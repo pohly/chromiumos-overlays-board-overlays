@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=2
-CROS_WORKON_COMMIT="07b8e190539b3075c32b2fe5696e79d648c5561c"
+CROS_WORKON_COMMIT="738dd64f2a6bc51b10ca9e3c56dee045f1f757d1"
 CROS_WORKON_PROJECT="chromiumos/platform/firmware"
 
 inherit cros-workon cros-firmware
@@ -20,10 +20,17 @@ RDEPEND="${DEPEND}"
 
 CROS_WORKON_LOCALNAME="firmware"
 
+pkg_postinst() {
+	# Don't execute the updater on ARM platform because the firmware is
+	# compiled from source, changed frequently, and not tested enough.
+	# It may damage devices if it has bugs.
+	touch "${ROOT}"/root/.leave_firmware_alone ||
+		die "Cannot disable firmware updating"
+}
+
 # ---------------------------------------------------------------------------
 # CUSTOMIZATION SECTION
 
 # System firmware image.
 CROS_FIRMWARE_MAIN_IMAGE="${ROOT}/u-boot/image.bin"
 CROS_FIRMWARE_EXTRA_LIST="${FILESDIR}/extra"
-
