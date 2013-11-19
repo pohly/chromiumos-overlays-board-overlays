@@ -228,22 +228,16 @@ while true; do
     fi
 
     if [[ "${PLATFORM}" = "Spring" ]] ; then
-        # Send UMA sample when a charger is plugged in
-        # and the current limit is greater than 2.8 A.
-        # Distinguish between original charger and others.
+        # Report charger type.
         if [[ "$power_info_pass" = "4" ]] ; then
             power_info_pass=0
-            uma_event=$(ectool powerinfo | awk '\
-/USB Device Type: /   { type = $4; } \
-/USB Current Limit: / { limit = $4; } \
-END  { \
-if (type == "0x20010" && limit > 2800) { \
-   print "SpringPowerSupply.Original.High"; \
-} else if (type != "0x0" && limit > 2800) { \
-   print "SpringPowerSupply.Other.High"; \
-}}')
-            if [[ -n "$uma_event" ]]; then
-                metrics_client -v "$uma_event"
+            # Charger type is 4-byte hex, but metric_client accepts only
+            # decimal.  Sparse histograms use 32-bit bucket indices, but
+            # the 64-bit values produced by awk are truncated correctly.
+            charger_type=$(($(ectool powerinfo | awk \
+              '/USB Device Type:/ { print $4; }')))
+            if [[ -n "$charger_type" ]]; then
+                metrics_client -s Platform.SpringChargerType $charger_type
             fi
         fi
         power_info_pass=$((power_info_pass + 1))
