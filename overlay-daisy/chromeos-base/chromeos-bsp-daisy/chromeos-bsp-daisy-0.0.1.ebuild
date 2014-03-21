@@ -40,7 +40,7 @@ src_install() {
 	doins "${FILESDIR}/cpufreq.conf" || die "installation failed ($?)"
 	doins "${FILESDIR}/runtime-pm.conf" || die "installation failed ($?)"
 
-	if use snow || use spring; then
+	if use spring || use snow || use spring; then
 		# Install platform specific config file for thermal monitoring
 		dosbin "${FILESDIR}/thermal.sh" || die "installation failed ($?)"
 		insinto "/etc/init/"
