@@ -10,7 +10,7 @@ DESCRIPTION="Daisy public bsp (meta package to pull in driver/tool dependencies)
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="arm"
-IUSE="-spring -snow -samsung_serial"
+IUSE="-skate -spring -snow -samsung_serial"
 
 DEPEND=""
 RDEPEND="
@@ -40,7 +40,7 @@ src_install() {
 	doins "${FILESDIR}/cpufreq.conf" || die "installation failed ($?)"
 	doins "${FILESDIR}/runtime-pm.conf" || die "installation failed ($?)"
 
-	if use spring || use snow || use spring; then
+	if use skate|| use snow || use spring; then
 		# Install platform specific config file for thermal monitoring
 		dosbin "${FILESDIR}/thermal.sh" || die "installation failed ($?)"
 		insinto "/etc/init/"
