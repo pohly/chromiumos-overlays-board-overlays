@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=4
-CROS_WORKON_COMMIT="5c68ca8d2b44773fb8b6abbe6c6fbf90c1acc2ec"
-CROS_WORKON_TREE="6115d92a980e24a86c8d10b03892d6e117183cc7"
+CROS_WORKON_COMMIT="c5365b0859dabd6953e9e64ea988eb90ca18a0c1"
+CROS_WORKON_TREE="a634288a506dab44e1e392b44d9917b5aadaf02d"
 CROS_WORKON_PROJECT="chromiumos/third_party/coreboot"
 CROS_WORKON_LOCALNAME="coreboot"
 
