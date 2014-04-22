@@ -13,6 +13,9 @@ rm -f $VPD_2_0
 sync
 sleep 3
 
+#clear Battery first use date
+ectool i2cwrite 16 0 0x16 0x3f 0x0000
+
 # this script is called by clobber-state
 /usr/sbin/battery_cut_off.sh
 
