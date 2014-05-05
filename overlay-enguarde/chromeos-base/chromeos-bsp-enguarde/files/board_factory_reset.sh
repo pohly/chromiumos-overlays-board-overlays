@@ -4,6 +4,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 #
+# This is for findLSBValue definition, which parses options in
+# lsb-factory or lsb-release.
+. "/opt/google/memento_updater/find_omaha.sh"
 
 /usr/sbin/activate_date --clean
 # remove the cached vpd log file so that the next reboot will re-generate it
@@ -15,6 +18,9 @@ sleep 3
 
 /usr/sbin/board_charge_battery.sh
 
+if [ "$(findLSBValue FACTORY_COMPLETE)" = "true" ]; then
+    /usr/sbin/board_factory_complete.sh
+fi
 /usr/sbin/battery_cut_off.sh
 
 # Battery cut-off is failed if it returns with 1.
