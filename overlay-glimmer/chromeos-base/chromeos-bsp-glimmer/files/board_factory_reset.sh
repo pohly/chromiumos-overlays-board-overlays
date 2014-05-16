@@ -15,9 +15,6 @@ sleep 3
 
 /usr/sbin/board_charge_battery.sh
 
-#clear Battery first use date
-ectool i2cwrite 16 0 0x16 0x3f 0x0000
-
 /usr/sbin/battery_cut_off.sh
 
 # Battery cut-off is failed if it returns with 1.
