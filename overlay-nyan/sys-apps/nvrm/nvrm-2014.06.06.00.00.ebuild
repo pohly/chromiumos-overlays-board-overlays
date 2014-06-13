@@ -10,25 +10,22 @@ SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/
 
 LICENSE="NVIDIA-r2"
 SLOT="0"
-KEYWORDS="arm"
+KEYWORDS="-* arm"
 IUSE=""
+
+RDEPEND="x11-libs/libXext"
+DEPEND="${RDEPEND}"
 
 S=${WORKDIR}
 
 src_install() {
-	local sover='19.013'
+	local sover='19.016'
 
 	insinto /lib/firmware
-	doins lib/firmware/nvavp_os_0ff00000.bin
-	doins lib/firmware/nvavp_os_8ff00000.bin
-	doins lib/firmware/nvavp_os_eff00000.bin
-	doins lib/firmware/nvavp_vid_ucode_alt.bin
+	doins lib/firmware/*
 
 	insinto /lib/firmware/tegra12x
-	doins lib/firmware/tegra12x/gpmu_ucode.bin
-	doins lib/firmware/tegra12x/NETB_img.bin
-	doins lib/firmware/tegra12x/gpccs.bin
-	doins lib/firmware/tegra12x/fecs.bin
+	doins lib/firmware/tegra12x/*
 
 	dolib.so usr/lib/libhdcp_up.so
 	dolib.so usr/lib/libnvapputil.so
@@ -72,6 +69,9 @@ src_install() {
 	dolib.so usr/lib/libnvwinsys.so
 	dolib.so usr/lib/libtegrav4l2.so
 	dolib.so usr/lib/libtsechdcp.so
+
+	insinto /etc/hdcpsrm
+	doins etc/hdcpsrm/hdcp1x.srm
 
 	udev_dorules "${FILESDIR}"/51-nvrm.rules
 }
