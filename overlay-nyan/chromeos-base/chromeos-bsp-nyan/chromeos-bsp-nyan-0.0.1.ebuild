@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="arm"
 IUSE="opengles tegra-ldk"
 
-DEPEND="sys-boot/chromeos-bootimage"
+DEPEND=""
 RDEPEND="
 	sys-kernel/tegra_lp0_resume
 	tegra-ldk? (
