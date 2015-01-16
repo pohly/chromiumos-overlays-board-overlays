@@ -15,7 +15,6 @@ IUSE="bluetooth +veyron-brcmfmac-nvram"
 # Add dependencies on other ebuilds from within this board overlay
 DEPEND=""
 RDEPEND="${DEPEND}
-	chromeos-base/AP6335-wifi-bin
 	x11-drivers/mali-rules
 	media-libs/media-rules
 	bluetooth? ( net-wireless/broadcom )
