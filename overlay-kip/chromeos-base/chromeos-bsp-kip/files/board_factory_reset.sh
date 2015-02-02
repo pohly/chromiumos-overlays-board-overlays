@@ -17,6 +17,7 @@ sync
 sleep 3
 
 /usr/sbin/board_charge_battery.sh
+/usr/sbin/board_discharge_battery.sh
 
 if [ "$(findLSBValue FACTORY_COMPLETE)" = "true" ]; then
     /usr/sbin/board_factory_complete.sh

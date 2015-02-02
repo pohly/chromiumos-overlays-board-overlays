@@ -97,8 +97,20 @@ cat > "${POST_FILE}" << EOF
     </params>
 </methodCall>
 EOF
-SHOPFLOORSERVER_URL="http://20.20.1.45:8097"
+
+test_lsb_dir="/mnt/stateful_partition/dev_image/etc"
+test_lsb_file="${test_lsb_dir}/lsb-factory"
+if [ ! -e ${test_lsb_file} ]; then
+  echo "Created file: ${test_lsb_file}"
+  mkdir -p -m 0600 ${test_lsb_dir}
+  touch ${test_lsb_file}
+  chmod 0600 ${test_lsb_file}
+fi
+
+SHOPFLOORSERVER_URL=$(grep -E "FACTORY_SHOPFLOOR" ${test_lsb_file} |
+                    grep -Eo "http.+" || true)
 echo "Calling shopfloor server(FinishFQA)..."
+echo "SHOPFLOOR= ${SHOPFLOORSERVER_URL}"
 RESPONSE=$(wget -q --header='Content-Type: text/xml' \
            --post-file="${POST_FILE}" -O - "${SHOPFLOORSERVER_URL}")
 WGET_RC=$?
