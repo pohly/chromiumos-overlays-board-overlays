@@ -32,14 +32,18 @@ src_install() {
 
 	# Battery cut-off
 	dosbin "${FILESDIR}/battery_cut_off.sh"
+	dosbin "${FILESDIR}/board_factory_complete.sh"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 	dosbin "${FILESDIR}/board_factory_reset.sh"
 	dosbin "${FILESDIR}/board_charge_battery.sh"
 
 	insinto "/usr/share/factory/images"
 	doins "${FILESDIR}/remove_ac.png"
+	doins "${FILESDIR}/call_shopfloor.png"
 	doins "${FILESDIR}/cutting_off.png"
 	doins "${FILESDIR}/cutoff_failed.png"
 	doins "${FILESDIR}/charging.png"
 	doins "${FILESDIR}/connect_ac.png"
+	doins "${FILESDIR}/connect_ethernet.png"
+	doins "${FILESDIR}/shopfloor_call_done.png"
 }

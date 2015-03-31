@@ -6,6 +6,9 @@
 #
 # This script uses ectool to send command to EC to cut off the battery power.
 #
+# This is for findLSBValue definition, which parses options in
+# lsb-factory or lsb-release.
+. "/opt/google/memento_updater/find_omaha.sh"
 
 IMG_PATH="/usr/share/factory/images"
 TTY="/dev/tty1"
@@ -32,14 +35,19 @@ else
   echo "==== Cutting off battery. Wait 10 seconds. ====" >"$TTY"
   echo "===============================================" >"$TTY"
 fi
-STATE_DEV="/dev/mmcblk0p1"
-STATE_PATH="mnt/stateful_partition"
-mount "${STATE_DEV}" "${STATE_PATH}"
-echo "factory fast" > "${STATE_PATH}"/factory_install_reset
-echo battery_cut_off > "${STATE_PATH}"/factory_wipe_option
-umount ${STATE_PATH}
-reboot
 
+if [ "$(findLSBValue BATTERY_WORKAROUND)" = "true" ]; then
+  STATE_DEV="/dev/mmcblk0p1"
+  STATE_PATH="mnt/stateful_partition"
+  mount "${STATE_DEV}" "${STATE_PATH}"
+  echo "factory fast" > "${STATE_PATH}"/factory_install_reset
+  echo battery_cut_off > "${STATE_PATH}"/factory_wipe_option
+  umount ${STATE_PATH}
+  reboot
+else
+  ectool batterycutoff
+  sleep 15
+fi
 
 # Couldn't have reached here
 if [ -e "${IMG_PATH}/cutoff_failed.png" ]; then
