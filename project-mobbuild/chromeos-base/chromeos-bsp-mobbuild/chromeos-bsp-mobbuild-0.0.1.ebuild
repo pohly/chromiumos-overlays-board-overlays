@@ -16,11 +16,6 @@ IUSE=""
 # properly handle the services required by mobbuild.
 RDEPEND=""
 
-# TODO (sbasi) - Remove test keys once proper ssh key installation flow is
-# determined.
-RDEPEND="${RDEPEND}
-	chromeos-base/chromeos-test-testauthkeys"
-
 # Mobbuild Deps.
 RDEPEND="${RDEPEND}
 	app-arch/unzip
