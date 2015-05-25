@@ -1,4 +1,7 @@
-# Re-enable USE flags that are disabled by the embedded profile.
-# TODO(benchan): Remove these overrides once the mipsel-o32-generic overlay is
-# migrated from the embedded profile to the regular profile.
-chromeos-base/chromeos-chrome accessibility chrome_remoting X
+# Keep existing prebuilts in sync until new Chrome PFQ runs.
+<chromeos-base/chromeos-chrome-45.0.2450 accessibility chrome_remoting X
+
+# Once the above is expired, we can drop these lines too.
+chromeos-base/autotest-all chromeless_tty
+chromeos-base/autotest-private-all chromeless_tty
+virtual/target-chromium-os-test app_shell
