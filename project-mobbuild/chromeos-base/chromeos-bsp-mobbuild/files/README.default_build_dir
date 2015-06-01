@@ -1,0 +1,11 @@
+Directory: /b
+This is the default build directory installed on mobbuild systems.
+
+All running systems should mount a work directory over this. As is, this
+directory does not have the correct permissions, or the space, for a build, and
+your build will fail.
+
+To get yourself some builder goodness, attach a large enough pre-formatted disk
+with one of the following identifications:
+- Filesystem label MOBBUILD_BUILD
+- Filesystem id MOBBUILD_BUILD  # TODO(pprabhu) Add this support.

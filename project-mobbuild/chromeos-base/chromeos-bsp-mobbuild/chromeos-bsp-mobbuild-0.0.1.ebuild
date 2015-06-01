@@ -1,9 +1,9 @@
 # Copyright 2014 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="4"
+EAPI="5"
 
-inherit user
+inherit user udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or portage actions"
 
@@ -35,11 +35,32 @@ pkg_setup() {
 }
 
 src_install(){
-	insinto /etc/init
-	doins "${FILESDIR}"/init/*.conf
-
+	# mobbuild user setup.
 	insinto /etc/sudoers.d
 	echo "mobbuild ALL=NOPASSWD: ALL" > mobbuild-all
 	insopts -m600
 	doins mobbuild-all
+	insinto /etc/init
+	doins "${FILESDIR}/init/mobbuild-homedir-init.conf"
+
+	insinto /root
+	doins "${FILESDIR}/README.default_build_dir"
+
+	# Build directory setup.
+	mkdir -m 0755 -p "${ED}/b"
+	udev_dorules "${FILESDIR}/65-mobbuild-build-disk-attached.rules"
+
+	# Marker abstract upstart job.
+	# All mobbuild jobs should start after the mobbuild-init-begin job.
+	insinto /etc/init
+	doins "${FILESDIR}/init/mobbuild-init-begin.conf"
+
+	# Local mobbuild build environment setup.
+	insinto /etc/init
+	doins "${FILESDIR}/init/mobbuild-build-disk-init.conf"
+	doins "${FILESDIR}/init/mobbuild-local-buildtools-init.conf"
+
+	# When used from anywhere except inside one of the buildbot directories, we
+	# want the user to launch a local build.
+	dobin "${FILESDIR}/cbuildbot"
 }
