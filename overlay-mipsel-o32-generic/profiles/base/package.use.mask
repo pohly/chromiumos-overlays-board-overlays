@@ -1,2 +1,0 @@
-# Keep existing prebuilts in sync until new Chrome PFQ runs.
-<chromeos-base/chromeos-chrome-45.0.2450 autotest build_tests
