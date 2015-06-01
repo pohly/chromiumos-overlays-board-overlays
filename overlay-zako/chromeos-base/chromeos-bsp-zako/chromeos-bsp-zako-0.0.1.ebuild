@@ -10,7 +10,7 @@ or portage actions."
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 S="${WORKDIR}"
 
@@ -20,5 +20,5 @@ RDEPEND="
 "
 
 src_install() {
-	doappid "{C3EA54EB-348D-5118-8598-CFD6317AD268}"
+	doappid "{C3EA54EB-348D-5118-8598-CFD6317AD268}" "CHROMEBOX"
 }

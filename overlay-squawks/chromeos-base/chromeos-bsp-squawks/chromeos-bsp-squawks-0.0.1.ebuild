@@ -9,7 +9,7 @@ DESCRIPTION="Squawks private bsp (meta package to pull in driver/tool deps)"
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 
 RDEPEND="
@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{777CE760-E315-FF86-2837-D51D10BA7C52}"
+	doappid "{777CE760-E315-FF86-2837-D51D10BA7C52}" "CHROMEBOOK"
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"

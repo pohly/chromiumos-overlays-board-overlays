@@ -21,7 +21,7 @@ RDEPEND="${DEPEND}
 S=${WORKDIR}
 
 src_install() {
-	doappid "{5615D466-EF74-FCD0-46EA-D7F60416B3CD}" # peach-pi
+	doappid "{5615D466-EF74-FCD0-46EA-D7F60416B3CD}" "CHROMEBOOK" # peach-pi
 
 	dosbin "${FILESDIR}/battery_cut_off.sh"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"

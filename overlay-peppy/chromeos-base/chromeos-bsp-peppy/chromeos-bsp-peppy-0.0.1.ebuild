@@ -23,7 +23,7 @@ RDEPEND="${DEPEND}
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{E6710DFC-3EC0-42AE-8095-733FDEA6AF18}"
+	doappid "{E6710DFC-3EC0-42AE-8095-733FDEA6AF18}" "CHROMEBOOK"
 
 	# Battery cut-off
 	dosbin "${FILESDIR}/battery_cut_off.sh"

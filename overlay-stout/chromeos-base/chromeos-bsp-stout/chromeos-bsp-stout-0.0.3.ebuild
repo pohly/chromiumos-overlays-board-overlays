@@ -17,7 +17,7 @@ RDEPEND="chromeos-base/trackpoint-xorg-conf"
 S=${WORKDIR}
 
 src_install() {
-	doappid "{6988C65F-7119-4DF2-8064-2E286F4748D4}"
+	doappid "{6988C65F-7119-4DF2-8064-2E286F4748D4}" "CHROMEBOOK"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 
 	insinto "/etc/init"

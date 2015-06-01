@@ -24,7 +24,7 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	if use !variant_build; then
-		doappid "{BAADD281-8816-1D16-5D83-0341376424DC}"
+		doappid "{BAADD281-8816-1D16-5D83-0341376424DC}" "CHROMEBOOK"
 	fi
 
 	# Install platform specific config files for power_manager.

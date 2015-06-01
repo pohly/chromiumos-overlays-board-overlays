@@ -20,7 +20,7 @@ RDEPEND="
 S=${WORKDIR}
 
 src_install() {
-	doappid "{2FC0F0CF-1A55-DF3F-73E6-517389444085}" # nyan-big
+	doappid "{2FC0F0CF-1A55-DF3F-73E6-517389444085}" "CHROMEBOOK" # nyan-big
 
 	# Install platform-specific config files for power manager
 	insinto "/usr/share/power_manager/board_specific"

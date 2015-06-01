@@ -8,7 +8,7 @@ inherit appid
 DESCRIPTION="Butterfly public bsp (meta package to pull in driver/tool dependencies)"
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 
 RDEPEND="
@@ -18,7 +18,7 @@ RDEPEND="
 S=${WORKDIR}
 
 src_install() {
-	doappid "{6372E332-9A26-4CE3-9C39-93D8A4E383AF}"
+	doappid "{6372E332-9A26-4CE3-9C39-93D8A4E383AF}" "CHROMEBOOK"
 
 	# Install platform specific config file for power_manager
 	insinto "/usr/share/power_manager/board_specific"

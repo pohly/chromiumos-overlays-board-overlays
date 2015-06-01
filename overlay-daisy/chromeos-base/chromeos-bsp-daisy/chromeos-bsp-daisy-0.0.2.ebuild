@@ -36,9 +36,9 @@ src_install() {
 	# This would normally be done with board_use_$BOARD USE flags.
 	if use spring; then
 		# Have to check spring first since it's a superset of snow.
-		doappid "{ADA16F7B-283C-4907-AE27-ABBF5CA4F7F1}"
+		doappid "{ADA16F7B-283C-4907-AE27-ABBF5CA4F7F1}" "CHROMEBOOK"
 	elif use snow; then
-		doappid "{D851316B-7E57-4805-A7CE-01829AC1443E}"
+		doappid "{D851316B-7E57-4805-A7CE-01829AC1443E}" "CHROMEBOOK"
 
 		dosbin "${FILESDIR}/battery_cut_off.sh"
 		dosbin "${FILESDIR}/board_factory_wipe.sh"

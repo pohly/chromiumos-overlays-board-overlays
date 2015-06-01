@@ -9,7 +9,7 @@ DESCRIPTION="Winky bsp (meta package to pull in driver/tool deps)"
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 S="${WORKDIR}"
 
@@ -22,7 +22,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{4B8B5979-526A-48D6-B6EB-D72680471AAD}"
+	doappid "{4B8B5979-526A-48D6-B6EB-D72680471AAD}" "CHROMEBOOK"
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"

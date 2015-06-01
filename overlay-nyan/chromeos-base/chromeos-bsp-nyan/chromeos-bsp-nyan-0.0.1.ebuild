@@ -28,7 +28,7 @@ S=${WORKDIR}
 src_install() {
 	# Variants of nyan will have their own appids
 	if ! use variant_build; then
-		doappid "{334FF5FA-CEE5-7688-1C73-78CE7F5B24A9}"
+		doappid "{334FF5FA-CEE5-7688-1C73-78CE7F5B24A9}" "REFERENCE"
 	fi
 
 	# Override default CPU clock speed governor

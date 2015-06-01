@@ -9,7 +9,7 @@ DESCRIPTION="Clapper private bsp (meta package to pull in driver/tool deps)"
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 
 RDEPEND="
@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{BBCEB6C1-5567-09B4-1619-DAD125AC892D}"
+	doappid "{BBCEB6C1-5567-09B4-1619-DAD125AC892D}" "CHROMEBOOK"
 
 	# Install platform specific config files for power_manager.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"

@@ -9,7 +9,7 @@ DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or port
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -22,7 +22,7 @@ DEPEND=""
 S=${WORKDIR}
 
 src_install() {
-	doappid "{2EE05B2F-3769-43B9-B78C-792F4A027971}"
+	doappid "{2EE05B2F-3769-43B9-B78C-792F4A027971}" "CHROMEBOX"
 
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 	dosbin "${FILESDIR}/board_factory_reset.sh"

@@ -9,7 +9,7 @@ DESCRIPTION="Glimmer private bsp (meta package to pull in driver/tool deps)"
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 
 RDEPEND="
@@ -24,7 +24,7 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{D0DBB0D9-6EEB-B148-F8AF-AE8AF86ECE5B}"
+	doappid "{D0DBB0D9-6EEB-B148-F8AF-AE8AF86ECE5B}" "CHROMEBOOK"
 
 	# Install platform specific config files for power_manager.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"

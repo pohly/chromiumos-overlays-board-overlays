@@ -11,7 +11,7 @@ SRC_URI=""
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 
 DEPEND="!chromeos-base/light-sensor"
@@ -27,7 +27,7 @@ RDEPEND="${DEPEND}
 S=${WORKDIR}
 
 src_install() {
-	doappid "{23F5C60F-7655-4BF4-90FB-BFDE16408308}"
+	doappid "{23F5C60F-7655-4BF4-90FB-BFDE16408308}" "CHROMEBOOK"
 
 	# Install platform-specific ambient light sensor configuration.
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"

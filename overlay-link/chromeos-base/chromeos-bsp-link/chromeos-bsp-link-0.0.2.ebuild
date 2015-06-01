@@ -26,7 +26,7 @@ RDEPEND="${DEPEND}
 S=${WORKDIR}
 
 src_install() {
-	doappid "{F26D159B-52A3-491A-AE25-B23670A66B32}"
+	doappid "{F26D159B-52A3-491A-AE25-B23670A66B32}" "CHROMEBOOK"
 
 	# Install platform-specific ambient light sensor configuration.
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"

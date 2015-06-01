@@ -19,7 +19,7 @@ DEPEND="!chromeos-base/light-sensor"
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{C776D42E-287A-435E-8BA7-E770BD30B46D}"
+	doappid "{C776D42E-287A-435E-8BA7-E770BD30B46D}" "CHROMEBOOK"
 
 	# Install platform-specific ambient light sensor configuration.
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"

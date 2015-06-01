@@ -10,7 +10,7 @@ or portage actions."
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 
 DEPEND="!chromeos-base/light-sensor"
 # modemmanager provides Y3300 support.
@@ -22,7 +22,7 @@ RDEPEND="${DEPEND}
 S=${WORKDIR}
 
 src_install() {
-	doappid "{A854E62E-9CB3-4DBE-8BBE-88C48FD65787}"
+	doappid "{A854E62E-9CB3-4DBE-8BBE-88C48FD65787}" "CHROMEBOOK"
 	dosbin "${FILESDIR}/battery_cut_off.sh"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 	dosbin "${FILESDIR}/board_factory_reset.sh"
