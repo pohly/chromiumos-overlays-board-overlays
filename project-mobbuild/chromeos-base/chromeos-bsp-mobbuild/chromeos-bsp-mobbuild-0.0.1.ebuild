@@ -19,6 +19,7 @@ RDEPEND=""
 # Mobbuild Deps.
 RDEPEND="${RDEPEND}
 	app-arch/unzip
+	app-arch/xz-utils
 	app-crypt/gnupg
 	dev-libs/protobuf
 	dev-python/mysql-python
