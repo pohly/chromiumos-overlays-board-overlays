@@ -72,7 +72,9 @@ Both user.name and user.email settings are required.
   fi
 }
 
-CBUILDBOT_PATH=/b/local_buildtools/chromiumos/chromite/bin/cbuildbot
+LOCAL_BUILDTOOLS_DIR=/b/local_buildtools
+CBUILDBOT_PATH="${LOCAL_BUILDTOOLS_DIR}/chromiumos/chromite/bin/cbuildbot"
+BOOTSTRAP_DIR="${LOCAL_BUILDTOOLS_DIR}/chromite_bootstrap"
 if [ ! -f "${CBUILDBOT_PATH}" ]; then
   echo 'Local cbuildbot is not setup! Something went wrong during boot?' >&2
   exit 1
@@ -83,4 +85,4 @@ fi
 # So, we sanity check before continuing.
 check_user_settings
 
-exec "${CBUILDBOT_PATH}" --local "$@"
+exec "${CBUILDBOT_PATH}" --local --bootstrap-dir "${BOOTSTRAP_DIR}" "$@"
