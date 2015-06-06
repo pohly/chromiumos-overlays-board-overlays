@@ -12,20 +12,17 @@ SLOT="0"
 KEYWORDS="*"
 IUSE=""
 
-# These packages are meant to set up the Chromium OS Basic environment to
-# properly handle the services required by mobbuild.
 RDEPEND=""
 
-# Mobbuild Deps.
+# Direct runtime dependencies.
 RDEPEND="${RDEPEND}
-	app-arch/unzip
-	app-arch/xz-utils
-	app-crypt/gnupg
-	dev-libs/protobuf
-	dev-python/mysql-python
-	dev-python/sqlalchemy
 	dev-vcs/git
 	dev-vcs/repo
+"
+
+# Pull in dependencies for cbuildbot, buildbot.
+RDEPEND="${RDEPEND}
+	chromeos-base/cbuildbot-deps
 "
 
 DEPEND=""
