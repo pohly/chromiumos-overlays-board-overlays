@@ -2,4 +2,3 @@ media-libs/mesa shared-glapi gles2 egl -gbm
 media-libs/piglit waffle
 media-libs/waffle gbm
 x11-libs/libva egl
->=chromeos-base/chromeos-chrome-45.0.2424.0_rc-r1 -ozone_platform_dri ozone_platform_drm

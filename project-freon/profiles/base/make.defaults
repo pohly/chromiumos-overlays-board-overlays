@@ -29,7 +29,7 @@ USE="${USE} -fbconsole -vtconsole"
 USE="${USE} frecon"
 
 # Ozone platforms to build into Chrome.
-OZONE_PLATFORM="dri gbm"
+OZONE_PLATFORM="drm gbm"
 
 # Of the above, platform to use by default at runtime.
 OZONE_PLATFORM_DEFAULT="gbm"
