@@ -11,6 +11,6 @@ IUSE="tegra-ldk"
 
 RDEPEND="
 	!tegra-ldk? ( x11-drivers/opengles )
-	tegra-ldk? ( x11-drivers/opengles-bin )
+	tegra-ldk? ( x11-drivers/opengles-bin x11-drivers/opengles-headers )
 	"
 DEPEND=""
