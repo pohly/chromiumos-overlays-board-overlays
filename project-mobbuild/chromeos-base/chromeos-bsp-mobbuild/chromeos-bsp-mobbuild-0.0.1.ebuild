@@ -45,6 +45,7 @@ src_install(){
 
 	insinto /root
 	doins "${FILESDIR}/README.default_build_dir"
+	doins "${FILESDIR}/README.default_creds_dir"
 
 	# Build directory setup.
 	mkdir -m 0755 -p "${ED}/b"
@@ -63,4 +64,10 @@ src_install(){
 	# When used from anywhere except inside one of the buildbot directories, we
 	# want the user to launch a local build.
 	dobin "${FILESDIR}/cbuildbot"
+
+	# Buildbot environment setup.
+	# Credentials setup.
+	udev_dorules "${FILESDIR}/65-mobbuild-creds-disk-attached.rules"
+	insinto /etc/init
+	doins "${FILESDIR}/init/mobbuild-creds-disk-init.conf"
 }

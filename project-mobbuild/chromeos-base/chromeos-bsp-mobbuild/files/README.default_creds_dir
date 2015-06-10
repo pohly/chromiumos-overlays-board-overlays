@@ -1,0 +1,24 @@
+Directory: /creds
+This directory contains dummy files for all the credentials required by mobbuild
+on a buildbot waterfall.
+
+If you intend to use this mobbuild on a waterfall, attach a disk with one of the
+following identifications:
+- Filesystem label MOBBUILD_CREDS
+- Filesystem id MOBBUILD_CREDS # TODO(pprabhu) Add this support.
+
+The attached disk should contain valid credentials for your waterfall.
+The file hierarchy expected on the disk is as follows:
+creds/
+  +- svn_password: Contains the password for chromium svn repositories for
+         chromet-bot bot user used on the waterfall, in plaintext.
+  +- .gitcookies: gitcookie file to authenticate with GoB.
+  +- .cidb_creds: directory containing cidb credentials.
+  +- .status_password_chromiumos: Password for updating tree status, in
+         plaintext.
+  +- .gmail_credentials: SSO Credentials for sending alert emails from builders.
+
+Not all the credentials may be useful on each type of mobbuild builder. To skip
+a cretain file / directory of credential, just create an empty file with a
+suffix ".ignore". So, if your builder doesn't use gitcookies, create a file
+named ".gitcookies.ignore" to make mobbuild initialization happy.
