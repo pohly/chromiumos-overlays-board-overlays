@@ -22,6 +22,7 @@ RDEPEND="${RDEPEND}
 
 # Pull in dependencies for cbuildbot, buildbot.
 RDEPEND="${RDEPEND}
+	chromeos-base/buildbot-deps
 	chromeos-base/cbuildbot-deps
 "
 
@@ -70,4 +71,9 @@ src_install(){
 	udev_dorules "${FILESDIR}/65-mobbuild-creds-disk-attached.rules"
 	insinto /etc/init
 	doins "${FILESDIR}/init/mobbuild-creds-disk-init.conf"
+
+	# Buildbot setup.
+	insinto /etc/init
+	doins "${FILESDIR}/init/mobbuild-depot-tools-init.conf"
+	doins "${FILESDIR}/init/mobbuild-buildbot-init.conf"
 }
