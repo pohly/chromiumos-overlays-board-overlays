@@ -24,5 +24,5 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{d7af4967-5671-4186-9306-ca0f7417fc1e}"
+	doappid "{D7AF4967-5671-4186-9306-CA0F7417FC1E}" "REFERENCE"
 }
