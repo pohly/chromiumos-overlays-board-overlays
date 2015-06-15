@@ -8,7 +8,7 @@ inherit appid
 DESCRIPTION="Butterfly public bsp (meta package to pull in driver/tool dependencies)"
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="-* amd64 x86"
 IUSE=""
 
 RDEPEND="
@@ -28,4 +28,33 @@ src_install() {
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/runtime-pm.conf"
 	doins "${FILESDIR}/intel-hda-powersave.conf"
+
+	# install alsa config files
+	local board="butterfly"
+	insinto /etc/modprobe.d
+	local alsa_conf="${FILESDIR}/alsa-module-config/alsa-${board}.conf"
+	if [[ -f "${alsa_conf}" ]] ; then
+		doins "${alsa_conf}"
+	fi
+
+	# install alsa patch files
+	insinto /lib/firmware
+	local alsa_patch="${FILESDIR}/alsa-module-config/${board}_alsa.fw"
+	if [[ -f "${alsa_patch}" ]] ; then
+		doins "${alsa_patch}"
+	fi
+
+	# install ucm config files
+	insinto /usr/share/alsa/ucm
+	local ucm_config="${FILESDIR}/ucm-config"
+	if [[ -d "${ucm_config}" ]] ; then
+		doins -r "${ucm_config}"/*
+	fi
+
+	# install cras config files
+	insinto /etc/cras
+	local cras_config="${FILESDIR}/cras-config"
+	if [[ -d "${cras_config}" ]] ; then
+		doins -r "${cras_config}"/*
+	fi
 }
