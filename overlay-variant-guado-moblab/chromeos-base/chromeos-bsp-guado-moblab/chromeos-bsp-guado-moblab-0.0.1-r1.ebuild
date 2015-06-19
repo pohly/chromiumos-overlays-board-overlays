@@ -1,0 +1,1 @@
+chromeos-bsp-guado-moblab-0.0.1.ebuild
