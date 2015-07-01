@@ -20,4 +20,11 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{8D0990C8-904D-45FD-ACEB-DCCAD82EC66E}" "REFERENCE"
+
+	# install ucm config files
+	insinto /usr/share/alsa/ucm
+	local ucm_config="${FILESDIR}/ucm-config"
+	if [[ -d "${ucm_config}" ]] ; then
+		doins -r "${ucm_config}"/*
+	fi
 }
