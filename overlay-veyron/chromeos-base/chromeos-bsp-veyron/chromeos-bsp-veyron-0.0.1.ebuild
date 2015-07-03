@@ -34,8 +34,6 @@ src_install() {
 
 	# Install platform specific files for bcm4354 bluetooth.
 	if use bluetooth ; then
-		insinto "/etc/init"
-		doins "${FILESDIR}"/brcm_patchram_plus.conf
 		insinto "/etc/modprobe.d"
 		doins "${FILESDIR}"/blacklist-btsdio.conf
 
