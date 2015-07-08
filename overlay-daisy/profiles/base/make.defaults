@@ -1,5 +1,2 @@
 U_BOOT_CONFIG_USE="daisy"
 U_BOOT_FDT_USE="exynos5250-snow"
-
-# Turn on the video cards this board uses.
-VIDEO_CARDS="exynos"
