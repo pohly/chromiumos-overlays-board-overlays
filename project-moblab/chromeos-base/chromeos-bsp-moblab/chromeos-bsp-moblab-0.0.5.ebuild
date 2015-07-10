@@ -32,6 +32,7 @@ RDEPEND="
 RDEPEND="${RDEPEND}
 	chromeos-base/autotest-server
 	chromeos-base/devserver
+	chromeos-base/mobmonitor
 "
 
 DEPEND=""
