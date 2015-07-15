@@ -20,8 +20,6 @@ fi
 "${DISPLAY_MESSAGE}" "cutting_off"
 
 ectool batterycutoff
-sleep 5
-shutdown -h now
 sleep 15
 
 "${DISPLAY_MESSAGE}" "cutoff_failed"
