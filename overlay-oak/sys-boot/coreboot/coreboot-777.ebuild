@@ -8,11 +8,11 @@ CROS_WORKON_PROJECT=(
 )
 CROS_WORKON_LOCALNAME=(
 	"../platform/vboot_reference"
-	"coreboot/3rdparty"
+	"coreboot/3rdparty/blobs"
 )
 CROS_WORKON_DESTDIR=(
 	"${S}/vboot_reference"
-	"${S}/3rdparty"
+	"${S}/3rdparty/blobs"
 )
 
 CROS_WORKON_BLACKLIST="1"
