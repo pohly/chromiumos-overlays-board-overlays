@@ -12,7 +12,7 @@ DISPLAY_MESSAGE="/usr/sbin/display_wipe_message.sh"
 modprobe i2c_dev
 
 # Discharge battery to ensure battery capacity in desired range
-/usr/sbin/board_discharge_battery.sh
+/usr/sbin/board_discharge_voltage.sh
 /usr/sbin/board_charge_battery.sh
 
 # AC power is required for battery cutoff.
@@ -25,11 +25,15 @@ fi
 
 "${DISPLAY_MESSAGE}" "cutting_off"
 
+# Set chargecontrol to idle to prevent battery overcharged.
+# chargecontrol discharge/idle only works when WP is disabled (before PVT).
+# This is only a double check in early stages (better than nothing).
+if !(crossystem sw_wpsw_boot?1 wpsw_boot?1); then
+  ectool chargecontrol idle
+  sleep 5
+fi
+
 ectool batterycutoff at-shutdown
 shutdown -h now
-sleep 15
 
-"${DISPLAY_MESSAGE}" "cutoff_failed"
-
-sleep 1d
 exit 1
