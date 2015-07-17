@@ -9,6 +9,8 @@
 
 DISPLAY_MESSAGE="/usr/sbin/display_wipe_message.sh"
 
+/usr/sbin/board_charge_battery.sh
+
 modprobe i2c_dev
 if (ectool battery | grep -q AC_PRESENT); then
   "${DISPLAY_MESSAGE}" "remove_ac"
