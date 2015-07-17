@@ -13,8 +13,6 @@ rm -f $VPD_2_0
 sync
 sleep 3
 
-/usr/sbin/board_charge_battery.sh
-
 /usr/sbin/battery_cut_off.sh
 
 # Battery cut-off is failed if it returns with 1.
