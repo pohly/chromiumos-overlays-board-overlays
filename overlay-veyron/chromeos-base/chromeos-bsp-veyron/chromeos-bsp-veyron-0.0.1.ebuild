@@ -10,7 +10,7 @@ DESCRIPTION="Veyron bsp (meta package to pull in driver/tool dependencies)"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm"
-IUSE="bluetooth +veyron-brcmfmac-nvram"
+IUSE="bluetooth cros_ec +veyron-brcmfmac-nvram"
 
 # Add dependencies on other ebuilds from within this board overlay
 DEPEND=""
@@ -18,7 +18,7 @@ RDEPEND="${DEPEND}
 	x11-drivers/mali-rules
 	media-libs/media-rules
 	bluetooth? ( net-wireless/broadcom )
-	chromeos-base/ec-utils
+	cros_ec? ( chromeos-base/ec-utils )
 "
 
 S=${WORKDIR}
