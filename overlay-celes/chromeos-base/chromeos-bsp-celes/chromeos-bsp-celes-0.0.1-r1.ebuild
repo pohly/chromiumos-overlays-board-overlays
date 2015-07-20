@@ -1,0 +1,1 @@
+chromeos-bsp-celes-0.0.1.ebuild
