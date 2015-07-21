@@ -16,7 +16,9 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND=""
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	media-libs/media-rules
+"
 
 src_install() {
 	doappid "{8D0990C8-904D-45FD-ACEB-DCCAD82EC66E}" "REFERENCE"
