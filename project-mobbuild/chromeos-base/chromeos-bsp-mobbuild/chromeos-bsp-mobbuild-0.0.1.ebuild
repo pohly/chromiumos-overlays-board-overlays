@@ -76,4 +76,7 @@ src_install(){
 	insinto /etc/init
 	doins "${FILESDIR}/init/mobbuild-depot-tools-init.conf"
 	doins "${FILESDIR}/init/mobbuild-buildbot-init.conf"
+
+	# Finally, start buildbot as an upstart job.
+	doins "${FILESDIR}/init/mobbuild-buildbot.conf"
 }
