@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-inherit appid udev
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Board-specific packages for ZGB"
 HOMEPAGE="http://src.chromium.org"
@@ -37,4 +37,8 @@ src_install() {
 	# Install board-specific info
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/intel-hda-powersave.conf"
+
+	# Install audio configs.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs x86-zgb "${audio_config_dir}"
 }
