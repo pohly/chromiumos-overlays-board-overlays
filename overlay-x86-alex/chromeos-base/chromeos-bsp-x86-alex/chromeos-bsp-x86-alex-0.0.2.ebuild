@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-inherit appid udev
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Board-specific packages for x86-alex"
 HOMEPAGE="http://src.chromium.org"
@@ -33,4 +33,8 @@ src_install() {
 	dosbin "${FILESDIR}/battery_cut_off.sh"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 	dosbin "${FILESDIR}/board_factory_reset.sh"
+
+	# Install audio configs.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs x86-alex "${audio_config_dir}"
 }
