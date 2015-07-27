@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-inherit appid toolchain-funcs udev
+inherit appid cros-audio-configs toolchain-funcs udev
 
 DESCRIPTION="Board-specific packages for x86-mario"
 HOMEPAGE="http://src.chromium.org"
@@ -33,4 +33,8 @@ src_install() {
 	# Install board-specific info
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/intel-hda-powersave.conf"
+
+	# Install audio configs.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs x86-mario "${audio_config_dir}"
 }
