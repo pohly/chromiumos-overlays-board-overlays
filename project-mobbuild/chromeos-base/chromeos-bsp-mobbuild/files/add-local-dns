@@ -1,0 +1,61 @@
+#!/bin/env python
+
+# Copyright 2015 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import dbus
+
+SHILL_SERVICE_NAME = 'org.chromium.flimflam'
+
+INTERFACE_MANAGER = 'org.chromium.flimflam.Manager'
+INTERFACE_SERVICE = 'org.chromium.flimflam.Service'
+
+STATIC_IP_CONFIG_KEY = 'StaticIPConfig'
+SAVED_IP_CONFIG_KEY = 'SavedIPConfig'
+NAME_SERVERS_KEY = 'NameServers'
+
+LOCAL_NAME_SERVER = '127.0.0.1'
+
+def main():
+  bus = dbus.SystemBus()
+  manager = bus.get_object(SHILL_SERVICE_NAME, '/')
+  i_manager = dbus.Interface(manager, INTERFACE_MANAGER)
+  ethernet_path = i_manager.FindMatchingService({'Type': 'ethernet'})
+  ethernet_service = bus.get_object(SHILL_SERVICE_NAME, ethernet_path)
+  i_ethernet_service = dbus.Interface(ethernet_service, INTERFACE_SERVICE)
+  properties = i_ethernet_service.GetProperties()
+
+  # We must merge the nameservers received over DHCP with the extra nameserver
+  # we want to install.
+  static_ip_config = properties.get(STATIC_IP_CONFIG_KEY, {})
+  static_name_servers = static_ip_config.get(NAME_SERVERS_KEY, [])
+  saved_ip_config = properties.get(SAVED_IP_CONFIG_KEY, {})
+  saved_name_servers = saved_ip_config.get(NAME_SERVERS_KEY, [])
+  # By keeping LOCAL_NAME_SERVER first, dnsmasq can forward requests to any
+  # number of entries below. OTOH, if we keep the local nameserver last, there's
+  # a chance that we'll hit the maximum number of entries allowed in
+  # resolv.conf, and never make it to the local nameserver.
+  merged_name_servers = [dbus.String(LOCAL_NAME_SERVER)] + saved_name_servers
+
+
+  # NB: Careful now -- this script is usually launched by an upstart job every
+  # time shill connects. This means that by toggling shill's connection state,
+  # we're eventually relaunching this script. Therefore, we must ensure that we
+  # don't keep toggling shill when no new changes are made to the nameservers.
+  if set(merged_name_servers) == set(static_name_servers):
+    print('List of static nameservers is up-to-date. Exiting early.')
+    return
+
+  static_ip_config[NAME_SERVERS_KEY] = merged_name_servers
+  i_ethernet_service.SetProperty(STATIC_IP_CONFIG_KEY, static_ip_config)
+  # If we updated the nameservers, we need to toggle the service connection to
+  # pick up the new nameservers.
+  try:
+    i_ethernet_service.Disconnect()
+  finally:
+    i_ethernet_service.Connect()
+
+
+if __name__ == '__main__':
+  main()

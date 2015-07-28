@@ -18,6 +18,8 @@ RDEPEND=""
 RDEPEND="${RDEPEND}
 	dev-vcs/git
 	dev-vcs/repo
+	net-dns/dnsmasq
+	dev-python/dbus-python
 "
 
 # Pull in dependencies for cbuildbot, buildbot.
@@ -76,6 +78,12 @@ src_install(){
 	insinto /etc/init
 	doins "${FILESDIR}/init/mobbuild-depot-tools-init.conf"
 	doins "${FILESDIR}/init/mobbuild-buildbot-init.conf"
+
+	# Support adding local DNS entries.
+    dosbin "${FILESDIR}/add-local-dns"
+	insinto /etc/init
+    doins "${FILESDIR}/init/mobbuild-local-dns-init.conf"
+    doins "${FILESDIR}/init/mobbuild-dnsmasq.conf"
 
 	# Finally, start buildbot as an upstart job.
 	doins "${FILESDIR}/init/mobbuild-buildbot.conf"
