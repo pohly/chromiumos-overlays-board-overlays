@@ -26,6 +26,7 @@ RDEPEND="
 	lxc? ( net-misc/bridge-utils )
 	net-misc/dhcp
 	net-misc/rsync
+	sys-apps/file
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
