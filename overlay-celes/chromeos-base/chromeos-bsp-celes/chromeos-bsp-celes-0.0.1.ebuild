@@ -19,10 +19,20 @@ RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-strago
 	chromeos-base/ec-utils
 	sys-kernel/linux-firmware
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{7834CC99-3294-421F-9963-028D7D6512CA}" "CHROMEBOOK"
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Wiping scripts.
+	dosbin "${FILESDIR}"/*.sh
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
