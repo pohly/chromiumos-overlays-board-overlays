@@ -6,6 +6,4 @@
 
 modify_kernel_command_line() {
   echo "iTCO_vendor_support.vendorsupport=3" >> "$1"
-  echo "acpi_enforce_resources=lax" >> "$1"
-  echo "gpio_ich.gpiobase=160" >> "$1"
 }
