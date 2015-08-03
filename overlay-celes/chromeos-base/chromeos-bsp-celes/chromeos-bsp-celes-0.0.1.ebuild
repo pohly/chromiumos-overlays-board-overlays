@@ -19,6 +19,7 @@ RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-strago
 	chromeos-base/ec-utils
 	sys-kernel/linux-firmware
+	chromeos-base/chromeos-touch-config-celes
 "
 DEPEND="${RDEPEND}"
 
