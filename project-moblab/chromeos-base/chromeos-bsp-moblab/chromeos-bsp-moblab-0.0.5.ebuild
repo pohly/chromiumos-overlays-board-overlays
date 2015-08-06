@@ -18,7 +18,7 @@ RDEPEND="
 	app-crypt/gnupg
 	lxc? ( app-emulation/lxc )
 	chromeos-base/chromeos-init
-	chromeos-base/chromeos-test-testauthkeys
+	virtual/chromeos-test-testauthkeys
 	chromeos-base/openssh-server-init
 	chromeos-base/jabra-vold
 	net-analyzer/fping
