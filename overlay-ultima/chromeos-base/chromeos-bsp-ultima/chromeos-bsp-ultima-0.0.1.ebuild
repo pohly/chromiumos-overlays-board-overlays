@@ -17,6 +17,8 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-strago
+	chromeos-base/ec-utils
+	sys-kernel/linux-firmware
 	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
