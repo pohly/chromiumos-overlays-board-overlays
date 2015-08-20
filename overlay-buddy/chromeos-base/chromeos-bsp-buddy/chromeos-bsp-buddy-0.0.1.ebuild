@@ -24,7 +24,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{B801E98B-4AB6-4D82-B3B3-E1517DC53266}" "CHROMEBASE"
+	doappid "{B801E98B-4AB6-4D82-B3B3-E1517DC53266}"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 	dosbin "${FILESDIR}/board_factory_reset.sh"
 }
