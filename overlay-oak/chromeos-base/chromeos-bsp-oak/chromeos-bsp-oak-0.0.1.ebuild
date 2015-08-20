@@ -15,8 +15,8 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND=""
-DEPEND="${RDEPEND}
+DEPEND=""
+RDEPEND="${DEPEND}
 	media-libs/media-rules
 "
 
