@@ -1,0 +1,4 @@
+USE="clang"
+CC=armv7a-cros-linux-gnueabi-clang
+CXX=armv7a-cros-linux-gnueabi-clang++
+
