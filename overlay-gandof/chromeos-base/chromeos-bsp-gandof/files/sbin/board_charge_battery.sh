@@ -9,7 +9,7 @@
 #
 
 IMG_PATH="/usr/share/factory/images"
-MIN_LEVEL=40
+MIN_LEVEL=20
 TTY="/dev/tty1"
 
 get_percentage() {
