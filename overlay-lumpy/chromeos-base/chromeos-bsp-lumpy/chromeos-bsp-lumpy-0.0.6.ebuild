@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid toolchain-funcs udev
+inherit appid cros-audio-configs toolchain-funcs udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -38,4 +38,7 @@ src_install() {
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
+
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs lumpy "${audio_config_dir}"
 }
