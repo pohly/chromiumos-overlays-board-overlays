@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Big bsp (meta package to pull in driver/tool deps)"
 
@@ -37,4 +37,8 @@ src_install() {
 	doins "${FILESDIR}/remove_ac.png"
 	doins "${FILESDIR}/battery_input.png"
 	doins "${FILESDIR}/go_to_repair.png"
+
+	# Install audio config files.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs nyan_big "${audio_config_dir}"
 }
