@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Nyan bsp (meta package to pull in driver/tool dependencies)"
 
@@ -47,4 +47,10 @@ src_install() {
 	# Install upstart script for setting CPU governors.
 	insinto "/etc/init"
 	doins "${FILESDIR}/tegra_governors.conf"
+
+	# Install audio configs, variants of nyan will have their own.
+	if ! use variant_build; then
+		local audio_config_dir="${FILESDIR}/audio-config"
+		install_audio_configs nyan "${audio_config_dir}"
+	fi
 }
