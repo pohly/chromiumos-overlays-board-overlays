@@ -80,4 +80,8 @@ src_install() {
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
+
+	# Copy the moblab checkfiles for the Mob* Monitor.
+	insinto "/etc/mobmonitor/checkfiles/moblab/"
+	doins -r "${FILESDIR}/checkfiles/moblab/"*
 }
