@@ -1,0 +1,1 @@
+chromeos-bsp-jaq-0.0.1.ebuild
