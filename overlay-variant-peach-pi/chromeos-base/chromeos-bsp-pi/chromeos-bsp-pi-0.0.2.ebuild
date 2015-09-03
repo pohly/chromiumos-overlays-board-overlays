@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Pi bsp (meta package to pull in driver/tool deps)"
 
@@ -44,4 +44,8 @@ src_install() {
 	# Install platform specific laptop mode tools configuration files
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/cpufreq.conf"
+
+	# Install audio configs
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs peach_pi "${audio_config_dir}"
 }
