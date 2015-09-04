@@ -1,0 +1,3 @@
+USE="clang"
+CC=i686-pc-linux-gnu-clang
+CXX=i686-pc-linux-gnu-clang++
