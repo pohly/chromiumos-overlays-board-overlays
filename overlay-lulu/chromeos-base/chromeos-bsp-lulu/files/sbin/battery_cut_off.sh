@@ -27,14 +27,14 @@ fi
 
 if [ -e "${IMG_PATH}/cutting_off.png" ]; then
   ply-image --clear 0x000000 "${IMG_PATH}/cutting_off.png"
+  sleep 2
 else
   echo "===============================================" >"$TTY"
   echo "==== Cutting off battery. Wait 10 seconds. ====" >"$TTY"
   echo "===============================================" >"$TTY"
 fi
 
-ectool batterycutoff at-shutdown
-shutdown -h now
+ectool batterycutoff
 sleep 15
 
 # Couldn't have reached here
