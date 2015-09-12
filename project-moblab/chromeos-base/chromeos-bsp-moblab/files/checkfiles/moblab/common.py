@@ -6,6 +6,12 @@
 
 from __future__ import print_function
 
+
+#
+# Boto file constants.
+#
+BOTO_PATH = '/home/moblab/.boto'
+
 #
 # disk_check constants.
 #

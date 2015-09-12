@@ -150,13 +150,17 @@ class DiskDevices(object):
     elif -5 == errcode:
       return ('USB drive is not correctly labelled.'
               ' Please review the setup instructions and label'
-              ' your USB drive.',
+              ' your USB drive. For more information please see'
+              ' https://www.chromium.org/chromium-os/testing/moblab/'
+              'setup#TOC-Formatting-External-Storage-for-MobLab',
               [])
 
     elif -6 == errcode:
       return ('USB drive is not formatted correctly.'
               ' Please review the setup instructions and format'
-              ' your USB drive',
+              ' your USB drive. For more information please see'
+              ' https://www.chromium.org/chromium-os/testing/moblab/'
+              'setup#TOC-Formatting-External-Storage-for-MobLab',
               [])
 
     elif -7 == errcode:

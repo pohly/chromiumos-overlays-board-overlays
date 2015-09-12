@@ -8,11 +8,8 @@ from __future__ import print_function
 
 import netifaces
 import os
-import re
 
 import common
-
-from chromite.lib import cros_build_lib
 
 
 def GetIp():
@@ -38,17 +35,27 @@ class BotoFile(object):
     Returns:
       0 if a Boto key exists.
       -1 if a Boto key does not exist.
+      -2 if the Boto key is empty.
     """
-    if not os.path.exists('/home/moblab/.boto'):
+    if not os.path.exists(common.BOTO_PATH):
       return -1
+
+    if 0 == os.stat(common.BOTO_PATH).st_size:
+      return -2
 
     return 0
 
   def Diagnose(self, errcode):
+    msg = ('Boto key is %s. Please upload a valid key'
+           ' at the following address:'
+           ' http://%s/moblab_setup/. For more information'
+           ' please see https://www.chromium.org/chromium-os/testing/'
+           'moblab/setup#TOC-Setting-up-the-boto-key-for-partners')
+
     if -1 == errcode:
-      return ('Boto key is missing. Please upload a valid key'
-              ' at the following address:'
-              ' http://%s/moblab_setup/' % GetIp(),
-              [])
+      return (msg % ('missing', GetIp()), [])
+
+    elif -2 == errcode:
+      return (msg % ('empty', GetIp()), [])
 
     return ('Unknown error reached with error code: %s' % errcode, [])
