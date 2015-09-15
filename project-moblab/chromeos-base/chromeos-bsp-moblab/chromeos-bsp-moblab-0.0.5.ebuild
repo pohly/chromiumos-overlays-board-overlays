@@ -36,6 +36,11 @@ RDEPEND="${RDEPEND}
 	chromeos-base/mobmonitor
 "
 
+# Dependencies for Android Testing on MobLab.
+RDEPEND="${RDEPEND}
+	dev-util/android-tools
+"
+
 DEPEND=""
 
 S=${WORKDIR}
