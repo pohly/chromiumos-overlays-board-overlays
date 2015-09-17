@@ -19,10 +19,16 @@ RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-strago
 	chromeos-base/ec-utils
 	sys-kernel/linux-firmware
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{9FBE03F2-6C37-DE1E-FC21-062EEADFEC60}" "CHROMEBOOK"
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Wiping scripts.
+	dosbin "${FILESDIR}"/sbin/*.sh
 }
