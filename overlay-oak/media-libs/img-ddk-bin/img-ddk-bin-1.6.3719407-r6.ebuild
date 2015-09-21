@@ -6,7 +6,7 @@ EAPI=4
 inherit unpacker
 
 DESCRIPTION="PowerVR Rogue GLES2 hardware driver, binary only install"
-SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/img-ddk-${PVR}.run"
+SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/img-ddk-oak-${PVR}.run"
 
 LICENSE="Google-TOS"
 SLOT="0"
