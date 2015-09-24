@@ -43,5 +43,5 @@ src_install() {
 
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
-	install_audio_configs nyan_big "${audio_config_dir}"
+	install_audio_configs samus "${audio_config_dir}"
 }
