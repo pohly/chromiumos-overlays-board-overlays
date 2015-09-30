@@ -29,4 +29,8 @@ src_install() {
 	if [[ -d "${ucm_config}" ]] ; then
 		doins -r "${ucm_config}"/*
 	fi
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
 }
