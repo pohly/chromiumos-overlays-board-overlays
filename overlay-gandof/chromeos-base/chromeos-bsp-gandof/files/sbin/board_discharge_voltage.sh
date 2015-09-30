@@ -8,7 +8,7 @@
 # it asks for AC power and waits for the battery to charge.
 #
 
-MAX_LEVEL=11400
+MAX_LEVEL=11200
 DISPLAY_MESSAGE="/usr/sbin/display_wipe_message.sh"
 
 get_voltage() {
