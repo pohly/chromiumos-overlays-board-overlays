@@ -38,7 +38,7 @@ RDEPEND="${RDEPEND}
 
 # Dependencies for Android Testing on MobLab.
 RDEPEND="${RDEPEND}
-	dev-util/android-tools
+	chromeos-base/chromeos-adb-env
 "
 
 DEPEND=""

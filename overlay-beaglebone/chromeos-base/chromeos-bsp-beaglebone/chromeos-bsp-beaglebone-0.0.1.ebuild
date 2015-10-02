@@ -17,6 +17,6 @@ DEPEND=""
 # infrastructure.  http://crbug.com/302022
 RDEPEND="
 	chromeos-base/u-boot-scripts
-	dev-util/android-tools
+	chromeos-base/chromeos-adb-env
 	sys-boot/u-boot
 "
