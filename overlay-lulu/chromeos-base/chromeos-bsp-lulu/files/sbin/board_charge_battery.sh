@@ -8,7 +8,7 @@
 # it asks for AC power and waits for the battery to charge.
 #
 
-MIN_LEVEL=40
+MIN_LEVEL=50
 DISPLAY_MESSAGE="/usr/sbin/display_wipe_message.sh"
 
 get_percentage() {
