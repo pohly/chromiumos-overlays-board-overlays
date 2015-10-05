@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -29,4 +29,8 @@ src_install() {
 	doappid "{B801E98B-4AB6-4D82-B3B3-E1517DC53266}" "CHROMEBASE"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 	dosbin "${FILESDIR}/board_factory_reset.sh"
+
+	# Install audio_config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs buddy "${audio_config_dir}"
 }
