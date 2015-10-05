@@ -5,7 +5,8 @@ EAPI=4
 
 inherit appid
 
-DESCRIPTION="Wizpig bsp (meta package to pull in driver/tool deps)"
+DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
+or portage actions."
 
 LICENSE="BSD-Google"
 SLOT="0"
@@ -13,13 +14,21 @@ KEYWORDS="-* amd64 x86"
 IUSE=""
 S="${WORKDIR}"
 
+# Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
+	chromeos-base/chromeos-bsp-baseboard-strago
 	chromeos-base/ec-utils
 	sys-kernel/linux-firmware
 "
 DEPEND="${RDEPEND}"
-S="${WORKDIR}"
 
 src_install() {
 	doappid "{74A5A9DD-1B51-4602-A7FA-751B804627A0}" "CHROMEBOOK"
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Wiping scripts.
+	dosbin "${FILESDIR}"/sbin/*.sh
 }
