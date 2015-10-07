@@ -15,6 +15,7 @@ IUSE="+lxc"
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
 RDEPEND="
+	chromeos-base/shill
 	app-crypt/gnupg
 	lxc? ( app-emulation/lxc )
 	chromeos-base/chromeos-init
