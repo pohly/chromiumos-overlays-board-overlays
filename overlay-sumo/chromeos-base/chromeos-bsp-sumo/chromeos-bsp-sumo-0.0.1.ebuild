@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid udev
 
 DESCRIPTION="Sumo bsp (meta package to pull in driver/tool deps)"
 
@@ -29,4 +29,17 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Install platform-specific internal keyboard keymap.
+	# It should probbaly go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 dev boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/61-sumo-keyboard.hwdb"
+}
+
+pkg_postinst() {
+	udevadm hwdb --update --root="${ROOT%/}"
+	# http://cgit.freedesktop.org/systemd/systemd/commit/?id=1fab57c209035f7e66198343074e9cee06718bda
+	[ "${ROOT:-/}" = "/" ] && udevadm control --reload
 }
