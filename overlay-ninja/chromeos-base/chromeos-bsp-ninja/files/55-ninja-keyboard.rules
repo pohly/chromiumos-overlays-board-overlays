@@ -1,0 +1,7 @@
+# Reset indication that device connected to PS/2 port on Ninja systems
+# is full keyboard; we'll also adjust keymap as well.
+# We want it run after 50-udev-default.rules that invokes input_id to
+# classify the devices.
+
+ACTION=="add", SUBSYSTEM=="input", DRIVERS=="atkbd", \
+   ENV{ID_INPUT_KEYBOARD}=""
