@@ -29,4 +29,22 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Install platform-specific internal keyboard keymap.
+	# It should probably go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 dev boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/61-ninja-keyboard.hwdb"
+
+	# Let's put rules also in /etc/udev to mirror the keymap
+	# placement.
+	insinto "${EPREFIX}/etc/udev/rules.d"
+	doins "${FILESDIR}/55-ninja-keyboard.rules"
+}
+
+pkg_postinst() {
+	udevadm hwdb --update --root="${ROOT%/}"
+	# http://cgit.freedesktop.org/systemd/systemd/commit/?id=1fab57c209035f7e66198343074e9cee06718bda
+	[ "${ROOT:-/}" = "/" ] && udevadm control --reload
 }
