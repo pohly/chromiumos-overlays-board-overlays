@@ -20,6 +20,7 @@ RDEPEND="
 	lxc? ( app-emulation/lxc )
 	chromeos-base/chromeos-init
 	virtual/chromeos-test-testauthkeys
+	chromeos-base/brillo_update_payload
 	chromeos-base/openssh-server-init
 	chromeos-base/jabra-vold
 	net-analyzer/fping
