@@ -22,6 +22,7 @@ RDEPEND="
 	sys-kernel/linux-firmware
 	media-gfx/ply-image
 	media-libs/go2001-fw
+	media-libs/media-rules
 "
 DEPEND="${RDEPEND}"
 
