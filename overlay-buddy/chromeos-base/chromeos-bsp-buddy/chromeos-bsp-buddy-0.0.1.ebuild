@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid cros-audio-configs
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -34,4 +34,17 @@ src_install() {
 	# Install audio_config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs buddy "${audio_config_dir}"
+
+	# Install platform-specific internal keyboard keymap.
+	# It should probbaly go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 dev boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/61-buddy-keyboard.hwdb"
+}
+
+pkg_postinst() {
+	udevadm hwdb --update --root="${ROOT%/}"
+	# http://cgit.freedesktop.org/systemd/systemd/commit/?id=1fab57c209035f7e66198343074e9cee06718bda
+	[ "${ROOT:-/}" = "/" ] && udevadm control --reload
 }
