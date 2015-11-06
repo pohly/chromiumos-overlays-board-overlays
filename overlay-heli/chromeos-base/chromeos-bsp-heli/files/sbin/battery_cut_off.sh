@@ -19,7 +19,7 @@ fi
 
 "${DISPLAY_MESSAGE}" "cutting_off"
 
-ectool batterycutoff
+ectool batterycutoff >/dev/null
 sleep 15
 
 "${DISPLAY_MESSAGE}" "cutoff_failed"
