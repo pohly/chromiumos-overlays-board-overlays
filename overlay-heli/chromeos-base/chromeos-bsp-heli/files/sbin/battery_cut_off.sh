@@ -33,7 +33,7 @@ else
   echo "===============================================" >"$TTY"
 fi
 
-ectool batterycutoff
+ectool batterycutoff >/dev/null
 sleep 15
 
 # Couldn't have reached here
