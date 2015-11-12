@@ -1,1 +1,0 @@
-chromeos-base/chromeos-bsp-veyron/chromeos-bsp-veyron-0.0.1.ebuild
