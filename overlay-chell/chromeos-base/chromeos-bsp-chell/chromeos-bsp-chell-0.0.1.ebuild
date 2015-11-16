@@ -11,17 +11,15 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
-S="${WORKDIR}"
 
-# Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
-	chromeos-base/chromeos-bsp-baseboard-glados
 	chromeos-base/ec-utils
 	sys-kernel/linux-firmware
 	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
+
+S="${WORKDIR}"
 
 src_install() {
 	doappid "{114DBB0F-4507-F7FC-99B6-4BCAB6A39725}" "CHROMEBOOK"
@@ -29,4 +27,7 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Battery cut-off
+	dosbin "${FILESDIR}/board_factory_reset.sh"
 }
