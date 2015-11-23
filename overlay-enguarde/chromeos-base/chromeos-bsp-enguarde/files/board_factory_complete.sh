@@ -6,6 +6,7 @@
 #
 # This script makes shopfloor call to enguarde_shopfloor to inform shopfloor
 # server that this machine has finished all factory flow.
+. "/opt/google/memento_updater/find_omaha.sh"
 
 TTY="/dev/tty1"
 IMG_PATH="/usr/share/factory/images"
@@ -97,8 +98,18 @@ cat > "${POST_FILE}" << EOF
     </params>
 </methodCall>
 EOF
-SHOPFLOORSERVER_URL="http://20.20.1.45:8093"
+
+test_lsb_dir="/mnt/stateful_partition/dev_image/etc"
+test_lsb_file="${test_lsb_dir}/lsb-factory"
+
+if [ -e ${test_lsb_file} ]; then
+  SHOPFLOORSERVER_URL="$(findLSBValue FACTORY_SHOPFLOOR)"
+else
+  die_with_error_message "Can't find ${test_lsb_file}."
+fi
+
 echo "Calling shopfloor server(FinishFQA)..."
+echo "SHOPFLOOR= ${SHOPFLOORSERVER_URL}"
 RESPONSE=$(wget -q --header='Content-Type: text/xml' \
            --post-file="${POST_FILE}" -O - "${SHOPFLOORSERVER_URL}")
 WGET_RC=$?
