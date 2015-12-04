@@ -35,6 +35,10 @@ src_install() {
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs buddy "${audio_config_dir}"
 
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
+
 	# Install platform-specific internal keyboard keymap.
 	# It should probbaly go into /lib/udev/hwdb.d but
 	# unfortunately udevadm on 64 dev boxes does not check
