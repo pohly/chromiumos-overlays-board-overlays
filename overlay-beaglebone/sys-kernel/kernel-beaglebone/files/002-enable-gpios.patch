@@ -17,7 +17,7 @@ new file mode 100644
 index 0000000..fb198c4
 --- /dev/null
 +++ b/firmware/capes/bone-servo-gpios-00A0.dts
-@@ -0,0 +1,63 @@
+@@ -0,0 +1,76 @@
 +// Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -70,14 +70,27 @@ index 0000000..fb198c4
 +                                        0x038 0x27        /* gpio1_14 */
 +                                        0x02c 0x27        /* gpio0_26 */
 +                                        0x034 0x27        /* gpio1_13 */
-+                                        0x070 0x27        /* gpio0_30 */
 +
-+                                        0x074 0x27        /* gpio0_31 */
 +                                        0x0e0 0x27        /* gpio2_22 */
 +                                        0x020 0x27        /* gpio0_22 */
 +                                        0x0a8 0x27        /* gpio2_8  */
++
++                                        0x000 0x27        /* gpio1_0 P8/25 */
++                                        0x004 0x27        /* gpio1_1 P8/24 */
 +                                >;
 +                        };
 +                };
 +        };
-+};
++
++        fragment@1 {
++            target = <&ocp>;
++            __overlay__ {
++                pinctrl_test_helper {
++                    compatible = "bone-pinmux-helper";
++                    pinctrl-names = "default";
++                    pinctrl-0 = <&pinctrl_test>;
++                    status = "okay";
++                };
++            };
++        };
++ };

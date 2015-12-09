@@ -27,7 +27,7 @@ SRC_URI="https://${LOCAL_MIRROR}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="arm"
+KEYWORDS="-* arm"
 
 umake() {
 	env -u ARCH emake CROSS_COMPILE="${CHOST}-" "HOSTCC=${BUILD_CC}" "$@"
@@ -50,4 +50,7 @@ src_compile() {
 src_install() {
 	insinto /firmware
 	doins u-boot u-boot.img MLO "${FILESDIR}"/uEnv.txt
+	insinto /boot
+	newins "${FILESDIR}"/uEnv.txt uEnv.A.txt
+	newins "${FILESDIR}"/uEnv.txt uEnv.B.txt
 }
