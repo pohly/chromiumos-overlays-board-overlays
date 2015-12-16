@@ -25,4 +25,11 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{E7507B05-EC5C-437C-9878-E870E20111BC}" "CHROMEBOOK"
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Battery cut off and Wiping scripts.
+	dosbin "${FILESDIR}"/sbin/*.sh
 }
