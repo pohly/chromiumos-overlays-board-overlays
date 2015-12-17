@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -32,4 +32,8 @@ src_install() {
 
 	# Battery cut off and Wiping scripts.
 	dosbin "${FILESDIR}"/sbin/*.sh
+
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs kunimitsu "${audio_config_dir}"
 }
