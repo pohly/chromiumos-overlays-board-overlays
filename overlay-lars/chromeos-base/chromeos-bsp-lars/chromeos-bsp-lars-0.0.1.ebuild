@@ -32,4 +32,8 @@ src_install() {
 
 	# Battery cut off and Wiping scripts.
 	dosbin "${FILESDIR}"/sbin/*.sh
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
