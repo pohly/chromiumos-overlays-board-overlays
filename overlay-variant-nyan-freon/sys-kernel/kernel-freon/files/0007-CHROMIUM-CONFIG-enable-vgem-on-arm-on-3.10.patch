@@ -1,0 +1,23 @@
+From 4c293f631ee13cda1c865a144bada41ea7a0cb50 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
+Date: Mon, 7 Dec 2015 19:19:39 -0800
+Subject: [PATCH 7/8] CHROMIUM: CONFIG: enable vgem on arm on 3.10
+
+Change-Id: I18bfd04359eae0abac565032b262d62bd3943243
+---
+ chromeos/config/armel/common.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
+index 084c150..d2e677f 100644
+--- a/chromeos/config/armel/common.config
++++ b/chromeos/config/armel/common.config
+@@ -472,3 +472,5 @@ CONFIG_ZBOOT_ROM_BSS=0x0
+ CONFIG_ZBOOT_ROM_TEXT=0x0
+ # CONFIG_ZD1211RW is not set
+ CONFIG_ZONE_DMA_FLAG=0
++CONFIG_DRM_VGEM=y
++
+-- 
+2.6.0.rc2.230.g3dd15c0
+

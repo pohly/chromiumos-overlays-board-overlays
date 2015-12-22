@@ -1,7 +1,7 @@
-From 05bb6297e22f9b439b92f05ef216b0cd1f30c179 Mon Sep 17 00:00:00 2001
+From 2fd7df2d86a50cf864acc7caf56a68e0b4c9246f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 7 May 2015 19:57:21 -0700
-Subject: [PATCH 5/5] HACK: DT: swap DC order
+Subject: [PATCH 5/8] HACK: DT: swap DC order
 
 Somehow with the new init, the DCs end up inverted. As a workaround
 let's swap them in the DT.
@@ -66,5 +66,5 @@ index c16ccbc..9825e70 100644
  			compatible = "nvidia,tegra124-sor";
  			reg = <0x54540000 0x00040000>;
 -- 
-2.2.0.rc0.207.ga3a616c
+2.6.0.rc2.230.g3dd15c0
 

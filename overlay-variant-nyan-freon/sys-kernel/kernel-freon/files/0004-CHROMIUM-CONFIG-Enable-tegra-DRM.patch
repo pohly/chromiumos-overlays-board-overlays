@@ -1,7 +1,7 @@
-From a51a41a51bd59ee86399c5a71570c6533f2b71e4 Mon Sep 17 00:00:00 2001
+From 5c24894104535bc256b1bcde540f0b5aac943027 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 16 Apr 2015 19:28:21 -0700
-Subject: [PATCH 4/5] CHROMIUM: CONFIG: Enable tegra DRM
+Subject: [PATCH 4/8] CHROMIUM: CONFIG: Enable tegra DRM
 
 This enables tegra DRM.
 
@@ -38,10 +38,10 @@ index 21e8eb4..c615c8e 100644
  CONFIG_GENERIC_PINCONF=y
  CONFIG_GPIO_TPS6586X=y
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index eb0f897..c1dfa4d 100644
+index 65bfebf..084c150 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
-@@ -435,7 +435,7 @@ CONFIG_TEGRA_DP=y
+@@ -437,7 +437,7 @@ CONFIG_TEGRA_DP=y
  # CONFIG_TEGRA_GRHOST_FORCE_NVMAP is not set
  # CONFIG_TEGRA_GRHOST_GK20A_PHYS_PAGE_TABLES is not set
  CONFIG_TEGRA_GRHOST_USE_DMABUF=y
@@ -51,5 +51,5 @@ index eb0f897..c1dfa4d 100644
  CONFIG_TEGRA_MIPI_CAL=y
  # CONFIG_TEGRA_PCI is not set
 -- 
-2.2.0.rc0.207.ga3a616c
+2.6.0.rc2.230.g3dd15c0
 
