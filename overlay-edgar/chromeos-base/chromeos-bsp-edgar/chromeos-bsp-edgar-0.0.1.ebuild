@@ -29,9 +29,6 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Wiping scripts.
-	dosbin "${FILESDIR}"/sbin/*.sh
-
 	# Install audio configs.
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs edgar "${audio_config_dir}"
