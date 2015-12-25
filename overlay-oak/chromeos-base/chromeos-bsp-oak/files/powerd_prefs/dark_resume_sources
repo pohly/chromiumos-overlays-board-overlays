@@ -1,2 +1,2 @@
 /sys/class/rtc/rtc0/device
-/sys/bus/platform/devices/rf_wake
+/sys/devices/mwifiex
