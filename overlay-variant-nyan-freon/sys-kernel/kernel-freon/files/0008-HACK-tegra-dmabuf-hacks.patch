@@ -1,4 +1,4 @@
-From c18294701d31b6079287f0030d1a57333ad56aca Mon Sep 17 00:00:00 2001
+From 8b6c18d20d66a770dac8d18d76b033ee00f1c5e3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Tue, 15 Sep 2015 15:45:03 -0700
 Subject: [PATCH 8/8] HACK: tegra dmabuf hacks
@@ -13,10 +13,10 @@ Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
  drivers/video/tegra/host/nvmap.c                   |  5 +--
  drivers/video/tegra/nvmap/nvmap.c                  |  3 +-
  drivers/video/tegra/nvmap/nvmap_dev.c              |  1 +
- drivers/video/tegra/nvmap/nvmap_dmabuf.c           | 26 ++++++++++--
- drivers/video/tegra/nvmap/nvmap_handle.c           | 11 +++++
+ drivers/video/tegra/nvmap/nvmap_dmabuf.c           | 30 +++++++++++--
+ drivers/video/tegra/nvmap/nvmap_handle.c           |  9 ++++
  include/linux/nvmap.h                              |  2 +
- 11 files changed, 103 insertions(+), 32 deletions(-)
+ 11 files changed, 105 insertions(+), 32 deletions(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
 index c615c8e..06334b1 100644
@@ -280,7 +280,7 @@ index 2006cd9..969c605 100644
  	p = &dev->handles.rb_node;
  	while (*p) {
 diff --git a/drivers/video/tegra/nvmap/nvmap_dmabuf.c b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
-index 8f09b02..e6fe5a1 100644
+index 8f09b02..44bd581 100644
 --- a/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 +++ b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 @@ -144,6 +144,7 @@ static int nvmap_dmabuf_attach(struct dma_buf *dmabuf, struct device *dev,
@@ -308,12 +308,11 @@ index 8f09b02..e6fe5a1 100644
  	.attach		= nvmap_dmabuf_attach,
  	.detach		= nvmap_dmabuf_detach,
  	.map_dma_buf	= nvmap_dmabuf_map_dma_buf,
-@@ -683,15 +685,23 @@ ulong nvmap_get_id_from_dmabuf_fd(struct nvmap_client *client, int fd)
+@@ -683,15 +685,27 @@ ulong nvmap_get_id_from_dmabuf_fd(struct nvmap_client *client, int fd)
  	struct dma_buf *dmabuf;
  	struct nvmap_handle_info *info;
  
 +	/* FIXME this whole function is leaking the handle info struct. */
-+	dump_stack();
 +
  	dmabuf = dma_buf_get(fd);
  	if (IS_ERR(dmabuf))
@@ -326,13 +325,18 @@ index 8f09b02..e6fe5a1 100644
  			id = -EINVAL;
 +	} else {
 +		/* Foreign dmabuf, need to import */
-+		id = (ulong) (nvmap_create_handle(client, dmabuf->size)->handle);
++		struct nvmap_handle_ref *ref;
++		ref = nvmap_create_handle(client, dmabuf->size);
++		if (!nvmap_handle_get(ref->handle))
++			id = -EINVAL;
++		else
++			id = (ulong) (ref->handle);
  	}
 +	printk(KERN_ERR"get ID dmabuf %p from fd %d\n",dmabuf,fd);
  	dma_buf_put(dmabuf);
  	return id;
  }
-@@ -761,9 +771,11 @@ void nvmap_set_dmabuf_private(struct dma_buf *dmabuf, void *priv,
+@@ -761,9 +775,11 @@ void nvmap_set_dmabuf_private(struct dma_buf *dmabuf, void *priv,
  	if (WARN_ON(!virt_addr_valid(dmabuf)))
  		return;
  
@@ -344,7 +348,7 @@ index 8f09b02..e6fe5a1 100644
  }
  
  void *nvmap_get_dmabuf_private(struct dma_buf *dmabuf)
-@@ -774,8 +786,16 @@ void *nvmap_get_dmabuf_private(struct dma_buf *dmabuf)
+@@ -774,8 +790,16 @@ void *nvmap_get_dmabuf_private(struct dma_buf *dmabuf)
  	if (WARN_ON(!virt_addr_valid(dmabuf)))
  		return ERR_PTR(-EINVAL);
  
@@ -364,26 +368,10 @@ index 8f09b02..e6fe5a1 100644
  }
  
 diff --git a/drivers/video/tegra/nvmap/nvmap_handle.c b/drivers/video/tegra/nvmap/nvmap_handle.c
-index 02db3ed..0a8266f 100644
+index 02db3ed..38f5500 100644
 --- a/drivers/video/tegra/nvmap/nvmap_handle.c
 +++ b/drivers/video/tegra/nvmap/nvmap_handle.c
-@@ -964,6 +964,7 @@ struct nvmap_handle_ref *nvmap_create_handle(struct nvmap_client *client,
- 	struct nvmap_handle *h;
- 	struct nvmap_handle_ref *ref = NULL;
- 
-+
- 	if (!client)
- 		return ERR_PTR(-EINVAL);
- 
-@@ -1051,6 +1052,7 @@ struct nvmap_handle_ref *nvmap_duplicate_handle_id(struct nvmap_client *client,
- 		nvmap_err(client, "%s duplicating unallocated handle\n",
- 			  current->group_leader->comm);
- 		nvmap_handle_put(h);
-+		dump_stack();
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-@@ -1111,6 +1113,10 @@ struct nvmap_handle_ref *nvmap_create_handle_from_fd(
+@@ -1111,6 +1111,10 @@ struct nvmap_handle_ref *nvmap_create_handle_from_fd(
  	id = nvmap_get_id_from_dmabuf_fd(client, fd);
  	if (IS_ERR_VALUE(id))
  		return ERR_PTR(id);
@@ -394,7 +382,7 @@ index 02db3ed..0a8266f 100644
  	ref = nvmap_duplicate_handle_id(client, id, 1);
  	nvmap_handle_put((struct nvmap_handle *)id);
  	return ref;
-@@ -1293,3 +1299,8 @@ int nvmap_get_handle_param(struct nvmap_client *client,
+@@ -1293,3 +1297,8 @@ int nvmap_get_handle_param(struct nvmap_client *client,
  
  	return __nvmap_get_handle_param(client, ref->handle, param, result);
  }
