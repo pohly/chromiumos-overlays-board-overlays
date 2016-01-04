@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -18,6 +18,7 @@ S="${WORKDIR}"
 DEPEND=""
 RDEPEND="${DEPEND}
 	media-libs/media-rules
+	sys-apps/ethtool
 "
 
 src_install() {
@@ -33,4 +34,7 @@ src_install() {
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Install rules to enable WoWLAN on startup.
+	udev_dorules "${FILESDIR}/99-mwifiex-wowlan.rules"
 }

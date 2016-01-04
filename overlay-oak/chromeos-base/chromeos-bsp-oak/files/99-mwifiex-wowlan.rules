@@ -1,0 +1,1 @@
+KERNEL=="mlan*", SUBSYSTEM=="net", ACTION=="add", RUN+="/usr/sbin/ethtool -s %k wol u"
