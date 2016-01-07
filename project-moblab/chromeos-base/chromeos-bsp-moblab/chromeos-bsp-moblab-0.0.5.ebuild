@@ -81,9 +81,11 @@ src_install() {
 	insinto /etc/sudoers.d
 	echo "moblab ALL=NOPASSWD: ALL" > moblab-all
 	echo "apache ALL = NOPASSWD: /sbin/reboot" > apache-reboot
+	echo "apache ALL = NOPASSWD: /sbin/restart" > apache-restart
 	insopts -m600
 	doins moblab-all
 	doins apache-reboot
+	doins apache-restart
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
