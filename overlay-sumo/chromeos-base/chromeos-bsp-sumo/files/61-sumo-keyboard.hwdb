@@ -8,7 +8,7 @@
 # we do not have full keyboard attached and present on-screen keyboard
 # automatically.
 #
-keyboard:dmi:bvn*:bvr*:bd*:svnGOOGLE:pnSumo:pvr*
+evdev:atkbd:dmi:bvn*:bvr*:bd*:svnGOOGLE:pnSumo:pvr*
  KEYBOARD_KEY_00=reserved
  KEYBOARD_KEY_01=reserved
  KEYBOARD_KEY_02=reserved
@@ -73,8 +73,8 @@ keyboard:dmi:bvn*:bvr*:bd*:svnGOOGLE:pnSumo:pvr*
  KEYBOARD_KEY_3d=reserved
  KEYBOARD_KEY_3e=reserved
  KEYBOARD_KEY_3f=reserved
- KEYBOARD_KEY_40=reserved
- KEYBOARD_KEY_41=reserved
+ KEYBOARD_KEY_40=f6                          # Brightness down on Chrome OS
+ KEYBOARD_KEY_41=f7                          # Brightness up on Chrome OS
  KEYBOARD_KEY_42=reserved
  KEYBOARD_KEY_43=reserved
  KEYBOARD_KEY_44=reserved
