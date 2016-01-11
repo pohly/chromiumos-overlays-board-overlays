@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyrightght 2016 The Chromium OS Authors. All rights reserved.
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 #
@@ -38,7 +38,7 @@ write_activate_date() {
 clean_activate_date() {
   echo "Clean Activate Date."
   ${VPD} -i "${PARTITION}" -d "${FIELD_NAME}" ||
-   echo "Can't delete ${FIELD_NAME}, it may not exist in ${PARTITION}."
+    echo "Can't delete ${FIELD_NAME}, it may not exist in ${PARTITION}."
 }
 
 main() {
@@ -47,7 +47,7 @@ main() {
   else
     CLEAN=0
   fi
-  
+
   # Get the current value in VPD. The output format is followed:
   #
   #   "ActivateDate"="2011-33"
