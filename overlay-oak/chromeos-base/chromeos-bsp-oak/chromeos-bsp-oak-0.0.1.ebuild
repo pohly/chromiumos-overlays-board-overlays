@@ -21,7 +21,7 @@ RDEPEND="${DEPEND}
 "
 
 src_install() {
-	doappid "{8D0990C8-904D-45FD-ACEB-DCCAD82EC66E}" "REFERENCE"
+	doappid "{8D0990C8-904D-45FD-ACEB-DCCAD82EC66E}" "CHROMEBOOK"
 
 	# install ucm config files
 	insinto /usr/share/alsa/ucm
