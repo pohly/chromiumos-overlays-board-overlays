@@ -9,7 +9,8 @@
 #
 
 BATTERY_PATH="/sys/class/power_supply/bq27500-0"
-MIN_LEVEL=45
+MIN_LEVEL=40
+MAX_LEVEL=60
 DISPLAY_MESSAGE="/usr/sbin/display_wipe_message.sh"
 
 get_percentage() {
@@ -30,6 +31,22 @@ if [[ $(get_percentage) -le $MIN_LEVEL ]]; then
   # Wait for battery to charge to MIN_LEVEL
   while [[ $(get_percentage) -le $MIN_LEVEL ]]; do
     "${DISPLAY_MESSAGE}" "charging" "$(get_percentage)" "${MIN_LEVEL}"
+    sleep 1
+  done
+fi
+
+if [[ $(get_percentage) -gt $MAX_LEVEL ]]; then
+  # Remove AC power
+  if [ "$(ectool battery | grep AC_PRESENT)" ]; then
+    "${DISPLAY_MESSAGE}" "remove_ac"
+    while [ "$(ectool battery | grep AC_PRESENT)" ]; do
+      sleep 0.5;
+    done
+  fi
+
+  # Wait for battery to discharge to MAX_LEVEL
+  while [[ $(get_percentage) -gt $MAX_LEVEL ]]; do
+    "${DISPLAY_MESSAGE}" "discharging" "$(get_percentage)" "${MAX_LEVEL}"
     sleep 1
   done
 fi
