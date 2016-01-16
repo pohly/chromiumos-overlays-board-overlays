@@ -1,4 +1,4 @@
-From 4c293f631ee13cda1c865a144bada41ea7a0cb50 Mon Sep 17 00:00:00 2001
+From d535b6d634f65662c278d04fb45f759122f0bcec Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Mon, 7 Dec 2015 19:19:39 -0800
 Subject: [PATCH 7/8] CHROMIUM: CONFIG: enable vgem on arm on 3.10

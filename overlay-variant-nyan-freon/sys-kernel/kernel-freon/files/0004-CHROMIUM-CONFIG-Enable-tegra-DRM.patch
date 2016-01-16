@@ -1,4 +1,4 @@
-From 5c24894104535bc256b1bcde540f0b5aac943027 Mon Sep 17 00:00:00 2001
+From 3ac627819739e87f6fa0eb2298fceb5d7cab0f83 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 16 Apr 2015 19:28:21 -0700
 Subject: [PATCH 4/8] CHROMIUM: CONFIG: Enable tegra DRM

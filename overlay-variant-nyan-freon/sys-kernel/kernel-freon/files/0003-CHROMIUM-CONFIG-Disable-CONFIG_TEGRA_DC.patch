@@ -1,4 +1,4 @@
-From 920eb75af1cd763b6ec067f9290006a1ab70ce3e Mon Sep 17 00:00:00 2001
+From e091c6f07796156273d0ee6bb0fb414f8c7aaa0a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 16 Apr 2015 18:30:54 -0700
 Subject: [PATCH 3/8] CHROMIUM: CONFIG: Disable CONFIG_TEGRA_DC

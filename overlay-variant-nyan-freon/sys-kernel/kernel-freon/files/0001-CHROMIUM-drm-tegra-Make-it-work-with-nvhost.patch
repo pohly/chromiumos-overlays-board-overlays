@@ -1,4 +1,4 @@
-From d718ec27b60e5d51102cdf04f7682dabf573d885 Mon Sep 17 00:00:00 2001
+From b3c01f7859a00864197730b58ce1a5ef7c70101d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 1 May 2015 18:58:07 -0700
 Subject: [PATCH 1/8] CHROMIUM: drm/tegra: Make it work with nvhost

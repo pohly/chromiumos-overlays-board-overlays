@@ -1,4 +1,4 @@
-From 7bb2fe78482d26f70a1c128f93e1b6fe135edfc9 Mon Sep 17 00:00:00 2001
+From 89bbe332ada6c2adf2cbfb6c06d0449e1d558364 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Tue, 15 Sep 2015 15:45:03 -0700
 Subject: [PATCH 8/8] HACK: tegra dmabuf hacks
@@ -7,16 +7,18 @@ Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
 ---
  .../config/armel/chromeos-tegra.flavour.config     |   2 +-
  drivers/gpu/drm/tegra/gem.c                        |   5 +-
- drivers/video/tegra/host/dmabuf.c                  | 121 +++++++++++++++++----
+ drivers/video/tegra/host/dmabuf.c                  | 121 +++++++++++++++---
  drivers/video/tegra/host/dmabuf.h                  |   5 +
+ drivers/video/tegra/host/nvhost_job.c              |   2 +
  drivers/video/tegra/host/nvhost_memmgr.c           |  36 +++++-
  drivers/video/tegra/host/nvhost_memmgr.h           |  14 ++-
- drivers/video/tegra/host/nvmap.c                   |   4 -
+ drivers/video/tegra/host/nvmap.c                   |   8 +-
  drivers/video/tegra/nvmap/nvmap.c                  |   2 +-
- drivers/video/tegra/nvmap/nvmap_dmabuf.c           |  42 +++++--
- drivers/video/tegra/nvmap/nvmap_handle.c           |   9 ++
+ drivers/video/tegra/nvmap/nvmap_dmabuf.c           |  58 +++++++--
+ drivers/video/tegra/nvmap/nvmap_handle.c           | 138 ++++++++++++++++++++-
+ drivers/video/tegra/nvmap/nvmap_priv.h             |   3 +
  include/linux/nvmap.h                              |   2 +
- 11 files changed, 197 insertions(+), 45 deletions(-)
+ 13 files changed, 348 insertions(+), 48 deletions(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
 index c615c8e..06334b1 100644
@@ -228,6 +230,26 @@ index 2646184..85a280e 100644
 +				 struct nvhost_allocator *allocator,
 +				 int lines);
  #endif
+diff --git a/drivers/video/tegra/host/nvhost_job.c b/drivers/video/tegra/host/nvhost_job.c
+index ffe3cab..98fcdcf 100644
+--- a/drivers/video/tegra/host/nvhost_job.c
++++ b/drivers/video/tegra/host/nvhost_job.c
+@@ -270,6 +270,7 @@ static int pin_array_ids(struct platform_device *dev,
+ 			return -EINVAL;
+ 
+ 		attach = dma_buf_attach(buf, &dev->dev);
++		printk("[%s:%d] ATTACH %p\n",__func__,__LINE__,buf);
+ 		if (IS_ERR(attach))
+ 			return PTR_ERR(attach);
+ 
+@@ -448,6 +449,7 @@ void nvhost_job_unpin(struct nvhost_job *job)
+ 		struct nvhost_job_unpin *unpin = &job->unpins[i];
+ 		dma_buf_unmap_attachment(unpin->attach, unpin->sgt,
+ 						DMA_BIDIRECTIONAL);
++		printk("[%s:%d] DETACH %p\n",__func__,__LINE__,unpin->buf);
+ 		dma_buf_detach(unpin->buf, unpin->attach);
+ 		dma_buf_put(unpin->buf);
+ 	}
 diff --git a/drivers/video/tegra/host/nvhost_memmgr.c b/drivers/video/tegra/host/nvhost_memmgr.c
 index 6fb668c..71f4bc1 100644
 --- a/drivers/video/tegra/host/nvhost_memmgr.c
@@ -398,10 +420,36 @@ index 8e65151..14eebb8 100644
  u32 nvhost_memmgr_handle_to_id(struct mem_handle *handle);
  
 diff --git a/drivers/video/tegra/host/nvmap.c b/drivers/video/tegra/host/nvmap.c
-index fb10ee6..5333a36 100644
+index fb10ee6..f9eb0f9 100644
 --- a/drivers/video/tegra/host/nvmap.c
 +++ b/drivers/video/tegra/host/nvmap.c
-@@ -260,12 +260,8 @@ void nvhost_nvmap_kunmap(struct mem_handle *handle, unsigned int pagenum,
+@@ -181,6 +181,7 @@ priv_exist_or_err:
+ 			}
+ 		}
+ 	} else if (as_priv->pin_count == 0) {
++		printk("[%s:%d] ATTACH %p\n",__func__,__LINE__,dmabuf);
+ 		as_priv->attach = dma_buf_attach(dmabuf, dev);
+ 		if (IS_ERR(as_priv->attach)) {
+ 			mutex_unlock(&priv->lock);
+@@ -190,7 +191,9 @@ priv_exist_or_err:
+ 		as_priv->sgt = dma_buf_map_attachment(as_priv->attach,
+ 						      DMA_BIDIRECTIONAL);
+ 		if (IS_ERR(as_priv->sgt)) {
++			printk("[%s:%d] DETACH %p\n",__func__,__LINE__,dmabuf);
+ 			dma_buf_detach(dmabuf, as_priv->attach);
++			as_priv->attach = NULL;
+ 			mutex_unlock(&priv->lock);
+ 			return as_priv->sgt;
+ 		}
+@@ -229,6 +232,7 @@ void nvhost_nvmap_unpin(struct mem_mgr *mgr, struct mem_handle *handle,
+ 			dma_buf_unmap_attachment(as_priv->attach,
+ 				as_priv->sgt, DMA_BIDIRECTIONAL);
+ 			dma_buf_detach(dmabuf, as_priv->attach);
++			as_priv->attach = NULL;
+ 		}
+ 		trace_nvhost_nvmap_unpin(dev_name(dev),
+ 			dmabuf, as_priv->len, dma_addr);
+@@ -260,12 +264,8 @@ void nvhost_nvmap_kunmap(struct mem_handle *handle, unsigned int pagenum,
  struct mem_handle *nvhost_nvmap_get(struct mem_mgr *mgr,
  		ulong id, struct platform_device *dev)
  {
@@ -428,7 +476,7 @@ index 66f0902..66f7529 100644
  	cnt = atomic_dec_return(&h->ref);
  
 diff --git a/drivers/video/tegra/nvmap/nvmap_dmabuf.c b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
-index 8f09b02..65fcc64 100644
+index 8f09b02..bd8f293 100644
 --- a/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 +++ b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 @@ -164,6 +164,7 @@ static void nvmap_dmabuf_detach(struct dma_buf *dmabuf,
@@ -479,7 +527,43 @@ index 8f09b02..65fcc64 100644
  	mutex_unlock(&info->maps_lock);
  	return sgt;
  
-@@ -520,7 +521,7 @@ static void nvmap_dmabuf_vunmap(struct dma_buf *dmabuf, void *vaddr)
+@@ -422,11 +423,22 @@ static void nvmap_dmabuf_unmap_dma_buf(struct dma_buf_attachment *attach,
+ 	mutex_unlock(&info->maps_lock);
+ }
+ 
++extern struct dma_buf_ops nvmap_dma_buf_ops;
++
+ static void nvmap_dmabuf_release(struct dma_buf *dmabuf)
+ {
+ 	struct nvmap_handle_info *info = dmabuf->priv;
+ 	struct nvmap_handle_sgt *nvmap_sgt;
+ 
++	if (dmabuf->ops == &nvmap_dma_buf_ops) {
++		printk("MINE %p handle %p\n",dmabuf,info->handle);
++		nvmap_handle_put(info->handle);
++		return;
++	}
++	else
++		printk("NOT MINE %p\n",dmabuf);
++
++
+ 	trace_nvmap_dmabuf_release(info->handle->owner ?
+ 				   info->handle->owner->name : "unknown",
+ 				   info->handle,
+@@ -442,9 +454,12 @@ static void nvmap_dmabuf_release(struct dma_buf *dmabuf)
+ 	}
+ 	mutex_unlock(&info->maps_lock);
+ 
++	printk("[%s:%d] DETACH %p\n",__func__,__LINE__,info->handle->dmabuf);
+ 	dma_buf_detach(info->handle->dmabuf, info->handle->attachment);
++	info->handle->attachment = NULL;
+ 	info->handle->dmabuf = NULL;
+ 	nvmap_handle_put(info->handle);
++	printk("[%s:%d] DETACHED %p\n",__func__,__LINE__,info->handle->dmabuf);
+ 	kfree(info);
+ }
+ 
+@@ -520,7 +535,7 @@ static void nvmap_dmabuf_vunmap(struct dma_buf *dmabuf, void *vaddr)
  	__nvmap_munmap(info->handle, vaddr);
  }
  
@@ -488,16 +572,18 @@ index 8f09b02..65fcc64 100644
  	.attach		= nvmap_dmabuf_attach,
  	.detach		= nvmap_dmabuf_detach,
  	.map_dma_buf	= nvmap_dmabuf_map_dma_buf,
-@@ -683,14 +684,25 @@ ulong nvmap_get_id_from_dmabuf_fd(struct nvmap_client *client, int fd)
+@@ -683,14 +698,27 @@ ulong nvmap_get_id_from_dmabuf_fd(struct nvmap_client *client, int fd)
  	struct dma_buf *dmabuf;
  	struct nvmap_handle_info *info;
  
++	dump_stack();
 +	/* FIXME this whole function is leaking the handle info struct. */
 +
  	dmabuf = dma_buf_get(fd);
  	if (IS_ERR(dmabuf))
  		return PTR_ERR(dmabuf);
  	if (dmabuf->ops == &nvmap_dma_buf_ops) {
++		printk("GET SELF IMPORTED %p\n",info->handle);
 +		/* Self-imported dmabuf, we can just get a ref and move on */
  		info = dmabuf->priv;
  		id = (ulong) info->handle;
@@ -506,7 +592,7 @@ index 8f09b02..65fcc64 100644
 +	} else {
 +		/* Foreign dmabuf, need to import */
 +		struct nvmap_handle_ref *ref;
-+		ref = nvmap_create_handle(client, dmabuf->size);
++		ref = nvmap_create_handle_dmabuf(client, dmabuf);
 +		if (!nvmap_handle_get(ref->handle))
 +			id = -EINVAL;
 +		else
@@ -514,7 +600,7 @@ index 8f09b02..65fcc64 100644
  	}
  	dma_buf_put(dmabuf);
  	return id;
-@@ -761,6 +773,7 @@ void nvmap_set_dmabuf_private(struct dma_buf *dmabuf, void *priv,
+@@ -761,6 +789,7 @@ void nvmap_set_dmabuf_private(struct dma_buf *dmabuf, void *priv,
  	if (WARN_ON(!virt_addr_valid(dmabuf)))
  		return;
  
@@ -522,7 +608,7 @@ index 8f09b02..65fcc64 100644
  	info = dmabuf->priv;
  	info->handle->nvhost_priv = priv;
  	info->handle->nvhost_priv_delete = delete;
-@@ -774,8 +787,13 @@ void *nvmap_get_dmabuf_private(struct dma_buf *dmabuf)
+@@ -774,8 +803,13 @@ void *nvmap_get_dmabuf_private(struct dma_buf *dmabuf)
  	if (WARN_ON(!virt_addr_valid(dmabuf)))
  		return ERR_PTR(-EINVAL);
  
@@ -539,21 +625,169 @@ index 8f09b02..65fcc64 100644
  }
  
 diff --git a/drivers/video/tegra/nvmap/nvmap_handle.c b/drivers/video/tegra/nvmap/nvmap_handle.c
-index 02db3ed..38f5500 100644
+index 02db3ed..f5ffedd 100644
 --- a/drivers/video/tegra/nvmap/nvmap_handle.c
 +++ b/drivers/video/tegra/nvmap/nvmap_handle.c
-@@ -1111,6 +1111,10 @@ struct nvmap_handle_ref *nvmap_create_handle_from_fd(
- 	id = nvmap_get_id_from_dmabuf_fd(client, fd);
- 	if (IS_ERR_VALUE(id))
- 		return ERR_PTR(id);
+@@ -596,6 +596,35 @@ static struct page *nvmap_alloc_pages_exact(gfp_t gfp, size_t size)
+ 	return page;
+ }
+ 
++static int handle_page_alloc_dmabuf(struct nvmap_client *client,
++				    struct nvmap_handle *h)
++{
++	size_t size = PAGE_ALIGN(h->size);
++	unsigned int nr_page = size >> PAGE_SHIFT;
++	unsigned int i = 0;
++	struct page **pages;
++	struct sg_table *sg_table;
++	struct sg_page_iter sg_iter;
++
++	pages = altalloc(nr_page * sizeof(*pages));
++	if (!pages)
++		return -ENOMEM;
++
++	sg_table = dma_buf_map_attachment(h->attachment, DMA_BIDIRECTIONAL);
++	if (!IS_ERR(sg_table)) {
++		altfree(pages, nr_page * sizeof(*pages));
++		return -ENOMEM;
++	}
++
++	for_each_sg_page(sg_table->sgl, &sg_iter, sg_table->nents, 0)
++                pages[i++] = sg_page_iter_page(&sg_iter);
++
++	h->size = size;
++	h->pgalloc.pages = pages;
++	h->pgalloc.contig = false;
++	return 0;
++}
++
+ static int handle_page_alloc(struct nvmap_client *client,
+ 			     struct nvmap_handle *h, bool contiguous)
+ {
+@@ -957,6 +986,69 @@ static void add_handle_ref(struct nvmap_client *client,
+ 	nvmap_ref_unlock(client);
+ }
+ 
++struct nvmap_handle_ref *nvmap_create_handle_dmabuf(struct nvmap_client *client,
++						    struct dma_buf *dmabuf)
++{
++	void *err = ERR_PTR(-ENOMEM);
++	struct nvmap_handle *h;
++	struct nvmap_handle_ref *ref = NULL;
++
++	if (!client)
++		return ERR_PTR(-EINVAL);
++
++	if (!dmabuf->size)
++		return ERR_PTR(-EINVAL);
++
++	h = kzalloc(sizeof(*h), GFP_KERNEL);
++	if (!h)
++		return ERR_PTR(-ENOMEM);
++
++	ref = kzalloc(sizeof(*ref), GFP_KERNEL);
++	if (!ref)
++		goto ref_alloc_fail;
++
++	atomic_set(&h->ref, 1);
++	atomic_set(&h->pin, 0);
++	h->owner = client;
++	h->owner_ref = ref;
++	h->dev = nvmap_dev;
++	BUG_ON(!h->owner);
++	h->size = h->orig_size = dmabuf->size;
++	h->flags = NVMAP_HANDLE_WRITE_COMBINE;
++	mutex_init(&h->lock);
++
++	h->dmabuf = dmabuf;
++
++	/*
++	 * Pre-attach nvmap to this dmabuf. This gets unattached during the
++	 * dma_buf_release() operation.
++	 */
++	h->attachment = dma_buf_attach(h->dmabuf, &nvmap_pdev->dev);
++	if (IS_ERR(h->attachment)) {
++		err = h->attachment;
++		goto dma_buf_attach_fail;
++	}
++
++	nvmap_handle_add(nvmap_dev, h);
++
++	/*
++	 * Major assumption here: the dma_buf object that the handle contains
++	 * is created with a ref count of 1.
++	 */
++	atomic_set(&ref->dupes, 1);
++	ref->handle = h;
++	atomic_set(&ref->pin, 0);
++	add_handle_ref(client, ref);
++	trace_nvmap_create_handle(client, client->name, h, dmabuf->size, ref);
++	return ref;
++
++dma_buf_attach_fail:
++	kfree(ref);
++ref_alloc_fail:
++	kfree(h);
++	return err;
++}
++
+ struct nvmap_handle_ref *nvmap_create_handle(struct nvmap_client *client,
+ 					     size_t size)
+ {
+@@ -1105,14 +1197,49 @@ struct nvmap_handle_ref *nvmap_create_handle_from_fd(
+ {
+ 	unsigned long id;
+ 	struct nvmap_handle_ref *ref;
++	struct dma_buf *dmabuf;
+ 
+ 	BUG_ON(!client);
+ 
+-	id = nvmap_get_id_from_dmabuf_fd(client, fd);
+-	if (IS_ERR_VALUE(id))
+-		return ERR_PTR(id);
++
++	dump_stack();
++
++	dmabuf = dma_buf_get(fd);
++	if (IS_ERR(dmabuf))
++		BUG_ON(1);
++
++	/* Foreign dmabuf, need to import */
++	ref = nvmap_create_handle_dmabuf(client, dmabuf);
++	if (IS_ERR(ref))
++		goto fail;
++
++	if (!nvmap_handle_get(ref->handle))
++		id = -EINVAL;
++	else
++		id = (ulong) (ref->handle);
 +
 +	/* give it some IOVM backing */
-+	alloc_handle(client, (struct nvmap_handle *)id, NVMAP_HEAP_IOVMM);
++	{
++		int ret;
++		struct nvmap_handle *h = (struct nvmap_handle *)id;
++		size_t reserved = PAGE_ALIGN(h->size);
++
++		atomic_add_return(reserved, &client->iovm_commit);
++		ret = handle_page_alloc_dmabuf(client, h);
++		if (ret) {
++			atomic_sub(reserved, &client->iovm_commit);
++			goto fail;
++		}
++		h->heap_pgalloc = true;
++		mb();
++		h->alloc = true;
++	}
 +
  	ref = nvmap_duplicate_handle_id(client, id, 1);
++
++fail:
  	nvmap_handle_put((struct nvmap_handle *)id);
++	dma_buf_put(dmabuf);
  	return ref;
-@@ -1293,3 +1297,8 @@ int nvmap_get_handle_param(struct nvmap_client *client,
+ }
+ 
+@@ -1293,3 +1420,8 @@ int nvmap_get_handle_param(struct nvmap_client *client,
  
  	return __nvmap_get_handle_param(client, ref->handle, param, result);
  }
@@ -562,6 +796,20 @@ index 02db3ed..38f5500 100644
 +{
 +	return h->attachment;
 +}
+diff --git a/drivers/video/tegra/nvmap/nvmap_priv.h b/drivers/video/tegra/nvmap/nvmap_priv.h
+index a21b7c9..0d1ddaf 100644
+--- a/drivers/video/tegra/nvmap/nvmap_priv.h
++++ b/drivers/video/tegra/nvmap/nvmap_priv.h
+@@ -293,6 +293,9 @@ void nvmap_handle_put(struct nvmap_handle *h);
+ struct nvmap_handle_ref *__nvmap_validate_id_locked(struct nvmap_client *priv,
+ 						   unsigned long id);
+ 
++struct nvmap_handle_ref *nvmap_create_handle_dmabuf(struct nvmap_client *client,
++						    struct dma_buf *dmabuf);
++
+ struct nvmap_handle_ref *nvmap_create_handle(struct nvmap_client *client,
+ 					     size_t size);
+ 
 diff --git a/include/linux/nvmap.h b/include/linux/nvmap.h
 index a4970ee..673d2f6 100644
 --- a/include/linux/nvmap.h

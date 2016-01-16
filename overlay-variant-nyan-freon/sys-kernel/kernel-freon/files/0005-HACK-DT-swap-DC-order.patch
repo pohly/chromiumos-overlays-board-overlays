@@ -1,4 +1,4 @@
-From 2fd7df2d86a50cf864acc7caf56a68e0b4c9246f Mon Sep 17 00:00:00 2001
+From 4bae1555f69c42398161a6e1f396c5d3950902d2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 7 May 2015 19:57:21 -0700
 Subject: [PATCH 5/8] HACK: DT: swap DC order
