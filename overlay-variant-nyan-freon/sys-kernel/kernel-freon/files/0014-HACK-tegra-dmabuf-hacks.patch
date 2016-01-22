@@ -1,7 +1,7 @@
-From 89bbe332ada6c2adf2cbfb6c06d0449e1d558364 Mon Sep 17 00:00:00 2001
+From cee43726bcd877482a1419c7cdbe9e8b0740edca Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Tue, 15 Sep 2015 15:45:03 -0700
-Subject: [PATCH 8/8] HACK: tegra dmabuf hacks
+Subject: [PATCH 14/14] HACK: tegra dmabuf hacks
 
 Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
 ---
@@ -21,7 +21,7 @@ Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
  13 files changed, 348 insertions(+), 48 deletions(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
-index c615c8e..06334b1 100644
+index a0d1803..027e6b4 100644
 --- a/chromeos/config/armel/chromeos-tegra.flavour.config
 +++ b/chromeos/config/armel/chromeos-tegra.flavour.config
 @@ -114,7 +114,7 @@ CONFIG_NVMAP_PAGE_POOLS_INIT_FILLUP=y
@@ -824,5 +824,5 @@ index a4970ee..673d2f6 100644
  ulong nvmap_page_pool_get_unused_pages(void);
  #else
 -- 
-2.6.0.rc2.230.g3dd15c0
+2.7.0.rc3.207.g0ac5344
 

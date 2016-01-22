@@ -1,0 +1,30 @@
+From d14917928de152a43f6e00a118862e555282c46d Mon Sep 17 00:00:00 2001
+From: Mark Zhang <markz@nvidia.com>
+Date: Tue, 12 Jan 2016 17:27:13 +0800
+Subject: [PATCH 09/14] Eliminate SMMU errors
+
+DC is enabled by coreboot but KMS/userspace doesn't init display on
+Freon now. So powergate dc when probing to turn dc down,
+this is able to eliminate all SMMU errors.
+
+Change-Id: Ic595b73abf81a289703ec58d2d18e337b436f330
+Signed-off-by: Mark Zhang <markz@nvidia.com>
+---
+ drivers/gpu/drm/tegra/dc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
+index 4677e50..dd785bc 100644
+--- a/drivers/gpu/drm/tegra/dc.c
++++ b/drivers/gpu/drm/tegra/dc.c
+@@ -1556,6 +1556,7 @@ static int tegra_dc_probe(struct platform_device *pdev)
+ 	if (err < 0)
+ 		return err;
+ 
++	tegra_dc_powergate_locked(dc);
+ 	tegra_dc_unpowergate_locked(dc);
+ 
+ 	dc->clk = devm_clk_get(&pdev->dev, NULL);
+-- 
+2.7.0.rc3.207.g0ac5344
+

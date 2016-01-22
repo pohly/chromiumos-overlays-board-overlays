@@ -1,0 +1,67 @@
+From e0497dd0ffa992d8f463fbf355f56072b375d338 Mon Sep 17 00:00:00 2001
+From: Mark Zhang <markz@nvidia.com>
+Date: Wed, 13 Jan 2016 16:36:58 +0800
+Subject: [PATCH 11/14] Fix the drm crash when TEGRA_FBDEV is enabled
+
+[   15.513135] [<c04e3c4c>] (drm_fb_helper_init+0x60/0x154) from
+[<c0502aa0>] (tegra_drm_fb_init+0x38/0x98)
+[   15.523113] [<c0502aa0>] (tegra_drm_fb_init+0x38/0x98) from
+[<c0500ff4>] (tegra_drm_load+0x128/0x1ac)
+[   15.532818] [<c0500ff4>] (tegra_drm_load+0x128/0x1ac) from
+[<c04ee2bc>] (drm_dev_register+0xec/0x1ac)
+[   15.542522] [<c04ee2bc>] (drm_dev_register+0xec/0x1ac) from
+[<c04efd80>] (drm_get_platform_dev+0x58/0xb8)
+[   15.552588] [<c04efd80>] (drm_get_platform_dev+0x58/0xb8) from
+[<c04efe34>] (drm_platform_init+0x54/0x68)
+[   15.562655] [<c04efe34>] (drm_platform_init+0x54/0x68) from
+[<c0501098>] (tegra_drm_platform_probe+0x20/0x28)
+[   15.573084] [<c0501098>] (tegra_drm_platform_probe+0x20/0x28) from
+[<c0518170>] (platform_drv_probe+0x24/0x28)
+[   15.583604] [<c0518170>] (platform_drv_probe+0x24/0x28) from
+[<c0516c38>] (driver_probe_device+0xd4/0x24c)
+[   15.593763] [<c0516c38>] (driver_probe_device+0xd4/0x24c) from
+[<c0516de8>] (__device_attach+0x38/0x54)
+[   15.603649] [<c0516de8>] (__device_attach+0x38/0x54) from
+[<c0514e84>] (bus_for_each_drv+0xa0/0xc8)
+[   15.613172] [<c0514e84>] (bus_for_each_drv+0xa0/0xc8) from
+[<c0516b10>] (device_attach+0x74/0x98)
+[   15.622514] [<c0516b10>] (device_attach+0x74/0x98) from [<c0516010>]
+(bus_probe_device+0x38/0xa8)
+[   15.631857] [<c0516010>] (bus_probe_device+0x38/0xa8) from
+[<c0514160>] (device_add+0x2dc/0x5dc)
+[   15.641108] [<c0514160>] (device_add+0x2dc/0x5dc) from [<c05185b8>]
+(platform_device_add+0x138/0x1d0)
+[   15.650811] [<c05185b8>] (platform_device_add+0x138/0x1d0) from
+[<c0518adc>] (platform_device_register_full+0xa8/0xe4)
+[   15.662058] [<c0518adc>] (platform_device_register_full+0xa8/0xe4)
+from [<c0c2a29c>] (host1x_drm_init+0x94/0x114)
+[   15.672850] [<c0c2a29c>] (host1x_drm_init+0x94/0x114) from
+[<c0200500>] (do_one_initcall+0xa8/0x148)
+[   15.682464] [<c0200500>] (do_one_initcall+0xa8/0x148) from
+[<c0c00c8c>] (kernel_init_freeable+0x110/0x1d8)
+[   15.692621] [<c0c00c8c>] (kernel_init_freeable+0x110/0x1d8) from
+[<c076544c>] (kernel_init+0x1c/0xf8)
+[   15.702326] [<c076544c>] (kernel_init+0x1c/0xf8) from [<c0206018>]
+(ret_from_fork+0x14/0x20)
+
+Change-Id: I0b42cdc133b8f6d3750f88987591108abefe2185
+Signed-off-by: Mark Zhang <markz@nvidia.com>
+---
+ drivers/gpu/drm/tegra/fb.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/tegra/fb.c b/drivers/gpu/drm/tegra/fb.c
+index 3547b22..97508fa 100644
+--- a/drivers/gpu/drm/tegra/fb.c
++++ b/drivers/gpu/drm/tegra/fb.c
+@@ -300,6 +300,7 @@ static struct tegra_fbdev *tegra_fbdev_create(struct drm_device *drm)
+ 	}
+ 
+ 	fbdev->base.funcs = &tegra_fb_helper_funcs;
++	fbdev->base.dev = drm;
+ 	helper = &fbdev->base;
+ 
+ 	return fbdev;
+-- 
+2.7.0.rc3.207.g0ac5344
+

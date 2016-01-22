@@ -1,0 +1,104 @@
+From e88f5e84f4ae1aa750cf5bde612c8a89ca6c6701 Mon Sep 17 00:00:00 2001
+From: Mark Zhang <markz@nvidia.com>
+Date: Wed, 13 Jan 2016 17:28:17 +0800
+Subject: [PATCH 13/14] HACK: Defer drm driver probe
+
+Wait before calling tegra_drm_load until dc/hdmi/dpaux/sor
+finish probing. This makes sure KMS happens when kernel boots.
+
+Change-Id: Ica7a6d5876720b6945dc03e45654fa6e5ff385ed
+Signed-off-by: Mark Zhang <markz@nvidia.com>
+---
+ drivers/gpu/drm/tegra/bus.c   | 10 ++++++++++
+ drivers/gpu/drm/tegra/dpaux.c |  7 +++++++
+ drivers/gpu/drm/tegra/drm.c   |  5 +++++
+ drivers/gpu/drm/tegra/drm.h   |  2 ++
+ 4 files changed, 24 insertions(+)
+
+diff --git a/drivers/gpu/drm/tegra/bus.c b/drivers/gpu/drm/tegra/bus.c
+index 3c75d1f..67a0431 100644
+--- a/drivers/gpu/drm/tegra/bus.c
++++ b/drivers/gpu/drm/tegra/bus.c
+@@ -88,4 +88,14 @@ int drm_host1x_device_exit(struct host1x_device *device)
+ 	return 0;
+ }
+ 
++int drm_host1x_get_clients_num(void)
++{
++	int i = 0;
++	struct host1x_client *client;
++
++	list_for_each_entry(client, &clients, list)
++		i++;
++
++	return i;
++}
+ 
+diff --git a/drivers/gpu/drm/tegra/dpaux.c b/drivers/gpu/drm/tegra/dpaux.c
+index 78a5eb8..4e32c69 100644
+--- a/drivers/gpu/drm/tegra/dpaux.c
++++ b/drivers/gpu/drm/tegra/dpaux.c
+@@ -25,6 +25,7 @@
+ 
+ static DEFINE_MUTEX(dpaux_lock);
+ static LIST_HEAD(dpaux_list);
++static bool probed;
+ 
+ struct tegra_dpaux {
+ 	struct drm_dp_aux aux;
+@@ -358,6 +359,7 @@ static int tegra_dpaux_probe(struct platform_device *pdev)
+ 	mutex_unlock(&dpaux_lock);
+ 
+ 	platform_set_drvdata(pdev, dpaux);
++	probed = true;
+ 
+ 	return 0;
+ }
+@@ -574,3 +576,8 @@ int tegra_dpaux_train(struct tegra_dpaux *dpaux, struct drm_dp_link *link,
+ 
+ 	return 0;
+ }
++
++bool tegra_dpaux_probed(void)
++{
++	return  probed;
++}
+diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
+index ffd6df3..8ca2ed2 100644
+--- a/drivers/gpu/drm/tegra/drm.c
++++ b/drivers/gpu/drm/tegra/drm.c
+@@ -716,6 +716,11 @@ static const struct of_device_id host1x_drm_subdevs[] = {
+ 
+ static int tegra_drm_platform_probe(struct platform_device *pdev)
+ {
++	/* HACK: wait until dc.0/dc.1/dpaux/sor/hdmi probe finished. */
++	if ((drm_host1x_get_clients_num() < 4) || !tegra_dpaux_probed()) {
++		return -EPROBE_DEFER;
++	}
++
+ 	return drm_platform_init(&tegra_drm_driver, pdev);
+ }
+ 
+diff --git a/drivers/gpu/drm/tegra/drm.h b/drivers/gpu/drm/tegra/drm.h
+index 2512bde..eb9f17b 100644
+--- a/drivers/gpu/drm/tegra/drm.h
++++ b/drivers/gpu/drm/tegra/drm.h
+@@ -266,6 +266,7 @@ void drm_host1x_exit(struct drm_driver *driver, struct host1x_device *device);
+ int drm_host1x_register(struct host1x_client *client);
+ int drm_host1x_unregister(struct host1x_client *client);
+ int drm_host1x_device_init(struct drm_device *drm, struct host1x_device *device);
++int drm_host1x_get_clients_num(void);
+ 
+ /* from rgb.c */
+ int tegra_dc_rgb_probe(struct tegra_dc *dc);
+@@ -292,6 +293,7 @@ int tegra_dpaux_disable(struct tegra_dpaux *dpaux);
+ int tegra_dpaux_prepare(struct tegra_dpaux *dpaux, u8 encoding);
+ int tegra_dpaux_train(struct tegra_dpaux *dpaux, struct drm_dp_link *link,
+ 		      u8 pattern);
++bool tegra_dpaux_probed(void);
+ 
+ /* from fb.c */
+ struct tegra_bo *tegra_fb_get_plane(struct drm_framebuffer *framebuffer,
+-- 
+2.7.0.rc3.207.g0ac5344
+

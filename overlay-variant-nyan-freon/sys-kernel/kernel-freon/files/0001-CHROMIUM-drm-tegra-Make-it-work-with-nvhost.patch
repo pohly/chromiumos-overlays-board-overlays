@@ -1,7 +1,7 @@
 From b3c01f7859a00864197730b58ce1a5ef7c70101d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 1 May 2015 18:58:07 -0700
-Subject: [PATCH 1/8] CHROMIUM: drm/tegra: Make it work with nvhost
+Subject: [PATCH 01/14] CHROMIUM: drm/tegra: Make it work with nvhost
 
 This change makes tegra drm work with nvhost (as opposed to host1x).
 To do so:
@@ -2415,5 +2415,5 @@ index 67ccb7f..c528387 100644
  		dev_err(&pdev->dev, "failed to unregister host1x client: %d\n",
  			err);
 -- 
-2.6.0.rc2.230.g3dd15c0
+2.7.0.rc3.207.g0ac5344
 

@@ -1,0 +1,47 @@
+From add24fc2cf573942215731eb60ad0507f2dd57ec Mon Sep 17 00:00:00 2001
+From: Mark Zhang <markz@nvidia.com>
+Date: Tue, 12 Jan 2016 15:41:10 +0800
+Subject: [PATCH 08/14] Add vdd-supply to make dpaux probing passes
+
+Change-Id: Ia8456b24c44ba122b8b902b1d0e4a40fdc2d14c9
+Signed-off-by: Mark Zhang <markz@nvidia.com>
+---
+ arch/arm/boot/dts/tegra124-nyan.dtsi | 4 ++++
+ drivers/gpu/drm/tegra/dpaux.c        | 5 ++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/tegra124-nyan.dtsi b/arch/arm/boot/dts/tegra124-nyan.dtsi
+index c6bd143..e49a660 100644
+--- a/arch/arm/boot/dts/tegra124-nyan.dtsi
++++ b/arch/arm/boot/dts/tegra124-nyan.dtsi
+@@ -34,6 +34,10 @@
+ 			hdmi-hpd-gpios = <&gpio TEGRA_GPIO(N, 7) GPIO_ACTIVE_HIGH>;
+ 		};
+ 
++		dpaux@545c0000 {
++			vdd-supply = <&avdd_lcd>;
++		};
++
+ 		gk20a@57000000 {
+ 			vddgpu-supply = <&vdd_gpu>;
+ 		};
+diff --git a/drivers/gpu/drm/tegra/dpaux.c b/drivers/gpu/drm/tegra/dpaux.c
+index 12a94fb..78a5eb8 100644
+--- a/drivers/gpu/drm/tegra/dpaux.c
++++ b/drivers/gpu/drm/tegra/dpaux.c
+@@ -326,8 +326,11 @@ static int tegra_dpaux_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	dpaux->vdd = devm_regulator_get(&pdev->dev, "vdd");
+-	if (IS_ERR(dpaux->vdd))
++	if (IS_ERR(dpaux->vdd)) {
++		dev_err(&pdev->dev, "failed to get vdd regulator: %ld\n",
++			PTR_ERR(dpaux->vdd));
+ 		return PTR_ERR(dpaux->vdd);
++	}
+ 
+ 	err = devm_request_irq(dpaux->dev, dpaux->irq, tegra_dpaux_irq, 0,
+ 			       dev_name(dpaux->dev), dpaux);
+-- 
+2.7.0.rc3.207.g0ac5344
+
