@@ -1,7 +1,7 @@
 From 9e474acce7379eb755d84b29900d5ba8eef9a3b5 Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 16:35:43 +0800
-Subject: [PATCH 10/14] config: Enable TEGRA_FBDEV to enable the KMS
+Subject: [PATCH 10/15] config: Enable TEGRA_FBDEV to enable the KMS
 
 Change-Id: Ia9505d0707ff0129daa6a0da33c605d877a9c2ea
 Signed-off-by: Mark Zhang <markz@nvidia.com>

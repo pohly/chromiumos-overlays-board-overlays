@@ -1,7 +1,7 @@
 From 6385c8bd0d6598b6531cb373b87ffecf739136d3 Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 16:41:55 +0800
-Subject: [PATCH 12/14] dt: panel: Add backlight & ddc channel
+Subject: [PATCH 12/15] dt: panel: Add backlight & ddc channel
 
 These 2 items are required by panel-simple driver.
 

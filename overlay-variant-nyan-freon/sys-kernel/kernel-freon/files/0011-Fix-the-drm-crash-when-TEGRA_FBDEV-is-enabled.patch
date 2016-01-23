@@ -1,7 +1,7 @@
 From e0497dd0ffa992d8f463fbf355f56072b375d338 Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 16:36:58 +0800
-Subject: [PATCH 11/14] Fix the drm crash when TEGRA_FBDEV is enabled
+Subject: [PATCH 11/15] Fix the drm crash when TEGRA_FBDEV is enabled
 
 [   15.513135] [<c04e3c4c>] (drm_fb_helper_init+0x60/0x154) from
 [<c0502aa0>] (tegra_drm_fb_init+0x38/0x98)

@@ -1,7 +1,7 @@
 From cee43726bcd877482a1419c7cdbe9e8b0740edca Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Tue, 15 Sep 2015 15:45:03 -0700
-Subject: [PATCH 14/14] HACK: tegra dmabuf hacks
+Subject: [PATCH 14/15] HACK: tegra dmabuf hacks
 
 Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
 ---

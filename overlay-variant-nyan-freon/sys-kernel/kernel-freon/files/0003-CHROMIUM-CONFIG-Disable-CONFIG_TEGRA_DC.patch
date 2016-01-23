@@ -1,7 +1,7 @@
 From e091c6f07796156273d0ee6bb0fb414f8c7aaa0a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 16 Apr 2015 18:30:54 -0700
-Subject: [PATCH 03/14] CHROMIUM: CONFIG: Disable CONFIG_TEGRA_DC
+Subject: [PATCH 03/15] CHROMIUM: CONFIG: Disable CONFIG_TEGRA_DC
 
 We're going to use tegra DRM for display.
 

@@ -1,0 +1,32 @@
+From 063e41a97948bcf1b875b05af02bf15defd26b6e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
+Date: Fri, 22 Jan 2016 22:17:46 -0800
+Subject: [PATCH 15/15] HACK: drm/edid: remove AUO reduced blanking
+
+This reduced blanking mode was added to let the driver use 1.62Gbit
+instead of 2.7Gbit mode, and therefore save power. However, it seems
+that on nyan, the eDP phy parameters don't work at 1.62Gbit.
+
+Change-Id: Iae4606b6c205484b0c54b2721073ca99964c97e6
+---
+ drivers/gpu/drm/drm_edid.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index eb65644..eab98c7 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -185,10 +185,6 @@ static struct short_blanking {
+ 	{ "IVO", 0x0533, 1520, 785, 71592 },
+ 	/* IVO M116NWR1 R7 */
+ 	{ "IVO", 0x0489, 1520, 785, 71592 },
+-	/* AUO B133XTN02.1 */
+-	{ "AUO", 0x212c, 1446, 824, 71490 },
+-	/* AUO B133XTN01.3 */
+-	{ "AUO", 0x132c, 1446, 824, 71490 },
+ 	/* BOE NT116WHM-N11 */
+ 	{ "BOE", 0x1543, 1512, 790, 71693 },
+ };
+-- 
+2.7.0.rc3.207.g0ac5344
+
