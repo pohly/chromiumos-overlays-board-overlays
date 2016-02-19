@@ -1,0 +1,12 @@
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# TODO(smbarber): replace with kernel-4_4 once it's available
+# http://crosbug.com/p/50426
+USE="device_tree hardfp kernel-3_18 neon"
+
+# TODO(smbarber): change to chromiumos-rk3399 when 4.4 is ready
+# http://crosbug.com/p/50426
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-arm64"
+CHROMEOS_KERNEL_ARCH="arm64"
