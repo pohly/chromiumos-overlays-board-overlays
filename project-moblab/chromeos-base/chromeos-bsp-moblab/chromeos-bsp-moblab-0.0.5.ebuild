@@ -19,7 +19,6 @@ RDEPEND="
 	app-crypt/gnupg
 	lxc? ( app-emulation/lxc )
 	chromeos-base/chromeos-init
-	virtual/chromeos-test-testauthkeys
 	chromeos-base/update_engine[delta_generator]
 	chromeos-base/openssh-server-init
 	chromeos-base/jabra-vold

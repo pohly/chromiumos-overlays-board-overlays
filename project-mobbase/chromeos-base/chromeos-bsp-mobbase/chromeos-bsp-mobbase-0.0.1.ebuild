@@ -14,6 +14,7 @@ IUSE=""
 # properly handle the services required by all mobbase infrastructure projects.
 RDEPEND="
 	chromeos-base/chromeos-init
+	virtual/chromeos-test-testauthkeys
 "
 
 DEPEND=""

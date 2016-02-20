@@ -2,5 +2,5 @@ Host *
   UserKnownHostsFile /dev/null
   CheckHostIP no
   StrictHostKeyChecking no
-  IdentityFile %d/.ssh/moblab_id_rsa
+  IdentityFile %d/.ssh/mobbase_id_rsa
   Protocol 2

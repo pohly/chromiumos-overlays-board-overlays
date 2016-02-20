@@ -1,4 +1,4 @@
-# Copyright (c) 2015 The Chromium OS Authors. All rights reserved.
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="4"
@@ -15,6 +15,7 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-ssh-testkeys
 	!chromeos-base/chromeos-test-testauthkeys
+	!chromeos-base/chromeos-test-testauthkeys-moblab
 "
 
 src_install() {
@@ -28,13 +29,14 @@ src_install() {
 	for filename in "${filenames[@]}"; do
 		dosym /usr/share/chromeos-ssh-config/keys/"${filename}" \
 		      /root/.ssh/"${filename}"
-	# Private key will be deleted from the image for security reasons.
-	# Moblab is special because it needs it present at boot time so name it
-	# differently to avoid deletion.
-	insinto /root/.ssh
-	newins "${EROOT}"/usr/share/chromeos-ssh-config/keys/id_rsa moblab_id_rsa
-	fperms 600 /root/.ssh/moblab_id_rsa
-	newins "${FILESDIR}"/ssh_config config
-	fperms 600 /root/.ssh/config
+		# Private key will be deleted from the image for security
+		# reasons.  MobBase is special because it needs it present at
+		# boot time so name it differently to avoid deletion.
+		insinto /root/.ssh
+		newins "${EROOT}"/usr/share/chromeos-ssh-config/keys/id_rsa \
+		       mobbase_id_rsa
+		fperms 600 /root/.ssh/mobbase_id_rsa
+		newins "${FILESDIR}"/ssh_config config
+		fperms 600 /root/.ssh/config
 	done
 }
