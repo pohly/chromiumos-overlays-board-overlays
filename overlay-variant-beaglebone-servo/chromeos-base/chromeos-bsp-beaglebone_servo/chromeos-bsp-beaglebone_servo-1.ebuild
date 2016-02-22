@@ -50,7 +50,9 @@ RDEPEND="${RDEPEND}
 	app-arch/tar
 	app-editors/vim
 	app-misc/screen
+	app-mobilephone/dfu-util
 	app-shells/bash
+	dev-embedded/dfu-programmer
 	dev-util/strace
 	net-analyzer/tcpdump
 	net-dialup/minicom
