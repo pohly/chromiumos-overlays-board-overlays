@@ -17,6 +17,7 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 DEPEND=""
 RDEPEND="${DEPEND}
+	chromeos-base/chromeos-accelerometer-init
 	media-libs/media-rules
 	sys-apps/ethtool
 "
