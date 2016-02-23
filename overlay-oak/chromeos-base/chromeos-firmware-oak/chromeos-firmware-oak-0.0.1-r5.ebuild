@@ -15,14 +15,6 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
 
-# MTK special preloaders.
-MTK_LOADER_VERSION="0.0.1"
-MTK_LOADER_DIR="chromiumos-third_party-mediatek-firmware"
-MTK_LOADER_ARCHIVE_NAME="${PN}-${MTK_LOADER_VERSION}.tar.gz"
-MTK_LOADER_ARCHIVE_PATH="${MTK_LOADER_DIR}/archive/${MTK_LOADER_ARCHIVE_NAME}"
-MTK_LOADER_LOCAL_DIR="${MTK_LOADER_DIR}-${PN}-${MTK_LOADER_VERSION}"
-SRC_URI="https://github.com/mtk09422/${MTK_LOADER_ARCHIVE_PATH}"
-
 # Remove other virtual packages
 RDEPEND="
 	!chromeos-base/chromeos-firmware-null
@@ -41,8 +33,9 @@ RDEPEND="
 
 # When you modify any files below, please also update manifest file in chroot:
 #  ebuild-$board chromeos-firmware-$board-9999.ebuild manifest
-CROS_FIRMWARE_MAIN_IMAGE=""
-CROS_FIRMWARE_EC_IMAGE=""
+CROS_FIRMWARE_MAIN_IMAGE="bcs://oak_fw_prerelease_0.0.22_rev5.tbz"
+CROS_FIRMWARE_EC_IMAGE="bcs://oak_ec_prerelease_0.0.22_rev5.tbz"
+#CROS_FIRMWARE_PD_IMAGE="bcs://oak_pd_prerelease_0.0.22_rev5.tbz"
 
 # Stable firmware settings. Devices with firmware version smaller than stable
 # version (or if stable version is empty) will get RO+RW update if write
@@ -54,14 +47,3 @@ CROS_FIRMWARE_STABLE_EC_VERSION=""
 CROS_FIRMWARE_SCRIPT="updater5.sh"
 
 cros-firmware_setup_source
-
-src_unpack() {
-	cros-firmware_src_unpack
-	unpack ../distdir/"${MTK_LOADER_ARCHIVE_NAME}"
-}
-
-src_install() {
-	cros-firmware_src_install
-	insinto /firmware/prebuilt
-	doins "${WORKDIR}/${MTK_LOADER_LOCAL_DIR}"/firmware/*
-}
