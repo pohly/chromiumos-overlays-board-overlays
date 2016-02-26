@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
+IUSE="cheets"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -24,7 +24,11 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{1553F3C0-F06D-CB2C-4755-9936D7B651C0}" "REFERENCE"
+	if use cheets; then
+		doappid "{422EC195-4A60-5A56-668A-50E8E6A1D2D5}" "REFERENCE"
+	else
+		doappid "{1553F3C0-F06D-CB2C-4755-9936D7B651C0}" "REFERENCE"
+	fi
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"

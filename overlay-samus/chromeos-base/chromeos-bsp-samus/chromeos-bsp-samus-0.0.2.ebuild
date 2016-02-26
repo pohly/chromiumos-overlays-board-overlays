@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
+IUSE="cheets"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
@@ -25,7 +25,11 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{F67500C1-C6D8-5287-E4EC-F9BBB4AEE5C5}" "CHROMEBOOK"
+	if use cheets; then
+		doappid "{FFF4E98C-0E01-EBE0-7D68-20E395E36AC5}" "CHROMEBOOK"
+	else
+		doappid "{F67500C1-C6D8-5287-E4EC-F9BBB4AEE5C5}" "CHROMEBOOK"
+	fi
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
