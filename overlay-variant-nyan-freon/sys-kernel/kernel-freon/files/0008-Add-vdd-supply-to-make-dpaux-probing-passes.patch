@@ -1,7 +1,8 @@
-From add24fc2cf573942215731eb60ad0507f2dd57ec Mon Sep 17 00:00:00 2001
+From e5a765cbc88eef7b7a1014a1aed2cce9a3819ade Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Tue, 12 Jan 2016 15:41:10 +0800
-Subject: [PATCH 08/15] Add vdd-supply to make dpaux probing passes
+Subject: [PATCH 08/20] Add vdd-supply to make dpaux probing passes
+X-NVConfidentiality: public
 
 Change-Id: Ia8456b24c44ba122b8b902b1d0e4a40fdc2d14c9
 Signed-off-by: Mark Zhang <markz@nvidia.com>
@@ -11,7 +12,7 @@ Signed-off-by: Mark Zhang <markz@nvidia.com>
  2 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/tegra124-nyan.dtsi b/arch/arm/boot/dts/tegra124-nyan.dtsi
-index c6bd143..e49a660 100644
+index c6bd143e1d25..e49a660c969e 100644
 --- a/arch/arm/boot/dts/tegra124-nyan.dtsi
 +++ b/arch/arm/boot/dts/tegra124-nyan.dtsi
 @@ -34,6 +34,10 @@
@@ -26,7 +27,7 @@ index c6bd143..e49a660 100644
  			vddgpu-supply = <&vdd_gpu>;
  		};
 diff --git a/drivers/gpu/drm/tegra/dpaux.c b/drivers/gpu/drm/tegra/dpaux.c
-index 12a94fb..78a5eb8 100644
+index 12a94fb35cac..78a5eb8fed62 100644
 --- a/drivers/gpu/drm/tegra/dpaux.c
 +++ b/drivers/gpu/drm/tegra/dpaux.c
 @@ -326,8 +326,11 @@ static int tegra_dpaux_probe(struct platform_device *pdev)
@@ -43,5 +44,5 @@ index 12a94fb..78a5eb8 100644
  	err = devm_request_irq(dpaux->dev, dpaux->irq, tegra_dpaux_irq, 0,
  			       dev_name(dpaux->dev), dpaux);
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 

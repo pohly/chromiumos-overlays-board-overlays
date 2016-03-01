@@ -1,7 +1,8 @@
-From e0497dd0ffa992d8f463fbf355f56072b375d338 Mon Sep 17 00:00:00 2001
+From c27ce330005ccac41876e6b1d970df8642781a91 Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 16:36:58 +0800
-Subject: [PATCH 11/15] Fix the drm crash when TEGRA_FBDEV is enabled
+Subject: [PATCH 11/20] Fix the drm crash when TEGRA_FBDEV is enabled
+X-NVConfidentiality: public
 
 [   15.513135] [<c04e3c4c>] (drm_fb_helper_init+0x60/0x154) from
 [<c0502aa0>] (tegra_drm_fb_init+0x38/0x98)
@@ -51,7 +52,7 @@ Signed-off-by: Mark Zhang <markz@nvidia.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/gpu/drm/tegra/fb.c b/drivers/gpu/drm/tegra/fb.c
-index 3547b22..97508fa 100644
+index 3547b222c440..97508fa76e6e 100644
 --- a/drivers/gpu/drm/tegra/fb.c
 +++ b/drivers/gpu/drm/tegra/fb.c
 @@ -300,6 +300,7 @@ static struct tegra_fbdev *tegra_fbdev_create(struct drm_device *drm)
@@ -63,5 +64,5 @@ index 3547b22..97508fa 100644
  
  	return fbdev;
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 

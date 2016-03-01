@@ -1,7 +1,8 @@
-From 6385c8bd0d6598b6531cb373b87ffecf739136d3 Mon Sep 17 00:00:00 2001
+From 0574afbce3339bb4910200baa7df36fa24c46bb8 Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 16:41:55 +0800
-Subject: [PATCH 12/15] dt: panel: Add backlight & ddc channel
+Subject: [PATCH 12/20] dt: panel: Add backlight & ddc channel
+X-NVConfidentiality: public
 
 These 2 items are required by panel-simple driver.
 
@@ -12,7 +13,7 @@ Signed-off-by: Mark Zhang <markz@nvidia.com>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/tegra124-nyan-big.dtsi b/arch/arm/boot/dts/tegra124-nyan-big.dtsi
-index b0a7d26..ca60a06 100644
+index b0a7d26a5b38..ca60a0664bb3 100644
 --- a/arch/arm/boot/dts/tegra124-nyan-big.dtsi
 +++ b/arch/arm/boot/dts/tegra124-nyan-big.dtsi
 @@ -5,7 +5,7 @@
@@ -34,5 +35,5 @@ index b0a7d26..ca60a06 100644
  
  		dpaux: dpaux@545c0000 {
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 

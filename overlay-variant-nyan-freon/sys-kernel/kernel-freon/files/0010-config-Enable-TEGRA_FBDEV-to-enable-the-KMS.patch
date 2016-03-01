@@ -1,7 +1,8 @@
-From 9e474acce7379eb755d84b29900d5ba8eef9a3b5 Mon Sep 17 00:00:00 2001
+From 11c407fc179834b59d8f44874fe92c7d76b301c0 Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 16:35:43 +0800
-Subject: [PATCH 10/15] config: Enable TEGRA_FBDEV to enable the KMS
+Subject: [PATCH 10/20] config: Enable TEGRA_FBDEV to enable the KMS
+X-NVConfidentiality: public
 
 Change-Id: Ia9505d0707ff0129daa6a0da33c605d877a9c2ea
 Signed-off-by: Mark Zhang <markz@nvidia.com>
@@ -10,7 +11,7 @@ Signed-off-by: Mark Zhang <markz@nvidia.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
-index c615c8e..a0d1803 100644
+index c615c8eb8518..a0d1803d219b 100644
 --- a/chromeos/config/armel/chromeos-tegra.flavour.config
 +++ b/chromeos/config/armel/chromeos-tegra.flavour.config
 @@ -61,7 +61,7 @@ CONFIG_AGP=y
@@ -23,5 +24,5 @@ index c615c8e..a0d1803 100644
  CONFIG_FB_CFB_COPYAREA=y
  CONFIG_FB_CFB_FILLRECT=y
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 

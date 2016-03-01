@@ -1,7 +1,8 @@
-From 4bae1555f69c42398161a6e1f396c5d3950902d2 Mon Sep 17 00:00:00 2001
+From ee384a30feed74b69bd778d63870c24a610a1989 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 7 May 2015 19:57:21 -0700
-Subject: [PATCH 05/15] HACK: DT: swap DC order
+Subject: [PATCH 05/20] HACK: DT: swap DC order
+X-NVConfidentiality: public
 
 Somehow with the new init, the DCs end up inverted. As a workaround
 let's swap them in the DT.
@@ -12,7 +13,7 @@ Change-Id: Ibc836e4536cce29a4456ba7eaab7f370ed57c8a5
  1 file changed, 18 insertions(+), 18 deletions(-)
 
 diff --git a/arch/arm/boot/dts/tegra124.dtsi b/arch/arm/boot/dts/tegra124.dtsi
-index c16ccbc..9825e70 100644
+index c16ccbc6353c..9825e70a1e40 100644
 --- a/arch/arm/boot/dts/tegra124.dtsi
 +++ b/arch/arm/boot/dts/tegra124.dtsi
 @@ -41,6 +41,24 @@
@@ -66,5 +67,5 @@ index c16ccbc..9825e70 100644
  			compatible = "nvidia,tegra124-sor";
  			reg = <0x54540000 0x00040000>;
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 

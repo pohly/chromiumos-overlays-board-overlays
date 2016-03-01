@@ -1,0 +1,356 @@
+From 9eafbf80dcd25cae7dc691a62c5fef4fb6ce479f Mon Sep 17 00:00:00 2001
+From: Vince Hsu <vince.h@nvidia.com>
+Date: Wed, 17 Feb 2016 18:49:36 +0800
+Subject: [PATCH 18/20] video: tegra: more changes for
+ CONFIG_NVMAP_USE_FD_FOR_HANDLE
+X-NVConfidentiality: public
+
+* 4096 <= fd < 8192k for foreign dmabuf, and 1024 <= fd < 4096 for
+  nvmap dmabuf
+* As a hack, use a list to record the foreign dmabuf information
+
+Change-Id: I64127e81293315ae0898eebd8bf017caad867572
+---
+ drivers/video/tegra/host/dmabuf.c        | 25 ++++++++---
+ drivers/video/tegra/host/nvhost_memmgr.c |  6 +++
+ drivers/video/tegra/host/nvhost_memmgr.h |  8 ++++
+ drivers/video/tegra/nvmap/nvmap_dmabuf.c | 32 +++++++++++---
+ drivers/video/tegra/nvmap/nvmap_ioctl.c  | 73 +++++++++++++++++++++++++++++++-
+ drivers/video/tegra/nvmap/nvmap_priv.h   |  1 +
+ 6 files changed, 130 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/video/tegra/host/dmabuf.c b/drivers/video/tegra/host/dmabuf.c
+index 17639ee83827..706692b1b904 100644
+--- a/drivers/video/tegra/host/dmabuf.c
++++ b/drivers/video/tegra/host/dmabuf.c
+@@ -34,7 +34,19 @@ struct nvhost_dmabuf_data {
+ 
+ static inline struct dma_buf_attachment *to_dmabuf_att(struct mem_handle *h)
+ {
++#ifdef CONFIG_NVMAP_USE_FD_FOR_HANDLE
++	struct dma_buf_attachment *attach;
++	struct dma_buf *dmabuf = (struct dma_buf *) h;
++
++	/* XXX */
++	attach = list_first_entry(&dmabuf->attachments,
++			struct dma_buf_attachment, node);
++	WARN(attach->dmabuf != dmabuf, "mismatch dmabuf!\n");
++
++	return attach;
++#else
+ 	return (struct dma_buf_attachment *)h;
++#endif
+ }
+ 
+ static inline struct dma_buf *to_dmabuf(struct mem_handle *h)
+@@ -59,7 +71,7 @@ void nvhost_dmabuf_put(struct mem_handle *handle)
+ 
+ struct sg_table *nvhost_dmabuf_pin(struct mem_handle *handle)
+ {
+-	struct dma_buf_attachment *attach = (struct dma_buf_attachment*)handle;
++	struct dma_buf_attachment *attach = to_dmabuf_att(handle);
+ 	struct nvhost_dmabuf_data *priv;
+ 
+ 	WARN_ON(attach->priv);
+@@ -68,8 +80,7 @@ struct sg_table *nvhost_dmabuf_pin(struct mem_handle *handle)
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	attach->priv = priv;
+ 
+-	return dma_buf_map_attachment(to_dmabuf_att(handle),
+-				DMA_BIDIRECTIONAL);
++	return dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
+ }
+ 
+ void nvhost_dmabuf_unpin(struct mem_handle *handle, struct sg_table *sgt)
+@@ -105,7 +116,7 @@ struct mem_handle *nvhost_dmabuf_get(ulong id, struct platform_device *dev)
+ 
+ 	attach = nvmap_get_dmabuf_attachment((struct nvmap_handle *)id);
+ 
+-	return (struct mem_handle *)attach;
++	return (struct mem_handle *)attach->dmabuf;
+ }
+ 
+ #if 0
+@@ -128,7 +139,7 @@ static void delete_priv(void *_priv)
+ int nvhost_dmabuf_get_param(struct mem_mgr *memmgr, struct mem_handle *handle,
+ 			    u32 param, u64 *result)
+ {
+-	struct dma_buf_attachment *attach = (struct dma_buf_attachment*)handle;
++	struct dma_buf_attachment *attach = to_dmabuf_att(handle);
+ 
+ 	switch(param)
+ 	{
+@@ -159,7 +170,7 @@ int nvhost_dmabuf_get_param(struct mem_mgr *memmgr, struct mem_handle *handle,
+ void nvhost_dmabuf_get_comptags(struct mem_handle *handle,
+ 				struct nvhost_comptags *comptags)
+ {
+-	struct dma_buf_attachment *attach = (struct dma_buf_attachment*)handle;
++	struct dma_buf_attachment *attach = to_dmabuf_att(handle);
+ 	struct nvhost_dmabuf_data *priv;
+ 
+ 	WARN_ON(!attach->priv);
+@@ -172,7 +183,7 @@ int nvhost_dmabuf_alloc_comptags(struct mem_handle *handle,
+ 				 struct nvhost_allocator *allocator,
+ 				 int lines)
+ {
+-	struct dma_buf_attachment *attach = (struct dma_buf_attachment*)handle;
++	struct dma_buf_attachment *attach = to_dmabuf_att(handle);
+ 	struct nvhost_dmabuf_data *priv;
+ 	u32 offset = 0;
+ 	int err;
+diff --git a/drivers/video/tegra/host/nvhost_memmgr.c b/drivers/video/tegra/host/nvhost_memmgr.c
+index 71f4bc1594eb..b863aa6700c3 100644
+--- a/drivers/video/tegra/host/nvhost_memmgr.c
++++ b/drivers/video/tegra/host/nvhost_memmgr.c
+@@ -115,9 +115,15 @@ struct mem_handle *nvhost_memmgr_get(struct mem_mgr *mgr,
+ #endif
+ #ifdef CONFIG_TEGRA_GRHOST_USE_DMABUF
+ 	case mem_mgr_type_dmabuf:
++#ifdef CONFIG_NVMAP_USE_FD_FOR_HANDLE
++		h = (struct mem_handle *)dma_buf_get(id);
++		pr_err("foreign dmabuf %p\n", h);
++#else
+ 		h = (struct mem_handle *) nvhost_dmabuf_get(id, dev);
++#endif
+ 		break;
+ #endif
++	case mem_mgr_type_invalid:
+ 	default:
+ 		WARN_ON(1);
+ 		break;
+diff --git a/drivers/video/tegra/host/nvhost_memmgr.h b/drivers/video/tegra/host/nvhost_memmgr.h
+index 14eebb85a091..16ebe48740ab 100644
+--- a/drivers/video/tegra/host/nvhost_memmgr.h
++++ b/drivers/video/tegra/host/nvhost_memmgr.h
+@@ -51,6 +51,7 @@ enum mem_rw_flag {
+ enum mem_mgr_type {
+ 	mem_mgr_type_nvmap = 0,
+ 	mem_mgr_type_dmabuf = 1,
++	mem_mgr_type_invalid = 2,
+ };
+ 
+ #ifdef CONFIG_NVMAP_USE_FD_FOR_HANDLE
+@@ -91,8 +92,15 @@ void nvhost_memmgr_free_sg_table(struct mem_mgr *mgr,
+ extern struct dma_buf_ops nvmap_dma_buf_ops;
+ static inline int nvhost_memmgr_type(ulong id) {
+ 	struct dma_buf* db = (struct dma_buf*)id;
++#ifdef CONFIG_NVMAP_USE_FD_FOR_HANDLE
+ 	if (id < 4096)
++		return mem_mgr_type_nvmap;
++	if (id < 8192)
+ 		return mem_mgr_type_dmabuf;
++#endif
++	/* nvtest would give wrong ID for kernel verification */
++	if (id == ~0)
++		return mem_mgr_type_invalid;
+ 
+ 	if (db->ops == &nvmap_dma_buf_ops)
+ 		return mem_mgr_type_nvmap;
+diff --git a/drivers/video/tegra/nvmap/nvmap_dmabuf.c b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
+index a1fad575eb29..f5035528195c 100644
+--- a/drivers/video/tegra/nvmap/nvmap_dmabuf.c
++++ b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
+@@ -425,12 +425,17 @@ static void nvmap_dmabuf_unmap_dma_buf(struct dma_buf_attachment *attach,
+ 
+ extern struct dma_buf_ops nvmap_dma_buf_ops;
+ 
++bool nvmap_dmabuf_is_foreign_dmabuf(struct dma_buf *dmabuf)
++{
++	return dmabuf->ops != &nvmap_dma_buf_ops;
++}
++
+ static void nvmap_dmabuf_release(struct dma_buf *dmabuf)
+ {
+ 	struct nvmap_handle_info *info = dmabuf->priv;
+ 	struct nvmap_handle_sgt *nvmap_sgt;
+ 
+-	if (dmabuf->ops == &nvmap_dma_buf_ops) {
++	if (!nvmap_dmabuf_is_foreign_dmabuf(dmabuf)) {
+ 		printk("MINE %p handle %p\n",dmabuf,info->handle);
+ 		nvmap_handle_put(info->handle);
+ 		return;
+@@ -578,14 +583,22 @@ err_nomem:
+ int __nvmap_dmabuf_fd(struct dma_buf *dmabuf, int flags)
+ {
+ 	int fd;
++	unsigned start;
+ 
+ 	if (!dmabuf || !dmabuf->file)
+ 		return -EINVAL;
+-	/* Allocate fd from 1024 onwards to overcome
++
++	/* XXX */
++	if (nvmap_dmabuf_is_foreign_dmabuf(dmabuf))
++		start = 4096;
++	else
++		start = 1024;
++
++	/* Allocate fd from _start_ onwards to overcome
+ 	 * __FD_SETSIZE limitation issue for select(),
+ 	 * pselect() syscalls.
+ 	 */
+-	fd = __alloc_fd(current->files, 1024,
++	fd = __alloc_fd(current->files, start,
+ 			sysctl_nr_open, flags);
+ 	if (fd < 0)
+ 		return fd;
+@@ -686,14 +699,13 @@ ulong nvmap_get_id_from_dmabuf_fd(struct nvmap_client *client, int fd)
+ 	struct dma_buf *dmabuf;
+ 	struct nvmap_handle_info *info;
+ 
+-	dump_stack();
+ 	/* FIXME this whole function is leaking the handle info struct. */
+ 
+ 	dmabuf = dma_buf_get(fd);
+ 	if (IS_ERR(dmabuf))
+ 		return PTR_ERR(dmabuf);
+-	if (dmabuf->ops == &nvmap_dma_buf_ops) {
+-		printk("GET SELF IMPORTED %p\n",info->handle);
++
++	if (!nvmap_dmabuf_is_foreign_dmabuf(dmabuf)){
+ 		/* Self-imported dmabuf, we can just get a ref and move on */
+ 		info = dmabuf->priv;
+ 		id = (ulong) info->handle;
+@@ -702,12 +714,18 @@ ulong nvmap_get_id_from_dmabuf_fd(struct nvmap_client *client, int fd)
+ 	} else {
+ 		/* Foreign dmabuf, need to import */
+ 		struct nvmap_handle_ref *ref;
++		WARN(1, "SHOULD NOT REACH HERE\n");
+ 		ref = nvmap_create_handle_dmabuf(client, dmabuf);
++		if (WARN_ON(IS_ERR(ref)))
++			goto err_exit;
++
+ 		if (!nvmap_handle_get(ref->handle))
+ 			id = -EINVAL;
+ 		else
+ 			id = (ulong) (ref->handle);
+ 	}
++
++err_exit:
+ 	dma_buf_put(dmabuf);
+ 	return id;
+ }
+@@ -791,7 +809,7 @@ void *nvmap_get_dmabuf_private(struct dma_buf *dmabuf)
+ 	if (WARN_ON(!virt_addr_valid(dmabuf)))
+ 		return ERR_PTR(-EINVAL);
+ 
+-	if (dmabuf->ops == &nvmap_dma_buf_ops) {
++	if (!nvmap_dmabuf_is_foreign_dmabuf(dmabuf)) {
+ 		info = dmabuf->priv;
+ 		priv = info->handle->nvhost_priv;
+ 	} else {
+diff --git a/drivers/video/tegra/nvmap/nvmap_ioctl.c b/drivers/video/tegra/nvmap/nvmap_ioctl.c
+index 5a11ad813dcb..ff02924091ab 100644
+--- a/drivers/video/tegra/nvmap/nvmap_ioctl.c
++++ b/drivers/video/tegra/nvmap/nvmap_ioctl.c
+@@ -51,6 +51,68 @@ static ssize_t rw_handle(struct nvmap_client *client, struct nvmap_handle *h,
+ 			 unsigned long sys_stride, unsigned long elem_size,
+ 			 unsigned long count);
+ 
++struct dmabuf_fd {
++	struct nvmap_handle *handle;
++	struct dma_buf *dmabuf;
++	int fd;
++	struct list_head node;
++};
++
++static LIST_HEAD(dmabuf_fd_list);
++static DEFINE_MUTEX(dmabuf_fd_mutex);
++
++static int nvmap_foreign_dmabuf_add(struct nvmap_handle *h, struct dma_buf *dmabuf,
++		int fd)
++{
++	struct dmabuf_fd *df = kzalloc(sizeof(*df), GFP_KERNEL);
++
++	BUG_ON(!df);
++
++	df->handle = h;
++	df->dmabuf = dmabuf;
++	df->fd = fd;
++
++	mutex_lock(&dmabuf_fd_mutex);
++	list_add(&df->node, &dmabuf_fd_list);
++	mutex_unlock(&dmabuf_fd_mutex);
++
++	pr_info("%s() added handle=%p, dmabuf=%p, fd=%d\n",
++			__func__, h, dmabuf, fd);
++
++	return 0;
++}
++
++static struct nvmap_handle *nvmap_foreign_dmabuf_find_by_fd(int fd)
++{
++	struct dmabuf_fd *df = NULL;
++	struct dma_buf *dmabuf;
++
++	mutex_lock(&dmabuf_fd_mutex);
++	list_for_each_entry(df, &dmabuf_fd_list, node) {
++		dmabuf = dma_buf_get(fd);
++
++		if (IS_ERR(dmabuf)) {
++			WARN(1, "failed to get dmabuf by fd %d\n", fd);
++			mutex_unlock(&dmabuf_fd_mutex);
++			return (struct nvmap_handle *)dmabuf;
++		}
++
++		if (df->fd == fd && df->dmabuf == dmabuf) {
++			pr_info("%s() found handle=%p, dmabuf=%p, fd=%d\n",
++					__func__, df->handle, df->dmabuf, df->fd);
++			if (!nvmap_handle_get(df->handle))
++				WARN(1, "failed to get ref for handle %p fd %d\n",
++						df->handle, fd);
++			mutex_unlock(&dmabuf_fd_mutex);
++			return df->handle;
++		}
++	}
++	mutex_unlock(&dmabuf_fd_mutex);
++
++	WARN(1, "failed to find dmabuf by fd %d\n", fd);
++	return ERR_PTR(-EINVAL);
++}
++
+ /* NOTE: Callers of this utility function must invoke nvmap_handle_put after
+  * using the returned handle id
+  */
+@@ -58,9 +120,14 @@ static ulong __attribute__((unused)) fd_to_handle_id(int handle)
+ {
+ 	ulong id;
+ 
+-	id = nvmap_get_id_from_dmabuf_fd(NULL, (int)handle);
++	if (handle < 4096) /* nvmap dmabuf */
++		id = nvmap_get_id_from_dmabuf_fd(NULL, (int)handle);
++	else /* foreign dmabuf */
++		id = (ulong)nvmap_foreign_dmabuf_find_by_fd(handle);
++
+ 	if (!IS_ERR_VALUE(id))
+ 		return id;
++
+ 	return 0;
+ }
+ 
+@@ -388,6 +455,10 @@ int nvmap_create_fd(struct nvmap_handle *h)
+ 	 * to balance ref count, ref count dma_buf.
+ 	 */
+ 	get_dma_buf(h->dmabuf);
++
++	if (nvmap_dmabuf_is_foreign_dmabuf(h->dmabuf))
++		nvmap_foreign_dmabuf_add(h, h->dmabuf, fd);
++
+ 	return fd;
+ }
+ 
+diff --git a/drivers/video/tegra/nvmap/nvmap_priv.h b/drivers/video/tegra/nvmap/nvmap_priv.h
+index 0d1ddaf5f4bf..3edf29380c0a 100644
+--- a/drivers/video/tegra/nvmap/nvmap_priv.h
++++ b/drivers/video/tegra/nvmap/nvmap_priv.h
+@@ -388,6 +388,7 @@ ulong __nvmap_ref_to_id(struct nvmap_handle_ref *ref);
+ int __nvmap_pin(struct nvmap_handle_ref *ref, phys_addr_t *phys);
+ void __nvmap_unpin(struct nvmap_handle_ref *ref);
+ int __nvmap_dmabuf_fd(struct dma_buf *dmabuf, int flags);
++bool nvmap_dmabuf_is_foreign_dmabuf(struct dma_buf *dmabuf);
+ 
+ void nvmap_dmabuf_debugfs_init(struct dentry *nvmap_root);
+ int nvmap_dmabuf_stash_init(void);
+-- 
+2.1.4
+

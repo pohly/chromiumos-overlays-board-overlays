@@ -1,0 +1,30 @@
+From 0a439d805dafc3198fe50e1778d64db69e530a8e Mon Sep 17 00:00:00 2001
+From: Vince Hsu <vince.h@nvidia.com>
+Date: Tue, 1 Mar 2016 14:23:36 +0800
+Subject: [PATCH 20/20] HACK: video: tegra: nvhost: get the correct platform
+ device
+X-NVConfidentiality: public
+
+Change-Id: I81d846852c1579f9c35f5999faef7713c83e0401
+Signed-off-by: Vince Hsu <vince.h@nvidia.com>
+---
+ drivers/video/tegra/host/nvhost_syncpt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/video/tegra/host/nvhost_syncpt.c b/drivers/video/tegra/host/nvhost_syncpt.c
+index f7c208889291..65a9cf56b357 100644
+--- a/drivers/video/tegra/host/nvhost_syncpt.c
++++ b/drivers/video/tegra/host/nvhost_syncpt.c
+@@ -842,7 +842,8 @@ u32 nvhost_syncpt_read_ext(struct platform_device *dev, u32 id)
+ 	}
+ 
+ 	/* get the parent */
+-	pdev = to_platform_device(dev->dev.parent);
++	//pdev = to_platform_device(dev->dev.parent);
++	pdev = dev;
+ 	sp = &(nvhost_get_host(pdev)->syncpt);
+ 
+ 	return nvhost_syncpt_read(sp, id);
+-- 
+2.1.4
+

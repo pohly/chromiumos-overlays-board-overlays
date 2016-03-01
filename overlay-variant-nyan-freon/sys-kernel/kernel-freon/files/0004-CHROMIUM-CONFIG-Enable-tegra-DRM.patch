@@ -1,7 +1,8 @@
-From 3ac627819739e87f6fa0eb2298fceb5d7cab0f83 Mon Sep 17 00:00:00 2001
+From fe75d5c4b53eafab838c069c528b1caad9900ecc Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 16 Apr 2015 19:28:21 -0700
-Subject: [PATCH 04/15] CHROMIUM: CONFIG: Enable tegra DRM
+Subject: [PATCH 04/20] CHROMIUM: CONFIG: Enable tegra DRM
+X-NVConfidentiality: public
 
 This enables tegra DRM.
 
@@ -12,7 +13,7 @@ Change-Id: I500405d0fd457a4b80497ffb49db53492e862d93
  2 files changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
-index 21e8eb4..c615c8e 100644
+index 21e8eb4eeb89..c615c8eb8518 100644
 --- a/chromeos/config/armel/chromeos-tegra.flavour.config
 +++ b/chromeos/config/armel/chromeos-tegra.flavour.config
 @@ -53,11 +53,20 @@ CONFIG_DMA_ENGINE=y
@@ -38,7 +39,7 @@ index 21e8eb4..c615c8e 100644
  CONFIG_GENERIC_PINCONF=y
  CONFIG_GPIO_TPS6586X=y
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index 65bfebf..084c150 100644
+index 65bfebf393ce..084c150e71c2 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
 @@ -437,7 +437,7 @@ CONFIG_TEGRA_DP=y
@@ -51,5 +52,5 @@ index 65bfebf..084c150 100644
  CONFIG_TEGRA_MIPI_CAL=y
  # CONFIG_TEGRA_PCI is not set
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 

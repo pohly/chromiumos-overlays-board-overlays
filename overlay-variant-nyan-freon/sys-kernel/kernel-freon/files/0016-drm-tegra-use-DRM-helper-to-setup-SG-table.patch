@@ -1,0 +1,55 @@
+From 28ea385bcc4b74eca9106f7b4914cab46688331d Mon Sep 17 00:00:00 2001
+From: Vince Hsu <vince.h@nvidia.com>
+Date: Wed, 17 Feb 2016 18:02:08 +0800
+Subject: [PATCH 16/20] drm/tegra: use DRM helper to setup SG table
+X-NVConfidentiality: public
+
+Change-Id: Ie98952e5a314274c7100f8e2066dabc0ed5e90f2
+---
+ drivers/gpu/drm/tegra/gem.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
+index ad34e197e9a0..05a418fded5a 100644
+--- a/drivers/gpu/drm/tegra/gem.c
++++ b/drivers/gpu/drm/tegra/gem.c
+@@ -531,23 +531,16 @@ tegra_gem_prime_map_dma_buf(struct dma_buf_attachment *attach,
+ 	struct tegra_bo *bo = to_tegra_bo(gem);
+ 	struct sg_table *sgt;
+ 
+-	sgt = kmalloc(sizeof(*sgt), GFP_KERNEL);
+-	if (!sgt)
+-		return NULL;
+-
+ 	if (bo->pages) {
+-		struct scatterlist *sg;
+-		unsigned int i;
+-
+-		if (sg_alloc_table(sgt, bo->num_pages, GFP_KERNEL))
+-			goto free;
+-
+-		for_each_sg(sgt->sgl, sg, bo->num_pages, i)
+-			sg_set_page(sg, bo->pages[i], PAGE_SIZE, 0);
++		sgt = drm_prime_pages_to_sg(bo->pages, bo->num_pages);
+ 
+ 		if (dma_map_sg(attach->dev, sgt->sgl, sgt->nents, dir) == 0)
+ 			goto free;
+ 	} else {
++		sgt = kmalloc(sizeof(*sgt), GFP_KERNEL);
++		if (!sgt)
++			return NULL;
++
+ 		if (sg_alloc_table(sgt, 1, GFP_KERNEL))
+ 			goto free;
+ 
+@@ -606,6 +599,7 @@ static void tegra_gem_prime_kunmap(struct dma_buf *buf, unsigned long page,
+ 
+ static int tegra_gem_prime_mmap(struct dma_buf *buf, struct vm_area_struct *vma)
+ {
++	pr_err("%s() return -EINVAL\n", __func__);
+ 	return -EINVAL;
+ }
+ 
+-- 
+2.1.4
+

@@ -1,7 +1,8 @@
-From 063e41a97948bcf1b875b05af02bf15defd26b6e Mon Sep 17 00:00:00 2001
+From 3d1e8a2a67a32a683b764ee6f15a45c38e08956b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 22 Jan 2016 22:17:46 -0800
-Subject: [PATCH 15/15] HACK: drm/edid: remove AUO reduced blanking
+Subject: [PATCH 15/20] HACK: drm/edid: remove AUO reduced blanking
+X-NVConfidentiality: public
 
 This reduced blanking mode was added to let the driver use 1.62Gbit
 instead of 2.7Gbit mode, and therefore save power. However, it seems
@@ -13,7 +14,7 @@ Change-Id: Iae4606b6c205484b0c54b2721073ca99964c97e6
  1 file changed, 4 deletions(-)
 
 diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index eb65644..eab98c7 100644
+index eb656443acdd..eab98c7c86c5 100644
 --- a/drivers/gpu/drm/drm_edid.c
 +++ b/drivers/gpu/drm/drm_edid.c
 @@ -185,10 +185,6 @@ static struct short_blanking {
@@ -28,5 +29,5 @@ index eb65644..eab98c7 100644
  	{ "BOE", 0x1543, 1512, 790, 71693 },
  };
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 

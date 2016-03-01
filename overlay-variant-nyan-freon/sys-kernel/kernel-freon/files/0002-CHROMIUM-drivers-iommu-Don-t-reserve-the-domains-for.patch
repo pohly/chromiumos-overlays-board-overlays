@@ -1,8 +1,9 @@
-From d99cc8c5a7fc6dfd781d13e3629d5c0da63c6ec7 Mon Sep 17 00:00:00 2001
+From 1d57f6fe7339a597d92a0fe0c99f5bce8db13814 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 24 Apr 2015 15:22:02 -0700
-Subject: [PATCH 02/15] CHROMIUM: drivers/iommu: Don't reserve the domains for
+Subject: [PATCH 02/20] CHROMIUM: drivers/iommu: Don't reserve the domains for
  display
+X-NVConfidentiality: public
 
 Tegra drm attaches the domains by itself, don't try to initialize and
 attach them from the iommu driver.
@@ -13,7 +14,7 @@ Change-Id: I4e7a11fb4a960f55491817431682ec200102b3c5
  1 file changed, 11 insertions(+)
 
 diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index 6e57981..f41f7b6 100644
+index 6e579815bc94..f41f7b69360e 100644
 --- a/drivers/iommu/tegra-smmu.c
 +++ b/drivers/iommu/tegra-smmu.c
 @@ -1059,6 +1059,7 @@ enum {
@@ -56,5 +57,5 @@ index 6e57981..f41f7b6 100644
  		smmu->map[i] = arm_iommu_create_mapping(&platform_bus_type,
  							base, size, 0);
 -- 
-2.7.0.rc3.207.g0ac5344
+2.1.4
 
