@@ -35,6 +35,7 @@ RDEPEND="${RDEPEND}
 	chromeos-base/autotest-server
 	chromeos-base/devserver
 	chromeos-base/mobmonitor
+	chromeos-base/whining
 "
 
 # Dependencies for Android Testing on MobLab.
