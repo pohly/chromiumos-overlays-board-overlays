@@ -1,5 +1,5 @@
 diff --git a/include/configs/am335x_evm.h b/include/configs/am335x_evm.h
-index c5a6d4b..5b70499 100644
+index c5a6d4b..11e0f4c 100644
 --- a/include/configs/am335x_evm.h
 +++ b/include/configs/am335x_evm.h
 @@ -34,6 +34,7 @@
@@ -10,7 +10,7 @@ index c5a6d4b..5b70499 100644
  #define CONFIG_OF_LIBFDT
  #define CONFIG_CMD_BOOTZ
  #define CONFIG_CMDLINE_TAG		/* enable passing of ATAGs */
-@@ -49,7 +50,7 @@
+@@ -49,15 +50,15 @@
  #define CONFIG_VERSION_VARIABLE
  
  /* set to negative value for no autoboot */
@@ -19,6 +19,17 @@ index c5a6d4b..5b70499 100644
  #define CONFIG_ENV_VARS_UBOOT_CONFIG
  #define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
  #ifndef CONFIG_SPL_BUILD
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+-	"loadaddr=0x80200000\0" \
+-	"fdtaddr=0x80F80000\0" \
++	"loadaddr=0x82000000\0" \
++	"fdtaddr=0x88000000\0" \
+ 	"fdt_high=0xffffffff\0" \
+-	"rdaddr=0x81000000\0" \
++	"rdaddr=0x88080000\0" \
+ 	"bootdir=/boot\0" \
+ 	"bootfile=uImage\0" \
+ 	"fdtfile=undefined\0" \
 @@ -105,7 +106,7 @@
  		"nfsroot=${serverip}:${rootpath},${nfsopts} rw " \
  		"ip=dhcp\0" \
