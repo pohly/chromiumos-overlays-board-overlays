@@ -18,7 +18,6 @@ S="${WORKDIR}"
 DEPEND=""
 RDEPEND="${DEPEND}
 	chromeos-base/chromeos-accelerometer-init
-	chromeos-base/ec-utils
 	media-libs/media-rules
 	sys-apps/ethtool
 "
