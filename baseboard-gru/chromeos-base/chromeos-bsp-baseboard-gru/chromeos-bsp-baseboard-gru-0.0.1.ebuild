@@ -13,4 +13,8 @@ SLOT="0"
 KEYWORDS="-* arm64 arm"
 S="${WORKDIR}"
 
+RDEPEND="
+	x11-drivers/mali-rules
+	media-libs/media-rules
+"
 DEPEND="${RDEPEND}"
