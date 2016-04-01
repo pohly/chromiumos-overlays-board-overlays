@@ -1,0 +1,66 @@
+From 759e44d4cbe78cf12d287799cee5ff519080052d Mon Sep 17 00:00:00 2001
+From: "peng.chen" <peng.c.chen@intel.com>
+Date: Wed, 16 Mar 2016 15:08:17 +0800
+Subject: [PATCH 2/2] update PIPE_MODE command setting for VP9 decoding
+
+v2:
+modify the commit message
+
+v1:
+initial
+
+Signed-off-by: peng.chen <peng.c.chen@intel.com>
+---
+ src/gen9_mfd.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/src/gen9_mfd.c b/src/gen9_mfd.c
+index 3e95810..92faa4f 100644
+--- a/src/gen9_mfd.c
++++ b/src/gen9_mfd.c
+@@ -189,13 +189,23 @@ gen9_hcpd_pipe_mode_select(VADriverContextP ctx,
+                            int codec,
+                            struct gen9_hcpd_context *gen9_hcpd_context)
+ {
++    struct i965_driver_data *i965 = i965_driver_data(ctx);
+     struct intel_batchbuffer *batch = gen9_hcpd_context->base.batch;
+ 
+     assert((codec == HCP_CODEC_HEVC) || (codec == HCP_CODEC_VP9));
+ 
+-    BEGIN_BCS_BATCH(batch, 4);
++    if(IS_KBL(i965->intel.device_info))
++    {
++        BEGIN_BCS_BATCH(batch, 6);
+ 
+-    OUT_BCS_BATCH(batch, HCP_PIPE_MODE_SELECT | (4 - 2));
++        OUT_BCS_BATCH(batch, HCP_PIPE_MODE_SELECT | (6 - 2));
++    }
++    else
++    {
++        BEGIN_BCS_BATCH(batch, 4);
++
++        OUT_BCS_BATCH(batch, HCP_PIPE_MODE_SELECT | (4 - 2));
++    }
+     OUT_BCS_BATCH(batch,
+                   (codec << 5) |
+                   (0 << 3) | /* disable Pic Status / Error Report */
+@@ -203,6 +213,16 @@ gen9_hcpd_pipe_mode_select(VADriverContextP ctx,
+     OUT_BCS_BATCH(batch, 0);
+     OUT_BCS_BATCH(batch, 0);
+ 
++    if(IS_KBL(i965->intel.device_info))
++    {
++        if(codec == HCP_CODEC_VP9)
++            OUT_BCS_BATCH(batch, 1<<6);
++        else
++            OUT_BCS_BATCH(batch, 0);
++
++        OUT_BCS_BATCH(batch, 0);
++    }
++
+     ADVANCE_BCS_BATCH(batch);
+ }
+ 
+-- 
+2.4.3
+

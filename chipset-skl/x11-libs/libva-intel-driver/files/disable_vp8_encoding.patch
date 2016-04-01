@@ -1,0 +1,20 @@
+diff --git a/src/i965_device_info.c b/src/i965_device_info.c
+index d5b5cb8..0698df9 100644
+--- a/src/i965_device_info.c
++++ b/src/i965_device_info.c
+@@ -296,7 +296,6 @@ static struct hw_codec_info chv_hw_codec_info = {
+     .has_di_motion_adptive = 1,
+     .has_di_motion_compensated = 1,
+     .has_vp8_decoding = 1,
+-    .has_vp8_encoding = 1,
+     .has_h264_mvc_encoding = 1,
+     .has_hevc_decoding = 1,
+ 
+@@ -344,7 +343,6 @@ static struct hw_codec_info skl_hw_codec_info = {
+     .has_di_motion_adptive = 1,
+     .has_di_motion_compensated = 1,
+     .has_vp8_decoding = 1,
+-    .has_vp8_encoding = 1,
+     .has_h264_mvc_encoding = 1,
+     .has_hevc_decoding = 1,
+     .has_hevc_encoding = 1,

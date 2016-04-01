@@ -1,0 +1,39 @@
+From f8cd21b335f5d17d5b2d5f9d82cbe845c5060552 Mon Sep 17 00:00:00 2001
+From: "peng.chen" <peng.c.chen@intel.com>
+Date: Tue, 15 Mar 2016 15:11:10 +0800
+Subject: [PATCH 1/2] vp9_decoding: disable all seg reference for key frame or
+ intra_only enabled frame
+
+Signed-off-by: peng.chen <peng.c.chen@intel.com>
+---
+ src/gen9_mfd.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/gen9_mfd.c b/src/gen9_mfd.c
+index 72c7183..3e95810 100644
+--- a/src/gen9_mfd.c
++++ b/src/gen9_mfd.c
+@@ -1771,13 +1771,19 @@ gen9_hcpd_vp9_segment_state(VADriverContextP ctx,
+ {
+     struct intel_batchbuffer *batch = gen9_hcpd_context->base.batch;
+ 
++    int segment_ref = seg_param->segment_flags.fields.segment_reference;
++
++    if((pic_param->pic_fields.bits.frame_type == HCP_VP9_KEY_FRAME)
++            || (pic_param->pic_fields.bits.intra_only))
++        segment_ref = 0;
++
+     BEGIN_BCS_BATCH(batch, 7);
+ 
+     OUT_BCS_BATCH(batch, HCP_VP9_SEGMENT_STATE | (7 - 2));
+     OUT_BCS_BATCH(batch, seg_id << 0); /* DW 1 - SegmentID */
+     OUT_BCS_BATCH(batch,
+                   seg_param->segment_flags.fields.segment_reference_enabled << 3 |
+-                  seg_param->segment_flags.fields.segment_reference << 1 |
++                  segment_ref << 1 |
+                   seg_param->segment_flags.fields.segment_reference_skipped <<0 ); /* DW 2 */
+     if(pic_param->filter_level)
+     {
+-- 
+2.4.3
+
