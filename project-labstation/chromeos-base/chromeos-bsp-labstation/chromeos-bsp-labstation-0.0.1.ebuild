@@ -24,6 +24,7 @@ RDEPEND="
 
 # These packages are for the test station support:
 RDEPEND="${RDEPEND}
+	app-arch/unzip
 	app-emulation/lxc
 	chromeos-base/chromeos-adb-env
 "
