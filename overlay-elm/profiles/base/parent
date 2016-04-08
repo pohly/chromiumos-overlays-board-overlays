@@ -1,1 +1,3 @@
-oak:base
+chromiumos:default/linux/arm/10.0/chromeos
+baseboard-oak:base
+freon:base/arm
