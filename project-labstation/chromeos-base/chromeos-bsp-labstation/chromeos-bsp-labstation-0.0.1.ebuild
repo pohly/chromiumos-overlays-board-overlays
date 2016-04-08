@@ -70,4 +70,10 @@ S=${WORKDIR}
 src_install() {
 	insinto /etc/init
 	doins "${FILESDIR}"/init/*.conf
+	# HACK HACK HACK TODO(kevcheng):
+	# cryptohomed is disabling the eth0 iface (crbug.com/591091)
+	# so disable cryptohomed from starting up.  Take this out once
+	# labstation is chrome-less which should prevent this cryptohomed
+	# trouble.
+	doins "${FILESDIR}"/init/cryptohomed.override
 }
