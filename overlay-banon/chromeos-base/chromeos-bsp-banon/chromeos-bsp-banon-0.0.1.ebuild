@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Banon bsp (meta package to pull in driver/tool deps)"
 
@@ -33,4 +33,7 @@ src_install() {
 	# Wiping scripts
 	dosbin "${FILESDIR}"/sbin/*.sh
 
+	# Install audio configs.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs banon "${audio_config_dir}"
 }
