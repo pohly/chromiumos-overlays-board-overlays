@@ -30,9 +30,6 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Battery cut off and Wiping scripts.
-	dosbin "${FILESDIR}"/sbin/*.sh
-
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs sentry "${audio_config_dir}"
