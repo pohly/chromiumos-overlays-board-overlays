@@ -8,8 +8,8 @@
     "usb": [
       {
         "num": 3,
-        "size":"1024 MiB",
-        "fs_size":"1000 MiB"
+        "size":"2048 MiB",
+        "fs_size":"2000 MiB"
       },
       {
         "num": 1,
