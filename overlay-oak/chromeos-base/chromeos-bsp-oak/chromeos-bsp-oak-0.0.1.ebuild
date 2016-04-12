@@ -36,6 +36,13 @@ src_install() {
 		doins -r "${ucm_config}"/*
 	fi
 
+	# install cras config files
+	insinto /etc/cras
+	local cras_config="${FILESDIR}/cras-config"
+	if [[ -d "${cras_config}" ]] ; then
+			doins -r "${cras_config}"/*
+	fi
+
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
