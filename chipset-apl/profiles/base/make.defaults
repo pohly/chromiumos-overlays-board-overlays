@@ -1,4 +1,1 @@
-# This kernel will NOT BOOT on apl platforms!
-# The following USE flag is temporary.
-# A different kernel will be used at a later date
-USE="kernel-3_18"
+USE="kernel-4_4"
