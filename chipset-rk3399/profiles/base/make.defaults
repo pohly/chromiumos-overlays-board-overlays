@@ -2,9 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# TODO(smbarber): replace with kernel-4_4 once it's available
-# http://crosbug.com/p/50426
-USE="device_tree hardfp kernel-3_18 neon"
+USE="device_tree hardfp kernel-4_4 neon"
 
 # TODO(smbarber): change to chromiumos-rk3399 when 4.4 is ready
 # http://crosbug.com/p/50426
