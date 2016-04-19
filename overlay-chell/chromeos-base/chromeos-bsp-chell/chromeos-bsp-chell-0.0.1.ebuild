@@ -11,6 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
+IUSE="cheets"
 
 RDEPEND="
 	chromeos-base/ec-utils
@@ -22,7 +23,11 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{114DBB0F-4507-F7FC-99B6-4BCAB6A39725}" "CHROMEBOOK"
+	if use cheets; then
+		doappid "{9F3771C2-2720-3094-3671-C1FB1CA0AE43}" "CHROMEBOOK"
+	else
+		doappid "{114DBB0F-4507-F7FC-99B6-4BCAB6A39725}" "CHROMEBOOK"
+	fi
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
