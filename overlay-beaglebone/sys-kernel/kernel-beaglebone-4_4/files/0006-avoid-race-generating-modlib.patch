@@ -1,0 +1,34 @@
+From 20d363dfd1d6503550b25eabbddd3c1da9722b63 Mon Sep 17 00:00:00 2001
+From: Victor Dodon <printesoi@chromium.org>
+Date: Tue, 26 Jan 2016 16:34:00 -0800
+Subject: [PATCH 6/9] avoid race generating modlib
+
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 5ae061c1..a2eb7a1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1121,7 +1121,7 @@ PHONY += modules_install
+ modules_install: _modinst_ _modinst_post
+ 
+ PHONY += _modinst_
+-_modinst_:
++_modinst_: include/config/kernel.release
+ 	@rm -rf $(MODLIB)/kernel
+ 	@rm -f $(MODLIB)/source
+ 	@mkdir -p $(MODLIB)/kernel
+@@ -1395,7 +1395,7 @@ modules_install: _emodinst_ _emodinst_post
+ 
+ install-dir := $(if $(INSTALL_MOD_DIR),$(INSTALL_MOD_DIR),extra)
+ PHONY += _emodinst_
+-_emodinst_:
++_emodinst_: include/config/kernel.release
+ 	$(Q)mkdir -p $(MODLIB)/$(install-dir)
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modinst
+ 
+-- 
+2.8.0.rc3.226.g39d4020
+

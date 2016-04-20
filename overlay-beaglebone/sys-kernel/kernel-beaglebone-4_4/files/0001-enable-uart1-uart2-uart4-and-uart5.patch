@@ -1,0 +1,95 @@
+From 09dd3af2b2565feae9295a32ffef06c7f5e13ece Mon Sep 17 00:00:00 2001
+From: Victor Dodon <printesoi@chromium.org>
+Date: Tue, 16 Feb 2016 16:43:51 -0800
+Subject: [PATCH 1/9] enable uart1, uart2, uart4, and uart5
+
+---
+ arch/arm/boot/dts/am335x-bone-pinmux-ttyS1.dtsi |  2 +-
+ arch/arm/boot/dts/am335x-bone-pinmux-ttyS2.dtsi |  4 ++--
+ arch/arm/boot/dts/am335x-bone-pinmux-ttyS4.dtsi |  2 +-
+ arch/arm/boot/dts/am335x-bone-pinmux-ttyS5.dtsi |  2 +-
+ arch/arm/boot/dts/am335x-bone.dts               | 12 ++++++++++++
+ 5 files changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS1.dtsi b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS1.dtsi
+index ae5b813..2cd52bf 100644
+--- a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS1.dtsi
++++ b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS1.dtsi
+@@ -38,7 +38,7 @@
+ 			/* P9_24: uart1_txd.uart1_txd */
+ 			BONE_P9_24 (PIN_OUTPUT_PULLDOWN | MUX_MODE0)
+ 			/* P9_26: uart1_rxd.uart1_rxd */
+-			BONE_P9_26 (PIN_INPUT_PULLUP | MUX_MODE0)
++			BONE_P9_26 (PIN_INPUT_PULLDOWN | MUX_MODE0)
+ 		>;
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS2.dtsi b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS2.dtsi
+index 5fa593a..7afb05e 100644
+--- a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS2.dtsi
++++ b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS2.dtsi
+@@ -35,10 +35,10 @@
+ &am33xx_pinmux {
+ 	uart2_pins: pinmux_uart2_pins {
+ 		pinctrl-single,pins = <
++			/* P9_22: spi0_sclk.uart2_rxd */
++			BONE_P9_22 (PIN_INPUT_PULLDOWN | MUX_MODE1)
+ 			/* P9_21: spi0_d0.uart2_txd */
+ 			BONE_P9_21 (PIN_OUTPUT_PULLDOWN | MUX_MODE1)
+-			/* P9_22: spi0_sclk.uart2_rxd */
+-			BONE_P9_22 (PIN_INPUT_PULLUP | MUX_MODE1)
+ 		>;
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS4.dtsi b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS4.dtsi
+index 1d22a95..dac3dcd 100644
+--- a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS4.dtsi
++++ b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS4.dtsi
+@@ -36,7 +36,7 @@
+ 	uart4_pins: pinmux_uart4_pins {
+ 		pinctrl-single,pins = <
+ 			/* P9_11: gpmc_wait0.uart4_rxd_mux2 */
+-			BONE_P9_11 (PIN_INPUT_PULLUP | MUX_MODE6)
++			BONE_P9_11 (PIN_INPUT_PULLDOWN | MUX_MODE6)
+ 			/* P9_13: gpmc_wpn.uart4_txd_mux2  */
+ 			BONE_P9_13 (PIN_OUTPUT_PULLDOWN | MUX_MODE6)
+ 		>;
+diff --git a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS5.dtsi b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS5.dtsi
+index 01d0aec..7d2d785 100644
+--- a/arch/arm/boot/dts/am335x-bone-pinmux-ttyS5.dtsi
++++ b/arch/arm/boot/dts/am335x-bone-pinmux-ttyS5.dtsi
+@@ -36,7 +36,7 @@
+ 	uart5_pins: pinmux_uart5_pins {
+ 		pinctrl-single,pins = <
+ 			/* P8_38: lcd_data9.uart5_rxd */
+-			BONE_P8_38 (PIN_INPUT_PULLUP | MUX_MODE4)
++			BONE_P8_38 (PIN_INPUT_PULLDOWN | MUX_MODE4)
+ 			/* P8_37: lcd_data8.uart5_txd */
+ 			BONE_P8_37 (PIN_OUTPUT_PULLDOWN | MUX_MODE4)
+ 		>;
+diff --git a/arch/arm/boot/dts/am335x-bone.dts b/arch/arm/boot/dts/am335x-bone.dts
+index b195b9e..841c5c4 100644
+--- a/arch/arm/boot/dts/am335x-bone.dts
++++ b/arch/arm/boot/dts/am335x-bone.dts
+@@ -11,6 +11,18 @@
+ #include "am335x-bone-common.dtsi"
+ #include "am33xx-overlay-edma-fix.dtsi"
+ 
++#include "am335x-peripheral-ttyS1.dtsi"
++#include "am335x-bone-pinmux-ttyS1.dtsi"
++
++#include "am335x-peripheral-ttyS2.dtsi"
++#include "am335x-bone-pinmux-ttyS2.dtsi"
++
++#include "am335x-peripheral-ttyS4.dtsi"
++#include "am335x-bone-pinmux-ttyS4.dtsi"
++
++#include "am335x-peripheral-ttyS5.dtsi"
++#include "am335x-bone-pinmux-ttyS5.dtsi"
++
+ / {
+ 	model = "TI AM335x BeagleBone";
+ 	compatible = "ti,am335x-bone", "ti,am33xx";
+-- 
+2.8.0.rc3.226.g39d4020
+

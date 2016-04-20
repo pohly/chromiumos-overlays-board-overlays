@@ -1,0 +1,59 @@
+From d967e6754af3cbcdffa1e42c408f5fa93e340293 Mon Sep 17 00:00:00 2001
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date: Sat, 20 Feb 2016 14:19:34 -0800
+Subject: [PATCH 7/9] UPSTREAM: Revert "usb: hub: do not clear BOS field during
+ reset device"
+
+This reverts commit d8f00cd685f5c8e0def8593e520a7fef12c22407.
+
+Tony writes:
+
+This upstream commit is causing an oops:
+d8f00cd685f5 ("usb: hub: do not clear BOS field during reset device")
+
+This patch has already been included in several -stable kernels.  Here
+are the affected kernels:
+4.5.0-rc4 (current git)
+4.4.2
+4.3.6 (currently in review)
+4.1.18
+3.18.27
+3.14.61
+
+How to reproduce the problem:
+Boot kernel with slub debugging enabled (otherwise memory corruption
+will cause random oopses later instead of immediately)
+Plug in USB 3.0 disk to xhci USB 3.0 port
+dd if=/dev/sdc of=/dev/null bs=65536
+(where /dev/sdc is the USB 3.0 disk)
+Unplug USB cable while dd is still going
+Oops is immediate:
+
+Reported-by: Tony Battersby <tonyb@cybernetics.com>
+Cc: Du, Changbin <changbin.du@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/core/hub.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 1560f3f..ac3a7c5 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5486,8 +5486,11 @@ done:
+ 	return 0;
+ 
+ re_enumerate:
+-	usb_release_bos_descriptor(udev);
+-	udev->bos = bos;
++	/* release the new BOS descriptor allocated  by hub_port_init() */
++	if (udev->bos != bos) {
++		usb_release_bos_descriptor(udev);
++		udev->bos = bos;
++	}
+ re_enumerate_no_bos:
+ 	/* LPM state doesn't matter when we're about to destroy the device. */
+ 	hub_port_logical_disconnect(parent_hub, port1);
+-- 
+2.8.0.rc3.226.g39d4020
+

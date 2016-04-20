@@ -1,0 +1,75 @@
+From a894f9f0c88402a7ad64850b60f89eec8830f5f5 Mon Sep 17 00:00:00 2001
+From: Victor Dodon <printesoi@chromium.org>
+Date: Wed, 2 Mar 2016 12:27:35 -0800
+Subject: [PATCH 4/9] Enable SPI1
+
+---
+ arch/arm/boot/dts/am335x-bone-pinmux-spi1.dtsi | 43 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/am335x-bone.dts              |  1 +
+ 2 files changed, 44 insertions(+)
+ create mode 100644 arch/arm/boot/dts/am335x-bone-pinmux-spi1.dtsi
+
+diff --git a/arch/arm/boot/dts/am335x-bone-pinmux-spi1.dtsi b/arch/arm/boot/dts/am335x-bone-pinmux-spi1.dtsi
+new file mode 100644
+index 0000000..2850313
+--- /dev/null
++++ b/arch/arm/boot/dts/am335x-bone-pinmux-spi1.dtsi
+@@ -0,0 +1,43 @@
++/*
++ * Copyright (C) 2016 Google, Inc.
++ *
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <dt-bindings/board/am335x-bbw-bbb-base.h>
++
++&am33xx_pinmux {
++	spi1_pins_s0: spi1_pins_s0 {
++		pinctrl-single,pins = <
++			/* P9_31: mcasp0_aclkx.spi1_sclk */
++			BONE_P9_31 (PIN_INPUT_PULLUP | MUX_MODE3)
++			/* P9_29: mcasp0_fsx.spi1_d0 */
++			BONE_P9_29 (PIN_INPUT_PULLUP | MUX_MODE3)
++			/* P9_30: mcasp0_axr0.spi1_d1 */
++			BONE_P9_30 (PIN_OUTPUT_PULLUP | MUX_MODE3)
++			/* P9_29: mcasp0_ahclkr.spi1_cs0 */
++			BONE_P9_28 (PIN_OUTPUT_PULLUP | MUX_MODE3)
++		>;
++	};
++};
++
++&spi1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi1_pins_s0>;
++
++	spidev@1 {
++		spi-max-frequency = <24000000>;
++		reg = <0>;
++		compatible = "linux,spidev";
++	};
++};
+diff --git a/arch/arm/boot/dts/am335x-bone.dts b/arch/arm/boot/dts/am335x-bone.dts
+index 7403b68..cfd83ec 100644
+--- a/arch/arm/boot/dts/am335x-bone.dts
++++ b/arch/arm/boot/dts/am335x-bone.dts
+@@ -24,6 +24,7 @@
+ #include "am335x-bone-pinmux-ttyS5.dtsi"
+ 
+ #include "am335x-bone-pinmux-i2c-1.dtsi"
++#include "am335x-bone-pinmux-spi1.dtsi"
+ 
+ / {
+ 	model = "TI AM335x BeagleBone";
+-- 
+2.8.0.rc3.226.g39d4020
+

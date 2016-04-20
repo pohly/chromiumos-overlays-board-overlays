@@ -1,0 +1,139 @@
+From 28be526b3658fc57c957c4c0a5e1ffab5ecdbd6a Mon Sep 17 00:00:00 2001
+From: Victor Dodon <printesoi@chromium.org>
+Date: Tue, 1 Mar 2016 19:05:12 -0800
+Subject: [PATCH 5/9] enable gpios
+
+---
+ arch/arm/boot/dts/am335x-bone-pinmux-gpios.dtsi | 107 ++++++++++++++++++++++++
+ arch/arm/boot/dts/am335x-bone.dts               |   1 +
+ 2 files changed, 108 insertions(+)
+ create mode 100644 arch/arm/boot/dts/am335x-bone-pinmux-gpios.dtsi
+
+diff --git a/arch/arm/boot/dts/am335x-bone-pinmux-gpios.dtsi b/arch/arm/boot/dts/am335x-bone-pinmux-gpios.dtsi
+new file mode 100644
+index 0000000..c6c2d37
+--- /dev/null
++++ b/arch/arm/boot/dts/am335x-bone-pinmux-gpios.dtsi
+@@ -0,0 +1,107 @@
++/*
++ * Copyright (C) 2016 Google, Inc.
++ *
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <dt-bindings/board/am335x-bbw-bbb-base.h>
++
++/* Standard */
++
++&am33xx_pinmux {
++	pinctrl_test: pinctrl_test_0_pins {
++		pinctrl-single,pins = <
++			/* gpmc_advn_ale.gpio2_2 */
++			BONE_P8_07 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad4.gpio1_4 */
++			BONE_P8_23 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_wen.gpio2_4 */
++			BONE_P8_10 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_oen_ren.gpio2_3 */
++			BONE_P8_08 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data3.gpio2_9 */
++			BONE_P8_44 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++
++			/* lcd_data11.gpio2_17 */
++			BONE_P8_34 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_csn0.gpio1_29 */
++			BONE_P8_26 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data5.gpio2_11 */
++			BONE_P8_42 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_be0n_cle.gpio2_5 */
++			BONE_P8_09 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data1.gpio2_7 */
++			BONE_P8_46 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++
++			/* lcd_data7.gpio2_13 */
++			BONE_P8_40 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad2.gpio1_2 */
++			BONE_P8_05 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_ac_bias_en.gpio2_25 */
++			BONE_P8_30 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data15.gpio0_11 */
++			BONE_P8_32 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data14.gpio0_10 */
++			BONE_P8_31 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++
++			/* lcd_data13.gpio0_9 */
++			BONE_P8_33 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_a0.gpio1_16 */
++			BONE_P9_15 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_be1n.gpio1_28 */
++			BONE_P9_12 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_hsync.gpio2_23 */
++			BONE_P8_29 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data12.gpio0_8 */
++			BONE_P8_35 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++
++			/* gpmc_ad0.gpio1_0 */
++			BONE_P8_25 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data10.gpio2_16 */
++			BONE_P8_36 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_pclk.gpio2_24 */
++			BONE_P8_28 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad9.gpio0_23 */
++			BONE_P8_13 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad15.gpio1_15 */
++			BONE_P8_15 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++
++			/* gpmc_ad6.gpio1_6 */
++			BONE_P8_03 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad14.gpio1_14 */
++			BONE_P8_16 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad11.gpio0_27 */
++			BONE_P8_17 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad13.gpio1_13 */
++			BONE_P8_11 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++
++			/* lcd_vsync.gpio2_22 */
++			BONE_P8_27 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad8.gpio0_22 */
++			BONE_P8_19 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* lcd_data2.gpio2_8 */
++			BONE_P8_43 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++
++			/* gpmc_ad0.gpio1_0 */
++			BONE_P8_25 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++			/* gpmc_ad1.gpio1_1 */
++			BONE_P8_24 (PIN_INPUT_PULLDOWN | MUX_MODE7)
++		>;
++	};
++};
++
++&ocp {
++	pinctrl_test_helper {
++		compatible = "bone-pinmux-helper";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_test>;
++		status = "okay";
++	};
++};
+diff --git a/arch/arm/boot/dts/am335x-bone.dts b/arch/arm/boot/dts/am335x-bone.dts
+index cfd83ec..6d26fab 100644
+--- a/arch/arm/boot/dts/am335x-bone.dts
++++ b/arch/arm/boot/dts/am335x-bone.dts
+@@ -25,6 +25,7 @@
+ 
+ #include "am335x-bone-pinmux-i2c-1.dtsi"
+ #include "am335x-bone-pinmux-spi1.dtsi"
++#include "am335x-bone-pinmux-gpios.dtsi"
+ 
+ / {
+ 	model = "TI AM335x BeagleBone";
+-- 
+2.8.0.rc3.226.g39d4020
+
