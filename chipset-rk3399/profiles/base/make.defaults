@@ -4,7 +4,5 @@
 
 USE="device_tree hardfp kernel-4_4 neon"
 
-# TODO(smbarber): change to chromiumos-rk3399 when 4.4 is ready
-# http://crosbug.com/p/50426
-CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-arm64"
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-rockchip64"
 CHROMEOS_KERNEL_ARCH="arm64"
