@@ -19,6 +19,7 @@ RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-gru
 	chromeos-base/ec-utils
 	media-gfx/ply-image
+	chromeos-base/chromeos-touch-config-kevin
 "
 DEPEND="${RDEPEND}"
 
