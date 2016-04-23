@@ -51,6 +51,7 @@ src_install() {
 	insinto /firmware
 	doins u-boot u-boot.img MLO "${FILESDIR}"/uEnv.txt
 	insinto /boot
+	doins u-boot u-boot.img MLO "${FILESDIR}"/uEnv.txt
 	newins "${FILESDIR}"/uEnv.txt uEnv.A.txt
 	newins "${FILESDIR}"/uEnv.txt uEnv.B.txt
 }
