@@ -19,8 +19,8 @@ USE="${USE} evdev_gestures"
 # Enable xkbcommon in Chrome for keyboard layouts.
 USE="${USE} xkbcommon"
 
-# Disable tty2 console. Not sure why TTY_CONSOLE can't be used for this.
-USE="${USE} -tty_console_tty2"
+# Disable tty2 console.
+TTY_CONSOLE="-tty2"
 
 # Disable VTs and framebuffer console in kernel.
 USE="${USE} -fbconsole -vtconsole"
