@@ -1,8 +1,7 @@
-From 075b43f2bef6f2ffdea75e66f628aee7aae98e92 Mon Sep 17 00:00:00 2001
+From a0535c7714af668d62f7c66dc98c5fc0429265d8 Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 24 Feb 2016 16:29:47 +0800
-Subject: [PATCH 19/20] video: tegra: host: change default kind for bringup
-X-NVConfidentiality: public
+Subject: [PATCH 17/18] video: tegra: host: change default kind for bringup
 
 Change-Id: Ifba504c9d54fd413a30e08576b169ed197e57298
 ---
@@ -10,7 +9,7 @@ Change-Id: Ifba504c9d54fd413a30e08576b169ed197e57298
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/video/tegra/host/dmabuf.c b/drivers/video/tegra/host/dmabuf.c
-index 706692b1b904..03525d7a522f 100644
+index 706692b..03525d7 100644
 --- a/drivers/video/tegra/host/dmabuf.c
 +++ b/drivers/video/tegra/host/dmabuf.c
 @@ -159,7 +159,7 @@ int nvhost_dmabuf_get_param(struct mem_mgr *memmgr, struct mem_handle *handle,
@@ -23,5 +22,5 @@ index 706692b1b904..03525d7a522f 100644
  	}
  
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

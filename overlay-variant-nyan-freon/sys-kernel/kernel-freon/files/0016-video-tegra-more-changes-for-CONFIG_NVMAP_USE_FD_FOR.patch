@@ -1,9 +1,8 @@
-From 9eafbf80dcd25cae7dc691a62c5fef4fb6ce479f Mon Sep 17 00:00:00 2001
+From edb0ef4fcfa179fdcfc1402f2ba1d6ddeed0f124 Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 17 Feb 2016 18:49:36 +0800
-Subject: [PATCH 18/20] video: tegra: more changes for
+Subject: [PATCH 16/18] video: tegra: more changes for
  CONFIG_NVMAP_USE_FD_FOR_HANDLE
-X-NVConfidentiality: public
 
 * 4096 <= fd < 8192k for foreign dmabuf, and 1024 <= fd < 4096 for
   nvmap dmabuf
@@ -20,7 +19,7 @@ Change-Id: I64127e81293315ae0898eebd8bf017caad867572
  6 files changed, 130 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/video/tegra/host/dmabuf.c b/drivers/video/tegra/host/dmabuf.c
-index 17639ee83827..706692b1b904 100644
+index 17639ee..706692b 100644
 --- a/drivers/video/tegra/host/dmabuf.c
 +++ b/drivers/video/tegra/host/dmabuf.c
 @@ -34,7 +34,19 @@ struct nvhost_dmabuf_data {
@@ -99,7 +98,7 @@ index 17639ee83827..706692b1b904 100644
  	u32 offset = 0;
  	int err;
 diff --git a/drivers/video/tegra/host/nvhost_memmgr.c b/drivers/video/tegra/host/nvhost_memmgr.c
-index 71f4bc1594eb..b863aa6700c3 100644
+index 71f4bc1..b863aa6 100644
 --- a/drivers/video/tegra/host/nvhost_memmgr.c
 +++ b/drivers/video/tegra/host/nvhost_memmgr.c
 @@ -115,9 +115,15 @@ struct mem_handle *nvhost_memmgr_get(struct mem_mgr *mgr,
@@ -119,7 +118,7 @@ index 71f4bc1594eb..b863aa6700c3 100644
  		WARN_ON(1);
  		break;
 diff --git a/drivers/video/tegra/host/nvhost_memmgr.h b/drivers/video/tegra/host/nvhost_memmgr.h
-index 14eebb85a091..16ebe48740ab 100644
+index 14eebb8..16ebe48 100644
 --- a/drivers/video/tegra/host/nvhost_memmgr.h
 +++ b/drivers/video/tegra/host/nvhost_memmgr.h
 @@ -51,6 +51,7 @@ enum mem_rw_flag {
@@ -147,7 +146,7 @@ index 14eebb85a091..16ebe48740ab 100644
  	if (db->ops == &nvmap_dma_buf_ops)
  		return mem_mgr_type_nvmap;
 diff --git a/drivers/video/tegra/nvmap/nvmap_dmabuf.c b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
-index a1fad575eb29..f5035528195c 100644
+index a1fad57..f503552 100644
 --- a/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 +++ b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 @@ -425,12 +425,17 @@ static void nvmap_dmabuf_unmap_dma_buf(struct dma_buf_attachment *attach,
@@ -240,7 +239,7 @@ index a1fad575eb29..f5035528195c 100644
  		priv = info->handle->nvhost_priv;
  	} else {
 diff --git a/drivers/video/tegra/nvmap/nvmap_ioctl.c b/drivers/video/tegra/nvmap/nvmap_ioctl.c
-index 5a11ad813dcb..ff02924091ab 100644
+index 5a11ad8..ff02924 100644
 --- a/drivers/video/tegra/nvmap/nvmap_ioctl.c
 +++ b/drivers/video/tegra/nvmap/nvmap_ioctl.c
 @@ -51,6 +51,68 @@ static ssize_t rw_handle(struct nvmap_client *client, struct nvmap_handle *h,
@@ -340,7 +339,7 @@ index 5a11ad813dcb..ff02924091ab 100644
  }
  
 diff --git a/drivers/video/tegra/nvmap/nvmap_priv.h b/drivers/video/tegra/nvmap/nvmap_priv.h
-index 0d1ddaf5f4bf..3edf29380c0a 100644
+index 0d1ddaf..3edf293 100644
 --- a/drivers/video/tegra/nvmap/nvmap_priv.h
 +++ b/drivers/video/tegra/nvmap/nvmap_priv.h
 @@ -388,6 +388,7 @@ ulong __nvmap_ref_to_id(struct nvmap_handle_ref *ref);
@@ -352,5 +351,5 @@ index 0d1ddaf5f4bf..3edf29380c0a 100644
  void nvmap_dmabuf_debugfs_init(struct dentry *nvmap_root);
  int nvmap_dmabuf_stash_init(void);
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

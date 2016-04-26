@@ -1,8 +1,7 @@
-From abbed70b6e41dd6e26e268cd86aabbaa4a9c105f Mon Sep 17 00:00:00 2001
+From 5b8b0f44d89e162eb116e8906b5bec77576017dc Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 17 Feb 2016 18:03:19 +0800
-Subject: [PATCH 17/20] kconfig: enable CONFIG_NVMAP_USE_FD_FOR_HANDLE
-X-NVConfidentiality: public
+Subject: [PATCH 15/18] kconfig: enable CONFIG_NVMAP_USE_FD_FOR_HANDLE
 
 The NVRM user space library has always used FD for NVMAP handle. So do the
 same in kernel.
@@ -13,7 +12,7 @@ Change-Id: I27588716028813c156d400359b89e1aefa58dc4c
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
-index 027e6b44ae4e..a0d1803d219b 100644
+index 06334b1..c615c8e 100644
 --- a/chromeos/config/armel/chromeos-tegra.flavour.config
 +++ b/chromeos/config/armel/chromeos-tegra.flavour.config
 @@ -114,7 +114,7 @@ CONFIG_NVMAP_PAGE_POOLS_INIT_FILLUP=y
@@ -26,5 +25,5 @@ index 027e6b44ae4e..a0d1803d219b 100644
  CONFIG_PAGE_OFFSET=0xC0000000
  CONFIG_PHYS_ADDR_T_64BIT=y
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

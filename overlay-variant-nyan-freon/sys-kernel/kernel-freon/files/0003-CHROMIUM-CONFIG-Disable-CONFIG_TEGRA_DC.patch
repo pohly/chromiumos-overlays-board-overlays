@@ -1,8 +1,7 @@
-From 690c0a9f9ce836633d0482681b05224f6860407b Mon Sep 17 00:00:00 2001
+From c76d180804f199474ce849a80b1ef52cb90e3715 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 16 Apr 2015 18:30:54 -0700
-Subject: [PATCH 03/20] CHROMIUM: CONFIG: Disable CONFIG_TEGRA_DC
-X-NVConfidentiality: public
+Subject: [PATCH 03/18] CHROMIUM: CONFIG: Disable CONFIG_TEGRA_DC
 
 We're going to use tegra DRM for display.
 
@@ -12,7 +11,7 @@ Change-Id: I26fed397129ba970032eeeb14deefd0a0ae1c4ac
  1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
-index 9d48f394cade..21e8eb4eeb89 100644
+index 9d48f39..21e8eb4 100644
 --- a/chromeos/config/armel/chromeos-tegra.flavour.config
 +++ b/chromeos/config/armel/chromeos-tegra.flavour.config
 @@ -197,15 +197,15 @@ CONFIG_TEGRA_124_DFLL_COOLING=y
@@ -41,5 +40,5 @@ index 9d48f394cade..21e8eb4eeb89 100644
  CONFIG_TEGRA_DEBUG_UART_AUTO_ODMDATA=y
  CONFIG_TEGRA_DVFS=y
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

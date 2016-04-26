@@ -1,8 +1,7 @@
-From 4aee747feee092627c6b68e24555f6162591533c Mon Sep 17 00:00:00 2001
+From 62788f7b4eec52904035067614895b9536d2d34d Mon Sep 17 00:00:00 2001
 From: Haixia Shi <hshi@chromium.org>
 Date: Tue, 26 May 2015 09:48:47 -0700
-Subject: [PATCH 06/20] CHROMIUM: drm/tegra: enable ioctls unrelated to syncpt
-X-NVConfidentiality: public
+Subject: [PATCH 06/18] CHROMIUM: drm/tegra: enable ioctls unrelated to syncpt
 
 Still keeping the 5 syncpt-related ioctls disabled.
 
@@ -12,7 +11,7 @@ Change-Id: I544ea19adf20b09487fde30328747b8ef3d9f522
  1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
-index 54894d1736d6..ffd6df317ab5 100644
+index 54894d1..ffd6df3 100644
 --- a/drivers/gpu/drm/tegra/drm.c
 +++ b/drivers/gpu/drm/tegra/drm.c
 @@ -152,7 +152,6 @@ static void tegra_drm_lastclose(struct drm_device *drm)
@@ -102,5 +101,5 @@ index 54894d1736d6..ffd6df317ab5 100644
  
  static const struct file_operations tegra_drm_fops = {
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

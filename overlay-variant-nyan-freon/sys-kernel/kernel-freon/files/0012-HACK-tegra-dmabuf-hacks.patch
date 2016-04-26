@@ -1,8 +1,7 @@
-From b4ad53502a096a231b16264cadae56ceab59a3c3 Mon Sep 17 00:00:00 2001
+From b81b37316367372c2b90432e59e13391edc49d93 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Tue, 15 Sep 2015 15:45:03 -0700
-Subject: [PATCH 14/20] HACK: tegra dmabuf hacks
-X-NVConfidentiality: public
+Subject: [PATCH 12/18] HACK: tegra dmabuf hacks
 
 Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
 ---
@@ -22,7 +21,7 @@ Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
  13 files changed, 348 insertions(+), 48 deletions(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
-index a0d1803d219b..027e6b44ae4e 100644
+index c615c8e..06334b1 100644
 --- a/chromeos/config/armel/chromeos-tegra.flavour.config
 +++ b/chromeos/config/armel/chromeos-tegra.flavour.config
 @@ -114,7 +114,7 @@ CONFIG_NVMAP_PAGE_POOLS_INIT_FILLUP=y
@@ -35,7 +34,7 @@ index a0d1803d219b..027e6b44ae4e 100644
  CONFIG_PAGE_OFFSET=0xC0000000
  CONFIG_PHYS_ADDR_T_64BIT=y
 diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
-index 00fcc00e05d1..ad34e197e9a0 100644
+index 00fcc00..ad34e19 100644
 --- a/drivers/gpu/drm/tegra/gem.c
 +++ b/drivers/gpu/drm/tegra/gem.c
 @@ -638,8 +638,11 @@ struct dma_buf *tegra_gem_prime_export(struct drm_device *drm,
@@ -52,7 +51,7 @@ index 00fcc00e05d1..ad34e197e9a0 100644
  
  struct drm_gem_object *tegra_gem_prime_import(struct drm_device *drm,
 diff --git a/drivers/video/tegra/host/dmabuf.c b/drivers/video/tegra/host/dmabuf.c
-index 62e5331c30b3..17639ee83827 100644
+index 62e5331..17639ee 100644
 --- a/drivers/video/tegra/host/dmabuf.c
 +++ b/drivers/video/tegra/host/dmabuf.c
 @@ -20,12 +20,21 @@
@@ -218,7 +217,7 @@ index 62e5331c30b3..17639ee83827 100644
 +	return err;
 +}
 diff --git a/drivers/video/tegra/host/dmabuf.h b/drivers/video/tegra/host/dmabuf.h
-index 264618473572..85a280e6a9f4 100644
+index 2646184..85a280e 100644
 --- a/drivers/video/tegra/host/dmabuf.h
 +++ b/drivers/video/tegra/host/dmabuf.h
 @@ -43,4 +43,9 @@ void nvhost_dmabuf_kunmap(struct mem_handle *handle, unsigned int pagenum,
@@ -232,7 +231,7 @@ index 264618473572..85a280e6a9f4 100644
 +				 int lines);
  #endif
 diff --git a/drivers/video/tegra/host/nvhost_job.c b/drivers/video/tegra/host/nvhost_job.c
-index ffe3cab1d34f..98fcdcff4d95 100644
+index ffe3cab..98fcdcf 100644
 --- a/drivers/video/tegra/host/nvhost_job.c
 +++ b/drivers/video/tegra/host/nvhost_job.c
 @@ -270,6 +270,7 @@ static int pin_array_ids(struct platform_device *dev,
@@ -252,7 +251,7 @@ index ffe3cab1d34f..98fcdcff4d95 100644
  		dma_buf_put(unpin->buf);
  	}
 diff --git a/drivers/video/tegra/host/nvhost_memmgr.c b/drivers/video/tegra/host/nvhost_memmgr.c
-index 6fb668c9076a..71f4bc1594eb 100644
+index 6fb668c..71f4bc1 100644
 --- a/drivers/video/tegra/host/nvhost_memmgr.c
 +++ b/drivers/video/tegra/host/nvhost_memmgr.c
 @@ -119,6 +119,7 @@ struct mem_handle *nvhost_memmgr_get(struct mem_mgr *mgr,
@@ -389,7 +388,7 @@ index 6fb668c9076a..71f4bc1594eb 100644
  
  int nvhost_memmgr_init(struct nvhost_chip_support *chip)
 diff --git a/drivers/video/tegra/host/nvhost_memmgr.h b/drivers/video/tegra/host/nvhost_memmgr.h
-index 8e65151e9173..14eebb85a091 100644
+index 8e65151..14eebb8 100644
 --- a/drivers/video/tegra/host/nvhost_memmgr.h
 +++ b/drivers/video/tegra/host/nvhost_memmgr.h
 @@ -21,6 +21,7 @@
@@ -421,7 +420,7 @@ index 8e65151e9173..14eebb85a091 100644
  u32 nvhost_memmgr_handle_to_id(struct mem_handle *handle);
  
 diff --git a/drivers/video/tegra/host/nvmap.c b/drivers/video/tegra/host/nvmap.c
-index fb10ee6dcc50..f9eb0f99a161 100644
+index fb10ee6..f9eb0f9 100644
 --- a/drivers/video/tegra/host/nvmap.c
 +++ b/drivers/video/tegra/host/nvmap.c
 @@ -181,6 +181,7 @@ priv_exist_or_err:
@@ -464,7 +463,7 @@ index fb10ee6dcc50..f9eb0f99a161 100644
  
  int nvhost_nvmap_get_param(struct mem_mgr *mgr, struct mem_handle *handle,
 diff --git a/drivers/video/tegra/nvmap/nvmap.c b/drivers/video/tegra/nvmap/nvmap.c
-index 66f09022139c..66f7529e5ae5 100644
+index 66f0902..66f7529 100644
 --- a/drivers/video/tegra/nvmap/nvmap.c
 +++ b/drivers/video/tegra/nvmap/nvmap.c
 @@ -447,7 +447,7 @@ void nvmap_handle_put(struct nvmap_handle *h)
@@ -477,7 +476,7 @@ index 66f09022139c..66f7529e5ae5 100644
  	cnt = atomic_dec_return(&h->ref);
  
 diff --git a/drivers/video/tegra/nvmap/nvmap_dmabuf.c b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
-index 49af54083115..a1fad575eb29 100644
+index 49af540..a1fad57 100644
 --- a/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 +++ b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 @@ -164,6 +164,7 @@ static void nvmap_dmabuf_detach(struct dma_buf *dmabuf,
@@ -626,7 +625,7 @@ index 49af54083115..a1fad575eb29 100644
  }
  
 diff --git a/drivers/video/tegra/nvmap/nvmap_handle.c b/drivers/video/tegra/nvmap/nvmap_handle.c
-index 02db3ed92372..f5ffeddac144 100644
+index 02db3ed..f5ffedd 100644
 --- a/drivers/video/tegra/nvmap/nvmap_handle.c
 +++ b/drivers/video/tegra/nvmap/nvmap_handle.c
 @@ -596,6 +596,35 @@ static struct page *nvmap_alloc_pages_exact(gfp_t gfp, size_t size)
@@ -798,7 +797,7 @@ index 02db3ed92372..f5ffeddac144 100644
 +	return h->attachment;
 +}
 diff --git a/drivers/video/tegra/nvmap/nvmap_priv.h b/drivers/video/tegra/nvmap/nvmap_priv.h
-index a21b7c91391d..0d1ddaf5f4bf 100644
+index a21b7c9..0d1ddaf 100644
 --- a/drivers/video/tegra/nvmap/nvmap_priv.h
 +++ b/drivers/video/tegra/nvmap/nvmap_priv.h
 @@ -293,6 +293,9 @@ void nvmap_handle_put(struct nvmap_handle *h);
@@ -812,7 +811,7 @@ index a21b7c91391d..0d1ddaf5f4bf 100644
  					     size_t size);
  
 diff --git a/include/linux/nvmap.h b/include/linux/nvmap.h
-index a4970eea167d..673d2f6ac146 100644
+index a4970ee..673d2f6 100644
 --- a/include/linux/nvmap.h
 +++ b/include/linux/nvmap.h
 @@ -86,6 +86,8 @@ void *nvmap_get_dmabuf_private(struct dma_buf *dmabuf);
@@ -825,5 +824,5 @@ index a4970eea167d..673d2f6ac146 100644
  ulong nvmap_page_pool_get_unused_pages(void);
  #else
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

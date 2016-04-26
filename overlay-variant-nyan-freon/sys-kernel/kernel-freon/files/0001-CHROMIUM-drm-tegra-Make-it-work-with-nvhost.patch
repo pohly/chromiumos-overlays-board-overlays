@@ -1,8 +1,7 @@
-From 44518a3af834b98616f0b41c78c594721fda869f Mon Sep 17 00:00:00 2001
+From f62474e54580caa14d33f397f73261812533e76b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 1 May 2015 18:58:07 -0700
-Subject: [PATCH 01/20] CHROMIUM: drm/tegra: Make it work with nvhost
-X-NVConfidentiality: public
+Subject: [PATCH 01/18] CHROMIUM: drm/tegra: Make it work with nvhost
 
 This change makes tegra drm work with nvhost (as opposed to host1x).
 To do so:
@@ -16,7 +15,7 @@ Change-Id: Ie3e49e596be0382ec7e4658e9b6004ae8d0cc6a7
 ---
  drivers/gpu/drm/tegra/Kconfig  |   1 -
  drivers/gpu/drm/tegra/Makefile |   5 +-
- drivers/gpu/drm/tegra/bus.c    | 115 ++---
+ drivers/gpu/drm/tegra/bus.c    | 119 +++--
  drivers/gpu/drm/tegra/dc.c     |   4 +-
  drivers/gpu/drm/tegra/drm.c    | 246 ++--------
  drivers/gpu/drm/tegra/drm.h    |   3 +
@@ -28,7 +27,7 @@ Change-Id: Ie3e49e596be0382ec7e4658e9b6004ae8d0cc6a7
  drivers/gpu/drm/tegra/gr3d.h   |  27 --
  drivers/gpu/drm/tegra/hdmi.c   |   4 +-
  drivers/gpu/drm/tegra/sor.c    |   4 +-
- 14 files changed, 115 insertions(+), 2018 deletions(-)
+ 14 files changed, 121 insertions(+), 2016 deletions(-)
  delete mode 100644 drivers/gpu/drm/tegra/dsi.c
  delete mode 100644 drivers/gpu/drm/tegra/dsi.h
  delete mode 100644 drivers/gpu/drm/tegra/gr2d.c
@@ -37,7 +36,7 @@ Change-Id: Ie3e49e596be0382ec7e4658e9b6004ae8d0cc6a7
  delete mode 100644 drivers/gpu/drm/tegra/gr3d.h
 
 diff --git a/drivers/gpu/drm/tegra/Kconfig b/drivers/gpu/drm/tegra/Kconfig
-index 354ddb29231f..b435689262e0 100644
+index 354ddb2..b435689 100644
 --- a/drivers/gpu/drm/tegra/Kconfig
 +++ b/drivers/gpu/drm/tegra/Kconfig
 @@ -6,7 +6,6 @@ config DRM_TEGRA
@@ -49,7 +48,7 @@ index 354ddb29231f..b435689262e0 100644
  	  Choose this option if you have an NVIDIA Tegra SoC.
  
 diff --git a/drivers/gpu/drm/tegra/Makefile b/drivers/gpu/drm/tegra/Makefile
-index d43f21bb4596..9a504283a257 100644
+index d43f21b..9a50428 100644
 --- a/drivers/gpu/drm/tegra/Makefile
 +++ b/drivers/gpu/drm/tegra/Makefile
 @@ -10,10 +10,7 @@ tegra-drm-y := \
@@ -65,10 +64,10 @@ index d43f21bb4596..9a504283a257 100644
  
  obj-$(CONFIG_DRM_TEGRA) += tegra-drm.o
 diff --git a/drivers/gpu/drm/tegra/bus.c b/drivers/gpu/drm/tegra/bus.c
-index 94c8f6575e1d..3c75d1f9e2a6 100644
+index 94c8f65..68faa3d 100644
 --- a/drivers/gpu/drm/tegra/bus.c
 +++ b/drivers/gpu/drm/tegra/bus.c
-@@ -8,69 +8,84 @@
+@@ -8,69 +8,92 @@
  
  #include "drm.h"
  
@@ -82,80 +81,79 @@ index 94c8f6575e1d..3c75d1f9e2a6 100644
 -
 -	master->unique_len = strlen(bus) + 1 + strlen(device);
 -	master->unique_size = master->unique_len;
--
++static DEFINE_MUTEX(clients_lock);
++static LIST_HEAD(clients);
+ 
 -	master->unique = kmalloc(master->unique_len + 1, GFP_KERNEL);
 -	if (!master->unique)
 -		return -ENOMEM;
 -
 -	snprintf(master->unique, master->unique_len + 1, "%s:%s", bus, device);
-+static DEFINE_MUTEX(clients_lock);
-+static LIST_HEAD(clients);
- 
--	length = strlen(driver) + 1 + master->unique_len;
--
--	dev->devname = kmalloc(length + 1, GFP_KERNEL);
--	if (!dev->devname)
--		return -ENOMEM;
--
--	snprintf(dev->devname, length + 1, "%s@%s", driver, master->unique);
 +void drm_host1x_exit(struct drm_driver *driver, struct host1x_device *device)
 +{
 +	struct tegra_drm *tegra = dev_get_drvdata(&device->dev);
  
--	return 0;
+-	length = strlen(driver) + 1 + master->unique_len;
 +	drm_put_dev(tegra->drm);
++}
+ 
+-	dev->devname = kmalloc(length + 1, GFP_KERNEL);
+-	if (!dev->devname)
+-		return -ENOMEM;
+ 
+-	snprintf(dev->devname, length + 1, "%s@%s", driver, master->unique);
++int drm_host1x_init(struct drm_driver *driver, struct host1x_device *device)
++{
++	mutex_init(&clients_lock);
++	INIT_LIST_HEAD(&device->clients);
+ 
+ 	return 0;
  }
  
 -static struct drm_bus drm_host1x_bus = {
 -	.bus_type = DRIVER_BUS_HOST1X,
 -	.set_busid = drm_host1x_set_busid,
 -};
- 
- int drm_host1x_init(struct drm_driver *driver, struct host1x_device *device)
+-
+-int drm_host1x_init(struct drm_driver *driver, struct host1x_device *device)
++int drm_host1x_register(struct host1x_client *client)
  {
 -	struct drm_device *drm;
 -	int ret;
 -
 -	INIT_LIST_HEAD(&driver->device_list);
 -	driver->bus = &drm_host1x_bus;
-+	mutex_init(&clients_lock);
-+	INIT_LIST_HEAD(&device->clients);
++	mutex_lock(&clients_lock);
++	list_add_tail(&client->list, &clients);
++	mutex_unlock(&clients_lock);
++	return 0;
++}
  
 -	drm = drm_dev_alloc(driver, &device->dev);
 -	if (!drm)
 -		return -ENOMEM;
--
++int drm_host1x_unregister(struct host1x_client *client)
++{
++	struct host1x_client *c;
+ 
 -	ret = drm_dev_register(drm, 0);
 -	if (ret)
 -		goto err_free;
--
++	list_for_each_entry(c, &clients, list) {
++		if (c == client) {
++			list_del(&c->list);
++			return 0;
++		}
++	}
+ 
 -	DRM_INFO("Initialized %s %d.%d.%d %s on minor %d\n", driver->name,
 -		 driver->major, driver->minor, driver->patchlevel,
 -		 driver->date, drm->primary->index);
-+	return 0;
++	return 1;
 +}
  
-+int drm_host1x_register(struct host1x_client *client)
-+{
-+	mutex_lock(&clients_lock);
-+	list_add_tail(&client->list, &clients);
-+	mutex_unlock(&clients_lock);
- 	return 0;
-+}
- 
--err_free:
--	kfree(drm);
--	return ret;
-+int drm_host1x_unregister(struct host1x_client *client)
-+{
-+	// FIXME
-+	return 0;
- }
- 
--void drm_host1x_exit(struct drm_driver *driver, struct host1x_device *device)
 +int drm_host1x_device_init(struct drm_device *drm, struct host1x_device *device)
- {
--	struct tegra_drm *tegra = dev_get_drvdata(&device->dev);
++{
 +	struct host1x_client *client;
 +	int err;
 +
@@ -175,12 +173,19 @@ index 94c8f6575e1d..3c75d1f9e2a6 100644
 +	}
 +
 +	mutex_unlock(&clients_lock);
-+	return 0;
-+}
+ 	return 0;
+-
+-err_free:
+-	kfree(drm);
+-	return ret;
+ }
  
--	drm_put_dev(tegra->drm);
+-void drm_host1x_exit(struct drm_driver *driver, struct host1x_device *device)
 +int drm_host1x_device_exit(struct host1x_device *device)
-+{
+ {
+-	struct tegra_drm *tegra = dev_get_drvdata(&device->dev);
+-
+-	drm_put_dev(tegra->drm);
 +	struct host1x_client *client;
 +	int err;
 +
@@ -204,7 +209,7 @@ index 94c8f6575e1d..3c75d1f9e2a6 100644
 +
 +
 diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
-index 5d3e37297079..4677e5064853 100644
+index 5d3e372..4677e50 100644
 --- a/drivers/gpu/drm/tegra/dc.c
 +++ b/drivers/gpu/drm/tegra/dc.c
 @@ -1601,7 +1601,7 @@ static int tegra_dc_probe(struct platform_device *pdev)
@@ -226,7 +231,7 @@ index 5d3e37297079..4677e5064853 100644
  		dev_err(&pdev->dev, "failed to unregister host1x client: %d\n",
  			err);
 diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
-index a56b51b278dd..54894d1736d6 100644
+index a56b51b..54894d1 100644
 --- a/drivers/gpu/drm/tegra/drm.c
 +++ b/drivers/gpu/drm/tegra/drm.c
 @@ -24,6 +24,10 @@ struct tegra_drm_file {
@@ -571,7 +576,7 @@ index a56b51b278dd..54894d1736d6 100644
  module_exit(host1x_drm_exit);
  
 diff --git a/drivers/gpu/drm/tegra/drm.h b/drivers/gpu/drm/tegra/drm.h
-index a39f5f352f8f..2512bde30fe9 100644
+index a39f5f3..2512bde 100644
 --- a/drivers/gpu/drm/tegra/drm.h
 +++ b/drivers/gpu/drm/tegra/drm.h
 @@ -263,6 +263,9 @@ static inline int tegra_output_check_mode(struct tegra_output *output,
@@ -586,7 +591,7 @@ index a39f5f352f8f..2512bde30fe9 100644
  int tegra_dc_rgb_probe(struct tegra_dc *dc);
 diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
 deleted file mode 100644
-index 3838575f71c6..000000000000
+index 3838575..0000000
 --- a/drivers/gpu/drm/tegra/dsi.c
 +++ /dev/null
 @@ -1,993 +0,0 @@
@@ -1585,7 +1590,7 @@ index 3838575f71c6..000000000000
 -};
 diff --git a/drivers/gpu/drm/tegra/dsi.h b/drivers/gpu/drm/tegra/dsi.h
 deleted file mode 100644
-index 5ce610d08d77..000000000000
+index 5ce610d..0000000
 --- a/drivers/gpu/drm/tegra/dsi.h
 +++ /dev/null
 @@ -1,130 +0,0 @@
@@ -1721,7 +1726,7 @@ index 5ce610d08d77..000000000000
 -#endif
 diff --git a/drivers/gpu/drm/tegra/gr2d.c b/drivers/gpu/drm/tegra/gr2d.c
 deleted file mode 100644
-index 2c7ca748edf5..000000000000
+index 2c7ca74..0000000
 --- a/drivers/gpu/drm/tegra/gr2d.c
 +++ /dev/null
 @@ -1,219 +0,0 @@
@@ -1946,7 +1951,7 @@ index 2c7ca748edf5..000000000000
 -};
 diff --git a/drivers/gpu/drm/tegra/gr2d.h b/drivers/gpu/drm/tegra/gr2d.h
 deleted file mode 100644
-index 4d7304fb015e..000000000000
+index 4d7304f..0000000
 --- a/drivers/gpu/drm/tegra/gr2d.h
 +++ /dev/null
 @@ -1,28 +0,0 @@
@@ -1980,7 +1985,7 @@ index 4d7304fb015e..000000000000
 -#endif
 diff --git a/drivers/gpu/drm/tegra/gr3d.c b/drivers/gpu/drm/tegra/gr3d.c
 deleted file mode 100644
-index f629e38b00e4..000000000000
+index f629e38..0000000
 --- a/drivers/gpu/drm/tegra/gr3d.c
 +++ /dev/null
 @@ -1,354 +0,0 @@
@@ -2340,7 +2345,7 @@ index f629e38b00e4..000000000000
 -};
 diff --git a/drivers/gpu/drm/tegra/gr3d.h b/drivers/gpu/drm/tegra/gr3d.h
 deleted file mode 100644
-index 0c30a1351c83..000000000000
+index 0c30a13..0000000
 --- a/drivers/gpu/drm/tegra/gr3d.h
 +++ /dev/null
 @@ -1,27 +0,0 @@
@@ -2372,7 +2377,7 @@ index 0c30a1351c83..000000000000
 -
 -#endif
 diff --git a/drivers/gpu/drm/tegra/hdmi.c b/drivers/gpu/drm/tegra/hdmi.c
-index fec1a63d32c9..754a930395e1 100644
+index fec1a63..754a930 100644
 --- a/drivers/gpu/drm/tegra/hdmi.c
 +++ b/drivers/gpu/drm/tegra/hdmi.c
 @@ -1534,7 +1534,7 @@ static int tegra_hdmi_probe(struct platform_device *pdev)
@@ -2394,7 +2399,7 @@ index fec1a63d32c9..754a930395e1 100644
  		dev_err(&pdev->dev, "failed to unregister host1x client: %d\n",
  			err);
 diff --git a/drivers/gpu/drm/tegra/sor.c b/drivers/gpu/drm/tegra/sor.c
-index 67ccb7fe4048..c5283878cd1f 100644
+index 67ccb7f..c528387 100644
 --- a/drivers/gpu/drm/tegra/sor.c
 +++ b/drivers/gpu/drm/tegra/sor.c
 @@ -1591,7 +1591,7 @@ static int tegra_sor_probe(struct platform_device *pdev)
@@ -2416,5 +2421,5 @@ index 67ccb7fe4048..c5283878cd1f 100644
  		dev_err(&pdev->dev, "failed to unregister host1x client: %d\n",
  			err);
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

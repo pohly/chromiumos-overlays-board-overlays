@@ -1,8 +1,7 @@
-From 28ea385bcc4b74eca9106f7b4914cab46688331d Mon Sep 17 00:00:00 2001
+From b346c3c22d97c1e57d3d204cdd4da7353bf65a7f Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 17 Feb 2016 18:02:08 +0800
-Subject: [PATCH 16/20] drm/tegra: use DRM helper to setup SG table
-X-NVConfidentiality: public
+Subject: [PATCH 14/18] drm/tegra: use DRM helper to setup SG table
 
 Change-Id: Ie98952e5a314274c7100f8e2066dabc0ed5e90f2
 ---
@@ -10,7 +9,7 @@ Change-Id: Ie98952e5a314274c7100f8e2066dabc0ed5e90f2
  1 file changed, 6 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
-index ad34e197e9a0..05a418fded5a 100644
+index ad34e19..05a418f 100644
 --- a/drivers/gpu/drm/tegra/gem.c
 +++ b/drivers/gpu/drm/tegra/gem.c
 @@ -531,23 +531,16 @@ tegra_gem_prime_map_dma_buf(struct dma_buf_attachment *attach,
@@ -51,5 +50,5 @@ index ad34e197e9a0..05a418fded5a 100644
  }
  
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 

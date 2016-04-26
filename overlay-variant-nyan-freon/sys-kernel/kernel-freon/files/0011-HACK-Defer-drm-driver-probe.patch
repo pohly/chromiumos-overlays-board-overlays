@@ -1,8 +1,7 @@
-From 635a6f852b7d4012542ee86fca2f846c588929bf Mon Sep 17 00:00:00 2001
+From 2bdd323f55f5380135a4c2069c1a1d791de66319 Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 17:28:17 +0800
-Subject: [PATCH 13/20] HACK: Defer drm driver probe
-X-NVConfidentiality: public
+Subject: [PATCH 11/18] HACK: Defer drm driver probe
 
 Wait before calling tegra_drm_load until dc/hdmi/dpaux/sor
 finish probing. This makes sure KMS happens when kernel boots.
@@ -17,10 +16,10 @@ Signed-off-by: Mark Zhang <markz@nvidia.com>
  4 files changed, 24 insertions(+)
 
 diff --git a/drivers/gpu/drm/tegra/bus.c b/drivers/gpu/drm/tegra/bus.c
-index 3c75d1f9e2a6..67a04311a2a4 100644
+index 68faa3d..da30e23 100644
 --- a/drivers/gpu/drm/tegra/bus.c
 +++ b/drivers/gpu/drm/tegra/bus.c
-@@ -88,4 +88,14 @@ int drm_host1x_device_exit(struct host1x_device *device)
+@@ -96,4 +96,14 @@ int drm_host1x_device_exit(struct host1x_device *device)
  	return 0;
  }
  
@@ -36,7 +35,7 @@ index 3c75d1f9e2a6..67a04311a2a4 100644
 +}
  
 diff --git a/drivers/gpu/drm/tegra/dpaux.c b/drivers/gpu/drm/tegra/dpaux.c
-index 78a5eb8fed62..4e32c6913251 100644
+index 78a5eb8..4e32c69 100644
 --- a/drivers/gpu/drm/tegra/dpaux.c
 +++ b/drivers/gpu/drm/tegra/dpaux.c
 @@ -25,6 +25,7 @@
@@ -65,7 +64,7 @@ index 78a5eb8fed62..4e32c6913251 100644
 +	return  probed;
 +}
 diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
-index ffd6df317ab5..8ca2ed2a898d 100644
+index ffd6df3..8ca2ed2 100644
 --- a/drivers/gpu/drm/tegra/drm.c
 +++ b/drivers/gpu/drm/tegra/drm.c
 @@ -716,6 +716,11 @@ static const struct of_device_id host1x_drm_subdevs[] = {
@@ -81,7 +80,7 @@ index ffd6df317ab5..8ca2ed2a898d 100644
  }
  
 diff --git a/drivers/gpu/drm/tegra/drm.h b/drivers/gpu/drm/tegra/drm.h
-index 2512bde30fe9..eb9f17bb7ea2 100644
+index 2512bde..eb9f17b 100644
 --- a/drivers/gpu/drm/tegra/drm.h
 +++ b/drivers/gpu/drm/tegra/drm.h
 @@ -266,6 +266,7 @@ void drm_host1x_exit(struct drm_driver *driver, struct host1x_device *device);
@@ -101,5 +100,5 @@ index 2512bde30fe9..eb9f17bb7ea2 100644
  /* from fb.c */
  struct tegra_bo *tegra_fb_get_plane(struct drm_framebuffer *framebuffer,
 -- 
-2.1.4
+2.8.0.rc3.226.g39d4020
 
