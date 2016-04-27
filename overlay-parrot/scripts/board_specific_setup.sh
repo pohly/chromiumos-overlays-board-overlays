@@ -4,6 +4,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-if [[ ${FLAGS_bootcache_use_board_default} -eq ${FLAGS_TRUE} ]]; then
+if [[ ${FLAGS_bootcache_use_board_default} -eq ${FLAGS_TRUE} && \
+      ${FLAGS_enable_rootfs_verification} -eq ${FLAGS_TRUE} ]]; then
   FLAGS_enable_bootcache=${FLAGS_TRUE}
 fi
