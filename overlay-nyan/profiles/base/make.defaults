@@ -4,3 +4,5 @@
 USE="-bootflash-emmc bootflash-spi -opengl opengles"
 U_BOOT_CONFIG_USE="venice2"
 U_BOOT_FDT_USE="tegra124-venice2"
+
+TTY_CONSOLE="ttyS0"

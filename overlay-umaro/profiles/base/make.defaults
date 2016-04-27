@@ -1,0 +1,4 @@
+# Disable the serial port before production.
+# Comment these lines to disable the serial port.
+# TTY_CONSOLE="ttyS0"
+# USE="pcserial"

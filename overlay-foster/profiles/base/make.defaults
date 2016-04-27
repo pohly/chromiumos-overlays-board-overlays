@@ -5,3 +5,5 @@
 USE="-bootflash-emmc bootflash-spi"
 U_BOOT_CONFIG_USE="foster"
 U_BOOT_FDT_USE="tegra210-foster"
+
+TTY_CONSOLE="ttyS0"
