@@ -3,3 +3,5 @@
 
 # Turn on the video cards this board uses.
 VIDEO_CARDS="armsoc rockchip"
+
+TTY_CONSOLE="ttyS2"

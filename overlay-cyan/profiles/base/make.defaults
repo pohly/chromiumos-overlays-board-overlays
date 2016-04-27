@@ -1,0 +1,3 @@
+# Un-comment these lines to enable the serial port.
+# TTY_CONSOLE="ttyS0"
+# USE="pcserial"

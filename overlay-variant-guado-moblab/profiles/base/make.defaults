@@ -3,4 +3,4 @@
 # found in the LICENSE file.
 
 # Uncomment this line to activate the serial port.
-#TTY_CONSOLE="${TTY_CONSOLE} ttyS0"
+#TTY_CONSOLE="ttyS0"

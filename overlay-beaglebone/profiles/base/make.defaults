@@ -1,1 +1,3 @@
 U_BOOT_CONFIG_USE="beaglebone"
+
+TTY_CONSOLE="ttyO0"

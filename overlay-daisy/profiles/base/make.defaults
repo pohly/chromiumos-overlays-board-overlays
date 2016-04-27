@@ -3,3 +3,6 @@ U_BOOT_FDT_USE="exynos5250-snow"
 
 # Turn on the video cards this board uses.
 VIDEO_CARDS="exynos"
+
+# Uncomment this line to activate the serial port.
+#TTY_CONSOLE="ttySAC3"

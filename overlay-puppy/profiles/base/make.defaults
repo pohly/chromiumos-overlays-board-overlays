@@ -4,3 +4,5 @@
 USE="-bootflash-emmc bootflash-spi highdpi"
 U_BOOT_CONFIG_USE="venice"
 U_BOOT_FDT_USE="tegra114-venice"
+
+TTY_CONSOLE="ttyS0"
