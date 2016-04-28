@@ -1,7 +1,7 @@
-From 2bdd323f55f5380135a4c2069c1a1d791de66319 Mon Sep 17 00:00:00 2001
+From 11d01403dbe32b27620b97f9a3bec740b0ab2f0b Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Wed, 13 Jan 2016 17:28:17 +0800
-Subject: [PATCH 11/18] HACK: Defer drm driver probe
+Subject: [PATCH 10/17] HACK: Defer drm driver probe
 
 Wait before calling tegra_drm_load until dc/hdmi/dpaux/sor
 finish probing. This makes sure KMS happens when kernel boots.
@@ -16,7 +16,7 @@ Signed-off-by: Mark Zhang <markz@nvidia.com>
  4 files changed, 24 insertions(+)
 
 diff --git a/drivers/gpu/drm/tegra/bus.c b/drivers/gpu/drm/tegra/bus.c
-index 68faa3d..da30e23 100644
+index e1291c5..cf76358 100644
 --- a/drivers/gpu/drm/tegra/bus.c
 +++ b/drivers/gpu/drm/tegra/bus.c
 @@ -96,4 +96,14 @@ int drm_host1x_device_exit(struct host1x_device *device)

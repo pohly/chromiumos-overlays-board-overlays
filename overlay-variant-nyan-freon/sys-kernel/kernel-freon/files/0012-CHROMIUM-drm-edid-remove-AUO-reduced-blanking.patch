@@ -1,7 +1,7 @@
-From 96c3b5b505e2c1d56e5480721f916ce31ce84b0d Mon Sep 17 00:00:00 2001
+From 1209ed5502cca1ce75ee5b44ff190ea7961031a1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 22 Jan 2016 22:17:46 -0800
-Subject: [PATCH 13/18] HACK: drm/edid: remove AUO reduced blanking
+Subject: [PATCH 12/17] CHROMIUM: drm/edid: remove AUO reduced blanking
 
 This reduced blanking mode was added to let the driver use 1.62Gbit
 instead of 2.7Gbit mode, and therefore save power. However, it seems

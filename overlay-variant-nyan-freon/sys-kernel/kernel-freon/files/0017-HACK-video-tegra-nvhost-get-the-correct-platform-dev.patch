@@ -1,7 +1,7 @@
-From 8e616d0a0894e9b7574aa76614b99e5ca4c7c94d Mon Sep 17 00:00:00 2001
+From 85dfdda513b33af8ba1314f2fcd7eed691b10301 Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Tue, 1 Mar 2016 14:23:36 +0800
-Subject: [PATCH 18/18] HACK: video: tegra: nvhost: get the correct platform
+Subject: [PATCH 17/17] HACK: video: tegra: nvhost: get the correct platform
  device
 
 Change-Id: I81d846852c1579f9c35f5999faef7713c83e0401

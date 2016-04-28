@@ -1,7 +1,7 @@
-From 9dde46d95e675f38bfe01904bba8590b7db06bce Mon Sep 17 00:00:00 2001
+From c6e8ffaaa8eb12a94ff011cbb9f333f01e0715d0 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Thu, 16 Apr 2015 19:28:21 -0700
-Subject: [PATCH 04/18] CHROMIUM: CONFIG: Enable tegra DRM
+Subject: [PATCH 04/17] CHROMIUM: CONFIG: Enable tegra DRM
 
 This enables tegra DRM.
 

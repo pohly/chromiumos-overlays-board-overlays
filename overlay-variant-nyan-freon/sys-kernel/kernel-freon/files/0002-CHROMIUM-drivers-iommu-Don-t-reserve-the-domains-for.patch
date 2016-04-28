@@ -1,7 +1,7 @@
-From 9a1fb1e9c2ab39948f59b118f7236885c4093cd8 Mon Sep 17 00:00:00 2001
+From 2ae387e91550174df00361bf16369b372cd50959 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 24 Apr 2015 15:22:02 -0700
-Subject: [PATCH 02/18] CHROMIUM: drivers/iommu: Don't reserve the domains for
+Subject: [PATCH 02/17] CHROMIUM: drivers/iommu: Don't reserve the domains for
  display
 
 Tegra drm attaches the domains by itself, don't try to initialize and

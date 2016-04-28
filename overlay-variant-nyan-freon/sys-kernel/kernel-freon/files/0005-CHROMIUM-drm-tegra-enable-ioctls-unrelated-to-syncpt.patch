@@ -1,7 +1,7 @@
-From 62788f7b4eec52904035067614895b9536d2d34d Mon Sep 17 00:00:00 2001
+From bf5220f4313d57df326f46c22fedd12943ef5fb9 Mon Sep 17 00:00:00 2001
 From: Haixia Shi <hshi@chromium.org>
 Date: Tue, 26 May 2015 09:48:47 -0700
-Subject: [PATCH 06/18] CHROMIUM: drm/tegra: enable ioctls unrelated to syncpt
+Subject: [PATCH 05/17] CHROMIUM: drm/tegra: enable ioctls unrelated to syncpt
 
 Still keeping the 5 syncpt-related ioctls disabled.
 

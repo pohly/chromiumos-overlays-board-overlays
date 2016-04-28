@@ -1,7 +1,7 @@
-From f62474e54580caa14d33f397f73261812533e76b Mon Sep 17 00:00:00 2001
+From 089bbf25615bc6f69d238e55b063a894fb81472a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Fri, 1 May 2015 18:58:07 -0700
-Subject: [PATCH 01/18] CHROMIUM: drm/tegra: Make it work with nvhost
+Subject: [PATCH 01/17] CHROMIUM: drm/tegra: Make it work with nvhost
 
 This change makes tegra drm work with nvhost (as opposed to host1x).
 To do so:
@@ -64,7 +64,7 @@ index d43f21b..9a50428 100644
  
  obj-$(CONFIG_DRM_TEGRA) += tegra-drm.o
 diff --git a/drivers/gpu/drm/tegra/bus.c b/drivers/gpu/drm/tegra/bus.c
-index 94c8f65..68faa3d 100644
+index 94c8f65..e1291c5 100644
 --- a/drivers/gpu/drm/tegra/bus.c
 +++ b/drivers/gpu/drm/tegra/bus.c
 @@ -8,69 +8,92 @@
@@ -158,7 +158,7 @@ index 94c8f65..68faa3d 100644
 +	int err;
 +
 +	mutex_lock(&clients_lock);
-+	list_for_each_entry_reverse(client, &clients, list) {
++	list_for_each_entry(client, &clients, list) {
 +		if (client->ops && client->ops->init) {
 +			client->parent = drm->dev;
 +			err = client->ops->init(client);

@@ -1,7 +1,7 @@
-From 5b8b0f44d89e162eb116e8906b5bec77576017dc Mon Sep 17 00:00:00 2001
+From 73b090d40b356eff67493f404d51ee968c92a03b Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 17 Feb 2016 18:03:19 +0800
-Subject: [PATCH 15/18] kconfig: enable CONFIG_NVMAP_USE_FD_FOR_HANDLE
+Subject: [PATCH 14/17] kconfig: enable CONFIG_NVMAP_USE_FD_FOR_HANDLE
 
 The NVRM user space library has always used FD for NVMAP handle. So do the
 same in kernel.

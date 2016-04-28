@@ -1,7 +1,7 @@
-From a0535c7714af668d62f7c66dc98c5fc0429265d8 Mon Sep 17 00:00:00 2001
+From 8d950132915090ea781061f3d5e3d1afc704e872 Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 24 Feb 2016 16:29:47 +0800
-Subject: [PATCH 17/18] video: tegra: host: change default kind for bringup
+Subject: [PATCH 16/17] video: tegra: host: change default kind for bringup
 
 Change-Id: Ifba504c9d54fd413a30e08576b169ed197e57298
 ---

@@ -1,7 +1,7 @@
-From 9bd61b01aff13e34605e01a93168216bfd1d1894 Mon Sep 17 00:00:00 2001
+From c350ae2986cd4f4c7307cbd990218cb313d536bc Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Tue, 12 Jan 2016 15:41:10 +0800
-Subject: [PATCH 08/18] Add vdd-supply to make dpaux probing passes
+Subject: [PATCH 07/17] Add vdd-supply to make dpaux probing passes
 
 Change-Id: Ia8456b24c44ba122b8b902b1d0e4a40fdc2d14c9
 Signed-off-by: Mark Zhang <markz@nvidia.com>

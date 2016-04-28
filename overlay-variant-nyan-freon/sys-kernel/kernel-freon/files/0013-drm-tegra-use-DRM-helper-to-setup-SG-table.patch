@@ -1,7 +1,7 @@
-From b346c3c22d97c1e57d3d204cdd4da7353bf65a7f Mon Sep 17 00:00:00 2001
+From 02904698c56ccfc2d428dd810e012210872633ad Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 17 Feb 2016 18:02:08 +0800
-Subject: [PATCH 14/18] drm/tegra: use DRM helper to setup SG table
+Subject: [PATCH 13/17] drm/tegra: use DRM helper to setup SG table
 
 Change-Id: Ie98952e5a314274c7100f8e2066dabc0ed5e90f2
 ---

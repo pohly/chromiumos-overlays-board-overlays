@@ -1,7 +1,7 @@
-From b81b37316367372c2b90432e59e13391edc49d93 Mon Sep 17 00:00:00 2001
+From 6e2abb0bad061024a3cbbc346ea1bf289412a9c3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
 Date: Tue, 15 Sep 2015 15:45:03 -0700
-Subject: [PATCH 12/18] HACK: tegra dmabuf hacks
+Subject: [PATCH 11/17] HACK: tegra dmabuf hacks
 
 Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
 ---
@@ -13,12 +13,12 @@ Change-Id: I2a8efd21b4daf79b28b820758963400c919a3d65
  drivers/video/tegra/host/nvhost_memmgr.c           |  36 +++++-
  drivers/video/tegra/host/nvhost_memmgr.h           |  14 ++-
  drivers/video/tegra/host/nvmap.c                   |   8 +-
- drivers/video/tegra/nvmap/nvmap.c                  |   2 +-
+ drivers/video/tegra/nvmap/nvmap.c                  |   5 +-
  drivers/video/tegra/nvmap/nvmap_dmabuf.c           |  58 +++++++--
  drivers/video/tegra/nvmap/nvmap_handle.c           | 138 ++++++++++++++++++++-
  drivers/video/tegra/nvmap/nvmap_priv.h             |   3 +
  include/linux/nvmap.h                              |   2 +
- 13 files changed, 348 insertions(+), 48 deletions(-)
+ 13 files changed, 351 insertions(+), 48 deletions(-)
 
 diff --git a/chromeos/config/armel/chromeos-tegra.flavour.config b/chromeos/config/armel/chromeos-tegra.flavour.config
 index c615c8e..06334b1 100644
@@ -463,18 +463,22 @@ index fb10ee6..f9eb0f9 100644
  
  int nvhost_nvmap_get_param(struct mem_mgr *mgr, struct mem_handle *handle,
 diff --git a/drivers/video/tegra/nvmap/nvmap.c b/drivers/video/tegra/nvmap/nvmap.c
-index 66f0902..66f7529 100644
+index 66f0902..e3a9c16 100644
 --- a/drivers/video/tegra/nvmap/nvmap.c
 +++ b/drivers/video/tegra/nvmap/nvmap.c
-@@ -447,7 +447,7 @@ void nvmap_handle_put(struct nvmap_handle *h)
+@@ -447,8 +447,11 @@ void nvmap_handle_put(struct nvmap_handle *h)
  {
  	int cnt;
  
 -	if (WARN_ON(!virt_addr_valid(h)))
-+	if (((unsigned long)h < 4096) || WARN_ON(!virt_addr_valid(h)))
++	if (((unsigned long)h < 4096) || WARN_ON(!virt_addr_valid(h))) {
++		// XXX delete dmabuf priv
++		printk(KERN_ERR"=== PUT HANDLE for dmabuf %p\n",h);
  		return;
++	}
  	cnt = atomic_dec_return(&h->ref);
  
+ 	if (WARN_ON(cnt < 0)) {
 diff --git a/drivers/video/tegra/nvmap/nvmap_dmabuf.c b/drivers/video/tegra/nvmap/nvmap_dmabuf.c
 index 49af540..a1fad57 100644
 --- a/drivers/video/tegra/nvmap/nvmap_dmabuf.c

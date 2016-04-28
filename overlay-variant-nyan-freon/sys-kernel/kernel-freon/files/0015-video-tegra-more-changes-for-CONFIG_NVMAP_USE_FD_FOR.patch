@@ -1,7 +1,7 @@
-From edb0ef4fcfa179fdcfc1402f2ba1d6ddeed0f124 Mon Sep 17 00:00:00 2001
+From b05db260b781e50d3593a8c1205c3a09b398430d Mon Sep 17 00:00:00 2001
 From: Vince Hsu <vince.h@nvidia.com>
 Date: Wed, 17 Feb 2016 18:49:36 +0800
-Subject: [PATCH 16/18] video: tegra: more changes for
+Subject: [PATCH 15/17] video: tegra: more changes for
  CONFIG_NVMAP_USE_FD_FOR_HANDLE
 
 * 4096 <= fd < 8192k for foreign dmabuf, and 1024 <= fd < 4096 for

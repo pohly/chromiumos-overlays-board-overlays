@@ -1,7 +1,7 @@
-From d784ca00ad266f54937a18ffc5e379c057a3af8b Mon Sep 17 00:00:00 2001
+From 7ec26c833f15d437a0cea6746df0e21affdb30ff Mon Sep 17 00:00:00 2001
 From: Mark Zhang <markz@nvidia.com>
 Date: Tue, 12 Jan 2016 17:27:13 +0800
-Subject: [PATCH 09/18] Eliminate SMMU errors
+Subject: [PATCH 08/17] Eliminate SMMU errors
 
 DC is enabled by coreboot but KMS/userspace doesn't init display on
 Freon now. So powergate dc when probing to turn dc down,
