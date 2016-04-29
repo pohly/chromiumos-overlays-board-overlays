@@ -38,4 +38,10 @@ src_install() {
 
 	# Install rules to enable WoWLAN on startup.
 	udev_dorules "${FILESDIR}/99-mwifiex-wowlan.rules"
+
+	# Install rules to detect when DRM HDMI driver is loaded
+	udev_dorules "${FILESDIR}/99-mtk_drm_hdmi_load.rules"
+
+	# Install script called by 99-mtk_drm_hdmi_load.rules
+	dosbin "${FILESDIR}"/hdcp_pass_key.sh
 }
