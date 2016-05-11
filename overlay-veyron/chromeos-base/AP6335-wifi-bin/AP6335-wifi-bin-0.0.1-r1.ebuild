@@ -1,1 +1,0 @@
-AP6335-wifi-bin-0.0.1.ebuild

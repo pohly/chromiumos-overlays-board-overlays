@@ -13,7 +13,6 @@ IUSE=""
 # Add dependencies on other ebuilds from within this board overlay
 DEPEND=""
 RDEPEND="${DEPEND}
-	chromeos-base/AP6335-wifi-bin
 	x11-drivers/mali-rules
 	media-libs/media-rules
 	net-wireless/broadcom
