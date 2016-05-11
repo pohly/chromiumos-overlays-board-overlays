@@ -5,7 +5,8 @@ EAPI=4
 
 inherit appid cros-audio-configs
 
-DESCRIPTION="Banon bsp (meta package to pull in driver/tool deps)"
+DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
+or portage actions."
 
 LICENSE="BSD-Google"
 SLOT="0"
@@ -13,13 +14,13 @@ KEYWORDS="-* amd64 x86"
 IUSE=""
 S="${WORKDIR}"
 
+# Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
+	chromeos-base/chromeos-bsp-baseboard-strago
 	chromeos-base/ec-utils
 	sys-kernel/linux-firmware
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
-S="${WORKDIR}"
 
 src_install() {
 	doappid "{4D1D08CA-E0D4-5ECB-09D2-13DD5859A362}" "CHROMEBOOK"
