@@ -31,4 +31,8 @@ src_install() {
 	# Wiping scripts.
 	dosbin "${FILESDIR}"/sbin/*.sh
 
+	# Install audio configs.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs relm "${audio_config_dir}"
+
 }
