@@ -12,4 +12,5 @@ USE="
 	-tests_security_NetworkListeners
 	-tests_security_RootfsStatefulSymlinks
 	-tests_security_StatefulPermissions
+	-tests_security_SuidBinaries
 "
