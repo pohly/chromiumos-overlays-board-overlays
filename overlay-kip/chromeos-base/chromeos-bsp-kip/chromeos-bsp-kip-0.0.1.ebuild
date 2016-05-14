@@ -10,13 +10,11 @@ DESCRIPTION="Kip bsp (meta package to pull in driver/tool deps)"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="-pcserial"
+IUSE=""
 
 RDEPEND="
 	chromeos-base/ec-utils
-	pcserial? ( chromeos-base/tty )
 	sys-kernel/linux-firmware
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 
@@ -25,22 +23,15 @@ S="${WORKDIR}"
 src_install() {
 	doappid "{BBE772C3-5541-6976-C676-54FD72D41B2B}" "CHROMEBOOK"
 
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
 	# Battery cut-off
 	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_factory_complete.sh"
 	dosbin "${FILESDIR}/board_factory_wipe.sh"
 	dosbin "${FILESDIR}/board_factory_reset.sh"
 	dosbin "${FILESDIR}/board_charge_battery.sh"
-	dosbin "${FILESDIR}/board_discharge_battery.sh"
+	dosbin "${FILESDIR}/display_wipe_message.sh"
 
-	insinto "/usr/share/factory/images"
-	doins "${FILESDIR}/remove_ac.png"
-	doins "${FILESDIR}/call_shopfloor.png"
-	doins "${FILESDIR}/cutting_off.png"
-	doins "${FILESDIR}/cutoff_failed.png"
-	doins "${FILESDIR}/charging.png"
-	doins "${FILESDIR}/discharging.png"
-	doins "${FILESDIR}/connect_ac.png"
-	doins "${FILESDIR}/connect_ethernet.png"
-	doins "${FILESDIR}/shopfloor_call_done.png"
 }
