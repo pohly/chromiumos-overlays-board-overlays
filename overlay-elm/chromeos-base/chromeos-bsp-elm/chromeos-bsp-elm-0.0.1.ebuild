@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm64 arm"
-IUSE=""
+IUSE="cheets"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -23,8 +23,11 @@ RDEPEND="${DEPEND}
 "
 
 src_install() {
-	doappid "{5BF597B2-ADE3-52C9-1DDA-95719C914AFF}" "CHROMEBOOK"
-
+	if use cheets; then
+		doappid "{3DFF3394-F97E-4971-83C6-2C5C06A9953D}" "CHROMEBOOK"
+	else
+		doappid "{5BF597B2-ADE3-52C9-1DDA-95719C914AFF}" "CHROMEBOOK"
+	fi
 	# install ucm config files
 	insinto /usr/share/alsa/ucm
 	local ucm_config="${FILESDIR}/ucm-config"
