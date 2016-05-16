@@ -3,10 +3,8 @@
 
 EAPI=4
 
-CROS_WORKON_REPO="git://github.com/beagleboard"
-CROS_WORKON_PROJECT="linux"
 CROS_WORKON_BLACKLIST="1"
-CROS_WORKON_COMMIT="19b7b0251f7b6b3ac3f75ab4e43d84425ee230ee"
+CROS_WORKON_INCREMENTAL_BUILD="0"
 
 inherit cros-workon cros-kernel2 eutils
 
@@ -16,6 +14,8 @@ inherit cros-workon cros-kernel2 eutils
 
 DESCRIPTION="Chrome OS Kernel-beaglebone"
 HOMEPAGE="http://src.chromium.org"
+GIT_SHA1="19b7b0251f7b6b3ac3f75ab4e43d84425ee230ee"
+SRC_URI="https://github.com/beagleboard/linux/archive/${GIT_SHA1}.tar.gz -> ${P}-${GIT_SHA1}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -28,6 +28,12 @@ DEPEND="!sys-kernel/chromeos-kernel-next
 RDEPEND="${DEPEND}"
 
 CHROMEOS_KERNEL_CONFIG="${FILESDIR}/config-${PV}"
+
+S="${WORKDIR}/linux-${GIT_SHA1}"
+
+src_unpack() {
+	default
+}
 
 src_prepare() {
 	cros-kernel2_src_prepare
