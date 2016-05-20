@@ -4,6 +4,8 @@
 EAPI=4
 
 inherit appid udev
+inherit appid cros-audio-configs
+
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -28,12 +30,10 @@ src_install() {
 	else
 		doappid "{5BF597B2-ADE3-52C9-1DDA-95719C914AFF}" "CHROMEBOOK"
 	fi
-	# install ucm config files
-	insinto /usr/share/alsa/ucm
-	local ucm_config="${FILESDIR}/ucm-config"
-	if [[ -d "${ucm_config}" ]] ; then
-		doins -r "${ucm_config}"/*
-	fi
+
+	# Install audio config files.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs elm "${audio_config_dir}"
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"

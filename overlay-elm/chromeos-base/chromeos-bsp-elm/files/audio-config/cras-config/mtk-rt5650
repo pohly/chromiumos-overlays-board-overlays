@@ -1,0 +1,8 @@
+[Speaker]
+  volume_curve = simple_step
+  volume_step = 40
+  max_volume = -1200
+[Headphone]
+  volume_curve = simple_step
+  volume_step = 40
+  max_volume = -1200
