@@ -3,6 +3,8 @@
 
 EAPI=4
 
+inherit appid
+
 DESCRIPTION="Servo bsp (meta package to pull in driver/tool dependencies)"
 
 LICENSE="BSD-Google"
@@ -68,3 +70,7 @@ RDEPEND="${RDEPEND}
 	sys-process/psmisc
 	sys-process/time
 "
+
+src_install() {
+	doappid "{1BB651DD-C762-3FCF-2A66-CEB4C1096BB1}" "OTHER"
+}
