@@ -5,6 +5,9 @@
 # Build app_shell instead of Chrome.
 USE="app_shell"
 
+# Don't include tests that depend on Chrome.
+USE="${USE} chromeless_tests"
+
 # Make it small.
 USE="${USE} -cellular -cros_disks -cros_p2p -debugd -vpn -build_tests -netflix"
 
