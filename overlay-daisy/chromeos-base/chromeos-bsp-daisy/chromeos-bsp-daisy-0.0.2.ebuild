@@ -10,7 +10,7 @@ DESCRIPTION="Daisy public bsp (meta package to pull in driver/tool dependencies)
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm"
-IUSE="-spring -snow -skate"
+IUSE="-spring -snow -skate -X"
 
 DEPEND="
 	!<chromeos-base/chromeos-bsp-spring-private-0.0.1-r16
@@ -26,7 +26,9 @@ RDEPEND="${DEPEND}
 	media-libs/mfc-fw
 	sys-boot/exynos-pre-boot
 	x11-drivers/mali-rules
-	x11-drivers/xf86-video-armsoc
+	X? (
+		x11-drivers/xf86-video-armsoc
+	)
 "
 
 S=${WORKDIR}
