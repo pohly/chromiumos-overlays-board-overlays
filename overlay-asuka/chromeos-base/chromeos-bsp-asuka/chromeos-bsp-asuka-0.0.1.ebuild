@@ -18,9 +18,15 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-kunimitsu
 	chromeos-base/ec-utils
+	sys-kernel/linux-firmware
+	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{7B2FC5AC-894A-5702-D00E-62E999F0AE22}" "CHROMEBOOK"
+
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs asuka "${audio_config_dir}"
 }
