@@ -5,5 +5,23 @@
   },
   "parent": "legacy_disk_layout.json",
   "layouts":{
+    # common is the standard layout template.
+    "common": [
+      {
+        # Slot A rootfs. Adjust to allow for more space.
+        "num": 3,
+        "fs_size_min": "1750 MiB",
+        "size_min": "2000 MiB"
+      }
+    ],
+    # Used for factory install images. No need to adjust fs size or partition
+    # size since these do not need more space.
+    "factory_install": [
+      {
+        "num": 3,
+        "fs_size_min": "0 MiB",
+        "size_min": "0 MiB"
+      }
+    ]
   }
 }
