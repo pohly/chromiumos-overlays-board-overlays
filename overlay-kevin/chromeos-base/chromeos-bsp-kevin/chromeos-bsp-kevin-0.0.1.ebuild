@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -25,4 +25,8 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{92A7272A-834A-47A3-9112-E8FD55831660}" "CHROMEBOOK"
+
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs kevin "${audio_config_dir}"
 }
