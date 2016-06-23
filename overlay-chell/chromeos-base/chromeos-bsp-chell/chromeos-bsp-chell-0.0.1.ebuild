@@ -14,6 +14,7 @@ KEYWORDS="-* amd64 x86"
 IUSE="cheets"
 
 RDEPEND="
+	chromeos-base/chromeos-bsp-baseboard-glados
 	chromeos-base/ec-utils
 	sys-kernel/linux-firmware
 	media-gfx/ply-image
