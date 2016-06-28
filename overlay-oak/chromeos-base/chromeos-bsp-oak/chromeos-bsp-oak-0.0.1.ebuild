@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm64 arm"
-IUSE="cheets"
+IUSE="oak-cheets"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -23,7 +23,7 @@ RDEPEND="${DEPEND}
 "
 
 src_install() {
-	if use cheets; then
+	if use oak-cheets; then
 		doappid "{CEAE875E-929A-9522-8C07-013C13A20456}" "CHROMEBOOK"
 	else
 		doappid "{8D0990C8-904D-45FD-ACEB-DCCAD82EC66E}" "CHROMEBOOK"
