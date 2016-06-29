@@ -72,18 +72,29 @@ src_install() {
 	# Create the mount point for external storage.
 	dodir "/mnt/moblab"
 
-	# Give moblab full sudo access.
-	# NOTE: this is a temporary hack to allow FAFT tests
-	# to run on moblab using servoV2. Once we fully
-	# move over to servoV3, we should reduce this to
-	# the previous sudo access.
-	# See chromium:394593
+	# Restrict sudo access.
 	insinto /etc/sudoers.d
-	echo "moblab ALL=NOPASSWD: ALL" > moblab-all
+	echo "moblab ALL = NOPASSWD: /sbin/start" > moblab-start
+	echo "moblab ALL = NOPASSWD: /sbin/stop" > moblab-stop
+	echo "moblab ALL = NOPASSWD: /sbin/status" > moblab-status
+	echo "moblab ALL = NOPASSWD: /sbin/restart" > moblab-restart
+	echo "moblab ALL = NOPASSWD: /bin/mount" > moblab-mount
+	echo "moblab ALL = NOPASSWD: /usr/bin/dut-control" > moblab-dut-control
+	echo "moblab ALL = NOPASSWD: /usr/bin/screen" > moblab-screen
+	echo "moblab ALL = NOPASSWD: /usr/sbin/flashrom" > moblab-flashrom
+	echo "moblab ALL = NOPASSWD: /usr/bin/vi" > moblab-vi
+	echo "moblab ALL = NOPASSWD: /usr/bin/servod" > moblab-servod
+	echo "moblab ALL = NOPASSWD: /usr/bin/adb" > moblab-adb
+	echo "moblab ALL = NOPASSWD: /usr/bin/fastboot" > moblab-fastboot
+	echo "moblab ALL = NOPASSWD: /sbin/reboot" > moblab-reboot
+	echo "moblab ALL = NOPASSWD: /sbin/shutdown" > moblab-shutdown
 	echo "apache ALL = NOPASSWD: /sbin/reboot" > apache-reboot
 	echo "apache ALL = NOPASSWD: /sbin/restart" > apache-restart
 	insopts -m600
-	doins moblab-all
+	doins moblab-start moblab-stop moblab-status moblab-restart moblab-mount
+	doins moblab-dut-control moblab-screen moblab-flashrom moblab-vi
+	doins moblab-servod moblab-adb moblab-fastboot moblab-reboot
+	doins moblab-shutdown
 	doins apache-reboot
 	doins apache-restart
 
