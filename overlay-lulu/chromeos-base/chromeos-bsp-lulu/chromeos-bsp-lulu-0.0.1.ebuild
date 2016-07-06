@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="cheets"
+IUSE="lulu-cheets"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -23,7 +23,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	if use cheets; then
+	if use lulu-cheets; then
 		doappid "{55C5C498-838E-E1DE-7A14-21352C635C72}" "CHROMEBOOK"
 	else
 		doappid "{40C6BCAB-B8D4-466F-9C3C-069B8CAC36D7}" "CHROMEBOOK"
