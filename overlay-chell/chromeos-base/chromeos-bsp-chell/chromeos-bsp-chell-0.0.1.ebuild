@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="cheets"
+IUSE="chell-cheets"
 
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-glados
@@ -24,7 +24,7 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	if use cheets; then
+	if use chell-cheets; then
 		doappid "{9F3771C2-2720-3094-3671-C1FB1CA0AE43}" "CHROMEBOOK"
 	else
 		doappid "{114DBB0F-4507-F7FC-99B6-4BCAB6A39725}" "CHROMEBOOK"
