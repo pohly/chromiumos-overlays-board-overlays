@@ -24,4 +24,8 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{1135E05E-D537-4CC7-BAB1-865C53175AB1}" "REFERENCE"
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
 }
