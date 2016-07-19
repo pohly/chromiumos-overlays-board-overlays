@@ -10,9 +10,11 @@ DESCRIPTION="Nyan bsp (meta package to pull in driver/tool dependencies)"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm"
-IUSE="opengles tegra-ldk variant_build"
+IUSE="opengles tegra-ldk variant_build bootimage"
 
-DEPEND="sys-boot/chromeos-bootimage"
+DEPEND="
+	bootimage? ( sys-boot/chromeos-bootimage )
+"
 RDEPEND="
 	!variant_build? ( chromeos-base/chromeos-touch-config-nyan )
 	sys-kernel/tegra_lp0_resume
