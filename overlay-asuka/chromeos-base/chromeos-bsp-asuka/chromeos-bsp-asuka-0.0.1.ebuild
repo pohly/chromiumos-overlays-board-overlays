@@ -4,7 +4,7 @@
 EAPI=4
 
 inherit appid cros-audio-configs
-
+inherit appid udev
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
 
@@ -30,6 +30,7 @@ src_install() {
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs asuka "${audio_config_dir}"
 
+        udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
