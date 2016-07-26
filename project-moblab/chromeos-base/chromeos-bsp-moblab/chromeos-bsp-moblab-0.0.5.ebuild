@@ -74,6 +74,8 @@ src_install() {
 
 	insinto /etc/sudoers.d
 	echo "moblab ALL = NOPASSWD: ALL" > moblab-sudo-all
+	echo "apache ALL = NOPASSWD: /sbin/reboot" > apache-reboot
+	echo "apache ALL = NOPASSWD: /sbin/restart" > apache-restart
 	insopts -m600
 	doins moblab-sudo-all
 	doins apache-reboot
