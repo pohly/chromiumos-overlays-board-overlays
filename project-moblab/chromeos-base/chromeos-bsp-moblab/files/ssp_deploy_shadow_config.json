@@ -1,0 +1,39 @@
+[
+    {
+        "source": "/etc/resolv.conf",
+        "target": "/etc/resolv.conf",
+        "append": true,
+        "permission": 400
+    },
+    {
+        "source": "~/.ssh",
+        "target": "/root/.ssh",
+        "append": false,
+        "permission": 400
+    },
+    {
+        "source": "shadow_config.ini",
+        "target": "/usr/local/autotest/shadow_config.ini",
+        "append": false,
+        "permission": 644
+    },
+    {
+        "source": "moblab_config.ini",
+        "target": "/usr/local/autotest/moblab_config.ini",
+        "append": false,
+        "permission": 644
+    },
+    {
+        "source": "/home/moblab/.boto",
+        "target": "/root/.boto",
+        "append": false,
+        "permission": 600
+    },
+    {
+        "source": "/usr/local/autotest/results/shared",
+        "target": "/usr/local/autotest/results/shared",
+        "mount": true,
+        "readonly": false,
+        "force_create": true
+    }
+]

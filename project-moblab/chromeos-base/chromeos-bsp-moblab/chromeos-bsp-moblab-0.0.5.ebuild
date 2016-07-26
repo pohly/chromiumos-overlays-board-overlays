@@ -72,6 +72,9 @@ src_install() {
 	# Create the mount point for external storage.
 	dodir "/mnt/moblab"
 
+	insinto /autotest
+	doins "${FILESDIR}/ssp_deploy_shadow_config.json"
+
 	insinto /etc/sudoers.d
 	echo "moblab ALL = NOPASSWD: ALL" > moblab-sudo-all
 	echo "apache ALL = NOPASSWD: /sbin/reboot" > apache-reboot
