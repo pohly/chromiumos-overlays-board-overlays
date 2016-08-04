@@ -3,8 +3,7 @@
 
 EAPI=4
 
-inherit appid cros-audio-configs
-inherit appid udev
+inherit appid cros-audio-configs udev
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
 
@@ -29,8 +28,8 @@ src_install() {
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs asuka "${audio_config_dir}"
-
-        udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
+	# Set the powerd udev tagging rules to allow the power manager to manage the touchscreen's wake and explicitly disable it.
+	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
