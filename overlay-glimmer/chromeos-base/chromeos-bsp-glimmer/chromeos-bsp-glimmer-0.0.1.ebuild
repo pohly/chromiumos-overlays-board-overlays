@@ -10,7 +10,7 @@ DESCRIPTION="Glimmer private bsp (meta package to pull in driver/tool deps)"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
+IUSE="glimmer-cheets"
 
 RDEPEND="
 	chromeos-base/chromeos-accelerometer-init
@@ -23,7 +23,11 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	doappid "{D0DBB0D9-6EEB-B148-F8AF-AE8AF86ECE5B}" "CHROMEBOOK"
+	if use glimmer-cheets; then
+		doappid "{107B04CD-3BF8-9C1F-6838-4AD43AE8EC1A}" "CHROMEBOOK"
+	else
+		doappid "{D0DBB0D9-6EEB-B148-F8AF-AE8AF86ECE5B}" "CHROMEBOOK" # glimmer
+	fi
 
 	# Install platform specific config files for power_manager.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
