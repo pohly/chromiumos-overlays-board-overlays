@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -22,4 +22,7 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{8396029B-FCEF-9EEC-C684-3BCB8E3E9429}" "REFERENCE"
+
+	# Install Power Manager rules.
+	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 }
