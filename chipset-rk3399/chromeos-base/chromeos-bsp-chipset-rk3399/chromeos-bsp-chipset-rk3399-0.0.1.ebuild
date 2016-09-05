@@ -3,19 +3,20 @@
 
 EAPI=4
 
-inherit appid
-
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
 
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm64 arm"
+IUSE="bootimage cros_ec"
 S="${WORKDIR}"
 
-RDEPEND="
-	chromeos-base/chromeos-bsp-chipset-rk3399
-	x11-drivers/mali-rules
-	media-libs/media-rules
-"
+# Add dependencies on other ebuilds from within this board overlay
+RDEPEND=""
 DEPEND="${RDEPEND}"
+
+src_install() {
+	insinto /opt/google/containers/android/vendor/etc/
+	doins "${FILESDIR}/media_codecs.xml"
+}
