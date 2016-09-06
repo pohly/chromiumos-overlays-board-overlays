@@ -25,4 +25,8 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{1B12EBFC-B514-4F33-90CC-FA7C67CAF7F0}" "CHROMEBOOK"
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
 }
