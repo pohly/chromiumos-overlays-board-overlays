@@ -17,7 +17,6 @@ RDEPEND="
 	!<chromeos-base/chromeos-bsp-rambi-private-0.0.1-r2
 	chromeos-base/chromeos-touch-config-rambi
 	chromeos-base/ec-utils
-	sys-kernel/linux-firmware
 	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"

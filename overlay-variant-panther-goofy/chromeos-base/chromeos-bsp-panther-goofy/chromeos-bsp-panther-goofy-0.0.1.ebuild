@@ -16,10 +16,7 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-# Panther itself requires no special firmware, but we modify panthers
-# to add WiFi parts that require firmware when building test APs.
 RDEPEND="
-	sys-kernel/linux-firmware
 "
 
 RDEPEND="${RDEPEND}

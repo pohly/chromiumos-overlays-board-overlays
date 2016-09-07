@@ -15,11 +15,8 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-# Panther itself requires no special firmware, but we modify panthers
-# to add WiFi parts that require firmware when building test APs.
 RDEPEND="
 	chromeos-base/jabra-vold
-	sys-kernel/linux-firmware
 	media-libs/media-rules
 	media-libs/go2001-fw
 "

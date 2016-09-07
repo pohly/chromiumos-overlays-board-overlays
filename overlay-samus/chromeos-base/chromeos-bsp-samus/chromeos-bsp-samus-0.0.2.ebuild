@@ -18,7 +18,6 @@ RDEPEND="
 	chromeos-base/chromeos-accelerometer-init
 	chromeos-base/chromeos-touch-config-samus
 	chromeos-base/ec-utils
-	sys-kernel/linux-firmware
 "
 DEPEND="${RDEPEND}"
 

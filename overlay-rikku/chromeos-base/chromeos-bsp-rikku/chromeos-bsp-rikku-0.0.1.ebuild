@@ -17,7 +17,6 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-jecht
 	chromeos-base/jabra-vold
-	sys-kernel/linux-firmware
 	media-gfx/ply-image
 	media-libs/go2001-fw
 	media-libs/media-rules

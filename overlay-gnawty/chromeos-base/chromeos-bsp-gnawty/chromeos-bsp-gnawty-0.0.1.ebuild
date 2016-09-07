@@ -15,7 +15,6 @@ S="${WORKDIR}"
 
 RDEPEND="
 	chromeos-base/ec-utils
-	sys-kernel/linux-firmware
 "
 DEPEND="${RDEPEND}"
 

@@ -16,7 +16,6 @@ RDEPEND="
 	chromeos-base/chromeos-accelerometer-init
 	chromeos-base/chromeos-touch-config-glimmer
 	chromeos-base/ec-utils
-	sys-kernel/linux-firmware
 "
 DEPEND="${RDEPEND}"
 

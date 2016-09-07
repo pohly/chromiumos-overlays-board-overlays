@@ -17,7 +17,6 @@ RDEPEND="
 	!<chromeos-base/chromeos-bsp-enguarde-private-0.0.1-r4
 	chromeos-base/chromeos-touch-config-enguarde
 	chromeos-base/ec-utils
-	sys-kernel/linux-firmware
 "
 DEPEND="${RDEPEND}"
 

@@ -17,7 +17,6 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-kunimitsu
 	chromeos-base/ec-utils
-	sys-kernel/linux-firmware
 	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"

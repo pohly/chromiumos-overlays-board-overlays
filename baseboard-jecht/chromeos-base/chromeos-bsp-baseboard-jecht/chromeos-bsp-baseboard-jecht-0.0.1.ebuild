@@ -15,6 +15,5 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
-	sys-kernel/linux-firmware
 "
 DEPEND="${RDEPEND}"
