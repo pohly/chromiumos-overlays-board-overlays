@@ -24,11 +24,4 @@ src_install() {
 	else
 		doappid "{432FF9F1-4D2E-7E74-6F98-32E56E904BFB}" "CHROMEBOOK" # veyron-minnie
 	fi
-
-	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_charge_battery.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/display_wipe_message.sh"
-
 }

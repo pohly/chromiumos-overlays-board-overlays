@@ -25,19 +25,6 @@ S="${WORKDIR}"
 src_install() {
 	doappid "{E6710DFC-3EC0-42AE-8095-733FDEA6AF18}" "CHROMEBOOK"
 
-	# Battery cut-off
-	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-	dosbin "${FILESDIR}/board_charge_battery.sh"
-
-	insinto "/usr/share/factory/images"
-	doins "${FILESDIR}/remove_ac.png"
-	doins "${FILESDIR}/cutting_off.png"
-	doins "${FILESDIR}/cutoff_failed.png"
-	doins "${FILESDIR}/charging.png"
-	doins "${FILESDIR}/connect_ac.png"
-
 	# Install platform-specific ambient light sensor configuration.
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"
 	exeinto $(udev_get_udevdir)

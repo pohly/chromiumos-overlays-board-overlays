@@ -23,9 +23,6 @@ S=${WORKDIR}
 
 src_install() {
 	doappid "{A854E62E-9CB3-4DBE-8BBE-88C48FD65787}" "CHROMEBOOK"
-	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
 
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/runtime-pm.conf"

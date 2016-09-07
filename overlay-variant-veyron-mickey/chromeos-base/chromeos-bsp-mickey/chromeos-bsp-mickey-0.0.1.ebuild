@@ -20,11 +20,7 @@ S=${WORKDIR}
 src_install() {
 	doappid "{181B8BE1-07A0-4D54-87B7-0157A4322FF1}" "CHROMEBIT" # veyron-mickey
 
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-
-    # Install Bluetooth ID override.
+	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
-
 }

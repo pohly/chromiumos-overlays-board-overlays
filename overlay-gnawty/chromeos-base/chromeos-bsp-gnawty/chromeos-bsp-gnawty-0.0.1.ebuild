@@ -25,13 +25,6 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Battery cut-off
-	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-	dosbin "${FILESDIR}/board_charge_battery.sh"
-	dosbin "${FILESDIR}/display_wipe_message.sh"
-
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"

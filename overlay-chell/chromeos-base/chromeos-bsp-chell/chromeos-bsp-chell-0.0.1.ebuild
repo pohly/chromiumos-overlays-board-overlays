@@ -37,9 +37,6 @@ src_install() {
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
 
-	# Battery cut-off
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-
 	# Install audio configs.
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs chell "${audio_config_dir}"

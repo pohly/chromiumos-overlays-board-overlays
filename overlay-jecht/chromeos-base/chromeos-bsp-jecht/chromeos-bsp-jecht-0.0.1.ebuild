@@ -24,6 +24,4 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{CC1EA699-3C85-8357-6E30-AC92FD975C8D}" "CHROMEBOX"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
 }

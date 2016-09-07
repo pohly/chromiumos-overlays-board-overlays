@@ -27,8 +27,6 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{B801E98B-4AB6-4D82-B3B3-E1517DC53266}" "CHROMEBASE"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
 
 	# Install audio_config files
 	local audio_config_dir="${FILESDIR}/audio-config"

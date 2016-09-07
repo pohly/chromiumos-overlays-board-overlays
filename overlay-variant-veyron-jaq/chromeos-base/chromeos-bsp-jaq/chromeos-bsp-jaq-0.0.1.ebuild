@@ -18,10 +18,4 @@ S=${WORKDIR}
 
 src_install() {
 	doappid "{6D2E4D56-A22C-2F8F-7127-DA90A65F85E1}" "CHROMEBOOK" # veyron-jaq
-
-	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_charge_battery.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/display_wipe_message.sh"
 }

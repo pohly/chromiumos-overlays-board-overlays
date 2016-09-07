@@ -28,9 +28,4 @@ src_install() {
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}/low_battery_shutdown_percent"
-
-	# Wiping scripts.
-	dosbin "${FILESDIR}"/sbin/*.sh
-	insinto "/usr/share/factory/images"
-	doins "${FILESDIR}"/images/*.png
 }

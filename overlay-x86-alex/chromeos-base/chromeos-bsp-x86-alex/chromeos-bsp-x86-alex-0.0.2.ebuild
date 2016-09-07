@@ -30,10 +30,6 @@ src_install() {
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/intel-hda-powersave.conf"
 
-	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-
 	# Install audio configs.
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs x86-alex "${audio_config_dir}"

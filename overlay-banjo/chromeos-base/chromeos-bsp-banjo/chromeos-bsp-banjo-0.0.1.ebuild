@@ -27,12 +27,6 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Wiping scripts
-	dosbin "${FILESDIR}"/sbin/*.sh
-
-	insinto "/usr/share/factory/images"
-	doins "${FILESDIR}"/images/*.png
-
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"

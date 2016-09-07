@@ -38,10 +38,6 @@ src_install() {
 		doappid "{ADA16F7B-283C-4907-AE27-ABBF5CA4F7F1}" "CHROMEBOOK"
 	elif use snow; then
 		doappid "{D851316B-7E57-4805-A7CE-01829AC1443E}" "CHROMEBOOK"
-
-		dosbin "${FILESDIR}/battery_cut_off.sh"
-		dosbin "${FILESDIR}/board_factory_wipe.sh"
-		dosbin "${FILESDIR}/board_factory_reset.sh"
 	fi
 
 	# Install platform-specific ambient light sensor configuration.

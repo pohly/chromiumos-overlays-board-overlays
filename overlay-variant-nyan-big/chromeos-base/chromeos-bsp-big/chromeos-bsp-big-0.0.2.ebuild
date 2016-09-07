@@ -26,18 +26,6 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	dosbin "${FILESDIR}/battery_cut_off.sh"
-	dosbin "${FILESDIR}/board_charge_battery.sh"
-	dosbin "${FILESDIR}/board_factory_reset.sh"
-	dosbin "${FILESDIR}/board_factory_wipe.sh"
-
-	insinto "/usr/share/factory/images"
-	doins "${FILESDIR}/cutoff_failed.png"
-	doins "${FILESDIR}/cutting_off.png"
-	doins "${FILESDIR}/remove_ac.png"
-	doins "${FILESDIR}/battery_input.png"
-	doins "${FILESDIR}/go_to_repair.png"
-
 	# Install audio config files.
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs nyan_big "${audio_config_dir}"
