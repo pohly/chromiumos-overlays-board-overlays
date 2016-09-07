@@ -14,15 +14,8 @@ KEYWORDS="-* amd64 x86"
 IUSE=""
 
 # Add dependencies on other ebuilds from within this board overlay
-
-# (MOCH) There is no buildable ec for leon on this branch. Added the dependency
-# on chromeos-ec only to get a working ectool binary. The EC ends up getting
-# built for board=bds
 RDEPEND="
 	!<chromeos-base/chromeos-bsp-leon-private-0.0.2
-	chromeos-base/chromeos-ec
-	media-gfx/ply-image
-	chromeos-base/ec-utils
 "
 
 DEPEND="${RDEPEND}"

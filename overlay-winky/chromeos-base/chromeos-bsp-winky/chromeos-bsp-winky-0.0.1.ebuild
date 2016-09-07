@@ -15,8 +15,6 @@ S="${WORKDIR}"
 
 RDEPEND="
 	chromeos-base/chromeos-touch-config-winky
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 

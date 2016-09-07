@@ -15,8 +15,6 @@ IUSE="chell-cheets"
 
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-glados
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 

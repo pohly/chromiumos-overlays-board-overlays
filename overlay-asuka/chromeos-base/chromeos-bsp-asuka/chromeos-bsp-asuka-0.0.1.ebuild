@@ -16,8 +16,6 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-kunimitsu
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 

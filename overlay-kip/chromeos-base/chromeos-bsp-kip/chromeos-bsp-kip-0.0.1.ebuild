@@ -13,7 +13,6 @@ KEYWORDS="-* amd64 x86"
 IUSE=""
 
 RDEPEND="
-	chromeos-base/ec-utils
 "
 DEPEND="${RDEPEND}"
 

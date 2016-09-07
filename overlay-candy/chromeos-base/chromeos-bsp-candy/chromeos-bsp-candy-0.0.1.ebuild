@@ -14,7 +14,6 @@ IUSE=""
 S="${WORKDIR}"
 
 RDEPEND="
-	chromeos-base/ec-utils
 "
 DEPEND="${RDEPEND}"
 S="${WORKDIR}"

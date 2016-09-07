@@ -16,7 +16,6 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
-	chromeos-base/ec-utils
 "
 DEPEND="${RDEPEND}"
 

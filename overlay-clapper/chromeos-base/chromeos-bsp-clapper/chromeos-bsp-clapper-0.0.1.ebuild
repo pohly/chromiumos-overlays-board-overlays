@@ -15,8 +15,6 @@ IUSE=""
 RDEPEND="
 	chromeos-base/chromeos-accelerometer-init
 	chromeos-base/chromeos-touch-config-clapper
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 S="${WORKDIR}"

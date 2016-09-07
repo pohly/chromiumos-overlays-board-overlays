@@ -18,8 +18,6 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	!<chromeos-base/chromeos-bsp-falco-private-0.0.2
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 

@@ -15,7 +15,6 @@ IUSE="glimmer-cheets"
 RDEPEND="
 	chromeos-base/chromeos-accelerometer-init
 	chromeos-base/chromeos-touch-config-glimmer
-	chromeos-base/ec-utils
 "
 DEPEND="${RDEPEND}"
 

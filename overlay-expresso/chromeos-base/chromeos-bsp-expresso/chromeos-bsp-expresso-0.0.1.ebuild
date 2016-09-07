@@ -15,8 +15,6 @@ S="${WORKDIR}"
 
 RDEPEND="
 	chromeos-base/chromeos-touch-config-expresso
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 

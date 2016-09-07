@@ -13,8 +13,6 @@ KEYWORDS="-* amd64 x86"
 IUSE=""
 
 RDEPEND="
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 

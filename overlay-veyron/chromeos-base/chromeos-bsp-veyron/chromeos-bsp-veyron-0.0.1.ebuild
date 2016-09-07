@@ -18,7 +18,6 @@ RDEPEND="${DEPEND}
 	x11-drivers/mali-rules
 	media-libs/media-rules
 	bluetooth? ( net-wireless/broadcom )
-	cros_ec? ( chromeos-base/ec-utils )
 "
 
 S=${WORKDIR}

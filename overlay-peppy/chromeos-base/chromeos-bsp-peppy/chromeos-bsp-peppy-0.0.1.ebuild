@@ -16,8 +16,6 @@ IUSE=""
 DEPEND="!<chromeos-base/chromeos-bsp-peppy-private-0.0.2"
 RDEPEND="${DEPEND}
 	chromeos-base/chromeos-touch-config-peppy
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 
 S="${WORKDIR}"

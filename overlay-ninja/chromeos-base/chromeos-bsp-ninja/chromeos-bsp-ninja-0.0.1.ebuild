@@ -14,8 +14,6 @@ IUSE=""
 S="${WORKDIR}"
 
 RDEPEND="
-	chromeos-base/ec-utils
-	media-gfx/ply-image
 "
 DEPEND="${RDEPEND}"
 S="${WORKDIR}"

@@ -16,8 +16,6 @@ IUSE=""
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	!<chromeos-base/chromeos-bsp-wolf-private-0.0.2
-	media-gfx/ply-image
-	chromeos-base/ec-utils
 "
 DEPEND="${RDEPEND}"
 
