@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -29,4 +29,8 @@ src_install() {
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Install audio configs.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs pbody "${audio_config_dir}"
 }
