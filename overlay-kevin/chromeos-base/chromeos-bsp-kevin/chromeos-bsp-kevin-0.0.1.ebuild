@@ -41,4 +41,8 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Install cpuset adjustemnts.
+	insinto "/etc/init"
+	doins "${FILESDIR}/platform-cpusets.conf"
 }
