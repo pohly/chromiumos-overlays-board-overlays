@@ -1,0 +1,24 @@
+LINUX_FIRMWARE=""
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-x86_64"
+
+# Empty USE to allow the same form below in real assignments
+USE=""
+
+USE="${USE} -cros_disks -cros_p2p -cros_host"
+USE="${USE} -debugd -opengl -wifi_bootstrapping -wimax -cellular -bluetooth -tpm -vpn"
+
+# Kernel specific use flags.
+USE="${USE} kernel_sources kernel-4_4"
+
+USE="${USE} chromeless_tty chromeless_tests"
+
+# Stateful partition does not need to be encrypted in lakitu.
+USE="${USE} -encrypted_stateful"
+
+# Disable the feature that chromeos-base/update_engine uses to determine
+# whether to pull in chromeos-base/power_manager.
+USE="${USE} -power_management"
+
+# Disable cups, which expects certain features from upstart that we don't want;
+# and we don't need printing support anyway.
+USE="${USE} -cups"
