@@ -45,4 +45,6 @@ src_install() {
 	# Install cpuset adjustemnts.
 	insinto "/etc/init"
 	doins "${FILESDIR}/platform-cpusets.conf"
+	insinto "/opt/google/containers/android/vendor/etc/init/"
+	doins "${FILESDIR}/init.cpusets.rc"
 }
