@@ -3,18 +3,13 @@
 
 EAPI=4
 
-DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
-or portage actions."
+DESCRIPTION="Install codec configuration for ARC++"
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="-* arm64 arm"
-IUSE="bootimage cros_ec"
+KEYWORDS="*"
+IUSE=""
 S="${WORKDIR}"
-
-# Add dependencies on other ebuilds from within this board overlay
-RDEPEND=""
-DEPEND="${RDEPEND}"
 
 src_install() {
 	insinto /opt/google/containers/android/vendor/etc/
