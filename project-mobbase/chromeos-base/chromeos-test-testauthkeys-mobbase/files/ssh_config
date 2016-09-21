@@ -2,5 +2,5 @@ Host *
   UserKnownHostsFile /dev/null
   CheckHostIP no
   StrictHostKeyChecking no
-  IdentityFile %d/.ssh/mobbase_id_rsa
+  IdentityFile /usr/share/chromeos-ssh-config/keys/id_rsa
   Protocol 2
