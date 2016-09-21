@@ -3,7 +3,7 @@
 
 EAPI="4"
 
-DESCRIPTION="Install Chromium OS test public keys for ssh clients on test image"
+DESCRIPTION="Install Chromium OS test public keys for root user outbound SSH."
 HOMEPAGE="http://www.chromium.org/"
 
 LICENSE="BSD-Google"
@@ -14,29 +14,12 @@ S="${WORKDIR}"
 
 RDEPEND="
 	chromeos-base/chromeos-ssh-testkeys
-	!chromeos-base/chromeos-test-testauthkeys
 	!chromeos-base/chromeos-test-testauthkeys-moblab
 "
 
 src_install() {
-	local filenames=(
-		authorized_keys
-		id_rsa
-		id_rsa.pub
-	)
-	local filename
-
-	for filename in "${filenames[@]}"; do
-		dosym /usr/share/chromeos-ssh-config/keys/"${filename}" \
-		      /root/.ssh/"${filename}"
-		# Private key will be deleted from the image for security
-		# reasons.  MobBase is special because it needs it present at
-		# boot time so name it differently to avoid deletion.
-		insinto /root/.ssh
-		newins "${EROOT}"/usr/share/chromeos-ssh-config/keys/id_rsa \
-		       mobbase_id_rsa
-		fperms 600 /root/.ssh/mobbase_id_rsa
-		newins "${FILESDIR}"/ssh_config config
-		fperms 600 /root/.ssh/config
-	done
+	# Sets up the outbound SSH access for root user.
+	insinto /root/.ssh
+	newins "${FILESDIR}"/ssh_config config
+	fperms 600 /root/.ssh/config
 }

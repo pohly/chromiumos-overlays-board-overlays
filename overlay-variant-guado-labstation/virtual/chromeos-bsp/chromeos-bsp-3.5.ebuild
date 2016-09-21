@@ -12,4 +12,5 @@ KEYWORDS="-* amd64 x86"
 
 RDEPEND="chromeos-base/chromeos-bsp-mobbase
 	chromeos-base/chromeos-bsp-labstation
-	chromeos-base/chromeos-bsp-guado-labstation"
+	chromeos-base/chromeos-bsp-guado-labstation
+	chromeos-base/chromeos-test-testauthkeys"
