@@ -37,4 +37,14 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Override default CPU clock speed governor
+	insinto "/etc/laptop-mode/conf.d/board-specific"
+	doins "${FILESDIR}/cpufreq.conf"
+
+	# Install cpuset adjustemnts.
+	insinto "/etc/init"
+	doins "${FILESDIR}/platform-cpusets.conf"
+	insinto "/opt/google/containers/android/vendor/etc/init/"
+	doins "${FILESDIR}/init.cpusets.rc"
 }
