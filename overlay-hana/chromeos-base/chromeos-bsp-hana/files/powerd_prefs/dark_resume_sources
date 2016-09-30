@@ -1,0 +1,2 @@
+/sys/class/rtc/rtc0/device
+/sys/bus/sdio/drivers/mwifiex_sdio/mmc2:0001:1
