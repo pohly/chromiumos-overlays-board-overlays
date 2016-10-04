@@ -14,4 +14,5 @@ S="${WORKDIR}"
 src_install() {
 	insinto /opt/google/containers/android/vendor/etc/
 	doins "${FILESDIR}/media_codecs.xml"
+	doins "${FILESDIR}/media_codecs_performance.xml"
 }
