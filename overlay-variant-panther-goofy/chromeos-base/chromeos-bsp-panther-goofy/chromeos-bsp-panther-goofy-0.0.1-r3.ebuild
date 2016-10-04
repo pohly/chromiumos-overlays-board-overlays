@@ -1,1 +1,0 @@
-chromeos-bsp-panther-goofy-0.0.1.ebuild
