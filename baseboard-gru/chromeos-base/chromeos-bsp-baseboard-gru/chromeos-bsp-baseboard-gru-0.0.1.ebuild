@@ -14,7 +14,6 @@ KEYWORDS="-* arm64 arm"
 S="${WORKDIR}"
 
 RDEPEND="
-	chromeos-base/chromeos-bsp-chipset-rk3399
 	x11-drivers/mali-rules
 	media-libs/media-rules
 "
