@@ -24,4 +24,8 @@ src_install() {
 
 	# Install Power Manager rules.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
