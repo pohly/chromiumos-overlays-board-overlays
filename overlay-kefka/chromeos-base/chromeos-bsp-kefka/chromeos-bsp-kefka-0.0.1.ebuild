@@ -17,6 +17,7 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-strago
 	chromeos-base/ec-utils
+	chromeos-base/chromeos-touch-config-kefka
 "
 DEPEND="${RDEPEND}"
 
