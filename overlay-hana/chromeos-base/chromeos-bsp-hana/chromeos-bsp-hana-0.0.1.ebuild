@@ -41,4 +41,8 @@ src_install() {
 
 	# Install script called by 99-mtk_drm_hdmi_load.rules
 	dosbin "${FILESDIR}"/hdcp_pass_key.sh
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
