@@ -76,4 +76,7 @@ src_install() {
 	# labstation is chrome-less which should prevent this cryptohomed
 	# trouble.
 	doins "${FILESDIR}"/init/cryptohomed.override
+
+	insinto /etc/sysctl.d
+	doins "${FILESDIR}"/sysctl.d/*.conf
 }
