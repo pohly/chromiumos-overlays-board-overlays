@@ -21,7 +21,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{4846109C-38A8-413F-E1FE-DCB98031EA65}" "CHROMEBOOK"
+	doappid "{63A9F698-C1CA-4A75-95E7-6B90181B3718}" "CHROMEBOOK"
 
 	# Install Power Manager rules.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
