@@ -2,3 +2,9 @@ USE="moblab lxc iscsi"
 
 # Additional modules to enable.
 APACHE2_MODULES="version"
+
+# We will use LLVM as the default compiler for amd64 boards. The moblab board
+# has not been tested yet, we hence continue to use gcc for moblab board for
+# now. https://crbug.com/537368.
+CC=x86_64-cros-linux-gnu-gcc
+CXX=x86_64-cros-linux-gnu-g++
