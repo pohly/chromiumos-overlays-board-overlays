@@ -15,4 +15,6 @@ S="${WORKDIR}"
 
 src_install() {
 	doappid "{41D57E57-2150-BB76-2730-EC8AFD1D835D}" "CHROMEBOX"
+	insinto /etc/init
+	doins "${FILESDIR}"/init/*.conf
 }
