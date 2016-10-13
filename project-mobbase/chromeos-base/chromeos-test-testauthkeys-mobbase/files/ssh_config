@@ -1,6 +1,9 @@
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 Host *
   UserKnownHostsFile /dev/null
   CheckHostIP no
   StrictHostKeyChecking no
-  IdentityFile /usr/share/chromeos-ssh-config/keys/id_rsa
+  IdentityFile %d/.ssh/mobbase_id_rsa
   Protocol 2
