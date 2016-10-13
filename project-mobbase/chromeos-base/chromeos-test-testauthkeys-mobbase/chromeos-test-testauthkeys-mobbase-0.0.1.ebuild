@@ -20,6 +20,8 @@ RDEPEND="
 src_install() {
 	# Sets up the outbound SSH access for root user.
 	insinto /root/.ssh
+	newins "${EROOT}"/usr/share/chromeos-ssh-config/keys/id_rsa \
+		mobbase_id_rsa
 	newins "${FILESDIR}"/ssh_config config
 	fperms 600 /root/.ssh/config
 }
