@@ -1,3 +1,2 @@
-x11-base/xorg-server dga xinerama
 media-libs/piglit waffle
 sys-apps/flashrom use_os_timer

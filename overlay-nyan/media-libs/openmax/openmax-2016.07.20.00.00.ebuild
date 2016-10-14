@@ -6,7 +6,6 @@ EAPI=4
 inherit multilib
 
 DESCRIPTION="OpenMAX binary libraries"
-SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/${P}.tbz2"
 
 LICENSE="NVIDIA-r2"
 SLOT="0"
@@ -18,9 +17,3 @@ RDEPEND="~sys-apps/nvrm-${PV}
 	"
 
 S=${WORKDIR}
-
-src_install() {
-	dolib.so usr/lib/libnvomxilclient.so
-	dolib.so usr/lib/libnvomx.so
-	dosym libnvomx.so /usr/$(get_libdir)/libOmxCore.so
-}

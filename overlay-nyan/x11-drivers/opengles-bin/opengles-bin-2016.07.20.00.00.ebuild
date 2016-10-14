@@ -5,7 +5,7 @@ EAPI=4
 
 inherit multilib
 
-DESCRIPTION="NVIDIA binary OpenGL|ES libraries for Tegra4"
+DESCRIPTION="NVIDIA binary OpenGL|ES libraries for Tegra124"
 SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/${P}.tbz2"
 
 LICENSE="NVIDIA-r2"
@@ -28,8 +28,9 @@ src_install() {
 	dolib.so usr/lib/libEGL.so.1
 	dosym libEGL.so.1 /usr/$(get_libdir)/libEGL.so
 
+	dolib.so usr/lib/libEGL_nvidia.so.0
+
 	dolib.so usr/lib/libGLESv1_CM.so.1
-	dosym libGLESv1_CM.so.1 /usr/$(get_libdir)/libGLESv1_CM.so
 
 	dolib.so usr/lib/libGLESv2.so.2
 	dosym libGLESv2.so.2 /usr/$(get_libdir)/libGLESv2.so

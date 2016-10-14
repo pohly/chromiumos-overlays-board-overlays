@@ -13,22 +13,12 @@ inherit multilib versionator
 DESCRIPTION="Tegra4 user-land drivers"
 MY_ABI=$(get_major_version)
 MY_PV=$(get_after_major_version)
-SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/${PN}-${MY_PV}.tbz2"
 
 LICENSE="NVIDIA-r2"
 SLOT="0"
 KEYWORDS="arm"
 IUSE=""
 
-RDEPEND="~sys-apps/nvrm-${MY_PV}
-	=x11-base/xorg-server-1.${MY_ABI}*"
+RDEPEND="~sys-apps/nvrm-${MY_PV}"
 
 S=${WORKDIR}
-
-src_install() {
-	exeinto /usr/$(get_libdir)/xorg/modules/drivers
-	newexe usr/lib/xorg/modules/drivers/nvidia_drv.so nvidia_drv.so
-
-	exeinto /usr/$(get_libdir)/xorg/modules/extensions
-	newexe usr/lib/xorg/modules/extensions/libglx.so libglx.so
-}
