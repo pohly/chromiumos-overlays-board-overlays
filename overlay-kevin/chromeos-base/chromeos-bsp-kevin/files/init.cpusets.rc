@@ -5,9 +5,13 @@
 
 on boot
     # Adjust cpusets in container to better split work between
-    # little and big cores. The setup is the same as we use for
-    # Nexus 5X.
+    # little and big cores.
+
+    # We start with CPUs 0-3 and so we have to extend to 0-5 first
+    # or write to the 'boost' cpuset will fail.
     write /dev/cpuset/foreground/cpus 0-5
     write /dev/cpuset/foreground/boost/cpus 4-5
+    # Our little cores are too slow, force foreground tasks to bigs.
+    write /dev/cpuset/foreground/cpus 4-5
     write /dev/cpuset/background/cpus 0
     write /dev/cpuset/system-background/cpus 0-3
