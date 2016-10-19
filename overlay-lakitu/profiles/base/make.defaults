@@ -22,3 +22,9 @@ USE="${USE} -power_management"
 # Disable cups, which expects certain features from upstart that we don't want;
 # and we don't need printing support anyway.
 USE="${USE} -cups"
+
+# Enable AppArmor support.  The USE flag causes certain packages to be built
+# with AppArmor support, and certain other packages to be installed on the base
+# image.  The kernel feature must be enabled separately by adding
+# "security=apparmor" to the kernel commandline.
+USE="${USE} apparmor"

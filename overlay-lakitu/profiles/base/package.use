@@ -1,0 +1,4 @@
+# Install minimal AppArmor profiles
+sec-policy/apparmor-profiles minimal
+
+sys-libs/libapparmor static-libs
