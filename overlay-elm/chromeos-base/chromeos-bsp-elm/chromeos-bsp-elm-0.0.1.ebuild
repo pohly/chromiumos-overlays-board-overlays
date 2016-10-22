@@ -3,8 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
-inherit appid cros-audio-configs
+inherit appid cros-audio-configs udev
 
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
@@ -20,6 +19,7 @@ S="${WORKDIR}"
 DEPEND=""
 RDEPEND="${DEPEND}
 	chromeos-base/chromeos-accelerometer-init
+	chromeos-base/chromeos-bsp-baseboard-oak
 	media-libs/media-rules
 	sys-apps/ethtool
 "
