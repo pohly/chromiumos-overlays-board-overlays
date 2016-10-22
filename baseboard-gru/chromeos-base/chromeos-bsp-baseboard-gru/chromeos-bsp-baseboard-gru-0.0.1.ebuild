@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -18,3 +18,9 @@ RDEPEND="
 	media-libs/media-rules
 "
 DEPEND="${RDEPEND}"
+
+src_install() {
+    # Install audio config files
+    local audio_config_dir="${FILESDIR}/audio-config"
+    install_audio_configs gru "${audio_config_dir}"
+}
