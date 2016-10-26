@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -16,17 +16,11 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
-	chromeos-base/chromeos-bsp-baseboard-reef
 "
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{8396029B-FCEF-9EEC-C684-3BCB8E3E9429}" "REFERENCE"
-
-	# Install Power Manager rules.
-	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
-
-	# Install Bluetooth ID override.
-	insinto "/etc/bluetooth"
-	doins "${FILESDIR}/main.conf"
+  # Install platform specific config files for power_manager.
+  insinto "/usr/share/power_manager/board_specific"
+  doins "${FILESDIR}"/powerd_prefs/*
 }
