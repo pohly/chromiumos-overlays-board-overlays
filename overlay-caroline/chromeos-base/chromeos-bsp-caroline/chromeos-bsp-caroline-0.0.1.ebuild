@@ -18,6 +18,7 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-glados
 	sys-kernel/linux-firmware
+	chromeos-base/chromeos-touch-config-caroline
 "
 DEPEND="${RDEPEND}"
 
