@@ -16,6 +16,7 @@ S="${WORKDIR}"
 RDEPEND="
 	x11-drivers/mali-rules
 	media-libs/media-rules
+	!<chromeos-base/chromeos-bsp-kevin-0.0.2
 "
 DEPEND="${RDEPEND}"
 
