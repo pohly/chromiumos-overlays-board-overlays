@@ -1,0 +1,14 @@
+[Match]
+Name=eth0
+
+[Network]
+DHCP=ipv4
+# TODO: Remove 'Domains' from this section:
+# - move it to resolved.conf file in systemd v229+, or
+# - let DHCP configure domain search list
+#   (https://github.com/systemd/systemd/issues/2710).
+Domains=google.internal
+
+[DHCP]
+UseMTU=true
+UseDomains=true

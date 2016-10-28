@@ -1,0 +1,57 @@
+commit e58597b091dc48ef81ecd361e6f0f9ae3561a44c
+Author: Amey Deshpande <ameyd@google.com>
+Date:   Wed Feb 17 12:08:40 2016 -0800
+
+    hostnamed: allow systemd-network user to call SetHostname
+    
+    systemd-networkd runs as a non-root user and does not have CAP_SYS_ADMIN.
+    systemd-hostnamed requires that for SetHostname method, either the
+    caller should have CAP_SYS_ADMIN or a PolKit rule should whitelist the
+    caller uid.
+    
+    Lakitu doesn't ship with PolKit.  This patch tweaks systemd-hostnamed to
+    whitelist the well-known user of systemd-networkd to call SetHostname
+    method.  All other Set methods remain unchanged.
+
+diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
+index a78516c..1a12509 100644
+--- a/src/hostname/hostnamed.c
++++ b/src/hostname/hostnamed.c
+@@ -37,6 +37,8 @@
+ 
+ #define VALID_DEPLOYMENT_CHARS (DIGITS LETTERS "-.:")
+ 
++#define ALLOW_NETWORKD_TO_SET_HOSTNAME 1
++
+ enum {
+         PROP_HOSTNAME,
+         PROP_STATIC_HOSTNAME,
+@@ -404,6 +406,19 @@ static int property_get_chassis(
+         return sd_bus_message_append(reply, "s", name);
+ }
+ 
++static uid_t get_good_user_uid(void) {
++#ifdef ALLOW_NETWORKD_TO_SET_HOSTNAME
++        const char *username = "systemd-network";
++        uid_t uid;
++        if (get_user_creds(&username, &uid, NULL, NULL, NULL)) {
++                return UID_INVALID;
++        }
++        return uid;
++#else
++        return UID_INVALID;
++#endif
++}
++
+ static int method_set_hostname(sd_bus_message *m, void *userdata, sd_bus_error *error) {
+         Context *c = userdata;
+         const char *name;
+@@ -435,7 +450,7 @@ static int method_set_hostname(sd_bus_message *m, void *userdata, sd_bus_error *
+                         CAP_SYS_ADMIN,
+                         "org.freedesktop.hostname1.set-hostname",
+                         interactive,
+-                        UID_INVALID,
++                        get_good_user_uid(),
+                         &c->polkit_registry,
+                         error);
+         if (r < 0)

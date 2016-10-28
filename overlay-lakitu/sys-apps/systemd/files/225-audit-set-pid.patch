@@ -1,0 +1,24 @@
+commit 78c2fc5686776fc7907a62504a299631a7b7a66a
+Author: Andrey Ulanov <andreyu@google.com>
+Date:   Wed Jul 6 18:41:55 2016 -0700
+
+    journald: When enabling audit also set audit PID.
+    
+    When audit PID is set kernel will not log audit messages to dmesg
+    as long as that process is running.
+
+diff --git a/src/journal/journald-audit.c b/src/journal/journald-audit.c
+index 83c3332..a3948f7 100644
+--- a/src/journal/journald-audit.c
++++ b/src/journal/journald-audit.c
+@@ -481,8 +481,9 @@ static int enable_audit(int fd, bool b) {
+                 .header.nlmsg_flags = NLM_F_REQUEST,
+                 .header.nlmsg_seq = 1,
+                 .header.nlmsg_pid = 0,
+-                .body.mask = AUDIT_STATUS_ENABLED,
++                .body.mask = AUDIT_STATUS_ENABLED | AUDIT_STATUS_PID,
+                 .body.enabled = b,
++                .body.pid = getpid(),
+         };
+         union sockaddr_union sa = {
+                 .nl.nl_family = AF_NETLINK,

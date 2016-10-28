@@ -1,0 +1,9 @@
+diff --git a/tmpfiles.d/home.conf b/tmpfiles.d/home.conf
+index aa652b1..b111167 100644
+--- a/tmpfiles.d/home.conf
++++ b/tmpfiles.d/home.conf
+@@ -8,4 +8,3 @@
+ # See tmpfiles.d(5) for details
+ 
+ v /home 0755 - - -
+-v /srv 0755 - - -
