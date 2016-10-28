@@ -24,4 +24,5 @@ src_install() {
 		mobbase_id_rsa
 	newins "${FILESDIR}"/ssh_config config
 	fperms 600 /root/.ssh/config
+	fperms 600 /root/.ssh/mobbase_id_rsa
 }
