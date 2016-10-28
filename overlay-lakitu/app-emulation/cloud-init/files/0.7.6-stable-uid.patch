@@ -1,0 +1,96 @@
+commit 019debb2c17d592e0dc3d2094f611499afe7b0ca
+Author: Andrey Ulanov <andreyu@google.com>
+Date:   Thu Feb 25 18:41:48 2016 -0800
+
+    This patch modifies users-groups with the goal of making it behave better in
+    configuration where /etc/passwd is stateless. Specifically it:
+    
+     - adds 'uid' options so that UIDs can be set from cloud-config, that is
+       now recommended and a warning is generated if some users do not have that
+       option;
+     - reserves range [2000, 5000) for UIDs created by cloud-init;
+     - makes sure that users are created in the alphabetical order to provide
+       more predictable and consistent UIDs;
+     - adds a requirement that if homedir already exists the UID assigned to user
+       must be the same as the owner of that directory, this is to protect from
+       assigning incorrect UIDs after config changes.
+
+diff --git a/cloudinit/config/cc_users_groups.py b/cloudinit/config/cc_users_groups.py
+index bf5b458..3ec857b 100644
+--- a/cloudinit/config/cc_users_groups.py
++++ b/cloudinit/config/cc_users_groups.py
+@@ -20,15 +20,50 @@
+ # since the module attribute 'distros'
+ # is a list of distros that are supported, not a sub-module
+ from cloudinit import distros as ds
++from cloudinit import log as logging
+ 
+ from cloudinit.settings import PER_INSTANCE
+ 
++import os
++import pwd
++
+ frequency = PER_INSTANCE
+ 
++LOG = logging.getLogger(__name__)
++
+ 
+ def handle(name, cfg, cloud, _log, _args):
+     (users, groups) = ds.normalize_users_groups(cfg, cloud.distro)
+     for (name, members) in groups.items():
+         cloud.distro.create_group(name, members)
++
++    # First create all users that have UID explicitly specified in cloud-config.
+     for (user, config) in users.items():
++        if 'uid' in config:
++            config['uid'] = str(config['uid'])
++            cloud.distro.create_user(user, **config)
++
++    # dict is an unordered container. To make UIDs assigened to users more
++    # predictable we sort them by the name and create accounts in that order.
++    nouids = []
++    for user in sorted(users):
++        config = users[user]
++        if 'uid' in config:
++            continue
++        nouids.append(user)
++
+         cloud.distro.create_user(user, **config)
++
++        pw = pwd.getpwnam(user)
++
++        homedir = config['homedir'] if 'homedir' in config else ('/home/%s' % user)
++        if os.path.isdir(homedir):
++            stats = os.stat(homedir)
++            if stats.st_uid != pw.pw_uid:
++                LOG.error('UID %d was assigned to user %s, but homedir %s '
++                          'is owned by %d', pw.pw_uid, user, homedir, stats.st_uid)
++                raise
++
++    if nouids:
++        LOG.warn('No explicit UID specified for the following users: %s. '
++                 'UID may change after reboot.', ', '.join(nouids))
+diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
+index 2599d9f..9eac306 100644
+--- a/cloudinit/distros/__init__.py
++++ b/cloudinit/distros/__init__.py
+@@ -303,8 +303,9 @@ class Distro(object):
+             LOG.info("User %s already exists, skipping." % name)
+             return
+ 
+-        adduser_cmd = ['useradd', name]
+-        log_adduser_cmd = ['useradd', name]
++        adduser_cmd = ['useradd', name,
++                       '-K', 'UID_MIN=2000', '-K', 'UID_MAX=4999', ]
++        log_adduser_cmd = adduser_cmd[:]
+ 
+         # Since we are creating users, we want to carefully validate the
+         # inputs. If something goes wrong, we can end up with a system
+@@ -319,6 +320,7 @@ class Distro(object):
+             "expiredate": '--expiredate',
+             "inactive": '--inactive',
+             "selinux_user": '--selinux-user',
++            "uid": '--uid',
+         }
+ 
+         adduser_flags = {

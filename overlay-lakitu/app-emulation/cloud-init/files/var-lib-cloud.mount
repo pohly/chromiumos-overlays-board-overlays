@@ -1,0 +1,17 @@
+# Cloud-init uses /var/lib/cloud as working directory, in which at least
+# two directories are required to be executable. We intend not to persist
+# cloud-init data across reboots. As a result, cloud-init will fetch metadata
+# and run user's configuration again after reboot. This is important as /etc/init
+# in lakitu is stateless.
+
+[Unit]
+Description=/var/lib/cloud
+DefaultDependencies=no
+Conflicts=umount.target
+Before=local-fs.target umount.target
+
+[Mount]
+Type=tmpfs
+What=tmpfs
+Where=/var/lib/cloud
+Options=rw,nosuid,nodev,size=1M,mode=755

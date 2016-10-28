@@ -1,0 +1,43 @@
+From 6ef1c9e5c8991c43da623d62fc1089fb9633c842 Mon Sep 17 00:00:00 2001
+From: Aditya Kali <adityakali@google.com>
+Date: Mon, 16 May 2016 12:19:04 -0700
+Subject: [PATCH] resolve metadata locally
+
+cloud-init tries to force the DNS lookup for metadata.google.internal
+address by appending a '.' at the end of the name. This triggers
+a bug in getaddrinfo - crbug.com/603189. Workaround the issue by not
+forcing the DNS lookup.
+---
+ cloudinit/sources/DataSourceGCE.py          | 2 +-
+ tests/unittests/test_datasource/test_gce.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cloudinit/sources/DataSourceGCE.py b/cloudinit/sources/DataSourceGCE.py
+index 7091e3c..e559deb 100644
+--- a/cloudinit/sources/DataSourceGCE.py
++++ b/cloudinit/sources/DataSourceGCE.py
+@@ -23,7 +23,7 @@ from cloudinit import url_helper
+ LOG = logging.getLogger(__name__)
+ 
+ BUILTIN_DS_CONFIG = {
+-    'metadata_url': 'http://metadata.google.internal./computeMetadata/v1/'
++    'metadata_url': 'http://metadata.google.internal/computeMetadata/v1/'
+ }
+ REQUIRED_FIELDS = ('instance-id', 'availability-zone', 'local-hostname')
+ 
+diff --git a/tests/unittests/test_datasource/test_gce.py b/tests/unittests/test_datasource/test_gce.py
+index 60a0ce4..b8648a5 100644
+--- a/tests/unittests/test_datasource/test_gce.py
++++ b/tests/unittests/test_datasource/test_gce.py
+@@ -40,7 +40,7 @@ GCE_META_PARTIAL = {
+ }
+ 
+ HEADERS = {'X-Google-Metadata-Request': 'True'}
+-MD_URL_RE = re.compile(r'http://metadata.google.internal./computeMetadata/v1/.*')
++MD_URL_RE = re.compile(r'http://metadata.google.internal/computeMetadata/v1/.*')
+ 
+ 
+ def _request_callback(method, uri, headers):
+-- 
+2.8.0.rc3.226.g39d4020
+
