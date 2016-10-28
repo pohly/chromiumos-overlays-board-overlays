@@ -16,7 +16,7 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
-	chromeos-base/chromeos-bsp-baseboard-gru
+	>=chromeos-base/chromeos-bsp-baseboard-gru-0.0.2
 	chromeos-base/chromeos-touch-config-kevin
 "
 DEPEND="${RDEPEND}"
