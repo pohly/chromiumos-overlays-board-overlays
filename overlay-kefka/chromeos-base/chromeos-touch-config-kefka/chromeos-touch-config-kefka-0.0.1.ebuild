@@ -11,7 +11,7 @@ KEYWORDS="*"
 IUSE=""
 
 TOUCH_FW_PATH="/opt/google/touch/firmware"
-TP_FW_FILE="148.0_3.0.bin"
+TP_FW_FILE="148.0_4.0.bin"
 TP_FW_LINK="/lib/firmware/elan_i2c_148.0.bin"
 
 S=${WORKDIR}
