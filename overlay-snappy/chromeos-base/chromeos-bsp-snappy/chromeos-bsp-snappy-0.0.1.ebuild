@@ -25,4 +25,6 @@ src_install() {
 
 	# Install Power Manager rules.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
+        # Battery cut-off
+        dosbin "${FILESDIR}/board_factory_reset.sh"
 }
