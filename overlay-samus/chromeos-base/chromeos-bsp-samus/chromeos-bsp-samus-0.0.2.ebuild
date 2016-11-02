@@ -17,6 +17,7 @@ IUSE="samus-cheets"
 RDEPEND="
 	chromeos-base/chromeos-accelerometer-init
 	chromeos-base/chromeos-touch-config-samus
+	chromeos-base/ec-utils
 	chromeos-base/genius-app-data-samus
 "
 DEPEND="${RDEPEND}"
