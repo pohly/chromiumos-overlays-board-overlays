@@ -9,7 +9,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="*"
 
-RDEPEND=""
+RDEPEND="chromeos-base/ec-utils"
 
 S=${WORKDIR}
 
