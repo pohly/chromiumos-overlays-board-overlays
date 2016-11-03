@@ -14,10 +14,13 @@ SRC_URI=""
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
+KEYWORDS="~*"
 IUSE=""
 
-RDEPEND="sys-apps/iotools"  # for wrmsr
+RDEPEND="
+	chromeos-base/ec-utils
+	sys-apps/iotools
+"
 
 src_compile() {
 	:
