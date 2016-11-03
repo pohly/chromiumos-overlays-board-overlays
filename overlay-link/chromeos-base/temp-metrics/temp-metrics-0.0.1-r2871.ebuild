@@ -3,8 +3,8 @@
 # found in the LICENSE.makefile file.
 
 EAPI="4"
-CROS_WORKON_COMMIT="6b1f11d6b9876bebcfc53f5b33794c9e6cb89939"
-CROS_WORKON_TREE="aac79e0ef309a9b9a36d716822a2d99e9a7faaca"
+CROS_WORKON_COMMIT="b8c1ce6700ba9e467f4b6a42cac5ceb3aacdd1db"
+CROS_WORKON_TREE="4353ff487a81b0a4cadb080199d1da61ca41bd15"
 CROS_WORKON_PROJECT="chromiumos/platform/ec"
 CROS_WORKON_LOCALNAME="../platform/ec"
 
@@ -16,10 +16,13 @@ SRC_URI=""
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm x86"
+KEYWORDS="*"
 IUSE=""
 
-RDEPEND="sys-apps/iotools"  # for wrmsr
+RDEPEND="
+	chromeos-base/ec-utils
+	sys-apps/iotools
+"
 
 src_compile() {
 	:
