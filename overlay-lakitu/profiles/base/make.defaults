@@ -6,6 +6,7 @@ USE=""
 
 USE="${USE} -cros_disks -cros_p2p -cros_host"
 USE="${USE} -debugd -opengl -wifi_bootstrapping -wimax -cellular -bluetooth -tpm -vpn"
+USE="${USE} -vtconsole"
 
 # Kernel specific use flags.
 USE="${USE} kernel_sources kernel-4_4"
