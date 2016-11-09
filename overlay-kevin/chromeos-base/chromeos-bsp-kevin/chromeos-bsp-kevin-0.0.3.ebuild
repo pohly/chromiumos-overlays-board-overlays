@@ -16,7 +16,7 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
-	>=chromeos-base/chromeos-bsp-baseboard-gru-0.0.2
+	>=chromeos-base/chromeos-bsp-baseboard-gru-0.0.3
 	chromeos-base/chromeos-touch-config-kevin
 "
 DEPEND="${RDEPEND}"
@@ -39,14 +39,4 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
-
-	# Override default CPU clock speed governor
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/cpufreq.conf"
-
-	# Install cpuset adjustemnts.
-	insinto "/etc/init"
-	doins "${FILESDIR}/platform-cpusets.conf"
-	insinto "/opt/google/containers/android/vendor/etc/init/"
-	doins "${FILESDIR}/init.cpusets.rc"
 }

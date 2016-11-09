@@ -16,7 +16,7 @@ S="${WORKDIR}"
 RDEPEND="
 	x11-drivers/mali-rules
 	media-libs/media-rules
-	!<chromeos-base/chromeos-bsp-kevin-0.0.2
+	!<chromeos-base/chromeos-bsp-kevin-0.0.3
 "
 DEPEND="${RDEPEND}"
 
@@ -24,4 +24,14 @@ src_install() {
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs gru "${audio_config_dir}"
+
+	# Override default CPU clock speed governor.
+	insinto "/etc/laptop-mode/conf.d/board-specific"
+	doins "${FILESDIR}/cpufreq.conf"
+
+	# Install cpuset adjustments.
+	insinto "/etc/init"
+	doins "${FILESDIR}/platform-cpusets.conf"
+	insinto "/opt/google/containers/android/vendor/etc/init/"
+	doins "${FILESDIR}/init.cpusets.rc"
 }
