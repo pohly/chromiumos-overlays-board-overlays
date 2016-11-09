@@ -21,7 +21,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-    # Install audio config files
-    local audio_config_dir="${FILESDIR}/audio-config"
-    install_audio_configs gru "${audio_config_dir}"
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs gru "${audio_config_dir}"
 }
