@@ -1,0 +1,70 @@
+commit c1772125e87779886be2e38e15eebf3c39619a16
+Author: Ke Wu <mikewu@google.com>
+Date:   Tue Nov 8 15:38:40 2016 -0800
+
+    When creating a user account try to derive the UID and GID from the homedir.
+    
+    It's possible that when a new user is being created that the home
+    directory for that user already exists. When this happens account
+    manager will now try to find the UID of the user from that directory
+    and reuse it.
+    
+    This fixes potential problems if for some reason the new accounts that
+    were previously added into passwd/group were not preserved after reboot,
+    but the correspondinghome directory was.
+
+diff --git a/google_compute_engine/accounts/accounts_utils.py b/google_compute_engine/accounts/accounts_utils.py
+index 4096086..d74e14d 100644
+--- a/google_compute_engine/accounts/accounts_utils.py
++++ b/google_compute_engine/accounts/accounts_utils.py
+@@ -98,11 +98,13 @@ class AccountsUtils(object):
+     except KeyError:
+       return None
+ 
+-  def _AddUser(self, user):
++  def _AddUser(self, user, uid=None, homedir=None):
+     """Configure a Linux user account.
+ 
+     Args:
+       user: string, the name of the Linux user account to create.
++      uid: string, derived from 'new' user's home directory
++      homedir: string, home directory for 'new' user
+ 
+     Returns:
+       bool, True if user creation succeeded.
+@@ -120,7 +122,14 @@ class AccountsUtils(object):
+     #
+     # To solve the issue, make the password '*' which is also recognized
+     # as locked but does not prevent SSH login.
+-    command = ['useradd', '-m', '-s', '/bin/bash', '-p', '*', user]
++    if homedir:
++      extra_flags = ['-d', homedir]
++    else:
++      extra_flags = ['-m']
++    if uid:
++      extra_flags += ['-u', str(uid)]
++
++    command = ['useradd', user, '-s', '/bin/bash', '-p', '*'] + extra_flags
+     try:
+       subprocess.check_call(command)
+     except subprocess.CalledProcessError as e:
+@@ -275,6 +284,19 @@ class AccountsUtils(object):
+     Returns:
+       bool, True if the user account updated successfully.
+     """
++    # First check if it is a new user that already have home directory
++    if not self._GetUser(user):
++      # Check if the homedir already exists and if yes try to derive UID
++      # and GID from that directory.
++      homedir = '/home/%s' % user
++      if os.path.isdir(homedir):
++        stats = os.stat(homedir)
++        if stats.st_uid > 1000 and stats.st_gid == stats.st_uid:
++          self.logger.info('Using UID %d and homedir %s for account %s',
++                       stats.st_uid, homedir, user)
++
++          self._AddUser(user, uid=stats.st_uid, homedir=homedir)
++
+     if not bool(USER_REGEX.match(user)):
+       self.logger.warning('Invalid user account name %s.', user)
+       return False

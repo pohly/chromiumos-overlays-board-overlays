@@ -1,0 +1,78 @@
+commit 8519613aa125e9ed843bc8298ea8e7c4e65095bd
+Author: Ke Wu <mikewu@google.com>
+Date:   Tue Nov 8 15:30:49 2016 -0800
+
+    do not block sshd for google.service
+
+diff --git a/google_compute_engine_init/systemd/google-accounts-daemon.service b/google_compute_engine_init/systemd/google-accounts-daemon.service
+index 125e776..b5945ee 100644
+--- a/google_compute_engine_init/systemd/google-accounts-daemon.service
++++ b/google_compute_engine_init/systemd/google-accounts-daemon.service
+@@ -1,7 +1,6 @@
+ [Unit]
+ Description=Google Compute Engine Accounts Daemon
+ After=network.target google-instance-setup.service google-network-setup.service
+-Before=sshd.service
+ Requires=network.target
+ 
+ [Service]
+diff --git a/google_compute_engine_init/systemd/google-instance-setup.service b/google_compute_engine_init/systemd/google-instance-setup.service
+index afa639a..6db20e1 100644
+--- a/google_compute_engine_init/systemd/google-instance-setup.service
++++ b/google_compute_engine_init/systemd/google-instance-setup.service
+@@ -1,8 +1,7 @@
+ [Unit]
+ Description=Google Compute Engine Instance Setup
+-After=local-fs.target network-online.target network.target rsyslog.service
+-Before=sshd.service
+-Wants=local-fs.target network-online.target network.target
++After=network-online.target
++Wants=network-online.target
+ 
+ [Service]
+ Type=oneshot
+diff --git a/google_compute_engine_init/systemd/google-network-setup.service b/google_compute_engine_init/systemd/google-network-setup.service
+index 4400391..8e649bf 100644
+--- a/google_compute_engine_init/systemd/google-network-setup.service
++++ b/google_compute_engine_init/systemd/google-network-setup.service
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=Google Compute Engine Network Setup
+-After=local-fs.target network-online.target network.target rsyslog.service
++After=network-online.target
+ After=google-instance-setup.service
+-Wants=local-fs.target network-online.target network.target
++Wants=network-online.target
+ 
+ [Service]
+ ExecStart=/usr/bin/google_network_setup
+diff --git a/google_compute_engine_init/systemd/google-shutdown-scripts.service b/google_compute_engine_init/systemd/google-shutdown-scripts.service
+index 3561089..bd0b062 100644
+--- a/google_compute_engine_init/systemd/google-shutdown-scripts.service
++++ b/google_compute_engine_init/systemd/google-shutdown-scripts.service
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=Google Compute Engine Shutdown Scripts
+-After=local-fs.target network-online.target network.target rsyslog.service
++After=network-online.target
+ After=google-instance-setup.service google-network-setup.service
+-Wants=local-fs.target network-online.target network.target
++Wants=network-online.target
+ 
+ [Service]
+ ExecStart=/bin/true
+diff --git a/google_compute_engine_init/systemd/google-startup-scripts.service b/google_compute_engine_init/systemd/google-startup-scripts.service
+index 9c04d79..52ab35f 100644
+--- a/google_compute_engine_init/systemd/google-startup-scripts.service
++++ b/google_compute_engine_init/systemd/google-startup-scripts.service
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=Google Compute Engine Startup Scripts
+-After=local-fs.target network-online.target network.target rsyslog.service
++After=network-online.target
+ After=google-instance-setup.service google-network-setup.service
+-Wants=local-fs.target network-online.target network.target
++Wants=network-online.target
+ 
+ [Service]
+ ExecStart=/usr/bin/google_metadata_script_runner --script-type startup
