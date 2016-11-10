@@ -1,2 +1,3 @@
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
+INPUT_DEVICES="synaptics"
