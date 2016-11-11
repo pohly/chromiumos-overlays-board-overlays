@@ -15,9 +15,7 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="
-	chromeos-base/ec-utils
-"
+RDEPEND=""
 DEPEND="${RDEPEND}"
 
 src_install() {
@@ -25,6 +23,4 @@ src_install() {
 
 	# Install Power Manager rules.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
-        # Battery cut-off
-        dosbin "${FILESDIR}/board_factory_reset.sh"
 }
