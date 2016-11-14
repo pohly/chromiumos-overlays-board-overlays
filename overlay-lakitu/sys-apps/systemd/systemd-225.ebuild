@@ -23,7 +23,7 @@ LICENSE="GPL-2 LGPL-2.1 public-domain"
 SLOT="0/2"
 IUSE="acl apparmor audit cryptsetup curl elfutils gcrypt gnuefi http
 	idn importd +kdbus +kmod +lz4 lzma nat pam policykit
-	qrcode +seccomp selinux ssl sysv-utils test xkb shill"
+	qrcode +seccomp selinux ssl sysv-utils test xkb"
 
 REQUIRED_USE="importd? ( curl gcrypt lzma )"
 
@@ -152,10 +152,9 @@ src_prepare() {
 	epatch "${FILESDIR}/225-CVE-2016-7795.patch"
 	epatch "${FILESDIR}/225-CVE-2016-7796.patch"
 
-	if ! use shill; then
-		# Lakitu: allow networkd => hostnamed communication w/o polkit.
-		epatch "${FILESDIR}/225-allow-networkd-to-hostnamed.patch"
-	fi
+	# Lakitu: allow networkd => hostnamed communication w/o polkit.
+	epatch "${FILESDIR}/225-allow-networkd-to-hostnamed.patch"
+
 	epatch "${FILESDIR}/225-single-label-hostname.patch"
 	epatch "${FILESDIR}/225-Force-re-creation-of-etc-localtime-symlink.patch"
 
@@ -245,9 +244,9 @@ multilib_src_configure() {
 	)
 
 	myeconfargs+=(
-		$(use_enable !shill networkd)
-		$(use_enable !shill hostnamed)
-		$(use_enable !shill resolved)
+		--enable-networkd
+		--enable-hostnamed
+		--enable-resolved
 		--enable-audit
 	)
 
@@ -364,9 +363,7 @@ multilib_src_install_all() {
 	# Lakitu:
 	dosym /usr/bin/udevadm sbin/udevadm
 	dosym /usr/lib/systemd/systemd-udevd sbin/udevd
-	if ! use shill; then
-		dosym /run/systemd/resolve/resolv.conf etc/resolv.conf
-	fi
+	dosym /run/systemd/resolve/resolv.conf etc/resolv.conf
 
 	# Lakitu: Disable all sysctl settings. In ChromeOS sysctl.conf is
 	# provided by chromeos-base.
@@ -388,11 +385,9 @@ multilib_src_install_all() {
 	insinto /usr/lib/systemd/system
 	doins "${FILESDIR}"/system-sysdaemons.slice
 
-	if ! use shill; then
-		# Lakitu: Install network files.
-		insinto /usr/lib/systemd/network
-		doins "${FILESDIR}"/*.network
-	fi
+	# Lakitu: Install network files.
+	insinto /usr/lib/systemd/network
+	doins "${FILESDIR}"/*.network
 }
 
 migrate_locale() {
@@ -484,10 +479,8 @@ pkg_postinst() {
 	enewgroup input
 	enewgroup systemd-journal
 	newusergroup systemd-timesync
-	if ! use shill; then
-		newusergroup systemd-network
-		newusergroup systemd-resolve
-	fi
+	newusergroup systemd-network
+	newusergroup systemd-resolve
 
 	# Lakitu: Disable groups not currently used.
 	# newusergroup systemd-bus-proxy
