@@ -1,2 +1,1 @@
-# Uncomment this line to activate the serial port.
-#TTY_CONSOLE="ttyS2"
+INPUT_DEVICES="wacom"
