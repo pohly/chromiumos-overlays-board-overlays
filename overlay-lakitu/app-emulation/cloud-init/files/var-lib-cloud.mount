@@ -9,6 +9,7 @@ Description=/var/lib/cloud
 DefaultDependencies=no
 Conflicts=umount.target
 Before=local-fs.target umount.target
+After=local-fs-pre.target
 
 [Mount]
 Type=tmpfs
