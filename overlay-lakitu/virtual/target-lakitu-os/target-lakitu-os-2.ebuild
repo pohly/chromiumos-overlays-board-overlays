@@ -20,7 +20,6 @@ LAKITU_RDEPEND="
 		sys-auth/pam_pwdfile
 	)
 	watchdog? ( sys-apps/daisydog )
-	systemd? ( chromeos-base/lakitu-systemd-glue )
 	app-admin/compute-image-packages
 	app-admin/sudo
 	app-admin/toolbox
@@ -29,7 +28,7 @@ LAKITU_RDEPEND="
 	app-emulation/cloud-init
 	app-emulation/docker
 	app-shells/bash
-	chromeos-base/chromeos-init
+	chromeos-base/chromeos-init-systemd
 	chromeos-base/chromeos-installer
 	chromeos-base/cloud-filesystem-init
 	chromeos-base/cloud-udev-config

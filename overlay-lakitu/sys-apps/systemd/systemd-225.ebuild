@@ -143,8 +143,6 @@ src_prepare() {
 	epatch "${FILESDIR}/CVE-2015-7510.patch"
 	epatch "${FILESDIR}/226-kcmp.patch"
 
-	# Lakitu: pid1hack allows running system systemd as a non-init process.
-	epatch "${FILESDIR}/225-pid1hack.patch"
 	# Do not create /srv
 	epatch "${FILESDIR}/225-tmpfiles-no-srv.patch"
 	epatch "${FILESDIR}/225-audit-set-pid.patch"
@@ -376,10 +374,6 @@ multilib_src_install_all() {
 	# Lakitu: Disable all sysctl settings. In ChromeOS sysctl.conf is
 	# provided by chromeos-base.
 	rm "${D}"/usr/lib/sysctl.d/*
-
-	# Lakitu: install upstart configs.
-	insinto /etc/init
-	newins "${FILESDIR}"/systemd_upstart.conf systemd.conf
 
 	# Lakitu: install our systemd-preset file.
 	insinto /usr/lib/systemd/system-preset

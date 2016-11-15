@@ -28,3 +28,6 @@ net-firewall/ebtables static
 
 # This removed dependency on libmix which is depricated and unsupported.
 net-analyzer/netcat -crypt
+
+# Enable 'poweroff', 'reboot' and other similar commands that control init.
+sys-apps/systemd sysv-utils

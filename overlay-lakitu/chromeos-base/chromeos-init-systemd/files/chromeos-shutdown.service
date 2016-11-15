@@ -1,0 +1,8 @@
+[Unit]
+Description=Chromium OS shutdown service
+Before=shutdown.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/chromeos_shutdown

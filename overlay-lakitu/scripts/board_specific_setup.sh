@@ -17,9 +17,8 @@ for var in $(compgen -v |grep INSTALL_MASK); do
   eval "$var='${mask}'"
 done
 
-# Don't start upstart-socket-bridge; lakitu should be moving to systemd for all
-# new features.
-INSTALL_MASK+=" /etc/init/upstart-socket-bridge.conf"
+# Don't install upstart files.
+INSTALL_MASK+=" /etc/init"
 
 # build_image script calls board_setup on the pristine base image.
 board_make_image_bootable() {

@@ -86,6 +86,12 @@ grub_install() {
     return 1
   fi
 
+  if ! sudo sed -i -e 's|/sbin/init|/usr/lib/systemd/systemd|' \
+                ${ESP_DIR}/efi/boot/grub.cfg; then
+    error "Could not make systemd the system init."
+    return 1
+  fi
+
   # Create a minimal grub.cfg that sets up environment variables and loads the
   # configuration from EFI installation.
   cat <<EOF | sudo dd of="${ESP_DIR}/${GRUB_DIR}/grub.cfg" 2>/dev/null

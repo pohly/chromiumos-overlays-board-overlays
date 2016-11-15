@@ -1,0 +1,11 @@
+[Unit]
+Description=Chromium OS startup script
+Before=local-fs-pre.target systemd-journald.service
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/sbin/chromeos_startup
+ExecStartPost=/bin/mkdir --mode=2755 -p /var/log/journal
+ExecStartPost=/bin/chgrp systemd-journal /var/log/journal
