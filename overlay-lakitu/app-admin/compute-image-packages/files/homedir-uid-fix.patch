@@ -1,23 +1,26 @@
-commit c1772125e87779886be2e38e15eebf3c39619a16
-Author: Ke Wu <mikewu@google.com>
-Date:   Tue Nov 8 15:38:40 2016 -0800
+From d23591bc4306e607c260d7ab7873a0e905e4479b Mon Sep 17 00:00:00 2001
+From: Andrey Ulanov <andreyu@google.com>
+Date: Wed, 16 Nov 2016 16:12:51 -0800
+Subject: [PATCH] When creating users try to derive the UID/GID from the
+ homedir
 
-    When creating a user account try to derive the UID and GID from the homedir.
-    
-    It's possible that when a new user is being created that the home
-    directory for that user already exists. When this happens account
-    manager will now try to find the UID of the user from that directory
-    and reuse it.
-    
-    This fixes potential problems if for some reason the new accounts that
-    were previously added into passwd/group were not preserved after reboot,
-    but the correspondinghome directory was.
+It's possible that when a new user is being created that the home
+directory for that user already exists. When this happens account
+manager will now try to find the UID of the user from that directory
+and reuse it.
+
+This fixes potential problems if for some reason the new accounts that
+were previously added into passwd/group were not preserved after reboot,
+but the correspondinghome directory was.
+---
+ google_compute_engine/accounts/accounts_utils.py | 35 +++++++++++++++++++++---
+ 1 file changed, 31 insertions(+), 4 deletions(-)
 
 diff --git a/google_compute_engine/accounts/accounts_utils.py b/google_compute_engine/accounts/accounts_utils.py
-index 4096086..d74e14d 100644
+index fbdd5ef..5c90226 100644
 --- a/google_compute_engine/accounts/accounts_utils.py
 +++ b/google_compute_engine/accounts/accounts_utils.py
-@@ -98,11 +98,13 @@ class AccountsUtils(object):
+@@ -104,11 +104,13 @@ class AccountsUtils(object):
      except KeyError:
        return None
  
@@ -32,7 +35,7 @@ index 4096086..d74e14d 100644
  
      Returns:
        bool, True if user creation succeeded.
-@@ -120,7 +122,14 @@ class AccountsUtils(object):
+@@ -126,7 +128,14 @@ class AccountsUtils(object):
      #
      # To solve the issue, make the password '*' which is also recognized
      # as locked but does not prevent SSH login.
@@ -48,12 +51,18 @@ index 4096086..d74e14d 100644
      try:
        subprocess.check_call(command)
      except subprocess.CalledProcessError as e:
-@@ -275,6 +284,19 @@ class AccountsUtils(object):
-     Returns:
-       bool, True if the user account updated successfully.
-     """
-+    # First check if it is a new user that already have home directory
-+    if not self._GetUser(user):
+@@ -284,11 +293,29 @@ class AccountsUtils(object):
+     if not bool(USER_REGEX.match(user)):
+       self.logger.warning('Invalid user account name %s.', user)
+       return False
++
+     if not self._GetUser(user):
+       # User does not exist. Attempt to create the user and add them to the
+       # appropriate user groups.
+-      if not (self._AddUser(user) and
+-              self._UpdateUserGroups(user, self.groups)):
++      user_created = False
++
 +      # Check if the homedir already exists and if yes try to derive UID
 +      # and GID from that directory.
 +      homedir = '/home/%s' % user
@@ -63,8 +72,17 @@ index 4096086..d74e14d 100644
 +          self.logger.info('Using UID %d and homedir %s for account %s',
 +                       stats.st_uid, homedir, user)
 +
-+          self._AddUser(user, uid=stats.st_uid, homedir=homedir)
++          if not self._AddUser(user, uid=stats.st_uid, homedir=homedir):
++            return False
++          user_created = True
 +
-     if not bool(USER_REGEX.match(user)):
-       self.logger.warning('Invalid user account name %s.', user)
-       return False
++      if not user_created and not self._AddUser(user):
++        return False
++
++      if not self._UpdateUserGroups(user, self.groups):
+         return False
+ 
+     # Don't try to manage account SSH keys with a shell set to disable
+-- 
+2.8.0.rc3.226.g39d4020
+
