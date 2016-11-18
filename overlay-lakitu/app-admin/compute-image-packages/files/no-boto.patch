@@ -1,0 +1,15 @@
+Remove boto dependency from setup.py
+
+diff --git a/setup.py b/setup.py
+index cd9a88a..6157da8 100755
+--- a/setup.py
++++ b/setup.py
+@@ -25,7 +25,7 @@ setuptools.setup(
+     author_email='gc-team@google.com',
+     description='Google Compute Engine',
+     include_package_data=True,
+-    install_requires=['boto'],
++    install_requires=[],
+     license='Apache Software License',
+     long_description='Google Compute Engine guest environment.',
+     name='google-compute-engine',
