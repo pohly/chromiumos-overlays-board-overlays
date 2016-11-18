@@ -20,7 +20,6 @@ IUSE=""
 
 DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	dev-python/boto[${PYTHON_USEDEP}]
 "
 RDEPEND="
 	sys-apps/iproute2
@@ -35,6 +34,7 @@ python_prepare_all() {
 	epatch "${FILESDIR}/catch-read-only-root-fs.patch"
 	epatch "${FILESDIR}/homedir-uid-fix.patch"
 	epatch "${FILESDIR}/do-not-block-sshd-for-google.service.patch"
+	epatch "${FILESDIR}/no-boto.patch"
 	distutils-r1_python_prepare_all
 }
 
