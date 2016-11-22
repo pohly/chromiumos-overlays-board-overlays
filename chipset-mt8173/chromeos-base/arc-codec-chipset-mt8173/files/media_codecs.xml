@@ -28,6 +28,15 @@
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
         </MediaCodec>
+        <MediaCodec name="ARC.vp8.decode" type="video/x-vnd.on2.vp8" >
+            <Limit name="size" min="64x64" max="4096x2304" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" min="1" max="1377000" />
+            <Limit name="bitrate" range="1-60000000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
         <MediaCodec name="ARC.vp9.decode" type="video/x-vnd.on2.vp9" >
             <Limit name="size" min="64x64" max="4096x2304" />
             <Limit name="alignment" value="2x2" />
