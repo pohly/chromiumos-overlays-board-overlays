@@ -1,0 +1,8 @@
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+# Initial value just for style purposes.
+USE=""
+
+# Disable some generic stuff we don't care about.
+USE="${USE} -buffet -peerd -wifi_bootstrapping"
