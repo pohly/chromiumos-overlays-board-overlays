@@ -148,6 +148,7 @@ src_prepare() {
 	epatch "${FILESDIR}/225-tmpfiles-no-srv.patch"
 	epatch "${FILESDIR}/225-audit-set-pid.patch"
 	epatch "${FILESDIR}/225-oom-score.patch"
+	epatch "${FILESDIR}/225-nspawn-sigchld.patch"
 
 	epatch "${FILESDIR}/225-CVE-2016-7795.patch"
 	epatch "${FILESDIR}/225-CVE-2016-7796.patch"
