@@ -11,5 +11,8 @@ if [ -e "${VPD_CACHE_FILE}" ]; then
   if [ "${CUSTOMIZATION_ID}" = "ACERTIFA" ]; then
 	SERIES="${CUSTOMIZATION_ID}"
   fi
+  if [ "${CUSTOMIZATION_ID}" = "DASANI" ]; then
+	SERIES="${CUSTOMIZATION_ID}"
+  fi
 fi
 echo "/etc/cras/${SERIES}"
