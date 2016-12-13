@@ -1,0 +1,7 @@
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+TOOLBOX_DOCKER_IMAGE="gcr.io/google-containers/toolbox"
+TOOLBOX_DOCKER_TAG="20161110-02"
+TOOLBOX_BIND="--bind=/:/media/root/ --bind=/mnt/disks/:/media/root/mnt/disks/ --bind=/var/:/media/root/var/ --bind=/home:/media/root/home/"

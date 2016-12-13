@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount /var/lib/toolbox with 'exec' and 'suid' bits
+DefaultDependencies=false
+Requires=bindmount@-var-lib-toolbox.service
+After=bindmount@-var-lib-toolbox.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mount -o remount,exec,suid /var/lib/toolbox
+RemainAfterExit=true
+
+[Install]
+WantedBy=local-fs.target

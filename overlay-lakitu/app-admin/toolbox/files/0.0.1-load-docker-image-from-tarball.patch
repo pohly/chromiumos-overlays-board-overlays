@@ -1,0 +1,42 @@
+From 3fc55496f97727ee760d2a7a657f3077d153eb06 Mon Sep 17 00:00:00 2001
+From: Aditya Kali <adityakali@google.com>
+Date: Thu, 3 Nov 2016 16:21:58 -0700
+Subject: [PATCH] load docker image from tarball
+
+Adds an option TOOLBOX_DOCKER_IMAGE_TARBALL that can be used to
+specify the path to locally saved docker image to load
+instead of doing a 'docker pull'.
+
+Signed-off-by: Aditya Kali <adityakali@google.com>
+---
+ toolbox | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/toolbox b/toolbox
+index f101cf1..c560dc1 100755
+--- a/toolbox
++++ b/toolbox
+@@ -10,6 +10,7 @@ TOOLBOX_DIRECTORY="/var/lib/toolbox"
+ TOOLBOX_BIND="--bind=/:/media/root --bind=/usr:/media/root/usr --bind=/run:/media/root/run"
+ # Ex: "--setenv=KEY=VALUE"
+ TOOLBOX_ENV=""
++TOOLBOX_DOCKER_IMAGE_TARBALL=""
+ 
+ toolboxrc="${HOME}"/.toolboxrc
+ 
+@@ -30,7 +31,11 @@ if [ ! -f ${osrelease} ] || systemctl is-failed -q ${machinename} ; then
+ 	sudo mkdir -p "${machinepath}"
+ 	sudo chown ${USER}: "${machinepath}"
+ 
+-	docker pull "${TOOLBOX_DOCKER_IMAGE}:${TOOLBOX_DOCKER_TAG}"
++	if [ ! -z "${TOOLBOX_DOCKER_IMAGE_TARBALL}" ] ; then
++		docker load -i "${TOOLBOX_DOCKER_IMAGE_TARBALL}"
++	else
++		docker pull "${TOOLBOX_DOCKER_IMAGE}:${TOOLBOX_DOCKER_TAG}"
++	fi
+ 	docker create --name=${machinename} "${TOOLBOX_DOCKER_IMAGE}:${TOOLBOX_DOCKER_TAG}" /bin/true
+ 	docker export ${machinename} | sudo tar -x -C "${machinepath}" -f -
+ 	docker rm ${machinename}
+-- 
+2.8.0.rc3.226.g39d4020
+
