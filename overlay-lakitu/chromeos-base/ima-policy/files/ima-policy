@@ -1,0 +1,31 @@
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# IMA policy that includes runtime auditing of executable files and libraries.
+#
+# For information on the grammar for IMA policies, see
+# http://www.kernel.org/doc/Documentation/ABI/testing/ima_policy
+# magic numbers come from /usr/include/linux/magic.h
+# PROC_SUPER_MAGIC
+dont_measure fsmagic=0x9fa0
+# SYSFS_MAGIC
+dont_measure fsmagic=0x62656572
+# DEBUGFS_MAGIC
+dont_measure fsmagic=0x64626720
+# TMPFS_MAGIC
+dont_measure fsmagic=0x01021994
+# RAMFS_MAGIC
+dont_measure fsmagic=0x858458f6
+# DEVPTS_SUPER_MAGIC
+dont_measure fsmagic=0x1cd1
+# BIFMT
+dont_measure fsmagic=0x42494e4d
+# SECURITYFS_MAGIC
+dont_measure fsmagic=0x73636673
+# SELINUXFS_MAGIC
+dont_measure fsmagic=0xf97cff8c
+# audit files executed.
+audit func=BPRM_CHECK
+# audit executable libraries mmap'd.
+audit func=FILE_MMAP mask=MAY_EXEC
