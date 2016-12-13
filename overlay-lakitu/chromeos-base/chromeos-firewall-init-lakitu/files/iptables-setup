@@ -1,0 +1,21 @@
+#!/bin/bash
+# Copyright 2015 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+iptables -P INPUT DROP -w
+iptables -P FORWARD DROP -w
+iptables -P OUTPUT DROP -w
+
+# Accept everything on the loopback
+iptables -I INPUT -i lo -j ACCEPT -w
+iptables -I OUTPUT -o lo -j ACCEPT -w
+
+# Accept return traffic inbound
+iptables -I INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT -w
+
+# Accept icmp echo (NB: icmp echo ratelimiting is done by the kernel)
+iptables -A INPUT -p icmp -j ACCEPT -w
+
+# Accept new and return traffic outbound
+iptables -I OUTPUT -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -w

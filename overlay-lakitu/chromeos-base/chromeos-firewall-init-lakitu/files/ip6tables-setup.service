@@ -1,0 +1,11 @@
+[Unit]
+Description=Configure ip6tables
+Before=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/share/cloud/ip6tables-setup
+
+[Install]
+WantedBy=basic.target
