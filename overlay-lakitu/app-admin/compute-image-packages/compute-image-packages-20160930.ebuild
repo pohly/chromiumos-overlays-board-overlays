@@ -56,4 +56,8 @@ python_install_all() {
 
 	systemd_dounit "${FILESDIR}/var-lib-google-remount.service"
 	systemd_enable_service local-fs.target var-lib-google-remount.service
+
+	# Install the helper script.
+	exeinto /usr/share/google/
+	newexe ${FILESDIR}/get_metadata_value.py get_metadata_value
 }
