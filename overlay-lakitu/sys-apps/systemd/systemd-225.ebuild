@@ -341,6 +341,8 @@ multilib_src_install() {
 }
 
 multilib_src_install_all() {
+	local unitdir=$(systemd_get_unitdir)
+
 	prune_libtool_files --modules
 
 	if use sysv-utils; then
@@ -383,12 +385,16 @@ multilib_src_install_all() {
 	rm  -f "${D}"/etc/systemd/system/getty.target.wants/getty@tty1.service
 
 	# Lakitu: Install system-sysdaemons.slice
-	insinto /usr/lib/systemd/system
+	insinto "${unitdir}"
 	doins "${FILESDIR}"/system-sysdaemons.slice
 
 	# Lakitu: Install network files.
 	insinto /usr/lib/systemd/network
 	doins "${FILESDIR}"/*.network
+
+	# Lakitu: Don't boot into graphical.target
+	rm "${D}${unitdir}"/default.target || die
+	dosym multi-user.target "${unitdir}"/default.target
 }
 
 migrate_locale() {
