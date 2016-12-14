@@ -1,1 +1,0 @@
-chromeos-bootcomplete-2.ebuild
