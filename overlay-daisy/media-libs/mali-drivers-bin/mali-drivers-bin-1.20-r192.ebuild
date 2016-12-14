@@ -19,9 +19,7 @@ DEPEND="
 
 RDEPEND="
 	!media-libs/mali-drivers
-	x11-base/xorg-server
 	!x11-drivers/opengles
-	x11-drivers/xf86-video-armsoc
 	x11-libs/libdrm
 	"
 
