@@ -1,0 +1,16 @@
+# Template unit that bind-mounts the argument path to itself.
+
+[Unit]
+ConditionPathIsMountPoint=!%I
+DefaultDependencies=false
+RequiresMountsFor=%I
+After=local-fs-pre.target
+Before=umount.target
+Conflicts=umount.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStartPre=/bin/mkdir -p %I
+ExecStart=/bin/mount -o bind %I %I
+ExecStop=/bin/umount %I

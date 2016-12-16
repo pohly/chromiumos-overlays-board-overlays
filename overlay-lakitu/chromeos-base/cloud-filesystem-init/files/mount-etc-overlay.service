@@ -1,0 +1,13 @@
+[Unit]
+Description=Init GCI filesystems
+DefaultDependencies=no
+Requires=tmp.mount var.mount
+After=syslog.target tmp.mount var.mount
+Before=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/cloud/mount-etc-overlay
+
+[Install]
+WantedBy=local-fs.target

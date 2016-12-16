@@ -1,0 +1,16 @@
+# Mount tmpfs at /mnt/disks/ where users can create sub-dirs for mounting
+# PDs.
+[Unit]
+Description=/mnt/disks
+DefaultDependencies=no
+Conflicts=umount.target
+Before=local-fs.target umount.target
+
+[Mount]
+Type=tmpfs
+What=tmpfs
+Where=/mnt/disks
+Options=size=256K,mode=755
+
+[Install]
+WantedBy=local-fs.target
