@@ -1,0 +1,25 @@
+From 7f7152350c5a96fa3a73f4258a3294fe5b9c8e20 Mon Sep 17 00:00:00 2001
+From: Daniel Wang <wonderfly@google.com>
+Date: Mon, 19 Dec 2016 15:23:59 -0800
+Subject: [PATCH] networkd: default to not touch ip forwarding setting
+
+---
+ src/network/networkd-network.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/network/networkd-network.c b/src/network/networkd-network.c
+index 6587ea9..a031ee6 100644
+--- a/src/network/networkd-network.c
++++ b/src/network/networkd-network.c
+@@ -115,6 +115,8 @@ static int network_load_one(Manager *manager, const char *filename) {
+ 
+         network->link_local = ADDRESS_FAMILY_IPV6;
+ 
++        network->ip_forward = _ADDRESS_FAMILY_BOOLEAN_INVALID;
++
+         network->ipv6_privacy_extensions = IPV6_PRIVACY_EXTENSIONS_NO;
+ 
+         r = config_parse(NULL, filename, file,
+-- 
+2.8.0.rc3.226.g39d4020
+

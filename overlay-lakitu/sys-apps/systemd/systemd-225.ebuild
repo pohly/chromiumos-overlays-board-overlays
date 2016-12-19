@@ -158,6 +158,10 @@ src_prepare() {
 	epatch "${FILESDIR}/225-single-label-hostname.patch"
 	epatch "${FILESDIR}/225-Force-re-creation-of-etc-localtime-symlink.patch"
 
+	# Lakitu: make networkd default to not touch IP forwarding setting.
+	# BUG 33257712
+	epatch "${FILESDIR}/225-networkd-default-ip-forwarding-to-kernel.patch"
+
 	epatch_user
 	eautoreconf
 }
