@@ -1,0 +1,21 @@
+{
+  "_comment": "See http://www.chromium.org/chromium-os/building-chromium-os/disk-layout-format",
+  "metadata":{
+    "rootdev_base": "/sys/devices/platform/80860F14:00/mmc_host/mmc0/mmc0:0001/block/mmcblk0"
+  },
+  "parent": "legacy_disk_layout.json",
+  "layouts":{
+    "common": [
+      {
+        # User data, fills all remaining space on drive.
+        "num": 1,
+        "label": "STATE",
+        "type": "data",
+        "fs_format": "ext4",
+        "size": "1536 MiB",
+        "features": ["expand"],
+        "uuid": "random"
+      }
+    ]
+  }
+}
