@@ -58,7 +58,8 @@ COMMON_DEPEND=">=sys-apps/util-linux-2.20:0=[${MULTILIB_USEDEP}]
 	selinux? ( sys-libs/libselinux:0= )
 	sysv-utils? (
 		!sys-apps/systemd-sysv-utils
-		!sys-apps/sysvinit )
+		!sys-apps/sysvinit
+		!sys-apps/upstart )
 	xkb? ( >=x11-libs/libxkbcommon-0.4.1:0= )
 	abi_x86_32? ( !<=app-emulation/emul-linux-x86-baselibs-20130224-r9
 		!app-emulation/emul-linux-x86-baselibs[-abi_x86_32(-)] )"
