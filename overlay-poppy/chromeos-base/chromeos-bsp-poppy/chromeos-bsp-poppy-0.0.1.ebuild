@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -22,4 +22,8 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{C2A20B44-A80D-4028-84AB-24FAC3E38B28}" "REFERENCE"
+
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs poppy "${audio_config_dir}"
 }
