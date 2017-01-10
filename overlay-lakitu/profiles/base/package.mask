@@ -1,0 +1,2 @@
+# This is needed to make sure we use lakitu version of systemd.
+>=sys-apps/systemd-226

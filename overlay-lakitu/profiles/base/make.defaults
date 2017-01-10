@@ -1,5 +1,6 @@
 LINUX_FIRMWARE=""
 CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-x86_64"
+CHROMEOS_KERNEL_ARCH="x86_64"
 
 # Empty USE to allow the same form below in real assignments
 USE=""
@@ -8,8 +9,14 @@ USE="${USE} -cros_disks -cros_p2p -cros_host"
 USE="${USE} -debugd -opengl -wifi_bootstrapping -wimax -cellular -bluetooth -tpm -vpn"
 USE="${USE} -vtconsole"
 
+# Used by virtual/chromeos-bootcomplete and virtual/update-policy to pull the
+# right implementation.
+USE="${USE} cros_embedded"
+
 # Kernel specific use flags.
 USE="${USE} kernel_sources kernel-4_4"
+# Disable some kernel options.
+USE="${USE} -fbconsole -firmware_install -mbim -vlan"
 
 USE="${USE} chromeless_tty chromeless_tests"
 
@@ -29,3 +36,16 @@ USE="${USE} -cups"
 # image.  The kernel feature must be enabled separately by adding
 # "security=apparmor" to the kernel commandline.
 USE="${USE} apparmor"
+
+# Disable agetty on tty2
+TTY_CONSOLE=""
+USE="${USE} -tty_console_tty2"
+
+# Enable feature: systemd
+USE="${USE} systemd -syslog"
+
+# Development devices do not have a HWID baked in.
+USE="${USE} hwid_override"
+
+# Disable the symlink to avoid conflict when building sys-apps/baselayout.
+SYMLINK_LIB="no"

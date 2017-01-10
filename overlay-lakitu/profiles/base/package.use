@@ -1,4 +1,30 @@
-# Install minimal AppArmor profiles
+# Install minimal AppArmor profiles.
 sec-policy/apparmor-profiles minimal
 
+# Docker uses libapparmor, so this should have static libs included.
 sys-libs/libapparmor static-libs
+
+# Lakitu uses overlayfs graph driver in docker.
+app-emulation/docker -device-mapper overlay
+
+# Use generated test key.
+chromeos-base/chromeos-ssh-testkeys generated_ssh_key
+
+# We don't use the few features this adds, and it avoids a circ dep.
+# https://crbug.com/599986
+sys-apps/util-linux -systemd
+
+# Enable metrics uploader.
+chromeos-base/metrics metrics_uploader
+
+# Enable full-featured vim.
+app-editors/vim -minimal
+
+# Docker uses libseccomp, so this should have static libs included.
+sys-libs/libseccomp static-libs
+
+# Build ebtables statically to prevent deps on its libraries.
+net-firewall/ebtables static
+
+# This removed dependency on libmix which is depricated and unsupported.
+net-analyzer/netcat -crypt
