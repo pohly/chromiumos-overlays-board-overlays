@@ -21,6 +21,10 @@ DEPEND="${RDEPEND}"
 src_install() {
 	doappid "{F8834CDD-B93C-4C2A-BEB9-5432EA99430D}" "CHROMEBOOK"
 
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
 	# Install Power Manager rules.
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 
