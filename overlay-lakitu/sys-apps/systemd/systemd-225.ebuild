@@ -235,6 +235,7 @@ multilib_src_configure() {
 		$(multilib_native_use_enable apparmor)
 		$(multilib_native_use_enable test tests)
 		$(multilib_native_use_enable test dbus)
+		$(use_enable audit)
 
 		# hardcode a few paths to spare some deps
 		QUOTAON=/usr/sbin/quotaon
@@ -253,7 +254,6 @@ multilib_src_configure() {
 		--enable-networkd
 		--enable-hostnamed
 		--enable-resolved
-		--enable-audit
 	)
 
 	# Lakitu: Disable all features that we are not using and which are not otherwise
