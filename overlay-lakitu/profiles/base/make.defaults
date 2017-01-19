@@ -27,6 +27,9 @@ USE="${USE} -encrypted_stateful"
 # whether to pull in chromeos-base/power_manager.
 USE="${USE} -power_management"
 
+# Disable shill, Lakitu uses systemd-networkd instead.
+USE="${USE} -shill"
+
 # Disable cups, which expects certain features from upstart that we don't want;
 # and we don't need printing support anyway.
 USE="${USE} -cups"
