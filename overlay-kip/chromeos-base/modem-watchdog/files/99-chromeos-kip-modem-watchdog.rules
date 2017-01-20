@@ -1,0 +1,15 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This file specifies udev rules to launch a watchdog to monitor if the
+# built-in modem (Huawei ME936) on Kip is successfully picked up ModemManager
+# within a specified amount of time after the modem appears on USB. For the
+# purpose of triggering the watchdog, we monitor the USB interface 0 under
+# configuration 3 (MBIM) of the modem.
+
+ACTION=="add", SUBSYSTEM=="usb", \
+  ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="15bb", \
+  ATTRS{bNumConfigurations}=="3", ATTRS{bConfigurationValue}=="3", \
+  ATTR{bInterfaceNumber}=="00", \
+  RUN+="/lib/udev/chromeos-kip-modem-watchdog.sh --daemonize"
