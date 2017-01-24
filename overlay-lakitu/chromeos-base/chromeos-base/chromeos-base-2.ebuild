@@ -20,6 +20,7 @@ RDEPEND="${DEPEND}
 	app-shells/bash
 	net-misc/openssh
 	sys-apps/mawk
+	sys-libs/lakitu-custom-locales
 	sys-libs/timezone-data
 	"
 
@@ -85,6 +86,7 @@ pkg_preinst() {
 src_install() {
 	insinto /etc
 	doins "${FILESDIR}"/issue
+	doins "${FILESDIR}"/locale.conf
 
 	insinto /etc/sysctl.d
 	doins "${FILESDIR}"/00-sysctl.conf

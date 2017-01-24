@@ -1,0 +1,1 @@
+lakitu-custom-locales-2.23.ebuild
