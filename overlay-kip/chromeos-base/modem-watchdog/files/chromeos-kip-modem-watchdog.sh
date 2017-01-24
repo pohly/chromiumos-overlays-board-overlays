@@ -31,17 +31,17 @@ readonly LOCK_FILE=/run/lock/chromeos-kip-modem-watchdog.lock
 readonly TIMEOUT_SECONDS=30
 
 log_info() {
-  logger -t "${LOG_TAG}" -p info "$*"
+  logger -t "${LOG_TAG}" --id="$$" -p info "$*"
   echo "   INFO: $*"
 }
 
 log_warning() {
-  logger -t "${LOG_TAG}" -p warn "$*"
+  logger -t "${LOG_TAG}" --id="$$" -p warn "$*"
   echo "WARNING: $*"
 }
 
 log_error() {
-  logger -t "${LOG_TAG}" -p err "$*"
+  logger -t "${LOG_TAG}" --id="$$" -p err "$*"
   echo "  ERROR: $*"
 }
 
