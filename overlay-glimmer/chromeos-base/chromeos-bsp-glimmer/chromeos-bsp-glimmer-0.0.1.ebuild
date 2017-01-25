@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid udev cros-audio-configs
 
 DESCRIPTION="Glimmer private bsp (meta package to pull in driver/tool deps)"
 
@@ -31,4 +31,8 @@ src_install() {
 	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Install audio config files.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs swanky "${audio_config_dir}"
 }

@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid udev cros-audio-configs
 
 DESCRIPTION="Sumo bsp (meta package to pull in driver/tool deps)"
 
@@ -31,6 +31,10 @@ src_install() {
 	# that directory (it wants to look in /lib64/udev).
 	insinto "${EPREFIX}/etc/udev/hwdb.d"
 	doins "${FILESDIR}/61-sumo-keyboard.hwdb"
+
+	# Install audio config files.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs swanky "${audio_config_dir}"
 }
 
 pkg_postinst() {

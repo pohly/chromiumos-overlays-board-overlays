@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ninja bsp (meta package to pull in driver/tool deps)"
 
@@ -36,6 +36,10 @@ src_install() {
 	# placement.
 	insinto "${EPREFIX}/etc/udev/rules.d"
 	doins "${FILESDIR}/55-ninja-keyboard.rules"
+
+	# Install audio config files.
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs swanky "${audio_config_dir}"
 }
 
 pkg_postinst() {
