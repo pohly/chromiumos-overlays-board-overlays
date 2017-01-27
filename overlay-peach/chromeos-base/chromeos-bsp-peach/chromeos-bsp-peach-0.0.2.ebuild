@@ -17,9 +17,3 @@ RDEPEND="
 "
 
 S="${WORKDIR}"
-
-src_install() {
-	# Install platform specific laptop mode tools configuration files
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/runtime-pm.conf"
-}
