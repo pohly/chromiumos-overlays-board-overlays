@@ -26,7 +26,6 @@ src_install() {
 
 	# Install board-specific info.
 	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/runtime-pm.conf"
 	doins "${FILESDIR}/intel-hda-powersave.conf"
 
 	# Determine kernel version.

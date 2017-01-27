@@ -32,7 +32,6 @@ src_install() {
 	# Install board-specific info.
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/intel-hda-powersave.conf"
-	doins "${FILESDIR}/runtime-pm.conf"
 
 	# Determine kernel version.
 	local audio_config_dir=$FILESDIR/audio-config-$(usex kernel-3_8 3_8 3_4)

@@ -52,7 +52,6 @@ src_install() {
 	# Install platform specific usb device list for laptop mode tools
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/cpufreq.conf"
-	doins "${FILESDIR}/runtime-pm.conf"
 
 	if use snow || use spring; then
 		udev_dorules "${FILESDIR}/50-rtc.rules"

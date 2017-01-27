@@ -25,7 +25,6 @@ src_install() {
 	doappid "{A854E62E-9CB3-4DBE-8BBE-88C48FD65787}" "CHROMEBOOK"
 
 	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/runtime-pm.conf"
 	doins "${FILESDIR}/intel-hda-powersave.conf"
 
 	# Install platform-specific ambient light sensor configuration.

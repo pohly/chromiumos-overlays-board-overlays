@@ -31,5 +31,4 @@ src_install() {
 	# Install board-specific laptop mode configs.
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/hdparm.conf"
-	doins "${FILESDIR}/runtime-pm.conf"
 }

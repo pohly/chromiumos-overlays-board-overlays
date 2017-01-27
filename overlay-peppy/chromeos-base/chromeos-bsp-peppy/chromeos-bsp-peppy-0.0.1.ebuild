@@ -35,5 +35,4 @@ src_install() {
 	# Install board-specific info.
 	insinto "/etc/laptop-mode/conf.d/board-specific"
 	doins "${FILESDIR}/hdparm.conf"
-	doins "${FILESDIR}/runtime-pm.conf"
 }
