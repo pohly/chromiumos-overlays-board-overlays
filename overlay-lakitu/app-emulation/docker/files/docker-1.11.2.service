@@ -12,6 +12,7 @@ EnvironmentFile=-/etc/default/docker
 # for containers run by docker
 ExecStartPre=/bin/sh -x -c "if [ ! -s /var/lib/docker/repositories-overlay ]; then rm -f /var/lib/docker/repositories-overlay; fi"
 ExecStart=/usr/bin/docker daemon -s overlay --registry-mirror=https://mirror.gcr.io --host=fd:// $DOCKER_OPTS
+ExecStopPost=/bin/echo "docker daemon exited"
 MountFlags=slave
 LimitNOFILE=1048576
 LimitNPROC=1048576
