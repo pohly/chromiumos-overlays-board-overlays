@@ -57,7 +57,8 @@ python_install_all() {
 	systemd_dounit "${FILESDIR}/var-lib-google-remount.service"
 	systemd_enable_service local-fs.target var-lib-google-remount.service
 
-	# Install the helper script.
+	# Backports the get-metadata-value script from older version of this
+	# package (1.3.3).
 	exeinto /usr/share/google/
-	newexe ${FILESDIR}/get_metadata_value.py get_metadata_value
+	newexe ${FILESDIR}/1.3.3-get_metadata_value get_metadata_value
 }
