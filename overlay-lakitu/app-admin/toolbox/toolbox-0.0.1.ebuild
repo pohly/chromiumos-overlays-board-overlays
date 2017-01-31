@@ -28,6 +28,7 @@ src_install() {
 	insinto /etc/default
 	newins "${FILESDIR}"/etc.default.toolbox toolbox
 
+	systemd_dounit "${FILESDIR}"/var-lib-toolbox.mount
 	systemd_dounit "${FILESDIR}"/var-lib-toolbox-remount.service
-	systemd_enable_service local-fs.target var-lib-toolbox-remount.service
+	systemd_enable_service local-fs.target var-lib-toolbox.mount
 }

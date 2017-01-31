@@ -1,13 +1,9 @@
 [Unit]
 Description=Mount /var/lib/google with 'exec'
 DefaultDependencies=false
-Requires=bindmount@-var-lib-google.service
-After=bindmount@-var-lib-google.service
+After=var-lib-google.mount
+Before=local-fs.target
 
 [Service]
 Type=oneshot
 ExecStart=/bin/mount -o remount,exec /var/lib/google
-RemainAfterExit=true
-
-[Install]
-WantedBy=local-fs.target

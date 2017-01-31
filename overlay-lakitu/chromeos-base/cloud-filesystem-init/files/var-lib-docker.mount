@@ -1,0 +1,13 @@
+[Unit]
+Description=Bind mount /var/lib/docker to itself
+Requires=var-lib-docker-remount.service
+Before=local-fs.target
+
+[Mount]
+What=/var/lib/docker
+Where=/var/lib/docker
+Type=none
+Options=bind
+
+[Install]
+WantedBy=local-fs.target

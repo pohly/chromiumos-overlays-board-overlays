@@ -1,13 +1,9 @@
 [Unit]
 Description=Mount /var/lib/docker with 'exec'
 DefaultDependencies=false
-Requires=bindmount@-var-lib-docker.service
-After=bindmount@-var-lib-docker.service
+After=var-lib-docker.mount
+Before=local-fs.target
 
 [Service]
 Type=oneshot
 ExecStart=/bin/mount -o remount,exec /var/lib/docker
-RemainAfterExit=true
-
-[Install]
-WantedBy=local-fs.target

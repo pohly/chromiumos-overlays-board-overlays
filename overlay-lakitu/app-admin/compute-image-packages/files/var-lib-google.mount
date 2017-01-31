@@ -1,0 +1,13 @@
+[Unit]
+Description=Bind mount /var/lib/google to itself
+Requires=var-lib-google-remount.service
+Before=local-fs.target
+
+[Mount]
+What=/var/lib/google
+Where=/var/lib/google
+Type=none
+Options=bind
+
+[Install]
+WantedBy=local-fs.target
