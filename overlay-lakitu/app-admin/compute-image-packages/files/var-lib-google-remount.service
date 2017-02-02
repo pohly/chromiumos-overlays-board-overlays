@@ -7,3 +7,4 @@ Before=local-fs.target
 [Service]
 Type=oneshot
 ExecStart=/bin/mount -o remount,exec /var/lib/google
+Slice=system-sysdaemons.slice

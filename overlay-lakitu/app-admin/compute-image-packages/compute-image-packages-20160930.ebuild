@@ -33,8 +33,8 @@ python_prepare_all() {
 	epatch "${FILESDIR}/set-ethtool-to-usr-sbin.patch"
 	epatch "${FILESDIR}/catch-read-only-root-fs.patch"
 	epatch "${FILESDIR}/homedir-uid-fix.patch"
-	epatch "${FILESDIR}/do-not-block-sshd-for-google.service.patch"
 	epatch "${FILESDIR}/no-boto.patch"
+	epatch "${FILESDIR}/20160930-service-file-customizations.patch"
 	distutils-r1_python_prepare_all
 }
 
