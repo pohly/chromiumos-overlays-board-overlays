@@ -9,9 +9,9 @@ inherit distutils-r1 systemd
 
 SRC_URI="https://github.com/GoogleCloudPlatform/compute-image-packages/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
-DESCRIPTION="A Python package for Linux daemons, scripts, and libraries."
-HOMEPAGE="http://github.com/GoogleCloudPlatform/compute-image-packages/tree/master"
-LICENSE="BSD-Google"
+DESCRIPTION="Linux Guest Environment for Google Compute Engine"
+HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages"
+LICENSE="Apache-2.0"
 
 KEYWORDS="*"
 
