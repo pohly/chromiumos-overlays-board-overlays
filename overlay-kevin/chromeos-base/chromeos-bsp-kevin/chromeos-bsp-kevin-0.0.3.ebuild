@@ -11,7 +11,6 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm64 arm"
-IUSE="kevin-tpm2"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -22,11 +21,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	if use kevin-tpm2; then
-		doappid "{A00D6A7E-0E93-AA5A-13D1-A0E70DB80ED0}" "CHROMEBOOK"
-	else
-		doappid "{92A7272A-834A-47A3-9112-E8FD55831660}" "CHROMEBOOK" # kevin
-	fi
+	doappid "{92A7272A-834A-47A3-9112-E8FD55831660}" "CHROMEBOOK" # kevin
 
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
