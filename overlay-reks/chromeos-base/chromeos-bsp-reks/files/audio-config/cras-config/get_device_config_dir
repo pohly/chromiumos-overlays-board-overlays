@@ -3,13 +3,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-VPD_CACHE_FILE="/mnt/stateful_partition/unencrypted/cache/vpd/filtered.txt"
-SERIES="REKS1"
-if [ -e "${VPD_CACHE_FILE}" ]; then
-  CUSTOMIZATION_ID="$(sed -nre 's/^"customization_id"="(.+)"$/\1/p' \
-                      <"${VPD_CACHE_FILE}")"
-  if [ ! -z ${CUSTOMIZATION_ID} ]; then
-	SERIES="${CUSTOMIZATION_ID##*-}"
-  fi
-fi
-echo "/etc/cras/${SERIES}"
+CHASSIS="$(mosys platform chassis)"
+: "${CHASSIS:=REKS1}"
+echo "/etc/cras/${CHASSIS}"

@@ -3,10 +3,4 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-VPD_CACHE_FILE="/mnt/stateful_partition/unencrypted/cache/vpd/filtered.txt"
-if [ -e "${VPD_CACHE_FILE}" ]; then
-  CUSTOMIZATION_ID="$(sed -nre 's/^"customization_id"="(.+)"$/\1/p' \
-                      <"${VPD_CACHE_FILE}")"
-  SERIES="${CUSTOMIZATION_ID##*-}"
-fi
-echo "/etc/cras/${SERIES}"
+echo "/etc/cras/$(mosys platform chassis)"
