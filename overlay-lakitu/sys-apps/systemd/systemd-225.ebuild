@@ -383,10 +383,6 @@ multilib_src_install_all() {
 	# Lakitu: there is no VT so no need for getty on tty1
 	rm  -f "${D}"/etc/systemd/system/getty.target.wants/getty@tty1.service
 
-	# Lakitu: Install system-sysdaemons.slice
-	insinto "${unitdir}"
-	doins "${FILESDIR}"/system-sysdaemons.slice
-
 	# Lakitu: Install network files.
 	insinto /usr/lib/systemd/network
 	doins "${FILESDIR}"/*.network

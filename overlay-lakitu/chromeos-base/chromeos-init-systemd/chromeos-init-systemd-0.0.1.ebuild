@@ -22,6 +22,7 @@ RDEPEND="${DEPEND}
 	chromeos-base/vboot_reference
 	sys-apps/rootdev
 	sys-apps/systemd
+	sys-apps/system-sysdaemons
 "
 
 S="${WORKDIR}"
