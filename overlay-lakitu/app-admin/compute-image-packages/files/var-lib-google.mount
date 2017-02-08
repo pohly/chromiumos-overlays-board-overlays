@@ -8,7 +8,6 @@ What=/var/lib/google
 Where=/var/lib/google
 Type=none
 Options=bind
-Slice=system-sysdaemons.slice
 
 [Install]
 WantedBy=local-fs.target

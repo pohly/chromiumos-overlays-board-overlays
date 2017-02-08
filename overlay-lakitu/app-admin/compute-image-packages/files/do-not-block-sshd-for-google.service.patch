@@ -1,26 +1,14 @@
-From 4b4cfd70dbcb7b76ce3da0357f15629cb67025fb Mon Sep 17 00:00:00 2001
-From: Daniel Wang <wonderfly@google.com>
-Date: Thu, 2 Feb 2017 15:29:54 -0800
-Subject: [PATCH] systemd: Patch service files
+commit 8519613aa125e9ed843bc8298ea8e7c4e65095bd
+Author: Ke Wu <mikewu@google.com>
+Date:   Tue Nov 8 15:30:49 2016 -0800
 
-Specifically:
-  - Group all services from this package into system-sysdaemons.slice
-  - Ensure none of them blocks sshd.service
----
- google_compute_engine_init/systemd/google-accounts-daemon.service   | 2 +-
- google_compute_engine_init/systemd/google-clock-skew-daemon.service | 1 +
- google_compute_engine_init/systemd/google-instance-setup.service    | 6 +++---
- .../systemd/google-ip-forwarding-daemon.service                     | 1 +
- google_compute_engine_init/systemd/google-network-setup.service     | 5 +++--
- google_compute_engine_init/systemd/google-shutdown-scripts.service  | 5 +++--
- google_compute_engine_init/systemd/google-startup-scripts.service   | 5 +++--
- 7 files changed, 15 insertions(+), 10 deletions(-)
+    do not block sshd for google.service
 
 diff --git a/google_compute_engine_init/systemd/google-accounts-daemon.service b/google_compute_engine_init/systemd/google-accounts-daemon.service
-index 125e776..001107c 100644
+index 125e776..b5945ee 100644
 --- a/google_compute_engine_init/systemd/google-accounts-daemon.service
 +++ b/google_compute_engine_init/systemd/google-accounts-daemon.service
-@@ -1,12 +1,12 @@
+@@ -1,7 +1,6 @@
  [Unit]
  Description=Google Compute Engine Accounts Daemon
  After=network.target google-instance-setup.service google-network-setup.service
@@ -28,29 +16,11 @@ index 125e776..001107c 100644
  Requires=network.target
  
  [Service]
- Type=simple
- ExecStart=/usr/bin/google_accounts_daemon
-+Slice=system-sysdaemons.slice
- 
- [Install]
- WantedBy=multi-user.target
-diff --git a/google_compute_engine_init/systemd/google-clock-skew-daemon.service b/google_compute_engine_init/systemd/google-clock-skew-daemon.service
-index 476abde..4d4b217 100644
---- a/google_compute_engine_init/systemd/google-clock-skew-daemon.service
-+++ b/google_compute_engine_init/systemd/google-clock-skew-daemon.service
-@@ -6,6 +6,7 @@ Requires=network.target
- [Service]
- Type=simple
- ExecStart=/usr/bin/google_clock_skew_daemon
-+Slice=system-sysdaemons.slice
- 
- [Install]
- WantedBy=multi-user.target
 diff --git a/google_compute_engine_init/systemd/google-instance-setup.service b/google_compute_engine_init/systemd/google-instance-setup.service
-index afa639a..6f8f2c5 100644
+index afa639a..6db20e1 100644
 --- a/google_compute_engine_init/systemd/google-instance-setup.service
 +++ b/google_compute_engine_init/systemd/google-instance-setup.service
-@@ -1,12 +1,12 @@
+@@ -1,8 +1,7 @@
  [Unit]
  Description=Google Compute Engine Instance Setup
 -After=local-fs.target network-online.target network.target rsyslog.service
@@ -61,28 +31,11 @@ index afa639a..6f8f2c5 100644
  
  [Service]
  Type=oneshot
- ExecStart=/usr/bin/google_instance_setup
-+Slice=system-sysdaemons.slice
- 
- [Install]
- WantedBy=sshd.service
-diff --git a/google_compute_engine_init/systemd/google-ip-forwarding-daemon.service b/google_compute_engine_init/systemd/google-ip-forwarding-daemon.service
-index d3704c6..491a0b1 100644
---- a/google_compute_engine_init/systemd/google-ip-forwarding-daemon.service
-+++ b/google_compute_engine_init/systemd/google-ip-forwarding-daemon.service
-@@ -6,6 +6,7 @@ Requires=network.target
- [Service]
- Type=simple
- ExecStart=/usr/bin/google_ip_forwarding_daemon
-+Slice=system-sysdaemons.slice
- 
- [Install]
- WantedBy=multi-user.target
 diff --git a/google_compute_engine_init/systemd/google-network-setup.service b/google_compute_engine_init/systemd/google-network-setup.service
-index 4400391..abc0544 100644
+index 4400391..8e649bf 100644
 --- a/google_compute_engine_init/systemd/google-network-setup.service
 +++ b/google_compute_engine_init/systemd/google-network-setup.service
-@@ -1,13 +1,14 @@
+@@ -1,8 +1,8 @@
  [Unit]
  Description=Google Compute Engine Network Setup
 -After=local-fs.target network-online.target network.target rsyslog.service
@@ -93,14 +46,8 @@ index 4400391..abc0544 100644
  
  [Service]
  ExecStart=/usr/bin/google_network_setup
- KillMode=process
- Type=oneshot
-+Slice=system-sysdaemons.slice
- 
- [Install]
- WantedBy=multi-user.target
 diff --git a/google_compute_engine_init/systemd/google-shutdown-scripts.service b/google_compute_engine_init/systemd/google-shutdown-scripts.service
-index 3561089..9bad914 100644
+index 3561089..bd0b062 100644
 --- a/google_compute_engine_init/systemd/google-shutdown-scripts.service
 +++ b/google_compute_engine_init/systemd/google-shutdown-scripts.service
 @@ -1,8 +1,8 @@
@@ -114,19 +61,11 @@ index 3561089..9bad914 100644
  
  [Service]
  ExecStart=/bin/true
-@@ -10,6 +10,7 @@ ExecStop=/usr/bin/google_metadata_script_runner --script-type shutdown
- Type=oneshot
- RemainAfterExit=true
- TimeoutStopSec=0
-+Slice=system-sysdaemons.slice
- 
- [Install]
- WantedBy=multi-user.target
 diff --git a/google_compute_engine_init/systemd/google-startup-scripts.service b/google_compute_engine_init/systemd/google-startup-scripts.service
-index 9c04d79..05f4def 100644
+index 9c04d79..52ab35f 100644
 --- a/google_compute_engine_init/systemd/google-startup-scripts.service
 +++ b/google_compute_engine_init/systemd/google-startup-scripts.service
-@@ -1,13 +1,14 @@
+@@ -1,8 +1,8 @@
  [Unit]
  Description=Google Compute Engine Startup Scripts
 -After=local-fs.target network-online.target network.target rsyslog.service
@@ -137,12 +76,3 @@ index 9c04d79..05f4def 100644
  
  [Service]
  ExecStart=/usr/bin/google_metadata_script_runner --script-type startup
- KillMode=process
- Type=oneshot
-+Slice=system-sysdaemons.slice
- 
- [Install]
- WantedBy=multi-user.target
--- 
-2.11.0.483.g087da7b7c-goog
-
