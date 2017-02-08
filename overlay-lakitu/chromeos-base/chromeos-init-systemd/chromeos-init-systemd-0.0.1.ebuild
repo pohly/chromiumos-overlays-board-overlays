@@ -22,7 +22,6 @@ RDEPEND="${DEPEND}
 	chromeos-base/vboot_reference
 	sys-apps/rootdev
 	sys-apps/systemd
-	!chromeos-base/chromeos-init
 "
 
 S="${WORKDIR}"
