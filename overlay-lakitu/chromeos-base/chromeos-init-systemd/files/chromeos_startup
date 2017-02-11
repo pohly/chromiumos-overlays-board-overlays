@@ -115,6 +115,10 @@ if [ "$ROOTDEV_RET_CODE" = "0" -a "$ROOTDEV_TYPE" != "/dev/ram" ]; then
     exec clobber-state "keepimg"
   fi
 
+  # Make it a private mount so that mounts made inside /var and /home do not
+  # propagate here.
+  mount --make-private /mnt/stateful_partition
+
   # Mount the OEM partition.
   # mount_or_fail isn't used since this partition only has a filesystem
   # on some boards.
