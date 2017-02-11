@@ -3,3 +3,10 @@
 
 # Turn on the video cards this board uses.
 VIDEO_CARDS="mediatek powervr"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} device_tree hardfp kernel-3_18"
+USE="${USE} mosys_eventlog neon -opengl opengles"
+USE="${USE} watchdog"

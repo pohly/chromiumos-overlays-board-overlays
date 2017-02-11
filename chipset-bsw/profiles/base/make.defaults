@@ -1,1 +1,10 @@
-USE="kernel-3_18"
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} kernel-3_18"
+
+# Enable native one-copy texture upload.
+USE="${USE} native_gpu_memory_buffers"

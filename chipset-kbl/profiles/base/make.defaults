@@ -1,1 +1,13 @@
-USE="kernel-4_4"
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+LINUX_FIRMWARE="adsp_kbl"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} kernel-4_4"
+
+USE="${USE} dptf"
+
+USE="${USE} kbl_lpe intel_lpe"

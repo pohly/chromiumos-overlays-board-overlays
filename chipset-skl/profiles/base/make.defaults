@@ -1,1 +1,17 @@
-USE="kernel-3_18"
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+LINUX_FIRMWARE="i915_skl adsp_skl"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} kernel-3_18"
+
+USE="${USE} skl_lpe intel_lpe"
+
+# Disable ACPI AC device and use USB PD power supply driver
+USE="${USE} acpi_ac_off"
+
+# Enable native one-copy texture upload.
+USE="${USE} native_gpu_memory_buffers"
