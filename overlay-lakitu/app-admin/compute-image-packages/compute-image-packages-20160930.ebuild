@@ -34,6 +34,7 @@ python_prepare_all() {
 	epatch "${FILESDIR}/homedir-uid-fix.patch"
 	epatch "${FILESDIR}/do-not-block-sshd-for-google.service.patch"
 	epatch "${FILESDIR}/no-boto.patch"
+	epatch "${FILESDIR}/${PV}-improve-handling-retries-in-the-metadata-watcher.patch"
 	distutils-r1_python_prepare_all
 }
 
