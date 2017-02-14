@@ -28,7 +28,6 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	epatch "${FILESDIR}/metadata-watcher-no-infinite-loop.patch"
 	epatch "${FILESDIR}/execute-startup-scripts-from-var-lib-google.patch"
 	epatch "${FILESDIR}/set-ethtool-to-usr-sbin.patch"
 	epatch "${FILESDIR}/catch-read-only-root-fs.patch"
