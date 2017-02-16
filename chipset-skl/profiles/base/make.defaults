@@ -15,3 +15,5 @@ USE="${USE} acpi_ac_off"
 
 # Enable native one-copy texture upload.
 USE="${USE} native_gpu_memory_buffers"
+
+USE="${USE} vulkan"
