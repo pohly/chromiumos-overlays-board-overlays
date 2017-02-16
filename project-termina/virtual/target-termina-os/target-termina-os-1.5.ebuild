@@ -9,11 +9,12 @@ HOMEPAGE="http://dev.chromium.org/"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE=""
+IUSE="-runc"
 
 RDEPEND="
 	chromeos-base/chromeos-bsp-termina
 	chromeos-base/run_oci
+	runc? ( app-emulation/runc )
 	sys-apps/upstart
 	sys-auth/pambase
 	virtual/chromeos-bsp
