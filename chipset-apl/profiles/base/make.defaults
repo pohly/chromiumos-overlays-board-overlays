@@ -12,3 +12,5 @@ USE="${USE} kernel-4_4"
 USE="${USE} acpi_ac_off"
 
 USE="${USE} apl_lpe intel_lpe"
+
+USE="${USE} vulkan"
