@@ -28,3 +28,5 @@ X11Forwarding no
 # Compute times out connections after 10 minutes of inactivity.  Keep alive
 # ssh connections by sending a packet every 7 minutes.
 ClientAliveInterval 420
+
+AcceptEnv EDITOR LANG LC_ALL PAGER TZ
