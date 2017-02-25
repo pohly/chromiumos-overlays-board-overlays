@@ -1,0 +1,7 @@
+# This is a workaround for very long latencies from transitioning out of the
+# D3 power state for the eMMC host controller.  If we allow the host controller
+# to suspend, we will notice UI jank at times because the device will have to
+# resume from D3 and it can take over 100 milliseconds for the device to
+# complete an I/O request in that case.  The issue currently affects all
+# systems using the Sky Lake PCH.
+ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x8086", ATTR{device}=="0x9d2b", ATTR{power/control}="on""
