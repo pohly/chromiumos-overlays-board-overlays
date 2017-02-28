@@ -4,7 +4,7 @@
 EAPI=5
 
 DESCRIPTION="FPC test-only related binaries"
-SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/libfp-eve-${PV}.tbz2"
+SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/libfp-eve-test-${PV}.tbz2"
 
 LICENSE="Google-TOS"
 SLOT="0"
@@ -17,5 +17,5 @@ S=${WORKDIR}
 
 src_install() {
 	# These are prebuilt binaries
-	dobin usr/bin/int_test usr/bin/libfp_test
+	dobin release/usr/bin/int_test release/usr/bin/libfp_test debug/usr/bin/stt
 }
