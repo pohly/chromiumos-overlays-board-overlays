@@ -1,5 +1,6 @@
 [Unit]
 Description=Chromium OS startup script
+After=sys-kernel-debug.mount
 Before=local-fs-pre.target systemd-journald.service
 DefaultDependencies=no
 

@@ -34,9 +34,6 @@ src_install() {
 	# Install startup scripts.
 	dosbin "${FILESDIR}"/chromeos_startup
 	dosbin "${FILESDIR}"/chromeos_shutdown
-	dosbin "${FILESDIR}"/clobber-state
-	dosbin "${FILESDIR}"/clobber-log
-	dosbin "${FILESDIR}"/chromeos-boot-alert
 
 	systemd_dounit "${FILESDIR}"/chromeos-startup.service
 	systemd_enable_service sysinit.target chromeos-startup.service
@@ -45,8 +42,8 @@ src_install() {
 
 	systemd_newtmpfilesd "${FILESDIR}"/run-lock.tmpfiles run-lock.conf
 
-	insinto /usr/share/cros
-	doins "${FILESDIR}"/startup_utils.sh
+	insinto $(systemd_get_unitdir)/sys-kernel-debug.mount.d
+	newins "${FILESDIR}"/sys-kernel-debug-lakitu.conf lakitu.conf
 }
 
 pkg_preinst() {
