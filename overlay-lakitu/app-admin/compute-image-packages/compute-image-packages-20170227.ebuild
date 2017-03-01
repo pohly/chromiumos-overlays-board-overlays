@@ -28,13 +28,9 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	epatch "${FILESDIR}/execute-startup-scripts-from-var-lib-google.patch"
-	epatch "${FILESDIR}/set-ethtool-to-usr-sbin.patch"
-	epatch "${FILESDIR}/catch-read-only-root-fs.patch"
-	epatch "${FILESDIR}/homedir-uid-fix.patch"
-	epatch "${FILESDIR}/do-not-block-sshd-for-google.service.patch"
-	epatch "${FILESDIR}/no-boto.patch"
-	epatch "${FILESDIR}/${PV}-improve-handling-retries-in-the-metadata-watcher.patch"
+	epatch "${FILESDIR}/20170227-homedir-uid-fix.patch"
+	epatch "${FILESDIR}/20170227-do-not-block-sshd-for-google.service.patch"
+	epatch "${FILESDIR}/20170227-no-boto.patch"
 	distutils-r1_python_prepare_all
 }
 
@@ -62,4 +58,8 @@ python_install_all() {
 	# package (1.3.3).
 	exeinto /usr/share/google/
 	newexe ${FILESDIR}/1.3.3-get_metadata_value get_metadata_value
+
+	# Install distro specific default configuration.
+	insinto /etc/default/
+	newins "${FILESDIR}/20170227-instance_configs.cfg.distro" instance_configs.cfg.distro
 }

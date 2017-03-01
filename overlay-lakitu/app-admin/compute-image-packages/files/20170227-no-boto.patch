@@ -1,0 +1,26 @@
+From 5e87db8f024756bf15b4cad354bde30061ff97c4 Mon Sep 17 00:00:00 2001
+From: Aditya Kali <adityakali@google.com>
+Date: Tue, 28 Feb 2017 14:47:39 -0800
+Subject: [PATCH] 20170120-no-boto
+
+Remove boto dependendancy.
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 405682a..2ea27d9 100755
+--- a/setup.py
++++ b/setup.py
+@@ -25,7 +25,7 @@ setuptools.setup(
+     author_email='gc-team@google.com',
+     description='Google Compute Engine',
+     include_package_data=True,
+-    install_requires=['boto', 'setuptools'],
++    install_requires=['setuptools'],
+     license='Apache Software License',
+     long_description='Google Compute Engine guest environment.',
+     name='google-compute-engine',
+-- 
+2.11.0.483.g087da7b7c-goog
+
