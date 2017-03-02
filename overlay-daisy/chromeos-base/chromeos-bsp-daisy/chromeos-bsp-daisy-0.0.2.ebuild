@@ -16,13 +16,13 @@ DEPEND="
 	!<chromeos-base/chromeos-bsp-spring-private-0.0.1-r16
 	!<chromeos-base/chromeos-bsp-daisy-private-0.0.1-r27
 	!chromeos-base/light-sensor
+	!media-libs/media-rules
 "
 RDEPEND="${DEPEND}
 	skate? ( chromeos-base/chromeos-init chromeos-base/thermal )
 	snow? ( chromeos-base/chromeos-init chromeos-base/thermal )
 	spring? ( chromeos-base/chromeos-init chromeos-base/thermal )
 	chromeos-base/default-zram-size
-	media-libs/media-rules
 	media-libs/mfc-fw
 	sys-boot/exynos-pre-boot
 	x11-drivers/mali-rules
@@ -60,4 +60,8 @@ src_install() {
 	# Install platform specific upstart jobs
 	insinto /etc/init
 	doins "${FILESDIR}/send-asv-metrics.conf"
+
+	# Install platform specific triggers and udev rules for codecs.
+	doins "${FILESDIR}/udev-trigger-codec.conf"
+	udev_dorules "${FILESDIR}/50-media.rules"
 }
