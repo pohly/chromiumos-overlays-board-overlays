@@ -19,7 +19,6 @@ DEPEND=""
 RDEPEND="${DEPEND}
 	chromeos-base/chromeos-accelerometer-init
 	chromeos-base/chromeos-bsp-baseboard-oak
-	media-libs/media-rules
 	sys-apps/ethtool
 "
 

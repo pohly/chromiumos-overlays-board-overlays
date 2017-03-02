@@ -1,0 +1,11 @@
+ACTION!="add", GOTO="media_end"
+SUBSYSTEM!="video4linux", GOTO="media_end"
+
+# TODO(owenlin): Remove "video-dec" once all clients are updated and understand
+#                numbering.
+ATTR{name}=="mtk-vcodec-dec", SYMLINK+="video-dec video-dec0"
+ATTR{name}=="mtk-vcodec-enc", SYMLINK+="video-enc"
+ATTR{name}=="mtk-mdp:m2m", SYMLINK+="image-proc0"
+ATTR{name}=="mtk-jpeg-dec", SYMLINK+="jpeg-dec"
+
+LABEL="media_end"
