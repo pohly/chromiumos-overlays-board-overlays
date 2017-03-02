@@ -13,10 +13,11 @@ KEYWORDS="-* arm"
 IUSE="bluetooth cros_ec +veyron-brcmfmac-nvram"
 
 # Add dependencies on other ebuilds from within this board overlay
-DEPEND=""
+DEPEND="
+	!media-libs/media-rules
+	"
 RDEPEND="${DEPEND}
 	x11-drivers/mali-rules
-	media-libs/media-rules
 	bluetooth? ( net-wireless/broadcom )
 "
 
@@ -50,4 +51,9 @@ src_install() {
 		insinto "/lib/firmware/brcm"
 		doins "${FILESDIR}/firmware/brcmfmac4354-sdio.txt"
 	fi
+
+	# Install platform specific triggers and udev rules for codecs.
+	insinto "/etc/init"
+	doins "${FILESDIR}/udev-trigger-codec.conf"
+	udev_dorules "${FILESDIR}/50-media.rules"
 }
