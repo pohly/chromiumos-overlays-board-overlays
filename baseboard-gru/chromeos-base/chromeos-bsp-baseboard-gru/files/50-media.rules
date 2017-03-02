@@ -1,0 +1,10 @@
+ACTION!="add", GOTO="media_end"
+SUBSYSTEM!="video4linux", GOTO="media_end"
+
+# TODO(owenlin): Remove "video-dec" once all clients are updated and understand
+#                numbering.
+ATTR{name}=="rockchip,rk3399-vdec-dec", SYMLINK+="video-dec video-dec0"
+ATTR{name}=="rockchip,rk3399-vpu-dec", SYMLINK+="video-dec1"
+ATTR{name}=="rockchip,rk3399-vpu-enc", SYMLINK+="video-enc"
+
+LABEL="media_end"

@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid cros-audio-configs
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -15,7 +15,7 @@ S="${WORKDIR}"
 
 RDEPEND="
 	x11-drivers/mali-rules
-	media-libs/media-rules
+	!media-libs/media-rules
 	!<chromeos-base/chromeos-bsp-kevin-0.0.3
 "
 DEPEND="${RDEPEND}"
@@ -34,4 +34,9 @@ src_install() {
 	doins "${FILESDIR}/platform-cpusets.conf"
 	insinto "/opt/google/containers/android/vendor/etc/init/"
 	doins "${FILESDIR}/init.cpusets.rc"
+
+	# Install platform specific triggers and udev rules for codecs.
+	insinto "/etc/init"
+	doins "${FILESDIR}/udev-trigger-codec.conf"
+	udev_dorules "${FILESDIR}/50-media.rules"
 }
