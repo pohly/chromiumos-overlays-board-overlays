@@ -3,6 +3,8 @@
 
 EAPI=4
 
+inherit udev
+
 DESCRIPTION="Peach bsp (meta package to pull in driver/tool dependencies)"
 
 LICENSE="BSD-Google"
@@ -12,8 +14,15 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="
-	media-libs/media-rules
+	!media-libs/media-rules
 	x11-drivers/mali-rules
 "
 
 S="${WORKDIR}"
+
+src_install() {
+	# Install platform specific triggers and udev rules for codecs.
+	insinto "/etc/init"
+	doins "${FILESDIR}/udev-trigger-codec.conf"
+	udev_dorules "${FILESDIR}/50-media.rules"
+}
