@@ -19,7 +19,7 @@ RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-auron
 	chromeos-base/jabra-vold
 	media-libs/go2001-fw
-	media-libs/media-rules
+	media-libs/go2001-rules
 "
 DEPEND="${RDEPEND}"
 
