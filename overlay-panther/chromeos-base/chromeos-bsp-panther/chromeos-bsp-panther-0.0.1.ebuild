@@ -17,8 +17,6 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	chromeos-base/jabra-vold
-	media-libs/media-rules
-	media-libs/go2001-fw
 "
 
 DEPEND="${RDEPEND}"
