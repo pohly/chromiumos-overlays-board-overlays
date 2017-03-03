@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -19,9 +19,6 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	# Install workaround for b/35172923 disabling D3 on the mmc controller
-	udev_dorules "${FILESDIR}/99-disable-mmc-suspend.rules"
-
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
