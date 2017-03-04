@@ -15,7 +15,9 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND=""
+RDEPEND="
+	chromeos-base/chromeos-bsp-baseboard-reef
+"
 DEPEND="${RDEPEND}"
 
 src_install() {
