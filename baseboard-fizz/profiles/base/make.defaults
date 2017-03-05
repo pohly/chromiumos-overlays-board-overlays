@@ -2,10 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Per-project Commit Queue settings.
-# Documentation: http://goo.gl/5J7oND
+LINUX_FIRMWARE="iwlwifi-7265D iwlwifi-7265 ibt-hw"
 
-[GENERAL]
-
-# Board-specific pre-cq
-pre-cq-configs: fizz-pre-cq
+USE=""
+USE="${USE} -tpm tpm2"
