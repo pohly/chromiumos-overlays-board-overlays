@@ -15,9 +15,15 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND=""
+RDEPEND="
+	chromeos-base/chromeos-bsp-baseboard-reef
+"
 DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{533B7092-5828-48E6-9F77-C7ADCBF8F7E9}" "CHROMEBOOK"
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
 }
