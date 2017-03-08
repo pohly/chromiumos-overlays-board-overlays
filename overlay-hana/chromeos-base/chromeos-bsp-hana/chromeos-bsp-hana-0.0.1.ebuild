@@ -18,7 +18,7 @@ S="${WORKDIR}"
 DEPEND=""
 RDEPEND="${DEPEND}
 	chromeos-base/chromeos-accelerometer-init
-	media-libs/media-rules
+	chromeos-base/chromeos-bsp-baseboard-oak
 	sys-apps/ethtool
 "
 
