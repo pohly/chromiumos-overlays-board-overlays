@@ -1,2 +1,4 @@
-# Uncomment this line to activate the serial port.
+# Uncomment these lines to activate the serial port.
 TTY_CONSOLE="ttyS0"
+USE=""
+USE="${USE} pcserial"
