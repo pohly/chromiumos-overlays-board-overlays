@@ -8,6 +8,8 @@ LINUX_FIRMWARE="iwlwifi-all"
 # Initial value just for style purposes.
 USE=""
 
+USE="${USE} containers device_jail"
+
 USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_4"
 
 # Enable all optional features on generic overlays.

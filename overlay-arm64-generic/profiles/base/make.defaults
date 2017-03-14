@@ -1,9 +1,6 @@
 # Copyright 2015 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-# Enable a few more video cards as this is a generic board.
-VIDEO_CARDS="intel nouveau radeon"
-
 # Initial value just for style purposes.
 USE=""
 
