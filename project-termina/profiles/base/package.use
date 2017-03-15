@@ -1,0 +1,3 @@
+# Skip the large dbus libraries from libchrome
+chromeos-base/libchrome -dbus
+chromeos-base/libbrillo -dbus

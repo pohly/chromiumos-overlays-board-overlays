@@ -19,7 +19,6 @@ RDEPEND="
 	virtual/chromeos-bsp
 	virtual/implicit-system
 	virtual/linux-sources
-	virtual/udev
 "
 
 DEPEND="
