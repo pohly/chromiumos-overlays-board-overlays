@@ -2,5 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Placeholder for temporary device-specific overrides of settings in
-# make.defaults.
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} bob"
