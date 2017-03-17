@@ -1,0 +1,1 @@
+chromeos-bsp-nasher-0.0.1.ebuild
