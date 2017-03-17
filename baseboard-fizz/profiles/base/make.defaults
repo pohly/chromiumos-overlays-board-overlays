@@ -6,3 +6,5 @@ LINUX_FIRMWARE="iwlwifi-7265D iwlwifi-7265 ibt-hw"
 
 USE=""
 USE="${USE} -tpm tpm2"
+USE="${USE} arc"
+USE="${USE} cros_ec cr50_onboard"

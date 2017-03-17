@@ -1,0 +1,9 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+USE=""
+USE="${USE} -display_backlight legacy_keyboard legacy_power_button"
+USE="${USE} -subpixel_rendering wireless38"
+
+# WiFi and BT driver firmware
+LINUX_FIRMWARE="marvell-pcie8897 iwlwifi-7260 ibt-hw"
