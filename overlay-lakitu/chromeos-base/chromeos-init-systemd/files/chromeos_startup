@@ -11,11 +11,6 @@ bootstat pre-startup
 
 mount -o remount,noexec /dev/shm
 
-# CROS_DEBUG equals one if we've booted in developer mode or we've
-# booted a developer image.
-crossystem "cros_debug?1"
-CROS_DEBUG=$((! $?))
-
 # Prepare to mount stateful partition
 ROOT_DEV=$(rootdev -s)
 ROOTDEV_RET_CODE=$?
@@ -46,93 +41,4 @@ OEM_FLAGS="ro,nodev,noexec,nosuid"
 OEM_DEV=${ROOTDEV_TYPE}${PARTITION_NUM_OEM}
 mount -n -t ${FS_FORMAT_OEM} -o ${OEM_FLAGS} ${OEM_DEV} /usr/share/oem
 
-# Make sure unencrypted stateful partition has the needed common directories.
-# Any non-common directories should be created in the device implementation of
-# "mount_var_and_home_chronos".
-for d in home home/chronos home/root home/user \
-         unencrypted unencrypted/cache unencrypted/preserve; do
-  mkdir -p -m 0755 "/mnt/stateful_partition/${d}"
-done
-
-# Mount /home.  This mount inherits nodev,noexec,nosuid from
-# /mnt/stateful_partition above.
-mount --bind /mnt/stateful_partition/home /home
-
-# Binds mount /var and /home/chronos. All function arguments are ignored.
-mkdir -p /mnt/stateful_partition/var
-mount -n --bind /mnt/stateful_partition/var /var
-
-# /run is now tmpfs used for runtime data. Make sure /var/run and /var/lock
-# are sym links to /run and /run/lock respectively for backwards compatibility.
-rm -rf /var/run /var/lock
-ln -s /run /var/run
-ln -s /run/lock /var/lock
-
-# Make sure required /var subdirectories exist.
-mkdir -p -m 0755 /var/cache /var/db /var/empty /var/log/metrics \
-                 /var/spool /var/tmp /var/lib/misc
-
-# /var/tmp must be world-writable and sticky
-chmod 1777 /var/tmp
-# /home/root must be group-writable and sticky
-chmod 1771 /home/root
-# Selected directories must belong to the chronos user.
-chown chronos:chronos /home/chronos /var/log/metrics
-# rsyslog needs to be able to create new logfiles, but not delete other logs
-chgrp syslog /var/log
-chmod 1775 /var/log
-# /var/cache, /var/db, and /var/empty may already exist with wrong permissions.
-# Force the correct ones.
-chmod 0755 /var/cache /var/db /var/empty /var/spool /var/lib /var/lib/misc
-# Make sure the empty dir stays empty (only works on ext4).
-chattr +i /var/empty || :
-
-# Mount stateful partition for dev packages.
-if [ ${CROS_DEBUG} -eq 1 ]; then
-  # Set up the logging dir that ASAN compiled programs will write to.  We want
-  # any privileged account to be able to write here so unittests need not worry
-  # about settings things up ahead of time.  See crbug.com/453579 for details.
-  mkdir -p /var/log/asan
-  chmod 1777 /var/log/asan
-
-  # Capture a snapshot of "normal" mount state here, for auditability,
-  # before we start applying devmode-specific changes.
-  cat /proc/mounts > /var/log/mount_options.log
-  # Create dev_image directory in base images in developer mode.
-  if [ ! -d /mnt/stateful_partition/dev_image ]; then
-    mkdir -p -m 0755 /mnt/stateful_partition/dev_image
-  fi
-  # Mount and then remount to enable exec/suid.
-  mount --bind /mnt/stateful_partition/dev_image /usr/local
-  mount -n -o remount,exec,suid /usr/local
-
-  # Set up /var elements needed by gmerge.
-  # TODO(keescook) Use dev/test package installs instead of piling more
-  # things here (crosbug.com/14091).
-  BASE=/mnt/stateful_partition/var_overlay
-  if [ -d ${BASE} ]; then
-    # Keep this list in sync with the var_overlay elements in the DIRLIST
-    # found in chromeos-install from chromeos-base/chromeos-installer.
-    DIRLIST="
-      db/pkg
-      lib/portage
-    "
-    for DIR in ${DIRLIST}; do
-      if [ ! -d ${BASE}/${DIR} ]; then
-        continue
-      fi
-      DEST=/var/${DIR}
-      if [ -e ${DEST} ]; then
-        continue
-      fi
-      PARENT=$(dirname ${DEST})
-      mkdir -p ${PARENT}
-      ln -sf ${BASE}/${DIR} ${DEST}
-    done
-  fi
-fi
-
 bootstat post-startup
-
-# Always return success to avoid killing init
-exit 0

@@ -1,0 +1,13 @@
+[Unit]
+Description=/home
+Before=local-fs.target
+After=chromeos-startup.service
+
+[Mount]
+What=/mnt/stateful_partition/home
+Where=/home
+Type=none
+Options=bind
+
+[Install]
+WantedBy=local-fs.target

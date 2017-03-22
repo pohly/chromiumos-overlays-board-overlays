@@ -40,7 +40,12 @@ src_install() {
 	systemd_dounit "${FILESDIR}"/chromeos-shutdown.service
 	systemd_enable_service shutdown.target chromeos-shutdown.service
 
-	systemd_newtmpfilesd "${FILESDIR}"/run-lock.tmpfiles run-lock.conf
+	systemd_dounit "${FILESDIR}"/home.mount
+	systemd_enable_service local-fs.target home.mount
+	systemd_dounit "${FILESDIR}"/var.mount
+	systemd_enable_service local-fs.target var.mount
+
+	systemd_newtmpfilesd "${FILESDIR}"/chromeos-init.tmpfiles chromeos-init.conf
 
 	insinto $(systemd_get_unitdir)/sys-kernel-debug.mount.d
 	newins "${FILESDIR}"/sys-kernel-debug-lakitu.conf lakitu.conf

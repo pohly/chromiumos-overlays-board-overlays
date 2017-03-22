@@ -1,0 +1,13 @@
+[Unit]
+Description=/var
+Before=local-fs.target
+After=chromeos-startup.service
+
+[Mount]
+What=/mnt/stateful_partition/var
+Where=/var
+Type=none
+Options=bind
+
+[Install]
+WantedBy=local-fs.target

@@ -1,0 +1,21 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file
+
+# /run is now tmpfs used for runtime data. Make sure /var/run and /var/lock
+# are symlinks to /run and /run/lock respectively for backwards compatibility.
+d /run/lock 1777 - - - -
+L+ /var/run - - - - /run
+L+ /var/lock - - - - /run/lock
+
+# Make sure required /var subdirectories exist.
+d /var/db 0755 - - - -
+d /var/empty 0755 - - - -
+
+# Make sure the empty dir stays empty (only works on ext4).
+h /var/empty 0755 - - - +i
+
+# Selected directories must belong to the chronos user.
+d /home/chronos - chronos chronos - -
+d /var/log/metrics 0755 chronos chronos - -
+

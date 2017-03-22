@@ -1,0 +1,9 @@
+[Unit]
+Description=Mount /usr/local with 'exec,suid'
+DefaultDependencies=false
+After=usr-local.mount
+Before=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mount -o remount,exec,suid /usr/local

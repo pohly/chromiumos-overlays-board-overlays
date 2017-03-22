@@ -1,0 +1,18 @@
+# Mount and then remount to enable exec/suid.
+#  mount --bind /mnt/stateful_partition/dev_image /usr/local
+#  mount -n -o remount,exec,suid /usr/local
+
+[Unit]
+Description=/usr/local
+Requires=usr-local-remount.service
+Before=local-fs.target
+After=chromeos-startup.service
+
+[Mount]
+What=/mnt/stateful_partition/dev_image
+Where=/usr/local
+Type=none
+Options=bind
+
+[Install]
+WantedBy=local-fs.target
