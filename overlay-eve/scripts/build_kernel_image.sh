@@ -5,5 +5,6 @@
 # found in the LICENSE file.
 
 modify_kernel_command_line() {
-  echo "intel_idle.max_cstate=4" >> "$1"
+  # Limit to C1E due to b/35587084
+  echo "intel_idle.max_cstate=2" >> "$1"
 }
