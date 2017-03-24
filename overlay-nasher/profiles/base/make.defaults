@@ -5,6 +5,7 @@
 USE=""
 USE="${USE} arc"
 USE="${USE} nasher"
+USE="${USE} cros_ec"
 
 # Uncomment these lines to activate the serial port.
 # TTY_CONSOLE="ttyS0"
