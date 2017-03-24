@@ -1,0 +1,61 @@
+#!/bin/sh
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# A systemd unit generator that outputs .mount units for
+# /mnt/stateful_partition and /usr/share/oem.
+
+gen_stateful_partition_mount() {
+  local dev=$1
+  local fstype=$2
+  local output_dir=$3
+
+  local DIRTY_EXPIRE_CENTISECS=$(sysctl -n vm.dirty_expire_centisecs)
+  local COMMIT_INTERVAL=$(( DIRTY_EXPIRE_CENTISECS / 100 ))
+
+  echo "
+[Unit]
+Before=local-fs.target
+Requires=mnt-stateful_partition-make-private.service
+
+[Mount]
+What=${dev}
+Where=/mnt/stateful_partition
+Type=${fstype}
+Options=nodev,noexec,nosuid,commit=${COMMIT_INTERVAL}
+" > ${output_dir}/mnt-stateful_partition.mount
+}
+
+gen_oem_partition_mount() {
+  local dev=$1
+  local fstype=$2
+  local output_dir=$3
+
+  echo "
+[Unit]
+Before=local-fs.target
+
+[Mount]
+What=${dev}
+Where=/usr/share/oem
+Type=${fstype}
+Options=ro,nodev,noexec,nosuid
+" > ${output_dir}/usr-share-oem.mount
+}
+
+output_dir=$1/local-fs.target.wants
+mkdir ${output_dir}
+
+# Determine root device and the disk it's on.
+# E.g.: /dev/sda2 -> /dev/sda
+ROOTDEV=$(rootdev -s | sed 's/[0-9_]*$//')
+
+# Load the image settings.
+. "/usr/sbin/write_gpt.sh"
+load_base_vars
+
+gen_stateful_partition_mount "${ROOTDEV}${PARTITION_NUM_STATE}" \
+  "${FS_FORMAT_STATE}" "${output_dir}"
+gen_oem_partition_mount "${ROOTDEV}${PARTITION_NUM_OEM}" "${FS_FORMAT_OEM}" \
+  "${output_dir}"

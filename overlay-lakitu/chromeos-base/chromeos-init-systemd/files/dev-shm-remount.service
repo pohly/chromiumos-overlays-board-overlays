@@ -1,0 +1,8 @@
+[Unit]
+Description=Mount /dev/shm with 'noexec'
+DefaultDependencies=false
+Before=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mount -o remount,noexec /dev/shm

@@ -1,0 +1,9 @@
+[Unit]
+Description=Make /mnt/stateful_partition private
+DefaultDependencies=false
+After=mnt-stateful_partition.mount
+Before=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mount --make-private /mnt/stateful_partition

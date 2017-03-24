@@ -17,7 +17,6 @@ IUSE=""
 
 # vboot_reference for crossystem
 RDEPEND="${DEPEND}
-	chromeos-base/bootstat
 	chromeos-base/chromeos-installer
 	chromeos-base/vboot_reference
 	sys-apps/rootdev
@@ -31,12 +30,7 @@ src_install() {
 	# We want /sbin, not /usr/sbin, etc.
 	into /
 
-	# Install startup scripts.
-	dosbin "${FILESDIR}"/chromeos_startup
 	dosbin "${FILESDIR}"/chromeos_shutdown
-
-	systemd_dounit "${FILESDIR}"/chromeos-startup.service
-	systemd_enable_service sysinit.target chromeos-startup.service
 	systemd_dounit "${FILESDIR}"/chromeos-shutdown.service
 	systemd_enable_service shutdown.target chromeos-shutdown.service
 
@@ -44,11 +38,17 @@ src_install() {
 	systemd_enable_service local-fs.target home.mount
 	systemd_dounit "${FILESDIR}"/var.mount
 	systemd_enable_service local-fs.target var.mount
+	systemd_dounit "${FILESDIR}"/mnt-stateful_partition-make-private.service
+	systemd_dounit "${FILESDIR}"/dev-shm-remount.service
+	systemd_enable_service local-fs.target dev-shm-remount.service
 
 	systemd_newtmpfilesd "${FILESDIR}"/chromeos-init.tmpfiles chromeos-init.conf
 
 	insinto $(systemd_get_unitdir)/sys-kernel-debug.mount.d
 	newins "${FILESDIR}"/sys-kernel-debug-lakitu.conf lakitu.conf
+
+	exeinto $(systemd_get_unitdir)-generators
+	doexe "${FILESDIR}"/chromeos-mount-generator
 }
 
 pkg_preinst() {

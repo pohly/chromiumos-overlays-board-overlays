@@ -1,7 +1,7 @@
 [Unit]
 Description=/var
 Before=local-fs.target
-After=chromeos-startup.service
+After=mnt-stateful_partition-make-private.service
 
 [Mount]
 What=/mnt/stateful_partition/var
