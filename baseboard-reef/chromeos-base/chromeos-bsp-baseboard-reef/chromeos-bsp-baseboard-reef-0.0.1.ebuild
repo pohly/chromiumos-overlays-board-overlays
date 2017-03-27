@@ -19,8 +19,3 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
-src_install() {
-  # Install platform specific config files for power_manager.
-  insinto "/usr/share/power_manager/board_specific"
-  doins "${FILESDIR}"/powerd_prefs/*
-}
