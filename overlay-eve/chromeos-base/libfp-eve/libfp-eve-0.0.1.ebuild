@@ -15,6 +15,6 @@ S=${WORKDIR}
 
 src_install() {
 	exeinto /opt/fpc/lib
-	doexe release/usr/lib/libfp.so.0
+	doexe Debug/usr/lib/libfp.so.0
 	dosym libfp.so.0 /opt/fpc/lib/libfp.so
 }

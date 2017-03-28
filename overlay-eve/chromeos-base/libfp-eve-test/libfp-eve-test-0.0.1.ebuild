@@ -17,5 +17,5 @@ S=${WORKDIR}
 
 src_install() {
 	# These are prebuilt binaries
-	dobin release/usr/bin/int_test release/usr/bin/libfp_test debug/usr/bin/stt
+	dobin Debug/usr/bin/int_test Debug/usr/bin/libfp_test Debug/usr/bin/stt Debug/usr/sbin/fptest
 }
