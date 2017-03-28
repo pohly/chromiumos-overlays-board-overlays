@@ -14,10 +14,13 @@ gen_stateful_partition_mount() {
   local DIRTY_EXPIRE_CENTISECS=$(sysctl -n vm.dirty_expire_centisecs)
   local COMMIT_INTERVAL=$(( DIRTY_EXPIRE_CENTISECS / 100 ))
 
+  local FSCK_SERVICE="systemd-fsck@$(systemd-escape ${dev#/}).service"
+
   echo "
 [Unit]
 Before=local-fs.target
-Requires=mnt-stateful_partition-make-private.service
+After=${FSCK_SERVICE}
+Requires=mnt-stateful_partition-make-private.service ${FSCK_SERVICE}
 
 [Mount]
 What=${dev}
