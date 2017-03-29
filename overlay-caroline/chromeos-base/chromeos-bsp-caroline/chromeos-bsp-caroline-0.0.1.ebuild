@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid cros-audio-configs
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -28,6 +28,10 @@ src_install() {
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
+
+	# Install udev rules telling powerd not to inhibit the internal keyboard in
+	# tablet mode.
+	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 
 	# Install audio configs.
 	local audio_config_dir="${FILESDIR}/audio-config"
