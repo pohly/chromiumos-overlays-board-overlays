@@ -3,6 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+set -eu
+
 AUTH_DATA="$(curl -s -f -m 10 "http://metadata/computeMetadata/v1/instance/service-accounts/default/token" \
   -H "Metadata-Flavor: Google")"
 R=$?
@@ -23,14 +25,18 @@ if [ -z "${AUTH}" ]; then
   exit 1
 fi
 
-cat > ~/.dockercfg <<EOF
+D="${HOME}/.docker"
+mkdir -p "${D}"
+cat > "${D}/config.json" <<EOF
 {
- "https://container.cloud.google.com":{"email": "not@val.id","auth": "${AUTH}"},
- "https://gcr.io":{"email": "not@val.id","auth": "${AUTH}"},
- "https://b.gcr.io":{"email": "not@val.id","auth": "${AUTH}"},
- "https://us.gcr.io":{"email": "not@val.id","auth": "${AUTH}"},
- "https://eu.gcr.io":{"email": "not@val.id","auth": "${AUTH}"},
- "https://asia.gcr.io":{"email": "not@val.id","auth": "${AUTH}"},
- "https://beta.gcr.io":{"email": "not@val.id","auth": "${AUTH}"}
+ "auths":{
+  "https://container.cloud.google.com":{"auth": "${AUTH}"},
+  "https://gcr.io":{"auth": "${AUTH}"},
+  "https://b.gcr.io":{"auth": "${AUTH}"},
+  "https://us.gcr.io":{"auth": "${AUTH}"},
+  "https://eu.gcr.io":{"auth": "${AUTH}"},
+  "https://asia.gcr.io":{"auth": "${AUTH}"},
+  "https://beta.gcr.io":{"auth": "${AUTH}"}
+ }
 }
 EOF
