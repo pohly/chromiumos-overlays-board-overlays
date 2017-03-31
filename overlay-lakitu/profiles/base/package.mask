@@ -1,2 +1,5 @@
 # This is needed to make sure we use lakitu version of systemd.
 >=sys-apps/systemd-226
+
+# Don't use the chromiumos-overlay version of runc.
+app-emulation/runc::chromiumos
