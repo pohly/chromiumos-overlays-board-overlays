@@ -1,0 +1,66 @@
+From e9b728f69c4e86a0341f10eb6107ad01a6542018 Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Wed, 29 Mar 2017 16:54:42 -0700
+Subject: [PATCH] cross-compiler patch
+
+---
+ hack/make/.binary     | 8 ++++----
+ hack/make/.go-autogen | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/hack/make/.binary b/hack/make/.binary
+index f5c35c3b7..78a6999f4 100644
+--- a/hack/make/.binary
++++ b/hack/make/.binary
+@@ -10,9 +10,9 @@ source "${MAKEDIR}/.go-autogen"
+ (
+ export GOGC=${DOCKER_BUILD_GOGC:-1000}
+ 
+-if [ "$(go env GOOS)/$(go env GOARCH)" != "$(go env GOHOSTOS)/$(go env GOHOSTARCH)" ]; then
++if [ "$($GO env GOOS)/$($GO env GOARCH)" != "$($GO env GOHOSTOS)/$($GO env GOHOSTARCH)" ]; then
+ 	# must be cross-compiling!
+-	case "$(go env GOOS)/$(go env GOARCH)" in
++	case "$($GO env GOOS)/$($GO env GOARCH)" in
+ 		windows/amd64)
+ 			export CC=x86_64-w64-mingw32-gcc
+ 			export CGO_ENABLED=1
+@@ -20,7 +20,7 @@ if [ "$(go env GOOS)/$(go env GOARCH)" != "$(go env GOHOSTOS)/$(go env GOHOSTARC
+ 	esac
+ fi
+ 
+-if [ "$IAMSTATIC" == "true" ] && [ "$(go env GOHOSTOS)" == "linux" ]; then
++if [ "$IAMSTATIC" == "true" ] && [ "$($GO env GOHOSTOS)" == "linux" ]; then
+ 	if  [ "${GOOS}/${GOARCH}" == "darwin/amd64" ]; then
+ 		export CGO_ENABLED=1
+ 		export CC=o64-clang
+@@ -32,7 +32,7 @@ if [ "$IAMSTATIC" == "true" ] && [ "$(go env GOHOSTOS)" == "linux" ]; then
+ fi
+ 
+ echo "Building: $DEST/$BINARY_FULLNAME"
+-go build \
++$GO build \
+ 	-o "$DEST/$BINARY_FULLNAME" \
+ 	"${BUILDFLAGS[@]}" \
+ 	-ldflags "
+diff --git a/hack/make/.go-autogen b/hack/make/.go-autogen
+index 4d26052bb..02bf7c638 100644
+--- a/hack/make/.go-autogen
++++ b/hack/make/.go-autogen
+@@ -40,12 +40,12 @@ const (
+ DVEOF
+ 
+ # Compile the Windows resources into the sources
+-if [ "$(go env GOOS)" = "windows" ]; then
++if [ "$($GO env GOOS)" = "windows" ]; then
+ 	mkdir -p autogen/winresources/tmp autogen/winresources/docker autogen/winresources/dockerd
+ 	cp hack/make/.resources-windows/resources.go autogen/winresources/docker/
+ 	cp hack/make/.resources-windows/resources.go autogen/winresources/dockerd/
+ 
+-	if [ "$(go env GOHOSTOS)" == "windows" ]; then
++	if [ "$($GO env GOHOSTOS)" == "windows" ]; then
+ 		WINDRES=windres
+ 		WINDMC=windmc
+ 	else
+-- 
+2.12.2.564.g063fe858b8-goog
+

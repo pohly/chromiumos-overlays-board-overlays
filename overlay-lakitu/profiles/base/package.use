@@ -34,3 +34,6 @@ sys-apps/systemd sysv-utils
 
 # Disable systemd-logind session tracker
 sys-auth/pambase -systemd
+
+# Docker uses tini, so this should be static
+sys-process/tini static

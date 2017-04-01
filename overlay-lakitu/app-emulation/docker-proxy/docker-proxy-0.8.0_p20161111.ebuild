@@ -1,7 +1,10 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
+
+inherit eutils golang-base
+
 EGO_PN="github.com/docker/libnetwork"
 
 if [[ ${PV} == *9999 ]]; then
@@ -9,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 else
 	EGIT_COMMIT="57be722e077059d1ee0539be31743a3642ccbeb3"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~*"
+	KEYWORDS="*"
 	inherit golang-vcs-snapshot
 fi
 
@@ -25,7 +28,9 @@ S=${WORKDIR}/${P}/src/${EGO_PN}
 RDEPEND="!<app-emulation/docker-1.13.0_rc1"
 
 src_compile() {
-	GOPATH="${WORKDIR}/${P}:$(get_golibdir_gopath)" go build -o "bin/docker-proxy" ./cmd/proxy || die
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
+	GOPATH="${WORKDIR}/${P}:$(get_golibdir_gopath)" ${GO} build -o "bin/docker-proxy" ./cmd/proxy || die
 }
 
 src_install() {

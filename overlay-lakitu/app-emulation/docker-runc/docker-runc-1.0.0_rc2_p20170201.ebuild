@@ -1,7 +1,10 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
+
+inherit eutils multilib
+
 EGO_PN="github.com/docker/${PN/docker-}"
 
 if [[ ${PV} == *9999 ]]; then
@@ -11,7 +14,7 @@ else
 	EGIT_COMMIT="9df8b306d01f59d3a8029be411de015b7304dd8f"
 	RUNC_COMMIT="9df8b3" # Change this when you update the ebuild
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~*"
+	KEYWORDS="*"
 	inherit golang-vcs-snapshot
 fi
 
@@ -32,6 +35,10 @@ S=${WORKDIR}/${P}/src/${EGO_PN}
 
 RESTRICT="test"
 
+src_prepare() {
+	epatch "${FILESDIR}/1.0.0_rc2_p20170201-use-GO-cross-compiler.patch"
+}
+
 src_compile() {
 	# Taken from app-emulation/docker-1.7.0-r1
 	export CGO_CFLAGS="-I${ROOT}/usr/include"
@@ -44,12 +51,15 @@ src_compile() {
 	ln -sf ../../../.. .gopath/src/"${GITHUB_URI}"
 	export GOPATH="${PWD}/.gopath:${PWD}/vendor"
 
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
 	# build up optional flags
 	local options=(
 		$(usex apparmor 'apparmor')
 		$(usex seccomp 'seccomp')
 	)
 
+	export PKG_CONFIG_PATH="${ROOT}/usr/$(get_libdir)/pkgconfig"
 	emake BUILDTAGS="${options[*]}" \
 		COMMIT="${RUNC_COMMIT}"
 }

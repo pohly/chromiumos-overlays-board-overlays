@@ -1,7 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
 
 EGO_PN="github.com/docker/docker"
 
@@ -15,7 +15,7 @@ else
 	DOCKER_GITCOMMIT="092cba3"
 	EGIT_COMMIT="v${MY_PV}"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~*"
+	KEYWORDS="*"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
 	inherit golang-vcs-snapshot
 fi
@@ -33,14 +33,12 @@ CDEPEND="
 	device-mapper? (
 		>=sys-fs/lvm2-2.02.89[thin]
 	)
-	seccomp? ( >=sys-libs/libseccomp-2.2.1 )
-	apparmor? ( sys-libs/libapparmor )
+	seccomp? ( >=sys-libs/libseccomp-2.2.1[static-libs] )
+	apparmor? ( sys-libs/libapparmor[static-libs] )
 "
 
 DEPEND="
 	${CDEPEND}
-
-	dev-go/go-md2man
 
 	btrfs? (
 		>=sys-fs/btrfs-progs-3.16.1
@@ -109,10 +107,6 @@ ERROR_CGROUP_PERF="CONFIG_CGROUP_PERF: is optional for container statistics gath
 ERROR_CFS_BANDWIDTH="CONFIG_CFS_BANDWIDTH: is optional for container statistics gathering"
 ERROR_XFRM_ALGO="CONFIG_XFRM_ALGO: is optional for secure networks"
 ERROR_XFRM_USER="CONFIG_XFRM_USER: is optional for secure networks"
-
-PATCHES=(
-	"${FILESDIR}"/${PV}-split-openrc-log.patch
-)
 
 pkg_setup() {
 	if kernel_is lt 3 10; then
@@ -198,6 +192,14 @@ pkg_setup() {
 	enewgroup docker
 }
 
+src_prepare() {
+	epatch "${FILESDIR}/docker-${PV}-cross-compile.patch"
+	epatch "${FILESDIR}/docker-${PV}-split-openrc-log.patch"
+	epatch "${FILESDIR}/docker-${PV}-forgiving-tini-output.patch"
+	# allow user patches (use sparingly - upstream won't support them)
+	epatch_user
+}
+
 src_compile() {
 	export GOPATH="${WORKDIR}/${P}:${PWD}/vendor"
 
@@ -235,11 +237,16 @@ src_compile() {
 		fi
 	done
 
+	export PKG_CONFIG_PATH="${ROOT}/usr/$(get_libdir)/pkgconfig"
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
+	echo "GO compiler '${GO}'"
 	# time to build!
 	./hack/make.sh dynbinary || die 'dynbinary failed'
 
-	# build the man pages too
-	./man/md2man-all.sh || die "unable to generate man pages"
+	# Don't build the man pages for lakitu. This also helps us avoid the
+	# dependency on dev-go/go-md2man.
+	# ./man/md2man-all.sh || die "unable to generate man pages"
 }
 
 src_install() {
@@ -254,26 +261,36 @@ src_install() {
 	newinitd contrib/init/openrc/docker.initd docker
 	newconfd contrib/init/openrc/docker.confd docker
 
-	systemd_dounit contrib/init/systemd/docker.{service,socket}
+	systemd_dounit contrib/init/systemd/docker.socket
+	systemd_newunit "${FILESDIR}/docker-${PV}.service" docker.service
+	systemd_enable_service sockets.target docker.socket
+	systemd_enable_service multi-user.target docker.service
 
 	udev_dorules contrib/udev/*.rules
 
 	dodoc AUTHORS CONTRIBUTING.md CHANGELOG.md NOTICE README.md
-	dodoc -r docs/*
-	doman man/man*/*
+	# No need to install development related tools on Lakitu.
+	# dodoc -r docs/*
+	# doman man/man*/*
 
-	dobashcomp contrib/completion/bash/*
+	# dobashcomp contrib/completion/bash/*
 
-	insinto /usr/share/zsh/site-functions
-	doins contrib/completion/zsh/_*
+	# insinto /usr/share/zsh/site-functions
+	# doins contrib/completion/zsh/_*
 
-	insinto /usr/share/vim/vimfiles
-	doins -r contrib/syntax/vim/ftdetect
-	doins -r contrib/syntax/vim/syntax
+	# insinto /usr/share/vim/vimfiles
+	# doins -r contrib/syntax/vim/ftdetect
+	# doins -r contrib/syntax/vim/syntax
 
 	# note: intentionally not using "doins" so that we preserve +x bits
 	dodir /usr/share/${PN}/contrib
 	cp -R contrib/* "${ED}/usr/share/${PN}/contrib"
+
+	# Install the dockercfg_update.sh script which allows docker
+	# to access the convoy registry. The script is taken from
+	# https://storage.googleapis.com/speckle-umbrella/bin/dockercfg-update.sh.
+	exeinto /usr/share/google
+	doexe "${FILESDIR}"/dockercfg_update.sh
 }
 
 pkg_postinst() {

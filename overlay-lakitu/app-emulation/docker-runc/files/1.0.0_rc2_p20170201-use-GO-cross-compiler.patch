@@ -1,0 +1,66 @@
+From af9e7eb4f93b2c1a654fbc2338dc0f8fc75e89d0 Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Fri, 31 Mar 2017 16:59:07 -0700
+Subject: [PATCH] Use corss compiler
+
+---
+ Makefile | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 779be92..9e5a482 100644
+--- a/Makefile
++++ b/Makefile
+@@ -27,10 +27,10 @@ VERSION := ${shell cat ./VERSION}
+ SHELL := $(shell command -v bash 2>/dev/null)
+ 
+ all: $(RUNC_LINK)
+-	go build -i -ldflags "-X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -tags "$(BUILDTAGS)" -o runc .
++	${GO} build -i -ldflags "-X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -tags "$(BUILDTAGS)" -o runc .
+ 
+ static: $(RUNC_LINK)
+-	CGO_ENABLED=1 go build -i -tags "$(BUILDTAGS) cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -o runc .
++	CGO_ENABLED=1 ${GO} build -i -tags "$(BUILDTAGS) cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -o runc .
+ 
+ release: $(RUNC_LINK)
+ 	@flag_list=(seccomp selinux apparmor static ambient); \
+@@ -55,7 +55,7 @@ release: $(RUNC_LINK)
+ 		}; \
+ 		echo "Building target: $$output"; \
+ 		rm -rf "${GOPATH}/pkg"; \
+-		go build -i -ldflags "$$ldflags" -tags "$$tags" -o "$$output" .; \
++		${GO} build -i -ldflags "$$ldflags" -tags "$$tags" -o "$$output" .; \
+ 	done
+ 
+ $(RUNC_LINK):
+@@ -65,8 +65,8 @@ dbuild: runcimage
+ 	docker run --rm -v $(CURDIR):/go/src/$(PROJECT) --privileged $(RUNC_IMAGE) make
+ 
+ lint:
+-	go vet ./...
+-	go fmt ./...
++	${GO} vet ./...
++	${GO} fmt ./...
+ 
+ man:
+ 	man/md2man-all.sh
+@@ -84,7 +84,7 @@ unittest: runcimage
+ 	docker run -e TESTFLAGS -ti --privileged --rm -v $(CURDIR):/go/src/$(PROJECT) $(RUNC_IMAGE) make localunittest
+ 
+ localunittest: all
+-	go test -timeout 3m -tags "$(BUILDTAGS)" ${TESTFLAGS} -v ./...
++	${GO} test -timeout 3m -tags "$(BUILDTAGS)" ${TESTFLAGS} -v ./...
+ 
+ integration: runcimage
+ 	docker run -e TESTFLAGS -t --privileged --rm -v $(CURDIR):/go/src/$(PROJECT) $(RUNC_IMAGE) make localintegration
+@@ -119,6 +119,6 @@ clean:
+ 
+ validate:
+ 	script/validate-gofmt
+-	go vet ./...
++	${GO} vet ./...
+ 
+ ci: validate localtest
+-- 
+2.12.2.564.g063fe858b8-goog
+

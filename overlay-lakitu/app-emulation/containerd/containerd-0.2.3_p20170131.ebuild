@@ -1,7 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
 EGO_PN="github.com/docker/${PN}"
 
 inherit toolchain-funcs
@@ -12,7 +12,7 @@ else
 	MY_PV="${PV/_/-}"
 	EGIT_COMMIT="aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~*"
+	KEYWORDS="*"
 	inherit golang-vcs-snapshot
 fi
 
@@ -29,9 +29,15 @@ RDEPEND=">=app-emulation/docker-runc-1.0.0_rc2
 
 S=${WORKDIR}/${P}/src/${EGO_PN}
 
+src_prepare() {
+	epatch "${FILESDIR}/0.2.3_p20170131-use-GO-cross-compiler.patch"
+}
+
 src_compile() {
 	local options=( $(usex seccomp "seccomp") )
 	export GOPATH="${WORKDIR}/${P}" # ${PWD}/vendor
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
 	LDFLAGS=$(usex hardened '-extldflags -fno-PIC' '') emake GIT_COMMIT="$EGIT_COMMIT" BUILDTAGS="${options[@]}"
 }
 
