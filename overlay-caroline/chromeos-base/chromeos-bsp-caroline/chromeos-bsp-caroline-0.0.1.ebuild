@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
+IUSE="caroline-userdebug"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -23,7 +23,11 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{C166AF52-7EE9-4F08-AAA7-B4B895A9F336}" "CHROMEBOOK"
+	if use caroline-userdebug; then
+		doappid "{D5CF3BCD-7093-49E6-8E31-0990E21730F8}" "CHROMEBOOK"
+	else
+		doappid "{C166AF52-7EE9-4F08-AAA7-B4B895A9F336}" "CHROMEBOOK"
+	fi
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
