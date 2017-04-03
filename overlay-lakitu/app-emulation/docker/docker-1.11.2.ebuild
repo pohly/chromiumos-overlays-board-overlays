@@ -174,6 +174,8 @@ src_prepare() {
 	epatch "${FILESDIR}/docker-1.11.1-cross-compile.patch"
 	epatch "${FILESDIR}/docker-1.11.2-docker-containerd.patch"
 	epatch "${FILESDIR}/docker-1.11.2-go-patricia-update.patch"
+	epatch --directory=vendor/src/golang.org/x/oauth2 "${FILESDIR}/oauth-HOME-fix.patch"
+	epatch "${FILESDIR}/docker-1.11.2-gcplogs-forcibly-set-HOME.patch"
 	# allow user patches (use sparingly - upstream won't support them)
 	epatch_user
 }

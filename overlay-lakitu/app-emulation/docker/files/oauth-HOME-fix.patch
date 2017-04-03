@@ -1,0 +1,42 @@
+From 96382aa079b72d8c014eb0c50f6c223d1e6a2de0 Mon Sep 17 00:00:00 2001
+From: Akihiro Suda <suda.kyoto@gmail.com>
+Date: Tue, 13 Dec 2016 06:27:07 +0000
+Subject: [PATCH] google: prefer os.Getenv("HOME") over os/user.Current() so as
+ to avoid SEGV
+
+Due to an issue in handling thread-local storages, os/user can lead to SEGV
+when glibc is statically linked with.
+
+So we prefer os.Getenv("HOME") for guessing where is the home directory.
+
+See also: golang/go#13470
+
+Change-Id: I1046ff93a71aa3b11299f7e6cf65ff7b1fb07eb9
+Reviewed-on: https://go-review.googlesource.com/34175
+Reviewed-by: Brad Fitzpatrick <bradfitz@golang.org>
+---
+ google/sdk.go | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/google/sdk.go b/google/sdk.go
+index d29a3bb..bdc1808 100644
+--- a/google/sdk.go
++++ b/google/sdk.go
+@@ -160,9 +160,13 @@ var sdkConfigPath = func() (string, error) {
+ }
+ 
+ func guessUnixHomeDir() string {
+-	usr, err := user.Current()
+-	if err == nil {
+-		return usr.HomeDir
++	// Prefer $HOME over user.Current due to glibc bug: golang.org/issue/13470
++	if v := os.Getenv("HOME"); v != "" {
++		return v
+ 	}
+-	return os.Getenv("HOME")
++	// Else, fall back to user.Current:
++	if u, err := user.Current(); err == nil {
++		return u.HomeDir
++	}
++	return ""
+ }
