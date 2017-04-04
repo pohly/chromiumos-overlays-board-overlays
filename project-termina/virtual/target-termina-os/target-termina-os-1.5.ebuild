@@ -13,7 +13,7 @@ IUSE=""
 
 RDEPEND="
 	chromeos-base/chromeos-bsp-termina
-	chromeos-base/container_utils
+	chromeos-base/run_oci
 	sys-apps/upstart
 	sys-auth/pambase
 	virtual/chromeos-bsp
