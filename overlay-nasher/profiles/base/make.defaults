@@ -6,6 +6,9 @@ USE=""
 USE="${USE} arc"
 USE="${USE} nasher"
 
+# Avoid inhibiting the keyboard (which reports events from side buttons).
+USE="${USE} keyboard_includes_side_buttons"
+
 # Uncomment these lines to activate the serial port.
 # TTY_CONSOLE="ttyS0"
 # USE="${USE} pcserial"
