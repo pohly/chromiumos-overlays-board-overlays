@@ -1,0 +1,1 @@
+KUBELET_OPTS="--manifest-url=http://metadata.google.internal/computeMetadata/v1/instance/attributes/google-container-manifest --manifest-url-header=Metadata-Flavor:Google --config=/etc/kubernetes/manifests"

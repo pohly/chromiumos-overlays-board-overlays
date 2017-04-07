@@ -1,0 +1,14 @@
+[Unit]
+Description=Kubernetes kubelet
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=always
+RestartSec=10
+EnvironmentFile=/etc/default/kubelet
+ExecStartPre=/bin/mkdir -p /etc/kubernetes/manifests
+ExecStart=/usr/bin/kubelet $KUBELET_OPTS
+
+[Install]
+WantedBy=multi-user.target
