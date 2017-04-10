@@ -6,3 +6,4 @@
 USE=""
 
 USE="${USE} bob"
+USE="${USE} arc"

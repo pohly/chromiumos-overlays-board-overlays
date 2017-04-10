@@ -6,6 +6,7 @@
 USE=""
 
 USE="${USE} gru"
+USE="${USE} arc"
 
 # All firmwares to build from the EC code base
 EC_FIRMWARE="gru"
