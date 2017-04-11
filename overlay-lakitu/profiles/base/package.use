@@ -31,3 +31,6 @@ net-analyzer/netcat -crypt
 
 # Enable 'poweroff', 'reboot' and other similar commands that control init.
 sys-apps/systemd sysv-utils
+
+# Disable systemd-logind session tracker
+sys-auth/pambase -systemd
