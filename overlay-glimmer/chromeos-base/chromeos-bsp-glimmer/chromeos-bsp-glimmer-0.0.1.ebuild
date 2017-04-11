@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev cros-audio-configs
+inherit appid cros-audio-configs
 
 DESCRIPTION="Glimmer private bsp (meta package to pull in driver/tool deps)"
 
@@ -28,7 +28,6 @@ src_install() {
 	fi
 
 	# Install platform specific config files for power_manager.
-	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 

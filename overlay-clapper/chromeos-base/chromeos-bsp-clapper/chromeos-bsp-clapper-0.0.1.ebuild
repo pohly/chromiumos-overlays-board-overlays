@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev cros-audio-configs
+inherit appid cros-audio-configs
 
 DESCRIPTION="Clapper private bsp (meta package to pull in driver/tool deps)"
 
@@ -23,7 +23,6 @@ src_install() {
 	doappid "{BBCEB6C1-5567-09B4-1619-DAD125AC892D}" "CHROMEBOOK"
 
 	# Install platform specific config files for power_manager.
-	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
