@@ -258,7 +258,6 @@ multilib_src_configure() {
 	# disabled by USE flags.
 	myeconfargs+=(
 		--disable-backlight
-		--disable-blkid
 		--disable-bootchart
 		--disable-efi
 		--disable-firstboot
