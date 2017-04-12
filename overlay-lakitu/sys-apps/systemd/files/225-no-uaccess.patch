@@ -1,0 +1,34 @@
+From 17ea125611385f184e75f89ad727a224a330683f Mon Sep 17 00:00:00 2001
+From: Andrey Ulanov <andreyu@google.com>
+Date: Thu, 13 Apr 2017 17:34:01 -0700
+Subject: [PATCH] Install uaccess udev rules only when acl is enabled
+
+---
+ Makefile.am | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 124e1867c..275ec1524 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -5981,12 +5981,16 @@ BUSNAMES_TARGET_WANTS += \
+ 	org.freedesktop.login1.busname
+ 
+ dist_udevrules_DATA += \
+-	src/login/70-uaccess.rules \
+ 	src/login/70-power-switch.rules
+ 
++if HAVE_ACL
++dist_udevrules_DATA += \
++	src/login/70-uaccess.rules
++
+ nodist_udevrules_DATA += \
+ 	src/login/71-seat.rules \
+ 	src/login/73-seat-late.rules
++endif
+ 
+ endif
+ 
+-- 
+2.12.2.762.g0e3151a226-goog
+

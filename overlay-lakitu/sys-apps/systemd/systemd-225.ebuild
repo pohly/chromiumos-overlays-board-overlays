@@ -162,6 +162,9 @@ src_prepare() {
 	# BUG 33257712
 	epatch "${FILESDIR}/225-networkd-default-ip-forwarding-to-kernel.patch"
 
+	# Lakitu: don't install uaccess rules without acl
+	epatch "${FILESDIR}/225-no-uaccess.patch"
+
 	epatch_user
 	eautoreconf
 }
