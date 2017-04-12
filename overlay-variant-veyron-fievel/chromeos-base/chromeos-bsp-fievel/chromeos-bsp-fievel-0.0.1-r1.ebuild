@@ -1,1 +1,0 @@
-chromeos-bsp-fievel-0.0.1.ebuild
