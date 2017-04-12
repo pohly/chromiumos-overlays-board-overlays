@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -26,9 +26,6 @@ src_install() {
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
-
-	# Install Power Manager rules.
-	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 
 	# Install Bluetooth ID override.
 	insinto /etc/bluetooth

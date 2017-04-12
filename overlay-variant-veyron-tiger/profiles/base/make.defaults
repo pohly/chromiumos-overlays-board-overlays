@@ -6,5 +6,8 @@ USE="veyron_tiger"
 # Behave like a chromebase.
 USE="${USE} ac_only legacy_keyboard -cros_ec"
 
+# Let the touchscreen wake the system when it's suspended.
+USE="${USE} touchscreen_wakeup"
+
 # Enable ARC by default.
 USE="${USE} arc"

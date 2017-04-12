@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid cros-audio-configs udev
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -23,7 +23,6 @@ DEPEND="${RDEPEND}"
 src_install() {
 	doappid "{74A5A9DD-1B51-4602-A7FA-751B804627A0}" "CHROMEBOOK"
 
-	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*

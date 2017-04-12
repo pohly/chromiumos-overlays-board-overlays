@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -28,7 +28,6 @@ src_install() {
 	fi
 
 	# Install platform specific config files for power_manager.
-	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
