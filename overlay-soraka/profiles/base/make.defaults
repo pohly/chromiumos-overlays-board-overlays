@@ -1,0 +1,15 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} cros_ec"
+USE="${USE} soraka"
+
+# Enable chrome's tablet mode code
+USE="${USE} touchview acpi_ac_off"
+
+# Uncomment these lines to activate the serial port.
+TTY_CONSOLE="ttyS0"
+USE="${USE} pcserial"
