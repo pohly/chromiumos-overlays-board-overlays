@@ -1,7 +1,16 @@
 # Copyright 2017 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
 USE=""
+
+# WiFi driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265"
+
+# BT driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
+
 USE="${USE} -tpm tpm2"
 USE="${USE} arc"
 USE="${USE} arc-camera3"
@@ -11,5 +20,3 @@ USE="${USE} direncryption"
 
 # FIXME: enable the following once it's ready
 #USE="${USE} cros_ec cr50_onboard"
-
-LINUX_FIRMWARE="iwlwifi-7265D iwlwifi-7265 ibt-hw"
