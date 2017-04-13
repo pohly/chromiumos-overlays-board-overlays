@@ -14,6 +14,10 @@ chromeos-base/chromeos-ssh-testkeys generated_ssh_key
 # https://crbug.com/599986
 sys-apps/util-linux -systemd
 
+# procps' "systemd" support is nothing but the "ps" tool printing systemd units,
+# which "systemd-cgls" can do. Disabling it avoids a circ dep.
+sys-process/procps -systemd
+
 # Enable metrics uploader.
 chromeos-base/metrics metrics_uploader
 

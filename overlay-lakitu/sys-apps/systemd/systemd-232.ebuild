@@ -1,14 +1,13 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
 
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/systemd/systemd.git"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/systemd/systemd/archive/v${PV}.tar.gz -> ${P}.tar.gz
-		!doc? ( https://dev.gentoo.org/~floppym/dist/${P}-man.tar.gz )"
+	SRC_URI="https://github.com/systemd/systemd/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 fi
 
@@ -23,7 +22,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 IUSE="acl apparmor audit build cryptsetup curl doc elfutils +gcrypt gnuefi http
 	idn importd +kmod +lz4 lzma nat pam policykit
-	qrcode +seccomp selinux ssl sysv-utils test vanilla xkb"
+	qrcode +seccomp selinux ssl sysv-utils test xkb"
 
 REQUIRED_USE="importd? ( curl gcrypt lzma )"
 
@@ -78,11 +77,15 @@ RDEPEND="${COMMON_DEPEND}
 	!sys-fs/udev"
 
 # sys-apps/dbus: the daemon only (+ build-time lib dep for tests)
+# The following PDEPENDs are present in Gentoo upstream but don't make sense for
+# Lakitu:
+#	  !vanilla? ( sys-apps/gentoo-systemd-integration )
+#	  >=sys-fs/udev-init-scripts-25
+# gentoo-systemd-integration: most of which conflicts with ChromeOS settings.
+# udev-init-scripts: startup scripts for OpenRC.
 PDEPEND=">=sys-apps/dbus-1.8.8:0[systemd]
 	>=sys-apps/hwids-20150417[udev]
-	>=sys-fs/udev-init-scripts-25
-	policykit? ( sys-auth/polkit )
-	!vanilla? ( sys-apps/gentoo-systemd-integration )"
+	policykit? ( sys-auth/polkit )"
 
 # Newer linux-headers needed by ia64, bug #480218
 DEPEND="${COMMON_DEPEND}
@@ -94,11 +97,13 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 	gnuefi? ( >=sys-boot/gnu-efi-3.0.2 )
 	test? ( >=sys-apps/dbus-1.6.8-r1:0 )
-	app-text/docbook-xml-dtd:4.2
-	app-text/docbook-xml-dtd:4.5
-	app-text/docbook-xsl-stylesheets
-	dev-libs/libxslt:0
-	doc? ( $(python_gen_any_dep 'dev-python/lxml[${PYTHON_USEDEP}]') )
+	doc? (
+		dev-libs/libxslt:0
+		app-text/docbook-xml-dtd:4.2
+		app-text/docbook-xml-dtd:4.5
+		app-text/docbook-xsl-stylesheets
+		$(python_gen_any_dep 'dev-python/lxml[${PYTHON_USEDEP}]')
+	)
 "
 
 python_check_deps() {
@@ -151,20 +156,39 @@ src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/232-0001-build-sys-check-for-lz4-in-the-old-and-new-numbering.patch
 		"${FILESDIR}"/232-0002-build-sys-add-check-for-gperf-lookup-function-signat.patch
-	)
+		# Lakitu: we do want audit enabled.
+		# "${FILESDIR}/218-Dont-enable-audit-by-default.patch"
+		"${FILESDIR}/228-noclean-tmp.patch"
+		"${FILESDIR}/232-systemd-user-pam.patch"
 
-	if ! use vanilla; then
-		PATCHES+=(
-			"${FILESDIR}/218-Dont-enable-audit-by-default.patch"
-			"${FILESDIR}/228-noclean-tmp.patch"
-			"${FILESDIR}/232-systemd-user-pam.patch"
-		)
-	fi
+		# Lakitu: CL:*250967
+		"${FILESDIR}"/232-tmpfiles-no-srv.patch
+		# Lakitu: This prevents the kernel from logging all audit messages to
+		# both dmesg and audit log. b/29581598.
+		"${FILESDIR}"/225-audit-set-pid.patch
+		# Lakitu: allow networkd => hostnamed communication w/o polkit.
+		"${FILESDIR}"/225-allow-networkd-to-hostnamed.patch
+		# Lakitu: work around the 64 bit restriction of hostname length from
+		# kernel. b/27702816.
+		"${FILESDIR}"/232-single-label-hostname.patch
+		# Lakitu: CL:*256679
+		"${FILESDIR}"/225-Force-re-creation-of-etc-localtime-symlink.patch
+		# Lakitu: make networkd default to not touch IP forwarding setting.
+		# b/33257712
+		"${FILESDIR}"/225-networkd-default-ip-forwarding-to-kernel.patch
+		# Lakitu: don't install uaccess rules without acl
+		"${FILESDIR}"/225-no-uaccess.patch
+		# Lakitu: CL:418388
+		"${FILESDIR}"/232-nspawn-sigchld.patch
+	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
 
-	default
+	for patch in ${PATCHES[@]}; do
+		epatch "${patch}"
+	done
 
+	epatch_user
 	eautoreconf
 }
 
@@ -213,7 +237,7 @@ multilib_src_configure() {
 		--with-sysvinit-path=
 		--with-sysvrcnd-path=
 		# no deps
-		--enable-efi
+		# --enable-efi
 		--enable-ima
 
 		# Optional components/dependencies
@@ -259,10 +283,37 @@ multilib_src_configure() {
 		--with-dbussessionservicedir="${EPREFIX}/usr/share/dbus-1/services"
 		--with-dbussystemservicedir="${EPREFIX}/usr/share/dbus-1/system-services"
 
-		--with-ntp-servers="0.gentoo.pool.ntp.org 1.gentoo.pool.ntp.org 2.gentoo.pool.ntp.org 3.gentoo.pool.ntp.org"
-
+		--with-ntp-servers=metadata.google.internal
 		# Breaks screen, tmux, etc.
 		--without-kill-user-processes
+	)
+
+	myeconfargs+=(
+		--enable-networkd
+		--enable-hostnamed
+		--enable-resolved
+	)
+
+	# Lakitu: Disable all features that we are not using and which are not
+	# otherwise disabled by USE flags.
+	myeconfargs+=(
+		--disable-backlight
+		--disable-efi
+		--disable-firstboot
+		--disable-hibernate
+		--disable-hwdb
+		--disable-localed
+		--disable-machined
+		--disable-manpages
+		--disable-myhostname
+		--disable-quotacheck
+		--disable-randomseed
+		--disable-rfkill
+		--disable-sysusers
+		--disable-timedated
+		--disable-utmp
+		--disable-vconsole
+		--without-python
 	)
 
 	# Work around bug 463846.
@@ -324,11 +375,12 @@ multilib_src_install() {
 
 multilib_src_install_all() {
 	prune_libtool_files --modules
-	einstalldocs
-	dodoc "${FILESDIR}"/nsswitch.conf
+	if use doc; then
+		einstalldocs
+	fi
 
 	if [[ ${PV} != 9999 ]]; then
-		use doc || doman "${WORKDIR}"/man/systemd.{directives,index}.7
+		use doc && doman "${WORKDIR}"/man/systemd.{directives,index}.7
 	fi
 
 	if use sysv-utils; then
@@ -351,13 +403,50 @@ multilib_src_install_all() {
 	# Symlink /etc/sysctl.conf for easy migration.
 	dosym ../sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
-	# If we install these symlinks, there is no way for the sysadmin to remove them
-	# permanently.
-	rm "${D}"/etc/systemd/system/multi-user.target.wants/systemd-networkd.service || die
-	rm -f "${D}"/etc/systemd/system/multi-user.target.wants/systemd-resolved.service || die
-	rm -r "${D}"/etc/systemd/system/network-online.target.wants || die
-	rm -r "${D}"/etc/systemd/system/sockets.target.wants || die
-	rm -r "${D}"/etc/systemd/system/sysinit.target.wants || die
+	# Lakitu: Following lines came from Gentoo upstream, but we want these so
+	# networkd, resolved and timesyncd start on boot.
+	# From Gentoo: "If we install these symlinks, there is no way for the
+	# sysadmin to remove them permanently".
+	# rm "${D}"/etc/systemd/system/multi-user.target.wants/systemd-networkd.service || die
+	# rm -f "${D}"/etc/systemd/system/multi-user.target.wants/systemd-resolved.service || die
+	# rm -r "${D}"/etc/systemd/system/network-online.target.wants || die
+	# rm -r "${D}"/etc/systemd/system/sockets.target.wants || die
+	# rm -r "${D}"/etc/systemd/system/sysinit.target.wants || die
+
+	# Lakitu:
+	dosym /usr/bin/udevadm sbin/udevadm
+	dosym /usr/lib/systemd/systemd-udevd sbin/udevd
+	dosym /run/systemd/resolve/resolv.conf etc/resolv.conf
+
+	# Lakitu: Disable all sysctl settings. In ChromeOS sysctl.conf is
+	# provided by chromeos-base.
+	rm "${D}"/usr/lib/sysctl.d/*
+
+	# Lakitu: install our systemd-preset file.
+	insinto /usr/lib/systemd/system-preset
+	rm -f "${D}"/usr/lib/systemd/system-preset/*
+	doins "${FILESDIR}"/00-lakitu.preset
+
+	# Lakitu: there is no VT so no need for getty on tty1
+	rm  -f "${D}"/etc/systemd/system/getty.target.wants/getty@tty1.service
+
+	# Lakitu: Install network files.
+	insinto /usr/lib/systemd/network
+	doins "${FILESDIR}"/*.network
+
+	# Lakitu: Configure Domain Search List for GCE.
+	insinto /usr/lib/systemd/resolved.conf.d/
+	doins "${FILESDIR}"/99-gce-domains.conf
+
+	# Lakitu: Turn off Predicable Network Interface Names to minimize the
+	# upgrade side-effects.
+	# https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+	dosym /dev/null /etc/systemd/network/99-default.link
+
+	# Lakitu: Don't boot into graphical.target
+	local unitdir=$(systemd_get_unitdir)
+	rm "${D}"/"${unitdir}"/default.target || die
+	dosym multi-user.target "${unitdir}"/default.target
 }
 
 migrate_locale() {
@@ -412,14 +501,27 @@ pkg_postinst() {
 
 	enewgroup input
 	enewgroup systemd-journal
-	newusergroup systemd-bus-proxy
-	newusergroup systemd-coredump
-	newusergroup systemd-journal-gateway
-	newusergroup systemd-journal-remote
-	newusergroup systemd-journal-upload
+	newusergroup systemd-timesync
 	newusergroup systemd-network
 	newusergroup systemd-resolve
-	newusergroup systemd-timesync
+
+	# Lakitu: Disable groups not currently used.
+	# newusergroup systemd-bus-proxy
+	# newusergroup systemd-journal-gateway
+	# newusergroup systemd-journal-remote
+	# newusergroup systemd-journal-upload
+
+	# Lakitu: Enable accounting for all supported controllers (CPU, Memory and Block)
+	sed -i 's/#DefaultCPUAccounting=no/DefaultCPUAccounting=yes/' "${ROOT}"/etc/systemd/system.conf
+	sed -i 's/#DefaultBlockIOAccounting=no/DefaultBlockIOAccounting=yes/' "${ROOT}"/etc/systemd/system.conf
+	sed -i 's/#DefaultMemoryAccounting=no/DefaultMemoryAccounting=yes/' "${ROOT}"/etc/systemd/system.conf
+
+	# Lakitu: Set default log rotation policy: 100M for each journal; 1G total.
+	sed -i 's/#SystemMaxUse=/SystemMaxUse=1G/' "${ROOT}"/etc/systemd/journald.conf
+	sed -i 's/#SystemMaxFileSize=/SystemMaxFileSize=100M/' "${ROOT}"/etc/systemd/journald.conf
+
+	# Lakitu: Enable persistent storage for the journal
+	sed -i 's/#Storage=auto/Storage=persistent/' "${ROOT}"/etc/systemd/journald.conf
 
 	systemd_update_catalog
 

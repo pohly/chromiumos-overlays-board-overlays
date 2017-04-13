@@ -1,13 +1,15 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 [Match]
 Name=eth0
 
 [Network]
 DHCP=ipv4
-# TODO: Remove 'Domains' from this section:
-# - move it to resolved.conf file in systemd v229+, or
-# - let DHCP configure domain search list
-#   (https://github.com/systemd/systemd/issues/2710).
-Domains=google.internal
+# Disable IPv6 completely.
+# https://github.com/systemd/systemd/issues/1982#issuecomment-158779777
+IPv6AcceptRA=no
 
 [DHCP]
 UseMTU=true

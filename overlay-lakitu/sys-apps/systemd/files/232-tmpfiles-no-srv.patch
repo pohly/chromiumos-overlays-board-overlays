@@ -5,5 +5,5 @@ index aa652b1..b111167 100644
 @@ -8,4 +8,3 @@
  # See tmpfiles.d(5) for details
  
- v /home 0755 - - -
--v /srv 0755 - - -
+ Q /home 0755 - - -
+-q /srv 0755 - - -
