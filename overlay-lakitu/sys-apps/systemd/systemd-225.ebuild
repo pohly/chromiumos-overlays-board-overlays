@@ -500,6 +500,9 @@ pkg_postinst() {
 	sed -i 's/#SystemMaxUse=/SystemMaxUse=1G/' "${ROOT}"/etc/systemd/journald.conf
 	sed -i 's/#SystemMaxFileSize=/SystemMaxFileSize=100M/' "${ROOT}"/etc/systemd/journald.conf
 
+	# Lakitu: Enable persistent storage for the journal
+	sed -i 's/#Storage=auto/Storage=persistent/' "${ROOT}"/etc/systemd/journald.conf
+
 	systemd_update_catalog
 
 	# Keep this here in case the database format changes so it gets updated
