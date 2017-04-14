@@ -43,7 +43,7 @@ src_compile() {
 	export GOPATH="${WORKDIR}/${P}" # ${PWD}/vendor
 	export GOTRACEBACK="crash"
 	export GO=$(tc-getGO)
-	LDFLAGS= emake static GIT_COMMIT="$EGIT_COMMIT" BUILDTAGS="${options[@]}"
+	LDFLAGS= emake GIT_COMMIT="$EGIT_COMMIT" BUILDTAGS="${options[@]}"
 }
 
 src_install() {
