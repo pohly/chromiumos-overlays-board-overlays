@@ -58,7 +58,7 @@ src_compile() {
 	export GO=$(tc-getGO)
 	# Prepare a string of optional flags to pass via BUILDTAGS.
 	local buildtags="${options[@]}"
-	emake static BUILDTAGS="${buildtags}"
+	emake BUILDTAGS="${buildtags}"
 }
 
 src_install() {

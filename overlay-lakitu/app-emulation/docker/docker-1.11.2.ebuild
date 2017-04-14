@@ -217,7 +217,7 @@ src_compile() {
 	export GO=$(tc-getGO)
 	echo "GO compiler '${GO}'"
 	# time to build!
-	./hack/make.sh binary || die 'binary failed'
+	./hack/make.sh dynbinary || die 'dynbinary failed'
 
 	# Don't build the man pages for lakitu. This also helps us avoid the
 	# dependency on dev-go/go-md2man.
@@ -227,7 +227,7 @@ src_compile() {
 src_install() {
 	cd "src/${EGO_PN}" || die
 	VERSION="$(cat VERSION)"
-	newbin "bundles/$VERSION/binary/docker-$VERSION" docker
+	newbin "bundles/$VERSION/dynbinary/docker-$VERSION" docker
 	#exeinto /usr/libexec/docker
 	#newexe "bundles/$VERSION/binary/dockerinit-$VERSION" dockerinit
 
