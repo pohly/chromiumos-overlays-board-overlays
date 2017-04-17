@@ -40,6 +40,7 @@ RDEPEND="
 	app-editors/vim
 	app-misc/screen
 	app-shells/bash
+	chromeos-base/chromeos-dev-root
 	chromeos-base/termina-auth-config
 	chromeos-base/tty
 	dev-python/cherrypy

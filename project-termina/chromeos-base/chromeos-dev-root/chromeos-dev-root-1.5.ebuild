@@ -3,7 +3,7 @@
 
 EAPI=5
 
-DESCRIPTION="Packages for Termina test images"
+DESCRIPTION="Install packages that must live in the rootfs in dev images."
 HOMEPAGE="http://dev.chromium.org/"
 
 LICENSE="BSD-Google"
@@ -12,5 +12,5 @@ KEYWORDS="*"
 IUSE=""
 
 RDEPEND="
-	chromeos-base/chromeos-test-root
+	virtual/chromeos-bsp-dev-root
 "
