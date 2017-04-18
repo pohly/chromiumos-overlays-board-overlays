@@ -26,7 +26,7 @@ DESCRIPTION="The core functions you need to create Docker images and run Docker 
 HOMEPAGE="https://dockerproject.org"
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="apparmor aufs btrfs +device-mapper experimental overlay seccomp +journald"
+IUSE="apparmor aufs btrfs +device-mapper experimental overlay seccomp systemd"
 
 # https://github.com/docker/docker/blob/master/hack/PACKAGERS.md#build-dependencies
 CDEPEND="
@@ -36,9 +36,6 @@ CDEPEND="
 	)
 	seccomp? (
 		>=sys-libs/libseccomp-2.2.1[static-libs]
-	)
-	journald? (
-		>=sys-apps/systemd-225
 	)
 "
 
@@ -203,11 +200,16 @@ src_compile() {
 		fi
 	done
 
-	for tag in apparmor seccomp journald; do
+	for tag in apparmor seccomp; do
 		if use $tag; then
 			DOCKER_BUILDTAGS+=" $tag"
 		fi
 	done
+
+	# enable journald support if systemd is available.
+	if use systemd; then
+		DOCKER_BUILDTAGS+=" journald"
+	fi
 
 	# https://github.com/docker/docker/pull/13338
 	if use experimental; then
