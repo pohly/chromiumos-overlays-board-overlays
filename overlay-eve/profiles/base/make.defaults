@@ -1,2 +1,2 @@
 #TTY_CONSOLE="ttyS2"
-INPUT_DEVICES="st"
+INPUT_DEVICES="st wacom"
