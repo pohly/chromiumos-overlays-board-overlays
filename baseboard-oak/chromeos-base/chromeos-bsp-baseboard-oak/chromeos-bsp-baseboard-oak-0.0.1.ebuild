@@ -12,7 +12,7 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm64 arm"
 S="${WORKDIR}"
-IUSE="cheets"
+IUSE="cheets kernel-4_4"
 
 # Add dependencies on other ebuilds from within this board overlay
 DEPEND="
@@ -27,6 +27,13 @@ src_install() {
 	# Install platform specific triggers and udev rules for codecs.
 	doins "${FILESDIR}/udev-trigger-codec.conf"
 	udev_dorules "${FILESDIR}/50-media.rules"
+
+	# chromeos-4.4 boots using performance governor.
+	# After boot switch to sched governor
+	if use kernel-4_4; then
+		insinto "/etc/laptop-mode/conf.d/board-specific"
+		doins "${FILESDIR}/cpufreq.conf"
+	fi
 
 	if use cheets; then
 		insinto "/opt/google/containers/android/vendor/etc/init"
