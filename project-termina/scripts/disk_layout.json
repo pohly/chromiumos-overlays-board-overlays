@@ -1,0 +1,31 @@
+{
+  "parent": "legacy_disk_layout.json",
+
+  "layouts": {
+    # These values were chosen by producing a tatl test image, mounting the
+    # resulting image, and increasing the used disk space on ROOT-A and STATE
+    # by roughly 20%. This significantly decreases disk usage by images, while
+    # also leaving some flexibility in case packages move between the rootfs
+    # and dev_image.
+    "common": [
+      {
+        # ROOT-A
+        "num": 3,
+        "size": "25 MiB",
+        "fs_size": "23 MiB",
+        "fs_format": "squashfs"
+      },
+      {
+        # STATE
+        "num": 1,
+        "size": "50 MiB",
+        "fs_format": "squashfs"
+      },
+      {
+        # Pad out the rest of the space.
+        "type": "blank",
+        "blocks": "64"
+      }
+    ]
+  }
+}
