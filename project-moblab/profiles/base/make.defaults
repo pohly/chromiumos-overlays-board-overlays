@@ -1,4 +1,4 @@
-USE="moblab lxc iscsi -X"
+USE="moblab lxc -X"
 
 # Additional modules to enable.
 APACHE2_MODULES="version"
