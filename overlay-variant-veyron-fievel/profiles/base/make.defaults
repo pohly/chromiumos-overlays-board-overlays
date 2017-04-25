@@ -5,3 +5,6 @@ USE="veyron_fievel"
 
 # Behave like a chromebox.
 USE="${USE} ac_only legacy_keyboard -display_backlight -cros_ec"
+
+# Enable ARC by default
+USE="${USE} arc"
