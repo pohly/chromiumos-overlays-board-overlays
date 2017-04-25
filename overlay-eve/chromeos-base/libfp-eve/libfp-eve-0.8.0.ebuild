@@ -15,6 +15,8 @@ S=${WORKDIR}
 
 src_install() {
 	exeinto /opt/fpc/lib
-	doexe Debug/usr/lib/libfp.so.0
-	dosym libfp.so.0 /opt/fpc/lib/libfp.so
+	doexe usr/lib/libfpsensor.so.0
+	dosym libfpsensor.so.0 /opt/fpc/lib/libfpsensor.so
+	insinto /opt/fpc/lib
+	doins usr/lib/libfpalgorithm.a
 }
