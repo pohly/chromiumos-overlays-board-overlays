@@ -95,6 +95,7 @@ python_install_all() {
 
 	exeinto /usr/share/cloud
 	doexe "${FILESDIR}"/rerun-cloudinit.sh
+	doexe "${FILESDIR}"/wait_for_user_data.sh
 
 	systemd_dounit "${FILESDIR}"/var-lib-cloud.mount
 	systemd_dounit "${S}"/systemd/cloud-config.service

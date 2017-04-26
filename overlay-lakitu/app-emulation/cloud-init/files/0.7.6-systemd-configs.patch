@@ -7,6 +7,7 @@ Date:   Tue Mar 1 16:58:39 2016 -0800
      - change all dependencies from network.target to network-online.target.
        All cloud-configs require network to be up.
      - Remove sshd.service dependencies.
+     - wait for 'user-data' to be available before running cloud-init.service
 
 diff --git a/systemd/cloud-config.service b/systemd/cloud-config.service
 index 41a8614..d110b11 100644
@@ -39,10 +40,10 @@ index ef0f52b..7613d64 100644
  [Service]
  Type=oneshot
 diff --git a/systemd/cloud-init.service b/systemd/cloud-init.service
-index 6b0c722..1a05e48 100644
+index 6b0c722..d93fe20 100644
 --- a/systemd/cloud-init.service
 +++ b/systemd/cloud-init.service
-@@ -1,9 +1,8 @@
+@@ -1,12 +1,12 @@
  [Unit]
  Description=Initial cloud-init job (metadata service crawler)
 -After=local-fs.target network.target cloud-init-local.service
@@ -55,6 +56,10 @@ index 6b0c722..1a05e48 100644
  
  [Service]
  Type=oneshot
++ExecStartPre=/usr/share/cloud/wait_for_user_data.sh
+ ExecStart=/usr/bin/cloud-init init
+ RemainAfterExit=yes
+ TimeoutSec=0
 diff --git a/systemd/cloud-init-local.service b/systemd/cloud-init-local.service
 index a31985c..05cb5b9 100644
 --- a/systemd/cloud-init-local.service
