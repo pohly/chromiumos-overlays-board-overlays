@@ -1,2 +1,11 @@
-# Uncomment this line to activate the serial port.
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} fizz"
+
+# Uncomment these lines to activate the serial port.
 TTY_CONSOLE="ttyS0"
+USE="${USE} pcserial"

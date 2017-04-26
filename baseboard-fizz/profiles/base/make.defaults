@@ -2,9 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-LINUX_FIRMWARE="iwlwifi-7265D iwlwifi-7265 ibt-hw"
-
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
 USE=""
+
+# WiFi driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265"
+
+# BT driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
+
 USE="${USE} -tpm tpm2"
 USE="${USE} arc"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
 USE="${USE} cros_ec cr50_onboard"
