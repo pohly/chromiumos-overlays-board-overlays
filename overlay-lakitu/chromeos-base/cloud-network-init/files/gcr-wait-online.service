@@ -1,0 +1,17 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+[Unit]
+Description=Wait for Google Container Registry (GCR) to be accessible
+Wants=network-online.target
+After=network-online.target
+Before=gcr-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "until eval curl -o /dev/null -s https://gcr.io/ ; do sleep 1; done"
+RemainAfterExit=yes
+
+[Install]
+WantedBy=gcr-online.target
