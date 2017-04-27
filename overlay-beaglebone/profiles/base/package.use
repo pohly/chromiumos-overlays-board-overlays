@@ -1,2 +1,3 @@
+sys-apps/busybox pam -static
 sys-kernel/kernel-beaglebone-4_4 iscsi dm_snapshot
 sys-kernel/kernel-beaglebone iscsi dm_snapshot
