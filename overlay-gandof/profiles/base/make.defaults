@@ -1,2 +1,16 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
+
+USE=""
+
+USE="${USE} has_keyboard_backlight gandof"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Use ext4 crypto
+USE="${USE} direncryption"

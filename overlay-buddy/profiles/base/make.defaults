@@ -1,2 +1,21 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
+
+USE=""
+
+USE="${USE} ac_only"
+
+# WiFi BT and Audio driver firmware
+LINUX_FIRMWARE="iwlwifi-7260 ibt-hw fw_sst2"
+
+USE="${USE} buddy"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
