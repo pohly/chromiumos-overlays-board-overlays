@@ -1,0 +1,18 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+USE=""
+
+USE="${USE} ac_only bootimage bluetooth -cros_ec legacy_keyboard"
+USE="${USE} legacy_power_button s3halt veyron_mickey -veyron-brcmfmac-nvram"
+USE="${USE} -display_backlight"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Do not apply brcmfmac4354-sdio inherited from veyron
+LINUX_FIRMWARE="bcm4354-bt"
