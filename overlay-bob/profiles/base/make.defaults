@@ -11,3 +11,6 @@ USE="${USE} arc"
 # Disable touchpad wakeup since it can't be turned off dynamically when the
 # system is converted to tablet mode while it's suspended.
 USE="${USE} -touchpad_wakeup"
+
+# Use ext4 crypto
+USE="${USE} direncryption"

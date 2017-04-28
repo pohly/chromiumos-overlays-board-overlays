@@ -12,6 +12,9 @@ USE="${USE} arc"
 # system is converted to tablet mode while it's suspended.
 USE="${USE} -touchpad_wakeup"
 
+# Use ext4 crypto
+USE="${USE} direncryption"
+
 # All firmwares to build from the EC code base
 EC_FIRMWARE="gru"
 
