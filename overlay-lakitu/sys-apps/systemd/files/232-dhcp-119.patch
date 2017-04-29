@@ -1,0 +1,317 @@
+From d305e88a8878f333c05cd6c8219960bd344734c6 Mon Sep 17 00:00:00 2001
+From: Daniel Wang <wonderfly@google.com>
+Date: Sat, 29 Apr 2017 11:52:46 -0700
+Subject: [PATCH] dhcp: Parse option 119 (Domain Search List)
+
+Add a modified version of dns_packet_read_name(), mirroring what was
+done in dhcp6_option_parse_domainname(). Security considerations
+mentioned in RFC 3397 section 4 were followed.
+
+If UseDomains= is set in a .network file, the same rules that define how
+domain name from DHCP server is used apply.
+---
+ src/libsystemd-network/dhcp-lease-internal.h |   2 +
+ src/libsystemd-network/sd-dhcp-lease.c       | 120 +++++++++++++++++++++++++++
+ src/network/networkd-link.c                  |  16 +++-
+ src/network/networkd-manager.c               |  17 ++--
+ src/systemd/sd-dhcp-client.h                 |   1 +
+ src/systemd/sd-dhcp-lease.h                  |   1 +
+ 6 files changed, 149 insertions(+), 8 deletions(-)
+
+diff --git a/src/libsystemd-network/dhcp-lease-internal.h b/src/libsystemd-network/dhcp-lease-internal.h
+index 82cae2300..2cc331927 100644
+--- a/src/libsystemd-network/dhcp-lease-internal.h
++++ b/src/libsystemd-network/dhcp-lease-internal.h
+@@ -75,6 +75,8 @@ struct sd_dhcp_lease {
+         uint16_t mtu; /* 0 if unset */
+ 
+         char *domainname;
++        char **search_domains;
++        size_t search_domains_count;
+         char *hostname;
+         char *root_path;
+ 
+diff --git a/src/libsystemd-network/sd-dhcp-lease.c b/src/libsystemd-network/sd-dhcp-lease.c
+index 8387b185c..8511ea7c8 100644
+--- a/src/libsystemd-network/sd-dhcp-lease.c
++++ b/src/libsystemd-network/sd-dhcp-lease.c
+@@ -231,6 +231,18 @@ int sd_dhcp_lease_get_routes(sd_dhcp_lease *lease, sd_dhcp_route ***routes) {
+         return (int) lease->static_route_size;
+ }
+ 
++int sd_dhcp_lease_get_search_domains(sd_dhcp_lease *lease, char ***domains) {
++        assert_return(lease, -EINVAL);
++        assert_return(domains, -EINVAL);
++
++        if (lease->search_domains_count) {
++                *domains = lease->search_domains;
++                return lease->search_domains_count;
++        }
++
++        return -ENODATA;
++}
++
+ int sd_dhcp_lease_get_vendor_specific(sd_dhcp_lease *lease, const void **data, size_t *data_len) {
+         assert_return(lease, -EINVAL);
+         assert_return(data, -EINVAL);
+@@ -282,6 +294,8 @@ sd_dhcp_lease *sd_dhcp_lease_unref(sd_dhcp_lease *lease) {
+         free(lease->static_route);
+         free(lease->client_id);
+         free(lease->vendor_specific);
++        strv_free(lease->search_domains);
++        lease->search_domains_count = 0;
+         return mfree(lease);
+ }
+ 
+@@ -383,6 +397,98 @@ static int lease_parse_domain(const uint8_t *option, size_t len, char **ret) {
+         return 0;
+ }
+ 
++/* Parses compressed domain names. */
++static int lease_parse_search_domains(const uint8_t *option, size_t len, char ***domains, size_t *domains_count) {
++        _cleanup_strv_free_ char **names = NULL;
++        size_t pos = 0, cnt = 0;
++        int r;
++
++        assert(domains);
++        assert(domains_count);
++        assert_return(option && len > 0, -ENODATA);
++
++        while (pos < len) {
++                _cleanup_free_ char *ret = NULL;
++                size_t n = 0, allocated = 0;
++                size_t jump_barrier = pos, next_chunk = 0;
++                bool first = true;
++
++                for (;;) {
++                        uint8_t c;
++                        c = option[pos++];
++
++                        if (c == 0) {
++                                /* End of name */
++                                break;
++                        } else if (c <= 63) {
++                                const char *label;
++
++                                /* Literal label */
++                                label = (const char *)&option[pos];
++                                pos += c;
++                                if (pos >= len)
++                                        return -EBADMSG;
++
++                                if (!GREEDY_REALLOC(ret, allocated, n + !first + DNS_LABEL_ESCAPED_MAX))
++                                        return -ENOMEM;
++
++                                if (first)
++                                        first = false;
++                                else
++                                        ret[n++] = '.';
++
++                                r = dns_label_escape(label, c, ret + n, DNS_LABEL_ESCAPED_MAX);
++                                if (r < 0)
++                                        return r;
++
++                                n += r;
++                        } else if ((c & 0xc0) == 0xc0) {
++                                /* Pointer */
++
++                                uint8_t d;
++                                uint16_t ptr;
++
++                                if (pos >= len)
++                                        return -EBADMSG;
++
++                                d = option[pos++];
++                                ptr = (uint16_t) (c & ~0xc0) << 8 | (uint16_t) d;
++
++                                /* Jumps are limited to a "prior occurrence" (RFC-1035 4.1.4) */
++                                if (ptr >= jump_barrier)
++                                        return -EBADMSG;
++                                jump_barrier = ptr;
++
++                                /* Save current location so we don't end up re-parsing what's parsed so far. */
++                                if (next_chunk == 0)
++                                        next_chunk = pos;
++
++                                pos = ptr;
++                        } else
++                                return -EBADMSG;
++                }
++
++                if (!GREEDY_REALLOC(ret, allocated, n + 1))
++                        return -ENOMEM;
++                ret[n] = 0;
++
++                r = strv_extend(&names, ret);
++                if (r < 0)
++                        return r;
++
++                cnt++;
++
++                if (next_chunk != 0)
++                      pos = next_chunk;
++        }
++
++        *domains = names;
++        names = NULL;
++
++        *domains_count = cnt;
++        return 0;
++}
++
+ static int lease_parse_in_addrs(const uint8_t *option, size_t len, struct in_addr **ret, size_t *n_ret) {
+         assert(option);
+         assert(ret);
+@@ -586,6 +692,12 @@ int dhcp_lease_parse_options(uint8_t code, uint8_t len, const void *option, void
+ 
+                 break;
+ 
++        case SD_DHCP_OPTION_DOMAIN_SEARCH_LIST:
++                r = lease_parse_search_domains(option, len, &lease->search_domains, &lease->search_domains_count);
++                if (r < 0)
++                        log_debug_errno(r, "Failed to parse Domain Search List, ignoring: %m");
++                break;
++
+         case SD_DHCP_OPTION_HOST_NAME:
+                 r = lease_parse_domain(option, len, &lease->hostname);
+                 if (r < 0) {
+@@ -732,6 +844,7 @@ int dhcp_lease_save(sd_dhcp_lease *lease, const char *lease_file) {
+         const char *string;
+         uint16_t mtu;
+         _cleanup_free_ sd_dhcp_route **routes = NULL;
++        char **search_domains = NULL;
+         uint32_t t1, t2, lifetime;
+         int r;
+ 
+@@ -805,6 +918,13 @@ int dhcp_lease_save(sd_dhcp_lease *lease, const char *lease_file) {
+         if (r >= 0)
+                 fprintf(f, "DOMAINNAME=%s\n", string);
+ 
++        r = sd_dhcp_lease_get_search_domains(lease, &search_domains);
++        if (r > 0) {
++                fputs("DOMAIN_SEARCH_LIST=", f);
++                fputstrv(f, search_domains, NULL, NULL);
++                fputs("\n", f);
++        }
++
+         r = sd_dhcp_lease_get_hostname(lease, &string);
+         if (r >= 0)
+                 fprintf(f, "HOSTNAME=%s\n", string);
+diff --git a/src/network/networkd-link.c b/src/network/networkd-link.c
+index aefe7335b..204992ae8 100644
+--- a/src/network/networkd-link.c
++++ b/src/network/networkd-link.c
+@@ -3248,6 +3248,7 @@ int link_save(Link *link) {
+                 sd_dhcp6_lease *dhcp6_lease = NULL;
+                 const char *dhcp_domainname = NULL;
+                 char **dhcp6_domains = NULL;
++                char **dhcp_domains = NULL;
+ 
+                 if (link->dhcp6_client) {
+                         r = sd_dhcp6_client_get_lease(link->dhcp6_client, &dhcp6_lease);
+@@ -3341,20 +3342,28 @@ int link_save(Link *link) {
+                 fputc('\n', f);
+ 
+                 if (link->network->dhcp_use_domains != DHCP_USE_DOMAINS_NO) {
+-                        if (link->dhcp_lease)
++                        if (link->dhcp_lease) {
+                                 (void) sd_dhcp_lease_get_domainname(link->dhcp_lease, &dhcp_domainname);
++                                (void) sd_dhcp_lease_get_search_domains(link->dhcp_lease, &dhcp_domains);
++                        }
+                         if (dhcp6_lease)
+                                 (void) sd_dhcp6_lease_get_domains(dhcp6_lease, &dhcp6_domains);
+                 }
+ 
+                 fputs("DOMAINS=", f);
++                space = false;
++                /* First, put statically configured search domains, as recommended by
++                 * https://tools.ietf.org/search/rfc3397#section-4 */
+                 fputstrv(f, link->network->search_domains, NULL, &space);
+ 
++                /* Second, add DomainName and Domain Search List from DHCP if UseDomains is set.*/
+                 if (link->network->dhcp_use_domains == DHCP_USE_DOMAINS_YES) {
+                         NDiscDNSSL *dd;
+ 
+                         if (dhcp_domainname)
+                                 fputs_with_space(f, dhcp_domainname, NULL, &space);
++                        if (dhcp_domains)
++                                fputstrv(f, dhcp_domains, NULL, &space);
+                         if (dhcp6_domains)
+                                 fputstrv(f, dhcp6_domains, NULL, &space);
+ 
+@@ -3365,13 +3374,16 @@ int link_save(Link *link) {
+                 fputc('\n', f);
+ 
+                 fputs("ROUTE_DOMAINS=", f);
+-                fputstrv(f, link->network->route_domains, NULL, NULL);
++                space = false;
++                fputstrv(f, link->network->route_domains, NULL, &space);
+ 
+                 if (link->network->dhcp_use_domains == DHCP_USE_DOMAINS_ROUTE) {
+                         NDiscDNSSL *dd;
+ 
+                         if (dhcp_domainname)
+                                 fputs_with_space(f, dhcp_domainname, NULL, &space);
++                        if (dhcp_domains)
++                                fputstrv(f, dhcp_domains, NULL, &space);
+                         if (dhcp6_domains)
+                                 fputstrv(f, dhcp6_domains, NULL, &space);
+ 
+diff --git a/src/network/networkd-manager.c b/src/network/networkd-manager.c
+index 9174dcc7f..f1d80aba4 100644
+--- a/src/network/networkd-manager.c
++++ b/src/network/networkd-manager.c
+@@ -911,15 +911,20 @@ static int manager_save(Manager *m) {
+ 
+                 if (link->network->dhcp_use_domains != DHCP_USE_DOMAINS_NO) {
+                         const char *domainname;
++                        char **domains = NULL;
+ 
++                        OrderedSet *target_domains = (link->network->dhcp_use_domains == DHCP_USE_DOMAINS_YES) ? search_domains : route_domains;
+                         r = sd_dhcp_lease_get_domainname(link->dhcp_lease, &domainname);
+-                        if (r >= 0) {
+-
+-                                if (link->network->dhcp_use_domains == DHCP_USE_DOMAINS_YES)
+-                                        r = ordered_set_put_strdup(search_domains, domainname);
+-                                else
+-                                        r = ordered_set_put_strdup(route_domains, domainname);
++                        if (r > 0) {
++                                r = ordered_set_put_strdup(target_domains, domainname);
++                                if (r < 0)
++                                        return r;
++                        } else if (r != -ENODATA)
++                                return r;
+ 
++                        r = sd_dhcp_lease_get_search_domains(link->dhcp_lease, &domains);
++                        if (r > 0) {
++                                r = ordered_set_put_strdupv(target_domains, domains);
+                                 if (r < 0)
+                                         return r;
+                         } else if (r != -ENODATA)
+diff --git a/src/systemd/sd-dhcp-client.h b/src/systemd/sd-dhcp-client.h
+index 9a90c2ed4..97a51c9d1 100644
+--- a/src/systemd/sd-dhcp-client.h
++++ b/src/systemd/sd-dhcp-client.h
+@@ -76,6 +76,7 @@ enum {
+         SD_DHCP_OPTION_FQDN                        = 81,
+         SD_DHCP_OPTION_NEW_POSIX_TIMEZONE          = 100,
+         SD_DHCP_OPTION_NEW_TZDB_TIMEZONE           = 101,
++        SD_DHCP_OPTION_DOMAIN_SEARCH_LIST          = 119,
+         SD_DHCP_OPTION_CLASSLESS_STATIC_ROUTE      = 121,
+         SD_DHCP_OPTION_PRIVATE_BASE                = 224,
+         SD_DHCP_OPTION_PRIVATE_LAST                = 254,
+diff --git a/src/systemd/sd-dhcp-lease.h b/src/systemd/sd-dhcp-lease.h
+index 2f565ca82..7ab99cccd 100644
+--- a/src/systemd/sd-dhcp-lease.h
++++ b/src/systemd/sd-dhcp-lease.h
+@@ -49,6 +49,7 @@ int sd_dhcp_lease_get_dns(sd_dhcp_lease *lease, const struct in_addr **addr);
+ int sd_dhcp_lease_get_ntp(sd_dhcp_lease *lease, const struct in_addr **addr);
+ int sd_dhcp_lease_get_mtu(sd_dhcp_lease *lease, uint16_t *mtu);
+ int sd_dhcp_lease_get_domainname(sd_dhcp_lease *lease, const char **domainname);
++int sd_dhcp_lease_get_search_domains(sd_dhcp_lease *lease, char ***domains);
+ int sd_dhcp_lease_get_hostname(sd_dhcp_lease *lease, const char **hostname);
+ int sd_dhcp_lease_get_root_path(sd_dhcp_lease *lease, const char **root_path);
+ int sd_dhcp_lease_get_routes(sd_dhcp_lease *lease, sd_dhcp_route ***routes);
+-- 
+2.13.0.rc1.294.g07d810a77f-goog
+

@@ -180,6 +180,8 @@ src_prepare() {
 		"${FILESDIR}"/225-no-uaccess.patch
 		# Lakitu: CL:418388
 		"${FILESDIR}"/232-nspawn-sigchld.patch
+		# Lakitu: Add DHCP Search Domain List support. b/36192250
+		"${FILESDIR}"/232-dhcp-119.patch
 	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
@@ -433,10 +435,6 @@ multilib_src_install_all() {
 	# Lakitu: Install network files.
 	insinto /usr/lib/systemd/network
 	doins "${FILESDIR}"/*.network
-
-	# Lakitu: Configure Domain Search List for GCE.
-	insinto /usr/lib/systemd/resolved.conf.d/
-	doins "${FILESDIR}"/99-gce-domains.conf
 
 	# Lakitu: Turn off Predicable Network Interface Names to minimize the
 	# upgrade side-effects.
