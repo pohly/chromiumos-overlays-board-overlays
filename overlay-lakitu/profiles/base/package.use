@@ -41,3 +41,6 @@ sys-auth/pambase -systemd
 
 # Docker uses tini, so this should be static
 sys-process/tini static
+
+# Disable PAM for busybox, because it conflicts with 'static' use flag.
+sys-apps/busybox -pam static
