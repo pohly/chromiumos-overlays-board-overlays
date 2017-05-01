@@ -12,7 +12,10 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265"
 # BT driver firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
 
-USE="${USE} -tpm tpm2"
+# Uncomment this later when TPM is actually available. Otherwise it
+# causes tpm and attestationd daemons to continuously crash.
+# USE="${USE} -tpm tpm2"
+
 USE="${USE} arc"
 
 # Use ext4 crypto
