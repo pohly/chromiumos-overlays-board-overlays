@@ -12,5 +12,7 @@ KEYWORDS="*"
 IUSE=""
 
 RDEPEND="
+	chromeos-base/termina-auth-config
+	chromeos-base/tty
 	virtual/chromeos-bsp-dev-root
 "
