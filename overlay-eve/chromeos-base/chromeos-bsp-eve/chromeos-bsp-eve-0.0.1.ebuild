@@ -15,7 +15,7 @@ KEYWORDS="-* amd64 x86"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="chromeos-base/libfp-eve"
+RDEPEND=""
 
 DEPEND="${RDEPEND}"
 
