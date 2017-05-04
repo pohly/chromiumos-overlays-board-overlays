@@ -1,7 +1,18 @@
 # Copyright 2015 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
+USE=""
+
 # Turn on the video cards this board uses.
 VIDEO_CARDS="rockchip"
 
 TTY_CONSOLE="ttyS2"
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-rockchip"
+
+USE="${USE} cros_ec device_tree gpu_sandbox_start_early"
+USE="${USE} hardfp kernel-3_14 mosys_eventlog neon -opengl opengles"
+USE="${USE} rk32 watchdog wifi_force_powersave"
+USE="${USE} wireless38"
+
+LINUX_FIRMWARE="brcmfmac4354-sdio bcm4354-bt"

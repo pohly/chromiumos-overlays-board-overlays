@@ -15,4 +15,4 @@ USE="${USE} allow_consumer_kiosk"
 USE="${USE} direncryption"
 
 # Do not apply brcmfmac4354-sdio inherited from veyron
-LINUX_FIRMWARE="bcm4354-bt"
+LINUX_FIRMWARE="bcm4354-bt -brcmfmac4354-sdio"
