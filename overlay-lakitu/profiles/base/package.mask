@@ -1,9 +1,0 @@
-# Don't use the chromiumos-overlay version of runc.
-app-emulation/runc::chromiumos
-
-# Mask docker-1.13.1 related packages.
->=app-emulation/docker-1.13.1
->=app-emulation/containerd-0.2.3_p20170131
->=app-emulation/docker-runc-1.0.0_rc2_p20170201
->=app-emulation/docker-proxy-0.8.0_p20161111
->=sys-process/tini-0.13.0

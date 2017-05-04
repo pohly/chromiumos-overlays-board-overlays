@@ -237,6 +237,9 @@ src_compile() {
 		fi
 	done
 
+	# enable journald.
+	DOCKER_BUILDTAGS+=" journald"
+
 	export PKG_CONFIG_PATH="${ROOT}/usr/$(get_libdir)/pkgconfig"
 	export GOTRACEBACK="crash"
 	export GO=$(tc-getGO)
