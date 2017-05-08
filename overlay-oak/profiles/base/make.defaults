@@ -1,1 +1,22 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} arc"
+
+USE="${USE} bootimage cros_ec pd_sync"
+
+USE="${USE} touchview"
+
+EC_FIRMWARE="oak"
+EC_FIRMWARE_EXTRA="oak_pd"
+PD_FIRMWARE="oak_pd"
+
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+USE="${USE} pcserial"
+# Declare set of enabled consoles
 TTY_CONSOLE="ttyS0"

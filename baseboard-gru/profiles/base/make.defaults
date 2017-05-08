@@ -26,4 +26,8 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} marvell-pcie8997 rockchip-dptx"
 
 VIDEO_CARDS="rockchip"
 
-TTY_CONSOLE="ttyS2"
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+#USE="${USE} pcserial"
+# Declare set of enabled consoles
+#TTY_CONSOLE="ttyS2"

@@ -1,1 +1,24 @@
-TTY_CONSOLE="ttyS0"
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} touchview"
+USE="${USE} arc"
+
+# Disable touchpad wakeup since it can't be turned off dynamically when the
+# system is converted to tablet mode while it's suspended.
+USE="${USE} -touchpad_wakeup"
+
+#EC_FIRMWARE="hana"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+#USE="${USE} pcserial"
+# Declare set of enabled consoles
+#TTY_CONSOLE="ttyS0"

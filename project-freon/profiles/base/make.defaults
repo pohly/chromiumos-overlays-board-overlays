@@ -1,8 +1,11 @@
 # Copyright 2014 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
+# Initial value.
+USE=""
+
 # Disable X11.
-USE="-X"
+USE="${USE} -X"
 
 # Use opengles instead of opengl
 USE="${USE} -opengl opengles"
