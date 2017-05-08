@@ -35,9 +35,14 @@
     # size since these do not need more space.
     "factory_install": [
       {
+        "num": 5,
+        "size": "2 MiB"
+      },
+      {
         "num": 3,
-        "fs_size_min": "0 MiB",
-        "size_min": "0 MiB"
+        "size": "420 MiB",
+        "fs_size_min": "400 MiB",
+        "fs_size": "400 MiB"
       }
     ]
   }
