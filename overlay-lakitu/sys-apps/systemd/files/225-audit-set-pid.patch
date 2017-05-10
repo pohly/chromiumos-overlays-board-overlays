@@ -1,4 +1,4 @@
-commit 03e42247d2df9ac55536ce6da6c79d54a2bd508b
+commit a355bea478bd9171ddb902cc1ad0af1468662501
 Author: Andrey Ulanov <andreyu@google.com>
 Date:   Thu Feb 23 17:41:37 2017 -0800
 
@@ -10,10 +10,10 @@ Date:   Thu Feb 23 17:41:37 2017 -0800
     multicast.
 
 diff --git a/src/journal/journald-audit.c b/src/journal/journald-audit.c
-index 83c3332ab..ad621fe6c 100644
+index a433c91c5..27740731b 100644
 --- a/src/journal/journald-audit.c
 +++ b/src/journal/journald-audit.c
-@@ -447,6 +447,14 @@ void server_process_audit_message(
+@@ -449,6 +449,14 @@ void server_process_audit_message(
                  return;
          }
  
@@ -28,14 +28,22 @@ index 83c3332ab..ad621fe6c 100644
          if (!ucred || ucred->pid != 0) {
                  log_debug("Audit netlink message with invalid credentials.");
                  return;
-@@ -481,12 +489,14 @@ static int enable_audit(int fd, bool b) {
+@@ -470,7 +478,7 @@ void server_process_audit_message(
+         process_audit_string(s, nl->nlmsg_type, NLMSG_DATA(nl), nl->nlmsg_len - ALIGN(sizeof(struct nlmsghdr)));
+ }
+ 
+-static int enable_audit(int fd, bool b) {
++static int audit_set_status(int fd, struct audit_status *status) {
+         struct {
+                 union {
+                         struct nlmsghdr header;
+@@ -483,12 +491,12 @@ static int enable_audit(int fd, bool b) {
                  .header.nlmsg_flags = NLM_F_REQUEST,
                  .header.nlmsg_seq = 1,
                  .header.nlmsg_pid = 0,
 -                .body.mask = AUDIT_STATUS_ENABLED,
-+                .body.mask = AUDIT_STATUS_ENABLED | AUDIT_STATUS_PID,
-                 .body.enabled = b,
-+                .body.pid = getpid(),
+-                .body.enabled = b,
++                .body = *status
          };
          union sockaddr_union sa = {
                  .nl.nl_family = AF_NETLINK,
@@ -44,7 +52,28 @@ index 83c3332ab..ad621fe6c 100644
          };
          struct iovec iovec = {
                  .iov_base = &request,
-@@ -518,12 +528,6 @@ int server_open_audit(Server *s) {
+@@ -515,17 +523,27 @@ static int enable_audit(int fd, bool b) {
+         return 0;
+ }
+ 
++static int enable_audit(int fd, bool b) {
++        struct audit_status status = {
++                .mask = AUDIT_STATUS_ENABLED,
++                .enabled = b,
++        };
++        return audit_set_status(fd, &status);
++}
++
++static int set_audit_pid(int fd, pid_t pid) {
++        struct audit_status status = {
++                .mask = AUDIT_STATUS_PID,
++                .pid = pid,
++        };
++        return audit_set_status(fd, &status);
++}
++
+ int server_open_audit(Server *s) {
+         static const int one = 1;
          int r;
  
          if (s->audit_fd < 0) {
@@ -57,7 +86,7 @@ index 83c3332ab..ad621fe6c 100644
                  s->audit_fd = socket(AF_NETLINK, SOCK_RAW|SOCK_CLOEXEC|SOCK_NONBLOCK, NETLINK_AUDIT);
                  if (s->audit_fd < 0) {
                          if (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT)
-@@ -533,15 +537,6 @@ int server_open_audit(Server *s) {
+@@ -535,15 +553,6 @@ int server_open_audit(Server *s) {
  
                          return 0;
                  }
@@ -73,3 +102,13 @@ index 83c3332ab..ad621fe6c 100644
          } else
                  fd_nonblock(s->audit_fd, 1);
  
+@@ -560,5 +569,9 @@ int server_open_audit(Server *s) {
+         if (r < 0)
+                 log_warning_errno(r, "Failed to issue audit enable call: %m");
+ 
++        r = set_audit_pid(s->audit_fd, getpid());
++        if (r < 0)
++                log_warning_errno(r, "Failed to issue set audit pid: %m");
++
+         return 0;
+ }
