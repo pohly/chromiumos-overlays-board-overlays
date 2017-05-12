@@ -436,7 +436,7 @@ multilib_src_install_all() {
 	insinto /usr/lib/systemd/network
 	doins "${FILESDIR}"/*.network
 
-	# Lakitu: Turn off Predicable Network Interface Names to minimize the
+	# Lakitu: Turn off Predictable Network Interface Names to minimize the
 	# upgrade side-effects.
 	# https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
 	dosym /dev/null /etc/systemd/network/99-default.link

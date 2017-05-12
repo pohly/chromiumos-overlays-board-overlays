@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 [Match]
-Name=eth0
+Driver=virtio_net
 
 [Network]
 DHCP=ipv4
