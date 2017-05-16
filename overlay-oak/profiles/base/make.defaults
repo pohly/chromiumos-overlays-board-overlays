@@ -11,6 +11,8 @@ USE="${USE} bootimage cros_ec pd_sync"
 
 USE="${USE} touchview"
 
+USE="${USE} direncryption"
+
 EC_FIRMWARE="oak"
 EC_FIRMWARE_EXTRA="oak_pd"
 PD_FIRMWARE="oak_pd"
