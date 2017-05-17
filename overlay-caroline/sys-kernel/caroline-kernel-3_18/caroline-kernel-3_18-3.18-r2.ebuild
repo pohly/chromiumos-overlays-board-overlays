@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=4
-CROS_WORKON_COMMIT="f8afe9c6ab8f987bfa39c70c96de25fbe66dc6a9"
-CROS_WORKON_TREE="03c3a051382843e7e0e0ae6febc9956f4f3b5a66"
+CROS_WORKON_COMMIT="2356e6ee9ec7b135bdfd9636721cbc73146652ab"
+CROS_WORKON_TREE="227b3137b03d6238ff42c7c03b62d86ef3552de4"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/caroline-v3.18"
 
