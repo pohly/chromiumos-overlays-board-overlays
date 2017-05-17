@@ -78,10 +78,16 @@ src_install() {
 	echo "moblab ALL = NOPASSWD: ALL" > moblab-sudo-all
 	echo "apache ALL = NOPASSWD: /sbin/reboot" > apache-reboot
 	echo "apache ALL = NOPASSWD: /sbin/restart" > apache-restart
+	echo "apache ALL = NOPASSWD: /sbin/start" > apache-start
+	echo "apache ALL = NOPASSWD: /sbin/stop" > apache-stop
+	echo "apache ALL = NOPASSWD: /usr/sbin/apache2" > apache-apache2
 	insopts -m600
 	doins moblab-sudo-all
 	doins apache-reboot
 	doins apache-restart
+	doins apache-start
+	doins apache-stop
+	doins apache-apache2
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
