@@ -4,4 +4,4 @@
 
 group:video
 gid:27
-users:root,chronos,arc-camera,dlm
+users:root,chronos,arc-camera,dlm,rtanalytics
