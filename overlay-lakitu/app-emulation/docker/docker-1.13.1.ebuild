@@ -35,6 +35,7 @@ CDEPEND="
 	)
 	seccomp? ( >=sys-libs/libseccomp-2.2.1[static-libs] )
 	apparmor? ( sys-libs/libapparmor[static-libs] )
+	sys-apps/systemd
 "
 
 DEPEND="
