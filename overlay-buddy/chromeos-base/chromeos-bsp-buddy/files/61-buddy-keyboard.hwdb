@@ -8,7 +8,7 @@
 # we do not have full keyboard attached and present on-screen keyboard
 # automatically.
 #
-keyboard:dmi:bvn*:bvr*:bd*:svnGOOGLE:pnBuddy:pvr*
+evdev:atkbd:dmi:bvn*:bvr*:bd*:svnGOOGLE:pnBuddy:pvr*
  KEYBOARD_KEY_00=reserved
  KEYBOARD_KEY_01=reserved
  KEYBOARD_KEY_02=reserved
