@@ -1,2 +1,24 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromeos-pinetrail-i386"
+
 U_BOOT_CONFIG_USE="coreboot"
 U_BOOT_FDT_USE="mario"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} als disable_login_animations gobi google_qdl mario"
+USE="${USE} novatel_gobi pineview watchdog"
+
+# Disable Flash low latency audio as the CPU here can't keep up.
+USE="${USE} disable_low_latency_audio"
+
+# Use 3.8 kernel with 3.4 wifi stack
+USE="${USE} kernel-3_8 wireless34"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"

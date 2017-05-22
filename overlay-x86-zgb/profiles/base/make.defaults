@@ -4,13 +4,11 @@
 
 CHROMEOS_KERNEL_SPLITCONFIG="chromeos-pinetrail-i386"
 
-U_BOOT_CONFIG_USE="coreboot"
-U_BOOT_FDT_USE="alex"
-
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} alex als disable_login_animations pineview watchdog"
+USE="${USE} als bogus_screen_resizes disable_login_animations gobi google_qdl"
+USE="${USE} pineview use_alsa_control watchdog"
 
 # Disable Flash low latency audio as the CPU here can't keep up.
 USE="${USE} disable_low_latency_audio"
