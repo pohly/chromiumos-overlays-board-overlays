@@ -1,0 +1,103 @@
+From 79b32967d0350f4f468a2d4d20b3ed34a1a68c83 Mon Sep 17 00:00:00 2001
+From: Daniel Wang <wonderfly@google.com>
+Date: Wed, 17 May 2017 16:14:27 -0700
+Subject: [PATCH] DHCP: when adding static routes set scopes properly
+
+DHCP responses could include static routes, but unfortunately not an
+option to tell what scope to use. So it's important that the client sets
+it properly.
+
+This mimics what the `ip route add` command does when adding a static
+route without an explicit scope:
+
+* If the destination IP is on the local host, use scope `host`
+* Otherwise if the gateway IP is null (direct route), use scope `link`
+* If anything else, use the current default `global`.
+
+Fixes #5979.
+---
+ man/systemd.network.xml      |  8 +++++---
+ src/network/networkd-dhcp4.c | 25 +++++++++++++++++++------
+ 2 files changed, 24 insertions(+), 9 deletions(-)
+
+diff --git a/man/systemd.network.xml b/man/systemd.network.xml
+index 2fb490763..0a45b83e1 100644
+--- a/man/systemd.network.xml
++++ b/man/systemd.network.xml
+@@ -890,9 +890,11 @@
+         <varlistentry>
+           <term><varname>UseRoutes=</varname></term>
+           <listitem>
+-            <para>When true (the default), the static routes will be
+-            requested from the DHCP server and added to the routing
+-            table with a metric of 1024.</para>
++            <para>When true (the default), the static routes will be requested from the DHCP server and added to the
++              routing table with a metric of 1024, and a scope of "global", "link" or "host", depending on the route's
++              destination and gateway. If the destination is on the local host, e.g., 127.x.x.x, or the same as the
++              link's own address, the scope will be set to "host". Otherwise if the gateway is null (a direct route), a
++              "link" scope will be used. For anything else, scope defaults to "global".</para>
+           </listitem>
+         </varlistentry>
+ 
+diff --git a/src/network/networkd-dhcp4.c b/src/network/networkd-dhcp4.c
+index 76d3d132e..a2c4d40cb 100644
+--- a/src/network/networkd-dhcp4.c
++++ b/src/network/networkd-dhcp4.c
+@@ -50,8 +50,21 @@ static int dhcp4_route_handler(sd_netlink *rtnl, sd_netlink_message *m,
+         return 1;
+ }
+ 
++static int route_scope_from_address(const Route *route, const struct in_addr *self_addr) {
++        assert(route);
++        assert(self_addr);
++
++        if (in_addr_is_localhost(AF_INET, &route->dst) ||
++            (self_addr->s_addr && route->dst.in.s_addr == self_addr->s_addr))
++                return RT_SCOPE_HOST;
++        else if (in4_addr_is_null(&route->gw.in))
++                return RT_SCOPE_LINK;
++        else
++                return RT_SCOPE_UNIVERSE;
++}
++
+ static int link_set_dhcp_routes(Link *link) {
+-        struct in_addr gateway;
++        struct in_addr gateway, address;
+         _cleanup_free_ sd_dhcp_route **static_routes = NULL;
+         int r, n, i;
+ 
+@@ -62,19 +75,18 @@ static int link_set_dhcp_routes(Link *link) {
+         if (!link->network->dhcp_use_routes)
+                 return 0;
+ 
++        r = sd_dhcp_lease_get_address(link->dhcp_lease, &address);
++        if (r < 0)
++                return log_link_warning_errno(link, r, "DHCP error: could not get address: %m");
++
+         r = sd_dhcp_lease_get_router(link->dhcp_lease, &gateway);
+         if (r < 0 && r != -ENODATA)
+                 return log_link_warning_errno(link, r, "DHCP error: could not get gateway: %m");
+ 
+         if (r >= 0) {
+-                struct in_addr address;
+                 _cleanup_route_free_ Route *route = NULL;
+                 _cleanup_route_free_ Route *route_gw = NULL;
+ 
+-                r = sd_dhcp_lease_get_address(link->dhcp_lease, &address);
+-                if (r < 0)
+-                        return log_link_warning_errno(link, r, "DHCP error: could not get address: %m");
+-
+                 r = route_new(&route);
+                 if (r < 0)
+                         return log_link_error_errno(link, r, "Could not allocate route: %m");
+@@ -139,6 +151,7 @@ static int link_set_dhcp_routes(Link *link) {
+                 assert_se(sd_dhcp_route_get_destination_prefix_length(static_routes[i], &route->dst_prefixlen) >= 0);
+                 route->priority = link->network->dhcp_route_metric;
+                 route->table = link->network->dhcp_route_table;
++                route->scope = route_scope_from_address(route, &address);
+ 
+                 r = route_configure(route, link, dhcp4_route_handler);
+                 if (r < 0)
+-- 
+2.13.0.219.gdb65acc882-goog
+

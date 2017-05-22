@@ -182,6 +182,8 @@ src_prepare() {
 		"${FILESDIR}"/232-nspawn-sigchld.patch
 		# Lakitu: Add DHCP Search Domain List support. b/36192250
 		"${FILESDIR}"/232-dhcp-119.patch
+		# Lakitu: Set DHCP static routes' scopes properly. b/34715285
+		"${FILESDIR}"/232-dhcp-route-scope.patch
 	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
