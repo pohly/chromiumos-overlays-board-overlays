@@ -1,6 +1,9 @@
 # Copyright 2015 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
+CHROMEOS_KERNEL_SPLITCONFIG="chromeos-intel-pineview"
+CHROMEOS_KERNEL_ARCH="x86_64"
+
 # Enable a few more video cards as this is a generic board.
 VIDEO_CARDS="intel nouveau radeon"
 
@@ -8,3 +11,19 @@ VIDEO_CARDS="intel nouveau radeon"
 USE=""
 
 USE="${USE} containers device_jail"
+
+USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_4"
+
+# This is only for the kernel and can be dropped once we merge:
+# https://chromium-review.googlesource.com/42537
+USE="${USE} x32"
+
+# Enable all optional features on generic overlays.
+USE="${USE} buffet peerd wifi_bootstrapping"
+
+# Include many firmwares as this is a "generic" board and might run on a
+# wide variety of platforms with who knows what kind of hardware.
+LINUX_FIRMWARE="iwlwifi-all"
+
+# Clang does not support x32.
+CROS_WORKON_CLANG="0"
