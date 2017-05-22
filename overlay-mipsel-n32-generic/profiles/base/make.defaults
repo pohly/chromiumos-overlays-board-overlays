@@ -1,0 +1,19 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-mips64el"
+CHROMEOS_KERNEL_ARCH="mips"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} legacy_keyboard legacy_power_button"
+
+# Chaps depends on leveldb which isn't ported to all arches yet.
+USE="${USE} -tpm"
+
+# Kernel doesn't yet build cleanly.
+USE="${USE} kernel-3_14 nowerror"
+
+# Enable all optional features on generic overlays.
+USE="${USE} buffet peerd wifi_bootstrapping"
