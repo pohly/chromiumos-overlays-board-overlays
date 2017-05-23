@@ -1,6 +1,9 @@
 # Copyright 2015 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-mediatek"
+CHROMEOS_KERNEL_ARCH="arm64"
+
 # Turn on the video cards this board uses.
 VIDEO_CARDS="mediatek powervr"
 
