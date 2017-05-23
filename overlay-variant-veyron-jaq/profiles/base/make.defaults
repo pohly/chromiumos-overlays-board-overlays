@@ -5,7 +5,7 @@ USE=""
 
 # Inherit the USE flags from both the public and private veyron
 # overlays. Only add USE flags specific to jaq here.
-USE="${USE} veyron_jaq transparent_hugepage"
+USE="${USE} veyron_jaq"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
