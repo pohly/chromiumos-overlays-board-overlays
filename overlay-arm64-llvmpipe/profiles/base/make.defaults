@@ -1,1 +1,25 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-arm64"
+CHROMEOS_KERNEL_ARCH="arm64"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} hardfp neon"
+USE="${USE} kernel-4_4 device_tree"
+USE="${USE} legacy_keyboard legacy_power_button"
+# Add powerd to avoid fiddling with the non-existent backlight
+USE="${USE} -display_backlight"
+
+# Use MESA llvmpipe in the guest as the GL library.
+USE="${USE} frecon -opengl opengles"
+
+# Nullify all firmware and ec-related USE flags
+USE="${USE} -coreboot -bootimage -cros_ec"
+USE="${USE} -fastboot -mtc"
+
+CROS_WORKON_CLANG=0
+
 TTY_CONSOLE="ttyAMA0"

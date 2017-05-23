@@ -1,7 +1,25 @@
 # Copyright 2015 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-arm64"
+
 # Initial value just for style purposes.
 USE=""
 
 USE="${USE} containers device_jail"
+
+USE="${USE} legacy_keyboard legacy_power_button"
+USE="${USE} -opengl opengles"
+USE="${USE} kernel-4_4 device_tree"
+
+# Disable binary options that are not ported yet.
+USE="${USE} -pepper_flash -netflix -internal"
+
+# Enable all optional features on generic overlays.
+USE="${USE} buffet peerd wifi_bootstrapping"
+
+# Include many firmwares as this is a "generic" board and might run on a
+# wide variety of platforms with who knows what kind of hardware.
+LINUX_FIRMWARE="iwlwifi-all"
+
+CROS_WORKON_CLANG=0
