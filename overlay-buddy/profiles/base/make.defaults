@@ -19,3 +19,6 @@ USE="${USE} allow_consumer_kiosk"
 
 # Use ext4 crypto
 USE="${USE} direncryption"
+
+# Let the touchscreen wake the system when it's suspended.
+USE="${USE} touchscreen_wakeup"
