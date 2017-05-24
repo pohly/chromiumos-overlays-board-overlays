@@ -5,4 +5,34 @@
 U_BOOT_CONFIG_USE="coreboot"
 U_BOOT_FDT_USE="samus"
 
+# Initial value just for style purposes.
+USE=""
+
 USE="${USE} containers"
+
+USE="${USE} als has_keyboard_backlight highdpi"
+USE="${USE} natural_scroll_default samus watchdog"
+USE="${USE} acpi_ac_off wireless38"
+USE="${USE} pcserial"
+
+# Enable ARC by default
+USE="${USE} arc"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Firmware
+USE="${USE} bootimage cros_ec"
+
+# All firmwares to build from the EC code base
+EC_FIRMWARE="samus"
+EC_FIRMWARE_EXTRA="dingdong hoho minimuffin samus_pd zinger"
+
+# Use PD firmware sync
+USE="${USE} pd_sync"
+# The firmware in PD_FIRMWARE must belong to EC_FIRMWARE_EXTRA.
+PD_FIRMWARE="samus_pd"
+
+# Audio, WiFi and BT driver firmware
+LINUX_FIRMWARE="cros-pd fw_sst2 ibt-hw iwlwifi-7260 marvell-pcie8897"
