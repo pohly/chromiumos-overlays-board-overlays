@@ -46,7 +46,7 @@ DEPEND=""
 
 S=${WORKDIR}
 
-pkg_setup() {
+pkg_preinst() {
 	enewgroup moblab
 	enewuser moblab
 }
