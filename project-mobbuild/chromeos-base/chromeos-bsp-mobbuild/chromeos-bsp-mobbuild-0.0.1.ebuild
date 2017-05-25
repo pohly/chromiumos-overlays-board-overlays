@@ -32,7 +32,7 @@ DEPEND=""
 
 S=${WORKDIR}
 
-pkg_setup() {
+pkg_preinst() {
 	enewgroup mobbuild
 	enewuser mobbuild
 }
