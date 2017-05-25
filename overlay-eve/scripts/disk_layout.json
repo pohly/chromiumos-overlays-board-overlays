@@ -15,7 +15,7 @@
       {
         # Slot A rootfs. Adjust to allow for more space.
         "num": 3,
-        "fs_size_min": "1844 MiB",
+        "fs_size_min": "2048 MiB",
         "size": "4096 MiB"
       }
     ],
