@@ -13,5 +13,7 @@ USE="${USE} allow_consumer_kiosk"
 
 USE="${USE} arc"
 
+USE="${USE} direncryption"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
