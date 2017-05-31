@@ -4,18 +4,6 @@ Date:   Tue Nov 8 15:30:49 2016 -0800
 
     do not block sshd for google.service
 
-diff --git a/google_compute_engine_init/systemd/google-accounts-daemon.service b/google_compute_engine_init/systemd/google-accounts-daemon.service
-index 125e776..b5945ee 100644
---- a/google_compute_engine_init/systemd/google-accounts-daemon.service
-+++ b/google_compute_engine_init/systemd/google-accounts-daemon.service
-@@ -1,7 +1,6 @@
- [Unit]
- Description=Google Compute Engine Accounts Daemon
- After=network.target google-instance-setup.service google-network-setup.service
--Before=sshd.service
- Requires=network.target
- 
- [Service]
 diff --git a/google_compute_engine_init/systemd/google-instance-setup.service b/google_compute_engine_init/systemd/google-instance-setup.service
 index afa639a..6db20e1 100644
 --- a/google_compute_engine_init/systemd/google-instance-setup.service
