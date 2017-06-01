@@ -11,7 +11,8 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="caroline-userdebug"
+IUSE="caroline-userdebug caroline-arc64"
+REQUIRED_USE="caroline-userdebug? ( !caroline-arc64 )"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -25,6 +26,8 @@ DEPEND="${RDEPEND}"
 src_install() {
 	if use caroline-userdebug; then
 		doappid "{D5CF3BCD-7093-49E6-8E31-0990E21730F8}" "CHROMEBOOK"
+	elif use caroline-arc64; then
+		doappid "{AAB07052-010F-1A82-D471-6159D122A397}" "CHROMEBOOK"
 	else
 		doappid "{C166AF52-7EE9-4F08-AAA7-B4B895A9F336}" "CHROMEBOOK"
 	fi
