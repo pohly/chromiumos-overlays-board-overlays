@@ -41,6 +41,7 @@ RDEPEND="
 	app-misc/screen
 	app-shells/bash
 	chromeos-base/chromeos-dev-root
+	chromeos-base/termina-sshd-init
 	dev-python/cherrypy
 	dev-python/dbus-python
 	dev-util/mem
