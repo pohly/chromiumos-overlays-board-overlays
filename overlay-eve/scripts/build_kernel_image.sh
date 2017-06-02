@@ -6,4 +6,7 @@
 
 modify_kernel_command_line() {
   echo "i915.enable_dpcd_backlight=1" >> "$1"
+
+  # Limit to C1E due to b/35587084
+  echo "intel_idle.max_cstate=2" >> "$1"
 }
