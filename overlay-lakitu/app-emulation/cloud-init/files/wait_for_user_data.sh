@@ -18,4 +18,3 @@ do
   sleep 1
 done
 echo "Timed out waiting for attributes/user-data" 1>&2
-exit 1
