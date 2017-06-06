@@ -14,6 +14,9 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 
+# Add Intel Camera IMGU ipu3-fw.bin
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
+
 USE="${USE} -tpm tpm2"
 USE="${USE} arc"
 # TODO(jcliang): set arc-camera3 once all camera-related CLs are merged.
