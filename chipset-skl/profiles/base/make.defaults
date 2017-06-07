@@ -1,7 +1,8 @@
 # Copyright 2017 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-LINUX_FIRMWARE="i915_skl adsp_skl"
+# TODO: re-add i915_skl when PC[8|9|10] re-enabled and DMC firmware updated.
+LINUX_FIRMWARE="adsp_skl"
 
 # Initial value just for style purposes.
 USE=""
