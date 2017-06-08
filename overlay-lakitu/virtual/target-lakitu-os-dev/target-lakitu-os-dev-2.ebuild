@@ -53,8 +53,8 @@ RDEPEND="
 	chromeos-base/protofiles
 	dev-python/cherrypy
 	dev-python/dbus-python
+	dev-python/protobuf-python
 	dev-util/strace
-	dev-libs/protobuf-python
 	dev-util/mem
 	dev-util/strace
 	net-analyzer/tcpdump
