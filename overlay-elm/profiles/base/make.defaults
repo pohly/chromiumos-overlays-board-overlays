@@ -8,6 +8,9 @@ USE=""
 USE="${USE} touchview"
 USE="${USE} arc"
 
+# Use for arc migration policy
+USE="${USE} arc_migration_policy_check"
+
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
