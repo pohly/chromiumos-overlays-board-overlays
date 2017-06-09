@@ -6,8 +6,7 @@ EAPI=5
 MY_PN="github.com/GoogleCloudPlatform/${PN}"
 
 EGIT_REPO_URI="https://chromium.googlesource.com/external/${MY_PN}.git"
-# TODO(mikewu): change it to version number when the next release is available.
-EGIT_COMMIT="COS-2017-05-12"
+EGIT_COMMIT="v${PV}"
 EGIT_SOURCEDIR="${S}/src/${MY_PN}"
 
 CROS_GO_BINARIES="${MY_PN}"
