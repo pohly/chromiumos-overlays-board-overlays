@@ -1,0 +1,120 @@
+From https://github.com/GoogleCloudPlatform/compute-image-packages/pull/410/commits/33906c7f1a602e7b811c2e9e11f6791a687388f6
+From 33906c7f1a602e7b811c2e9e11f6791a687388f6 Mon Sep 17 00:00:00 2001
+From: Max Illfelder <illfelder@google.com>
+Date: Wed, 7 Jun 2017 15:09:59 -0700
+Subject: [PATCH] Add a config option to disable IP alias support.
+
+---
+ README.md                                          |  1 +
+ .../instance_setup/instance_config.py              |  1 +
+ .../ip_forwarding/ip_forwarding_daemon.py          |  8 ++++--
+ .../tests/ip_forwarding_daemon_test.py             | 32 ++++++++++++++++++++++
+ 4 files changed, 40 insertions(+), 2 deletions(-)
+
+diff --git a/README.md b/README.md
+index b7f75e2..dfd13f5 100644
+--- a/README.md
++++ b/README.md
+@@ -248,6 +248,7 @@ InstanceSetup     | set_boto_config      | `false` skips setting up a boto confi
+ InstanceSetup     | set_host_keys        | `false` skips generating host keys on first boot.
+ InstanceSetup     | set_multiqueue       | `false` skips multiqueue driver support.
+ IpForwarding      | ethernet_proto_id    | Protocol ID string for daemon added routes.
++IpForwarding      | ip_aliases           | `false` disables setting up alias IP routes.
+ MetadataScripts   | run_dir              | String base directory where metadata scripts are executed.
+ MetadataScripts   | startup              | `false` disables startup script execution.
+ MetadataScripts   | shutdown             | `false` disables shutdown script execution.
+diff --git a/google_compute_engine/instance_setup/instance_config.py b/google_compute_engine/instance_setup/instance_config.py
+index e64457d..eac48fd 100644
+--- a/google_compute_engine/instance_setup/instance_config.py
++++ b/google_compute_engine/instance_setup/instance_config.py
+@@ -61,6 +61,7 @@ class InstanceConfig(config_manager.ConfigManager):
+       },
+       'IpForwarding': {
+           'ethernet_proto_id': '66',
++          'ip_aliases': 'true',
+       },
+       'MetadataScripts': {
+           'run_dir': '',
+diff --git a/google_compute_engine/ip_forwarding/ip_forwarding_daemon.py b/google_compute_engine/ip_forwarding/ip_forwarding_daemon.py
+index 45b0ce7..e3e5c1b 100755
+--- a/google_compute_engine/ip_forwarding/ip_forwarding_daemon.py
++++ b/google_compute_engine/ip_forwarding/ip_forwarding_daemon.py
+@@ -46,7 +46,7 @@ class IpForwardingDaemon(object):
+ 
+   network_interfaces = 'instance/network-interfaces'
+ 
+-  def __init__(self, proto_id=None, debug=False):
++  def __init__(self, proto_id=None, ip_aliases=True, debug=False):
+     """Constructor.
+ 
+     Args:
+@@ -60,6 +60,7 @@ def __init__(self, proto_id=None, debug=False):
+     self.network_utils = network_utils.NetworkUtils(logger=self.logger)
+     self.ip_forwarding_utils = ip_forwarding_utils.IpForwardingUtils(
+         logger=self.logger, proto_id=proto_id)
++    self.ip_aliases = ip_aliases
+     try:
+       with file_utils.LockFile(LOCKFILE):
+         self.logger.info('Starting Google IP Forwarding daemon.')
+@@ -136,7 +137,8 @@ def HandleNetworkInterfaces(self, result):
+       ip_addresses = []
+       if interface:
+         ip_addresses.extend(network_interface.get('forwardedIps', []))
+-        ip_addresses.extend(network_interface.get('ipAliases', []))
++        if self.ip_aliases:
++          ip_addresses.extend(network_interface.get('ipAliases', []))
+         self._HandleForwardedIps(ip_addresses, interface)
+       else:
+         message = 'Network interface not found for MAC address: %s.'
+@@ -154,6 +156,8 @@ def main():
+     IpForwardingDaemon(
+         proto_id=instance_config.GetOptionString(
+             'IpForwarding', 'ethernet_proto_id'),
++        ip_aliases=instance_config.GetOptionBool(
++            'IpForwarding', 'ip_aliases'),
+         debug=bool(options.debug))
+ 
+ 
+diff --git a/google_compute_engine/ip_forwarding/tests/ip_forwarding_daemon_test.py b/google_compute_engine/ip_forwarding/tests/ip_forwarding_daemon_test.py
+index 4c0f32f..fe576e2 100644
+--- a/google_compute_engine/ip_forwarding/tests/ip_forwarding_daemon_test.py
++++ b/google_compute_engine/ip_forwarding/tests/ip_forwarding_daemon_test.py
+@@ -176,6 +176,38 @@ def testHandleForwardedIps(self):
+     self.assertEqual(mocks.mock_calls, expected_calls)
+ 
+   def testHandleNetworkInterfaces(self):
++    self.mock_setup.ip_aliases = False
++    mocks = mock.Mock()
++    mocks.attach_mock(self.mock_network_utils, 'network')
++    mocks.attach_mock(self.mock_setup, 'setup')
++    self.mock_network_utils.GetNetworkInterface.side_effect = [
++        'eth0', 'eth1', 'eth2', 'eth3', None]
++    result = [
++        {'mac': '1', 'forwardedIps': ['a']},
++        {'mac': '2', 'forwardedIps': ['b'], 'ipAliases': ['banana']},
++        {'mac': '3', 'ipAliases': ['cherry']},
++        {'mac': '4'},
++        {'forwardedIps': ['d'], 'ipAliases': ['date']},
++    ]
++
++    ip_forwarding_daemon.IpForwardingDaemon.HandleNetworkInterfaces(
++        self.mock_setup, result)
++    expected_calls = [
++        mock.call.network.GetNetworkInterface('1'),
++        mock.call.setup._HandleForwardedIps(['a'], 'eth0'),
++        mock.call.network.GetNetworkInterface('2'),
++        mock.call.setup._HandleForwardedIps(['b'], 'eth1'),
++        mock.call.network.GetNetworkInterface('3'),
++        mock.call.setup._HandleForwardedIps([], 'eth2'),
++        mock.call.network.GetNetworkInterface('4'),
++        mock.call.setup._HandleForwardedIps([], 'eth3'),
++        mock.call.network.GetNetworkInterface(None),
++        mock.call.setup.logger.warning(mock.ANY, None),
++    ]
++    self.assertEqual(mocks.mock_calls, expected_calls)
++
++  def testHandleNetworkInterfacesIpAliases(self):
++    self.mock_setup.ip_aliases = True
+     mocks = mock.Mock()
+     mocks.attach_mock(self.mock_network_utils, 'network')
+     mocks.attach_mock(self.mock_setup, 'setup')
