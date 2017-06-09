@@ -10,6 +10,10 @@ USE="${USE} pointer_events"
 USE="${USE} passive_event_listeners"
 USE="${USE} edge_touch_filtering"
 USE="${USE} arc"
+
+# Use for arc migration policy
+USE="${USE} arc_migration_policy_check"
+
 # override the baseboard in this one exception (combo of TPM2 + cr50)
 USE="${USE} -cr50_onboard"
 USE="${USE} tpm -tpm2"
