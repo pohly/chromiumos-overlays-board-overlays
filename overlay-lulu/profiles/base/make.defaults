@@ -11,7 +11,6 @@ USE="${USE} has_keyboard_backlight lulu"
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
 
-USE="${USE} arc"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
