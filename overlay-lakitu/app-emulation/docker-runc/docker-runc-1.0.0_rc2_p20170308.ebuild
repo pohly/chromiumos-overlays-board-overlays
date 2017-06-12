@@ -1,7 +1,10 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
+
+inherit eutils multilib
+
 EGO_PN="github.com/docker/${PN/docker-}"
 
 if [[ ${PV} == *9999 ]]; then
@@ -32,6 +35,10 @@ S=${WORKDIR}/${P}/src/${EGO_PN}
 
 RESTRICT="test"
 
+src_prepare() {
+	epatch "${FILESDIR}/1.0.0_rc2_p20170201-use-GO-cross-compiler.patch"
+}
+
 src_compile() {
 	# Taken from app-emulation/docker-1.7.0-r1
 	export CGO_CFLAGS="-I${ROOT}/usr/include"
@@ -44,6 +51,8 @@ src_compile() {
 	ln -sf ../../../.. .gopath/src/"${GITHUB_URI}"
 	export GOPATH="${PWD}/.gopath:${PWD}/vendor"
 
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
 	# build up optional flags
 	local options=(
 		$(usex apparmor 'apparmor')
