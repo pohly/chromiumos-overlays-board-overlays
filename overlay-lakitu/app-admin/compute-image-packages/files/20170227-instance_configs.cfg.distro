@@ -10,3 +10,6 @@ set_boto_config = false
 
 [MetadataScripts]
 run_dir = /var/lib/google/
+
+[IpForwarding]
+ip_aliases = false
