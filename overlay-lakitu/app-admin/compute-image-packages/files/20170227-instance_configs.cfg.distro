@@ -13,3 +13,6 @@ run_dir = /var/lib/google/
 
 [NetworkInterfaces]
 setup = false
+
+[IpForwarding]
+ip_aliases = false
