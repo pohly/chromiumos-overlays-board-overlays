@@ -14,9 +14,9 @@ IUSE="-runc"
 RDEPEND="
 	chromeos-base/chromeos-bsp-termina
 	chromeos-base/run_oci
+	chromeos-base/vm_tools
 	net-fs/nfs-utils
 	runc? ( app-emulation/runc )
-	sys-apps/upstart
 	sys-auth/pambase
 	virtual/chromeos-bsp
 	virtual/implicit-system
