@@ -1,2 +1,30 @@
-#TTY_CONSOLE="ttyS2"
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+LINUX_FIRMWARE=""
+
+USE="${USE} eve cros_ec"
+USE="${USE} -tpm tpm2"
+USE="${USE} cr50_onboard"
+USE="${USE} arc touchview"
+USE="${USE} has_keyboard_backlight als"
+
+# Disable ACPI AC device and use USB PD power supply driver
+USE="${USE} acpi_ac_off"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Avoid inhibiting the keyboard (which reports events from side buttons).
+USE="${USE} keyboard_includes_side_buttons"
+
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
+
 INPUT_DEVICES="st wacom"
+
+# For debug images, disable for production
+TTY_CONSOLE="ttyS0"
+USE="${USE} pcserial"
