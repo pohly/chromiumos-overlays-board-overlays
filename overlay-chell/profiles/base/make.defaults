@@ -5,6 +5,8 @@
 # Initial value just for style purposes.
 USE=""
 
+USE="${USE} containers device_jail"
+
 USE="${USE} direncryption"
 
 # Uncomment this line to activate the serial port.

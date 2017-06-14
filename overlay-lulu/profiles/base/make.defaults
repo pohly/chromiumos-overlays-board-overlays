@@ -11,6 +11,8 @@ USE="${USE} has_keyboard_backlight lulu"
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
 
+USE="${USE} containers device_jail"
+
 USE="${USE} arc"
 
 USE="${USE} direncryption"
