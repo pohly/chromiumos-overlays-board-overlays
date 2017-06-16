@@ -3,5 +3,5 @@
 # found in the LICENSE file.
 
 TOOLBOX_DOCKER_IMAGE="gcr.io/google-containers/toolbox"
-TOOLBOX_DOCKER_TAG="20161110-02"
+TOOLBOX_DOCKER_TAG="20170615-00"
 TOOLBOX_BIND="--bind=/:/media/root/ --bind=/mnt/disks/:/media/root/mnt/disks/ --bind=/var/:/media/root/var/ --bind=/home:/media/root/home/ --bind=/etc/resolv.conf:/etc/resolv.conf"
