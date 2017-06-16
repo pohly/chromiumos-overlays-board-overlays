@@ -15,5 +15,3 @@ USE="${USE} -bluetooth -cellular -cras -cups -debugd -encrypted_stateful -kmod"
 USE="${USE} -power_management -shill -systemd -timers -tpm -vaapi -vtconsole -udev"
 
 USE="${USE} kernel-4_4"
-
-TTY_CONSOLE="ttyS0 -tty2"
