@@ -94,10 +94,5 @@ Only the three quirks included above are recognized at this point:
     </Decoders>
     <Include href="media_codecs_google_audio.xml" />
     <Include href="media_codecs_google_video.xml" />
-    <Decoders>
-        <MediaCodec name="OMX.google.hevc.decoder" type="video/hevc" update="true" >
-            <!-- Overwrites the max frame size to 720p (b/35855735). -->
-            <Limit name="size" min="2x2" max="1280x1280" />
-        </MediaCodec>
-    </Decoders>
+    <Include href="media_codecs_cheets.xml" />
 </MediaCodecs>
