@@ -1,0 +1,15 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-x86_64"
+CHROMEOS_KERNEL_ARCH="x86_64"
+
+# Initial value just for style purposes.
+USE=""
+
+# Use kernel-4_4 with amdgpu support.
+USE="${USE} builtin_fw_amdgpu legacy_keyboard legacy_power_button kernel-4_4"
+
+# Enable unibuild
+USE="${USE} unibuild"
