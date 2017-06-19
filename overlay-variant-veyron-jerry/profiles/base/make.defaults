@@ -14,5 +14,7 @@ USE="${USE} allow_consumer_kiosk"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
+USE="${USE} arc"
+
 # The EC board name is jerry
 EC_FIRMWARE="jerry"
