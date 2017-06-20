@@ -1,1 +1,0 @@
-containerd-0.2.3_p20170131.ebuild
