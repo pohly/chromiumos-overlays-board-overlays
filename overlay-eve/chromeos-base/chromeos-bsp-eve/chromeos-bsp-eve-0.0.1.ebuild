@@ -33,4 +33,11 @@ src_install() {
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs eve "${audio_config_dir}"
+
+	# Install platform-specific internal keyboard keymap.
+	# It should probbaly go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 bit boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/61-eve-keyboard.hwdb"
 }
