@@ -1,0 +1,9 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+#
+# Special mapping for "Hammer" keyboard that has a special
+# "Assistant" key.
+#
+evdev:input:b0003v18D1p5022*
+ KEYBOARD_KEY_ffd10018=assistant
