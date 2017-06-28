@@ -62,16 +62,32 @@ cleanup() {
 grub_install() {
   trap cleanup EXIT
   IMAGE="$1"
+
   info "Installing GRUB2 ${GRUB_TARGET} on ${IMAGE}"
+
   LOOP_DEV="$(sudo losetup --find --show --partscan "${IMAGE}")"
 
-  # Wait till udevd finishes the work.
   if ! sudo udevadm settle --timeout=10; then
     warn "Error running 'udevadm settle'"
   fi
 
+  local -r esp_node=${LOOP_DEV}p12
+  # Wait till udevd finishes the work.
+  for i in {1..10}; do
+    info "Probing ${esp_node}"
+    if [[ -b "${esp_node}" ]]; then
+      break
+    fi
+    sleep 1
+    sudo blockdev --rereadpt "${LOOP_DEV}"
+  done
+  if [[ ! -b "${esp_node}" ]]; then
+    error "EFI partition ${esp_node} not available"
+    return 1
+  fi
+
   ESP_DIR="$(mktemp --directory)"
-  if ! sudo mount -t vfat "${LOOP_DEV}p12" "${ESP_DIR}"; then
+  if ! sudo mount -t vfat "${esp_node}" "${ESP_DIR}"; then
     error "Could not mount EFI partition"
     return 1
   fi
