@@ -4,6 +4,8 @@
 
 EAPI=5
 
+inherit appid
+
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
 
