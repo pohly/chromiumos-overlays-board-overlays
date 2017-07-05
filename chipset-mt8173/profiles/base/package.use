@@ -1,3 +1,4 @@
+media-gfx/deqp vulkan
 media-libs/mesa egl -gbm gles2 shared-glapi
 media-libs/mesa-img egl -gbm gles2 shared-glapi
 media-libs/piglit waffle
