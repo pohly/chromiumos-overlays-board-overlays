@@ -27,4 +27,6 @@ src_install() {
 	systemd_dounit "${FILESDIR}"/usr-local-remount.service
 
 	systemd_newtmpfilesd "${FILESDIR}"/dev-image.tmpfiles dev-image.conf
+
+	systemd_enable_service getty.target serial-getty@ttyS1.service
 }
