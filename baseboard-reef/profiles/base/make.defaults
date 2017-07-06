@@ -27,3 +27,6 @@ USE="${USE} -tpm tpm2"
 
 # Include prebuilt (&signed) CR50 FW
 USE="${USE} cr50_onboard"
+
+# Add EC logging
+USE="${USE} eclog"
