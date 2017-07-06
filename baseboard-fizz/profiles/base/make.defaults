@@ -22,3 +22,6 @@ USE="${USE} arc"
 USE="${USE} direncryption"
 
 USE="${USE} cros_ec cr50_onboard"
+
+# Add EC logging
+USE="${USE} eclog"

@@ -5,6 +5,8 @@ USE=""
 USE="${USE} dptf"
 # Required for alternate kernel LPC access
 USE="${USE} cros_ec_mec"
+# Add EC logging
+USE="${USE} eclog"
 
 # WiFi and BT driver firmware
 LINUX_FIRMWARE="marvell-pcie8897 iwlwifi-7260 iwlwifi-7265D ibt-hw fw_sst"
