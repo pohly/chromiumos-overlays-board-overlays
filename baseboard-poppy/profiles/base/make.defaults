@@ -16,7 +16,8 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 
 USE="${USE} -tpm tpm2"
 USE="${USE} arc"
-USE="${USE} arc-camera3"
+# TODO(jcliang): set arc-camera3 once all camera-related CLs are merged.
+# USE="${USE} arc-camera3"
 
 # Use ext4 crypto
 USE="${USE} direncryption"
