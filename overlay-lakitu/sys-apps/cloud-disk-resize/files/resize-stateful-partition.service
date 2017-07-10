@@ -1,0 +1,13 @@
+[Unit]
+Description=Resize stateful partition
+DefaultDependencies=no
+Requires=mnt-stateful_partition.mount
+After=mnt-stateful_partition.mount
+Before=sysinit.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/cloud/resize-stateful
+
+[Install]
+WantedBy=sysinit.target

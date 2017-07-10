@@ -1,0 +1,11 @@
+[Unit]
+Description=Setup audit rules
+After=iptables-setup.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/cloud/audit/setup.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

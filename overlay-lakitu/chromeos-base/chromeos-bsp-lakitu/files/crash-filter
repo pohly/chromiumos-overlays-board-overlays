@@ -1,0 +1,13 @@
+#!/bin/bash
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+pid=$1
+exec_device=$(stat -L -c %D /proc/$pid/exe)
+root_device=$(stat -c %D /)
+
+if [ "${exec_device}" != "${root_device}" ]; then
+        logger --tag crash_reporter "Not collecting crash from pid=${pid}"
+        exit 1
+fi
