@@ -28,3 +28,6 @@ INPUT_DEVICES="st wacom"
 # For debug images, disable for production
 TTY_CONSOLE="ttyS0"
 USE="${USE} pcserial"
+
+# Add EC logging
+USE="${USE} eclog"
