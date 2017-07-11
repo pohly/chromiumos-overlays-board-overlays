@@ -13,9 +13,6 @@ USE="${USE} -opengl opengles"
 # Enable ozone in Chrome.
 USE="${USE} ozone"
 
-# Enable atomic modesetting.
-USE="${USE} drm_atomic"
-
 # Enable gestures support in Chrome.
 USE="${USE} evdev_gestures"
 
