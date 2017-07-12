@@ -6,6 +6,8 @@
 USE=""
 LINUX_FIRMWARE=""
 
+USE="${USE} containers device_jail"
+
 USE="${USE} eve cros_ec"
 USE="${USE} -tpm tpm2"
 USE="${USE} cr50_onboard"
