@@ -10,7 +10,7 @@ HOMEPAGE="http://dev.chromium.org/"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor"
+IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor criu"
 
 LAKITU_RDEPEND="
 	bootchart? ( app-benchmarks/bootchart )
@@ -50,6 +50,7 @@ LAKITU_RDEPEND="
 		sys-apps/apparmor
 		sec-policy/apparmor-profiles
 	)
+	sys-apps/cloud-disk-resize
 	sys-apps/dbus
 	sys-apps/ethtool
 	>=sys-apps/iproute2-3.19.0
@@ -57,6 +58,7 @@ LAKITU_RDEPEND="
 	sys-apps/mosys
 	sys-apps/pv
 	sys-fs/e2fsprogs
+	criu? ( sys-process/criu )
 	virtual/chromeos-bsp
 	virtual/chromeos-firewall
 	virtual/implicit-system
