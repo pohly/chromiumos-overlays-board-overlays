@@ -5,6 +5,7 @@ EAPI=4
 
 inherit cros-audio-configs
 inherit appid
+inherit udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -40,4 +41,7 @@ src_install() {
 	# that directory (it wants to look in /lib64/udev).
 	insinto "${EPREFIX}/etc/udev/hwdb.d"
 	doins "${FILESDIR}/61-eve-keyboard.hwdb"
+
+	# Intall a rule tagging keyboard as having updated layout
+	udev_dorules "${FILESDIR}/61-eve-keyboard.rules"
 }
