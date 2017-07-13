@@ -2,8 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 #
-# Special keyboard mapping for Eve project. The keyboard has an extra
-# "Assistant" key.
+# Special keyboard mapping for Eve project. The keyboard has extra
+# "Assistant" and "Hamburger" keys.
 #
 evdev:atkbd:dmi:bvn*:bvr*:bd*:svnGoogle:pnEve:pvr*
+ KEYBOARD_KEY_5d=controlpanel
  KEYBOARD_KEY_d8=assistant
