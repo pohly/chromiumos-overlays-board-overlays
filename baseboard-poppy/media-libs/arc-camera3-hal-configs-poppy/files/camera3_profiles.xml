@@ -78,7 +78,6 @@
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
-                edge.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
                 jpeg.quality,
@@ -93,7 +92,6 @@
                 lens.focusDistance,
                 lens.filterDensity,
                 lens.opticalStabilizationMode,
-                noiseReduction.mode,
                 tonemap.curve,
                 tonemap.mode"/>
 
@@ -121,7 +119,6 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
-                edge.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
@@ -133,7 +130,6 @@
                 lens.filterDensity,
                 lens.focusDistance,
                 lens.opticalStabilizationMode,
-                noiseReduction.mode,
                 request.pipelineDepth,
                 scaler.cropRegion,
                 sensor.exposureTime,
@@ -161,37 +157,44 @@
                 BLOB,1920x1080,OUTPUT,
                 BLOB,1280x720,OUTPUT,
                 BLOB,640x480,OUTPUT,
+                BLOB,640x360,OUTPUT,
                 BLOB,320x240,OUTPUT,
                 YCbCr_420_888,1920x1080,OUTPUT,
                 YCbCr_420_888,1280x720,OUTPUT,
                 YCbCr_420_888,640x480,OUTPUT,
+                YCbCr_420_888,640x360,OUTPUT,
                 YCbCr_420_888,320x240,OUTPUT,
                 IMPLEMENTATION_DEFINED,1920x1080,OUTPUT,
                 IMPLEMENTATION_DEFINED,1280x720,OUTPUT,
                 IMPLEMENTATION_DEFINED,640x480,OUTPUT,
+                IMPLEMENTATION_DEFINED,640x360,OUTPUT,
                 IMPLEMENTATION_DEFINED,320x240,OUTPUT" />
             <scaler.availableMinFrameDurations value="BLOB,4160x3120,41666666,
                 BLOB,1920x1080,41666666,
                 BLOB,1280x720,41666666,
                 BLOB,640x480,41666666,
+                BLOB,640x360,41666666,
                 BLOB,320x240,41666666,
                 YCbCr_420_888,1920x1080,41666666,
                 YCbCr_420_888,1280x720,41666666,
                 YCbCr_420_888,640x480,41666666,
+                YCbCr_420_888,640x360,41666666,
                 YCbCr_420_888,320x240,41666666,
                 IMPLEMENTATION_DEFINED,1920x1080,41666666,
                 IMPLEMENTATION_DEFINED,1280x720,41666666,
                 IMPLEMENTATION_DEFINED,640x480,41666666,
+                IMPLEMENTATION_DEFINED,640x360,41666666,
                 IMPLEMENTATION_DEFINED,320x240,41666666" />
             <scaler.availableStallDurations value="BLOB,4160x3120,41666666,
                                                    BLOB,1920x1080,41666666,
                                                    BLOB,1280x720,41666666,
                                                    BLOB,640x480,41666666,
+                                                   BLOB,640x360,41666666,
                                                    BLOB,320x240,41666666" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
             <sensor.info.activeArraySize value="48,40,4224,3136"/>
-            <sensor.info.sensitivityRange value="49,1600"/>
+            <sensor.info.sensitivityRange value="32,2400"/>
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="200000000"/>
@@ -203,7 +206,7 @@
             <sensor.baseGainFactor value="0,1"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.blackLevelPattern value="0,0,0,0"/>
             <sensor.maxAnalogSensitivity value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <sensor.orientation value="270"/>
+            <sensor.orientation value="0"/>
             <sensor.profileHueSatMapDimensions value="0,0,0"/>
             <sensor.availableTestPatternModes value="OFF"/>
             <!-- Info -->
@@ -231,12 +234,8 @@
             <flash.maxEnergy value="10"/>
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
-            <!-- Edge -->
-            <edge.availableEdgeModes value="OFF,FAST,HIGH_QUALITY"/>
             <!-- Hot Pixel -->
             <hotPixel.availableHotPixelModes value="FAST"/>
-            <!-- Noise Reduction -->
-            <noiseReduction.availableNoiseReductionModes value="OFF,FAST,HIGH_QUALITY,MINIMAL"/>
 
         </Android_metadata>
 
@@ -332,7 +331,6 @@
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
-                edge.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
                 jpeg.quality,
@@ -347,7 +345,6 @@
                 lens.focusDistance,
                 lens.filterDensity,
                 lens.opticalStabilizationMode,
-                noiseReduction.mode,
                 tonemap.curve,
                 tonemap.mode"/>
 
@@ -374,7 +371,6 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
-                edge.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
@@ -386,7 +382,6 @@
                 lens.filterDensity,
                 lens.focusDistance,
                 lens.opticalStabilizationMode,
-                noiseReduction.mode,
                 request.pipelineDepth,
                 scaler.cropRegion,
                 sensor.exposureTime,
@@ -415,39 +410,46 @@
                 BLOB,1920x1080,OUTPUT,
                 BLOB,1280x720,OUTPUT,
                 BLOB,640x480,OUTPUT,
+                BLOB,640x360,OUTPUT,
                 BLOB,320x240,OUTPUT,
                 YCbCr_420_888,1920x1080,OUTPUT,
                 YCbCr_420_888,1280x720,OUTPUT,
                 YCbCr_420_888,640x480,OUTPUT,
+                YCbCr_420_888,640x360,OUTPUT,
                 YCbCr_420_888,320x240,OUTPUT,
                 IMPLEMENTATION_DEFINED,1920x1080,OUTPUT,
                 IMPLEMENTATION_DEFINED,1280x720,OUTPUT,
                 IMPLEMENTATION_DEFINED,640x480,OUTPUT,
+                IMPLEMENTATION_DEFINED,640x360,OUTPUT,
                 IMPLEMENTATION_DEFINED,320x240,OUTPUT" />
             <scaler.availableMinFrameDurations value="
                 BLOB,2560x1920,41666666,
                 BLOB,1920x1080,41666666,
                 BLOB,1280x720,41666666,
                 BLOB,640x480,41666666,
+                BLOB,640x360,41666666,
                 BLOB,320x240,41666666,
                 YCbCr_420_888,1920x1080,41666666,
                 YCbCr_420_888,1280x720,41666666,
                 YCbCr_420_888,640x480,41666666,
+                YCbCr_420_888,640x360,41666666,
                 YCbCr_420_888,320x240,41666666,
                 IMPLEMENTATION_DEFINED,1920x1080,41666666,
                 IMPLEMENTATION_DEFINED,1280x720,41666666,
                 IMPLEMENTATION_DEFINED,640x480,41666666,
+                IMPLEMENTATION_DEFINED,640x360,41666666,
                 IMPLEMENTATION_DEFINED,320x240,41666666" />
             <scaler.availableStallDurations value="
                 BLOB,2560x1920,41666666,
                 BLOB,1920x1080,41666666,
                 BLOB,1280x720,41666666,
                 BLOB,640x480,41666666,
+                BLOB,640x360,41666666,
                 BLOB,320x240,41666666" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
             <sensor.info.activeArraySize value="0,0,2560,1920"/>
-            <sensor.info.sensitivityRange value="100,800"/>
+            <sensor.info.sensitivityRange value="50,800"/>
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="200000000"/>
@@ -459,7 +461,7 @@
             <sensor.baseGainFactor value="0,1"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.blackLevelPattern value="0,0,0,0"/>
             <sensor.maxAnalogSensitivity value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <sensor.orientation value="90"/>
+            <sensor.orientation value="0"/>
             <sensor.profileHueSatMapDimensions value="0,0,0"/>
             <sensor.availableTestPatternModes value="OFF"/>
             <!-- Info -->
@@ -487,12 +489,8 @@
             <flash.maxEnergy value="10"/>
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
-            <!-- Edge -->
-            <edge.availableEdgeModes value="OFF,FAST,HIGH_QUALITY"/>
             <!-- Hot Pixel -->
             <hotPixel.availableHotPixelModes value="FAST"/>
-            <!-- Noise Reduction -->
-            <noiseReduction.availableNoiseReductionModes value="OFF,FAST,HIGH_QUALITY,MINIMAL"/>
 
         </Android_metadata>
 
