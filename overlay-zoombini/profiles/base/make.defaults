@@ -13,3 +13,6 @@ USE="${USE} arc"
 USE="${USE} pcserial"
 # Declare set of enabled consoles
 TTY_CONSOLE="ttyS0"
+
+# All firmware to build from the EC code base.
+EC_FIRMWARE="zoombini"
