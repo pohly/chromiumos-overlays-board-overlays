@@ -13,6 +13,9 @@ IUSE=""
 S=${WORKDIR}
 
 src_install() {
+	insinto /etc
+	doins "${FILESDIR}"/resolv.conf
+
 	insinto /etc/init
-	doins "${FILESDIR}"/*.conf
+	doins "${FILESDIR}"/init/*.conf
 }
