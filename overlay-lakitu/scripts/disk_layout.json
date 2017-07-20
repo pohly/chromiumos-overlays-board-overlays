@@ -1,0 +1,34 @@
+{
+  "parent": "legacy_disk_layout.json",
+
+  "layouts": {
+  # The following number for size (4966) is determined such that the
+  # size of image with "base" disk layout is exactly 10GiB. GCE images
+  # are expected to be multiple of 1GiB. We choose 10GiB because it's
+  # the default boot disk size on GCE.
+  #
+  # For now, we determine the starting sector number of the stateful
+  # partition with cgpt (see below) on a built image. But ideally
+  # we should arrive at this number based on legacy_disk_layout.json.
+  #
+  # Partitions are expected to be aligned to 4096 block boundary,
+  # that is, 2 MiB.
+  #
+  # Starting with crrev.com/c/528047, 1GiB will always be added
+  # to the stateful partition size. Therefore, we leave room
+  # for it in the computation below to prevent the image size
+  # growing beyond 10GiB.
+  #
+  # number of 512-byte sectors in 10GiB:    20,971,520
+  # stateful partition starting sector:      8,704,000 (cgpt show /dev/sda)
+  # stateful partition size in MiB:              5,990 (2MiB aligned)
+  # stateful partition size less 1GiB in MiB:    4,966 (crrev.com/c/528047)
+   "common": [
+      {
+        # STATE
+        "num": 1,
+        "size": "4966 MiB"
+      }
+    ]
+  }
+}
