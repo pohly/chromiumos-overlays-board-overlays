@@ -8,19 +8,41 @@
     # common is the standard layout template.
     "common": [
       {
+        # Slot B rootfs. Updated for more space, like Slot A below
+        "num": 5,
+        "size": "4096 MiB"
+      },
+      {
         # Slot A rootfs. Adjust to allow for more space.
         "num": 3,
-        "fs_size_min": "1750 MiB",
-        "size_min": "2000 MiB"
+        "fs_size_min": "2048 MiB",
+        "size": "4096 MiB"
+      }
+    ],
+    "usb": [
+      {
+        # TODO(adlr): see why stacking logic fails, thus requiring this section
+        # in this file
+        "num": 5,
+        "size": "2 MiB"
+      },
+      {
+        "num": 3,
+        "size": "2300 MiB"
       }
     ],
     # Used for factory install images. No need to adjust fs size or partition
     # size since these do not need more space.
     "factory_install": [
       {
+        "num": 5,
+        "size": "2 MiB"
+      },
+      {
         "num": 3,
-        "fs_size_min": "0 MiB",
-        "size_min": "0 MiB"
+        "size": "420 MiB",
+        "fs_size_min": "400 MiB",
+        "fs_size": "400 MiB"
       }
     ]
   }
