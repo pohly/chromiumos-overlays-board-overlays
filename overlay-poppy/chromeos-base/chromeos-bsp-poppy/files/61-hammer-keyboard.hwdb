@@ -7,3 +7,4 @@
 #
 evdev:input:b0003v18D1p5022*
  KEYBOARD_KEY_ffd10018=assistant
+ KEYBOARD_KEY_00070068=controlpanel
