@@ -11,7 +11,7 @@ U_BOOT_FDT_USE="lumpy"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} 32bit_au als bluetooth fade_boot_splash_screen gdmwimax"
+USE="${USE} als bluetooth fade_boot_splash_screen gdmwimax"
 USE="${USE} lumpy watchdog wimax"
 
 # Allow consumer kiosk.
