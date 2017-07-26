@@ -13,9 +13,6 @@ USE=""
 
 USE="${USE} bluetooth butterfly legacy_keyboard watchdog"
 
-# Use 32-bit AU post-install binary to accomodate 32 --> 64 AU
-USE="${USE} 32bit_au"
-
 # This USE flag is obsolete on 3.8+ kernel
 USE="${USE} realtekpstor"
 
