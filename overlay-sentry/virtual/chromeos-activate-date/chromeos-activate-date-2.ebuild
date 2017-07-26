@@ -10,4 +10,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="*"
 
-RDEPEND="chromeos-base/chromeos-activate-date-sentry"
+RDEPEND="
+	chromeos-base/chromeos-activate-date
+	!!chromeos-base/chromeos-activate-date-sentry
+"

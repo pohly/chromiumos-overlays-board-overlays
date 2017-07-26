@@ -10,4 +10,7 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
 
-RDEPEND="chromeos-base/chromeos-activate-date-pyro"
+RDEPEND="
+	chromeos-base/chromeos-activate-date
+	!!chromeos-base/chromeos-activate-date-pyro
+"
