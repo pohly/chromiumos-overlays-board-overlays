@@ -13,9 +13,6 @@ USE=""
 
 USE="${USE} has_hdd intel_hdcp legacy_keyboard parrot watchdog"
 
-# 32-bit updater during 32->64 switch
-USE="${USE} 32bit_au"
-
 # Disable bluetooth tests, too.
 USE="${USE} -tests_security_HciconfigDefaultSettings"
 
