@@ -22,4 +22,4 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{533B7092-5828-48E6-9F77-C7ADCBF8F7E9}" "CHROMEBOOK"
-
+}
