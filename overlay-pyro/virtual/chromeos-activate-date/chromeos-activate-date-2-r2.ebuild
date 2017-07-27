@@ -1,1 +1,0 @@
-chromeos-activate-date-2.ebuild
