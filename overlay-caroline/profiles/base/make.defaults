@@ -1,1 +1,27 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} caroline cros_ec pd_sync touchview"
+USE="${USE} edge_touch_filtering"
+USE="${USE} arc"
+
+# All firmwares to build from the EC code base
+EC_FIRMWARE="caroline"
+EC_FIRMWARE_EXTRA="caroline_pd"
+PD_FIRMWARE="caroline_pd"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Avoid inhibiting the keyboard (which reports events from side buttons).
+USE="${USE} keyboard_includes_side_buttons"
+
+# Disable touchpad wakeup since it can't be turned off dynamically when the
+# system is converted to tablet mode while it's suspended.
+USE="${USE} -touchpad_wakeup"
+
 INPUT_DEVICES="wacom"
