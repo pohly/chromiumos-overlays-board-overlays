@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 # Initial value just for style purposes.
+LINUX_FIRMWARE=""
 USE=""
 
 USE="${USE} cros_ec eclog mosys_eventlog -opengl"
@@ -19,10 +20,13 @@ USE="${USE} -tpm tpm2"
 # Include prebuilt (&signed) CR50 FW
 USE="${USE} cr50_onboard"
 
-# Google USBPD peripheral firmwares
-LINUX_FIRMWARE="cros-pd"
+# QCA Wifi.
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k"
 
-LINUX_FIRMWARE="${LINUX_FIRMWARE} marvell-pcie8997 rockchip-dptx"
+# Google USBPD peripheral firmwares
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
+
+LINUX_FIRMWARE="${LINUX_FIRMWARE} marvell-pcie8997 qca-bt rockchip-dptx"
 
 VIDEO_CARDS="rockchip"
 
