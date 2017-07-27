@@ -9,5 +9,17 @@ USE="${USE} containers device_jail"
 
 USE="${USE} direncryption"
 
+USE="${USE} chell cros_ec has_keyboard_backlight pd_sync"
+USE="${USE} arc"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# All firmwares to build from the EC code base
+EC_FIRMWARE="chell"
+EC_FIRMWARE_EXTRA="chell_pd"
+PD_FIRMWARE="chell_pd"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
