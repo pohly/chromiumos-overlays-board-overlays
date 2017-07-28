@@ -9,6 +9,7 @@ LLVM_TARGETS="AMDGPU"
 USE=""
 
 USE="${USE} kahlee"
+USE="${USE} cros_ec"
 
 # with some legacy peripherals
 USE="${USE} legacy_keyboard legacy_power_button"
