@@ -1,0 +1,4 @@
+reef:base
+chromiumos:default/linux/amd64/10.0/chromeos
+baseboard-reef:base
+freon:base/amd64
