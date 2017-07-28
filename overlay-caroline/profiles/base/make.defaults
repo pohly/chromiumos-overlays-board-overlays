@@ -8,6 +8,7 @@ USE=""
 USE="${USE} caroline cros_ec pd_sync touchview"
 USE="${USE} edge_touch_filtering"
 USE="${USE} arc"
+USE="${USE} internal_stylus"
 
 # All firmwares to build from the EC code base
 EC_FIRMWARE="caroline"
