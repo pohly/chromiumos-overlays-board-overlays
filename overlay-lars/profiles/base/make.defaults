@@ -5,6 +5,15 @@
 # Initial value just for style purposes.
 USE=""
 
+USE="${USE} has_keyboard_backlight lars"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
 USE="${USE} arc"
 
 # Use for arc migration policy
