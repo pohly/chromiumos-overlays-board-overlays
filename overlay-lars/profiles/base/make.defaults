@@ -16,8 +16,5 @@ USE="${USE} direncryption"
 
 USE="${USE} arc"
 
-# Use for arc migration policy
-USE="${USE} arc_migration_policy_check"
-
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"

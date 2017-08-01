@@ -12,9 +12,6 @@ USE="${USE} edge_touch_filtering"
 USE="${USE} arc"
 USE="${USE} internal_stylus"
 
-# Use for arc migration policy
-USE="${USE} arc_migration_policy_check"
-
 # override the baseboard in this one exception (combo of TPM2 + cr50)
 USE="${USE} -cr50_onboard"
 USE="${USE} tpm -tpm2"
