@@ -184,6 +184,10 @@ src_prepare() {
 		"${FILESDIR}"/232-dhcp-119.patch
 		# Lakitu: Set DHCP static routes' scopes properly. b/34715285
 		"${FILESDIR}"/232-dhcp-route-scope.patch
+		# Lakitu: The following three are a set of fixes for CVE-2017-9445
+		"${FILESDIR}"/232-0001-resolved-simplify-alloc-size-calculation.patch
+		"${FILESDIR}"/232-0002-resolved-do-not-allocate-packets-with-minimum-size.patch
+		"${FILESDIR}"/232-0003-resolved-define-various-packet-sizes-as-unsigned.patch
 	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
