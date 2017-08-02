@@ -13,7 +13,9 @@ KEYWORDS="-* arm"
 IUSE="bluetooth"
 
 DEPEND=""
-RDEPEND=""
+RDEPEND="
+	media-libs/vpd-hdcpkey-install
+"
 
 S=${WORKDIR}
 
