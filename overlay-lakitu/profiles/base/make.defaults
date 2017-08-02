@@ -22,7 +22,7 @@ USE="${USE} kernel_sources kernel-4_4"
 USE="${USE} -fbconsole -firmware_install -mbim -vlan"
 
 # This is needed to make chromeos-base/autotest-all compile
-USE="${USE} chromeless_tty chromeless_tests"
+USE="${USE} chromeless_tty chromeless_tests -X -drm -vaapi"
 
 # Stateful partition does not need to be encrypted in lakitu.
 USE="${USE} -encrypted_stateful"
