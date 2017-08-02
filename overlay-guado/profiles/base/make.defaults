@@ -12,5 +12,8 @@ USE="${USE} ac_only guado"
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
 
+# Indicates board should fallback to SW video encoder for screensharing.
+USE="${USE} screenshare_sw_codec"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
