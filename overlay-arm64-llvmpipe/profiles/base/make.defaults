@@ -20,6 +20,8 @@ USE="${USE} frecon -opengl opengles"
 USE="${USE} -coreboot -bootimage -cros_ec"
 USE="${USE} -fastboot -mtc"
 
+VIDEO_CARDS="llvmpipe"
+
 CROS_WORKON_CLANG=0
 
 TTY_CONSOLE="ttyAMA0"

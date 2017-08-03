@@ -22,4 +22,4 @@ USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_4"
 USE="${USE} buffet peerd wifi_bootstrapping"
 
 # Enable a few more video cards as this is a generic board.
-VIDEO_CARDS="intel nouveau radeon"
+VIDEO_CARDS="intel llvmpipe nouveau radeon"
