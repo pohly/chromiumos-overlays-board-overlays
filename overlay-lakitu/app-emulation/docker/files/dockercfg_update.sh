@@ -3,6 +3,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+printf "%b%s%b\n" \
+  "\e[0;31m" \
+  "WARNING: dockercfg_update.sh is deprecated. \
+Use \`docker-credential-gcr configure-docker\` instead." \
+  "\e[0m" >&2
+
 set -eu
 
 AUTH_DATA="$(curl -s -f -m 10 "http://metadata/computeMetadata/v1/instance/service-accounts/default/token" \
