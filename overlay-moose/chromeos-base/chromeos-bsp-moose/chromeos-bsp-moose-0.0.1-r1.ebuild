@@ -1,1 +1,0 @@
-chromeos-bsp-moose-0.0.1.ebuild

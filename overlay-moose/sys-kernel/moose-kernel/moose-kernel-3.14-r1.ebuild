@@ -1,1 +1,0 @@
-moose-kernel-3.14.ebuild
