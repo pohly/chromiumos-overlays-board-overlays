@@ -28,8 +28,8 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
 INPUT_DEVICES="st wacom"
 
 # For debug images, disable for production
-TTY_CONSOLE="ttyS0"
-USE="${USE} pcserial"
+#TTY_CONSOLE="ttyS0"
+#USE="${USE} pcserial"
 
 # Add EC logging
 USE="${USE} eclog"
