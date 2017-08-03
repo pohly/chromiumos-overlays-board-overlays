@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid cros-audio-configs
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
