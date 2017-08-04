@@ -23,4 +23,10 @@ src_install() {
 	systemd_dounit "${FILESDIR}"/gcr-wait-online.service
 	systemd_dounit "${FILESDIR}"/gcr-online.target
 	systemd_enable_service gcr-online.target gcr-wait-online.service
+
+	exeinto /usr/share/cloud
+	doexe "${FILESDIR}"/wait_for_user_data.sh
+	systemd_dounit "${FILESDIR}"/user-data-wait-online.service
+	systemd_dounit "${FILESDIR}"/user-data-online.target
+	systemd_enable_service user-data-online.target user-data-wait-online.service
 }

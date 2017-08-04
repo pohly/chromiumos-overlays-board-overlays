@@ -40,23 +40,19 @@ index ef0f52b..7613d64 100644
  [Service]
  Type=oneshot
 diff --git a/systemd/cloud-init.service b/systemd/cloud-init.service
-index 6b0c722..d93fe20 100644
+index 6b0c722..a920676 100644
 --- a/systemd/cloud-init.service
 +++ b/systemd/cloud-init.service
-@@ -1,12 +1,12 @@
+@@ -1,9 +1,8 @@
  [Unit]
  Description=Initial cloud-init job (metadata service crawler)
 -After=local-fs.target network.target cloud-init-local.service
 -Before=sshd.service sshd-keygen.service
 -Requires=network.target
 -Wants=local-fs.target cloud-init-local.service sshd.service sshd-keygen.service
-+After=network-online.target cloud-init-local.service
++After=network-online.target user-data-online.target cloud-init-local.service
 +Requires=network-online.target
-+Wants=cloud-init-local.service
++Wants=cloud-init-local.service network-online.target user-data-online.target
  
  [Service]
  Type=oneshot
-+ExecStartPre=/usr/share/cloud/wait_for_user_data.sh
- ExecStart=/usr/bin/cloud-init init
- RemainAfterExit=yes
- TimeoutSec=0
