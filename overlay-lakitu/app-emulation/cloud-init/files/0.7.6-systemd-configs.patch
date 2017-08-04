@@ -60,17 +60,3 @@ index 6b0c722..d93fe20 100644
  ExecStart=/usr/bin/cloud-init init
  RemainAfterExit=yes
  TimeoutSec=0
-diff --git a/systemd/cloud-init-local.service b/systemd/cloud-init-local.service
-index a31985c..05cb5b9 100644
---- a/systemd/cloud-init-local.service
-+++ b/systemd/cloud-init-local.service
-@@ -1,7 +1,7 @@
- [Unit]
- Description=Initial cloud-init job (pre-networking)
--Wants=local-fs.target
--After=local-fs.target
-+Wants=var-lib-cloud.mount
-+After=var-lib-cloud.mount
- 
- [Service]
- Type=oneshot

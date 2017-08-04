@@ -104,6 +104,7 @@ python_install_all() {
 	systemd_dounit "${S}"/systemd/cloud-init-local.service
 	systemd_dounit "${S}"/systemd/cloud-init.service
 
+	systemd_enable_service local-fs.target var-lib-cloud.mount
 	systemd_enable_service multi-user.target cloud-config.service
 	systemd_enable_service multi-user.target cloud-final.service
 	systemd_enable_service multi-user.target cloud-init-local.service

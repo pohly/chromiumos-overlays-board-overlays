@@ -6,13 +6,13 @@
 
 [Unit]
 Description=/var/lib/cloud
-DefaultDependencies=no
-Conflicts=umount.target
-Before=local-fs.target umount.target
-After=local-fs-pre.target
+Before=local-fs.target
 
 [Mount]
 Type=tmpfs
 What=tmpfs
 Where=/var/lib/cloud
 Options=rw,nosuid,nodev,size=1M,mode=755
+
+[Install]
+WantedBy=local-fs.target
