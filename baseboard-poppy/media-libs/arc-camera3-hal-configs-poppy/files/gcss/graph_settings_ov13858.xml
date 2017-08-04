@@ -323,7 +323,6 @@ See the License for the specific language governing permissions and
       <gdc width="1600" height="1200" />
       <yuv width="1600" height="1200" />
     </video>
-    <video enabled="0" />
     <still enabled="0" />
   </imgu>
 </settings>
