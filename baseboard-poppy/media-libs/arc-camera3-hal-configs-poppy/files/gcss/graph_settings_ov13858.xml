@@ -2811,4 +2811,3036 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
+
+<!-- Add 9:16 and 3:4 -->
+<settings key="8092" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1080" height="1920" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8093" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8094" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="720" height="1280" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="720" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8095" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="480" height="640" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="480" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8096" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="360" height="640" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="360" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8097" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="240" height="320" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8098" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1080" height="1920" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video enabled="0" />
+    <still width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8099" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="960" height="1280" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video enabled="0" />
+    <still width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="960" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8100" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8101" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8102" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8103" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8104" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1200" height="1600" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8105" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8106" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="720" height="1280" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="720" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8107" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="480" height="640" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="480" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8108" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="360" height="640" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="360" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8109" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="240" height="320" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8110" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1200" height="1600" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video enabled="0" />
+    <still width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8111" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="960" height="1280" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video enabled="0" />
+    <still width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="960" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8112" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8113" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8114" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8115" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8116" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1080" height="1920" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8117" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1200" height="1600" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8118" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8119" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="720" height="1280" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8120" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="480" height="640" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="480" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8121" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="360" height="640" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8122" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="240" height="320" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8123" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1080" height="1920" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8124" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1200" height="1600" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8125" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="960" height="1280" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8126" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8127" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8128" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8129" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8130" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1080" height="1920" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8131" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1200" height="1600" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8132" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8133" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="720" height="1280" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8134" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="480" height="640" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="480" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8135" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="360" height="640" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8136" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="240" height="320" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8137" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1080" height="1920" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8138" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1200" height="1600" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8139" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="960" height="1280" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8140" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8141" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8142" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8143" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8144" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1080" height="1920" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8145" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1200" height="1600" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8146" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8147" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="720" height="1280" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8148" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="480" height="640" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8149" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="360" height="640" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8150" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="240" height="320" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8151" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1080" height="1920" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8152" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1200" height="1600" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8153" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="960" height="1280" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8154" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8155" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8156" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8157" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8158" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1080" height="1920" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8159" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1200" height="1600" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8160" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8161" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="720" height="1280" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8162" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="480" height="640" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="480" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8163" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="360" height="640" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8164" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="240" height="320" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8165" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1080" height="1920" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8166" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1200" height="1600" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="4200" height="3120" />
+      <bds width="2240" height="1664" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2176" height="1600" />
+      <yuv width="1200" height="1600" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8167" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="960" height="1280" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="960" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8168" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8169" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8170" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8171" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8172" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1080" height="1920" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8173" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1200" height="1600" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8174" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8175" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="720" height="1280" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8176" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="480" height="640" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8177" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="360" height="640" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8178" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="240" height="320" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="648" height="756" />
+      <bds width="288" height="336" />
+      <filter width="4" height="4" />
+      <env width="12" height="4" />
+      <gdc width="256" height="320" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="648" height="756" />
+      <bds width="288" height="336" />
+      <filter width="4" height="4" />
+      <env width="12" height="4" />
+      <gdc width="256" height="320" />
+      <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8179" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1080" height="1920" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="4200" height="3100" />
+      <bds width="2688" height="1984" />
+      <filter width="4" height="4" />
+      <env width="28" height="28" />
+      <gdc width="2624" height="1920" />
+      <yuv width="1080" height="1920" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8180" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="1200" height="1600" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8181" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="960" height="1280" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8182" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8183" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8184" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8185" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="648" height="756" />
+      <bds width="288" height="336" />
+      <filter width="4" height="4" />
+      <env width="12" height="4" />
+      <gdc width="256" height="320" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="648" height="756" />
+      <bds width="288" height="336" />
+      <filter width="4" height="4" />
+      <env width="12" height="4" />
+      <gdc width="256" height="320" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8186" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+  <video width="1080" height="1920" stream_id="1" />
+  <preview width="1080" height="1920" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </preview>
+    <video width="1080" height="1920" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1850" height="3100" />
+      <bds width="1184" height="1984" />
+      <filter width="4" height="4" />
+      <env width="44" height="28" />
+      <gdc width="1088" height="1920" />
+      <yuv width="1080" height="1920" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8187" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+  <video width="1200" height="1600" stream_id="1" />
+  <preview width="1200" height="1600" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="4224x3136" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="4224" height="3136" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="4224" height="3136" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="4224" height="3136" format="CIO2" />
+    <preview width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </preview>
+    <video width="1200" height="1600" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2520" height="3120" />
+      <bds width="1344" height="1664" />
+      <filter width="4" height="4" />
+      <env width="60" height="28" />
+      <gdc width="1216" height="1600" />
+      <yuv width="1200" height="1600" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8188" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+  <video width="960" height="1280" stream_id="1" />
+  <preview width="960" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </preview>
+    <video width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1188" height="1548" />
+      <bds width="1056" height="1376" />
+      <filter width="4" height="4" />
+      <env width="44" height="44" />
+      <gdc width="960" height="1280" />
+      <yuv width="960" height="1280" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8189" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+  <still width="720" height="1280" stream_id="1" />
+  <preview width="720" height="1280" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2112x1568" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2112" height="1568" format="BG10" />
+        </sensor>
+  <csi_be>
+            <output width="2112" height="1568" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2112" height="1568" format="CIO2" />
+    <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </preview>
+    <video enabled="0" />
+    <still width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="2106" height="1548" />
+      <bds width="1872" height="1376" />
+      <filter width="4" height="4" />
+      <env width="68" height="44" />
+      <gdc width="1728" height="1280" />
+      <yuv width="720" height="1280" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8190" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+  <still width="480" height="640" stream_id="1" />
+  <preview width="480" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="630" height="756" />
+      <bds width="560" height="672" />
+      <filter width="4" height="4" />
+      <env width="20" height="12" />
+      <gdc width="512" height="640" />
+      <yuv width="480" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8191" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+  <still width="360" height="640" stream_id="1" />
+  <preview width="360" height="640" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </preview>
+    <video enabled="0" />
+    <still width="360" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="1044" height="756" />
+      <bds width="928" height="672" />
+      <filter width="4" height="4" />
+      <env width="12" height="12" />
+      <gdc width="896" height="640" />
+      <yuv width="360" height="640" />
+    </still>
+  </imgu>
+</settings>
+<settings key="8192" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+  <still width="240" height="320" stream_id="1" />
+  <preview width="240" height="320" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1056x784" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1056" height="784" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="1056" height="784" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="1056" height="784" format="CIO2" />
+    <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="648" height="756" />
+      <bds width="288" height="336" />
+      <filter width="4" height="4" />
+      <env width="12" height="4" />
+      <gdc width="256" height="320" />
+      <yuv width="240" height="320" />
+    </preview>
+    <video enabled="0" />
+    <still width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="still">
+      <if width="648" height="756" />
+      <bds width="288" height="336" />
+      <filter width="4" height="4" />
+      <env width="12" height="4" />
+      <gdc width="256" height="320" />
+      <yuv width="240" height="320" />
+    </still>
+  </imgu>
+</settings>
 </graph_settings>
