@@ -13,6 +13,7 @@ USE="${USE} -tpm tpm2"
 USE="${USE} cr50_onboard"
 USE="${USE} arc touchview"
 USE="${USE} has_keyboard_backlight als"
+USE="${USE} background_blur"
 
 # Disable ACPI AC device and use USB PD power supply driver
 USE="${USE} acpi_ac_off"
