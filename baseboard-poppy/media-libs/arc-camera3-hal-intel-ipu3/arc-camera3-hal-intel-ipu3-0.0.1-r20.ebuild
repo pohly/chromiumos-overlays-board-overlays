@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="930d54e3d9fe2035e64bac166539197ee8826e29"
-CROS_WORKON_TREE="b1aea1807d2639c06917d34b69205b5e9ddc8b43"
+CROS_WORKON_COMMIT="51eeb268d269af0914582a1df73998a317e1136a"
+CROS_WORKON_TREE="edbfc86beedafa60a331a638be6a7f0d531c3008"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
@@ -16,13 +16,14 @@ SLOT="0"
 KEYWORDS="-* amd64"
 
 RDEPEND="media-libs/arc-camera3-libcbm
-	media-libs/intel-3a-libs-bin"
+	media-libs/intel-3a-libs-bin
+	media-libs/libsync"
 
 DEPEND="${RDEPEND}
 	media-libs/arc-camera3-android-headers
 	media-libs/arc-camera3-libcamera_client
 	media-libs/arc-camera3-libcamera_metadata
-	media-libs/arc-camera3-libsync
+	!media-libs/arc-camera3-libsync
 	sys-kernel/linux-headers
 	virtual/jpeg:0
 	virtual/pkgconfig"
