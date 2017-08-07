@@ -8,4 +8,10 @@ CHROMEOS_KERNEL_ARCH="arm64"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} device_tree hardfp kernel-4_4 neon drm_atomic big_little"
+USE="${USE} big_little"
+USE="${USE} device_tree"
+USE="${USE} drm_atomic"
+USE="${USE} hardfp"
+USE="${USE} kernel-4_4"
+USE="${USE} neon"
+USE="${USE} rk3399"
