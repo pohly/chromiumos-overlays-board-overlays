@@ -11,6 +11,7 @@ LINUX_FIRMWARE=""
 
 USE="${USE} dptf kernel-4_4"
 USE="${USE} expresso"
+USE="${USE} direncryption"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.

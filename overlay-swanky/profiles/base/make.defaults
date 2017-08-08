@@ -13,6 +13,7 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7260 ibt-hw fw_sst"
 USE="${USE} dptf"
 USE="${USE} kernel-4_4"
 USE="${USE} swanky"
+USE="${USE} direncryption"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
