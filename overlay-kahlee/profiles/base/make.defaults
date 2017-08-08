@@ -11,5 +11,8 @@ USE=""
 USE="${USE} kahlee"
 USE="${USE} cros_ec"
 
+# Use ext4 crypto
+USE="${USE} direncryption"
+
 # with some legacy peripherals
 USE="${USE} legacy_keyboard legacy_power_button"
