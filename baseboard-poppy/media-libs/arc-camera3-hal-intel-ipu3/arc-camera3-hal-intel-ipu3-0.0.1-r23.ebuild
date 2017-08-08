@@ -37,13 +37,14 @@ src_prepare() {
 }
 
 src_configure() {
+	cros-debug-add-NDEBUG
+
 	cd ${HAL_DIR}
 	econf --with-ipu=ipu3 --with-base-version=${BASE_VER}
 }
 
 src_compile() {
 	tc-export CC CXX PKG_CONFIG
-	cros-debug-add-NDEBUG
 
 	cd ${HAL_DIR}
 	emake
