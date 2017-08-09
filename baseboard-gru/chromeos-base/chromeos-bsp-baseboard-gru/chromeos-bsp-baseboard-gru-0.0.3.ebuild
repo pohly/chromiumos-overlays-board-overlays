@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid cros-audio-configs udev
+inherit appid udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -21,10 +21,6 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	# Install audio config files
-	local audio_config_dir="${FILESDIR}/audio-config"
-	install_audio_configs gru "${audio_config_dir}"
-
 	# Override default CPU clock speed governor.
 	insinto "/etc"
 	doins "${FILESDIR}/cpufreq.conf"
