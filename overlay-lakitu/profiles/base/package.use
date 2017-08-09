@@ -44,3 +44,8 @@ sys-process/tini static
 
 # Disable PAM for busybox, because it conflicts with 'static' use flag.
 sys-apps/busybox -pam static
+
+# The JavaScript SSH client implementation on GCE developer console
+# ('ssh-in-browser') does not handle HPN-capable server very well, so disable
+# HPN support in OpenSSH (b/64450408).
+net-misc/openssh -hpn
