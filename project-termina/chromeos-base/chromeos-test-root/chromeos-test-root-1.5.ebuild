@@ -12,5 +12,7 @@ KEYWORDS="*"
 IUSE=""
 
 RDEPEND="
+	chromeos-base/chromeos-test-testauthkeys
+	chromeos-base/termina-sshd-init
 	virtual/chromeos-bsp-test-root
 "
