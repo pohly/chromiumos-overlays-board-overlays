@@ -31,8 +31,8 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Install platform specific laptop mode tools configuration files
-	insinto "/etc/laptop-mode/conf.d/board-specific"
+	# Override default CPU clock speed governor
+	insinto "/etc"
 	doins "${FILESDIR}/cpufreq.conf"
 
 	# Install audio configs
