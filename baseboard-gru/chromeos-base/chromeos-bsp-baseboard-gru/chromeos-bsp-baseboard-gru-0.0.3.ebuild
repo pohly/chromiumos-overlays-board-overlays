@@ -26,7 +26,7 @@ src_install() {
 	install_audio_configs gru "${audio_config_dir}"
 
 	# Override default CPU clock speed governor.
-	insinto "/etc/laptop-mode/conf.d/board-specific"
+	insinto "/etc"
 	doins "${FILESDIR}/cpufreq.conf"
 
 	# Install cpuset adjustments.
