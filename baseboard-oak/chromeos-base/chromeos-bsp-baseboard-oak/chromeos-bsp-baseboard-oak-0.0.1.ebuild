@@ -34,7 +34,7 @@ src_install() {
 	# chromeos-4.4 boots using performance governor.
 	# After boot switch to sched governor
 	if use kernel-4_4; then
-		insinto "/etc/laptop-mode/conf.d/board-specific"
+		insinto "/etc"
 		doins "${FILESDIR}/cpufreq.conf"
 	fi
 
