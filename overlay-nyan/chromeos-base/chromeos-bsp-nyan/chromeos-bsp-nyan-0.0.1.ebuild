@@ -34,7 +34,7 @@ src_install() {
 	fi
 
 	# Override default CPU clock speed governor
-	insinto "/etc/laptop-mode/conf.d/board-specific"
+	insinto "/etc"
 	doins "${FILESDIR}/cpufreq.conf"
 	# Enable the Tegra CPU auto-hotplug feature
 	insinto "/etc/laptop-mode/conf.d/board-specific"
