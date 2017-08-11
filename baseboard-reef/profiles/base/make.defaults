@@ -16,6 +16,9 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
 # DSP firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} fw_sst"
 
+# QCA Wifi and BT
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k qca-bt"
+
 # Enable DPTF
 USE="${USE} dptf"
 
