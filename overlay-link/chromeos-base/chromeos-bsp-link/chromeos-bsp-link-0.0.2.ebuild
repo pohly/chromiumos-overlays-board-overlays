@@ -36,7 +36,7 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Install board-specific info.
-	insinto "/etc/laptop-mode/conf.d/board-specific"
+	# Override default CPU clock speed governor
+	insinto "/etc"
 	doins "${FILESDIR}/cpufreq.conf"
 }
