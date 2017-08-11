@@ -14,6 +14,9 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265 iwlwifi-7265D"
 # BT driver firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
 
+# QCA Wifi and BT
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k qca-bt"
+
 # DSP firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} fw_sst"
 
