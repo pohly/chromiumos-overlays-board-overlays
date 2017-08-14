@@ -16,7 +16,7 @@ KEYWORDS="-* amd64 x86"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND=""
+RDEPEND="chromeos-base/u2fd"
 
 DEPEND="${RDEPEND}"
 
