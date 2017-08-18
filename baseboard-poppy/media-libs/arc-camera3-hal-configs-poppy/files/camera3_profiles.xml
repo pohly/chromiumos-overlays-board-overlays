@@ -223,7 +223,7 @@
             <sensor.maxAnalogSensitivity value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.orientation value="0"/>
             <sensor.profileHueSatMapDimensions value="0,0,0"/>
-            <sensor.availableTestPatternModes value="OFF"/>
+            <sensor.availableTestPatternModes value="OFF,COLOR_BARS"/>
             <!-- Info -->
             <info.supportedHardwareLevel value="LIMITED"/>
             <!-- shading -->
@@ -497,7 +497,7 @@
             <sensor.maxAnalogSensitivity value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.orientation value="0"/>
             <sensor.profileHueSatMapDimensions value="0,0,0"/>
-            <sensor.availableTestPatternModes value="OFF"/>
+            <sensor.availableTestPatternModes value="OFF,COLOR_BARS"/>
             <!-- Info -->
             <info.supportedHardwareLevel value="LIMITED"/>
             <!-- shading -->
