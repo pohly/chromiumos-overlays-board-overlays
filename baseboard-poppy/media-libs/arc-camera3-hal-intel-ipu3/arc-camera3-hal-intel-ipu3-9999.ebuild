@@ -22,6 +22,7 @@ DEPEND="${RDEPEND}
 	media-libs/arc-camera3-libcamera_client
 	media-libs/arc-camera3-libcamera_metadata
 	!media-libs/arc-camera3-libsync
+	media-libs/libyuv
 	sys-kernel/linux-headers
 	virtual/jpeg:0
 	virtual/pkgconfig"
