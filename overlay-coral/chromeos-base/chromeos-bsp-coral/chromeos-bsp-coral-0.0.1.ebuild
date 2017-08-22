@@ -22,4 +22,8 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{5A3AB642-2A67-470A-8F37-37E737A53CFC}" "CHROMEBOOK"
+
+	# Install Bluetooth ID override.
+	insinto /etc/bluetooth
+	doins "${FILESDIR}"/main.conf
 }
