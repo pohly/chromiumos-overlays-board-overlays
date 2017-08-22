@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="ae1459fcc4e9f34970f5a8537af5c2d7b808cb32"
-CROS_WORKON_TREE="a0098e9baaf3be23fbf117b459270dfa06724192"
+CROS_WORKON_COMMIT="f9f85e9803d2f5442d57427ba1a11b0d03d4bcc2"
+CROS_WORKON_TREE="bda64e0e86434a6ea01b746a9b4c43c1447c09f7"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
@@ -24,6 +24,7 @@ DEPEND="${RDEPEND}
 	media-libs/arc-camera3-libcamera_client
 	media-libs/arc-camera3-libcamera_metadata
 	!media-libs/arc-camera3-libsync
+	media-libs/libyuv
 	sys-kernel/linux-headers
 	virtual/jpeg:0
 	virtual/pkgconfig"
