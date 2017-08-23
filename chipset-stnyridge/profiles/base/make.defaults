@@ -16,6 +16,10 @@ USE="${USE} acpi_ac_off"
 # Don't build in the Intel MRC
 USE="${USE} amd_cpu"
 
+# GPU sandboxing needs to be started early as GPU process spawns
+# multiple threads.
+USE="${USE} gpu_sandbox_start_early"
+
 # Turn on the video cards this chip uses.
 # TODO: Remove radeon when amdgpu works by itself
 VIDEO_CARDS="-* radeon amdgpu"
