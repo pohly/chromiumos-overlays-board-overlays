@@ -10,7 +10,7 @@ U_BOOT_FDT_USE="mario"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} als disable_login_animations gobi google_qdl mario"
+USE="${USE} als gobi google_qdl mario"
 USE="${USE} novatel_gobi pineview watchdog"
 
 # Disable Flash low latency audio as the CPU here can't keep up.

@@ -10,7 +10,7 @@ U_BOOT_FDT_USE="alex"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} alex als disable_login_animations pineview watchdog"
+USE="${USE} alex als pineview watchdog"
 
 # Disable Flash low latency audio as the CPU here can't keep up.
 USE="${USE} disable_low_latency_audio"
