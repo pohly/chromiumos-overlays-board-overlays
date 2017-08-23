@@ -24,5 +24,8 @@ USE="${USE} keyboard_includes_side_buttons"
 # system is converted to tablet mode while it's suspended.
 USE="${USE} -touchpad_wakeup"
 
+# Declare TPM model.
+USE="${USE} tpm_slb9655"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"

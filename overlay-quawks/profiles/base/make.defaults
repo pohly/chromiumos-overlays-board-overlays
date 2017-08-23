@@ -23,5 +23,8 @@ USE="${USE} direncryption"
 
 USE="${USE} arc"
 
+# Declare TPM model.
+USE="${USE} tpm_slb9655"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
