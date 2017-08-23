@@ -15,4 +15,7 @@ USE="${USE} hardfp kernel-3_14 mosys_eventlog neon -opengl opengles"
 USE="${USE} rk32 watchdog wifi_force_powersave"
 USE="${USE} wireless38"
 
+# Declare TPM model.
+USE="${USE} tpm_slb9645"
+
 LINUX_FIRMWARE="brcmfmac4354-sdio bcm4354-bt"

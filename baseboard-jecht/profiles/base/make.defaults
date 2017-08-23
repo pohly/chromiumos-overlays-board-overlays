@@ -6,5 +6,8 @@ USE="${USE} -display_backlight legacy_keyboard legacy_power_button"
 USE="${USE} -subpixel_rendering wireless38"
 USE="${USE} direncryption"
 
+# Declare TPM model.
+USE="${USE} tpm_slb9655"
+
 # WiFi and BT driver firmware
 LINUX_FIRMWARE="marvell-pcie8897 iwlwifi-7260 ibt-hw"

@@ -19,5 +19,8 @@ USE="${USE} direncryption"
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
 
+# Declare TPM model.
+USE="${USE} tpm_slb9655"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
