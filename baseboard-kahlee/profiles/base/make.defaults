@@ -4,8 +4,5 @@
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} dptf"
-# Required for alternate kernel LPC access
-USE="${USE} cros_ec_mec"
 # With amdgpu support.
 USE="${USE} builtin_fw_amdgpu"
