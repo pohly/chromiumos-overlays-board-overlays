@@ -1,0 +1,5 @@
+env IMAGE_PATH="/lib/firmware/hammer.fw"
+env VENDOR_ID=6353  # 0x18d1
+env PRODUCT_ID=20514  # 0x5022
+env USB_BUS=1
+env USB_PORT=2

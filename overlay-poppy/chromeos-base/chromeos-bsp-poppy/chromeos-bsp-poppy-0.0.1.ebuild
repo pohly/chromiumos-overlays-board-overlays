@@ -36,4 +36,9 @@ src_install() {
 
 	# Install a rule tagging keyboard as having updated layout
 	udev_dorules "${FILESDIR}/61-hammer-keyboard.rules"
+
+	# Install hammerd udev rules and override for chromeos-base/hammerd.
+	udev_dorules "${FILESDIR}/99-hammerd.rules"
+	insinto /etc/init
+	doins "${FILESDIR}/hammerd.override"
 }
