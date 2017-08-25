@@ -4,5 +4,8 @@
 # Initial value just for style purposes.
 USE=""
 
+# Add EC logging
+USE="${USE} eclog"
+
 # With amdgpu support.
 USE="${USE} builtin_fw_amdgpu"
