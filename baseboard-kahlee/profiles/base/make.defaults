@@ -9,3 +9,6 @@ USE="${USE} eclog"
 
 # With amdgpu support.
 USE="${USE} builtin_fw_amdgpu"
+
+# Enable unified builds
+USE="${USE} unibuild"
