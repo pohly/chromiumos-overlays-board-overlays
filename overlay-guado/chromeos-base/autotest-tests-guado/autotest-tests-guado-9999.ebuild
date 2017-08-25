@@ -19,6 +19,7 @@ IUSE="+autotest"
 
 SERVER_IUSE_TESTS="
 	+tests_enterprise_CFM_HuddlyUpdater
+	+tests_enterprise_CFM_SiSFwUpdater
 "
 
 IUSE_TESTS="${IUSE_TESTS}
