@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit appid cros-audio-configs
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -26,4 +26,9 @@ src_install() {
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs soraka "${audio_config_dir}"
+
+	# Install hammerd udev rules and override for chromeos-base/hammerd.
+	udev_dorules "${FILESDIR}/99-hammerd.rules"
+	insinto /etc/init
+	doins "${FILESDIR}/hammerd.override"
 }
