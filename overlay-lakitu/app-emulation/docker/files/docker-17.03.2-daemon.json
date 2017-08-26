@@ -1,0 +1,5 @@
+{
+	"storage-driver": "overlay2",
+	"live-restore": true,
+	"registry-mirrors": [ "https://mirror.gcr.io" ]
+}

@@ -10,7 +10,7 @@ EnvironmentFile=-/etc/default/docker
 # the default is not to use systemd for cgroups because the delegate issues still
 # exists and systemd currently does not support the cgroup feature set required
 # for containers run by docker
-ExecStart=/usr/bin/dockerd -s overlay2 --live-restore --registry-mirror=https://mirror.gcr.io --host=fd:// $DOCKER_OPTS
+ExecStart=/usr/bin/dockerd --host=fd:// $DOCKER_OPTS
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStopPost=/bin/echo "docker daemon exited"
 LimitNOFILE=1048576
