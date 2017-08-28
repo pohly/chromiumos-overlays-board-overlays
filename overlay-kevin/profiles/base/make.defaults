@@ -31,3 +31,8 @@ USE="${USE} direncryption"
 EC_FIRMWARE="kevin"
 
 INPUT_DEVICES="wacom"
+
+# The device had ARC M in version 60 and will get ARC N in 61. This flag is
+# used to decide the default behavior for data migration, when no policy was set
+# by admin.
+USE="${USE} arc_transition_m_to_n"

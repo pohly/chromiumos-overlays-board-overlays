@@ -8,3 +8,8 @@ USE="${USE} ac_only legacy_keyboard -display_backlight -cros_ec"
 
 # Enable ARC by default
 USE="${USE} arc"
+
+# The device had ARC M in version 60 and will get ARC N in 61. This flag is
+# used to decide the default behavior for data migration, when no policy was set
+# by admin.
+USE="${USE} arc_transition_m_to_n"
