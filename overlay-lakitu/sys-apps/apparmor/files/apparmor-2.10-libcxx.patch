@@ -1,0 +1,16 @@
+Apparmor cannot be built with libc++ because of GNU extension
+header ext/stdio_filebuf.h. Since this header is unused,
+simply drop it so that apparmor can be built with libc++.
+https://bugs.launchpad.net/apparmor/+bug/1713542
+https://crbug.com/759455
+diff -Nuar apparmor-2.10.1/parser/libapparmor_re/aare_rules.cc apparmor-new/parser/libapparmor_re/aare_rules.cc
+--- apparmor-2.10.1/parser/libapparmor_re/aare_rules.cc
++++ apparmor-new/parser/libapparmor_re/aare_rules.cc
+@@ -23,7 +23,6 @@
+ #include <iostream>
+ #include <fstream>
+ #include <sstream>
+-#include <ext/stdio_filebuf.h>
+ #include <assert.h>
+ #include <stdlib.h>
+ 

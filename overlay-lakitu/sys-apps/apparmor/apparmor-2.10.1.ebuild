@@ -34,6 +34,7 @@ src_prepare() {
 	sed -e "/installation problem/ctrue" -i rc.apparmor.functions || die
 	epatch "${FILESDIR}/${PN}-2.10-dynamic-link.patch"
 	epatch "${FILESDIR}/${PN}-2.10-makefile.patch"
+	epatch "${FILESDIR}/${PN}-2.10-libcxx.patch"
 }
 
 src_compile()  {
