@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 EAPI="5"
-CROS_WORKON_COMMIT="6b45b8c0d5b1a247baac4c727d020d2c0c28575b"
-CROS_WORKON_TREE="26041124a79fd2b64315dd7fef555ef1df14617f"
+CROS_WORKON_COMMIT="785e58b97e826ec6b34f277e091fb144edba6524"
+CROS_WORKON_TREE="f135f8645ccbbe21a34f80f58c240945d3dc6790"
 CROS_WORKON_PROJECT="chromiumos/third_party/autotest"
 CROS_WORKON_LOCALNAME=../third_party/autotest
 CROS_WORKON_SUBDIR=files
@@ -21,6 +21,7 @@ IUSE="+autotest"
 
 SERVER_IUSE_TESTS="
 	+tests_enterprise_CFM_HuddlyUpdater
+	+tests_enterprise_CFM_SiSFwUpdater
 "
 
 IUSE_TESTS="${IUSE_TESTS}
