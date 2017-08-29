@@ -10,6 +10,7 @@ USE=""
 
 USE="${USE} kahlee"
 USE="${USE} cros_ec"
+USE="${USE} als touchview"
 
 # Use ext4 crypto
 USE="${USE} direncryption"
