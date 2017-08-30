@@ -23,6 +23,10 @@ DEPEND="${RDEPEND}"
 src_install() {
 	doappid "{55DA7A1B-DCE6-47E6-95EC-0CCB7AC432F5}" "CHROMEBOOK"
 
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs soraka "${audio_config_dir}"
