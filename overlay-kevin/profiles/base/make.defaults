@@ -19,6 +19,9 @@ USE="${USE} arc_migration_policy_check"
 USE="${USE} -cr50_onboard"
 USE="${USE} tpm -tpm2"
 
+# Declare TPM model.
+USE="${USE} tpm_slb9670"
+
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
