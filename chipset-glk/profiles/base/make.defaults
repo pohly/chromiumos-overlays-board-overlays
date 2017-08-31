@@ -1,0 +1,16 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromeos-intel-pineview"
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+LINUX_FIRMWARE="${LINUX_FIRMWARE} adsp_apl"
+
+USE="${USE} kernel-4_12"
+USE="${USE} apl_lpe intel_lpe"
+
+# Disable ACPI AC device and use USB PD power supply driver
+USE="${USE} acpi_ac_off"
