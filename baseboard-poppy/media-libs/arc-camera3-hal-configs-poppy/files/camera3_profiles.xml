@@ -276,7 +276,7 @@
             <frame.initialSkip value="3"/> <!-- camera3 HAL CPF parameters moved here end-->
             <isoAnalogGain1 value="75"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
-            <nvmDirectory value=""/> <!--location of the NVM data-->
+            <nvmDirectory value="i2c-INT3499:00"/> <!--location of the NVM data-->
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
