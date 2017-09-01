@@ -25,6 +25,10 @@ S="${WORKDIR}"
 src_install() {
 	doappid "{87efface-864d-49a5-9bb3-4b050a7c227a}" "CHROMEBOOK"
 
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
+
 	# Install platform-specific ambient light sensor configuration.
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"
 	exeinto $(udev_get_udevdir)
