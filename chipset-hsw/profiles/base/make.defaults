@@ -9,5 +9,8 @@ USE=""
 
 USE="${USE} kernel-3_8"
 
+# Disable containers because kernel-3_8 doesn't support everything needed.
+USE="${USE} -containers"
+
 # Enable native one-copy texture upload.
 USE="${USE} native_gpu_memory_buffers"

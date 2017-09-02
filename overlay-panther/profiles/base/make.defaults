@@ -4,3 +4,6 @@
 U_BOOT_CONFIG_USE="coreboot"
 U_BOOT_FDT_USE="panther"
 USE="kernel-3_8 wireless34"
+
+# Disable containers because kernel-3_8 doesn't support everything needed.
+USE="${USE} -containers"

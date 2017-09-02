@@ -22,3 +22,6 @@ USE="${USE} allow_consumer_kiosk"
 
 # Use 3.8 kernel with 3.4 wifi stack
 USE="${USE} kernel-3_8 wireless34"
+
+# Disable containers because kernel-3_8 doesn't support everything needed.
+USE="${USE} -containers"
