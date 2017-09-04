@@ -4068,7 +4068,7 @@ See the License for the specific language governing permissions and
 </settings>
 
 <!-- Add 320x240 -->
-<settings key="8035" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8134" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="1920" height="1080" stream_id="1" />
   <preview width="320" height="240" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2576x1936" analogue_gain="100" exposure="500">
@@ -4098,7 +4098,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8036" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8135" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="960" height="720" stream_id="1" />
   <preview width="320" height="240" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2576x1936" analogue_gain="100" exposure="500">
@@ -4128,7 +4128,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8037" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8136" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="2560" height="1920" stream_id="1" />
   <preview width="320" height="240" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2576x1936" analogue_gain="100" exposure="500">
@@ -4158,7 +4158,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8038" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8137" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="320" height="240" stream_id="1" />
   <preview width="1920" height="1080" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2576x1936" analogue_gain="100" exposure="500">
@@ -4188,7 +4188,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8039" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8138" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="320" height="240" stream_id="1" />
   <preview width="1280" height="720" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2576x1936" analogue_gain="100" exposure="500">
@@ -4218,7 +4218,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8040" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8139" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="640" height="480" stream_id="1" />
   <preview width="320" height="240" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="656x496" analogue_gain="100" exposure="500">
@@ -4248,37 +4248,37 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8041" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8140" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="320" height="240" stream_id="1" />
-  <sensor stream_id="1" vflip="0" hflip="0" mode_id="656x496" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="656" height="496" format="RG10" />
-  </sensor>
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="1296" height="972" format="BG10" />
+        </sensor>
   <csi_be>
-            <output width="656" height="496" format="CIO2" />
+            <output width="1296" height="972" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="656" height="496" format="CIO2" />
-    <preview width="320" height="240" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
-      <if width="652" height="496" />
-      <bds width="652" height="496" />
+    <input width="1296" height="972" format="CIO2" />
+    <preview width="320" height="240" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
+      <if width="1290" height="960" />
+      <bds width="688" height="512" />
       <filter width="4" height="4" />
-      <env width="2" height="0" />
-      <gdc width="640" height="488" />
+      <env width="20" height="12" />
+      <gdc width="640" height="480" />
       <yuv width="320" height="240" />
     </preview>
-    <video width="640" height="360" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
-      <if width="652" height="496" />
-      <bds width="652" height="496" />
+    <video width="640" height="360" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="1290" height="960" />
+      <bds width="688" height="512" />
       <filter width="4" height="4" />
-      <env width="2" height="0" />
-      <gdc width="640" height="488" />
+      <env width="20" height="12" />
+      <gdc width="640" height="480" />
       <yuv width="640" height="360" />
     </video>
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8042" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8141" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="320" height="240" stream_id="1" />
   <preview width="320" height="240" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="656x496" analogue_gain="100" exposure="500">
@@ -4308,7 +4308,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8043" id="1" active_outputs="1" dvs="1" power_factor="0" fps="30">
+<settings key="8142" id="1" active_outputs="1" dvs="1" power_factor="0" fps="30">
   <preview width="320" height="240" stream_id="1" />
   <video width="320" height="240" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="656x496" analogue_gain="100" exposure="500">
@@ -4338,7 +4338,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8044" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8143" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="320" height="240" stream_id="1" />
   <preview width="640" height="480" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="656x496" analogue_gain="100" exposure="500">
@@ -4368,7 +4368,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8045" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
+<settings key="8144" id="1" active_outputs="2" dvs="1" power_factor="0" fps="30">
   <video width="320" height="240" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="656x496" analogue_gain="100" exposure="500">
@@ -4400,7 +4400,7 @@ See the License for the specific language governing permissions and
 </settings>
 
 <!-- Add 640x360 -->
-<settings key="8046" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8145" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1920" height="1080" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4430,7 +4430,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8047" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8146" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1280" height="960" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4460,7 +4460,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8048" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8147" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1280" height="720" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4490,7 +4490,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8049" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8148" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1600" height="1200" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4520,7 +4520,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8050" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8149" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="2560" height="1920" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4550,7 +4550,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8051" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8150" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="480" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -4580,7 +4580,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8052" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8151" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -4610,7 +4610,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8053" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8152" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="320" height="240" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -4640,7 +4640,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8054" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8153" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1920" height="1080" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4670,7 +4670,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8055" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8154" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1280" height="960" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4700,7 +4700,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8056" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8155" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1280" height="720" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4730,7 +4730,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8057" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8156" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="2560" height="1920" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4760,7 +4760,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8058" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8157" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1600" height="1200" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4790,7 +4790,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8059" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8158" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="640" height="480" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -4820,7 +4820,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8060" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8159" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="320" height="240" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -4850,7 +4850,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8061" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8160" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="640" height="360" stream_id="1" />
   <preview width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -4880,7 +4880,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8062" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8161" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <preview width="640" height="360" stream_id="1" />
   <video width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -4910,7 +4910,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8063" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8162" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="1920" height="1080" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4940,7 +4940,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8064" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8163" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="1280" height="720" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -4970,7 +4970,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8065" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8164" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="1600" height="1200" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5000,7 +5000,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8066" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8165" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="1280" height="960" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5030,7 +5030,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8067" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8166" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="640" height="480" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -5060,7 +5060,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8068" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8167" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="640" height="360" stream_id="1" />
   <preview width="320" height="240" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -5090,7 +5090,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8069" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8168" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <still width="640" height="360" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
             <port_0 type="port" width="1296" height="972" format="BG10" />
@@ -5114,7 +5114,7 @@ See the License for the specific language governing permissions and
 </settings>
 
 <!-- Add 9:16 and 3:4-->
-<settings key="8070" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8169" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1080" height="1920" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5144,7 +5144,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8071" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8170" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5174,7 +5174,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8072" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8171" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5204,7 +5204,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8073" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8172" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5234,7 +5234,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8074" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8173" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5264,7 +5264,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8075" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8174" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5294,7 +5294,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8076" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8175" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1080" height="1920" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5324,7 +5324,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8077" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8176" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="960" height="1280" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5354,7 +5354,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8078" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8177" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="720" height="1280" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5384,7 +5384,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8079" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8178" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="480" height="640" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5414,7 +5414,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8080" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8179" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="360" height="640" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5444,7 +5444,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8081" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8180" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="240" height="320" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5474,7 +5474,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8082" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8181" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1200" height="1600" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5504,7 +5504,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8083" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8182" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5534,7 +5534,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8084" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8183" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5564,7 +5564,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8085" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8184" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5594,7 +5594,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8086" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8185" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5624,7 +5624,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8087" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8186" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5654,7 +5654,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8088" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8187" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1200" height="1600" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5684,7 +5684,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8089" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8188" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="960" height="1280" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5714,7 +5714,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8090" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8189" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="720" height="1280" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5744,7 +5744,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8091" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8190" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="480" height="640" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5774,7 +5774,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8092" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8191" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="360" height="640" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5804,7 +5804,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8093" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8192" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="240" height="320" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5834,7 +5834,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8094" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8193" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1080" height="1920" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5864,7 +5864,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8095" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8194" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1200" height="1600" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5894,7 +5894,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8096" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8195" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5924,7 +5924,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8097" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8196" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5954,7 +5954,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8098" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8197" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -5984,7 +5984,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8099" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8198" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6014,7 +6014,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8100" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8199" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6044,7 +6044,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8101" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8200" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1080" height="1920" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6074,7 +6074,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8102" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8201" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1200" height="1600" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6104,7 +6104,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8103" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8202" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="960" height="1280" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6134,7 +6134,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8104" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8203" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="720" height="1280" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6164,7 +6164,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8105" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8204" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="480" height="640" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6194,7 +6194,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8106" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8205" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="360" height="640" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6224,7 +6224,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8107" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8206" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="240" height="320" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6254,7 +6254,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8108" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8207" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1080" height="1920" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6284,7 +6284,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8109" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8208" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1200" height="1600" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6314,7 +6314,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8110" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8209" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6344,7 +6344,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8111" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8210" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6374,7 +6374,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8112" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8211" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6404,7 +6404,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8113" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8212" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6434,7 +6434,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8114" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8213" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6464,7 +6464,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8115" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8214" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1080" height="1920" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6494,7 +6494,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8116" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8215" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1200" height="1600" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6524,7 +6524,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8117" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8216" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="960" height="1280" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6554,7 +6554,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8118" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8217" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="720" height="1280" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6584,7 +6584,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8119" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8218" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="480" height="640" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6614,7 +6614,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8120" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8219" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="360" height="640" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6644,7 +6644,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8121" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8220" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="240" height="320" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6674,7 +6674,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8122" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8221" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1080" height="1920" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6704,7 +6704,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8123" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8222" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1200" height="1600" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6734,7 +6734,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8124" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8223" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6764,7 +6764,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8125" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8224" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6794,7 +6794,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8126" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8225" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -6824,7 +6824,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8127" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8226" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -6854,7 +6854,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8128" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8227" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -6884,7 +6884,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8129" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8228" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1080" height="1920" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6914,7 +6914,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8130" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8229" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1200" height="1600" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6944,7 +6944,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8131" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8230" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="960" height="1280" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -6974,7 +6974,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8132" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8231" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="720" height="1280" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7004,7 +7004,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8133" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8232" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="480" height="640" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7034,7 +7034,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8134" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8233" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="360" height="640" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7064,7 +7064,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8135" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8234" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="240" height="320" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7094,7 +7094,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8136" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8235" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1080" height="1920" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7124,7 +7124,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8137" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8236" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1200" height="1600" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7154,7 +7154,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8138" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8237" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7184,7 +7184,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8139" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8238" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7214,7 +7214,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8140" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8239" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7244,7 +7244,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8141" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8240" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7274,7 +7274,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8142" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8241" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7304,7 +7304,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8143" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8242" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1080" height="1920" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7334,7 +7334,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8144" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8243" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1200" height="1600" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7364,7 +7364,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8145" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8244" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="960" height="1280" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7394,7 +7394,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8146" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8245" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="720" height="1280" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7424,7 +7424,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8147" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8246" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="480" height="640" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7454,7 +7454,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8148" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8247" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="360" height="640" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7484,7 +7484,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8149" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8248" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="240" height="320" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7514,7 +7514,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8150" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8249" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1080" height="1920" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7544,7 +7544,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8151" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8250" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="1200" height="1600" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7574,7 +7574,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8152" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8251" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7604,7 +7604,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8153" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8252" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7634,7 +7634,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8154" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8253" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7664,7 +7664,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8155" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8254" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7694,7 +7694,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8156" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8255" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7724,7 +7724,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8157" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8256" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1080" height="1920" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7754,7 +7754,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8158" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8257" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="1200" height="1600" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7784,7 +7784,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8159" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8258" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="960" height="1280" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7814,7 +7814,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8160" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8259" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="720" height="1280" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7844,7 +7844,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8161" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8260" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="480" height="640" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7874,7 +7874,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8162" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8261" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="360" height="640" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7904,7 +7904,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8163" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+<settings key="8262" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
   <still width="240" height="320" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -7934,7 +7934,7 @@ See the License for the specific language governing permissions and
     </still>
   </imgu>
 </settings>
-<settings key="8164" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8263" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <video width="1080" height="1920" stream_id="1" />
   <preview width="1080" height="1920" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7964,7 +7964,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8165" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8264" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <video width="720" height="1280" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -7994,7 +7994,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8166" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8265" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <video width="1200" height="1600" stream_id="1" />
   <preview width="1200" height="1600" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -8024,7 +8024,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8167" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8266" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <video width="960" height="1280" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
@@ -8054,7 +8054,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8168" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8267" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <video width="480" height="640" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -8084,7 +8084,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8169" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8268" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <video width="360" height="640" stream_id="1" />
   <preview width="360" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -8114,7 +8114,7 @@ See the License for the specific language governing permissions and
     <still enabled="0" />
   </imgu>
 </settings>
-<settings key="8170" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
+<settings key="8269" id="1" active_outputs="1" dvs="0" power_factor="0" fps="30">
   <video width="240" height="320" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="1296x972" analogue_gain="100" exposure="500">
@@ -8140,6 +8140,36 @@ See the License for the specific language governing permissions and
       <env width="12" height="12" />
       <gdc width="256" height="320" />
       <yuv width="240" height="320" />
+    </video>
+    <still enabled="0" />
+  </imgu>
+</settings>
+<settings key="8270" id="1" active_outputs="2" dvs="0" power_factor="0" fps="30">
+  <video width="1920" height="1080" stream_id="1" />
+  <preview width="1600" height="1200" stream_id="1" />
+  <sensor stream_id="1" vflip="0" hflip="0" mode_id="2592x1944" analogue_gain="100" exposure="500">
+            <port_0 type="port" width="2592" height="1944" format="BG10" />
+  </sensor>
+  <csi_be>
+            <output width="2592" height="1944" format="CIO2" />
+  </csi_be>
+  <imgu stream_id="1">
+    <input width="2592" height="1944" format="CIO2" />
+    <preview width="1600" height="1200" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
+      <if width="2592" height="1944" />
+      <bds width="2592" height="1944" />
+      <filter width="4" height="4" />
+      <env width="12" height="8" />
+      <gdc width="2560" height="1920" />
+      <yuv width="1600" height="1200" />
+    </preview>
+    <video width="1920" height="1080" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="video">
+      <if width="2592" height="1944" />
+      <bds width="2592" height="1944" />
+      <filter width="4" height="4" />
+      <env width="12" height="8" />
+      <gdc width="2560" height="1920" />
+      <yuv width="1920" height="1080" />
     </video>
     <still enabled="0" />
   </imgu>
