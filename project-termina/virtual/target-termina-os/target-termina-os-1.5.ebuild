@@ -17,6 +17,7 @@ RDEPEND="
 	chromeos-base/vm_tools
 	net-fs/nfs-utils
 	runc? ( app-emulation/runc )
+	sys-apps/iproute2
 	sys-auth/pambase
 	virtual/chromeos-bsp
 	virtual/implicit-system

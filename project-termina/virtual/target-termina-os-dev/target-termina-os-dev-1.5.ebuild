@@ -46,9 +46,11 @@ RDEPEND="
 	dev-util/mem
 	dev-util/strace
 	net-analyzer/tcpdump
+	net-misc/curl
 	net-misc/iperf:2
 	net-misc/iputils
 	net-misc/rsync
+	net-misc/wget
 	sys-apps/coreutils
 	sys-apps/diffutils
 	sys-apps/file
