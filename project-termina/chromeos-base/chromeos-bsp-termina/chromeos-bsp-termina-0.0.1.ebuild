@@ -16,9 +16,6 @@ src_install() {
 	insinto /etc
 	doins "${FILESDIR}"/resolv.conf
 
-	insinto /etc/init
-	doins "${FILESDIR}"/init/*.conf
-
 	insinto /etc/profile.d
 	doins "${FILESDIR}"/PS1-termina.sh
 

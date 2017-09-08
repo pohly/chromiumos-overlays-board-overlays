@@ -13,6 +13,5 @@ IUSE=""
 
 RDEPEND="
 	chromeos-base/termina-auth-config
-	chromeos-base/termina-tty
 	virtual/chromeos-bsp-dev-root
 "
