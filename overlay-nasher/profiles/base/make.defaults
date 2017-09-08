@@ -2,7 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# Initial value just for style purposes.
+INPUT_DEVICES=""
+LINUX_FIRMWARE=""
 USE=""
+
 USE="${USE} arc"
 USE="${USE} nasher"
 

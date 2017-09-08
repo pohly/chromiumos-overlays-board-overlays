@@ -7,10 +7,8 @@ INPUT_DEVICES=""
 LINUX_FIRMWARE=""
 USE=""
 
-USE="${USE} amenia cros_ec mocktpm"
+USE="${USE} has_keyboard_backlight sand"
+USE="${USE} arc"
 
 # All firmwares to build from the EC code base
-EC_FIRMWARE="amenia"
-
-# Uncomment this line to activate the serial port.
-#TTY_CONSOLE="ttyS2"
+EC_FIRMWARE="sand"

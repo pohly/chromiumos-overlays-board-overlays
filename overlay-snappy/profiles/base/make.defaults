@@ -1,2 +1,27 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+INPUT_DEVICES=""
+LINUX_FIRMWARE=""
+USE=""
+
+USE="${USE} has_keyboard_backlight snappy cros_ec touchview stylus pointer_events"
+USE="${USE} arc"
+
+# Avoid inhibiting the keyboard (which reports events from side buttons).
+USE="${USE} keyboard_includes_side_buttons"
+
+# Disable touchpad wakeup since it can't be turned off dynamically when the
+# system is converted to tablet mode while it's suspended.
+USE="${USE} -touchpad_wakeup"
+
+# All firmwares to build from the EC code base
+EC_FIRMWARE="snappy"
+
+# Include the wacom firmware updating tool
+INPUT_DEVICES="${INPUT_DEVICES} wacom"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS2"
