@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-DESCRIPTION="Install the upstart job that launches the openssh-server on Termina."
+DESCRIPTION="Install configs for launching openssh-server on Termina."
 HOMEPAGE="http://www.chromium.org/"
 
 LICENSE="BSD-Google"
@@ -20,11 +20,8 @@ RDEPEND="
 
 src_install() {
 	# Termina SSH keys and configuration are installed in a
-	# separate place, because they may conflict with chromeos-base
+	# separate place, because they may conflict with chromeos-base.
 	insinto /etc/ssh
 	doins "${FILESDIR}"/termina_sshd_config
 	fperms 600 /etc/ssh/termina_sshd_config
-
-	insinto /etc/init
-	doins "${FILESDIR}"/openssh-server.conf
 }
