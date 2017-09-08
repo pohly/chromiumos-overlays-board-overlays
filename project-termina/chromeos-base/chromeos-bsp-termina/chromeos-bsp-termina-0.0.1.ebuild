@@ -21,4 +21,6 @@ src_install() {
 
 	insinto /etc/profile.d
 	doins "${FILESDIR}"/PS1-termina.sh
+
+	newbin "${FILESDIR}"/hook_prestart_network.sh hook_prestart_network
 }
