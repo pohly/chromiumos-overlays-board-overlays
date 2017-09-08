@@ -5,6 +5,8 @@
 LINUX_FIRMWARE=""
 USE=""
 
+USE="${USE} zoombini"
+
 # Enable ARC by default
 USE="${USE} arc"
 
