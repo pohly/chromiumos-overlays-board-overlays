@@ -22,6 +22,7 @@ EC_FIRMWARE="snappy"
 
 # Include the wacom firmware updating tool
 INPUT_DEVICES="${INPUT_DEVICES} wacom"
+INPUT_DEVICES="${INPUT_DEVICES} weida"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS2"
