@@ -54,7 +54,7 @@
             <lens.facing value="BACK"/>
             <!-- Request -->
             <request.maxNumOutputStreams value="1,2,1"/>
-            <request.pipelineMaxDepth value="6"/>
+            <request.pipelineMaxDepth value="3"/>
             <request.maxNumInputStreams value="0"/>
             <request.partialResultCount value="1"/>
             <request.availableCapabilities value="BACKWARD_COMPATIBLE"/>
@@ -327,7 +327,7 @@
             <lens.facing value="FRONT"/>
             <!-- Request -->
             <request.maxNumOutputStreams value="1,2,1"/>
-            <request.pipelineMaxDepth value="5"/>
+            <request.pipelineMaxDepth value="3"/>
             <request.maxNumInputStreams value="0"/>
             <request.partialResultCount value="1"/>
             <request.availableCapabilities value="BACKWARD_COMPATIBLE"/>
