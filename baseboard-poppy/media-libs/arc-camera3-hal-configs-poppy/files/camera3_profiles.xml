@@ -280,9 +280,9 @@
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
-            <element name="ov13858 8-0010" type="pixel_array"/>
+            <element name="ov13858" type="pixel_array"/> <!-- HAL will append Bus id for element name "ov13858 8-0010" -->
             <element name="ipu3-csi2:1" type="csi_receiver"/>
-            <element name="dw9714 8-000c" type="lens"/>
+            <element name="dw9714" type="lens"/>
         </MediaCtl_elements_IPU3>
 
 <!-- ******************PSL specific section end **************************************************************-->
@@ -554,7 +554,7 @@
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
-            <element name="ov5670 11-0036" type="pixel_array"/>
+            <element name="ov5670" type="pixel_array"/> <!-- HAL will append Bus id for element name "ov5670 11-0036" -->
             <element name="ipu3-csi2:0" type="csi_receiver"/>
         </MediaCtl_elements_IPU3>
     </Profiles>
