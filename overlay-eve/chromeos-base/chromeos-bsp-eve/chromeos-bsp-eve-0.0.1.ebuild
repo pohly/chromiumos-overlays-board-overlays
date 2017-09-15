@@ -13,6 +13,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
+IUSE="eve-userdebug"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -21,7 +22,11 @@ RDEPEND="chromeos-base/u2fd"
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{01906EA2-3EB2-41F1-8F62-F0B7120EFD2E}" "CHROMEBOOK"
+	if use eve-userdebug; then
+		doappid "{20C53672-DEE7-4824-A131-D9547AB409ED}" "CHROMEBOOK"
+	else
+		doappid "{01906EA2-3EB2-41F1-8F62-F0B7120EFD2E}" "CHROMEBOOK"
+	fi
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
