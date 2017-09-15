@@ -26,4 +26,8 @@ src_install() {
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs fizz "${audio_config_dir}"
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
