@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 EAPI="5"
-CROS_WORKON_COMMIT="0bd74dd4f9b7de0ad342d44ad59bfa1a36e15bcc"
-CROS_WORKON_TREE="bd25ba33054144f1cda3d115ebb777f974cb4605"
+CROS_WORKON_COMMIT="a0e0befd9d8b3a499a90c78ab6bce9546c94a560"
+CROS_WORKON_TREE="ceccc6d22215efa71d01dd0aadd647c43257fe59"
 CROS_WORKON_PROJECT="chromiumos/third_party/autotest"
 CROS_WORKON_LOCALNAME=../third_party/autotest
 CROS_WORKON_SUBDIR=files
