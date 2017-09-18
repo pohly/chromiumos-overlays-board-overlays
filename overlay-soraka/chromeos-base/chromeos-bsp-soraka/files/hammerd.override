@@ -1,4 +1,5 @@
-env IMAGE_PATH="/lib/firmware/staff.fw"
+env EC_IMAGE_PATH="/lib/firmware/staff.fw"
+env TOUCHPAD_IMAGE_PATH=
 env VENDOR_ID=6353  # 0x18d1
 env PRODUCT_ID=20523  # 0x502b
 env USB_BUS=1
