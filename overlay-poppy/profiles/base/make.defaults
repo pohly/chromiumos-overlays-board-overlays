@@ -10,6 +10,8 @@ USE="${USE} poppy"
 # Enable chrome's tablet mode code
 USE="${USE} touchview acpi_ac_off"
 
+USE="${USE} has_keyboard_backlight"
+
 # Uncomment these lines to activate the serial port.
 TTY_CONSOLE="ttyS0"
 USE="${USE} pcserial"
