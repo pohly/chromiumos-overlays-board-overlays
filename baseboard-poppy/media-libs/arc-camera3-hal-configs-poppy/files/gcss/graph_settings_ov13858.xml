@@ -248,19 +248,19 @@ See the License for the specific language governing permissions and
   <imgu stream_id="1">
     <input width="4224" height="3136" format="CIO2" />
     <preview width="1280" height="960" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
-      <if width="4224" height="3136" />
-      <bds width="4224" height="3136" />
+      <if width="4176" height="3074" />
+      <bds width="2304" height="1696" />
       <filter width="4" height="4" />
       <env width="28" height="4" />
-      <gdc width="4160" height="3120" />
+      <gdc width="2240" height="1680" />
       <yuv width="1280" height="960" />
     </preview>
     <video width="1280" height="960" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
-      <if width="4224" height="3136" />
-      <bds width="4224" height="3136" />
+      <if width="4176" height="3074" />
+      <bds width="2304" height="1696" />
       <filter width="4" height="4" />
       <env width="28" height="4" />
-      <gdc width="4160" height="3120" />
+      <gdc width="2240" height="1680" />
       <yuv width="1280" height="960" />
     </video>
     <still enabled="0" />
