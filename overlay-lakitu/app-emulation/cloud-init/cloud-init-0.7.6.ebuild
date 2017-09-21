@@ -14,7 +14,7 @@ SRC_URI="https://launchpad.net/${PN}/trunk/${PV}/+download/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="*"
-IUSE="test"
+IUSE="test +gcpnet"
 
 CDEPEND="
 	dev-python/cheetah[${PYTHON_USEDEP}]
@@ -45,7 +45,7 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	epatch "${FILESDIR}/0.7.6-systemd-configs.patch"
+	use gcpnet && epatch "${FILESDIR}/0.7.6-systemd-configs.patch"
 	epatch "${FILESDIR}/0.7.6-stable-uid.patch"
 	epatch "${FILESDIR}/0.7.6-resolve-metadata-locally.patch"
 
