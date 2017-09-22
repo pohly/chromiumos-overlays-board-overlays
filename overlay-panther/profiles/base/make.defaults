@@ -1,9 +1,29 @@
 # Copyright (c) 2014 The Chromium OS Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+
 U_BOOT_CONFIG_USE="coreboot"
 U_BOOT_FDT_USE="panther"
-USE="kernel-3_8 wireless34"
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+# Moved this to the base profile, since we need to use 3.10 kernel
+# for test AP builds.
+USE="${USE} kernel-3_8 wireless34"
 
 # Disable containers because kernel-3_8 doesn't support everything needed.
 USE="${USE} -containers"
+
+USE="${USE} ac_only -display_backlight legacy_keyboard"
+USE="${USE} legacy_power_button panther -subpixel_rendering"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Declare TPM model.
+USE="${USE} tpm_slb9655"
+
+LINUX_FIRMWARE="${LINUX_FIRMWARE} rtl8168g-1"

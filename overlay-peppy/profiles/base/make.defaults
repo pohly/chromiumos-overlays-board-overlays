@@ -1,5 +1,20 @@
 # Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+
 U_BOOT_CONFIG_USE="coreboot"
 U_BOOT_FDT_USE="peppy"
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+USE="${USE} als cros_ec intel_hdcp peppy watchdog"
+USE="${USE} wireless34"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Declare TPM model.
+USE="${USE} tpm_slb9655"

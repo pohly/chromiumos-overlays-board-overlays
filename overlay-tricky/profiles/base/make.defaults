@@ -1,15 +1,13 @@
-# Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
-U_BOOT_CONFIG_USE="coreboot"
-U_BOOT_FDT_USE="falco"
 
 # Initial value just for style purposes.
 LINUX_FIRMWARE=""
 USE=""
 
-USE="${USE} cros_ec falco intel_hdcp watchdog wireless34"
+USE="${USE} ac_only -display_backlight legacy_keyboard"
+USE="${USE} legacy_power_button -subpixel_rendering tricky"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
@@ -17,3 +15,5 @@ USE="${USE} allow_consumer_kiosk"
 
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
+
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7260 ibt-hw"
