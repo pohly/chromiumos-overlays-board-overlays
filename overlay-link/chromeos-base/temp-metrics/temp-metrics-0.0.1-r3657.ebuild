@@ -3,8 +3,8 @@
 # found in the LICENSE.makefile file.
 
 EAPI="4"
-CROS_WORKON_COMMIT="0ddaa7d9ebc722c56625d0ff800e83cf5d11d67b"
-CROS_WORKON_TREE="d1c295d0bc94a17f3f2e2e6bd235bba7fbbebc7f"
+CROS_WORKON_COMMIT="3fe117d346e2a23d316cbdf038f95ccb62ac4565"
+CROS_WORKON_TREE="22e31f4a292a6c1c1171465fb1d1f004fdaf60a7"
 CROS_WORKON_PROJECT="chromiumos/platform/ec"
 CROS_WORKON_LOCALNAME="../platform/ec"
 
