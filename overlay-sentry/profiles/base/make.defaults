@@ -21,5 +21,7 @@ PD_FIRMWARE="sentry_pd"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
+USE="${USE} arc"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
