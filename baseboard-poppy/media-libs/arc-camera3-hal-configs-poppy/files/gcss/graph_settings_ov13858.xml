@@ -5862,7 +5862,7 @@ See the License for the specific language governing permissions and
       <yuv width="1600" height="1200" />
     </preview>
     <video width="1920" height="1080" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
-      <if width="4216" height="2516" />
+      <if width="4224" height="3136" />
       <bds width="4224" height="3136" />
       <filter width="4" height="4" />
       <env width="28" height="48" />
