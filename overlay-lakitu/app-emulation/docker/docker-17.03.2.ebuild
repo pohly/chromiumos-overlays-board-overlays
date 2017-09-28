@@ -296,10 +296,6 @@ src_install() {
 	# https://storage.googleapis.com/speckle-umbrella/bin/dockercfg-update.sh.
 	exeinto /usr/share/google
 	doexe "${FILESDIR}"/dockercfg_update.sh
-
-	# Install Docker daemon configuration file
-	insinto /etc/docker
-	newins "${FILESDIR}/docker-${PV}-daemon.json" daemon.json
 }
 
 pkg_postinst() {
