@@ -20,6 +20,9 @@ USE="${USE} amd_cpu"
 # multiple threads.
 USE="${USE} gpu_sandbox_start_early"
 
+# LLVM is required to build the radeon and amdgpu drivers.
+USE="${USE} llvm"
+
 # Turn on the video cards this chip uses.
 # TODO: Remove radeon when amdgpu works by itself
 VIDEO_CARDS="-* radeon amdgpu"

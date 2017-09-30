@@ -20,6 +20,9 @@ USE="${USE} frecon -opengl opengles"
 USE="${USE} -coreboot -bootimage -cros_ec"
 USE="${USE} -fastboot -mtc"
 
+# LLVM is required to build the llvmpipe driver.
+USE="${USE} llvm"
+
 VIDEO_CARDS="llvmpipe"
 
 CROS_WORKON_CLANG=0
