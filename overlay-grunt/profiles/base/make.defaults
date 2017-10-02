@@ -1,0 +1,25 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Use LLVM amdgpu target when building LLVM.
+LLVM_TARGETS="AMDGPU"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} grunt"
+
+# TODO: uncomment to enable EC build
+#USE="${USE} cros_ec"
+
+USE="${USE} als touchview"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# with some legacy peripherals
+USE="${USE} legacy_keyboard legacy_power_button"
+
+# TODO: Enable unified builds
+#USE="${USE} unibuild"

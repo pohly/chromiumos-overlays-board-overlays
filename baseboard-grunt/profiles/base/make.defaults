@@ -1,0 +1,11 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+# Initial value just for style purposes.
+USE=""
+
+# Add EC logging
+USE="${USE} eclog"
+
+# With amdgpu support.
+USE="${USE} builtin_fw_amdgpu"
