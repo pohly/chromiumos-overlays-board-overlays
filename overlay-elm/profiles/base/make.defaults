@@ -24,3 +24,6 @@ USE="${USE} -touchpad_wakeup"
 #USE="${USE} pcserial"
 # Declare set of enabled consoles
 #TTY_CONSOLE="ttyS0"
+
+# Build kernel with AutoFDO.
+USE="${USE} kernel_afdo"

@@ -24,3 +24,6 @@ USE="${USE} -touchpad_wakeup"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
+
+# Build kernel with AutoFDO.
+USE="${USE} kernel_afdo"
