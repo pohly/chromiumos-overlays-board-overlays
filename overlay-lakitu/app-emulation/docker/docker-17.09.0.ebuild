@@ -1,7 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
 
 EGO_PN="github.com/docker/docker-ce"
 
@@ -38,14 +38,13 @@ CDEPEND="
 	device-mapper? (
 		>=sys-fs/lvm2-2.02.89[thin]
 	)
-	seccomp? ( >=sys-libs/libseccomp-2.2.1 )
-	apparmor? ( sys-libs/libapparmor )
+	seccomp? ( >=sys-libs/libseccomp-2.2.1[static-libs] )
+	apparmor? ( sys-libs/libapparmor[static-libs] )
+	sys-apps/systemd
 "
 
 DEPEND="
 	${CDEPEND}
-
-	dev-go/go-md2man
 
 	btrfs? (
 		>=sys-fs/btrfs-progs-3.16.1
@@ -56,6 +55,8 @@ DEPEND="
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#optional-dependencies
 RDEPEND="
 	${CDEPEND}
+
+	>=sys-devel/libtool-2.4.6
 	>=net-firewall/iptables-1.4
 	sys-process/procps
 	>=dev-vcs/git-1.7
@@ -195,6 +196,12 @@ pkg_setup() {
 	enewgroup docker
 }
 
+src_prepare() {
+	epatch "${FILESDIR}/docker-17.09.0-cross-compile.patch"
+	# allow user patches (use sparingly - upstream won't support them)
+	epatch_user
+}
+
 src_compile() {
 	export GOPATH="${WORKDIR}/${P}"
 
@@ -234,6 +241,12 @@ src_compile() {
 		grep -q -- '-fno-PIC' hack/make/dynbinary-daemon || die 'hardened sed failed'
 	fi
 
+	# enable journald.
+	DOCKER_BUILDTAGS+=" journald"
+
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
+	echo "GO compiler '${GO}'"
 	# build daemon
 	./hack/make.sh dynbinary || die 'dynbinary failed'
 
@@ -249,11 +262,12 @@ src_compile() {
 		DISABLE_WARN_OUTSIDE_CONTAINER=1 \
 		dynbinary || die
 
-	# build man pages
-	go build -o gen-manpages github.com/docker/cli/man || die
-	./gen-manpages --root . --target ./man/man1 || die
-	./man/md2man-all.sh -q || die
-	rm gen-manpages || die
+	# Don't build the man pages for lakitu. This also helps us avoid the
+	# dependency on dev-go/go-md2man.
+	# go build -o gen-manpages github.com/docker/cli/man || die
+	# ./gen-manpages --root . --target ./man/man1 || die
+	# ./man/md2man-all.sh -q || die
+	# rm gen-manpages || die
 	# see "components/cli/scripts/docs/generate-man.sh" (which also does "go get" for go-md2man) 
 
 	popd || die # components/cli
@@ -271,16 +285,20 @@ src_install() {
 	newinitd contrib/init/openrc/docker.initd docker
 	newconfd contrib/init/openrc/docker.confd docker
 
-	systemd_dounit contrib/init/systemd/docker.{service,socket}
+	systemd_dounit contrib/init/systemd/docker.socket
+	systemd_newunit "${FILESDIR}/docker-${PV}.service" docker.service
+	systemd_enable_service sockets.target docker.socket
+	systemd_enable_service multi-user.target docker.service
 
 	udev_dorules contrib/udev/*.rules
 
 	dodoc AUTHORS CONTRIBUTING.md CHANGELOG.md NOTICE README.md
-	dodoc -r docs/*
+	# No need to install development related tools on Lakitu.
+	# dodoc -r docs/*
 
-	insinto /usr/share/vim/vimfiles
-	doins -r contrib/syntax/vim/ftdetect
-	doins -r contrib/syntax/vim/syntax
+	# insinto /usr/share/vim/vimfiles
+	# doins -r contrib/syntax/vim/ftdetect
+	# doins -r contrib/syntax/vim/syntax
 
 	# note: intentionally not using "doins" so that we preserve +x bits
 	dodir /usr/share/${PN}/contrib
@@ -291,12 +309,22 @@ src_install() {
 
 	newbin build/docker-* docker
 
-	doman man/man*/*
+	# doman man/man*/*
 
-	dobashcomp contrib/completion/bash/*
-	insinto /usr/share/zsh/site-functions
-	doins contrib/completion/zsh/_*
+	# dobashcomp contrib/completion/bash/*
+	# insinto /usr/share/zsh/site-functions
+	# doins contrib/completion/zsh/_*
 	popd || die # components/cli
+
+	# Install the dockercfg_update.sh script which allows docker
+	# to access the convoy registry. The script is taken from
+	# https://storage.googleapis.com/speckle-umbrella/bin/dockercfg-update.sh.
+	exeinto /usr/share/google
+	doexe "${FILESDIR}"/dockercfg_update.sh
+
+	# Install Docker daemon configuration file
+	insinto /etc/docker
+	newins "${FILESDIR}/docker-${PV}-daemon.json" daemon.json
 }
 
 pkg_postinst() {

@@ -1,7 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
 EGO_PN="github.com/${PN}/${PN}"
 
 inherit toolchain-funcs
@@ -31,9 +31,15 @@ S=${WORKDIR}/${P}/src/${EGO_PN}
 
 RESTRICT="test"
 
+src_prepare() {
+	epatch "${FILESDIR}/0.2.3_p20170131-use-GO-cross-compiler.patch"
+}
+
 src_compile() {
 	local options=( $(usex seccomp "seccomp" '') )
 	export GOPATH="${WORKDIR}/${P}" # ${PWD}/vendor
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
 	LDFLAGS=$(usex hardened '-extldflags -fno-PIC' '') emake GIT_COMMIT="$EGIT_COMMIT" BUILDTAGS="${options[@]}"
 }
 

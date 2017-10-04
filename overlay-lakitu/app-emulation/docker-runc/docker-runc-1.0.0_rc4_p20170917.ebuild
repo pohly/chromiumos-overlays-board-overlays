@@ -1,7 +1,10 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
+
+inherit eutils multilib
+
 EGO_PN="github.com/opencontainers/${PN/docker-}"
 
 if [[ ${PV} == *9999 ]]; then
@@ -35,6 +38,7 @@ RESTRICT="test"
 src_prepare() {
 	default
 	sed -i -e "s/git rev-parse.*\$/echo gentoo)/" -e "/COMMIT :=/d" -e "/COMMIT_NO :=/d" Makefile || die
+	epatch "${FILESDIR}/1.0.0_rc2_p20170201-use-GO-cross-compiler.patch"
 }
 
 src_compile() {
@@ -43,6 +47,8 @@ src_compile() {
 	export CGO_LDFLAGS="$(usex hardened '-fno-PIC ' '')
 		-L${ROOT}/usr/$(get_libdir)"
 
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
 	# build up optional flags
 	local options=(
 		$(usex ambient 'ambient' '')
