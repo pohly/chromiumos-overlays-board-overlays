@@ -10,7 +10,7 @@ HOMEPAGE="http://dev.chromium.org/"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor criu"
+IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor criu uefi_bootloaders"
 
 LAKITU_RDEPEND="
 	bootchart? ( app-benchmarks/bootchart )
@@ -56,6 +56,7 @@ LAKITU_RDEPEND="
 	sys-apps/less
 	sys-apps/mosys
 	sys-apps/pv
+	uefi_bootloaders? ( sys-boot/shim )
 	sys-fs/e2fsprogs
 	criu? ( sys-process/criu )
 	virtual/chromeos-bsp
