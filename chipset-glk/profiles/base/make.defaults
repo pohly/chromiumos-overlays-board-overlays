@@ -16,3 +16,5 @@ USE="${USE} apl_lpe intel_lpe"
 USE="${USE} acpi_ac_off"
 
 USE="${USE} android_aep"
+
+USE="${USE} drm_atomic"

@@ -17,3 +17,5 @@ USE="${USE} kernel-4_4"
 USE="${USE} native_gpu_memory_buffers"
 
 USE="${USE} android_aep"
+
+USE="${USE} drm_atomic"
