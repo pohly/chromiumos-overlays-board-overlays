@@ -1,0 +1,19 @@
+Some UEFI firmware passes an empty string ({'\0', '\0'}) as
+LocalOptions. Shim doesn't handle such a case properly.
+
+This patch makes Shim bypass an empty LocalOptions and fall back to
+the default loader.
+
+Patch by Edward Hyunkoo Jee (edjee@google.com)
+
+--- ucs2.h
++++ ucs2.h
+@@ -113,6 +113,8 @@ count_ucs2_strings(UINT8 *data, UINTN data_size)
+ 	}
+ 	if (num_nuls > 0 && last_nul_pos != pos - 1)
+ 		return 0;
++	if (last_nul_pos == 0)
++		return 0;
+ 	return num_nuls;
+ }
+ 

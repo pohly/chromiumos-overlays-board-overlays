@@ -8,7 +8,7 @@ GIT_COMMIT_ID="02e2fc61bd2fb7f0045f15db105de7b8ace3029f"
 SRC_URI="https://github.com/rhboot/shim/archive/${GIT_COMMIT_ID}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="*"
 
-inherit multilib
+inherit eutils multilib
 
 DESCRIPTION="Red Hat UEFI shim loader"
 HOMEPAGE="https://github.com/rhboot/shim"
@@ -21,6 +21,10 @@ DEPEND="dev-libs/openssl
 	sys-boot/gnu-efi"
 
 S="${WORKDIR}/${PN}-${GIT_COMMIT_ID}"
+
+src_prepare() {
+	epatch "${FILESDIR}/shim-14.0.20171219-empty-localoptions.patch"
+}
 
 src_compile() {
 	emake ARCH="x86_64" \
