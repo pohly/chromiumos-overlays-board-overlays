@@ -1,5 +1,28 @@
 # Copyright (c) 2011 The Chromium OS Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+
 U_BOOT_CONFIG_USE="coreboot"
 U_BOOT_FDT_USE="link"
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromeos-intel-pineview"
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+USE="${USE} als cros_ec has_keyboard_backlight highdpi link"
+USE="${USE} natural_scroll_default watchdog"
+USE="${USE} -tests_factory_Leds"
+
+# Turn on the Creative CA0132 patch.
+USE="${USE} ca0132"
+
+# Use 3.8 kernel with 3.4 wifi stack
+USE="${USE} kernel-3_8 wireless34"
+
+# Declare TPM model.
+USE="${USE} tpm_slb9655"
+
+# Disable containers because kernel-3_8 doesn't support everything needed.
+USE="${USE} -containers"
