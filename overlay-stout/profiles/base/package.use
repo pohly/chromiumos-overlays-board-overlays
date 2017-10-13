@@ -2,9 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Disable web audio because it's too heavy for Mario.
-chromeos-base/chromeos-login disable_webaudio
-
 # We don't have the space in the recovery image on linux-3.8 kernels to support
 # this (it pulls in libusb).  https://crbug.com/764753
 sys-apps/flashrom -raiden_debug_spi
