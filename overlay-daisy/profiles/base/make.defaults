@@ -1,8 +1,35 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 U_BOOT_CONFIG_USE="daisy"
 U_BOOT_FDT_USE="exynos5250-snow"
 
+CHROMEOS_KERNEL_SPLITCONFIG="chromeos-exynos5"
+
+# Initial value just for style purposes.
+USE=""
+
 # Turn on the video cards this board uses.
 VIDEO_CARDS="exynos"
+
+USE="${USE} als cros_ec device_tree exynos gpu_sandbox_start_early"
+USE="${USE} hardfp kernel-3_8 neon -opengl opengles watchdog wireless34"
+# Set default build to snow, USE="-snow" to build daisy.
+USE="${USE} snow"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Disable tranparent hugepage, since kernel 3_8 does not support it for arm.
+USE="${USE} -transparent_hugepage"
+
+# Disable containers because kernel-3_8 doesn't support everything needed.
+USE="${USE} -containers"
+
+# Build kernel with AutoFDO.
+USE="${USE} kernel_afdo"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttySAC3"
