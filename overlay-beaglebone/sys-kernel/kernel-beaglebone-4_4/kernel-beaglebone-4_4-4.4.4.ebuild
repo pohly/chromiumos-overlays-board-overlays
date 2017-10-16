@@ -15,7 +15,10 @@ inherit cros-workon cros-kernel2 eutils
 DESCRIPTION="Chrome OS Kernel-beaglebone"
 HOMEPAGE="http://src.chromium.org"
 GIT_SHA1="19b7b0251f7b6b3ac3f75ab4e43d84425ee230ee"
-SRC_URI="https://github.com/beagleboard/linux/archive/${GIT_SHA1}.tar.gz -> ${P}-${GIT_SHA1}.tar.gz"
+#SRC_URI="https://github.com/beagleboard/linux/archive/${GIT_SHA1}.tar.gz -> ${P}-${GIT_SHA1}.tar.gz"
+# We recompress the gzip tarball to save ~44MiB.
+# zcat xxx.tar.gz | pxz > xxx.tar.xz
+SRC_URI="gs://chromeos-localmirror/distfiles/${P}-${GIT_SHA1}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
