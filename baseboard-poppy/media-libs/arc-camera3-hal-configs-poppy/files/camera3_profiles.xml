@@ -28,7 +28,7 @@
             <control.aeAvailableAntibandingModes value="OFF,50HZ,60Hz,AUTO"/>
             <control.aeAvailableModes value="OFF,ON"/>
             <control.aeLockAvailable value="TRUE"/>
-            <control.aeAvailableTargetFpsRanges value="30,30,15,30"/>
+            <control.aeAvailableTargetFpsRanges value="15,30,30,30"/>
             <control.aeCompensationRange value="0,0"/>
             <control.aeCompensationStep value="0,1"/>
             <control.afAvailableModes value="OFF,AUTO,CONTINUOUS_VIDEO,CONTINUOUS_PICTURE"/>
@@ -301,7 +301,7 @@
             <control.aeAvailableAntibandingModes value="OFF,50HZ,60Hz,AUTO"/>
             <control.aeAvailableModes value="OFF,ON"/>
             <control.aeLockAvailable value="TRUE"/>
-            <control.aeAvailableTargetFpsRanges value="30,30,15,30"/>
+            <control.aeAvailableTargetFpsRanges value="15,30,30,30"/>
             <control.aeCompensationRange value="0,0"/>
             <control.aeCompensationStep value="0,1"/>
             <control.afAvailableModes value="OFF"/>
