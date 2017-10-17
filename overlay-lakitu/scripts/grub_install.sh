@@ -103,8 +103,9 @@ grub_install() {
   fi
 
   if ! sudo sed -i -e 's|/sbin/init|/usr/lib/systemd/systemd|' \
-                ${ESP_DIR}/efi/boot/grub.cfg; then
-    error "Could not make systemd the system init."
+                -e '/^set timeout=/s|=.*|=0|' \
+                "${ESP_DIR}/efi/boot/grub.cfg"; then
+    error "Failed to update grub configuration file."
     return 1
   fi
 
