@@ -18,6 +18,7 @@ KEYWORDS="~*"
 IUSE="+autotest"
 
 SERVER_IUSE_TESTS="
+	+tests_enterprise_CFM_HuddlyMonitor
 	+tests_enterprise_CFM_HuddlyUpdater
 	+tests_enterprise_CFM_SiSFwUpdater
 "
