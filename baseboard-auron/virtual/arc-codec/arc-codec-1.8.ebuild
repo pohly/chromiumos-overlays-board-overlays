@@ -10,4 +10,4 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
 
-RDEPEND="chromeos-base/arc-codec-auron-paine"
+RDEPEND="chromeos-base/arc-codec-baseboard-auron"
