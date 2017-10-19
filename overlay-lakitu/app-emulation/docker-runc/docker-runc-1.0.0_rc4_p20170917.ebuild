@@ -38,7 +38,7 @@ RESTRICT="test"
 src_prepare() {
 	default
 	sed -i -e "s/git rev-parse.*\$/echo gentoo)/" -e "/COMMIT :=/d" -e "/COMMIT_NO :=/d" Makefile || die
-	epatch "${FILESDIR}/1.0.0_rc2_p20170201-use-GO-cross-compiler.patch"
+	epatch "${FILESDIR}/1.0.0_rc4_p20170917-use-GO-cross-compiler.patch"
 }
 
 src_compile() {
