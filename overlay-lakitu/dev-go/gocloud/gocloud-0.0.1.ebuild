@@ -29,4 +29,7 @@ IUSE=""
 RESTRICT="binchecks strip test"
 
 DEPEND=""
-RDEPEND=""
+
+RDEPEND="
+	dev-go/net
+"
