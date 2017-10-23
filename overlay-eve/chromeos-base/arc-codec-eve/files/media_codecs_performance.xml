@@ -16,6 +16,12 @@
 
 <MediaCodecs>
     <Encoders>
+        <MediaCodec name="OMX.arc.h264.encode" type="video/avc" update="true">
+            <Limit name="measured-frame-rate-320x240" range="508-519" />
+            <Limit name="measured-frame-rate-720x480" range="214-263" />
+            <Limit name="measured-frame-rate-1280x720" range="104-127" />
+            <Limit name="measured-frame-rate-1920x1080" range="53-67" />
+        </MediaCodec>
         <MediaCodec name="OMX.google.h263.encoder" type="video/3gpp" update="true">
             <Limit name="measured-frame-rate-176x144" range="1084-1085" />
         </MediaCodec>
