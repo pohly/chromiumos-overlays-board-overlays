@@ -8,3 +8,4 @@
 >=app-emulation/docker-17.09.0
 # Mask audit from portage-stable
 sys-process/audit::portage-stable
+sys-process/shadow::portage-stable
