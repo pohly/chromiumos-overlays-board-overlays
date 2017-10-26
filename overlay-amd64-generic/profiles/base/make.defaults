@@ -19,7 +19,7 @@ USE="${USE} containers device_jail kvm_host"
 USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_4"
 
 # Enable all optional features on generic overlays.
-USE="${USE} buffet peerd wifi_bootstrapping"
+USE="${USE} buffet"
 
 # LLVM is required to build the llvmpipe and radeon drivers.
 USE="${USE} llvm"

@@ -19,7 +19,7 @@ USE="${USE} -tpm"
 USE="${USE} kernel-3_14 nowerror"
 
 # Enable all optional features on generic overlays.
-USE="${USE} buffet peerd wifi_bootstrapping"
+USE="${USE} buffet"
 
 # Enable a few more video cards as this is a generic board.
 VIDEO_CARDS="nouveau radeon"

@@ -5,4 +5,4 @@
 USE=""
 
 # Disable some generic stuff we don't care about.
-USE="${USE} -buffet -peerd -wifi_bootstrapping"
+USE="${USE} -buffet"
