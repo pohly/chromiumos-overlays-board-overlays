@@ -13,8 +13,6 @@ USE="${USE} allow_consumer_kiosk"
 
 USE="${USE} containers device_jail"
 
-USE="${USE} arc"
-
 USE="${USE} direncryption"
 
 # Uncomment this line to activate the serial port.
