@@ -18,7 +18,6 @@ DEPEND="!chromeos-base/light-sensor"
 # modemmanager provides Ericsson support.
 RDEPEND="${DEPEND}
 	app-laptop/laptop-mode-tools
-	chromeos-base/chrontel
 	chromeos-base/vpd
 	sys-apps/iotools
 	virtual/modemmanager
