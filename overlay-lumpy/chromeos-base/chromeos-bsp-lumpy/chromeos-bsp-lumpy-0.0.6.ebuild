@@ -15,6 +15,7 @@ KEYWORDS="-* amd64 x86"
 DEPEND="!chromeos-base/light-sensor"
 # modemmanager provides Y3300 support.
 RDEPEND="${DEPEND}
+	!<chromeos-base/chromeos-bsp-lumpy-private-0.0.6
 	sys-apps/iotools
 	virtual/modemmanager
 "
@@ -37,4 +38,8 @@ src_install() {
 
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs lumpy "${audio_config_dir}"
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
