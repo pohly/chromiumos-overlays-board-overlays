@@ -1,9 +1,9 @@
 # Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
-CROS_WORKON_COMMIT="27fef79931df23b7efba7fc11aec7fa4f61a2e0d"
-CROS_WORKON_TREE="43079b022399a1e0c845244b57010a9e6f949e9a"
+EAPI=5
+CROS_WORKON_COMMIT="8b4c7a5c29a027633e772886c88fd510c1e366b0"
+CROS_WORKON_TREE="2bfcb27ebd704f088015160bb51483807360ead3"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/v4.4"
 
