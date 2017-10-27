@@ -14,6 +14,7 @@ IUSE=""
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
+	!<chromeos-base/chromeos-bsp-stumpy-private-0.0.2
 	chromeos-base/oem-customization
 	chromeos-base/jabra-vold
 "
@@ -29,4 +30,8 @@ src_install() {
 
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs stumpy "${audio_config_dir}"
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
