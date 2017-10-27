@@ -36,7 +36,10 @@ RDEPEND="${RDEPEND}
 	pam? ( >=sys-auth/pambase-20150213 )"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-4.1.3-dots-in-usernames.patch #22920
+	# epatch "${FILESDIR}"/${PN}-4.1.3-dots-in-usernames.patch #22920
+	# Lakitu: apply Fedora's patch on usernames, which entails the allowance of
+	# dots.
+	epatch "${FILESDIR}"/${P}-goodname.patch
 	epatch "${FILESDIR}"/${P}-cross-size-checks.patch
 	epatch_user
 	# https://github.com/shadow-maint/shadow/pull/5

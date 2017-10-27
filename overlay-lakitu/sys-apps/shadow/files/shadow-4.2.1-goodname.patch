@@ -1,0 +1,94 @@
+From: https://src.fedoraproject.org/rpms/shadow-utils/raw/master/f/shadow-4.5-goodname.patch
+diff -up shadow-4.5/libmisc/chkname.c.goodname shadow-4.5/libmisc/chkname.c
+--- shadow-4.5/libmisc/chkname.c.goodname	2014-09-01 16:36:40.000000000 +0200
++++ shadow-4.5/libmisc/chkname.c	2017-09-15 17:06:29.917939977 +0200
+@@ -47,27 +47,46 @@
+ #include "chkname.h"
+ 
+ static bool is_valid_name (const char *name)
+-{
++{      
+ 	/*
+-	 * User/group names must match [a-z_][a-z0-9_-]*[$]
+-	 */
+-	if (('\0' == *name) ||
+-	    !((('a' <= *name) && ('z' >= *name)) || ('_' == *name))) {
++         * User/group names must match gnu e-regex:
++         *    [a-zA-Z0-9_.][a-zA-Z0-9_.-]{0,30}[a-zA-Z0-9_.$-]?
++         *
++         * as a non-POSIX, extension, allow "$" as the last char for
++         * sake of Samba 3.x "add machine script"
++         *
++         * Also do not allow fully numeric names or just "." or "..".
++         */
++	int numeric;
++
++	if ('\0' == *name ||
++	    ('.' == *name && (('.' == name[1] && '\0' == name[2]) ||
++			      '\0' == name[1])) ||
++	    !((*name >= 'a' && *name <= 'z') ||
++	      (*name >= 'A' && *name <= 'Z') ||
++	      (*name >= '0' && *name <= '9') ||
++	      *name == '_' ||
++	      *name == '.')) {
+ 		return false;
+ 	}
+ 
++	numeric = isdigit(*name);
++
+ 	while ('\0' != *++name) {
+-		if (!(( ('a' <= *name) && ('z' >= *name) ) ||
+-		      ( ('0' <= *name) && ('9' >= *name) ) ||
+-		      ('_' == *name) ||
+-		      ('-' == *name) ||
+-		      ( ('$' == *name) && ('\0' == *(name + 1)) )
++		if (!((*name >= 'a' && *name <= 'z') ||
++		      (*name >= 'A' && *name <= 'Z') ||
++		      (*name >= '0' && *name <= '9') ||
++		      *name == '_' ||
++		      *name == '.' ||
++		      *name == '-' ||
++		      (*name == '$' && name[1] == '\0')
+ 		     )) {
+ 			return false;
+ 		}
++		numeric &= isdigit(*name);
+ 	}
+ 
+-	return true;
++	return !numeric;
+ }
+ 
+ bool is_valid_user_name (const char *name)
+diff -up shadow-4.5/man/groupadd.8.xml.goodname shadow-4.5/man/groupadd.8.xml
+--- shadow-4.5/man/groupadd.8.xml.goodname	2014-09-01 16:36:40.000000000 +0200
++++ shadow-4.5/man/groupadd.8.xml	2017-08-14 10:27:24.657391521 +0200
+@@ -256,12 +256,6 @@
+    <refsect1 id='caveats'>
+      <title>CAVEATS</title>
+      <para>
+-       Groupnames must start with a lower case letter or an underscore,
+-       followed by lower case letters, digits, underscores, or dashes.
+-       They can end with a dollar sign.
+-       In regular expression terms: [a-z_][a-z0-9_-]*[$]?
+-     </para>
+-     <para>
+        Groupnames may only be up to &GROUP_NAME_MAX_LENGTH; characters long.
+      </para>
+      <para>
+diff -up shadow-4.5/man/useradd.8.xml.goodname shadow-4.5/man/useradd.8.xml
+--- shadow-4.5/man/useradd.8.xml.goodname	2016-08-15 04:48:14.000000000 +0200
++++ shadow-4.5/man/useradd.8.xml	2017-08-14 10:27:24.667391382 +0200
+@@ -633,12 +633,6 @@
+     </para>
+ 
+     <para>
+-      Usernames must start with a lower case letter or an underscore,
+-      followed by lower case letters, digits, underscores, or dashes.
+-      They can end with a dollar sign.
+-      In regular expression terms: [a-z_][a-z0-9_-]*[$]?
+-    </para>
+-    <para>
+       Usernames may only be up to 32 characters long.
+     </para>
+   </refsect1>
