@@ -15,6 +15,7 @@ IUSE=""
 
 DEPEND="!chromeos-base/light-sensor"
 RDEPEND="${DEPEND}
+	!<chromeos-base/chromeos-bsp-link-private-0.0.3
 	chromeos-base/chromeos-board-info-link
 	chromeos-base/chromeos-touch-config-link
 	chromeos-base/ca0132-dsp-firmware
@@ -39,4 +40,8 @@ src_install() {
 	# Override default CPU clock speed governor
 	insinto "/etc"
 	doins "${FILESDIR}/cpufreq.conf"
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
