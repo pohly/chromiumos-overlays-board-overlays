@@ -1,20 +1,20 @@
-# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="47067e53f0f4afc158d14ab44f4ae937f6ef19c6"
-CROS_WORKON_TREE="7f462402ea186e4ed6f51848ddbdf2835d20f02e"
+CROS_WORKON_COMMIT="1fc22f877a1299036531c2058cc3cf4b633161b9"
+CROS_WORKON_TREE="0949c6d13e0d6b26682bb7188bab005c162b4dd6"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
-CROS_WORKON_LOCALNAME="kernel/v4.12"
+CROS_WORKON_LOCALNAME="kernel/v4.4"
 
-CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
+CHROMEOS_KERNEL_CONFIG="${FILESDIR}/lakitu_kernel_config_4_4"
 
 # This must be inherited *after* EGIT/CROS_WORKON variables defined
 inherit cros-workon cros-kernel2 osreleased
 
 STRIP_MASK+=" /usr/src/${P}/build/vmlinux"
 
-DESCRIPTION="Chromium OS Linux Kernel 4.12"
+DESCRIPTION="Chromium OS Linux Kernel 4.4"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="*"
 
