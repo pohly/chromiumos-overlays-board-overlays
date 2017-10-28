@@ -37,8 +37,3 @@ S="${WORKDIR}/linux-${GIT_SHA1}"
 src_unpack() {
 	default
 }
-
-src_prepare() {
-	cros-kernel2_src_prepare
-	epatch "${FILESDIR}"/*.patch
-}

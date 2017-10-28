@@ -42,11 +42,6 @@ DEPEND="!sys-kernel/chromeos-kernel-next
 "
 RDEPEND="${DEPEND}"
 
-src_prepare() {
-	cros-workon_src_prepare
-	epatch "${FILESDIR}"/*.patch
-}
-
 src_unpack() {
 	default
 }
