@@ -199,6 +199,7 @@ src_prepare() {
 	epatch "${FILESDIR}/docker-1.13.1-forgiving-tini-output.patch"
 	# TODO(mikewu): remove the patch in milestone 63.
 	epatch "${FILESDIR}/docker-17.03.2-disable-health-check.patch"
+	epatch "${FILESDIR}/docker-17.03.2-log-line-max-size.patch"
 	# allow user patches (use sparingly - upstream won't support them)
 	epatch_user
 }

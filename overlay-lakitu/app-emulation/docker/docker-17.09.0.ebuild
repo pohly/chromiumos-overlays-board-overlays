@@ -198,6 +198,7 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}/docker-17.09.0-cross-compile.patch"
+	epatch "${FILESDIR}/docker-17.09.0-log-line-max-size.patch"
 	# allow user patches (use sparingly - upstream won't support them)
 	epatch_user
 }
