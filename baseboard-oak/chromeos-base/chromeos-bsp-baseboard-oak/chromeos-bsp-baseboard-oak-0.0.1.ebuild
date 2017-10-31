@@ -22,10 +22,11 @@ RDEPEND="${DEPEND}"
 
 src_install() {
 	local soc=$(usex mt8176 mt817{6,3})
+	local kernel=$(usex kernel-4_4 4_4 3_18)
 
 	# Install cpuset adjustments.
 	insinto "/etc/init"
-	newins "${FILESDIR}/platform-cpusets-${soc}.conf" platform-cpusets.conf
+	newins "${FILESDIR}/platform-cpusets-${soc}-${kernel}.conf" platform-cpusets.conf
 
 	# Install platform specific triggers and udev rules for codecs.
 	doins "${FILESDIR}/udev-trigger-codec.conf"
@@ -40,6 +41,6 @@ src_install() {
 
 	if use cheets; then
 		insinto "/opt/google/containers/android/vendor/etc/init"
-		newins "${FILESDIR}/init.cpusets-${soc}.rc" init.cpusets.rc
+		newins "${FILESDIR}/init.cpusets-${soc}-${kernel}.rc" init.cpusets.rc
 	fi
 }
