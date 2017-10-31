@@ -1,6 +1,6 @@
-From d23591bc4306e607c260d7ab7873a0e905e4479b Mon Sep 17 00:00:00 2001
-From: Andrey Ulanov <andreyu@google.com>
-Date: Wed, 16 Nov 2016 16:12:51 -0800
+From c346d84e45f956c3d4e8147d3567287290d5287b Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Mon, 30 Oct 2017 23:26:19 -0700
 Subject: [PATCH] When creating users try to derive the UID/GID from the
  homedir
 
@@ -13,14 +13,23 @@ This fixes potential problems if for some reason the new accounts that
 were previously added into passwd/group were not preserved after reboot,
 but the correspondinghome directory was.
 ---
- google_compute_engine/accounts/accounts_utils.py | 35 +++++++++++++++++++++---
- 1 file changed, 31 insertions(+), 4 deletions(-)
+ google_compute_engine/accounts/accounts_utils.py | 37 ++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 5 deletions(-)
 
 diff --git a/google_compute_engine/accounts/accounts_utils.py b/google_compute_engine/accounts/accounts_utils.py
-index fbdd5ef..5c90226 100644
+index f52af05..01d846c 100644
 --- a/google_compute_engine/accounts/accounts_utils.py
 +++ b/google_compute_engine/accounts/accounts_utils.py
-@@ -104,11 +104,13 @@ class AccountsUtils(object):
+@@ -28,7 +28,7 @@ from google_compute_engine import file_utils
+ 
+ USER_REGEX = re.compile(r'\A[A-Za-z0-9._][A-Za-z0-9._-]*\Z')
+ DEFAULT_GROUPADD_CMD = 'groupadd {group}'
+-DEFAULT_USERADD_CMD = 'useradd -m -s /bin/bash -p * {user}'
++DEFAULT_USERADD_CMD = 'useradd -s /bin/bash -p * {user}'
+ DEFAULT_USERDEL_CMD = 'userdel -r {user}'
+ DEFAULT_USERMOD_CMD = 'usermod -G {groups} {user}'
+ 
+@@ -121,18 +121,28 @@ class AccountsUtils(object):
      except KeyError:
        return None
  
@@ -35,27 +44,23 @@ index fbdd5ef..5c90226 100644
  
      Returns:
        bool, True if user creation succeeded.
-@@ -126,7 +128,14 @@ class AccountsUtils(object):
-     #
-     # To solve the issue, make the password '*' which is also recognized
-     # as locked but does not prevent SSH login.
--    command = ['useradd', '-m', '-s', '/bin/bash', '-p', '*', user]
+     """
+     self.logger.info('Creating a new user account for %s.', user)
+ 
+-    command = self.useradd_cmd.format(user=user)
++    extra_flags = ''
 +    if homedir:
-+      extra_flags = ['-d', homedir]
++      extra_flags += ' -d %s' % homedir
 +    else:
-+      extra_flags = ['-m']
++      extra_flags += ' -m'
 +    if uid:
-+      extra_flags += ['-u', str(uid)]
++      extra_flags += ' -u %s' % str(uid)
 +
-+    command = ['useradd', user, '-s', '/bin/bash', '-p', '*'] + extra_flags
++    command = self.useradd_cmd.format(user=user) + extra_flags
      try:
-       subprocess.check_call(command)
+       subprocess.check_call(command.split(' '))
      except subprocess.CalledProcessError as e:
-@@ -284,11 +293,29 @@ class AccountsUtils(object):
-     if not bool(USER_REGEX.match(user)):
-       self.logger.warning('Invalid user account name %s.', user)
-       return False
-+
+@@ -300,8 +310,25 @@ class AccountsUtils(object):
      if not self._GetUser(user):
        # User does not exist. Attempt to create the user and add them to the
        # appropriate user groups.
@@ -84,5 +89,5 @@ index fbdd5ef..5c90226 100644
  
      # Don't try to manage account SSH keys with a shell set to disable
 -- 
-2.8.0.rc3.226.g39d4020
+2.15.0.rc2.357.g7e34df9404-goog
 

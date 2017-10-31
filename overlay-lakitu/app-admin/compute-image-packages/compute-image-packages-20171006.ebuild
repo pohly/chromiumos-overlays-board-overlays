@@ -28,10 +28,9 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	epatch "${FILESDIR}/20170227-homedir-uid-fix.patch"
-	epatch "${FILESDIR}/20170523-do-not-block-sshd-for-google.service.patch"
+	epatch "${FILESDIR}/20171006-homedir-uid-fix.patch"
+	epatch "${FILESDIR}/20171006-do-not-block-sshd-for-google.service.patch"
 	epatch "${FILESDIR}/20170227-no-boto.patch"
-	epatch "${FILESDIR}/20170523-config-option-for-ip-alias.patch"
 	distutils-r1_python_prepare_all
 }
 
