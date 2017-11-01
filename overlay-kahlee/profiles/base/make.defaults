@@ -7,6 +7,7 @@ LLVM_TARGETS="AMDGPU"
 
 # Initial value just for style purposes.
 USE=""
+LINUX_FIRMWARE=""
 
 USE="${USE} kahlee"
 USE="${USE} cros_ec"
@@ -18,3 +19,6 @@ USE="${USE} direncryption"
 
 # with some legacy peripherals
 USE="${USE} legacy_keyboard legacy_power_button"
+
+# NFA344A RF module
+LINUX_FIRMWARE="${LINUX_FIRMWARE} qca-bt"
