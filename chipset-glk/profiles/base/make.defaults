@@ -14,3 +14,5 @@ USE="${USE} apl_lpe intel_lpe"
 
 # Disable ACPI AC device and use USB PD power supply driver
 USE="${USE} acpi_ac_off"
+
+USE="${USE} android_aep"

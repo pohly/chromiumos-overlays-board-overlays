@@ -29,3 +29,5 @@ USE="${USE} native_gpu_memory_buffers"
 # Turn on the video cards this chip uses.
 # TODO: Remove radeon when amdgpu works by itself
 VIDEO_CARDS="-* radeon amdgpu"
+
+USE="${USE} android_aep"

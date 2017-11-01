@@ -20,3 +20,5 @@ USE="${USE} acpi_ac_off"
 USE="${USE} native_gpu_memory_buffers"
 
 USE="${USE} vulkan"
+
+USE="${USE} android_aep"
