@@ -44,7 +44,7 @@
             <!-- Lens Info-->
             <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableFocalLengths value="3.69,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.minimumFocusDistance value="0.1"/> <!-- HAL may override this value from CMC for RAW sensors -->
@@ -154,7 +154,7 @@
             <!-- Scaler -->
             <scaler.availableMaxDigitalZoom value="16.0"/>
             <scaler.availableInputOutputFormatsMap value="IMPLEMENTATION_DEFINED,2,YCbCr_420_888,BLOB"/>
-            <scaler.availableStreamConfigurations value="BLOB,4160x3120,OUTPUT,
+            <scaler.availableStreamConfigurations value="BLOB,4096x3072,OUTPUT,
                 BLOB,1920x1080,OUTPUT,
                 BLOB,1600x1200,OUTPUT,
                 BLOB,1280x960,OUTPUT,
@@ -176,7 +176,7 @@
                 IMPLEMENTATION_DEFINED,640x480,OUTPUT,
                 IMPLEMENTATION_DEFINED,640x360,OUTPUT,
                 IMPLEMENTATION_DEFINED,320x240,OUTPUT" />
-            <scaler.availableMinFrameDurations value="BLOB,4160x3120,41666666,
+            <scaler.availableMinFrameDurations value="BLOB,4096x3072,41666666,
                 BLOB,1920x1080,33333333,
                 BLOB,1600x1200,33333333,
                 BLOB,1280x960,33333333,
@@ -198,7 +198,7 @@
                 IMPLEMENTATION_DEFINED,640x480,33333333,
                 IMPLEMENTATION_DEFINED,640x360,33333333,
                 IMPLEMENTATION_DEFINED,320x240,33333333" />
-            <scaler.availableStallDurations value="BLOB,4160x3120,41666666,
+            <scaler.availableStallDurations value="BLOB,4096x3072,41666666,
                                                    BLOB,1920x1080,33333333,
                                                    BLOB,1600x1200,33333333,
                                                    BLOB,1280x960,33333333,
@@ -213,7 +213,7 @@
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="200000000"/>
-            <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4224x1.12um 3136x1.12um -->
+            <sensor.info.physicalSize value="4.73,3.51"/> <!-- 4224x1.12um 3136x1.12um -->
             <sensor.info.pixelArraySize value="4224x3136"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.timestampSource value="UNKNOWN"/>
@@ -317,7 +317,7 @@
             <!-- Lens Info-->
             <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableFocalLengths value="1.75,1.75"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/>
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.minimumFocusDistance value="0.1"/> <!-- HAL may override this value from CMC for RAW sensors -->
