@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -17,3 +17,9 @@ S="${WORKDIR}"
 RDEPEND="
 "
 DEPEND="${RDEPEND}"
+
+src_install() {
+	# Workaround for popping noise on external speaker:
+	# http://crbug.com/775486
+	udev_dorules "${FILESDIR}"/99-powerknobs-jecht.rules
+}
