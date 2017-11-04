@@ -4,7 +4,7 @@
 EAPI=5
 
 inherit appid
-inherit cros-audio-configs
+inherit cros-unibuild
 
 DESCRIPTION="Pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -18,13 +18,12 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-kahlee
+	chromeos-base/chromeos-config
 "
 DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{84B4D9E0-E317-45B0-91DF-FAF3CD8244FC}" "CHROMEBOOK"
 
-	# Install audio config files
-	local audio_config_dir="${FILESDIR}/audio-config"
-	install_audio_configs kahlee "${audio_config_dir}"
+	unibuild_install_audio_files
 }
