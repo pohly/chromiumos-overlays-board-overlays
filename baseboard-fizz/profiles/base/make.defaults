@@ -12,6 +12,7 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265"
 # BT driver firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
 
+USE="${USE} -display_backlight legacy_keyboard -subpixel_rendering"
 USE="${USE} -tpm tpm2"
 USE="${USE} arc"
 
