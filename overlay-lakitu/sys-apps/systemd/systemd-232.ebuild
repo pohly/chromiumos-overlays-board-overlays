@@ -188,6 +188,8 @@ src_prepare() {
 		"${FILESDIR}"/232-0001-resolved-simplify-alloc-size-calculation.patch
 		"${FILESDIR}"/232-0002-resolved-do-not-allocate-packets-with-minimum-size.patch
 		"${FILESDIR}"/232-0003-resolved-define-various-packet-sizes-as-unsigned.patch
+		# Lakitu: fix for upstream bug https://github.com/systemd/systemd/issues/4747
+		"${FILESDIR}"/232-avoid-calling-unit-free-null-in-device-setup.patch
 	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
