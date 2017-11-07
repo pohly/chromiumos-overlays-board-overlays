@@ -3,6 +3,8 @@
 
 EAPI=5
 
+inherit appid
+
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions"
 
@@ -15,3 +17,6 @@ S="${WORKDIR}"
 RDEPEND="chromeos-base/chromeos-bsp-baseboard-gru"
 DEPEND="${RDEPEND}"
 
+src_install() {
+	doappid "{8FF51C76-7EB0-46A1-9B00-1E2975761BB7}" "CHROMEBOOK"
+}
