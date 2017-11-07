@@ -78,7 +78,6 @@
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
-                edge.mode,
                 flash.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
@@ -93,8 +92,7 @@
                 lens.filterDensity,
                 lens.opticalStabilizationMode,
                 noiseReduction.mode,
-                tonemap.curve,
-                tonemap.mode"/>
+                tonemap.curve"/>
 
             <request.availableResultKeys value="colorCorrection.mode,
                 colorCorrection.transform,
@@ -120,7 +118,6 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
-                edge.mode,
                 flash.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
@@ -148,8 +145,7 @@
                 statistics.sceneFlicker,
                 statistics.lensShadingMapMode,
                 noiseReduction.mode,
-                tonemap.curve,
-                tonemap.mode"/>
+                tonemap.curve"/>
             <request.availableCharacteristicsKeys value="0"/>
             <!-- Scaler -->
             <scaler.availableMaxDigitalZoom value="16.0"/>
@@ -232,7 +228,6 @@
             <statistics.info.availableLensShadingMapModes value="OFF"/>
             <!-- Tonemap -->
             <tonemap.maxCurvePoints value="1024"/>
-            <tonemap.availableToneMapModes value="FAST,HIGH_QUALITY"/>
             <!-- Flash -->
             <flash.colorTemperature value="0"/>
             <flash.maxEnergy value="0"/>
@@ -242,8 +237,6 @@
             <flash.maxEnergy value="10"/>
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
-            <!-- Edge -->
-            <edge.availableEdgeModes value="OFF"/>
             <!-- Hot Pixel -->
             <hotPixel.availableHotPixelModes value="FAST"/>
             <!-- Noise Reduction -->
@@ -340,7 +333,6 @@
                 control.awbMode,
                 control.captureIntent,
                 control.effectMode,
-                edge.mode,
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
@@ -358,8 +350,7 @@
                 lens.filterDensity,
                 lens.opticalStabilizationMode,
                 noiseReduction.mode,
-                tonemap.curve,
-                tonemap.mode"/>
+                tonemap.curve"/>
 
             <request.availableResultKeys value="colorCorrection.mode,
                 colorCorrection.transform,
@@ -384,7 +375,6 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
-                edge.mode,
                 flash.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
@@ -412,8 +402,7 @@
                 statistics.sceneFlicker,
                 statistics.lensShadingMapMode,
                 noiseReduction.mode,
-                tonemap.curve,
-                tonemap.mode"/>
+                tonemap.curve"/>
             <request.availableCharacteristicsKeys value="0"/>
             <!-- Scaler -->
             <scaler.availableMaxDigitalZoom value="16.0"/>
@@ -499,7 +488,6 @@
             <statistics.info.availableLensShadingMapModes value="OFF"/>
             <!-- Tonemap -->
             <tonemap.maxCurvePoints value="1024"/>
-            <tonemap.availableToneMapModes value="FAST,HIGH_QUALITY"/>
             <!-- Flash -->
             <flash.colorTemperature value="0"/>
             <flash.maxEnergy value="0"/>
@@ -509,8 +497,6 @@
             <flash.maxEnergy value="10"/>
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
-            <!-- Edge -->
-            <edge.availableEdgeModes value="OFF"/>
             <!-- Hot Pixel -->
             <hotPixel.availableHotPixelModes value="FAST"/>
             <!-- Noise Reduction -->
