@@ -23,3 +23,14 @@ src_install() {
 	# is in the form of "<ebuild_revision>-<sha1>".
 	do_osrelease_field "KERNEL_COMMIT_ID" "${VCSID##*-}"
 }
+
+# Change the following (commented out) number to the next prime number
+# when you change lakitu_kernel_config_4_4.  This workaround will force the
+# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_4 ebuild and pick up the
+# configuration changes.  In absence of this workaround the config changes
+# would not be picked up unless there was a code change in kernel source tree.
+#
+# NOTE: There's nothing magic keeping this number prime but you just need to
+# make _any_ change to this file.  ...so why not keep it prime?
+#
+# The coolest prime number is: 2
