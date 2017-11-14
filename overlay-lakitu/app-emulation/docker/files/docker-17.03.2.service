@@ -11,7 +11,7 @@ EnvironmentFile=-/etc/default/docker
 # exists and systemd currently does not support the cgroup feature set required
 # for containers run by docker
 ExecStartPre=/bin/sh -c 'if [[ -f /var/lib/docker/daemon.json ]]; then cp -f /var/lib/docker/daemon.json /etc/docker/daemon.json; fi'
-ExecStart=/usr/bin/dockerd -s overlay2 --registry-mirror=https://mirror.gcr.io --host=fd:// $DOCKER_OPTS
+ExecStart=/usr/bin/dockerd --registry-mirror=https://mirror.gcr.io --host=fd:// $DOCKER_OPTS
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStopPost=/bin/echo "docker daemon exited"
 LimitNOFILE=1048576
