@@ -28,6 +28,8 @@ src_install() {
 		doappid "{D5CF3BCD-7093-49E6-8E31-0990E21730F8}" "CHROMEBOOK"
 	elif use caroline-arc64; then
 		doappid "{AAB07052-010F-1A82-D471-6159D122A397}" "CHROMEBOOK"
+	elif use caroline-ndktranslation; then
+		doappid "{B99F1576-FDAD-6E9B-B4A2-B7195749BC74}" "CHROMEBOOK"
 	else
 		doappid "{C166AF52-7EE9-4F08-AAA7-B4B895A9F336}" "CHROMEBOOK"
 	fi
