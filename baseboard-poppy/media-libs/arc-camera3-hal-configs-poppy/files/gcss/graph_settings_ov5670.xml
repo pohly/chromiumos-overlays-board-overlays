@@ -3598,20 +3598,20 @@ See the License for the specific language governing permissions and
   <imgu stream_id="1">
     <input width="2592" height="1944" format="CIO2" />
     <preview width="1920" height="1080" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
-      <if width="2562" height="1512" />
-      <bds width="1952" height="1152" />
+      <if width="2592" height="1944" />
+      <bds width="2592" height="1944" />
       <filter width="4" height="4" />
-      <env width="12" height="32" />
-      <gdc width="1920" height="1080" />
+      <env width="12" height="8" />
+      <gdc width="2560" height="1920" />
       <yuv width="1920" height="1080" />
     </preview>
     <still enabled="0" />
     <video width="1920" height="1080" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
-      <if width="2562" height="1512" />
-      <bds width="1952" height="1152" />
+      <if width="2592" height="1944" />
+      <bds width="2592" height="1944" />
       <filter width="4" height="4" />
-      <env width="12" height="32" />
-      <gdc width="1920" height="1080" />
+      <env width="12" height="8" />
+      <gdc width="2560" height="1920" />
       <yuv width="1920" height="1080" />
     </video>
   </imgu>
@@ -3628,20 +3628,20 @@ See the License for the specific language governing permissions and
   <imgu stream_id="1">
     <input width="2592" height="1944" format="CIO2" />
     <preview width="1280" height="720" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="still">
-      <if width="2562" height="1512" />
-      <bds width="1952" height="1152" />
+      <if width="2592" height="1944" />
+      <bds width="2592" height="1944" />
       <filter width="4" height="4" />
-      <env width="12" height="32" />
-      <gdc width="1920" height="1080" />
+      <env width="12" height="8" />
+      <gdc width="2560" height="1920" />
       <yuv width="1280" height="720" />
     </preview>
     <still enabled="0" />
     <video width="1280" height="720" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="video">
-      <if width="2562" height="1512" />
-      <bds width="1952" height="1152" />
+      <if width="2592" height="1944" />
+      <bds width="2592" height="1944" />
       <filter width="4" height="4" />
-      <env width="12" height="32" />
-      <gdc width="1920" height="1080" />
+      <env width="12" height="8" />
+      <gdc width="2560" height="1920" />
       <yuv width="1280" height="720" />
     </video>
   </imgu>
