@@ -53,7 +53,7 @@
             <!-- Lens -->
             <lens.facing value="BACK"/>
             <!-- Request -->
-            <request.maxNumOutputStreams value="1,2,1"/>
+            <request.maxNumOutputStreams value="0,2,1"/>
             <request.pipelineMaxDepth value="6"/>
             <request.maxNumInputStreams value="0"/>
             <request.partialResultCount value="1"/>
@@ -312,7 +312,7 @@
             <!-- Lens -->
             <lens.facing value="FRONT"/>
             <!-- Request -->
-            <request.maxNumOutputStreams value="1,2,1"/>
+            <request.maxNumOutputStreams value="0,2,1"/>
             <request.pipelineMaxDepth value="5"/>
             <request.maxNumInputStreams value="0"/>
             <request.partialResultCount value="1"/>
