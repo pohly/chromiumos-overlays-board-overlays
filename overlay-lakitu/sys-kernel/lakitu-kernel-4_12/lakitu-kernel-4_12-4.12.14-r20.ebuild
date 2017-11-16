@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="0b313b0e0950c59729269286124d7646ad484d77"
-CROS_WORKON_TREE="9f80374ad8cb4907161b6eaf11928341afad227c"
+CROS_WORKON_COMMIT="8d9378dcd344de5259ff509c84137fd064fb5efe"
+CROS_WORKON_TREE="28340d594917b47ce7cc170c4d572823039eb272"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/v4.12"
 
@@ -25,3 +25,14 @@ src_install() {
 	# is in the form of "<ebuild_revision>-<sha1>".
 	do_osrelease_field "KERNEL_COMMIT_ID" "${VCSID##*-}"
 }
+
+# Change the following (commented out) number to the next prime number
+# when you change base.config.  This workaround will force the
+# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_12 ebuild and pick up the
+# configuration changes.  In absence of this workaround the config changes
+# would not be picked up unless there was a code change in kernel source tree.
+#
+# NOTE: There's nothing magic keeping this number prime but you just need to
+# make _any_ change to this file.  ...so why not keep it prime?
+#
+# The coolest prime number is: 2
