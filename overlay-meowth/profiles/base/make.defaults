@@ -17,6 +17,5 @@ USE="${USE} pcserial"
 TTY_CONSOLE="ttyS0"
 
 # All firmware to build from the EC code base.
-# TODO(aaboagye): uncomment, once meowth board name is added
-# EC_FIRMWARE="meowth"
+EC_FIRMWARE="meowth"
 EC_FIRMWARE_EXTRA="cr50"
