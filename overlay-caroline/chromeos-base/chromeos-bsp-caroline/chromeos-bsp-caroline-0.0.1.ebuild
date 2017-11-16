@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="caroline-userdebug caroline-arc64"
+IUSE="caroline-userdebug caroline-arc64 caroline-ndktranslation"
 REQUIRED_USE="caroline-userdebug? ( !caroline-arc64 )"
 S="${WORKDIR}"
 
