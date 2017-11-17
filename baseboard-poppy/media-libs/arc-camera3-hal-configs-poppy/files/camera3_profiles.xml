@@ -303,7 +303,7 @@
             <!-- Lens Info-->
             <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="1.84,1.84"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableFocalLengths value="1.84"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/>
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.minimumFocusDistance value="0.1"/> <!-- HAL may override this value from CMC for RAW sensors -->
