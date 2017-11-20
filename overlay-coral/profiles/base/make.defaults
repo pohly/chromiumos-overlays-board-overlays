@@ -27,5 +27,5 @@ EC_FIRMWARE="coral"
 INPUT_DEVICES="wacom"
 
 # Uncomment these lines to activate the serial port.
-TTY_CONSOLE="ttyS0"
-USE="${USE} pcserial"
+#TTY_CONSOLE="ttyS2"
+#USE="${USE} pcserial"
