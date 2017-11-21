@@ -1,0 +1,1 @@
+chromeos-bsp-baseboard-nami-0.0.1.ebuild
