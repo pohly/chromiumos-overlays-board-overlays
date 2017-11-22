@@ -6,4 +6,5 @@
 
 modify_kernel_command_line() {
   echo "i915.enable_dpcd_backlight=1" >> "$1"
+  echo "i915.enable_psr=0" >> "$1"
 }
