@@ -35,4 +35,8 @@ src_install() {
 	udev_dorules "${FILESDIR}/99-hammerd.rules"
 	insinto /etc/init
 	doins "${FILESDIR}/hammerd.override"
+
+	# Install Bluetooth ID override.
+	insinto /etc/bluetooth
+	doins "${FILESDIR}/main.conf"
 }
