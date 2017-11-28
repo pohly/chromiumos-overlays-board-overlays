@@ -1,0 +1,28 @@
+From https://github.com/GoogleCloudPlatform/compute-image-packages/pull/549
+From 278bfd5f8857c38b5f11375ce343fa55a90a9240 Mon Sep 17 00:00:00 2001
+From: Daniel Wang <wonderfly@google.com>
+Date: Thu, 1 Feb 2018 20:48:08 -0800
+Subject: [PATCH] oslogin: Make CXX overridable
+
+Give systems that don't use g++ a chance, while keeping it as the
+default for systems that does.
+---
+ google_compute_engine_oslogin/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/google_compute_engine_oslogin/Makefile b/google_compute_engine_oslogin/Makefile
+index 2888139..f654a84 100644
+--- a/google_compute_engine_oslogin/Makefile
++++ b/google_compute_engine_oslogin/Makefile
+@@ -15,7 +15,7 @@ AUTHKEYS_INSTALL_PATH = /usr/bin
+ JSON_INCLUDE_PATH = /usr/include/json-c
+ INCLUDE_FLAGS = -I$(JSON_INCLUDE_PATH)
+ 
+-CXX = g++
++CXX ?= g++
+ CXXFLAGS += -fPIC# -Wall
+ PAMFLAGS = $(LDFLAGS) $(INCLUDE_FLAGS) -shared
+ NSSFLAGS = $(LDFLAGS) $(INCLUDE_FLAGS) -shared -Wl,-soname,$(NSS_LIBRARY_SONAME)
+-- 
+2.16.0.rc1.238.g530d649a79-goog
+
