@@ -5,7 +5,7 @@ Protocol 2
 # Not using v1, so no v1 key
 HostKey /run/sshd/ssh_host_ed25519_key
 
-PermitRootLogin yes
+PermitRootLogin no
 PasswordAuthentication no
 PrintMotd no
 PrintLastLog no

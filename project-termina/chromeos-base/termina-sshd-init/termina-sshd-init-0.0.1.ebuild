@@ -15,6 +15,7 @@ IUSE=""
 S=${WORKDIR}
 
 RDEPEND="
+	chromeos-base/termina-ssh-keys
 	net-misc/openssh
 "
 
