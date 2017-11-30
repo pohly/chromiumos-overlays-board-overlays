@@ -10,6 +10,9 @@ USE="${USE} has_keyboard_backlight coral"
 
 USE="${USE} touchview"
 
+# The astronaut variant needs modemfwd for updating modem firmware.
+USE="${USE} modemfwd"
+
 # Avoid inhibiting the keyboard (which reports events from side buttons).
 USE="${USE} keyboard_includes_side_buttons"
 
