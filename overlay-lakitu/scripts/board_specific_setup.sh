@@ -22,8 +22,8 @@ INSTALL_MASK+=" /etc/init"
 
 # build_image script calls board_setup on the pristine base image.
 board_make_image_bootable() {
-  local image="$1"
-  local script_root="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
+  local -r image="$1"
+  local -r script_root="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
   . "${script_root}/grub_install.sh" || exit 1
   if ! grub_install "${image}"; then
     error "Could not install GRUB2 on ${image}"
@@ -31,9 +31,19 @@ board_make_image_bootable() {
   fi
 }
 
+write_toolchain_path() {
+  local -r cros_overlay="/mnt/host/source/src/third_party/chromiumos-overlay"
+  local -r sdk_ver_file="${cros_overlay}/chromeos/binhost/host/sdk_version.conf"
+  local -r ctarget="$(get_ctarget_from_board "${BOARD}")"
+  . "${sdk_ver_file}"
+  echo "${TC_PATH/\%\(target\)s/${ctarget}}" | \
+      sudo tee "${root_fs_dir}/etc/toolchain-path" > /dev/null
+}
+
 # board_finalize_base_image() gets invoked by the build scripts at the
 # end of building base image.
 board_finalize_base_image() {
+  write_toolchain_path
   # /etc/machine-id gets installed by sys-apps/dbus and is a symlink.
   # This conflicts with systemd's machine-id generation mechanism,
   # so we remove the symlink and recreate it as an empty file.
