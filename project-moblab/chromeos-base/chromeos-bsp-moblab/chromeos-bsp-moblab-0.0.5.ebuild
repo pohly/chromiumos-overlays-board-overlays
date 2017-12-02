@@ -14,9 +14,12 @@ IUSE="+lxc"
 
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
+# TODO(pprabhu, crbug.com/775373) Move virt-what to common VM overlay once that
+# is ready.
 RDEPEND="
 	chromeos-base/shill
 	app-crypt/gnupg
+	app-emulation/virt-what
 	lxc? ( app-emulation/lxc )
 	chromeos-base/chromeos-init
 	chromeos-base/update_engine[delta_generator]
