@@ -1,3 +1,12 @@
 # Initial value just for style purposes.
 USE=""
-LINUX_FIRMWARE=""
+
+USE="${USE} rainier"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# All firmwares to build from the EC code base
+EC_FIRMWARE="rainier"
+
+INPUT_DEVICES="wacom"
