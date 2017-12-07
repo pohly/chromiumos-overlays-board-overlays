@@ -10,8 +10,7 @@ USE=""
 
 USE="${USE} grunt"
 
-# TODO: uncomment to enable EC build
-#USE="${USE} cros_ec"
+USE="${USE} cros_ec"
 
 USE="${USE} als touchview"
 
@@ -21,5 +20,4 @@ USE="${USE} direncryption"
 # with some legacy peripherals
 USE="${USE} legacy_keyboard legacy_power_button"
 
-# TODO: Enable unified builds
-#USE="${USE} unibuild"
+USE="${USE} unibuild"
