@@ -67,7 +67,7 @@
             <Feature name="secure-playback" required="true" />
         </MediaCodec>
         <MediaCodec name="ARC.vp9.decode.secure" type="video/x-vnd.on2.vp9" >
-            <Limit name="size" min="16x16" max="4096x4096" />
+            <Limit name="size" min="32x32" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
             <Limit name="blocks-per-second" min="1" max="2073600" />
