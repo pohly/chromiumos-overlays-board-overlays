@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
+IUSE="unibuild"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -22,4 +22,10 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{F8834CDD-B93C-4C2A-BEB9-5432EA99430D}" "CHROMEBOOK"
+
+	if ! use unibuild; then
+		# Install platform specific config files for power_manager.
+		insinto "/usr/share/power_manager/board_specific"
+		doins "${FILESDIR}"/powerd_prefs/*
+	fi
 }
