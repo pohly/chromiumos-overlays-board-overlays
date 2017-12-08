@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions"
