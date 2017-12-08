@@ -523,6 +523,7 @@
             <isoAnalogGain1 value="64"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
             <nvmDirectory value=""/> <!--location of the NVM data-->
+            <testPattern.bayerFormat value="V4L2_PIX_FMT_IPU3_SBGGR10"/> <!-- bayer order of video node when generate test pattern-->
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
