@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid
+inherit appid udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -34,4 +34,10 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Add udev rule for iwlwifi workaround for Intel NIC
+	# disappearing from PCI bus
+	udev_dorules "${FILESDIR}/iwlwifi/60-iwlwifi.rules"
+	exeinto "$(get_udevdir)"
+	doexe "${FILESDIR}/iwlwifi/wifi-pci-rescan.sh"
 }
