@@ -7,8 +7,5 @@ net-misc/dhcp server -client
 dev-libs/libusb static-libs
 sys-apps/flashrom ft2232_spi
 
-# For Brillo Tier 1 testing support.
-chromeos-base/update_engine delta_generator
-
 # To reduce the size of the image - take out text to speach
 chromeos-base/common-assets -tts

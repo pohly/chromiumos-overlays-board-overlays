@@ -22,7 +22,6 @@ RDEPEND="
 	app-emulation/virt-what
 	lxc? ( app-emulation/lxc )
 	chromeos-base/chromeos-init
-	chromeos-base/update_engine[delta_generator]
 	chromeos-base/openssh-server-init
 	net-analyzer/fping
 	net-ftp/tftp-hpa
