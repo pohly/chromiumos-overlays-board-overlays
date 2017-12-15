@@ -15,6 +15,9 @@ USE="${USE} direncryption"
 # WiFi driver, BT driver, and USBPD peripheral firmwares
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
 
+# Add Intel Camera IMGU ipu3-fw.bin
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
+
 # Build EC firmware from source
 EC_FIRMWARE="nautilus"
 
