@@ -1,0 +1,13 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+USE=""
+
+# TODO(crbug.com/775373) Once we have a common x86 VM baseboard, reparent to
+# that instead of amd64-generic, and move these options there.
+# amd64-generic enables far too many things, because it tries to be generic.
+# Here, we pare the options down only to what is needed for x86 VMs.
+USE="${USE} -buffet"
+
+LINUX_FIRMWARE="-*"
+VIDEO_CARDS="-* llvmpipe"
