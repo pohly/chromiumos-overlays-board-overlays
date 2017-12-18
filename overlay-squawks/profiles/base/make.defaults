@@ -20,8 +20,6 @@ USE="${USE} allow_consumer_kiosk"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
-USE="${USE} arc"
-
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
 
