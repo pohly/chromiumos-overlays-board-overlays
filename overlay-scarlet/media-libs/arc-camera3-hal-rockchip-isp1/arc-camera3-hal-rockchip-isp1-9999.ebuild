@@ -18,7 +18,6 @@ RDEPEND="media-libs/arc-camera3-libcbm
 
 DEPEND="${RDEPEND}
 	media-libs/arc-camera3-android-headers
-	media-libs/arc-camera3-libcab
 	media-libs/arc-camera3-libcamera_client
 	media-libs/arc-camera3-libcamera_metadata
 	sys-kernel/linux-headers
@@ -37,7 +36,7 @@ src_configure() {
 	cros-debug-add-NDEBUG
 
 	cd ${HAL_DIR}
-	econf --with-base-version=${BASE_VER} --enable-remote3a
+	econf --with-base-version=${BASE_VER}
 }
 
 src_compile() {
@@ -52,7 +51,6 @@ src_install() {
 
 	# install hal libs to dev
 	cd ${HAL_DIR}
-	dolib.so .libs/libcam_algo.so*
 	dolib.so .libs/libcamerahal.so*
 	dosym "${LIBDIR}"/libcamerahal.so "${LIBDIR}"/camera_hal.so
 }
