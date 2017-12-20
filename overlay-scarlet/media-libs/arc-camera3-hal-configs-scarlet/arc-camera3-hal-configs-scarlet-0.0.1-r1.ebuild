@@ -1,1 +1,0 @@
-arc-camera3-hal-configs-scarlet-0.0.1.ebuild
