@@ -27,6 +27,7 @@ RDEPEND="
 	net-misc/dhcp
 	net-misc/rsync
 	sys-apps/file
+	dev-python/pyyaml
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
