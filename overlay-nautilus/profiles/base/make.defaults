@@ -21,6 +21,9 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
 # Build EC firmware from source
 EC_FIRMWARE="nautilus"
 
+# Enable camera 3A sandboxing
+USE="${USE} arc-camera3-3a-sandbox"
+
 # Add EC logging
 USE="${USE} eclog"
 
