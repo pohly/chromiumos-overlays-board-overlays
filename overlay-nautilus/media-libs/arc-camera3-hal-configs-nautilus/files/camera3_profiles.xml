@@ -154,7 +154,7 @@
             <!-- Scaler -->
             <scaler.availableMaxDigitalZoom value="16.0"/>
             <scaler.availableInputOutputFormatsMap value="IMPLEMENTATION_DEFINED,2,YCbCr_420_888,BLOB"/>
-            <scaler.availableStreamConfigurations value="BLOB,4160x3120,OUTPUT,
+            <scaler.availableStreamConfigurations value="BLOB,4096x3072,OUTPUT,
                 BLOB,1920x1080,OUTPUT,
                 BLOB,1600x1200,OUTPUT,
                 BLOB,1280x960,OUTPUT,
@@ -176,7 +176,7 @@
                 IMPLEMENTATION_DEFINED,640x480,OUTPUT,
                 IMPLEMENTATION_DEFINED,640x360,OUTPUT,
                 IMPLEMENTATION_DEFINED,320x240,OUTPUT" />
-            <scaler.availableMinFrameDurations value="BLOB,4160x3120,41666666,
+            <scaler.availableMinFrameDurations value="BLOB,4096x3072,41666666,
                 BLOB,1920x1080,33333333,
                 BLOB,1600x1200,33333333,
                 BLOB,1280x960,33333333,
@@ -198,7 +198,7 @@
                 IMPLEMENTATION_DEFINED,640x480,33333333,
                 IMPLEMENTATION_DEFINED,640x360,33333333,
                 IMPLEMENTATION_DEFINED,320x240,33333333" />
-            <scaler.availableStallDurations value="BLOB,4160x3120,41666666,
+            <scaler.availableStallDurations value="BLOB,4096x3072,41666666,
                                                    BLOB,1920x1080,33333333,
                                                    BLOB,1600x1200,33333333,
                                                    BLOB,1280x960,33333333,
@@ -208,13 +208,13 @@
                                                    BLOB,320x240,33333333" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
-            <sensor.info.activeArraySize value="48,40,4208,3120"/>
+            <sensor.info.activeArraySize value="48,40,4208,3118"/>
             <sensor.info.sensitivityRange value="32,2400"/>
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="200000000"/>
             <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4208x1.12um 3120x1.12um -->
-            <sensor.info.pixelArraySize value="4208x3120"/>
+            <sensor.info.pixelArraySize value="4208x3118"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.timestampSource value="UNKNOWN"/>
             <!-- Sensor -->
