@@ -53,11 +53,9 @@ src_compile() {
 }
 
 src_install() {
-	local LIBDIR="/usr/$(get_libdir)"
-
 	# install hal libs to dev
 	cd ${HAL_DIR}
 	dolib.so .libs/libcam_algo.so*
 	dolib.so .libs/libcamerahal.so*
-	dosym "${LIBDIR}"/libcamerahal.so "${LIBDIR}"/camera_hal.so
+	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/intel-ipu3.so
 }

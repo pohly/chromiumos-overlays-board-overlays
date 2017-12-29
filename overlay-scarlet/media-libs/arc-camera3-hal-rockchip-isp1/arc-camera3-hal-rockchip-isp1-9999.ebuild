@@ -56,5 +56,5 @@ src_install() {
 	cd ${HAL_DIR}
 	dolib.so .libs/libcam_algo.so*
 	dolib.so .libs/libcamerahal.so*
-	dosym libcamerahal.so /usr/$(get_libdir)/camera_hal.so
+	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/rockchip-isp1.so
 }
