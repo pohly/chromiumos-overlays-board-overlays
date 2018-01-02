@@ -7,5 +7,5 @@ USE=""
 USE="${USE} fizz"
 
 # Uncomment these lines to activate the serial port.
-TTY_CONSOLE="ttyS0"
-USE="${USE} pcserial"
+#TTY_CONSOLE="ttyS0"
+#USE="${USE} pcserial"
