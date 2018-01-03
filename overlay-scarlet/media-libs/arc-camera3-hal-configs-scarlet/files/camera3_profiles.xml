@@ -29,7 +29,7 @@
             <control.aeLockAvailable value="FALSE"/>
             <control.aeAvailableTargetFpsRanges value="15,30,30,30,60,60"/>
             <control.aeCompensationRange value="0,0"/>
-            <control.aeCompensationStep value="0,0"/>
+            <control.aeCompensationStep value="0,1"/>
             <control.afAvailableModes value="OFF"/>
             <control.availableEffects value="OFF"/>
             <control.awbAvailableModes value="AUTO"/>
@@ -46,7 +46,7 @@
             <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <!--lens.info.minimumFocusDistance value="0.1"/ --> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.minimumFocusDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.shadingMapSize value="0,0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.focusDistanceCalibration value="APPROXIMATE"/>
             <!-- Lens -->
@@ -67,8 +67,6 @@
                 control.aeMode,
                 control.aeTargetFpsRange,
                 control.afMode,
-                control.aeRegions,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -106,7 +104,6 @@
                 control.aeTargetFpsRange,
                 control.aePrecaptureTrigger,
                 control.afMode,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -294,7 +291,7 @@
             <control.aeLockAvailable value="FALSE"/>
             <control.aeAvailableTargetFpsRanges value="15,30,30,30"/>
             <control.aeCompensationRange value="0,0"/>
-            <control.aeCompensationStep value="0,0"/>
+            <control.aeCompensationStep value="0,1"/>
             <control.afAvailableModes value="OFF"/>
             <control.availableEffects value="OFF"/>
             <control.awbAvailableModes value="AUTO"/>
@@ -311,7 +308,7 @@
             <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <!--lens.info.minimumFocusDistance value="0.1"/ --> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.minimumFocusDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.shadingMapSize value="0,0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.focusDistanceCalibration value="APPROXIMATE"/>
             <!-- Lens -->
@@ -332,8 +329,6 @@
                 control.aeMode,
                 control.aeTargetFpsRange,
                 control.afMode,
-                control.aeRegions,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -371,7 +366,6 @@
                 control.aeTargetFpsRange,
                 control.aePrecaptureTrigger,
                 control.afMode,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
