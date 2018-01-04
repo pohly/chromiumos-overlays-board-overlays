@@ -3,6 +3,8 @@
 
 EAPI=4
 
+inherit cros-constants
+
 DESCRIPTION="Install codec configuration for ARC++"
 
 LICENSE="BSD-Google"
@@ -18,7 +20,7 @@ src_install() {
 		ARC_CODEC_DIR="${FILESDIR}/mnc"
 	fi
 
-	insinto /opt/google/containers/android/vendor/etc/
+	insinto "${ARC_VENDOR_DIR}/etc/"
 	doins "${ARC_CODEC_DIR}/media_codecs.xml"
 	doins "${ARC_CODEC_DIR}/media_codecs_performance.xml"
 }
