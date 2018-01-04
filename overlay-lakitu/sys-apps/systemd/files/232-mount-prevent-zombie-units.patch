@@ -1,0 +1,40 @@
+diff --git a/src/core/mount.c b/src/core/mount.c
+index d749e49df..868c8b291 100644
+--- a/src/core/mount.c
++++ b/src/core/mount.c
+@@ -1374,7 +1374,7 @@ static int mount_setup_unit(
+         _cleanup_free_ char *e = NULL, *w = NULL, *o = NULL, *f = NULL;
+         bool load_extras = false;
+         MountParameters *p;
+-        bool delete, changed = false;
++        bool delete, changed, just_mounted = false;
+         Unit *u;
+         int r;
+ 
+@@ -1436,7 +1436,7 @@ static int mount_setup_unit(
+                 }
+ 
+                 unit_add_to_load_queue(u);
+-                changed = true;
++                changed, just_mounted = true;
+         } else {
+                 delete = false;
+ 
+@@ -1466,6 +1466,8 @@ static int mount_setup_unit(
+                         load_extras = true;
+                         changed = true;
+                 }
++
++                just_mounted = !MOUNT(u)->from_proc_self_mountinfo || MOUNT(u)->just_mounted;
+         }
+ 
+         w = strdup(what);
+@@ -1485,7 +1487,7 @@ static int mount_setup_unit(
+ 
+         if (set_flags) {
+                 MOUNT(u)->is_mounted = true;
+-                MOUNT(u)->just_mounted = !MOUNT(u)->from_proc_self_mountinfo;
++                MOUNT(u)->just_mounted = just_mounted;
+                 MOUNT(u)->just_changed = changed;
+         }
+ 
