@@ -1,7 +1,7 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
 
 EGO_PN="github.com/docker/docker-ce"
 
@@ -20,11 +20,11 @@ else
 	DOCKER_GITCOMMIT="c97c6d6"
 	EGIT_COMMIT="v${MY_PV}"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}-r1.tar.gz"
-	KEYWORDS="~amd64 ~arm"
+	KEYWORDS="*"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
 	inherit golang-vcs-snapshot
 fi
-inherit bash-completion-r1 golang-base linux-info systemd udev user
+inherit bash-completion-r1 eutils golang-base linux-info toolchain-funcs systemd udev user
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
 HOMEPAGE="https://dockerproject.org"
@@ -40,12 +40,11 @@ CDEPEND="
 	)
 	seccomp? ( >=sys-libs/libseccomp-2.2.1 )
 	apparmor? ( sys-libs/libapparmor )
+	sys-apps/systemd
 "
 
 DEPEND="
 	${CDEPEND}
-
-	dev-go/go-md2man
 
 	btrfs? (
 		>=sys-fs/btrfs-progs-3.16.1
@@ -56,6 +55,7 @@ DEPEND="
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#optional-dependencies
 RDEPEND="
 	${CDEPEND}
+	>=sys-devel/libtool-2.4.6
 	>=net-firewall/iptables-1.4
 	sys-process/procps
 	>=dev-vcs/git-1.7
@@ -195,6 +195,15 @@ pkg_setup() {
 	enewgroup docker
 }
 
+src_prepare() {
+	epatch "${FILESDIR}/docker-17.12.0-cross-compile.patch"
+	epatch "${FILESDIR}/docker-17.12.0-log-line-max-size.patch"
+	default
+	# lakitu: Since EAPI 6, the default src_prepare() runs 'eapply_user'.
+	# Because we use EAPI 5, we explicitly call 'epatch_user' here.
+	epatch_user
+}
+
 src_compile() {
 	export GOPATH="${WORKDIR}/${P}"
 
@@ -234,6 +243,12 @@ src_compile() {
 		grep -q -- '-fno-PIC' hack/make/dynbinary-daemon || die 'hardened sed failed'
 	fi
 
+	# enable journald
+	DOCKER_BUILDTAGS+=" journald"
+
+	export GOTRACEBACK="crash"
+	export GO=$(tc-getGO)
+	echo "GO compiler: '${GO}'"
 	# build daemon
 	VERSION="$(cat ../../VERSION)" \
 	./hack/make.sh dynbinary || die 'dynbinary failed'
@@ -250,12 +265,15 @@ src_compile() {
 		DISABLE_WARN_OUTSIDE_CONTAINER=1 \
 		dynbinary || die
 
-	# build man pages
-	go build -o gen-manpages github.com/docker/cli/man || die
-	./gen-manpages --root . --target ./man/man1 || die
-	./man/md2man-all.sh -q || die
-	rm gen-manpages || die
-	# see "components/cli/scripts/docs/generate-man.sh" (which also does "go get" for go-md2man)
+	# lakitu: Don't build the man pages. This also helps us avoid the
+	# dependency on dev-go/go-md2man.
+	#
+	# # build man pages
+	# go build -o gen-manpages github.com/docker/cli/man || die
+	# ./gen-manpages --root . --target ./man/man1 || die
+	# ./man/md2man-all.sh -q || die
+	# rm gen-manpages || die
+	# # see "components/cli/scripts/docs/generate-man.sh" (which also does "go get" for go-md2man)
 
 	popd || die # components/cli
 }
@@ -272,16 +290,20 @@ src_install() {
 	newinitd contrib/init/openrc/docker.initd docker
 	newconfd contrib/init/openrc/docker.confd docker
 
-	systemd_dounit contrib/init/systemd/docker.{service,socket}
+	systemd_dounit contrib/init/systemd/docker.socket
+	systemd_newunit "${FILESDIR}/docker-${PV}.service" docker.service
+	systemd_enable_service sockets.target docker.socket
+	systemd_enable_service multi-user.target docker.service
 
 	udev_dorules contrib/udev/*.rules
 
+	# lakitu: No need to install development related tools
 	dodoc AUTHORS CONTRIBUTING.md CHANGELOG.md NOTICE README.md
-	dodoc -r docs/*
+	# dodoc -r docs/*
 
-	insinto /usr/share/vim/vimfiles
-	doins -r contrib/syntax/vim/ftdetect
-	doins -r contrib/syntax/vim/syntax
+	# insinto /usr/share/vim/vimfiles
+	# doins -r contrib/syntax/vim/ftdetect
+	# doins -r contrib/syntax/vim/syntax
 
 	# note: intentionally not using "doins" so that we preserve +x bits
 	dodir /usr/share/${PN}/contrib
@@ -292,12 +314,22 @@ src_install() {
 
 	newbin build/docker-* docker
 
-	doman man/man*/*
+	# doman man/man*/*
 
-	dobashcomp contrib/completion/bash/*
-	insinto /usr/share/zsh/site-functions
-	doins contrib/completion/zsh/_*
+	# dobashcomp contrib/completion/bash/*
+	# insinto /usr/share/zsh/site-functions
+	# doins contrib/completion/zsh/_*
 	popd || die # components/cli
+
+	# lakitu: Install the dockercfg_update.sh script which allows Docker to
+	# access the convoy registry. The script is taken from
+	# https://storage.googleapis.com/speckle-umbrella/bin/dockercfg-update.sh.
+	exeinto /usr/share/google
+	doexe "${FILESDIR}"/dockercfg_update.sh
+
+	# Install Docker daemon configuration file
+	insinto /etc/docker
+	newins "${FILESDIR}/docker-${PV}-daemon.json" daemon.json
 }
 
 pkg_postinst() {

@@ -1,0 +1,81 @@
+From e55a17483f7b0f43f7ed4b5f2204d4530c4d0fe1 Mon Sep 17 00:00:00 2001
+From: Edward Hyunkoo Jee <edjee@google.com>
+Date: Thu, 4 Jan 2018 17:59:24 -0800
+Subject: [PATCH] fix compile error caused when clang is used as the c compiler
+
+When building packages for lakitu board,
+vendor/github.com/containerd/btrfs/btrfs.go causes the following
+compile errors.
+
+  containerd-1.0.0-r1: # github.com/containerd/containerd/vendor/github.com/containerd/btrfs
+  containerd-1.0.0-r1: vendor/github.com/containerd/btrfs/btrfs.go:103: constant -256 overflows C.__u64
+  containerd-1.0.0-r1: vendor/github.com/containerd/btrfs/btrfs.go:104: constant -1 overflows C.__u64
+  containerd-1.0.0-r1: vendor/github.com/containerd/btrfs/btrfs.go:105: constant -1 overflows C.__u64
+
+This problem does not happen when the default C compiler ("CC"
+environment variable) is "gcc", but it does happen when the default C
+compiler is "clang" or "g++".
+
+When building lakitu, our default C compiler for cross compilation is
+x86_64-cros-linux-gnu-clang. Hence we do have the issue.
+
+The issue can be simply reproduced with the following process.
+
+  1. Create a test program, "t.go".
+
+    package main
+
+    import (
+      "fmt"
+    )
+
+    /*
+    typedef unsigned long long __u64;
+    const __u64 v = (__u64)(-1ULL);
+    struct st {
+      __u64 x;
+    };
+    */
+    import "C"
+
+    func main() {
+      var s C.struct_s
+      s.x = C.v
+      fmt.Println("The value=%ull", s.x)
+    }
+
+  2. Run "cgo" against it, using the default compiler.
+
+    $ /usr/lib64/go/pkg/tool/linux_amd64/cgo -debug-gcc -objdir ./clang -- -g -O2 t.go
+
+  3. Run "cgo", using gcc.
+
+    $ CC=gcc /usr/lib64/go/pkg/tool/linux_amd64/cgo -debug-gcc -objdir ./gccc -- -g -O2 t.go
+
+I guess this issue happens because gcc and clang treat "const"
+qualifier differently. For the C code in the comment above, the type
+detection logic at
+https://github.com/golang/go/blob/a99deed39bb945cba922bd312435fdf309b42a13/src/cmd/cgo/gcc.go#L272
+behaves differently with gcc and clang, respectively.
+---
+ vendor/github.com/containerd/btrfs/btrfs.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/vendor/github.com/containerd/btrfs/btrfs.go b/vendor/github.com/containerd/btrfs/btrfs.go
+index bbe7e0cd..b1653870 100644
+--- a/vendor/github.com/containerd/btrfs/btrfs.go
++++ b/vendor/github.com/containerd/btrfs/btrfs.go
+@@ -8,8 +8,8 @@ import "sort"
+ #include "btrfs.h"
+ 
+ // Required because Go has struct casting rules for negative numbers
+-const __u64 u64_BTRFS_LAST_FREE_OBJECTID = (__u64)BTRFS_LAST_FREE_OBJECTID;
+-const __u64 negative_one = (__u64)-1;
++__u64 u64_BTRFS_LAST_FREE_OBJECTID = (__u64)BTRFS_LAST_FREE_OBJECTID;
++__u64 negative_one = (__u64)-1;
+ 
+ static char* get_name_btrfs_ioctl_vol_args_v2(struct btrfs_ioctl_vol_args_v2* btrfs_struct) {
+ 	return btrfs_struct->name;
+-- 
+2.16.0.rc0.223.g4a4ac83678-goog
+

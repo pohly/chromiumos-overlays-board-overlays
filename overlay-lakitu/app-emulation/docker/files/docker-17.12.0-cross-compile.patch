@@ -1,0 +1,117 @@
+From 83f45aa642f309e781cfc83a0962ca5243d1603a Mon Sep 17 00:00:00 2001
+From: Edward Hyunkoo Jee <edjee@google.com>
+Date: Tue, 2 Jan 2018 18:22:18 -0800
+Subject: [PATCH] cross-compiler patch
+
+---
+ components/cli/scripts/build/.variables | 4 ++--
+ components/cli/scripts/build/dynbinary  | 2 +-
+ components/engine/hack/make.sh          | 4 ++--
+ components/engine/hack/make/.binary     | 8 ++++----
+ components/engine/hack/make/.go-autogen | 4 ++--
+ 5 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/components/cli/scripts/build/.variables b/components/cli/scripts/build/.variables
+index 208f44c316..3025f7c638 100755
+--- a/components/cli/scripts/build/.variables
++++ b/components/cli/scripts/build/.variables
+@@ -20,7 +20,7 @@ export LDFLAGS="\
+     ${LDFLAGS:-} \
+ "
+ 
+-GOOS="${GOOS:-$(go env GOHOSTOS)}"
+-GOARCH="${GOARCH:-$(go env GOHOSTARCH)}"
++GOOS="${GOOS:-$($GO env GOHOSTOS)}"
++GOARCH="${GOARCH:-$($GO env GOHOSTARCH)}"
+ export TARGET="build/docker-$GOOS-$GOARCH"
+ export SOURCE="github.com/docker/cli/cmd/docker"
+diff --git a/components/cli/scripts/build/dynbinary b/components/cli/scripts/build/dynbinary
+index 3c32ed342e..bc1c53ae22 100755
+--- a/components/cli/scripts/build/dynbinary
++++ b/components/cli/scripts/build/dynbinary
+@@ -9,6 +9,6 @@ source ./scripts/build/.variables
+ 
+ echo "Building dynamically linked $TARGET"
+ export CGO_ENABLED=1
+-go build -o "${TARGET}" -tags pkcs11 --ldflags "${LDFLAGS}" "${SOURCE}"
++$GO build -o "${TARGET}" -tags pkcs11 --ldflags "${LDFLAGS}" "${SOURCE}"
+ 
+ ln -sf "$(basename "${TARGET}")" build/docker
+diff --git a/components/engine/hack/make.sh b/components/engine/hack/make.sh
+index 99c51a7b62..5152cf27d1 100755
+--- a/components/engine/hack/make.sh
++++ b/components/engine/hack/make.sh
+@@ -31,7 +31,7 @@ export PKG_CONFIG=${PKG_CONFIG:-pkg-config}
+ # We're a nice, sexy, little shell script, and people might try to run us;
+ # but really, they shouldn't. We want to be in a container!
+ inContainer="AssumeSoInitially"
+-if [ "$(go env GOHOSTOS)" = 'windows' ]; then
++if [ "$($GO env GOHOSTOS)" = 'windows' ]; then
+ 	if [ -z "$FROM_DOCKERFILE" ]; then
+ 		unset inContainer
+ 	fi
+@@ -189,7 +189,7 @@ main() {
+ 	mkdir -p bundles
+ 
+ 	# Windows and symlinks don't get along well
+-	if [ "$(go env GOHOSTOS)" != 'windows' ]; then
++	if [ "$($GO env GOHOSTOS)" != 'windows' ]; then
+ 		rm -f bundles/latest
+ 		# preserve latest symlink for backward compatibility
+ 		ln -sf . bundles/latest
+diff --git a/components/engine/hack/make/.binary b/components/engine/hack/make/.binary
+index b3c7a795ab..48e2646fff 100644
+--- a/components/engine/hack/make/.binary
++++ b/components/engine/hack/make/.binary
+@@ -3,7 +3,7 @@ set -e
+ 
+ # a helper to provide ".exe" when it's appropriate
+ binary_extension() {
+-	if [ "$(go env GOOS)" = 'windows' ]; then
++	if [ "$($GO env GOOS)" = 'windows' ]; then
+ 		echo -n '.exe'
+ 	fi
+ }
+@@ -40,9 +40,9 @@ hash_files() {
+ (
+ export GOGC=${DOCKER_BUILD_GOGC:-1000}
+ 
+-if [ "$(go env GOOS)/$(go env GOARCH)" != "$(go env GOHOSTOS)/$(go env GOHOSTARCH)" ]; then
++if [ "$($GO env GOOS)/$($GO env GOARCH)" != "$($GO env GOHOSTOS)/$($GO env GOHOSTARCH)" ]; then
+ 	# must be cross-compiling!
+-	case "$(go env GOOS)/$(go env GOARCH)" in
++	case "$($GO env GOOS)/$($GO env GOARCH)" in
+ 		windows/amd64)
+ 			export CC=x86_64-w64-mingw32-gcc
+ 			export CGO_ENABLED=1
+@@ -51,7 +51,7 @@ if [ "$(go env GOOS)/$(go env GOARCH)" != "$(go env GOHOSTOS)/$(go env GOHOSTARC
+ fi
+ 
+ echo "Building: $DEST/$BINARY_FULLNAME"
+-go build \
++$GO build \
+ 	-o "$DEST/$BINARY_FULLNAME" \
+ 	"${BUILDFLAGS[@]}" \
+ 	-ldflags "
+diff --git a/components/engine/hack/make/.go-autogen b/components/engine/hack/make/.go-autogen
+index 850c3ec9ac..f28ebb5ab9 100644
+--- a/components/engine/hack/make/.go-autogen
++++ b/components/engine/hack/make/.go-autogen
+@@ -41,12 +41,12 @@ const (
+ DVEOF
+ 
+ # Compile the Windows resources into the sources
+-if [ "$(go env GOOS)" = "windows" ]; then
++if [ "$($GO env GOOS)" = "windows" ]; then
+ 	mkdir -p autogen/winresources/tmp autogen/winresources/docker autogen/winresources/dockerd
+ 	cp hack/make/.resources-windows/resources.go autogen/winresources/docker/
+ 	cp hack/make/.resources-windows/resources.go autogen/winresources/dockerd/
+ 
+-	if [ "$(go env GOHOSTOS)" == "windows" ]; then
++	if [ "$($GO env GOHOSTOS)" == "windows" ]; then
+ 		WINDRES=windres
+ 		WINDMC=windmc
+ 	else
+-- 
+2.16.0.rc1.238.g530d649a79-goog
+
