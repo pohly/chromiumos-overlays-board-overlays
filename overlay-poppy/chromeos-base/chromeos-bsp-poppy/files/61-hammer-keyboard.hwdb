@@ -2,9 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
 #
-# Special mapping for "Hammer" keyboard that has a special
+# Special mapping for "Hammer"/"Wand" keyboard that has a special
 # "Assistant" key.
 #
 evdev:input:b0003v18D1p5022*
+ KEYBOARD_KEY_ffd10018=assistant
+ KEYBOARD_KEY_00070068=controlpanel
+evdev:input:b0003v18D1p502d*
  KEYBOARD_KEY_ffd10018=assistant
  KEYBOARD_KEY_00070068=controlpanel

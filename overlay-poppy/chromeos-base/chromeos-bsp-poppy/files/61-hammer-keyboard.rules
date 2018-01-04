@@ -2,8 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
 #
-# Tag hammer keyboard on Poppy as having new top row layout.
+# Tag hammer/wand keyboard on Poppy as having new top row layout.
 
 ACTION=="add", SUBSYSTEM=="input", ENV{ID_INPUT_KEYBOARD}=="1", \
   ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="5022", \
+  ENV{CROS_KEYBOARD_TOP_ROW_LAYOUT}="2"
+ACTION=="add", SUBSYSTEM=="input", ENV{ID_INPUT_KEYBOARD}=="1", \
+  ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="502d", \
   ENV{CROS_KEYBOARD_TOP_ROW_LAYOUT}="2"
