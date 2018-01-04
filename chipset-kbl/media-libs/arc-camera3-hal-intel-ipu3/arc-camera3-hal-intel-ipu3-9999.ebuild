@@ -18,6 +18,7 @@ RDEPEND="media-libs/arc-camera3-libcbm
 	media-libs/libsync"
 
 DEPEND="${RDEPEND}
+	dev-libs/expat
 	media-libs/arc-camera3-android-headers
 	media-libs/arc-camera3-libcab
 	media-libs/arc-camera3-libcamera_client
