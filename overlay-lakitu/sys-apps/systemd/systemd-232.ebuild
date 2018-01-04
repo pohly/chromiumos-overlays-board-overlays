@@ -190,6 +190,8 @@ src_prepare() {
 		"${FILESDIR}"/232-0003-resolved-define-various-packet-sizes-as-unsigned.patch
 		# Lakitu: fix for upstream bug https://github.com/systemd/systemd/issues/4747
 		"${FILESDIR}"/232-avoid-calling-unit-free-null-in-device-setup.patch
+		# Lakitu: fix for upstream bug https://github.com/systemd/systemd/issues/7798
+		"${FILESDIR}"/232-mount-prevent-zombie-units.patch
 	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
