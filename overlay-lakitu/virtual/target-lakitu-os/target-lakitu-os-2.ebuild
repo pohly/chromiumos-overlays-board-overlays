@@ -37,7 +37,6 @@ LAKITU_RDEPEND="
 	chromeos-base/cloud-udev-config
 	chromeos-base/ima-policy
 	chromeos-base/openssh-server-init
-	chromeos-base/terminfo-extra
 	chromeos-base/tty
 	chromeos-base/update_engine
 	dev-lang/python
