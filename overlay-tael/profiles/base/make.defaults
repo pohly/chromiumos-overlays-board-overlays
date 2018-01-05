@@ -4,3 +4,12 @@
 
 # tael doesn't use splitconfig.
 CHROMEOS_KERNEL_CONFIG="arch/arm64/configs/chromiumos-container-vm-arm64_defconfig"
+CHROMEOS_KERNEL_ARCH="arm64"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} device_tree"
+USE="${USE} hardfp"
+USE="${USE} kernel-4_4"
+USE="${USE} neon"
