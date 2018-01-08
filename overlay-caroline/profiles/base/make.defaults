@@ -26,3 +26,6 @@ USE="${USE} keyboard_includes_side_buttons"
 USE="${USE} -touchpad_wakeup"
 
 INPUT_DEVICES="wacom"
+
+# enable keyboard backlight and als
+USE="${USE} has_keyboard_backlight als"
