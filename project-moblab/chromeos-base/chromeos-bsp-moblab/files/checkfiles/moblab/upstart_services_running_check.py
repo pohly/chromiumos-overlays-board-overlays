@@ -119,6 +119,12 @@ class DatabaseRunning(UpstartServiceRunning):
   SERVICES = ['moblab-database-init']
 
 
+class JobAborterRunning(UpstartServiceRunning):
+  """Verifies that job_aborter is up."""
+
+  SERVICES = ['autotest-job-aborter']
+
+
 class ApacheUpstartRunning(UpstartServiceRunning):
   """Verifies that apache is running."""
 
