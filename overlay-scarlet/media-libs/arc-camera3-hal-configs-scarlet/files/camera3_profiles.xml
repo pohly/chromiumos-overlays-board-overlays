@@ -171,28 +171,28 @@
                 BLOB,1920x1080,33333333,
                 BLOB,1600x1200,33333333,
                 BLOB,1280x960,16666666,
-                BLOB,1280x720,33333333,
-                BLOB,640x480,33333333,
-                BLOB,320x240,33333333,
+                BLOB,1280x720,16666666,
+                BLOB,640x480,16666666,
+                BLOB,320x240,16666666,
                 YCbCr_420_888,1920x1080,33333333,
                 YCbCr_420_888,1600x1200,33333333,
                 YCbCr_420_888,1280x960,16666666,
-                YCbCr_420_888,1280x720,33333333,
-                YCbCr_420_888,640x480,33333333,
-                YCbCr_420_888,320x240,33333333,
+                YCbCr_420_888,1280x720,16666666,
+                YCbCr_420_888,640x480,16666666,
+                YCbCr_420_888,320x240,16666666,
                 IMPLEMENTATION_DEFINED,1920x1080,33333333,
                 IMPLEMENTATION_DEFINED,1600x1200,33333333,
                 IMPLEMENTATION_DEFINED,1280x960,16666666,
-                IMPLEMENTATION_DEFINED,1280x720,33333333,
-                IMPLEMENTATION_DEFINED,640x480,33333333,
-                IMPLEMENTATION_DEFINED,320x240,33333333" />
+                IMPLEMENTATION_DEFINED,1280x720,16666666,
+                IMPLEMENTATION_DEFINED,640x480,16666666,
+                IMPLEMENTATION_DEFINED,320x240,16666666" />
             <scaler.availableStallDurations value="BLOB,2592x1944,33333333,
                                                    BLOB,1920x1080,33333333,
                                                    BLOB,1600x1200,33333333,
                                                    BLOB,1280x960,16666666,
-                                                   BLOB,1280x720,33333333,
-                                                   BLOB,640x480,33333333,
-                                                   BLOB,320x240,33333333" />
+                                                   BLOB,1280x720,16666666,
+                                                   BLOB,640x480,16666666,
+                                                   BLOB,320x240,16666666" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
             <sensor.info.activeArraySize value="0,0,2592,1944"/>
