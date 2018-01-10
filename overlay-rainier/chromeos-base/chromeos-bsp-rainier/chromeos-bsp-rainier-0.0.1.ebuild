@@ -21,7 +21,7 @@ src_install() {
 	doappid "{8FF51C76-7EB0-46A1-9B00-1E2975761BB7}" "CHROMEBOOK" # rainier
 
 	# Install audio config files
-	local audio_config_dir="{FILESDIR}/audio-config"
+	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs rainier "${audio_config_dir}"
 
 
