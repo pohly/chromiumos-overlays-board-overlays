@@ -203,7 +203,7 @@
             <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4224x1.12um 3136x1.12um -->
             <sensor.info.pixelArraySize value="2592x1944"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <sensor.info.timestampSource value="UNKNOWN"/>
+            <sensor.info.timestampSource value="REALTIME"/>
             <!-- Sensor -->
             <sensor.baseGainFactor value="0,1"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.blackLevelPattern value="0,0,0,0"/>
@@ -452,7 +452,7 @@
             <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4224x1.12um 3136x1.12um -->
             <sensor.info.pixelArraySize value="1600x1200"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <sensor.info.timestampSource value="UNKNOWN"/>
+            <sensor.info.timestampSource value="REALTIME"/>
             <!-- Sensor -->
             <sensor.baseGainFactor value="0,1"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.blackLevelPattern value="0,0,0,0"/>
