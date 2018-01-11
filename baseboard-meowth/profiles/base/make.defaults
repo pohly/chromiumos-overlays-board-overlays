@@ -7,3 +7,6 @@ USE=""
 
 # Use ext4 crypto (for NYC Android container)
 USE="${USE} direncryption"
+
+# Enable TPM2
+USE="${USE} -tpm tpm2 cr50_onboard"
