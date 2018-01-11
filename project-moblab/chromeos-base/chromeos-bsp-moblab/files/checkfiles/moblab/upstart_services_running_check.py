@@ -122,7 +122,7 @@ class DatabaseRunning(UpstartServiceRunning):
 class JobAborterRunning(UpstartServiceRunning):
   """Verifies that job_aborter is up."""
 
-  SERVICES = ['autotest-job-aborter']
+  SERVICES = ['job_aborter']
 
 
 class ApacheUpstartRunning(UpstartServiceRunning):
