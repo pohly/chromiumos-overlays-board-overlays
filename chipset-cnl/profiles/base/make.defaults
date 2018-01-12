@@ -10,8 +10,8 @@ USE=""
 
 LINUX_FIRMWARE="${LINUX_FIRMWARE} i915_cnl"
 
-# Use 4.12 kernel
-USE="${USE} kernel-4_12"
+# Use 4.14 kernel
+USE="${USE} kernel-4_14"
 
 # Enable native one-copy texture upload.
 USE="${USE} native_gpu_memory_buffers"
