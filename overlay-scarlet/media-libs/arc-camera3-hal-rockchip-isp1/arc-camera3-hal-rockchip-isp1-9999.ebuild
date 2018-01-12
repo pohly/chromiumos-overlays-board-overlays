@@ -14,6 +14,7 @@ SLOT="0"
 KEYWORDS="-* ~arm ~arm64"
 
 RDEPEND="
+	!media-libs/arc-camera3-hal-usb
 	media-libs/arc-camera3-libcbm
 	media-libs/libsync
 	media-libs/rockchip-isp1-3a-libs-bin"
