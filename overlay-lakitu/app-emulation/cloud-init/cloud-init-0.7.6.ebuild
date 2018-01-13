@@ -48,6 +48,7 @@ python_prepare_all() {
 	use gcpnet && epatch "${FILESDIR}/0.7.6-systemd-configs.patch"
 	epatch "${FILESDIR}/0.7.6-stable-uid.patch"
 	epatch "${FILESDIR}/0.7.6-resolve-metadata-locally.patch"
+	epatch "${FILESDIR}/0.7.6-add-retries-metadata-server.patch"
 
 	# Note: Gentoo places ip in /sbin/ not /bin/
 	ebegin 'patching cloudinit/sources/DataSourceOpenNebula.py'

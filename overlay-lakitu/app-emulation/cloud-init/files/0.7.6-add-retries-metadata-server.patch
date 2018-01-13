@@ -1,0 +1,37 @@
+From fb3686cb60ffa8733f903e017a981a7ad0066828 Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Fri, 12 Jan 2018 16:35:02 -0800
+Subject: [PATCH] Add retries to DataSourceGCE.py when connecting to GCE
+ metadata server
+
+---
+ cloudinit/sources/DataSourceGCE.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/cloudinit/sources/DataSourceGCE.py b/cloudinit/sources/DataSourceGCE.py
+index 7091e3c..33ec8d0 100644
+--- a/cloudinit/sources/DataSourceGCE.py
++++ b/cloudinit/sources/DataSourceGCE.py
+@@ -36,6 +36,8 @@ class DataSourceGCE(sources.DataSource):
+             util.get_cfg_by_path(sys_cfg, ["datasource", "GCE"], {}),
+             BUILTIN_DS_CONFIG])
+         self.metadata_address = self.ds_cfg['metadata_url']
++        self.retries = 5
++        self.retries_sec_between = 1
+ 
+     # GCE takes sshKeys attribute in the format of '<user>:<public_key>'
+     # so we have to trim each key to remove the username part
+@@ -70,7 +72,9 @@ class DataSourceGCE(sources.DataSource):
+         for (mkey, path, required) in url_map:
+             try:
+                 resp = url_helper.readurl(url=self.metadata_address + path,
+-                                          headers=headers)
++                                          headers=headers,
++                                          retries=self.retries,
++                                          sec_between=self.retries_sec_between)
+                 if resp.code == 200:
+                     found = True
+                     self.metadata[mkey] = resp.contents
+-- 
+2.16.0.rc1.238.g530d649a79-goog
+
