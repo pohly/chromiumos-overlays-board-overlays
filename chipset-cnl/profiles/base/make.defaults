@@ -19,3 +19,6 @@ USE="${USE} native_gpu_memory_buffers"
 USE="${USE} android_aep"
 
 USE="${USE} drm_atomic"
+
+# Disable ACPI AC device and use USB PD power supply driver
+USE="${USE} acpi_ac_off"
