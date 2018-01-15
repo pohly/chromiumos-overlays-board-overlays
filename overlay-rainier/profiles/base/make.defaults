@@ -2,6 +2,8 @@
 USE=""
 
 USE="${USE} rainier"
+USE="${USE} arc"
+USE="${USE} arc-camera3-3a-sandbox"
 
 # Use ext4 crypto
 USE="${USE} direncryption"
