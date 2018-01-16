@@ -6,8 +6,7 @@ USE=""
 
 USE="${USE} nami"
 
-# FIXME: enable the following once it's ready
-#USE="${USE} cros_ec cr50_onboard"
+USE="${USE} cros_ec"
 
 USE="${USE} arc"
 
