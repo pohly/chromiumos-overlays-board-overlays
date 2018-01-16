@@ -26,5 +26,5 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 # TODO: put the right one
 #VIDEO_CARDS="qualcomm"
 
-# Declare set of enabled consoles (TODO: what is it?)
-#TTY_CONSOLE="ttyS2"
+# Declare set of enabled consoles
+TTY_CONSOLE="ttyMSM0"
