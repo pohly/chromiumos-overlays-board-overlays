@@ -37,6 +37,9 @@ USE="${USE} keyboard_includes_side_buttons"
 # Add Touchview to get chromeos-accelerometer-init.
 USE="${USE} touchview"
 
+# Add internal_stylus.
+USE="${USE} internal_stylus"
+
 # Comment these lines to disable the serial port.
 TTY_CONSOLE="ttyS0"
 USE="${USE} pcserial"
