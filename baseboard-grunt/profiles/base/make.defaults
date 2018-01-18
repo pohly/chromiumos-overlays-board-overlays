@@ -3,6 +3,10 @@
 
 # Initial value just for style purposes.
 USE=""
+LINUX_FIRMWARE=""
+
+# QCA Wifi and BT
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k qca-bt"
 
 # Add EC logging
 USE="${USE} eclog"
