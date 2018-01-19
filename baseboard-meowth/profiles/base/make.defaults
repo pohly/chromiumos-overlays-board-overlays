@@ -10,3 +10,6 @@ USE="${USE} direncryption"
 
 # Enable TPM2
 USE="${USE} -tpm tpm2 cr50_onboard"
+
+# BT driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
