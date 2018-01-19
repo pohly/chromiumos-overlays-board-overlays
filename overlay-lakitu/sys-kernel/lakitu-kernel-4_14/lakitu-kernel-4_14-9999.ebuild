@@ -5,7 +5,7 @@ EAPI=5
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/v4.14"
 
-CHROMEOS_KERNEL_CONFIG="${FILESDIR}/lakitu_kernel_config_4_14"
+CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
 
 # This must be inherited *after* EGIT/CROS_WORKON variables defined
 inherit cros-workon cros-kernel2 osreleased
@@ -25,7 +25,7 @@ src_install() {
 }
 
 # Change the following (commented out) number to the next prime number
-# when you change lakitu_kernel_config_4_14.  This workaround will force the
+# when you change base.config.  This workaround will force the
 # ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_14 ebuild and pick up the
 # configuration changes.  In absence of this workaround the config changes
 # would not be picked up unless there was a code change in kernel source tree.
