@@ -11,7 +11,7 @@ DESCRIPTION="Rockchip ISP1 (Image Processing Unit) ARC++ camera HAL v3"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="-* ~arm ~arm64"
+KEYWORDS="-* arm arm64"
 
 RDEPEND="media-libs/arc-camera3-libcbm
 	media-libs/libsync"
