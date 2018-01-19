@@ -14,7 +14,6 @@ KEYWORDS="*"
 
 IUSE_KERNEL_VERS=(
 	kernel-4_4
-	kernel-4_12
 	kernel-4_14
 )
 IUSE="kernel_sources ${IUSE_KERNEL_VERS[*]}"
@@ -27,7 +26,6 @@ RDEPEND="
 	!sys-kernel/upstream-kernel-mainline
 	!sys-kernel/upstream-kernel-next
 	kernel-4_4? ( sys-kernel/lakitu-kernel-4_4[kernel_sources=] )
-	kernel-4_12? ( sys-kernel/lakitu-kernel-4_12[kernel_sources=] )
 	kernel-4_14? ( sys-kernel/lakitu-kernel-4_14[kernel_sources=] )
 "
 
