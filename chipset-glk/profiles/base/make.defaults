@@ -9,7 +9,7 @@ USE=""
 
 LINUX_FIRMWARE="${LINUX_FIRMWARE} adsp_apl"
 
-USE="${USE} kernel-4_12"
+USE="${USE} kernel-4_14"
 USE="${USE} apl_lpe intel_lpe"
 
 # Disable ACPI AC device and use USB PD power supply driver
