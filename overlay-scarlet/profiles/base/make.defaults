@@ -7,7 +7,6 @@ USE=""
 
 USE="${USE} scarlet"
 USE="${USE} arc"
-USE="${USE} arc-camera3-3a-sandbox"
 
 # Use ext4 crypto
 USE="${USE} direncryption"
