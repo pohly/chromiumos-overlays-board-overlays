@@ -15,4 +15,4 @@ USE="${USE} -tpm tpm2"
 USE="${USE} cr50_onboard"
 
 # BT driver firmware
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt_9560"
