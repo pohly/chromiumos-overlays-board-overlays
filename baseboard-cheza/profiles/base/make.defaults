@@ -26,3 +26,13 @@ VIDEO_CARDS="msm"
 
 # Declare set of enabled consoles
 TTY_CONSOLE="ttyMSM0"
+
+#### Below is temporary until we get the normal video card working ####
+
+# LLVM is required to build the llvmpipe driver.
+#
+# NOTE: we currently turn on _both_ llvmpipe and msm video cards.  The
+# msm video card will be used by the "minigbm" ebuild and the "llvmpipe"
+# by the mesa one.  We'd remove this when mesa supports "msm"
+USE="${USE} llvm"
+VIDEO_CARDS="${VIDEO_CARDS} llvmpipe"
