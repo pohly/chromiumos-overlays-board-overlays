@@ -21,3 +21,5 @@ USE="${USE} direncryption"
 USE="${USE} legacy_keyboard legacy_power_button"
 
 USE="${USE} unibuild"
+
+USE="${USE} arc"
