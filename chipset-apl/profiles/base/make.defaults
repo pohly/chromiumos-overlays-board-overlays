@@ -26,4 +26,4 @@ USE="${USE} drm_atomic"
 USE="${USE} android_aep"
 
 # Enable once b/67394445 is fixed.
-USE="${USE} -android_gles31 android_gles30"
+USE="${USE} -android_aep -android_gles31 android_gles30"
