@@ -40,11 +40,6 @@ RDEPEND="${RDEPEND}
 	chromeos-base/whining
 "
 
-# Dependencies for Android Testing on MobLab.
-RDEPEND="${RDEPEND}
-	chromeos-base/chromeos-adb-env
-"
-
 DEPEND=""
 
 S=${WORKDIR}
