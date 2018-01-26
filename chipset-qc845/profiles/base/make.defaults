@@ -2,8 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-#CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-qualcomm64"
-CHROMEOS_KERNEL_CONFIG="arch/arm64/configs/defconfig"
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-qualcomm"
 CHROMEOS_KERNEL_ARCH="arm64"
 
 
