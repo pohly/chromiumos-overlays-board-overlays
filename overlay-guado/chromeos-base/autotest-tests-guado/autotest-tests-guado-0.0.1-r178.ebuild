@@ -3,11 +3,10 @@
 # found in the LICENSE file.
 
 EAPI="5"
-CROS_WORKON_COMMIT="cd0cbf6ef74119b9a11ef91e7c8dd76295b86715"
-CROS_WORKON_TREE="e76f96edfa9396fcb96243c19f6cbc4dee980ba9"
+CROS_WORKON_COMMIT="281d780391f83d8f4acc238ab873b67a529413f3"
+CROS_WORKON_TREE="dc6c1d5f96acbd5744168a7a43b53977f3013bb8"
 CROS_WORKON_PROJECT="chromiumos/third_party/autotest"
-CROS_WORKON_LOCALNAME=../third_party/autotest
-CROS_WORKON_SUBDIR=files
+CROS_WORKON_LOCALNAME=../third_party/autotest/files
 
 inherit cros-workon autotest
 
