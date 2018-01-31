@@ -6,7 +6,7 @@ CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-arm"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} containers device_jail"
+USE="${USE} containers"
 
 USE="${USE} hardfp legacy_keyboard legacy_power_button neon"
 USE="${USE} -opengl opengles"

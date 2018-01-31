@@ -8,7 +8,7 @@ U_BOOT_FDT_USE="samus"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} containers device_jail"
+USE="${USE} containers"
 
 USE="${USE} als has_keyboard_backlight highdpi"
 USE="${USE} natural_scroll_default samus watchdog"

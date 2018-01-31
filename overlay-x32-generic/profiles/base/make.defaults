@@ -10,7 +10,7 @@ VIDEO_CARDS="intel nouveau radeon"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} containers device_jail"
+USE="${USE} containers"
 
 USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_4"
 

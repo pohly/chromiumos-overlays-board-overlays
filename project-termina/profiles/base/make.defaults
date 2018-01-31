@@ -10,7 +10,7 @@ USE=""
 USE="${USE} chromeless_tty chromeless_tests"
 USE="${USE} pam seccomp"
 
-USE="${USE} -cros_disks -cros_host -cros_p2p -crypto -device_jail"
+USE="${USE} -cros_disks -cros_host -cros_p2p -crypto"
 USE="${USE} -bluetooth -cellular -cras -cups -debugd -encrypted_stateful -kmod"
 USE="${USE} -power_management -shill -systemd -timers -tpm -vaapi -vtconsole -udev"
 
