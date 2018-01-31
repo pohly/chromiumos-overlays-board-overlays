@@ -1,0 +1,12 @@
+# HW decoding
+- hw_dec_h264_1080_30
+- hw_dec_h264_1080_60
+- hw_dec_jpeg
+
+
+# HW encoding
+- hw_enc_h264_1080_30
+
+
+# camera
+- webcam
