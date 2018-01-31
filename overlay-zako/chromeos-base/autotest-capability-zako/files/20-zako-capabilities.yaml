@@ -1,0 +1,6 @@
+# HW encoding
+- detector: intel_cpu
+  match:
+    - intel_celeron_2955U
+  capabilities:
+    - no hw_enc_h264_1080_30
