@@ -25,10 +25,6 @@ S="${WORKDIR}"
 src_install() {
 	doappid "{D3844706-6B0E-78DF-752C-00DCDF11E04B}" "CHROMEBOOK"
 
-	# Install board-specific info.
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/hdparm.conf"
-
 	# Install platform specific config file for power_manager
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
