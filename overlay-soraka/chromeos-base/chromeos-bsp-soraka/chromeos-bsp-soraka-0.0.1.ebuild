@@ -31,6 +31,9 @@ src_install() {
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs soraka "${audio_config_dir}"
 
+	# Install a rule tagging keyboard as internal
+	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
+
 	# Install hammerd udev rules and override for chromeos-base/hammerd.
 	udev_dorules "${FILESDIR}/99-hammerd.rules"
 	insinto /etc/init

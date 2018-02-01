@@ -38,8 +38,8 @@ src_install() {
 	insinto "${EPREFIX}/etc/udev/hwdb.d"
 	doins "${FILESDIR}/61-hammer-keyboard.hwdb"
 
-	# Install a rule tagging keyboard as having updated layout
-	udev_dorules "${FILESDIR}/61-hammer-keyboard.rules"
+	# Install a rule tagging keyboard as internal and having updated layout
+	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
 
 	# Install hammerd udev rules and override for chromeos-base/hammerd.
 	udev_dorules "${FILESDIR}/99-hammerd.rules"
