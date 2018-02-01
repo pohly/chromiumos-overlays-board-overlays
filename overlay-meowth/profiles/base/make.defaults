@@ -19,4 +19,4 @@ TTY_CONSOLE="ttyS1"
 
 # All firmware to build from the EC code base.
 EC_FIRMWARE="meowth"
-EC_FIRMWARE_EXTRA="meowth_fp cr50"
+EC_FIRMWARE_EXTRA="meowth_fp"
