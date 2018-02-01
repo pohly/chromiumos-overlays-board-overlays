@@ -30,10 +30,6 @@ src_install() {
 	exeinto $(udev_get_udevdir)
 	doexe "${FILESDIR}/light-sensor-set-multiplier.sh"
 
-	# Install board-specific info
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/intel-hda-powersave.conf"
-
 	# Install audio configs.
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs x86-alex "${audio_config_dir}"
