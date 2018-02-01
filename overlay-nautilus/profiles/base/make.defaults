@@ -40,6 +40,9 @@ USE="${USE} touchview"
 # Add internal_stylus.
 USE="${USE} internal_stylus"
 
+# To get wacom_flash
+INPUT_DEVICES="wacom"
+
 # Comment these lines to disable the serial port.
 TTY_CONSOLE="ttyS0"
 USE="${USE} pcserial"
