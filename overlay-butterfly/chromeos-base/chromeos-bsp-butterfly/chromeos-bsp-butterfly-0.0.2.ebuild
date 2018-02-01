@@ -24,10 +24,6 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Install board-specific info.
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/intel-hda-powersave.conf"
-
 	# Determine kernel version.
 	local audio_config_dir="${FILESDIR}/audio-config-$(usex kernel-3_8 3_8 3_4)"
 	install_audio_configs butterfly "${audio_config_dir}"
