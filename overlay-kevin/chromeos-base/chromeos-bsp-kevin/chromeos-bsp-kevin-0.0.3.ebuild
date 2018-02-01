@@ -36,5 +36,5 @@ src_install() {
 	doins "${FILESDIR}/main.conf"
 
 	# Disable touchpad wakeup source completely
-	udev_dorules "${FILESDIR}/92-powerd-overrides.rules"
+	udev_dorules "${FILESDIR}/93-powerd-overrides.rules"
 }
