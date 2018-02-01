@@ -25,9 +25,6 @@ S=${WORKDIR}
 src_install() {
 	doappid "{A854E62E-9CB3-4DBE-8BBE-88C48FD65787}" "CHROMEBOOK"
 
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/intel-hda-powersave.conf"
-
 	# Install platform-specific ambient light sensor configuration.
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"
 	exeinto $(udev_get_udevdir)
