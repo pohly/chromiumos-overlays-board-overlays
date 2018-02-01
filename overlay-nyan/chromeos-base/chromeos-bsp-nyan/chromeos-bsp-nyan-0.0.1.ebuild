@@ -36,11 +36,6 @@ src_install() {
 	# Override default CPU clock speed governor
 	insinto "/etc"
 	doins "${FILESDIR}/cpufreq.conf"
-	# Enable the Tegra CPU auto-hotplug feature
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/nv-cpu-auto-hotplug.conf"
-	exeinto "/usr/share/laptop-mode-tools/modules"
-	doexe "${FILESDIR}/nv-cpu-auto-hotplug"
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
