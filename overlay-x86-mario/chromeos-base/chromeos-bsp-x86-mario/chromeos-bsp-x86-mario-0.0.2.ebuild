@@ -17,7 +17,6 @@ IUSE=""
 DEPEND="!chromeos-base/light-sensor
 	!chromeos-base/chromeos-bsp-mario"
 RDEPEND="${DEPEND}
-	app-laptop/laptop-mode-tools
 	sys-apps/iotools"
 
 S="${WORKDIR}"
@@ -33,10 +32,6 @@ src_install() {
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"
 	exeinto $(udev_get_udevdir)
 	doexe "${FILESDIR}/light-sensor-set-multiplier.sh"
-
-	# Install board-specific info
-	insinto "/etc/laptop-mode/conf.d/board-specific"
-	doins "${FILESDIR}/intel-hda-powersave.conf"
 
 	# Install audio configs.
 	local audio_config_dir="${FILESDIR}/audio-config"
