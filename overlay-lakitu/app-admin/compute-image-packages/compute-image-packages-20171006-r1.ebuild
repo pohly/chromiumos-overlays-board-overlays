@@ -1,1 +1,0 @@
-compute-image-packages-20171006.ebuild
