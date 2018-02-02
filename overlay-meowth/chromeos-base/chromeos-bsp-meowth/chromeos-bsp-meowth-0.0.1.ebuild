@@ -22,4 +22,7 @@ RDEPEND="${DEPEND}"
 
 src_install() {
 	doappid "{BA7F2ABA-8567-476F-B1CC-BC1C60404FEC}" "CHROMEBOOK"
+
+	# Install a rule tagging keyboard as internal and having updated layout
+	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
 }

@@ -1,0 +1,16 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+#
+# Tag whiskers keyboard on meowth as having new top row layout,
+# and tell powerd that whiskers is actually "internal" keyboard/touchpad
+
+SUBSYSTEM=="input", ENV{ID_INPUT_KEYBOARD}=="1", \
+  ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="5030", \
+  ENV{CROS_KEYBOARD_TOP_ROW_LAYOUT}="2", \
+  ENV{POWERD_ROLE}="internal_keyboard"
+# For some reason udev thinks the touchpad is either a mouse or a touchscreen
+SUBSYSTEM=="input", ENV{ID_INPUT_MOUSE}=="1", \
+  ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="5030", \
+  ENV{POWERD_ROLE}="internal_touchpad"
+
