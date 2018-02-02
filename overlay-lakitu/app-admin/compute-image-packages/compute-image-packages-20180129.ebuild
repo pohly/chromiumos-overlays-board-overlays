@@ -25,6 +25,7 @@ RDEPEND="
 	sys-apps/iproute2
 	!app-admin/google-daemon
 	!app-admin/google-startup-scripts
+	app-admin/oslogin
 "
 
 python_prepare_all() {
