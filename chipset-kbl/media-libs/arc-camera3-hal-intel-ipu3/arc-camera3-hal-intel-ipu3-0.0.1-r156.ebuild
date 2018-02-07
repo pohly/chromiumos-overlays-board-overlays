@@ -23,6 +23,7 @@ DEPEND="${RDEPEND}
 	dev-libs/expat
 	media-libs/arc-camera3-android-headers
 	media-libs/arc-camera3-libcab
+	media-libs/arc-camera3-libcamera_common
 	media-libs/arc-camera3-libcamera_client
 	media-libs/arc-camera3-libcamera_jpeg
 	media-libs/arc-camera3-libcamera_metadata
