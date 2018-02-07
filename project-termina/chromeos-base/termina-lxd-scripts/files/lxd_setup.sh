@@ -40,7 +40,7 @@ profiles:
       parent: lxdbr0
       type: nic
     wayland-sock:
-      path: /run/wayland-0
+      path: /dev/.wayland-0
       source: /run/wayland-0
       type: disk
     wl0:
