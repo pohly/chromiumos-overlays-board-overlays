@@ -1,7 +1,7 @@
-env EC_IMAGE_PATH="/lib/firmware/hammer.fw"
-env TOUCHPAD_IMAGE_PATH="/lib/firmware/hammer-touchpad.fw"
+env EC_IMAGE_PATH="/lib/firmware/wand.fw"
+env TOUCHPAD_IMAGE_PATH="/lib/firmware/wand-touchpad.fw"
 env VENDOR_ID=6353  # 0x18d1
-env PRODUCT_ID=20514  # 0x5022
+env PRODUCT_ID=20525  # 0x502d
 env USB_BUS=1
 env USB_PORT=2
 env AUTOSUSPEND_DELAY_MS="1000"
