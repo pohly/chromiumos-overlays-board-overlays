@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="e78788bdc7c9a1b030a07e1e811b23f1eabf88b8"
-CROS_WORKON_TREE="201003644f2e5621620452d8a9cfd90e44978b08"
+CROS_WORKON_COMMIT="6af2965cc006feac208b746df1fbc7f2e06723c4"
+CROS_WORKON_TREE="34335aa0d2e471f24eb580f0e0c74adbad3f0750"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
@@ -16,7 +16,6 @@ SLOT="0"
 KEYWORDS="-* arm arm64"
 
 RDEPEND="
-	!media-libs/arc-camera3-hal-usb
 	media-libs/arc-camera3-libcbm
 	media-libs/libsync
 	media-libs/rockchip-isp1-3a-libs-bin"
@@ -58,5 +57,5 @@ src_install() {
 	cd ${HAL_DIR}
 	dolib.so .libs/libcam_algo.so*
 	dolib.so .libs/libcamerahal.so*
-	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/rockchip-isp1.so
+	dosym libcamerahal.so /usr/$(get_libdir)/camera_hal.so
 }
