@@ -19,10 +19,6 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
 
 USE="${USE} -tpm tpm2"
 USE="${USE} arc"
-USE="${USE} arc-camera3"
-
-# Enable camera 3A sandboxing
-USE="${USE} arc-camera3-3a-sandbox"
 
 # Use ext4 crypto
 USE="${USE} direncryption"

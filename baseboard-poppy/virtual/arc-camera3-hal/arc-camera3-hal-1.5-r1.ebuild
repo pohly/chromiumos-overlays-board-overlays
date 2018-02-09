@@ -1,1 +1,0 @@
-arc-camera3-hal-1.5.ebuild
