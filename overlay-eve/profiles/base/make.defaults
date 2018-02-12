@@ -35,3 +35,6 @@ INPUT_DEVICES="st wacom"
 
 # Add EC logging
 USE="${USE} eclog"
+
+# Ability to run guest VMs.
+USE="${USE} kvm_host"
