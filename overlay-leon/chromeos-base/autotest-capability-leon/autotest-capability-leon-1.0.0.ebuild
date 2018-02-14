@@ -11,7 +11,7 @@ KEYWORDS="*"
 IUSE=""
 S="${WORKDIR}"
 
-RDEPEND="chromeos-base/autotest-capability-hsw"
+RDEPEND="chromeos-base/autotest-capability-chipset-hsw"
 DEPEND="${RDEPEND}"
 
 src_install() {
