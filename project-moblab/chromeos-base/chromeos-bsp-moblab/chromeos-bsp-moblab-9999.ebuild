@@ -3,23 +3,29 @@
 
 EAPI="6"
 
-inherit user
+CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
+CROS_WORKON_LOCALNAME="../overlays/"
+CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
+
+inherit user cros-workon
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or portage actions"
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="*"
+KEYWORDS="~*"
 IUSE="+lxc"
 
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
+# TODO(pprabhu, crbug.com/775373) Move virt-what to common VM overlay once that
+# is ready.
 RDEPEND="
 	chromeos-base/shill
 	app-crypt/gnupg
+	app-emulation/virt-what
 	lxc? ( app-emulation/lxc )
 	chromeos-base/chromeos-init
-	chromeos-base/update_engine[delta_generator]
 	chromeos-base/openssh-server-init
 	net-analyzer/fping
 	net-ftp/tftp-hpa
@@ -36,11 +42,10 @@ RDEPEND="${RDEPEND}
 	chromeos-base/devserver
 	chromeos-base/mobmonitor
 	chromeos-base/whining
+	sys-apps/moblab-site-utils
 "
 
 DEPEND=""
-
-S=${WORKDIR}
 
 pkg_preinst() {
 	enewgroup moblab
