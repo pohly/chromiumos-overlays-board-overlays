@@ -3,13 +3,17 @@
 
 EAPI="6"
 
-inherit user
+CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
+CROS_WORKON_LOCALNAME="../overlays/"
+CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
+
+inherit user cros-workon
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or portage actions"
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="*"
+KEYWORDS="~*"
 IUSE="+lxc"
 
 # These packages are meant to set up the Chromium OS Basic environment to
@@ -42,8 +46,6 @@ RDEPEND="${RDEPEND}
 "
 
 DEPEND=""
-
-S=${WORKDIR}
 
 pkg_preinst() {
 	enewgroup moblab
