@@ -7,5 +7,3 @@
 # Mask audit from portage-stable
 sys-process/audit::portage-stable
 sys-process/shadow::portage-stable
-# Mask kubernetes versions 1.,9.0 or later.
->=app-emulation/kubernetes-1.9.0
