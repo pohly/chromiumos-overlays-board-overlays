@@ -1,7 +1,7 @@
 # Copyright 2014 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="4"
+EAPI="6"
 
 inherit user
 
@@ -71,21 +71,14 @@ src_install() {
 	doins "${FILESDIR}/ssp_deploy_shadow_config.json"
 
 	insinto /etc/sudoers.d
-	echo "moblab ALL = NOPASSWD: ALL" > moblab-sudo-all
-	echo "apache ALL = NOPASSWD: /sbin/reboot" > apache-reboot
-	echo "apache ALL = NOPASSWD: /sbin/restart" > apache-restart
-	echo "apache ALL = NOPASSWD: /sbin/start" > apache-start
-	echo "apache ALL = NOPASSWD: /sbin/stop" > apache-stop
-	echo "apache ALL = NOPASSWD: /usr/sbin/apache2" > apache-apache2
-	echo "apache ALL = NOPASSWD: /usr/bin/update_engine_client" > apache-update_client
 	insopts -m600
-	doins moblab-sudo-all
-	doins apache-reboot
-	doins apache-restart
-	doins apache-start
-	doins apache-stop
-	doins apache-apache2
-	doins apache-update_client
+	echo "moblab ALL = NOPASSWD: ALL" | newins - moblab-sudo-all
+	echo "apache ALL = NOPASSWD: /sbin/reboot" | newins - apache-reboot
+	echo "apache ALL = NOPASSWD: /sbin/restart" | newins - apache-restart
+	echo "apache ALL = NOPASSWD: /sbin/start" | newins - apache-start
+	echo "apache ALL = NOPASSWD: /sbin/stop" | newins - apache-stop
+	echo "apache ALL = NOPASSWD: /usr/sbin/apache2" | newins - apache-apache2
+	echo "apache ALL = NOPASSWD: /usr/bin/update_engine_client" | newins - apache-update_client
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
