@@ -1,0 +1,21 @@
+[Unit]
+Description=Fluentd container for Stackdriver Logging
+After=stackdriver-metadata.service
+Requires=stackdriver-metadata.service
+
+[Service]
+EnvironmentFile=-/etc/stackdriver/env_vars
+ExecStartPre=/bin/mkdir -p /var/log/google-fluentd/
+ExecStart=/usr/bin/docker run --rm \
+    --name="${LOGGING_AGENT_NAME}" --network="${NETWORK_NAME}" \
+    -v /etc/stackdriver/logging.config.d/:/etc/google-fluentd/config.d/ \
+    -v /var/log:/var/log \
+    -v /var/lib/docker/containers/:/var/lib/docker/containers/ \
+    -v /usr/lib64/:/host/lib/ \
+    --env=METADATA_AGENT_HOSTNAME="${METADATA_AGENT_NAME}" \
+    "${LOGGING_AGENT_DOCKER_IMAGE}" \
+    /bin/sh -c "/run.sh 2>&1 >> /var/log/google-fluentd/google-fluentd.log"
+
+Restart=on-failure
+RestartSec=10
+ExecStop=/usr/bin/docker stop "${LOGGING_AGENT_NAME}"

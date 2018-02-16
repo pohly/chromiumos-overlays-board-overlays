@@ -1,0 +1,12 @@
+[Unit]
+Description=Stackdriver Docker Network
+After=docker.socket
+Wants=docker.socket
+StopWhenUnneeded=true
+
+[Service]
+EnvironmentFile=-/etc/stackdriver/env_vars
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker network create --driver=bridge "${NETWORK_NAME}"
+ExecStop=/usr/bin/docker network rm "${NETWORK_NAME}"

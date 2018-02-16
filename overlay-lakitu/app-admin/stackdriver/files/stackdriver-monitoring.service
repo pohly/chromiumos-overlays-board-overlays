@@ -1,0 +1,19 @@
+[Unit]
+Description=Stackdriver Monitoring Agent
+After=stackdriver-metadata.service
+Requires=stackdriver-metadata.service
+
+[Service]
+EnvironmentFile=-/etc/stackdriver/env_vars
+ExecStart=/usr/bin/docker run \
+    --rm --pid=host \
+    --network="${NETWORK_NAME}" \
+    --name="${MONITORING_AGENT_NAME}" \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /etc/stackdriver/monitoring.config.d/:/etc/collectd/collectd.d/ \
+    --env=METADATA_AGENT_HOSTNAME="${METADATA_AGENT_NAME}" \
+    --env=LOOKUP_GCE_INSTANCE_ID=true \
+    "${MONITORING_AGENT_DOCKER_IMAGE}"
+Restart=on-failure
+RestartSec=10
+ExecStop=/usr/bin/docker stop "${MONITORING_AGENT_NAME}"

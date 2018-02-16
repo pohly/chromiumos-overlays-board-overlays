@@ -1,0 +1,17 @@
+[Unit]
+Description=Stackdriver Metadata Agent
+After=gcr-online.target stackdriver-docker-network.service
+Wants=gcr-online.target
+Requires=stackdriver-docker-network.service
+StopWhenUnneeded=true
+
+[Service]
+EnvironmentFile=-/etc/stackdriver/env_vars
+ExecStart=/usr/bin/docker run \
+    --rm --network="${NETWORK_NAME}" \
+    --name="${METADATA_AGENT_NAME}" \
+    --volume=/var/run/docker.sock:/var/run/docker.sock \
+    "${METADATA_AGENT_DOCKER_IMAGE}"
+Restart=on-failure
+RestartSec=5
+ExecStop=/usr/bin/docker stop "${METADATA_AGENT_NAME}"

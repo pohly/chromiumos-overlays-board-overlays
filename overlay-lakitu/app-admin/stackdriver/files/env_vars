@@ -1,0 +1,14 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+NETWORK_NAME="stackdriver-agents-network"
+
+METADATA_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-metadata-agent:0.2-0.0.14-1"
+METADATA_AGENT_NAME="stackdriver-metadata-agent"
+
+MONITORING_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-monitoring-agent:0.2-5.5.2-379"
+MONITORING_AGENT_NAME="stackdriver-monitoring-agent"
+
+LOGGING_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-logging-agent:0.2-1.5.21-1"
+LOGGING_AGENT_NAME="stackdriver-logging-agent"
