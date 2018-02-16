@@ -6,7 +6,7 @@ EAPI=4
 inherit multilib
 
 DESCRIPTION="OpenMAX binary libraries"
-SRC_URI="ftp://download.nvidia.com/chromeos/binary-ldk/t114/ER/${PV//./_}/nvidia-binaries_armhf_${PV//./_}.tbz2"
+SRC_URI="http://download.nvidia.com/chromeos/binary-ldk/t114/ER/${PV//./_}/nvidia-binaries_armhf_${PV//./_}.tbz2"
 
 LICENSE="NVIDIA"
 SLOT="0"

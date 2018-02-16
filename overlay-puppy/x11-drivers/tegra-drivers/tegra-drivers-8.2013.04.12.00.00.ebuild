@@ -13,7 +13,7 @@ inherit multilib versionator
 DESCRIPTION="Tegra4 user-land drivers"
 MY_ABI=$(get_major_version)
 MY_PV=$(get_after_major_version)
-SRC_URI="ftp://download.nvidia.com/chromeos/binary-ldk/t114/ER/${MY_PV//./_}/nvidia-binaries_armhf_${MY_PV//./_}.tbz2"
+SRC_URI="http://download.nvidia.com/chromeos/binary-ldk/t114/ER/${MY_PV//./_}/nvidia-binaries_armhf_${MY_PV//./_}.tbz2"
 
 LICENSE="NVIDIA"
 SLOT="0"

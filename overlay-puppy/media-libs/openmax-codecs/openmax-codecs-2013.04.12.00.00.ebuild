@@ -4,7 +4,7 @@
 EAPI=4
 
 DESCRIPTION="OpenMAX binary libraries"
-SRC_URI="ftp://download.nvidia.com/chromeos/binary-ldk/t114/ER/${PV//./_}/nvidia-codecs_armhf_${PV//./_}.tbz2"
+SRC_URI="http://download.nvidia.com/chromeos/binary-ldk/t114/ER/${PV//./_}/nvidia-codecs_armhf_${PV//./_}.tbz2"
 
 LICENSE="NVIDIA-codecs"
 SLOT="0"
