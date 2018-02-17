@@ -14,7 +14,6 @@ DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or port
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="~*"
-IUSE="+lxc"
 
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
@@ -24,12 +23,12 @@ RDEPEND="
 	chromeos-base/shill
 	app-crypt/gnupg
 	app-emulation/virt-what
-	lxc? ( app-emulation/lxc )
+	app-emulation/lxc
 	chromeos-base/chromeos-init
 	chromeos-base/openssh-server-init
 	net-analyzer/fping
 	net-ftp/tftp-hpa
-	lxc? ( net-misc/bridge-utils )
+	net-misc/bridge-utils
 	net-misc/dhcp
 	net-misc/rsync
 	sys-apps/file
@@ -55,13 +54,6 @@ pkg_preinst() {
 src_install() {
 	insinto /etc/init
 	doins "${FILESDIR}"/init/*.conf
-
-	if use lxc; then
-		doins "${FILESDIR}/moblab-network-bridge-init.conf"
-		doins "${FILESDIR}/moblab-base-container-init.conf"
-	else
-		doins "${FILESDIR}/moblab-network-init.conf"
-	fi
 
 	insinto /etc/apache2/modules.d
 	doins "${FILESDIR}/moblab-apache-settings.conf"

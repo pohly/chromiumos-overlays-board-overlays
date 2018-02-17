@@ -1,1 +1,0 @@
-chromeos-bsp-dev-root-moblab-0.0.1.ebuild

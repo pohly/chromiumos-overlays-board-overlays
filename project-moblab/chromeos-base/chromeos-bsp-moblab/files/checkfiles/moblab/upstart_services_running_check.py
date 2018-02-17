@@ -147,7 +147,7 @@ class ApacheUpstartRunning(UpstartServiceRunning):
 class DhcpUpstartRunning(UpstartServiceRunning):
   """Verifies that dhcp is running."""
 
-  SERVICES = ['moblab-network-init', 'moblab-network-bridge-init']
+  SERVICES = ['moblab-network-bridge-init']
   SERVICE_SEARCH = 'dhcpcd'
 
   def Check(self):
@@ -155,14 +155,9 @@ class DhcpUpstartRunning(UpstartServiceRunning):
 
     Returns:
       0 if dhcp is up.
-      -1 if dhcp is down and moblab-network-init is installed on moblab.
-      -2 if dhcp is down and moblab-network-bridge-init is installed on moblab.
+      -1 if dhcp is down and moblab-network-bridge-init is installed on moblab.
     """
     if not ServiceRunning(self.SERVICE_SEARCH):
-      # DHCP is down. We need to figure which upstart script will
-      # correct the issue for this moblab.
-      for i, x in enumerate(self.SERVICES):
-        if UpstartExists(x):
-          return -(i+1)
+      return -1
 
     return 0
