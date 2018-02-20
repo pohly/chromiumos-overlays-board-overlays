@@ -4,3 +4,7 @@
     - intel_celeron_2955U
   capabilities:
     - no hw_enc_h264_1080_30
+
+
+# camera
+- no webcam
