@@ -9,7 +9,8 @@
 - hw_dec_vp9_1080_60
 - hw_dec_vp9_2160_30
 - hw_dec_vp9_2160_60
-- hw_dec_jpeg
+# HW jpeg decoding isn't enabled yet.
+# - hw_dec_jpeg
 
 
 # HW encoding
