@@ -11,7 +11,7 @@ KEYWORDS="*"
 IUSE=""
 S="${WORKDIR}"
 
-RDEPEND="chromeos-base/autotest-capability-chipset-bdw"
+RDEPEND="chromeos-base/autotest-capability-baseboard-jecht"
 DEPEND="${RDEPEND}"
 
 src_install() {
