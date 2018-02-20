@@ -19,6 +19,8 @@
 - hw_enc_h264_1080_30
 # HW vp9 encoding isn't enabled yet. (crbug.com/794608)
 #- hw_enc_vp9_1080_30
+- hw_enc_jpeg
+
 
 # camera
 - webcam
