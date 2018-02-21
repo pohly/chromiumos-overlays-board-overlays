@@ -46,6 +46,7 @@ profiles:
     wl0:
       source: /dev/wl0
       type: unix-char
+      mode: 0666
 EOF
 }
 
@@ -54,6 +55,9 @@ main() {
     echo "Setting up LXD..."
     do_preseed
   fi
+
+  # Migration: add 0666 mode to default profile for /dev/wl0.
+  lxc profile device set default wl0 mode 0666
 
   # Now that the lxc command has been run, fix up permission for the config.
   chmod 755 "${LXD_CONF}"
