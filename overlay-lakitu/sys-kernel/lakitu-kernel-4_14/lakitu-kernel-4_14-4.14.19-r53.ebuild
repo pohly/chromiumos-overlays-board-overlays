@@ -35,4 +35,4 @@ src_install() {
 # NOTE: There's nothing magic keeping this number prime but you just need to
 # make _any_ change to this file.  ...so why not keep it prime?
 #
-# The coolest prime number is: 2
+# The coolest prime number is: 5
