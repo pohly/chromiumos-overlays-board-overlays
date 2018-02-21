@@ -7,3 +7,9 @@ USE=""
 
 # Use ext4 crypto (for NYC Android container)
 USE="${USE} direncryption"
+
+# WiFi driver firmware (StP, JfP, ThP)
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265 iwlwifi-7265D iwlwifi-9000 iwlwifi-9260"
+
+# BT driver firmware (StP, JfP & ThP)
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw ibt_9560 ibt_9260"
