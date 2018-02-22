@@ -3,8 +3,8 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="81f54b79545111c4abf3f5913f4c20080658e0e1"
-CROS_WORKON_TREE="c43ed8ca6b54e2bd0fd3da9ecfe2faa3f45c1cc4"
+CROS_WORKON_COMMIT="4c72f55a51466af5110140e09b67b2bbc8117f38"
+CROS_WORKON_TREE="74517b03f321b7c38ac495eb9239b38e78c038b9"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
@@ -16,7 +16,6 @@ DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or port
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="+lxc"
 
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
@@ -26,12 +25,12 @@ RDEPEND="
 	chromeos-base/shill
 	app-crypt/gnupg
 	app-emulation/virt-what
-	lxc? ( app-emulation/lxc )
+	app-emulation/lxc
 	chromeos-base/chromeos-init
 	chromeos-base/openssh-server-init
 	net-analyzer/fping
 	net-ftp/tftp-hpa
-	lxc? ( net-misc/bridge-utils )
+	net-misc/bridge-utils
 	net-misc/dhcp
 	net-misc/rsync
 	sys-apps/file
@@ -57,13 +56,6 @@ pkg_preinst() {
 src_install() {
 	insinto /etc/init
 	doins "${FILESDIR}"/init/*.conf
-
-	if use lxc; then
-		doins "${FILESDIR}/moblab-network-bridge-init.conf"
-		doins "${FILESDIR}/moblab-base-container-init.conf"
-	else
-		doins "${FILESDIR}/moblab-network-init.conf"
-	fi
 
 	insinto /etc/apache2/modules.d
 	doins "${FILESDIR}/moblab-apache-settings.conf"
