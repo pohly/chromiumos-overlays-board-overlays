@@ -26,6 +26,9 @@ USE="${USE} llvm"
 # Enable native one-copy texture upload.
 USE="${USE} native_gpu_memory_buffers"
 
+# Enable drm atomic in chromium.
+USE="${USE} drm_atomic"
+
 # Turn on the video cards this chip uses.
 # TODO: Remove radeon when amdgpu works by itself
 VIDEO_CARDS="-* radeon amdgpu"
