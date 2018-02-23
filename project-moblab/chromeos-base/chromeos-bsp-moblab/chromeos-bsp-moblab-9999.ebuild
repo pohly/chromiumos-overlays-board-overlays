@@ -39,9 +39,9 @@ RDEPEND="
 RDEPEND="${RDEPEND}
 	chromeos-base/autotest-server
 	chromeos-base/devserver
-	chromeos-base/mobmonitor
 	chromeos-base/whining
 	sys-apps/moblab-site-utils
+	sys-apps/mobmonitor
 "
 
 DEPEND=""
@@ -79,8 +79,4 @@ src_install() {
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
-
-	# Copy the moblab checkfiles for the Mob* Monitor.
-	insinto "/etc/mobmonitor/checkfiles/moblab/"
-	doins -r "${FILESDIR}/checkfiles/moblab/"*
 }
