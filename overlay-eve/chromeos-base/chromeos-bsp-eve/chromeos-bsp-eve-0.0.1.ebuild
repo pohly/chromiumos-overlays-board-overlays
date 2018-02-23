@@ -1,7 +1,7 @@
 # Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 
 inherit cros-audio-configs
 inherit appid
@@ -13,7 +13,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="eve-userdebug eve-kvm"
+IUSE="eve-userdebug eve-kvm eve-arcnext"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -28,6 +28,8 @@ src_install() {
 		doappid "{20C53672-DEE7-4824-A131-D9547AB409ED}" "CHROMEBOOK"
 	elif use eve-kvm; then
 		doappid "{75563B98-6669-53BA-9A12-D48141DA0C14}" "CHROMEBOOK"
+	elif use eve-arcnext; then
+		doappid "{12E4F4E4-4482-2F56-F445-7EDA56433A9A}" "CHROMEBOOK"
 	else
 		doappid "{01906EA2-3EB2-41F1-8F62-F0B7120EFD2E}" "CHROMEBOOK"
 	fi

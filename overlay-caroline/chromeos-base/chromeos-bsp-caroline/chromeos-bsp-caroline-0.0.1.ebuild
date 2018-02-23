@@ -1,7 +1,7 @@
 # Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 
 inherit appid cros-audio-configs
 
@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="caroline-userdebug caroline-arc64 caroline-ndktranslation"
+IUSE="caroline-userdebug caroline-arc64 caroline-ndktranslation caroline-arcnext"
 REQUIRED_USE="caroline-userdebug? ( !caroline-arc64 )"
 S="${WORKDIR}"
 
@@ -30,6 +30,8 @@ src_install() {
 		doappid "{AAB07052-010F-1A82-D471-6159D122A397}" "CHROMEBOOK"
 	elif use caroline-ndktranslation; then
 		doappid "{B99F1576-FDAD-6E9B-B4A2-B7195749BC74}" "CHROMEBOOK"
+	elif use caroline-arcnext; then
+		doappid "{E4E99475-2297-3104-EF71-064182D67DA2}" "CHROMEBOOK"
 	else
 		doappid "{C166AF52-7EE9-4F08-AAA7-B4B895A9F336}" "CHROMEBOOK"
 	fi
