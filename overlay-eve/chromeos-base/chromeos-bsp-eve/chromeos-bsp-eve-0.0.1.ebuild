@@ -13,7 +13,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="eve-arcnext eve-campfire eve-kvm eve-swap eve-userdebug"
+IUSE="eve-arcnext eve-arm64 eve-campfire eve-kvm eve-swap eve-userdebug"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -28,6 +28,8 @@ src_install() {
 		doappid "{75563B98-6669-53BA-9A12-D48141DA0C14}" "CHROMEBOOK"
 	elif use eve-arcnext; then
 		doappid "{12E4F4E4-4482-2F56-F445-7EDA56433A9A}" "CHROMEBOOK"
+	elif use eve-arm64; then
+		doappid "{AD912019-11B6-4239-8937-AF902C074065}" "CHROMEBOOK"
 	elif use eve-campfire; then
 		doappid "{BF8505B6-AF41-4F34-8F6D-1768FEF18753}" "CHROMEBOOK"
 	elif use eve-swap; then
