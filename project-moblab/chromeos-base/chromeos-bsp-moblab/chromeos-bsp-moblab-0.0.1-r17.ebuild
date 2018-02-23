@@ -3,8 +3,8 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="3a9a3d7ec95575ee1d81c936124d070d5613c86d"
-CROS_WORKON_TREE="ea7a53a631a0c723ed0266f48380a03f6a4cea84"
+CROS_WORKON_COMMIT="1c6b409209765233bc7ec8d4b8cfb2aad73744d3"
+CROS_WORKON_TREE="0cdb5fb519f4d7b58ea9293389e083307f96e57f"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
