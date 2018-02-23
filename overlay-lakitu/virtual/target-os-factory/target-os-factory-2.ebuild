@@ -1,6 +1,6 @@
 # Copyright 2017 The Chromium OS Authors. All rights reserved.
 
-EAPI="4"
+EAPI=5
 
 DESCRIPTION="List of packages that make up the factory test OS image;
 not used and so is empty in Lakitu"

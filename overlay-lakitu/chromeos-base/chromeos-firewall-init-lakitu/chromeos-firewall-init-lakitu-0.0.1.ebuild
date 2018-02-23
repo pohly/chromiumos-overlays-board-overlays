@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-EAPI="4"
+EAPI=5
 
 DESCRIPTION="Install the upstart jobs that configure the firewall."
 HOMEPAGE="http://www.chromium.org/"

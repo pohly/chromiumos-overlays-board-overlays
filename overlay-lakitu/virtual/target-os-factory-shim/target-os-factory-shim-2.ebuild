@@ -1,6 +1,6 @@
 # Copyright 2016 The Chromium OS Authors. All rights reserved.
 
-EAPI="4"
+EAPI=5
 
 DESCRIPTION="List of packages that make up the factory shim OS image;
 Not used and so is empty in Lakitu."
