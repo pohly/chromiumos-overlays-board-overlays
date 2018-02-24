@@ -3,8 +3,8 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="4c72f55a51466af5110140e09b67b2bbc8117f38"
-CROS_WORKON_TREE="74517b03f321b7c38ac495eb9239b38e78c038b9"
+CROS_WORKON_COMMIT="f9e725fbb21c9045db771daf8ff7b2a0ce36245b"
+CROS_WORKON_TREE="5182ed2ab1ce9745dbdb4178b4388aa7b0d8f570"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
@@ -41,9 +41,9 @@ RDEPEND="
 RDEPEND="${RDEPEND}
 	chromeos-base/autotest-server
 	chromeos-base/devserver
-	chromeos-base/mobmonitor
 	chromeos-base/whining
 	sys-apps/moblab-site-utils
+	sys-apps/mobmonitor
 "
 
 DEPEND=""
@@ -81,8 +81,4 @@ src_install() {
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
-
-	# Copy the moblab checkfiles for the Mob* Monitor.
-	insinto "/etc/mobmonitor/checkfiles/moblab/"
-	doins -r "${FILESDIR}/checkfiles/moblab/"*
 }
