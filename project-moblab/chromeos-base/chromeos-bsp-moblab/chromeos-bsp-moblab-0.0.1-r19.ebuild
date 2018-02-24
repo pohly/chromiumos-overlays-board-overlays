@@ -1,10 +1,10 @@
 # Copyright 2014 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="5"
 
-CROS_WORKON_COMMIT="386a83c2f90a7db6a7681a592b497f2dfcc961f7"
-CROS_WORKON_TREE="a71ec5e6d3825736c8a46ce1a0f728b83be20a5e"
+CROS_WORKON_COMMIT="f735cd2fd864401aec22502ee6bbf41d95a20ff5"
+CROS_WORKON_TREE="b2453112753968f9b4d0b379f0699870b9af0b93"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
