@@ -10,5 +10,5 @@ METADATA_AGENT_NAME="stackdriver-metadata-agent"
 MONITORING_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-monitoring-agent:0.2-5.5.2-379"
 MONITORING_AGENT_NAME="stackdriver-monitoring-agent"
 
-LOGGING_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-logging-agent:0.2-1.5.21-1"
+LOGGING_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-logging-agent:0.2-1.5.28-2"
 LOGGING_AGENT_NAME="stackdriver-logging-agent"
