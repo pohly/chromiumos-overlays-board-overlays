@@ -8,5 +8,5 @@ StopWhenUnneeded=true
 EnvironmentFile=-/etc/stackdriver/env_vars
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/docker network create --driver=bridge "${NETWORK_NAME}"
+ExecStart=/bin/sh -c "if ! /usr/bin/docker network inspect ${NETWORK_NAME}; then /usr/bin/docker network create --driver=bridge ${NETWORK_NAME}; fi"
 ExecStop=/usr/bin/docker network rm "${NETWORK_NAME}"
