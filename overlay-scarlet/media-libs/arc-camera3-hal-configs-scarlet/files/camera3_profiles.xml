@@ -299,13 +299,13 @@
             <jpeg.maxSize value="2880000"/>  <!-- 1600*1200*1.5 -->
             <jpeg.availableThumbnailSizes value="0,0,160,120,320,180,320,240"/> <!-- INCREASING ORDER -->
             <!-- Lens Info-->
-            <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableApertures value="2.4"/>
+            <lens.info.availableFilterDensities value="0.0"/> <!-- 0 means unsupported -->
+            <lens.info.availableFocalLengths value="2.0"/>
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
-            <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.minimumFocusDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.shadingMapSize value="0,0"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.hyperfocalDistance value="0.0"/> <!-- 0.0f represents focusing at infinity -->
+            <lens.info.minimumFocusDistance value="0.0"/> <!-- 0 means fixed focus  -->
+            <lens.info.shadingMapSize value="0,0"/> <!-- TODO: rkisp1 support 17x17 LSC map -->
             <lens.info.focusDistanceCalibration value="APPROXIMATE"/>
             <!-- Lens -->
             <lens.facing value="FRONT"/>
