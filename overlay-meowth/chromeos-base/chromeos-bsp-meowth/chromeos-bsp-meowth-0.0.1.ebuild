@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Meowth board-specific ebuild that pulls in necessary ebuilds as
 dependencies or portage actions."
@@ -22,6 +22,9 @@ RDEPEND="${DEPEND}"
 
 src_install() {
 	doappid "{BA7F2ABA-8567-476F-B1CC-BC1C60404FEC}" "CHROMEBOOK"
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs nautilus "${audio_config_dir}"
 
 	# Install a rule tagging keyboard as internal and having updated layout
 	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
