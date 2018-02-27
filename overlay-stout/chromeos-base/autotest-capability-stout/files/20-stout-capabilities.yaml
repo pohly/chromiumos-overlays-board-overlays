@@ -4,3 +4,9 @@
     - intel_celeron_1007U
   capabilities:
     - no hw_enc_h264_1080_30
+
+- detector: intel_cpu
+  match:
+    - intel_celeron_877
+  capabilities:
+    - no hw_dec_jpeg
