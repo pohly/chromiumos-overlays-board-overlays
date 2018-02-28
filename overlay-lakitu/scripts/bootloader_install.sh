@@ -143,6 +143,22 @@ EOF
 
   info "Successfully installed GRUB2 ${GRUB_TARGET} on ${IMAGE}"
 
+  info "Installing secure UEFI bootloaders on ${IMAGE}"
+
+  sudo cp "${BOARD_ROOT}/usr/lib/shim/shimx64.efi" \
+          "${ESP_DIR}/efi/boot/shimx64.efi"
+  sudo cp "${BOARD_ROOT}/usr/lib/grub-lakitu/grub-lakitu.efi" \
+          "${ESP_DIR}/efi/boot/grub-lakitu.efi"
+
+  # Directory for GSetup data.
+  sudo mkdir -p "${ESP_DIR}/EFI/Google/GSetup"
+
+  # Boot sequence.
+  echo "\\efi\\boot\\shimx64.efi" | \
+      sudo tee "${ESP_DIR}/EFI/Google/GSetup/Boot" > /dev/null
+
+  info "Successfully installed secure UEFI bootloaders on ${IMAGE}"
+
   trap - EXIT
   cleanup
   info "Successfully installed bootloaders on ${IMAGE}"

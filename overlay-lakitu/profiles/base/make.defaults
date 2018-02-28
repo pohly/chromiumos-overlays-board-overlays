@@ -63,6 +63,9 @@ USE="${USE} hwid_override"
 # Enable crash reporting support
 USE="${USE} crash_reporting"
 
+# Enable UEFI bootloaders.
+USE="${USE} uefi_bootloaders"
+
 # Disable the symlink to avoid conflict when building sys-apps/baselayout.
 SYMLINK_LIB="no"
 
