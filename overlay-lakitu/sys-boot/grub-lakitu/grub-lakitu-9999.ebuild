@@ -1,11 +1,12 @@
 # Copyright (c) 2010 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="4"
-CROS_WORKON_PROJECT="chromiumos/third_party/grub2"
-CROS_WORKON_LOCALNAME="grub2"
+EAPI=5
+CROS_WORKON_PROJECT="chromiumos/platform/cobble"
+CROS_WORKON_LOCALNAME="../platform/cobble"
+CROS_WORKON_SUBTREE="grub-lakitu"
 
-inherit eutils toolchain-funcs multiprocessing cros-workon
+inherit autotools eutils toolchain-funcs multiprocessing cros-workon
 
 DESCRIPTION="GNU GRUB 2 boot loader"
 HOMEPAGE="http://www.gnu.org/software/grub/"
@@ -14,13 +15,26 @@ SLOT="0"
 KEYWORDS="-* ~amd64"
 IUSE=""
 
-PROVIDE="virtual/bootloader"
+DEPEND="dev-lang/python"
 
 export STRIP_MASK="*.img *.mod *.module"
 
 # The ordering doesn't seem to matter.
-PLATFORMS=( "efi" "pc" )
-TARGETS=( "i386" "x86_64" )
+PLATFORMS=( "efi" )
+TARGETS=( "x86_64" )
+
+src_unpack() {
+	cros-workon_src_unpack
+	S="${WORKDIR}/${P}/grub-lakitu"
+}
+
+src_prepare() {
+	default
+	sed -i -e /autoreconf/d autogen.sh || die
+	bash autogen.sh || die
+	autopoint() { :; }
+	eautoreconf -vi
+}
 
 src_configure() {
 	local platform target
@@ -34,7 +48,7 @@ src_configure() {
 			# GRUB defaults to a --program-prefix set based on target
 			# platform; explicitly set it to nothing to install unprefixed
 			# tools.  https://savannah.gnu.org/bugs/?39818
-			ECONF_SOURCE="${S}" multijob_child_init econf \
+			ECONF_SOURCE="${S}" multijob_child_init econf_build \
 				--disable-werror \
 				--disable-grub-mkfont \
 				--disable-grub-mount \
@@ -47,7 +61,7 @@ src_configure() {
 				--libdir=/$(get_libdir) \
 				--with-platform=${platform} \
 				--target=${target} \
-				--program-prefix=
+				--prefix="${D}"
 			popd >/dev/null
 		done
 	done
@@ -76,4 +90,14 @@ src_install() {
 				install
 		done
 	done
+	"${D}/bin/grub-mkimage" -O x86_64-efi \
+		-p "(hd0,gpt12)/efi/boot" \
+		-d "${D}/$(get_libdir)/grub/x86_64-efi" \
+		-o "${S}/grub-lakitu.efi" \
+		part_gpt gptpriority test fat ext2 hfs hfsplus normal boot \
+		chain efi_gop configfile search search_fs_uuid search_label \
+		terminal memdisk echo serial linuxefi
+	rm -Rf "${D}"/*
+	insinto /usr/lib/grub-lakitu
+	doins "grub-lakitu.efi"
 }

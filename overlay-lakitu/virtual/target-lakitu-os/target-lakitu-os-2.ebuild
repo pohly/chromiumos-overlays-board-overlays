@@ -73,5 +73,6 @@ RDEPEND="${LAKITU_RDEPEND}
 
 DEPEND="
 	${LAKITU_RDEPEND}
+	uefi_bootloaders? ( sys-boot/grub-lakitu )
 	sys-boot/syslinux
 "

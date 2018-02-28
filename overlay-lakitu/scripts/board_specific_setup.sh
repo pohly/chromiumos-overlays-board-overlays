@@ -23,6 +23,9 @@ INSTALL_MASK+=" /etc/init"
 # Don't install Red Hat Shim in root filesystem.
 INSTALL_MASK+=" /usr/lib/shim/shimx64.efi"
 
+# Don't install grub-lakitu in root filesystem.
+INSTALL_MASK+=" /usr/lib/grub-lakitu/grub-lakitu.efi"
+
 # build_image script calls board_setup on the pristine base image.
 board_make_image_bootable() {
   local -r image="$1"
