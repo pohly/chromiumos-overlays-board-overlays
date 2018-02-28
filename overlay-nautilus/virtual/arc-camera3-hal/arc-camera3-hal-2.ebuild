@@ -10,4 +10,7 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
 
-RDEPEND="media-libs/arc-camera3-hal-intel-ipu3"
+RDEPEND="
+	media-libs/arc-camera3-hal-intel-ipu3
+	media-libs/arc-camera3-hal-usb
+"
