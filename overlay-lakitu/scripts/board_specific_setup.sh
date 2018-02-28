@@ -30,9 +30,9 @@ INSTALL_MASK+=" /usr/lib/grub-lakitu/grub-lakitu.efi"
 board_make_image_bootable() {
   local -r image="$1"
   local -r script_root="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
-  . "${script_root}/grub_install.sh" || exit 1
-  if ! grub_install "${image}"; then
-    error "Could not install GRUB2 on ${image}"
+  . "${script_root}/bootloader_install.sh" || exit 1
+  if ! bootloader_install "${image}"; then
+    error "Could not install bootloaders on ${image}"
     return 1
   fi
 }

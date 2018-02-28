@@ -55,15 +55,15 @@ cleanup() {
   fi
 }
 
-# Installs GRUB2 on the given disk image.
+# Installs bootloaderes on the given disk image.
 #
 # Args:
 #   $1: absolute path to the disk image.
-grub_install() {
+bootloader_install() {
   trap cleanup EXIT
   IMAGE="$1"
 
-  info "Installing GRUB2 ${GRUB_TARGET} on ${IMAGE}"
+  info "Installing bootloaders on ${IMAGE}"
 
   LOOP_DEV="$(sudo losetup --find --show --partscan "${IMAGE}")"
 
@@ -91,6 +91,8 @@ grub_install() {
     error "Could not mount EFI partition"
     return 1
   fi
+
+  info "Installing GRUB2 ${GRUB_TARGET} on ${IMAGE}"
 
   if ! sudo mkdir -p "${ESP_DIR}/${GRUB_DIR}"; then
     error "Could not create dir for grub config"
@@ -139,7 +141,9 @@ EOF
     return 1
   fi
 
+  info "Successfully installed GRUB2 ${GRUB_TARGET} on ${IMAGE}"
+
   trap - EXIT
   cleanup
-  info "Successfully installed GRUB2 ${GRUB_TARGET} on ${IMAGE}"
+  info "Successfully installed bootloaders on ${IMAGE}"
 }
