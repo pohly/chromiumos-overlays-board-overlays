@@ -42,7 +42,7 @@ src_install() {
 
 	# Install platform-specific ambient light sensor configuration.
 	udev_dorules "${FILESDIR}/99-light-sensor.rules"
-	exeinto $(udev_get_udevdir)
+	exeinto $(get_udevdir)
 	doexe "${FILESDIR}/light-sensor-set-multiplier.sh"
 
 	# Install platform specific config files for power_manager.
