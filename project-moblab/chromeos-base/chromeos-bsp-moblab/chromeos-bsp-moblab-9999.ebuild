@@ -76,6 +76,7 @@ src_install() {
 	echo "apache ALL = NOPASSWD: /sbin/stop" | newins - apache-stop
 	echo "apache ALL = NOPASSWD: /usr/sbin/apache2" | newins - apache-apache2
 	echo "apache ALL = NOPASSWD: /usr/bin/update_engine_client" | newins - apache-update_client
+	echo "apache ALL = NOPASSWD: /usr/sbin/vpd" | newins - apache-vpd
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
