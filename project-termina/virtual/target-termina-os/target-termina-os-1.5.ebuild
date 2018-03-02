@@ -13,7 +13,10 @@ IUSE="-runc"
 
 # TODO: Remove termina-sshd-init once API is ready: crbug.com/790728
 RDEPEND="
+	app-arch/bzip2
+	app-arch/gzip
 	app-arch/tar
+	app-arch/xz-utils
 	app-emulation/lxd
 	chromeos-base/chromeos-bsp-termina
 	chromeos-base/run_oci
