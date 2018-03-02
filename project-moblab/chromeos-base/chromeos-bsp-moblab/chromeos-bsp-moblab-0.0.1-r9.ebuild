@@ -3,7 +3,7 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="84c7c13b22a82566f6263cc8dfc97a6e90a8abc5"
+CROS_WORKON_COMMIT="7fc2d93a9f7c6c73fdd8d087b80eee1c69aa97dd"
 CROS_WORKON_TREE="22f275a6881fc79b4fa6772c2a09d4125be812f0"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
@@ -78,6 +78,7 @@ src_install() {
 	echo "apache ALL = NOPASSWD: /sbin/stop" | newins - apache-stop
 	echo "apache ALL = NOPASSWD: /usr/sbin/apache2" | newins - apache-apache2
 	echo "apache ALL = NOPASSWD: /usr/bin/update_engine_client" | newins - apache-update_client
+	echo "apache ALL = NOPASSWD: /usr/sbin/vpd" | newins - apache-vpd
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
