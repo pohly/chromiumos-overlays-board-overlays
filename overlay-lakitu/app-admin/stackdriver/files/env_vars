@@ -4,7 +4,7 @@
 
 NETWORK_NAME="stackdriver-agents-network"
 
-METADATA_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-metadata-agent:0.2-0.0.14-1"
+METADATA_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-metadata-agent:0.2-0.0.17-2"
 METADATA_AGENT_NAME="stackdriver-metadata-agent"
 
 MONITORING_AGENT_DOCKER_IMAGE="gcr.io/stackdriver-agents/stackdriver-monitoring-agent:0.2-5.5.2-379"
