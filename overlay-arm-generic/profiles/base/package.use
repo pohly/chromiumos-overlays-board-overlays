@@ -1,3 +1,4 @@
 media-libs/mesa egl gles2 shared-glapi
 media-libs/piglit waffle
 media-libs/waffle gbm
+sys-kernel/chromeos-kernel-4_4 -clang
