@@ -11,7 +11,6 @@ SLOT="0"
 KEYWORDS="*"
 IUSE="-runc"
 
-# TODO: Remove termina-sshd-init once API is ready: crbug.com/790728
 RDEPEND="
 	app-arch/bzip2
 	app-arch/gzip
@@ -19,9 +18,7 @@ RDEPEND="
 	app-arch/xz-utils
 	app-emulation/lxd
 	chromeos-base/chromeos-bsp-termina
-	chromeos-base/run_oci
 	chromeos-base/termina-lxd-scripts
-	chromeos-base/termina-sshd-init
 	chromeos-base/vm_tools
 	net-fs/nfs-utils
 	runc? ( app-emulation/runc )
