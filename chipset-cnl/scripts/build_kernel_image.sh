@@ -6,5 +6,4 @@
 
 modify_kernel_command_line() {
   echo "i915.alpha_support=1" >> "$1"
-  echo "i915.fastboot=1" >> "$1"
 }
