@@ -1,1 +1,2 @@
+SUBSYSTEM=="pci", ACTION=="change", DRIVER=="iwlwifi", ENV{EVENT}=="INACCESSIBLE", RUN+="log-wifi-gone-metric.sh"
 SUBSYSTEM=="pci", ACTION=="remove", ATTRS{vendor}=="0x8086", RUN+="wifi-pci-rescan.sh"
