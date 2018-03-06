@@ -39,6 +39,14 @@ src_install() {
 	# disappearing from PCI bus
 	udev_dorules "${FILESDIR}/iwlwifi/60-iwlwifi.rules"
 	exeinto "$(get_udevdir)"
-	doexe "${FILESDIR}/iwlwifi/wifi-pci-rescan.sh"
 	doexe "${FILESDIR}/iwlwifi/log-wifi-gone-metric.sh"
+
+	# Add an upstart script that will monitor wifi status
+	# once the workaround (pci rescan) to revive wifi has been applied
+	insinto "/etc/init"
+	doins "${FILESDIR}/iwlwifi/pci-rescan-to-revive-wifi.conf"
+
+	# Add script that does the actual rescan and metrics logging
+	# and is called by the upstart .conf
+	dosbin "${FILESDIR}/iwlwifi/pci-rescan-to-revive-wifi.sh"
 }
