@@ -1,6 +1,6 @@
 # Copyright 2017 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
-EAPI=4
+EAPI=5
 
 inherit appid cros-audio-configs udev
 
@@ -10,7 +10,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm64 arm"
-IUSE=""
+IUSE="scarlet-arcnext"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -20,7 +20,11 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{F1C30EB2-8429-4A18-9321-93E224753A98}" "CHROMEBOOK"
+	if use scarlet-arcnext; then
+		doappid "{8A1450CE-E1AF-DF7B-D242-74AB10A7B1F9}" "CHROMEBOOK"
+	else
+		doappid "{F1C30EB2-8429-4A18-9321-93E224753A98}" "CHROMEBOOK"
+	fi
 
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
