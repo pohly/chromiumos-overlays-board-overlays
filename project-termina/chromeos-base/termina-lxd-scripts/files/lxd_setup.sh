@@ -71,6 +71,7 @@ main() {
 
   # Now that the lxc command has been run, fix up permission for the config.
   chmod 755 "${LXD_CONF}"
+  chown -R chronos:chronos "${LXD_CONF}"
 }
 
 main "$@"
