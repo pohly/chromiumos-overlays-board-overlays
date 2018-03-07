@@ -1,41 +1,43 @@
-# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="17f0102cf4c2ae0a9cf0c095c1b1e31f07a13d7d"
-CROS_WORKON_TREE="d1ff027de443166f4935c120d7cfb7803bc8ff7f"
+CROS_WORKON_COMMIT="2355499039c9e43a2fa4110e777224bcd8713b0d"
+CROS_WORKON_TREE="77ad73b95eff4d2cce5f2e72ecab1d019d240967"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
 inherit autotools cros-debug cros-workon libchrome toolchain-funcs
 
-DESCRIPTION="Rockchip ISP1 ARC++ camera HAL v3"
+DESCRIPTION="Intel IPU3 (Image Processing Unit) ARC++ camera HAL v3"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="-* arm arm64"
+KEYWORDS="-* amd64"
 
-RDEPEND="
-	!media-libs/arc-camera3-hal-usb
-	media-libs/arc-camera3-libcbm
-	media-libs/libsync
-	media-libs/rockchip-isp1-3a-libs-bin"
+RDEPEND="media-libs/arc-camera3-libcbm
+	media-libs/intel-3a-libs-bin
+	media-libs/libsync"
 
 DEPEND="${RDEPEND}
+	dev-libs/expat
 	media-libs/arc-camera3-android-headers
 	media-libs/arc-camera3-libcab
+	media-libs/arc-camera3-libcamera_common
 	media-libs/arc-camera3-libcamera_client
 	media-libs/arc-camera3-libcamera_jpeg
 	media-libs/arc-camera3-libcamera_metadata
+	!media-libs/arc-camera3-libsync
 	media-libs/libyuv
 	sys-kernel/linux-headers
 	virtual/jpeg:0
 	virtual/pkgconfig"
 
-HAL_DIR="hal/rockchip"
+HAL_DIR="hal/intel"
+
 
 src_prepare() {
-	cd "${HAL_DIR}"
+	cd ${HAL_DIR}
 	eautoreconf
 }
 
@@ -43,7 +45,7 @@ src_configure() {
 	cros-debug-add-NDEBUG
 
 	cd ${HAL_DIR}
-	econf --with-base-version=${BASE_VER} --enable-remote3a
+	econf --with-ipu=ipu3 --with-base-version=${BASE_VER} --enable-remote3a
 }
 
 src_compile() {
@@ -58,5 +60,5 @@ src_install() {
 	cd ${HAL_DIR}
 	dolib.so .libs/libcam_algo.so*
 	dolib.so .libs/libcamerahal.so*
-	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/rockchip-isp1.so
+	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/intel-ipu3.so
 }

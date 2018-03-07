@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="17f0102cf4c2ae0a9cf0c095c1b1e31f07a13d7d"
-CROS_WORKON_TREE="d1ff027de443166f4935c120d7cfb7803bc8ff7f"
+CROS_WORKON_COMMIT="2355499039c9e43a2fa4110e777224bcd8713b0d"
+CROS_WORKON_TREE="77ad73b95eff4d2cce5f2e72ecab1d019d240967"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
@@ -16,6 +16,7 @@ SLOT="0"
 KEYWORDS="-* arm arm64"
 
 RDEPEND="
+	!media-libs/arc-camera3-hal-usb
 	media-libs/arc-camera3-libcbm
 	media-libs/libsync
 	media-libs/rockchip-isp1-3a-libs-bin"
