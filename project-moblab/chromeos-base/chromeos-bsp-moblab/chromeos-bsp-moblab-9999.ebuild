@@ -33,6 +33,7 @@ RDEPEND="
 	net-misc/rsync
 	sys-apps/file
 	dev-python/pyyaml
+	sys-apps/ethtool
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
