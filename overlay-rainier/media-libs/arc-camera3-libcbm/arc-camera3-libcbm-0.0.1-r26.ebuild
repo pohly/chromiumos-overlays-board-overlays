@@ -3,8 +3,8 @@
 # $Header: $
 
 EAPI=5
-CROS_WORKON_COMMIT="b9f7a207c3e8b3fc787dbf2ef7a559b76fde2dd2"
-CROS_WORKON_TREE="78bd620e658c6572f38a8a24abd9dec75ef034b9"
+CROS_WORKON_COMMIT="ddaaed6cf48e7f8be1bea4bf2c7bd1f3837b86cb"
+CROS_WORKON_TREE="2970218947c4fe75a7a6ebf5b536f7bbfdd31b95"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
