@@ -5,6 +5,7 @@
 LINUX_FIRMWARE=""
 USE=""
 
+USE="${USE} biod"
 USE="${USE} cros_ec"
 USE="${USE} meowth"
 
