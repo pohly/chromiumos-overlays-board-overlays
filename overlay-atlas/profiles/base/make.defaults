@@ -1,0 +1,36 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+USE="${USE} atlas"
+
+# Enable ARC by default
+USE="${USE} arc"
+
+# Use ext4 crypto (for NYC Android container)
+USE="${USE} direncryption"
+
+# Include prebuilt (&signed) CR50 FW
+USE="${USE} cr50_onboard"
+
+# Enable TPM2
+USE="${USE} -tpm tpm2"
+
+# Enable DPTF
+USE="${USE} dptf"
+
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+USE="${USE} pcserial"
+# Declare set of enabled consoles
+TTY_CONSOLE="ttyS0"
+
+# Building EC
+# USE="${USE} cros_ec"
+
+# All firmware to build from the EC code base.
+# TODO(caveh): uncomment, once atlas board name is added
+# EC_FIRMWARE="atlas"
