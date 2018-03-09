@@ -39,6 +39,9 @@ profiles:
       nictype: bridged
       parent: lxdbr0
       type: nic
+    garcon:
+      path: /opt/google/garcon
+      source: /opt/google/garcon
     host-ip:
       path: /dev/.host_ip
       source: /run/host_ip
@@ -67,6 +70,12 @@ main() {
   if ! lxc profile device get default host-ip source; then
     lxc profile device add default host-ip disk \
         source=/run/host_ip path=/dev/.host_ip
+  fi
+
+  # Migration: add garcon.
+  if ! lxc profile device get default garcon source; then
+    lxc profile device add default garcon disk \
+        source=/opt/google/garcon path=/opt/google/garcon
   fi
 
   # Now that the lxc command has been run, fix up permission for the config.
