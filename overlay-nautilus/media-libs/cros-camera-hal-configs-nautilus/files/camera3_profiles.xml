@@ -44,7 +44,7 @@
             <!-- Lens Info-->
             <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableFocalLengths value="3.6,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.minimumFocusDistance value="0.1"/> <!-- HAL may override this value from CMC for RAW sensors -->
@@ -53,7 +53,7 @@
             <!-- Lens -->
             <lens.facing value="BACK"/>
             <!-- Request -->
-            <request.maxNumOutputStreams value="1,2,1"/>
+            <request.maxNumOutputStreams value="0,2,1"/>
             <request.pipelineMaxDepth value="6"/>
             <request.maxNumInputStreams value="0"/>
             <request.partialResultCount value="1"/>
@@ -78,7 +78,6 @@
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
-                edge.mode,
                 flash.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
@@ -93,8 +92,7 @@
                 lens.filterDensity,
                 lens.opticalStabilizationMode,
                 noiseReduction.mode,
-                tonemap.curve,
-                tonemap.mode"/>
+                tonemap.curve"/>
 
             <request.availableResultKeys value="colorCorrection.mode,
                 colorCorrection.transform,
@@ -120,7 +118,6 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
-                edge.mode,
                 flash.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
@@ -148,8 +145,7 @@
                 statistics.sceneFlicker,
                 statistics.lensShadingMapMode,
                 noiseReduction.mode,
-                tonemap.curve,
-                tonemap.mode"/>
+                tonemap.curve"/>
             <request.availableCharacteristicsKeys value="0"/>
             <!-- Scaler -->
             <scaler.availableMaxDigitalZoom value="16.0"/>
@@ -160,21 +156,18 @@
                 BLOB,1280x960,OUTPUT,
                 BLOB,1280x720,OUTPUT,
                 BLOB,640x480,OUTPUT,
-                BLOB,640x360,OUTPUT,
                 BLOB,320x240,OUTPUT,
                 YCbCr_420_888,1920x1080,OUTPUT,
                 YCbCr_420_888,1600x1200,OUTPUT,
                 YCbCr_420_888,1280x960,OUTPUT,
                 YCbCr_420_888,1280x720,OUTPUT,
                 YCbCr_420_888,640x480,OUTPUT,
-                YCbCr_420_888,640x360,OUTPUT,
                 YCbCr_420_888,320x240,OUTPUT,
                 IMPLEMENTATION_DEFINED,1920x1080,OUTPUT,
                 IMPLEMENTATION_DEFINED,1600x1200,OUTPUT,
                 IMPLEMENTATION_DEFINED,1280x960,OUTPUT,
                 IMPLEMENTATION_DEFINED,1280x720,OUTPUT,
                 IMPLEMENTATION_DEFINED,640x480,OUTPUT,
-                IMPLEMENTATION_DEFINED,640x360,OUTPUT,
                 IMPLEMENTATION_DEFINED,320x240,OUTPUT" />
             <scaler.availableMinFrameDurations value="BLOB,4096x3072,41666666,
                 BLOB,1920x1080,33333333,
@@ -182,21 +175,18 @@
                 BLOB,1280x960,33333333,
                 BLOB,1280x720,33333333,
                 BLOB,640x480,33333333,
-                BLOB,640x360,33333333,
                 BLOB,320x240,33333333,
                 YCbCr_420_888,1920x1080,33333333,
                 YCbCr_420_888,1600x1200,33333333,
                 YCbCr_420_888,1280x960,33333333,
                 YCbCr_420_888,1280x720,33333333,
                 YCbCr_420_888,640x480,33333333,
-                YCbCr_420_888,640x360,33333333,
                 YCbCr_420_888,320x240,33333333,
                 IMPLEMENTATION_DEFINED,1920x1080,33333333,
                 IMPLEMENTATION_DEFINED,1600x1200,33333333,
                 IMPLEMENTATION_DEFINED,1280x960,33333333,
                 IMPLEMENTATION_DEFINED,1280x720,33333333,
                 IMPLEMENTATION_DEFINED,640x480,33333333,
-                IMPLEMENTATION_DEFINED,640x360,33333333,
                 IMPLEMENTATION_DEFINED,320x240,33333333" />
             <scaler.availableStallDurations value="BLOB,4096x3072,41666666,
                                                    BLOB,1920x1080,33333333,
@@ -204,7 +194,6 @@
                                                    BLOB,1280x960,33333333,
                                                    BLOB,1280x720,33333333,
                                                    BLOB,640x480,33333333,
-                                                   BLOB,640x360,33333333,
                                                    BLOB,320x240,33333333" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
@@ -213,7 +202,7 @@
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="200000000"/>
-            <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4208x1.12um 3120x1.12um -->
+            <sensor.info.physicalSize value="4.71,3.49"/> <!-- 4208x1.12um 3120x1.12um -->
             <sensor.info.pixelArraySize value="4208x3118"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.timestampSource value="UNKNOWN"/>
@@ -239,7 +228,6 @@
             <statistics.info.availableLensShadingMapModes value="OFF"/>
             <!-- Tonemap -->
             <tonemap.maxCurvePoints value="1024"/>
-            <tonemap.availableToneMapModes value="FAST,HIGH_QUALITY"/>
             <!-- Flash -->
             <flash.colorTemperature value="0"/>
             <flash.maxEnergy value="0"/>
@@ -249,8 +237,6 @@
             <flash.maxEnergy value="10"/>
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
-            <!-- Edge -->
-            <edge.availableEdgeModes value="OFF"/>
             <!-- Hot Pixel -->
             <hotPixel.availableHotPixelModes value="FAST"/>
             <!-- Noise Reduction -->
