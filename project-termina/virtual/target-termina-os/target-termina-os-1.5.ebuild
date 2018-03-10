@@ -18,6 +18,7 @@ RDEPEND="
 	app-arch/xz-utils
 	app-emulation/lxd
 	chromeos-base/chromeos-bsp-termina
+	chromeos-base/termina_container_tools
 	chromeos-base/termina-lxd-scripts
 	chromeos-base/vm_tools
 	net-fs/nfs-utils
