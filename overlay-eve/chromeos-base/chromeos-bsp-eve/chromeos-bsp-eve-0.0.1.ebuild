@@ -13,7 +13,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="eve-userdebug eve-kvm eve-arcnext"
+IUSE="eve-userdebug eve-kvm eve-arcnext eve-campfire"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
