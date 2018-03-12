@@ -13,12 +13,14 @@ KEYWORDS="*"
 IUSE=""
 
 RDEPEND="
+	dev-util/shflags
 	sys-fs/btrfs-progs
 "
 
 S=${WORKDIR}
 
 src_install() {
+	dobin "${FILESDIR}"/run_container.sh
 	dosbin "${FILESDIR}"/lxd_setup.sh
 	dosbin "${FILESDIR}"/stateful_setup.sh
 }
