@@ -20,20 +20,22 @@ KEYWORDS="~*"
 # TODO(pprabhu, crbug.com/775373) Move virt-what to common VM overlay once that
 # is ready.
 RDEPEND="
-	chromeos-base/shill
 	app-crypt/gnupg
-	app-emulation/virt-what
 	app-emulation/lxc
+	app-emulation/virt-what
 	chromeos-base/chromeos-init
 	chromeos-base/openssh-server-init
+	chromeos-base/shill
+	dev-python/pyyaml
 	net-analyzer/fping
+	net-firewall/iptables
 	net-ftp/tftp-hpa
 	net-misc/bridge-utils
 	net-misc/dhcp
 	net-misc/rsync
-	sys-apps/file
-	dev-python/pyyaml
 	sys-apps/ethtool
+	sys-apps/file
+	sys-fs/e2fsprogs
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
