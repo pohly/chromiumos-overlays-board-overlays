@@ -200,7 +200,7 @@
             <sensor.info.colorFilterArrangement value="BGGR"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="4,2020"/>
             <sensor.info.maxFrameDuration value="66666666"/>
-            <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4224x1.12um 3136x1.12um -->
+            <sensor.info.physicalSize value="3.684,2.763"/>
             <sensor.info.pixelArraySize value="2592x1944"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.timestampSource value="REALTIME"/>
@@ -449,7 +449,7 @@
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="66666666"/>
-            <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4224x1.12um 3136x1.12um -->
+            <sensor.info.physicalSize value="2.840,2.150"/>
             <sensor.info.pixelArraySize value="1600x1200"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.timestampSource value="REALTIME"/>
