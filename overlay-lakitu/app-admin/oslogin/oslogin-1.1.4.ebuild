@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit pam flag-o-matic
+inherit eutils pam flag-o-matic
 
 DESCRIPTION="Google Compute Engine OS Login libraries, applications and configurations."
 HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages/tree/master/google_compute_engine_oslogin"

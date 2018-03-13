@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit toolchain-funcs versionator
+inherit eutils toolchain-funcs versionator
 
 DESCRIPTION="Userspace utils and init scripts for the AppArmor application security system"
 HOMEPAGE="http://apparmor.net/"
