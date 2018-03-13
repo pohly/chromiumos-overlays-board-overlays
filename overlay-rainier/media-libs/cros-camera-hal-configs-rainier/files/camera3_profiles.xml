@@ -29,7 +29,7 @@
             <control.aeLockAvailable value="FALSE"/>
             <control.aeAvailableTargetFpsRanges value="15,30,30,30,60,60"/>
             <control.aeCompensationRange value="0,0"/>
-            <control.aeCompensationStep value="0,0"/>
+            <control.aeCompensationStep value="0,1"/>
             <control.afAvailableModes value="OFF"/>
             <control.availableEffects value="OFF"/>
             <control.awbAvailableModes value="AUTO"/>
@@ -41,13 +41,13 @@
             <jpeg.maxSize value="7558272"/>  <!-- 2592*1944*1.5 -->
             <jpeg.availableThumbnailSizes value="0,0,160,120,320,180,320,240"/> <!-- INCREASING ORDER -->
             <!-- Lens Info-->
-            <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableApertures value="2.0"/>
+            <lens.info.availableFilterDensities value="0.0"/> <!-- 0 means unsupported -->
+            <lens.info.availableFocalLengths value="2.35"/>
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
-            <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <!--lens.info.minimumFocusDistance value="0.1"/ --> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.shadingMapSize value="0,0"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.hyperfocalDistance value="0.0"/> <!-- 0.0f represents focusing at infinity -->
+            <lens.info.minimumFocusDistance value="0.0"/> <!-- 0 means fixed focus  -->
+            <lens.info.shadingMapSize value="0,0"/> <!-- TODO: rkisp1 support 17x17 LSC map -->
             <lens.info.focusDistanceCalibration value="APPROXIMATE"/>
             <!-- Lens -->
             <lens.facing value="BACK"/>
@@ -67,8 +67,6 @@
                 control.aeMode,
                 control.aeTargetFpsRange,
                 control.afMode,
-                control.aeRegions,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -77,7 +75,6 @@
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
-                edge.mode,
                 flash.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
@@ -106,7 +103,6 @@
                 control.aeTargetFpsRange,
                 control.aePrecaptureTrigger,
                 control.afMode,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -119,7 +115,6 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
-                edge.mode,
                 flash.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
@@ -176,28 +171,28 @@
                 BLOB,1920x1080,33333333,
                 BLOB,1600x1200,33333333,
                 BLOB,1280x960,16666666,
-                BLOB,1280x720,33333333,
-                BLOB,640x480,33333333,
-                BLOB,320x240,33333333,
+                BLOB,1280x720,16666666,
+                BLOB,640x480,16666666,
+                BLOB,320x240,16666666,
                 YCbCr_420_888,1920x1080,33333333,
                 YCbCr_420_888,1600x1200,33333333,
                 YCbCr_420_888,1280x960,16666666,
-                YCbCr_420_888,1280x720,33333333,
-                YCbCr_420_888,640x480,33333333,
-                YCbCr_420_888,320x240,33333333,
+                YCbCr_420_888,1280x720,16666666,
+                YCbCr_420_888,640x480,16666666,
+                YCbCr_420_888,320x240,16666666,
                 IMPLEMENTATION_DEFINED,1920x1080,33333333,
                 IMPLEMENTATION_DEFINED,1600x1200,33333333,
                 IMPLEMENTATION_DEFINED,1280x960,16666666,
-                IMPLEMENTATION_DEFINED,1280x720,33333333,
-                IMPLEMENTATION_DEFINED,640x480,33333333,
-                IMPLEMENTATION_DEFINED,320x240,33333333" />
+                IMPLEMENTATION_DEFINED,1280x720,16666666,
+                IMPLEMENTATION_DEFINED,640x480,16666666,
+                IMPLEMENTATION_DEFINED,320x240,16666666" />
             <scaler.availableStallDurations value="BLOB,2592x1944,33333333,
                                                    BLOB,1920x1080,33333333,
                                                    BLOB,1600x1200,33333333,
                                                    BLOB,1280x960,16666666,
-                                                   BLOB,1280x720,33333333,
-                                                   BLOB,640x480,33333333,
-                                                   BLOB,320x240,33333333" />
+                                                   BLOB,1280x720,16666666,
+                                                   BLOB,640x480,16666666,
+                                                   BLOB,320x240,16666666" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
             <sensor.info.activeArraySize value="0,0,2592,1944"/>
@@ -205,10 +200,10 @@
             <sensor.info.colorFilterArrangement value="BGGR"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="4,2020"/>
             <sensor.info.maxFrameDuration value="66666666"/>
-            <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4224x1.12um 3136x1.12um -->
+            <sensor.info.physicalSize value="3.684,2.763"/>
             <sensor.info.pixelArraySize value="2592x1944"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <sensor.info.timestampSource value="UNKNOWN"/>
+            <sensor.info.timestampSource value="REALTIME"/>
             <!-- Sensor -->
             <sensor.baseGainFactor value="0,1"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.blackLevelPattern value="0,0,0,0"/>
@@ -241,8 +236,6 @@
             <flash.maxEnergy value="10"/>
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
-            <!-- Edge -->
-            <edge.availableEdgeModes value="OFF"/>
             <!-- Hot Pixel -->
             <hotPixel.availableHotPixelModes value="FAST"/>
             <!-- Noise Reduction -->
@@ -294,7 +287,7 @@
             <control.aeLockAvailable value="FALSE"/>
             <control.aeAvailableTargetFpsRanges value="15,30,30,30"/>
             <control.aeCompensationRange value="0,0"/>
-            <control.aeCompensationStep value="0,0"/>
+            <control.aeCompensationStep value="0,1"/>
             <control.afAvailableModes value="OFF"/>
             <control.availableEffects value="OFF"/>
             <control.awbAvailableModes value="AUTO"/>
@@ -306,13 +299,13 @@
             <jpeg.maxSize value="2880000"/>  <!-- 1600*1200*1.5 -->
             <jpeg.availableThumbnailSizes value="0,0,160,120,320,180,320,240"/> <!-- INCREASING ORDER -->
             <!-- Lens Info-->
-            <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="2.04,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableApertures value="2.4"/>
+            <lens.info.availableFilterDensities value="0.0"/> <!-- 0 means unsupported -->
+            <lens.info.availableFocalLengths value="2.1"/>
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
-            <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <!--lens.info.minimumFocusDistance value="0.1"/ --> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.shadingMapSize value="0,0"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.hyperfocalDistance value="0.0"/> <!-- 0.0f represents focusing at infinity -->
+            <lens.info.minimumFocusDistance value="0.0"/> <!-- 0 means fixed focus  -->
+            <lens.info.shadingMapSize value="0,0"/> <!-- TODO: rkisp1 support 17x17 LSC map -->
             <lens.info.focusDistanceCalibration value="APPROXIMATE"/>
             <!-- Lens -->
             <lens.facing value="FRONT"/>
@@ -332,8 +325,6 @@
                 control.aeMode,
                 control.aeTargetFpsRange,
                 control.afMode,
-                control.aeRegions,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -342,7 +333,6 @@
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
-                edge.mode,
                 flash.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
@@ -371,7 +361,6 @@
                 control.aeTargetFpsRange,
                 control.aePrecaptureTrigger,
                 control.afMode,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -384,7 +373,6 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
-                edge.mode,
                 flash.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
@@ -461,10 +449,10 @@
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="66666666"/>
-            <sensor.info.physicalSize value="5.5,4.5"/> <!-- 4224x1.12um 3136x1.12um -->
+            <sensor.info.physicalSize value="2.840,2.150"/>
             <sensor.info.pixelArraySize value="1600x1200"/>
             <sensor.info.whiteLevel value="0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <sensor.info.timestampSource value="UNKNOWN"/>
+            <sensor.info.timestampSource value="REALTIME"/>
             <!-- Sensor -->
             <sensor.baseGainFactor value="0,1"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.blackLevelPattern value="0,0,0,0"/>
@@ -497,8 +485,6 @@
             <flash.maxEnergy value="10"/>
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
-            <!-- Edge -->
-            <edge.availableEdgeModes value="OFF"/>
             <!-- Hot Pixel -->
             <hotPixel.availableHotPixelModes value="FAST"/>
             <!-- Noise Reduction -->
