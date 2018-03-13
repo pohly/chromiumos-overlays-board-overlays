@@ -301,7 +301,7 @@
             <!-- Lens Info-->
             <lens.info.availableApertures value="2.4"/>
             <lens.info.availableFilterDensities value="0.0"/> <!-- 0 means unsupported -->
-            <lens.info.availableFocalLengths value="2.0"/>
+            <lens.info.availableFocalLengths value="2.1"/>
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
             <lens.info.hyperfocalDistance value="0.0"/> <!-- 0.0f represents focusing at infinity -->
             <lens.info.minimumFocusDistance value="0.0"/> <!-- 0 means fixed focus  -->
