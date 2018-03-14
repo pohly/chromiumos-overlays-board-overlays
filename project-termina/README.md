@@ -8,12 +8,16 @@ Currently, these are `tatl` (`x86_64`) and `tael` (`arm64`).
 ## Packages
 
 ### `chromeos-base/chromeos-bsp-termina`
-Installs upstart .conf files to bring up the system to be able to start
-a container.
+Installs files required for basic VM functionality.
 
 ### `chromeos-base/termina-auth-config`
 Sets up PAM to allow root/chronos passwordless login. By default this is only
-installed by `target-termina-os-dev`.
+installed by `target-termina-os-dev`, meaning that only dev or test images will
+get this functionality.
+
+### `chromeos-base/termina-lxd-scripts`
+Installs convenience wrapper scripts for setting up the stateful disk image,
+lxd's initial configuration, and for starting a container with lxd.
 
 ### `virtual/target-os*`
 These override the normal Chromium OS targets to either no-op (e.g. the factory
@@ -26,23 +30,34 @@ developers will likely want to include `target-termina-os-dev` as well to
 enable serial console support and allow login.
 
 ## Building
-`build_image` is not well suited for putting together a minimal rootfs image,
-so for now we are piggybacking on the `package_to_container` script to put
-together a squashfs rootfs image. TODO: better build script
+Termina images are currently repacked from a normal Chromium OS disk image. An
+example invocation of the repacking script is below.
 
-Example:
 ```sh
 export BOARD=tatl
 ./setup_board --board=${BOARD}
 ./build_packages --board=${BOARD} --nowithautotest
-./package_to_container --board=${BOARD} --package target-termina-os --argv dontcare --extra target-termina-os-dev --name ${BOARD}-image
+./build_image --board=${BOARD} --noenable_rootfs_verification test
+./termina_build_image --image=../build/images/${BOARD}/latest/chromiumos_test_image.bin --output=${BOARD}
 ```
 
+At this point, the output directory will have (among others), the
+following files:
+* `vm_kernel` - A kernel suitable booting with crosvm.
+* `vm_rootfs.img` - The rootfs for the VM.
+
 ## Running
-Copy the kernel and squashfs image to the DUT. The upstart `container` job will
-attempt to execute a container that's provided over a 9p share. This is still
-WIP.
+Please refer to crosvm documentation on how to run the kernel and rootfs.
+
+These images can also be started with `concierge` via `concierge_client`. This
+mirrors their usage in a production system. To use a custom image with
+concierge:
+
 ```sh
-export CONTAINER=<path to container>
-lkvm run -d ${BOARD}-image.sqsh --9p ${CONTAINER},container_rootfs -k ${BOARD}-kernel
+# Copy the rootfs and kernel to a working directory on the device, such as
+# /usr/local/tatl.
+# Then, make this visible to concierge.
+mkdir /run/imageloader/cros-termina/99999.0.0
+mount --bind /usr/local/tatl /run/imageloader/cros-termina/99999.0.0
+restart vm_concierge
 ```
