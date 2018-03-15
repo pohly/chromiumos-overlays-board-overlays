@@ -6,4 +6,5 @@
 
 modify_kernel_command_line() {
   echo "i915.preliminary_hw_support=1" >> "$1"
+  echo "disablevmx=off" >> "$1"
 }
