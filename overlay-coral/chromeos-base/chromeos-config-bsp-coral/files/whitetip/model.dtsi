@@ -1,0 +1,83 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	whitetip: whitetip {
+		powerd-prefs = "robo";
+		test-label = "robo";
+		audio {
+			main {
+				audio-type = <&audio_type_1mic>;
+				cras-config-dir = "whitetip";
+			};
+		};
+		thermal {
+			dptf-dv = "whitetip/dptf.dv";
+		};
+		whitelabels {
+			ctl {
+				brand-code = "HRIZ";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALE";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-2 {
+				brand-code = "LOGH";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-3 {
+				brand-code = "IULQ";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-4 {
+				brand-code = "LOGI";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-5 {
+				brand-code = "TPHN";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-6 {
+				brand-code = "URZD";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-7 {
+				brand-code = "QTMI";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-8 {
+				brand-code = "QHTT";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-9 {
+				brand-code = "FGNZ";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-wt-loem-10 {
+				brand-code = "JLRH";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+		};
+	};
+};

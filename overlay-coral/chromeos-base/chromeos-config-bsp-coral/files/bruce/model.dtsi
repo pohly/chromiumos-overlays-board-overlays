@@ -1,0 +1,41 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	bruce: bruce {
+		brand-code = "ACBF";
+		powerd-prefs = "bruce";
+		test-label = "bruce";
+		submodels {
+			bruce_1mic: bruce-1mic {
+				audio {
+					main {
+						audio-type = <&audio_type_1mic>;
+						cras-config-dir = "bruce";
+					};
+				};
+			};
+			bruce_2mic: bruce-2mic {
+				audio {
+					main {
+						card = "bxtda7219max";
+						cras-config-dir = "bruce";
+						ucm-suffix = "2micBruce360";
+						volume = "${cras-config-dir}/audio/cras-config/${card}";
+						dsp-ini = "${cras-config-dir}/audio/cras-config/dsp.ini";
+						hifi-conf = "${cras-config-dir}/audio/ucm-config/2mic/HiFi";
+						alsa-conf = "${cras-config-dir}/audio/ucm-config/2mic/${card}.conf";
+					};
+				};
+			};
+		};
+		thermal {
+			/* With the assumption that both can share the same dptf file */
+			dptf-dv = "blue/dptf.dv";
+		};
+	};
+};

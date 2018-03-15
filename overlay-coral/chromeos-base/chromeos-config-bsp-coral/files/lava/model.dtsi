@@ -1,0 +1,24 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	lava: lava {
+		brand-code = "SHAN";
+		powerd-prefs = "lava";
+		test-label = "lava";
+		audio {
+			main {
+				audio-type = <&audio_type_1mic>;
+				cras-config-dir = "lava";
+			};
+		};
+		thermal {
+			/* Could also point to astronaut/dptf.dv */
+			dptf-dv = "lava/dptf.dv";
+		};
+	};
+};

@@ -1,0 +1,23 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	astronaut: astronaut {
+		brand-code = "CTIE";
+		powerd-prefs = "astronaut";
+		test-label = "astronaut";
+		audio {
+			main {
+				audio-type = <&audio_type_1mic>;
+				cras-config-dir = "astronaut";
+			};
+		};
+		thermal {
+			dptf-dv = "astronaut/dptf.dv";
+		};
+	};
+};

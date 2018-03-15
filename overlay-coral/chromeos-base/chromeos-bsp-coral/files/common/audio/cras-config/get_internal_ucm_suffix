@@ -1,0 +1,30 @@
+#!/bin/sh
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This searches /usr/share/alsa/ucm for the most specific ucm audio config
+# available.
+# E.g. SKU specific
+#   santa.2
+# E.g. Model specific
+#   santa
+# E.g. Default
+#   [empty]
+
+base_path='/usr/share/alsa/ucm/bxtda7219max.'
+model="$(mosys platform model)"
+sku="$(mosys platform sku)"
+result=''
+
+sku_suffix="${model}.${sku}"
+model_suffix="${model}"
+
+
+if [ -d "${base_path}${sku_suffix}" ]; then
+  result="${sku_suffix}"
+elif [ -d "${base_path}${model_suffix}" ]; then
+  result="${model_suffix}"
+fi
+
+echo "${result}"

@@ -1,0 +1,29 @@
+#!/bin/sh
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This searches /etc/cras for the most specific cras audio config
+# available.
+# E.g. SKU specific
+#   /etc/cras/santa/2
+# E.g. Model specific
+#   /etc/cras/santa
+# E.g. Default
+#   /etc/cras
+
+base_path='/etc/cras'
+model="$(mosys platform model)"
+sku="$(mosys platform sku)"
+result="${base_path}"
+
+sku_dir="${base_path}/${model}/${sku}"
+model_dir="${base_path}/${model}"
+
+if [ -d "${sku_dir}" ]; then
+  result="${sku_dir}"
+elif [ -d "${model_dir}" ]; then
+  result="${model_dir}"
+fi
+
+echo "${result}"

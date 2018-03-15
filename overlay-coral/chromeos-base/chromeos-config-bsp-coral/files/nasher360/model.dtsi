@@ -1,0 +1,46 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	nasher360: nasher360 {
+		brand-code = "INUT";
+		powerd-prefs = "nasher";
+		test-label = "nasher360";
+		submodels {
+			nasher360_1mic: nasher {
+				audio {
+					main {
+						card = "bxtda7219max";
+						cras-config-dir = "nasher";
+						ucm-suffix = "nasher";
+						volume = "${cras-config-dir}/audio/cras-config/${card}";
+						dsp-ini = "${cras-config-dir}/audio/cras-config/dsp.ini";
+						hifi-conf = "${cras-config-dir}/audio/ucm-config/HiFi";
+						alsa-conf = "${cras-config-dir}/audio/ucm-config/${card}.conf";
+					};
+				};
+			};
+			nasher360_2mic: nasher360-2mic {
+				audio {
+					main {
+						card = "bxtda7219max";
+						cras-config-dir = "nasher";
+						ucm-suffix = "2micNasher360";
+						volume = "${cras-config-dir}/audio/cras-config/${card}";
+						dsp-ini = "${cras-config-dir}/audio/cras-config/dsp.ini";
+						hifi-conf = "${model}/audio/ucm-config/2mic/HiFi";
+						alsa-conf = "${model}/audio/ucm-config/2mic/${card}.conf";
+					};
+				};
+			};
+		};
+		thermal {
+			/* Could also point to nasher/dptf.dv */
+			dptf-dv = "nasher360/dptf.dv";
+		};
+	};
+};

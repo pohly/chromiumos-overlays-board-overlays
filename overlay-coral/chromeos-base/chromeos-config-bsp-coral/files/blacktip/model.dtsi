@@ -1,0 +1,97 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	blacktip: blacktip {
+		powerd-prefs = "blacktip";
+		test-label = "blacktip";
+		submodels {
+			blacktip_1mic: blacktip-1mic {
+				audio {
+					main {
+						audio-type = <&audio_type_1mic>;
+						cras-config-dir = "blacktip";
+					};
+				};
+			};
+			blacktip_2mic: blacktip-2mic {
+				audio {
+					main {
+						audio-type = <&audio_type_2mic>;
+						cras-config-dir = "blacktip";
+					};
+				};
+			};
+		};
+		thermal {
+			/* Could also point to astronaut/dptf.dv */
+			dptf-dv = "blacktip/dptf.dv";
+		};
+		whitelabels {
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem1 {
+				brand-code = "WXZG";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem2 {
+				brand-code = "RIKG";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem3 {
+				brand-code = "EDHM";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem4 {
+				brand-code = "PWFL";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem5 {
+				brand-code = "XBWL";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem6 {
+				brand-code = "WNNA";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem7 {
+				brand-code = "PCBV";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem8 {
+				brand-code = "VXVH";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem9 {
+				brand-code = "QPMP";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+			// TODO(sie): Replace with correct loem name
+			to-be-determined-bt-loem10 {
+				brand-code = "BMTG";
+				// TODO(sie): Replace with correct mp key-id for loem
+				key-id = "CORALC";
+			};
+		};
+	};
+};

@@ -1,0 +1,28 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	nasher: nasher {
+		brand-code = "CPPT";
+		powerd-prefs = "nasher";
+		test-label = "nasher";
+		audio {
+			main {
+				card = "bxtda7219max";
+				cras-config-dir = "nasher";
+				ucm-suffix = "nasher";
+				volume = "${cras-config-dir}/audio/cras-config/${card}";
+				dsp-ini = "${cras-config-dir}/audio/cras-config/dsp.ini";
+				hifi-conf = "${cras-config-dir}/audio/ucm-config/HiFi";
+				alsa-conf = "${cras-config-dir}/audio/ucm-config/${card}.conf";
+			};
+		};
+		thermal {
+			dptf-dv = "nasher/dptf.dv";
+		};
+	};
+};

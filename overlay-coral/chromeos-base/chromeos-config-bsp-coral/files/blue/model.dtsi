@@ -1,0 +1,23 @@
+/*
+ * Copyright 2017 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	blue: blue {
+		brand-code = "VVUC";
+		powerd-prefs = "blue";
+		test-label = "blue";
+		audio {
+			main {
+				audio-type = <&audio_type_1mic>;
+				cras-config-dir = "astronaut";
+			};
+		};
+		thermal {
+			dptf-dv = "blue/dptf.dv";
+		};
+	};
+};
