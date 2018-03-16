@@ -3,7 +3,7 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="5923868cc36379039823cf1fb836b70ec866c41d"
+CROS_WORKON_COMMIT="02da080491857ed2503b5f243e791ccebbd4d1b2"
 CROS_WORKON_TREE="21765f508a01bdde3a39bca83734ca604e70af95"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
@@ -22,20 +22,22 @@ KEYWORDS="*"
 # TODO(pprabhu, crbug.com/775373) Move virt-what to common VM overlay once that
 # is ready.
 RDEPEND="
-	chromeos-base/shill
 	app-crypt/gnupg
-	app-emulation/virt-what
 	app-emulation/lxc
+	app-emulation/virt-what
 	chromeos-base/chromeos-init
 	chromeos-base/openssh-server-init
+	chromeos-base/shill
+	dev-python/pyyaml
 	net-analyzer/fping
+	net-firewall/iptables
 	net-ftp/tftp-hpa
 	net-misc/bridge-utils
 	net-misc/dhcp
 	net-misc/rsync
-	sys-apps/file
-	dev-python/pyyaml
 	sys-apps/ethtool
+	sys-apps/file
+	sys-fs/e2fsprogs
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
