@@ -1,0 +1,33 @@
+/*
+ * Copyright 2018 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	epaulette: epaulette {
+		// TODO(sie): Add correct brand code
+		// brand-code = "";
+		powerd-prefs = "epaulette";
+		test-label = "epaulette";
+		audio {
+			main {
+				card = "bxtda7219max";
+				ucm-suffix = "2micEpaulette";
+				cras-config-dir="epaulette";
+				// TODO(epaulette-odm): Modify the current conf files as
+				//     required, they are copies from other 2-mic model.
+				volume = "${model}/audio/cras-config/${card}";
+				dsp-ini = "${model}/audio/cras-config/dsp.ini";
+				hifi-conf = "${model}/audio/ucm-config/2mic/HiFi";
+				alsa-conf = "${model}/audio/ucm-config/2mic/${card}.conf";
+			};
+		};
+		thermal {
+			// TODO(epaulette-odm): Add validated dptf.dv file into
+			//     BSP, it's currently using inherited version from the parent.
+			dptf-dv = "epaulette/dptf.dv";
+		};
+	};
+};
