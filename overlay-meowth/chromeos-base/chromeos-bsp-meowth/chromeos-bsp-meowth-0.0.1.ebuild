@@ -30,6 +30,13 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
+	# Install updated hammer keyboard keymap.
+	# It should probbaly go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 bit boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/61-hammer-keyboard.hwdb"
+
 	# Install a rule tagging keyboard as internal and having updated layout
 	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
 }
