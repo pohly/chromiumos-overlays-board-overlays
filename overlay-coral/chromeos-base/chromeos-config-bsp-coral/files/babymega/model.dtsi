@@ -1,0 +1,26 @@
+/*
+ * Copyright 2018 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	babymega: babymega {
+		// TODO(OEM or SIE): Add correct brand code after applying for one.
+		// brand-code = "";
+		powerd-prefs = "babymega";
+		test-label = "babymega";
+		audio {
+			main {
+				audio-type = <&audio_type_1mic>;
+				cras-config-dir = "babymega";
+			};
+		};
+		thermal {
+			// TODO(ODM): Add validated dptf.dv file into BSP, it's
+			// currently using inherited version from the parent.
+			dptf-dv = "babymega/dptf.dv";
+		};
+	};
+};
