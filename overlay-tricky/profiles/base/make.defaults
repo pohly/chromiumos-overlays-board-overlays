@@ -16,4 +16,7 @@ USE="${USE} allow_consumer_kiosk"
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
 
+# Use Intel wifi stack, disable stock cfg80211
+USE="${USE} intelwifi38"
+
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7260 ibt-hw"
