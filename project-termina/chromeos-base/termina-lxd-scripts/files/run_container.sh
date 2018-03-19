@@ -75,6 +75,7 @@ main() {
     die "--container_name is required"
   fi
 
+  local token_path="/run/tokens/${FLAGS_container_name}_token"
   if ! container_exists "${FLAGS_container_name}"; then
     if [ -z "${FLAGS_lxd_remote}" ]; then
       die "Container does not already exist; you must specify --lxd_remote"
@@ -86,10 +87,25 @@ main() {
       lxc remote remove "google"
     fi
 
+    if [ -z "${FLAGS_container_token}" ]; then
+      warning "container token not supplied; garcon may not function"
+    fi
+
     lxc remote add "google" "${FLAGS_lxd_remote}" --protocol=simplestreams
     lxc launch "google:${FLAGS_lxd_image}" "${FLAGS_container_name}"
+    echo -n "${FLAGS_container_token}" > "${token_path}"
+    lxc config device add "${FLAGS_container_name}" \
+                          container_token \
+                          disk \
+                          source="${token_path}" \
+                          path="/dev/.container_token"
   else
     if ! container_running "${FLAGS_container_name}"; then
+      if [ -z "${FLAGS_container_token}" ]; then
+        warning "container token not supplied; garcon may not function"
+      fi
+
+      echo -n "${FLAGS_container_token}" > "${token_path}"
       lxc start "${FLAGS_container_name}"
     fi
   fi
