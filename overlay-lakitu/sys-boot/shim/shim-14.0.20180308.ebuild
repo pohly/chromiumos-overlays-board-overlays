@@ -4,7 +4,7 @@
 
 EAPI=5
 
-GIT_COMMIT_ID="02e2fc61bd2fb7f0045f15db105de7b8ace3029f"
+GIT_COMMIT_ID="79cdb2a215de2ace7d1bf0a294165a04b726c70a"
 SRC_URI="https://github.com/rhboot/shim/archive/${GIT_COMMIT_ID}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="*"
 
@@ -21,10 +21,6 @@ DEPEND="dev-libs/openssl
 	sys-boot/gnu-efi"
 
 S="${WORKDIR}/${PN}-${GIT_COMMIT_ID}"
-
-src_prepare() {
-	epatch "${FILESDIR}/shim-14.0.20171219-empty-localoptions.patch"
-}
 
 src_compile() {
 	emake ARCH="x86_64" \
