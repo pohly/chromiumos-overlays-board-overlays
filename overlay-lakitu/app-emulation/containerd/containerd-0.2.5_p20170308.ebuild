@@ -31,6 +31,7 @@ S=${WORKDIR}/${P}/src/${EGO_PN}
 
 src_prepare() {
 	epatch "${FILESDIR}/0.2.3_p20170131-use-GO-cross-compiler.patch"
+	epatch "${FILESDIR}/0.2.5_p20170308-delete-after-chan-close.patch"
 }
 
 src_compile() {
