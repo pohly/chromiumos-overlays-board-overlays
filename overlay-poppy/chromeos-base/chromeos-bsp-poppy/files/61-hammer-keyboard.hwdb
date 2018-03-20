@@ -6,8 +6,6 @@
 # "Assistant" key.
 #
 evdev:input:b0003v18D1p5022*
- KEYBOARD_KEY_ffd10018=assistant
- KEYBOARD_KEY_00070068=controlpanel
-evdev:input:b0003v18D1p502d*
+evdev:input:b0003v18D1p502D*
  KEYBOARD_KEY_ffd10018=assistant
  KEYBOARD_KEY_00070068=controlpanel
