@@ -42,6 +42,7 @@ profiles:
     garcon:
       path: /opt/google/garcon
       source: /opt/google/garcon
+      type: disk
     host-ip:
       path: /dev/.host_ip
       source: /run/host_ip
