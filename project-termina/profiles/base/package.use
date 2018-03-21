@@ -1,3 +1,4 @@
 # Skip the large dbus libraries from libchrome
 chromeos-base/libchrome -dbus
 chromeos-base/libbrillo -dbus
+sys-fs/btrfs-progs -convert
