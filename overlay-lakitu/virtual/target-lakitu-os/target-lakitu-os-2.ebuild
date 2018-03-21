@@ -10,7 +10,7 @@ HOMEPAGE="http://dev.chromium.org/"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor criu uefi_bootloaders"
+IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor criu uefi_bootloaders stackdriver_alpha"
 
 LAKITU_RDEPEND="
 	bootchart? ( app-benchmarks/bootchart )
@@ -21,6 +21,7 @@ LAKITU_RDEPEND="
 	)
 	watchdog? ( sys-apps/daisydog )
 	app-admin/compute-image-packages
+	stackdriver_alpha? ( app-admin/stackdriver )
 	app-admin/sudo
 	app-admin/toolbox
 	app-arch/tar
