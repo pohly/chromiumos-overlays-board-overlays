@@ -45,6 +45,7 @@ RDEPEND="${RDEPEND}
 	chromeos-base/whining
 	sys-apps/moblab-site-utils
 	sys-apps/mobmonitor
+	sys-apps/mobmonitor-ui
 "
 
 DEPEND=""
