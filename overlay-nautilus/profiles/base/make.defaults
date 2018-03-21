@@ -44,5 +44,5 @@ USE="${USE} internal_stylus"
 INPUT_DEVICES="wacom"
 
 # Comment these lines to disable the serial port.
-TTY_CONSOLE="ttyS0"
-USE="${USE} pcserial"
+#TTY_CONSOLE="ttyS0"
+#USE="${USE} pcserial"
