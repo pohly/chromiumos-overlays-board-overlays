@@ -11,5 +11,4 @@ USE=""
 
 USE="${USE} device_tree"
 USE="${USE} hardfp"
-USE="${USE} kernel-4_4"
 USE="${USE} neon"
