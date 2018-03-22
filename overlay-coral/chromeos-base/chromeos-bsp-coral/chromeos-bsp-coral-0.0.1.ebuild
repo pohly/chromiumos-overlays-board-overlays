@@ -16,9 +16,7 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="
-	chromeos-base/chromeos-bsp-baseboard-coral
-"
+RDEPEND="chromeos-base/chromeos-bsp-baseboard-coral"
 DEPEND="
 	${RDEPEND}
 	chromeos-base/chromeos-config
@@ -39,7 +37,6 @@ src_install() {
 		insinto "/etc/bluetooth/models"
 		newins "${D}${CROS_MODELS_DIR}/${model}/bluetooth/main.conf" "${model}.conf"
 	done
-
 
 	# TODO(pberny/shapiroc): PowerD config is done differently from other configs.
 	#                        it should not have a separate folder for common

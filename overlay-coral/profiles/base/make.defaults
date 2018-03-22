@@ -20,6 +20,9 @@ USE="${USE} keyboard_includes_side_buttons"
 # system is converted to tablet mode while it's suspended.
 USE="${USE} -touchpad_wakeup"
 
+# Enable unibuild
+USE="${USE} unibuild"
+
 # All firmwares to build from the EC code base
 EC_FIRMWARE="coral"
 
