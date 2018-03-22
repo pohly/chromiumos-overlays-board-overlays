@@ -17,9 +17,7 @@ IUSE="eve-userdebug eve-kvm eve-arcnext eve-campfire"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="
-	chromeos-base/genius-app-data-eve
-	chromeos-base/u2fd"
+RDEPEND="chromeos-base/genius-app-data-eve"
 
 DEPEND="${RDEPEND}"
 
