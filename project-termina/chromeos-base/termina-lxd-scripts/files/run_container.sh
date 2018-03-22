@@ -58,12 +58,6 @@ container_running() {
   lxc info "${container_name}" 2>&1 | grep -q "Status: Running"
 }
 
-remote_exists() {
-  local remote_name="$1"
-
-  lxc image list "${remote_name}:" >/dev/null 2>&1
-}
-
 main() {
   # TODO(smbarber): Remove once setup flow is finalized. Use this option
   # to test usage of run_container.sh.
@@ -83,9 +77,7 @@ main() {
       die "Container does not already exist; you must specify --lxd_image"
     fi
 
-    if remote_exists "google"; then
-      lxc remote remove "google"
-    fi
+    lxc remote remove "google" >/dev/null 2>&1 || true
 
     if [ -z "${FLAGS_container_token}" ]; then
       warning "container token not supplied; garcon may not function"
