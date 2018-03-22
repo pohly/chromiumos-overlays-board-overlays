@@ -7,10 +7,10 @@ CHROMEOS_KERNEL_SPLITCONFIG="chromeos-intel-pineview"
 LINUX_FIRMWARE=""
 USE=""
 
-LINUX_FIRMWARE="${LINUX_FIRMWARE} adsp_apl"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} adsp_apl adsp_glk"
 
 USE="${USE} kernel-4_14"
-USE="${USE} apl_lpe intel_lpe"
+USE="${USE} apl_lpe glk_lpe intel_lpe"
 
 # Disable ACPI AC device and use USB PD power supply driver
 USE="${USE} acpi_ac_off"
