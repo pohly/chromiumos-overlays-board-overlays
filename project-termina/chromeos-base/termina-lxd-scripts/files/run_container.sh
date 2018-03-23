@@ -85,7 +85,7 @@ main() {
 
     lxc remote add "google" "${FLAGS_lxd_remote}" --protocol=simplestreams
     lxc launch "google:${FLAGS_lxd_image}" "${FLAGS_container_name}"
-    echo -n "${FLAGS_container_token}" > "${token_path}"
+    printf "%s" "${FLAGS_container_token}" > "${token_path}"
     lxc config device add "${FLAGS_container_name}" \
                           container_token \
                           disk \
@@ -97,7 +97,7 @@ main() {
         warning "container token not supplied; garcon may not function"
       fi
 
-      echo -n "${FLAGS_container_token}" > "${token_path}"
+      printf "%s" "${FLAGS_container_token}" > "${token_path}"
       lxc start "${FLAGS_container_name}"
     fi
   fi
