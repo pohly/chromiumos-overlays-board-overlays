@@ -34,6 +34,10 @@ USE="${USE} arc"
 # Add keyboard
 USE="${USE} keyboard_includes_side_buttons"
 
+# Disable touchpad wakeup since it can't be turned off dynamically when the
+# system is converted to tablet mode while it's suspended.
+USE="${USE} -touchpad_wakeup"
+
 # Add Touchview to get chromeos-accelerometer-init.
 USE="${USE} touchview"
 
