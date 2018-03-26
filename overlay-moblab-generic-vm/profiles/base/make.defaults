@@ -11,3 +11,6 @@ USE="${USE} -buffet"
 
 LINUX_FIRMWARE="-*"
 VIDEO_CARDS="-* llvmpipe"
+
+# Include the kernel in the base image.
+USE="${USE} include_vmlinuz"
