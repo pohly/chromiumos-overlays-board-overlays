@@ -26,6 +26,7 @@ RDEPEND="
 	chromeos-base/chromeos-init
 	chromeos-base/openssh-server-init
 	chromeos-base/shill
+	dev-python/python-dateutil
 	dev-python/pyyaml
 	net-analyzer/fping
 	net-firewall/iptables
