@@ -19,6 +19,16 @@
         "size_min": "4096 MiB"
       }
     ],
+    "usb": [
+      {
+        "num": 5,
+        "size": "2 MiB"
+      },
+      {
+        "num": 3,
+        "size": "2300 MiB"
+      }
+    ],
     # Used for factory install images. No need to adjust fs size or partition
     # size since these do not need more space.
     "factory_install": [
