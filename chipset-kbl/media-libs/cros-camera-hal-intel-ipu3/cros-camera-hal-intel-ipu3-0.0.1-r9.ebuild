@@ -29,6 +29,7 @@ DEPEND="${RDEPEND}
 	media-libs/cros-camera-libcamera_common
 	media-libs/cros-camera-libcamera_jpeg
 	media-libs/cros-camera-libcamera_metadata
+	media-libs/cros-camera-libcamera_v4l2_device
 	media-libs/libyuv
 	sys-kernel/linux-headers
 	virtual/jpeg:0
