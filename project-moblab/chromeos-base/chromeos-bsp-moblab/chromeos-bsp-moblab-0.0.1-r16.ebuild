@@ -3,7 +3,7 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="0d0966f15542dca22c1538dd5af0774b96abcfcd"
+CROS_WORKON_COMMIT="c65fa4701d560257375951009cc60d5b1a1b9c11"
 CROS_WORKON_TREE="21765f508a01bdde3a39bca83734ca604e70af95"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
@@ -28,6 +28,7 @@ RDEPEND="
 	chromeos-base/chromeos-init
 	chromeos-base/openssh-server-init
 	chromeos-base/shill
+	dev-python/python-dateutil
 	dev-python/pyyaml
 	net-analyzer/fping
 	net-firewall/iptables
