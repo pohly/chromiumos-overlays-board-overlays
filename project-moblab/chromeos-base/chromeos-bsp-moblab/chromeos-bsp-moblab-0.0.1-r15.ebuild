@@ -3,7 +3,7 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="02da080491857ed2503b5f243e791ccebbd4d1b2"
+CROS_WORKON_COMMIT="0d0966f15542dca22c1538dd5af0774b96abcfcd"
 CROS_WORKON_TREE="21765f508a01bdde3a39bca83734ca604e70af95"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
@@ -47,6 +47,7 @@ RDEPEND="${RDEPEND}
 	chromeos-base/whining
 	sys-apps/moblab-site-utils
 	sys-apps/mobmonitor
+	sys-apps/mobmonitor-ui
 "
 
 DEPEND=""
