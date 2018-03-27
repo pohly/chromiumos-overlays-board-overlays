@@ -32,6 +32,11 @@
 			dptf-dv = "blacktip/dptf.dv";
 		};
 		whitelabels {
+			// *default* LOEM
+			default {
+				brand-code = "TEST";
+				key-id = "CORALC";
+			};
 			// TODO(sie): Replace with correct loem name
 			to-be-determined-bt-loem1 {
 				brand-code = "WXZG";

@@ -19,6 +19,11 @@
 			dptf-dv = "whitetip/dptf.dv";
 		};
 		whitelabels {
+			// *default* LOEM
+			default {
+				brand-code = "TEST";
+				key-id = "CORALC";
+			};
 			ctl {
 				brand-code = "HRIZ";
 				// TODO(sie): Replace with correct mp key-id for loem
