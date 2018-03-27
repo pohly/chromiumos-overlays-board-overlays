@@ -17,4 +17,3 @@ USE="${USE} tpm_slb9670"
 
 # WiFi and BT driver firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} marvell-pcie8897 iwlwifi-7265D ibt-hw"
-LINUX_FIRMWARE="${LINUX_FIRMWARE} brcmfmac4371-pcie"
