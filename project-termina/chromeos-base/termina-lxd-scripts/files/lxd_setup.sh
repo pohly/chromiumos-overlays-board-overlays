@@ -7,8 +7,29 @@
 
 set -eu
 
+info() {
+  if [ -t 2 ]; then
+    echo "lxd_setup: info: $*" >&2
+  else
+    logger -p syslog.info -t "lxd_setup" "$*"
+  fi
+}
+
+error() {
+  if [ -t 2 ]; then
+    echo "lxd_setup: error: $*" >&2
+  else
+    logger -p syslog.err -t "lxd_setup" "$*"
+  fi
+}
+
+die() {
+  error "$*"
+  exit 1
+}
+
 do_preseed() {
-  cat <<EOF | lxd init --preseed >/dev/null 2>&1
+  local preseed_config="
 # Storage pools
 storage_pools:
 - name: default
@@ -55,28 +76,32 @@ profiles:
       source: /dev/wl0
       type: unix-char
       mode: 0666
-EOF
+"
+
+  echo "${preseed_config}" | lxd init --preseed >/dev/null 2>&1 || \
+    die "Failed to configure LXD"
 }
 
 main() {
   if ! lxc network show lxdbr0 >/dev/null 2>&1; then
-    echo "Setting up LXD..."
+    info "Performing initial LXD setup"
     do_preseed
   fi
 
   # Migration: add 0666 mode to default profile for /dev/wl0.
-  lxc profile device set default wl0 mode 0666
+  lxc profile device set default wl0 mode 0666 || die "Failed to add /dev/wl0"
 
   # Migration: add host-ip device to default profile.
   if ! lxc profile device get default host-ip source; then
     lxc profile device add default host-ip disk \
-        source=/run/host_ip path=/dev/.host_ip
+        source=/run/host_ip path=/dev/.host_ip || die "Failed to add host_ip"
   fi
 
   # Migration: add garcon.
   if ! lxc profile device get default garcon source; then
     lxc profile device add default garcon disk \
-        source=/opt/google/garcon path=/opt/google/garcon
+        source=/opt/google/garcon path=/opt/google/garcon || \
+      die "Failed to add garcon"
   fi
 
   # Now that the lxc command has been run, fix up permission for the config.

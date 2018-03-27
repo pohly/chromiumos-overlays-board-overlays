@@ -33,12 +33,28 @@ FLAGS "$@" || exit 1
 
 set -e
 
+info() {
+  if [ -t 2 ]; then
+    echo "lxd_setup: info: $*" >&2
+  else
+    logger -p syslog.info -t "lxd_setup" "$*"
+  fi
+}
+
 warning() {
-  echo "run_container: warning: $*" >&2
+  if [ -t 2 ]; then
+    echo "run_container: warning: $*" >&2
+  else
+    logger -p syslog.warning -t "run_container" "$*"
+  fi
 }
 
 error() {
-  echo "run_container: error: $*" >&2
+  if [ -t 2 ]; then
+    echo "run_container: error: $*" >&2
+  else
+    logger -p syslog.err -t "run_container" "$*"
+  fi
 }
 
 die() {
@@ -77,20 +93,28 @@ main() {
       die "Container does not already exist; you must specify --lxd_image"
     fi
 
+    info "Container '${FLAGS_container_name}'  does not exist; creating from '${FLAGS_lxd_image}' on ${FLAGS_lxd_remote}"
+
     lxc remote remove "google" >/dev/null 2>&1 || true
 
     if [ -z "${FLAGS_container_token}" ]; then
       warning "container token not supplied; garcon may not function"
     fi
 
-    lxc remote add "google" "${FLAGS_lxd_remote}" --protocol=simplestreams
-    lxc launch "google:${FLAGS_lxd_image}" "${FLAGS_container_name}"
+    lxc remote add "google" "${FLAGS_lxd_remote}" --protocol=simplestreams || \
+      die "Failed to add lxd remote '${FLAGS_lxd_remote}'"
+    lxc launch "google:${FLAGS_lxd_image}" "${FLAGS_container_name}" || \
+      die "Unable to launch container from image '${FLAGS_lxd_image}'"
+
+    # Set up container token for garcon.
     printf "%s" "${FLAGS_container_token}" > "${token_path}"
     lxc config device add "${FLAGS_container_name}" \
                           container_token \
                           disk \
                           source="${token_path}" \
-                          path="/dev/.container_token"
+                          path="/dev/.container_token" || \
+      die "Failed to add container token"
+    info "Created container '${FLAGS_container_name}'"
   else
     if ! container_running "${FLAGS_container_name}"; then
       if [ -z "${FLAGS_container_token}" ]; then
@@ -98,7 +122,10 @@ main() {
       fi
 
       printf "%s" "${FLAGS_container_token}" > "${token_path}"
-      lxc start "${FLAGS_container_name}"
+
+      lxc start "${FLAGS_container_name}" || \
+        die "Failed to start container '"${FLAGS_container_name}"'"
+      info "Started container '${FLAGS_container_name}'"
     fi
   fi
 
