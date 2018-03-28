@@ -17,10 +17,10 @@ DEFINE_string container_name "" \
 DEFINE_string container_token "" \
   "The garcon access token for the container"
 
-DEFINE_string lxd_image "" \
+DEFINE_string lxd_image "debian/stretch" \
   "The image to create a container from"
 
-DEFINE_string lxd_remote "" \
+DEFINE_string lxd_remote "https://storage.googleapis.com/cros-containers" \
   "The LXD remote URL"
 
 DEFINE_boolean shell "${FLAGS_FALSE}" \
