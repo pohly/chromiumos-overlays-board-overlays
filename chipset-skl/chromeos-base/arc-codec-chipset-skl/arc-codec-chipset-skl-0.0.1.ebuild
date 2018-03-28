@@ -10,17 +10,21 @@ DESCRIPTION="Install codec configuration for ARC++"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="android-container-nyc"
+IUSE="android-container-nyc android-container-pi"
 S="${WORKDIR}"
 
 src_install() {
-	if use android-container-nyc; then
+	insinto "${ARC_VENDOR_DIR}/etc/"
+
+	if use android-container-pi; then
+		ARC_CODEC_DIR="${FILESDIR}/pic"
+		doins "${ARC_CODEC_DIR}/media_codecs_c2.xml"
+	elif use android-container-nyc; then
 		ARC_CODEC_DIR="${FILESDIR}/nyc"
 	else
 		ARC_CODEC_DIR="${FILESDIR}/mnc"
 	fi
 
-	insinto "${ARC_VENDOR_DIR}/etc/"
 	doins "${ARC_CODEC_DIR}/media_codecs.xml"
 	doins "${ARC_CODEC_DIR}/media_codecs_performance.xml"
 }
