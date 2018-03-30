@@ -31,8 +31,7 @@ USE="${USE} pcserial"
 TTY_CONSOLE="ttyS0"
 
 # Building EC
-# USE="${USE} cros_ec"
+USE="${USE} cros_ec"
 
 # All firmware to build from the EC code base.
-# TODO(caveh): uncomment, once atlas board name is added
-# EC_FIRMWARE="atlas"
+EC_FIRMWARE="atlas"
