@@ -36,6 +36,7 @@
 		sku-map {
 			platform-name = "Coral";
 			simple-sku-map = < 0 &astronaut
+				1 &astronaut
 				2 &santa
 				3 &santa
 				4 &lava
