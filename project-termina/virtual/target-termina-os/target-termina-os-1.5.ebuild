@@ -20,7 +20,7 @@ RDEPEND="
 	chromeos-base/chromeos-bsp-termina
 	chromeos-base/termina_container_tools
 	chromeos-base/termina-lxd-scripts
-	chromeos-base/vm_tools
+	chromeos-base/vm_guest_tools
 	net-fs/nfs-utils
 	runc? ( app-emulation/runc )
 	sys-apps/iproute2
