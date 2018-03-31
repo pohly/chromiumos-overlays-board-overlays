@@ -15,3 +15,6 @@ USE="${USE} -bluetooth -cellular -cras -cups -debugd -encrypted_stateful -kmod"
 USE="${USE} -power_management -shill -systemd -timers -tpm -vaapi -vtconsole -udev"
 
 USE="${USE} kernel-4_14"
+
+# Include the kernel in the base image.
+USE="${USE} include_vmlinuz"
