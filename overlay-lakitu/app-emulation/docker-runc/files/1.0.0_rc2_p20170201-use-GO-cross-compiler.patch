@@ -16,11 +16,11 @@ index 779be92..9e5a482 100644
  
  all: $(RUNC_LINK)
 -	go build -i -ldflags "-X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -tags "$(BUILDTAGS)" -o runc .
-+	${GO} build -i -ldflags "-X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -tags "$(BUILDTAGS)" -o runc .
++	${GO} build -ldflags "-X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -tags "$(BUILDTAGS)" -o runc .
  
  static: $(RUNC_LINK)
 -	CGO_ENABLED=1 go build -i -tags "$(BUILDTAGS) cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -o runc .
-+	CGO_ENABLED=1 ${GO} build -i -tags "$(BUILDTAGS) cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -o runc .
++	CGO_ENABLED=1 ${GO} build -tags "$(BUILDTAGS) cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit=${COMMIT} -X main.version=${VERSION}" -o runc .
  
  release: $(RUNC_LINK)
  	@flag_list=(seccomp selinux apparmor static ambient); \
@@ -29,7 +29,7 @@ index 779be92..9e5a482 100644
  		echo "Building target: $$output"; \
  		rm -rf "${GOPATH}/pkg"; \
 -		go build -i -ldflags "$$ldflags" -tags "$$tags" -o "$$output" .; \
-+		${GO} build -i -ldflags "$$ldflags" -tags "$$tags" -o "$$output" .; \
++		${GO} build -ldflags "$$ldflags" -tags "$$tags" -o "$$output" .; \
  	done
  
  $(RUNC_LINK):
