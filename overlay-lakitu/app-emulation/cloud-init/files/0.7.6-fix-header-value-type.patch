@@ -1,0 +1,11 @@
+--- cloudinit/sources/DataSourceGCE.py.orig	2018-04-03 15:17:14.656686781 -0700
++++ cloudinit/sources/DataSourceGCE.py	2018-04-03 15:06:01.298948183 -0700
+@@ -51,7 +51,7 @@
+ 
+     def get_data(self):
+         # GCE metadata server requires a custom header since v1
+-        headers = {'X-Google-Metadata-Request': True}
++        headers = {'X-Google-Metadata-Request': 'True'}
+ 
+         # url_map: (our-key, path, required)
+         url_map = [

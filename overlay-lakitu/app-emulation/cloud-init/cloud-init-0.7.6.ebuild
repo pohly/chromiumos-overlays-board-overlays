@@ -49,6 +49,9 @@ python_prepare_all() {
 	epatch "${FILESDIR}/0.7.6-stable-uid.patch"
 	epatch "${FILESDIR}/0.7.6-resolve-metadata-locally.patch"
 	epatch "${FILESDIR}/0.7.6-add-retries-metadata-server.patch"
+	# Even though it was never enforced, HTTP headers were supposed to be
+	# strings and nothing else.
+	epatch "${FILESDIR}/0.7.6-fix-header-value-type.patch"
 
 	# Note: Gentoo places ip in /sbin/ not /bin/
 	ebegin 'patching cloudinit/sources/DataSourceOpenNebula.py'
