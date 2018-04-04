@@ -5,7 +5,7 @@
 LINUX_FIRMWARE=""
 USE=""
 
-USE="${USE} octopus"
+USE="${USE} octopus cros_ec"
 
 # Enable ARC by default
 USE="${USE} arc"
