@@ -26,7 +26,6 @@
 			};
 			ctl {
 				brand-code = "HRIZ";
-				// TODO(sie): Replace with correct mp key-id for loem
 				key-id = "CORALE";
 			};
 			// TODO(sie): Replace with correct loem name

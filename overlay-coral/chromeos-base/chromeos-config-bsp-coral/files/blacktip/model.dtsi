@@ -37,11 +37,9 @@
 				brand-code = "TEST";
 				key-id = "CORALC";
 			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem1 {
+			ctl {
 				brand-code = "WXZG";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
+				key-id = "CORALF";
 			};
 			// TODO(sie): Replace with correct loem name
 			to-be-determined-bt-loem2 {
