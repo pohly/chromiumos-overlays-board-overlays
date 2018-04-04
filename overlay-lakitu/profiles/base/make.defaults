@@ -72,6 +72,10 @@ SYMLINK_LIB="no"
 # Enable stackdriver-on-COS alpha feature.
 USE="${USE} stackdriver_alpha"
 
+# vmlinuz is not installed by default anymore and this can break AutoUpdates.
+# So explicitly require installing it. (b/77477921).
+USE="${USE} include_vmlinuz"
+
 # The following tests from smoke suite are currently failing on lakitu.
 # TODO(andreyu): find out which of these tests could or should be enabled.
 USE="${USE}
