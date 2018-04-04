@@ -4,6 +4,8 @@
 
 LINUX_FIRMWARE=""
 
+VIDEO_CARDS="llvmpipe"
+
 # Empty USE to allow the same form below in real assignments.
 USE=""
 
