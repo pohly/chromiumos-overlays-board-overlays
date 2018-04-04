@@ -60,9 +60,13 @@ profiles:
       nictype: bridged
       parent: lxdbr0
       type: nic
+    cros_containers:
+      path: /opt/google/cros-containers
+      source: /opt/google/cros-containers
+      type: disk
     garcon:
       path: /opt/google/garcon
-      source: /opt/google/garcon
+      source: /opt/google/cros-containers
       type: disk
     host-ip:
       path: /dev/.host_ip
@@ -97,11 +101,18 @@ main() {
         source=/run/host_ip path=/dev/.host_ip || die "Failed to add host_ip"
   fi
 
-  # Migration: add garcon.
+  # Migrations: add cros_containers and garcon bind mounts.
+  # TODO(smbarber): remove garcon once LXD is uprevved.
   if ! lxc profile device get default garcon source; then
     lxc profile device add default garcon disk \
-        source=/opt/google/garcon path=/opt/google/garcon || \
-      die "Failed to add garcon"
+        source=/opt/google/cros-containers path=/opt/google/garcon || \
+      die "Failed to add garcon bind mount"
+  fi
+
+  if ! lxc profile device get default cros_containers source; then
+    lxc profile device add default cros_containers disk \
+        source=/opt/google/cros-containers path=/opt/google/cros-containers || \
+      die "Failed to add cros_containers bind mount"
   fi
 
   # Now that the lxc command has been run, fix up permission for the config.
