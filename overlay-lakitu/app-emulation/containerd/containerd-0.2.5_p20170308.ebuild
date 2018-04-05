@@ -4,7 +4,7 @@
 EAPI=5
 EGO_PN="github.com/docker/${PN}"
 
-inherit toolchain-funcs
+inherit eutils toolchain-funcs
 
 if [[ ${PV} == *9999 ]]; then
 	inherit golang-vcs
