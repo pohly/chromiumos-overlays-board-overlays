@@ -9,7 +9,7 @@ HOMEPAGE="http://dev.chromium.org/"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="-runc"
+IUSE=""
 
 RDEPEND="
 	app-arch/bzip2
@@ -21,8 +21,6 @@ RDEPEND="
 	chromeos-base/termina_container_tools
 	chromeos-base/termina-lxd-scripts
 	chromeos-base/vm_guest_tools
-	net-fs/nfs-utils
-	runc? ( app-emulation/runc )
 	sys-apps/iproute2
 	sys-auth/pambase
 	virtual/chromeos-bsp
