@@ -7,7 +7,7 @@ CHROMEOS_KERNEL_SPLITCONFIG="chromeos-intel-pineview"
 LINUX_FIRMWARE=""
 USE=""
 
-LINUX_FIRMWARE="${LINUX_FIRMWARE} adsp_apl adsp_glk"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} i915_glk adsp_apl adsp_glk"
 
 USE="${USE} kernel-4_14"
 USE="${USE} apl_lpe glk_lpe intel_lpe"
