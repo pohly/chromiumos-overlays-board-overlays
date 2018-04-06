@@ -16,5 +16,8 @@ USE="${USE} -power_management -shill -systemd -timers -tpm -vaapi -vtconsole -ud
 
 USE="${USE} kernel-4_14"
 
+# This overlay is meant to be run as a VM guest.
+USE="${USE} kvm_guest"
+
 # Include the kernel in the base image.
 USE="${USE} include_vmlinuz"
