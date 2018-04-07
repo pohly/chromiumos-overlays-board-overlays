@@ -115,6 +115,11 @@ main() {
       die "Failed to add cros_containers bind mount"
   fi
 
+  # Migration: remove wayland`sock
+  if lxc profile device get default wayland-sock source; then
+    lxc profile device remove default wayland-sock
+  fi
+
   # Now that the lxc command has been run, fix up permission for the config.
   chmod 755 "${LXD_CONF}"
   chown -R chronos:chronos "${LXD_CONF}"
