@@ -40,4 +40,5 @@ src_install() {
 	udev_dorules "${FILESDIR}/iwlwifi/60-iwlwifi.rules"
 	exeinto "$(get_udevdir)"
 	doexe "${FILESDIR}/iwlwifi/wifi-pci-rescan.sh"
+	doexe "${FILESDIR}/iwlwifi/log-wifi-gone-metric.sh"
 }
