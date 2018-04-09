@@ -14,17 +14,18 @@ SLOT="0"
 KEYWORDS="-* ~arm ~arm64"
 
 RDEPEND="
+	dev-libs/expat
 	!media-libs/arc-camera3-hal-rockchip-isp1
+	media-libs/cros-camera-libcab
+	media-libs/cros-camera-libcamera_client
+	media-libs/cros-camera-libcamera_jpeg
+	media-libs/cros-camera-libcamera_metadata
 	media-libs/cros-camera-libcbm
 	media-libs/libsync
 	media-libs/rockchip-isp1-3a-libs-bin"
 
 DEPEND="${RDEPEND}
 	media-libs/cros-camera-android-headers
-	media-libs/cros-camera-libcab
-	media-libs/cros-camera-libcamera_client
-	media-libs/cros-camera-libcamera_jpeg
-	media-libs/cros-camera-libcamera_metadata
 	media-libs/libyuv
 	sys-kernel/linux-headers
 	virtual/jpeg:0
