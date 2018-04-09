@@ -57,7 +57,10 @@ LAKITU_RDEPEND="
 	sys-apps/less
 	sys-apps/mosys
 	sys-apps/pv
-	uefi_bootloaders? ( sys-boot/shim )
+	uefi_bootloaders? (
+		sys-boot/grub-lakitu
+		sys-boot/shim
+	)
 	sys-fs/e2fsprogs
 	criu? ( sys-process/criu )
 	virtual/chromeos-bsp
@@ -74,6 +77,5 @@ RDEPEND="${LAKITU_RDEPEND}
 
 DEPEND="
 	${LAKITU_RDEPEND}
-	uefi_bootloaders? ( sys-boot/grub-lakitu )
 	sys-boot/syslinux
 "

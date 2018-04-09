@@ -98,6 +98,6 @@ src_install() {
 		chain efi_gop configfile search search_fs_uuid search_label \
 		terminal memdisk echo serial linuxefi
 	rm -Rf "${D}"/*
-	insinto /usr/lib/grub-lakitu
+	insinto /boot/efi/boot
 	doins "grub-lakitu.efi"
 }

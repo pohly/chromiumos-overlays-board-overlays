@@ -33,6 +33,6 @@ src_compile() {
 }
 
 src_install() {
-	insinto /usr/lib/shim
+	insinto /boot/efi/boot
 	doins "shimx64.efi"
 }
