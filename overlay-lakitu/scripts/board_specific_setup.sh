@@ -44,9 +44,14 @@ write_toolchain_path() {
 # end of building base image.
 board_finalize_base_image() {
   write_toolchain_path
+
   # /etc/machine-id gets installed by sys-apps/dbus and is a symlink.
   # This conflicts with systemd's machine-id generation mechanism,
   # so we remove the symlink and recreate it as an empty file.
   sudo rm "${root_fs_dir}"/etc/machine-id
   sudo touch "${root_fs_dir}"/etc/machine-id
+
+  info "Deleting legacy EFI bootloaders"
+  sudo rm -f "${root_fs_dir}"/boot/efi/boot/boot{x64,ia32}.efi
+  info "Successfully deleted legacy EFI bootloaders"
 }
