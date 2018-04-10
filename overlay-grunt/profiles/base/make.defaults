@@ -23,3 +23,6 @@ USE="${USE} legacy_keyboard legacy_power_button"
 USE="${USE} unibuild"
 
 USE="${USE} arc"
+
+# Ability to run guest VMs.
+USE="${USE} kvm_host"
