@@ -10,6 +10,9 @@ USE="${USE} nocturne"
 # Enable ARC by default
 USE="${USE} arc"
 
+# Enable biometrics support
+USE="${USE} biod"
+
 # Use ext4 crypto (for NYC Android container)
 USE="${USE} direncryption"
 
@@ -29,8 +32,11 @@ USE="${USE} pcserial"
 TTY_CONSOLE="ttyS0"
 
 # Building EC
-# USE="${USE} cros_ec"
+USE="${USE} cros_ec"
+# Log cros_ec/cros_fp consoles with the timberslide daemon
+USE="${USE} eclog"
 
 # All firmware to build from the EC code base.
 # TODO(caveh): uncomment, once nocturne board name is added
 # EC_FIRMWARE="nocturne"
+EC_FIRMWARE_EXTRA="nocturne_fp"
