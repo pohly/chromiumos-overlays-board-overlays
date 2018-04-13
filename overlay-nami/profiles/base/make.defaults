@@ -6,7 +6,6 @@ USE=""
 
 USE="${USE} nami"
 
-# Add touchview to install chromeos-accelerometer-init
 USE="${USE} touchview"
 
 USE="${USE} cros_ec"
