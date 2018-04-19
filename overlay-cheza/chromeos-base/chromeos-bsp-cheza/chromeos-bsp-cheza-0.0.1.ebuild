@@ -14,8 +14,11 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
+# TODO(b:78303233): We temporarily add net-libs/libqrtr as an explicit
+# dependency for initial bring-up, which should later be removed.
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-cheza
+	net-libs/libqrtr
 "
 DEPEND="${RDEPEND}"
 
