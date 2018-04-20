@@ -103,7 +103,10 @@ main() {
 
   # Migrations: add cros_containers and garcon bind mounts.
   # TODO(smbarber): remove garcon once LXD is uprevved.
-  if ! lxc profile device get default garcon source; then
+  local garcon_dir=$(lxc profile device get default garcon source)
+  if [ ! -d "${garcon_dir}" ]; then
+    lxc profile device remove default garcon
+
     lxc profile device add default garcon disk \
         source=/opt/google/cros-containers path=/opt/google/garcon || \
       die "Failed to add garcon bind mount"
