@@ -7,8 +7,7 @@
 
 &models {
 	babymega: babymega {
-		// TODO(OEM or SIE): Add correct brand code after applying for one.
-		// brand-code = "";
+		brand-code = "GOKU";
 		powerd-prefs = "babymega";
 		test-label = "babymega";
 		audio {
