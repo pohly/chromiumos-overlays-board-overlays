@@ -8,6 +8,8 @@ USE="${USE} nami"
 
 USE="${USE} touchview"
 
+USE="${USE} als"
+
 # Add keyboard backlight detection
 USE="${USE} has_keyboard_backlight"
 
