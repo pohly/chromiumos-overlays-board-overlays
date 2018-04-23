@@ -2792,13 +2792,13 @@ See the License for the specific language governing permissions and
   <video width="960" height="1280" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
       <if width="1098" height="1458" />
       <bds width="976" height="1296" />
@@ -2822,13 +2822,13 @@ See the License for the specific language governing permissions and
   <video width="720" height="1280" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
             <output width="2112" height="1568" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
       <if width="1098" height="1458" />
       <bds width="976" height="1296" />
@@ -2852,13 +2852,13 @@ See the License for the specific language governing permissions and
   <video width="480" height="640" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
       <if width="1098" height="1458" />
       <bds width="976" height="1296" />
@@ -2882,13 +2882,13 @@ See the License for the specific language governing permissions and
   <video width="240" height="320" stream_id="1" />
   <preview width="960" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="960" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="0" peer="preview">
       <if width="1098" height="1458" />
       <bds width="976" height="1296" />
@@ -3152,13 +3152,13 @@ See the License for the specific language governing permissions and
   <video width="960" height="1280" stream_id="1" />
   <preview width="720" height="1280" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="720" height="1280" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
       <if width="1098" height="1458" />
       <bds width="976" height="1296" />
@@ -3512,13 +3512,13 @@ See the License for the specific language governing permissions and
   <video width="960" height="1280" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
       <if width="1098" height="1458" />
       <bds width="976" height="1296" />
@@ -3542,13 +3542,13 @@ See the License for the specific language governing permissions and
   <video width="720" height="1280" stream_id="1" />
   <preview width="480" height="640" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="480" height="640" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
       <if width="868" height="1512" />
       <bds width="744" height="1296" />
@@ -3872,13 +3872,13 @@ See the License for the specific language governing permissions and
   <video width="960" height="1280" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
       <if width="1098" height="1458" />
       <bds width="976" height="1296" />
@@ -3902,13 +3902,13 @@ See the License for the specific language governing permissions and
   <video width="720" height="1280" stream_id="1" />
   <preview width="240" height="320" stream_id="1" />
   <sensor stream_id="1" vflip="0" hflip="0" mode_id="2104x1560" analogue_gain="100" exposure="500">
-            <port_0 type="port" width="2112" height="1568" format="BG10" />
+            <port_0 type="port" width="2104" height="1560" format="BG10" />
         </sensor>
   <csi_be>
-            <output width="2112" height="1568" format="CIO2" />
+            <output width="2104" height="1560" format="CIO2" />
   </csi_be>
   <imgu stream_id="1">
-    <input width="2112" height="1568" format="CIO2" />
+    <input width="2104" height="1560" format="CIO2" />
     <preview width="240" height="320" format="NV12" cpff_mode_hint="0" pipe_output_id="1" peer="preview">
       <if width="868" height="1512" />
       <bds width="744" height="1296" />
