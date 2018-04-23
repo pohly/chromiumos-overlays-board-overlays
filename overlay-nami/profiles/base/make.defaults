@@ -8,6 +8,9 @@ USE="${USE} nami"
 
 USE="${USE} touchview"
 
+# Add keyboard backlight detection
+USE="${USE} has_keyboard_backlight"
+
 USE="${USE} cros_ec"
 
 USE="${USE} arc"
