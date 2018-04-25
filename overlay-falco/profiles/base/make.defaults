@@ -17,3 +17,5 @@ USE="${USE} allow_consumer_kiosk"
 
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
+
+AFDO_PROFILE_SOURCE='broadwell'

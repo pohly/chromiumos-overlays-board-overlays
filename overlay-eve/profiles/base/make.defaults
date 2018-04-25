@@ -42,3 +42,5 @@ USE="${USE} eclog"
 
 # Ability to run guest VMs.
 USE="${USE} kvm_host crosvm-plugin"
+
+AFDO_PROFILE_SOURCE='broadwell'

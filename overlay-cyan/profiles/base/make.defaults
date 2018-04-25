@@ -32,3 +32,5 @@ USE="${USE} direncryption"
 # Un-comment these lines to enable the serial port.
 # TTY_CONSOLE="ttyS0"
 # USE="${USE} pcserial"
+
+AFDO_PROFILE_SOURCE='airmont'

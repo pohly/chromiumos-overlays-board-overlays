@@ -19,3 +19,5 @@ USE="${USE} allow_consumer_kiosk"
 USE="${USE} direncryption"
 
 USE="${USE} arc"
+
+AFDO_PROFILE_SOURCE='broadwell'
