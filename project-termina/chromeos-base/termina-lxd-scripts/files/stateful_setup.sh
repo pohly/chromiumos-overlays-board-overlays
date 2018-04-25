@@ -28,7 +28,8 @@ main() {
 
   # Create a btrfs filesystem.
   mkfs.btrfs /dev/vdb || true # The disk may already be formatted.
-  mount /dev/vdb /mnt/stateful || die "Failed to mount stateful disk"
+  mount -o user_subvol_rm_allowed /dev/vdb /mnt/stateful \
+    || die "Failed to mount stateful disk"
 
   exit 0
 }
