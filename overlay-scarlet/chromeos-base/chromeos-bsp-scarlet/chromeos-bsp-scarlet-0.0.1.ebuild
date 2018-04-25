@@ -30,6 +30,11 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
+	# Scarlet uses multiple vendors for the same wacom touchscreen device,
+	# thus it needs a way to differentiate between those.
+	exeinto "/opt/google/touch/scripts"
+	doexe "${FILESDIR}"/get_board_specific_wacom_hwid.sh
+
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
