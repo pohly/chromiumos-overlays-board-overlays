@@ -3,7 +3,8 @@
 
 EAPI=5
 
-inherit appid cros-audio-configs
+inherit appid
+inherit cros-model cros-unibuild
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -15,19 +16,17 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="
-	chromeos-base/chromeos-bsp-baseboard-nami
+RDEPEND="chromeos-base/chromeos-bsp-baseboard-nami"
+DEPEND="
+	${RDEPEND}
+	chromeos-base/chromeos-config
 "
-DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{495DCB07-E19A-4D7D-99B9-4710011A65B1}" "CHROMEBOOK"
 
-	# Install platform specific config files for power_manager.
-	insinto "/usr/share/power_manager/board_specific"
-	doins "${FILESDIR}"/powerd_prefs/*
+	unibuild_install_audio_files
 
-	# Install audio config files
-	local audio_config_dir="${FILESDIR}/audio-config"
-	install_audio_configs nami "${audio_config_dir}"
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/common/bluetooth/main.conf"
 }
