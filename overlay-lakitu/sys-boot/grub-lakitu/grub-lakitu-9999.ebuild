@@ -94,9 +94,9 @@ src_install() {
 		-p "(hd0,gpt12)/efi/boot" \
 		-d "${D}/$(get_libdir)/grub/x86_64-efi" \
 		-o "${S}/grub-lakitu.efi" \
-		part_gpt gptpriority test fat ext2 hfs hfsplus normal boot \
-		chain efi_gop configfile search search_fs_uuid search_label \
-		terminal memdisk echo serial linuxefi
+		part_gpt gptpriority test fat ext2 normal boot \
+		efi_gop configfile search search_fs_uuid search_label \
+		terminal echo serial linuxefi
 	rm -Rf "${D}"/*
 	insinto /boot/efi/boot
 	doins "grub-lakitu.efi"
