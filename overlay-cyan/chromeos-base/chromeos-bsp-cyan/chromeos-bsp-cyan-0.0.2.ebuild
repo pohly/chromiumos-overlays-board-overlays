@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit appid udev
+inherit appid
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -17,6 +17,7 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-strago
+	net-wireless/iwlwifi_rescan
 "
 DEPEND="${RDEPEND}"
 
@@ -34,19 +35,4 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
-
-	# Add udev rule for iwlwifi workaround for Intel NIC
-	# disappearing from PCI bus
-	udev_dorules "${FILESDIR}/iwlwifi/60-iwlwifi.rules"
-	exeinto "$(get_udevdir)"
-	doexe "${FILESDIR}/iwlwifi/log-wifi-gone-metric.sh"
-
-	# Add an upstart script that will monitor wifi status
-	# once the workaround (pci rescan) to revive wifi has been applied
-	insinto "/etc/init"
-	doins "${FILESDIR}/iwlwifi/pci-rescan-to-revive-wifi.conf"
-
-	# Add script that does the actual rescan and metrics logging
-	# and is called by the upstart .conf
-	dosbin "${FILESDIR}/iwlwifi/pci-rescan-to-revive-wifi.sh"
 }
