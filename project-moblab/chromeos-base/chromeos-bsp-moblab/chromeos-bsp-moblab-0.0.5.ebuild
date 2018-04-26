@@ -96,4 +96,7 @@ src_install() {
 	# Copy the moblab checkfiles for the Mob* Monitor.
 	insinto "/etc/mobmonitor/checkfiles/moblab/"
 	doins -r "${FILESDIR}/checkfiles/moblab/"*
+
+	insinto "/usr/share/update_engine"
+	doins "${FILESDIR}/update-payload-key.pub.pem"
 }
