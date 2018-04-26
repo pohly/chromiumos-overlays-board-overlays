@@ -23,8 +23,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	# TODO: is this just generated with "uuidgen" ?
-	doappid "{8A68F44A-29F1-42AB-A539-3D5C3400E7B8}" "REFERENCE"
+	doappid "{752826D9-391D-44BE-A5DD-D783F58A6577}" "REFERENCE"
 
 	# TODO: Install audio config files
 }
