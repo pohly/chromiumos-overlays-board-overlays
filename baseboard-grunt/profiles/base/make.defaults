@@ -6,7 +6,7 @@ USE=""
 LINUX_FIRMWARE=""
 
 # QCA Wifi and BT
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k qca-bt"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174 qca-bt"
 
 # Add EC logging
 USE="${USE} eclog"
