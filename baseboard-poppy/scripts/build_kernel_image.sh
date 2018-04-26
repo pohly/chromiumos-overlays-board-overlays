@@ -18,4 +18,7 @@ modify_kernel_command_line() {
 
   # Might be helpful to preserve ramoops in extreme circumstances
   echo "ramoops.ecc=1" >> "$1"
+
+  # Backlight driver parameter
+  echo "i915.enable_dpcd_backlight=1" >> "$1"
 }
