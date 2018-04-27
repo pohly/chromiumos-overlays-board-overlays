@@ -28,6 +28,9 @@ USE="${USE} keyboard_includes_side_buttons"
 
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
 
+# Allow the option to use QCA Wifi and BT
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k qca-bt"
+
 INPUT_DEVICES="st wacom"
 
 # For debug images, disable for production
