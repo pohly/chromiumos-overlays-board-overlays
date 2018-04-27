@@ -3,8 +3,8 @@
 
 EAPI="5"
 
-CROS_WORKON_COMMIT="30ba08feff2fbc91a2099fdc395fcfa65f2c0743"
-CROS_WORKON_TREE="388132b344415c5cbaeebc72462655c7d1a10a6c"
+CROS_WORKON_COMMIT="b99b1a85d44fbab29a086669ad29785bf25bad8c"
+CROS_WORKON_TREE="96c4a189560a58abec31539a077b666a252c5656"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
@@ -93,7 +93,4 @@ src_install() {
 	# Copy the moblab checkfiles for the Mob* Monitor.
 	insinto "/etc/mobmonitor/checkfiles/moblab/"
 	doins -r "${FILESDIR}/checkfiles/moblab/"*
-	
-	insinto "/usr/share/update_engine"
-	doins "${FILESDIR}/update-payload-key.pub.pem"
 }
