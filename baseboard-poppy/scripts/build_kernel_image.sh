@@ -21,4 +21,7 @@ modify_kernel_command_line() {
 
   # Backlight driver parameter
   echo "i915.enable_dpcd_backlight=1" >> "$1"
+
+  # Don't disable the ability to run VMs.
+  echo "disablevmx=off" >> "$1"
 }
