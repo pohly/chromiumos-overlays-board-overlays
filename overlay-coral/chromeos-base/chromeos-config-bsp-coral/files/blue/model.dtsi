@@ -13,7 +13,7 @@
 		audio {
 			main {
 				audio-type = <&audio_type_1mic>;
-				cras-config-dir = "astronaut";
+				cras-config-dir = "blue";
 			};
 		};
 		thermal {
