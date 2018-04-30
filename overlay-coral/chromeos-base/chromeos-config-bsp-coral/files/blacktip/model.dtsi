@@ -9,22 +9,10 @@
 	blacktip: blacktip {
 		powerd-prefs = "blacktip";
 		test-label = "blacktip";
-		submodels {
-			blacktip_1mic: blacktip-1mic {
-				audio {
-					main {
-						audio-type = <&audio_type_1mic>;
-						cras-config-dir = "blacktip";
-					};
-				};
-			};
-			blacktip_2mic: blacktip-2mic {
-				audio {
-					main {
-						audio-type = <&audio_type_2mic>;
-						cras-config-dir = "blacktip";
-					};
-				};
+		audio {
+			main {
+				audio-type = <&audio_type_1mic>;
+				cras-config-dir = "blacktip";
 			};
 		};
 		thermal {
