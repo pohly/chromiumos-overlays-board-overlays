@@ -12,7 +12,7 @@ USE="${USE} containers"
 
 USE="${USE} als has_keyboard_backlight highdpi"
 USE="${USE} natural_scroll_default samus watchdog"
-USE="${USE} acpi_ac_off wireless38"
+USE="${USE} -acpi_ac wireless38"
 USE="${USE} pcserial"
 
 # Enable ARC by default

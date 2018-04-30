@@ -14,7 +14,7 @@ USE="${USE} kernel-3_18"
 USE="${USE} skl_lpe intel_lpe"
 
 # Disable ACPI AC device and use USB PD power supply driver
-USE="${USE} acpi_ac_off"
+USE="${USE} -acpi_ac"
 
 # Enable native one-copy texture upload.
 USE="${USE} native_gpu_memory_buffers"

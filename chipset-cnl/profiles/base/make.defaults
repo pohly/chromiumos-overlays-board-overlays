@@ -21,7 +21,7 @@ USE="${USE} android_aep"
 USE="${USE} drm_atomic"
 
 # Disable ACPI AC device and use USB PD power supply driver
-USE="${USE} acpi_ac_off"
+USE="${USE} -acpi_ac"
 
 #Enable LPE Audio
 USE="${USE} cnl_lpe intel_lpe"

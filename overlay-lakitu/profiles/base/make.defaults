@@ -37,6 +37,9 @@ USE="${USE} -shill"
 # Disable acpid, Lakitu uses systemd-logind instead.
 USE="${USE} -acpi"
 
+# Disable the ACPI power supply driver.
+USE="${USE} -acpi_ac"
+
 # Disable cups, which expects certain features from upstart that we don't want;
 # and we don't need printing support anyway.
 USE="${USE} -cups"

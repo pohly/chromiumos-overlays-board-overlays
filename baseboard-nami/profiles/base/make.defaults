@@ -15,4 +15,4 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 USE="${USE} eclog"
 
 # Disable AC ACPI driver
-USE="${USE} acpi_ac_off"
+USE="${USE} -acpi_ac"

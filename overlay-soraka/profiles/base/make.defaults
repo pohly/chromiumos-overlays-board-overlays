@@ -7,8 +7,8 @@ USE=""
 USE="${USE} cros_ec"
 USE="${USE} soraka"
 
-# Enable chrome's tablet mode code
-USE="${USE} touchview acpi_ac_off"
+# Enable Chrome's tablet mode code and disable ACPI AC driver.
+USE="${USE} touchview -acpi_ac"
 
 USE="${USE} has_keyboard_backlight"
 
