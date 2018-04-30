@@ -11,6 +11,7 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} i915_glk adsp_apl adsp_glk"
 
 USE="${USE} kernel-4_14"
 USE="${USE} apl_lpe glk_lpe intel_lpe"
+USE="${USE} dptf"
 
 # Disable ACPI AC device and use USB PD power supply driver
 USE="${USE} acpi_ac_off"
