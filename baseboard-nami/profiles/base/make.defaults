@@ -13,3 +13,6 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 
 # Add EC logging
 USE="${USE} eclog"
+
+# Disable AC ACPI driver
+USE="${USE} acpi_ac_off"
