@@ -29,7 +29,7 @@ RDEPEND=""
 DEPEND="
 	${RDEPEND}
 "
-MOBMONITOR_BASE="/usr/local/moblab/mobmonitor"
+MOBMONITOR_BASE="/etc/moblab/mobmonitor"
 
 src_unpack() {
 	cros-workon_src_unpack
