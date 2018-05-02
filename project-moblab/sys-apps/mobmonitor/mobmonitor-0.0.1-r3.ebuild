@@ -3,8 +3,8 @@
 
 EAPI=6
 
-CROS_WORKON_COMMIT="eef971e60d830e2419487de6dae2b2f124616ae3"
-CROS_WORKON_TREE="b2026acfd5bfc2a76517da581a2ae9a7c495c0bc"
+CROS_WORKON_COMMIT="a64b978b676c2e590a4f7f9a2e6c56b9f421aae8"
+CROS_WORKON_TREE="a8d38dd61b646228b4c94691e491f8e707165eda"
 CROS_WORKON_INCREMENTAL_BUILD=1
 CROS_WORKON_OUTOFTREE_BUILD=1
 CROS_WORKON_PROJECT="chromiumos/platform/moblab"
@@ -31,7 +31,7 @@ RDEPEND=""
 DEPEND="
 	${RDEPEND}
 "
-MOBMONITOR_BASE="/usr/local/moblab/mobmonitor"
+MOBMONITOR_BASE="/etc/moblab/mobmonitor"
 
 src_unpack() {
 	cros-workon_src_unpack
