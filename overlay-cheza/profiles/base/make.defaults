@@ -11,5 +11,8 @@ USE="${USE} cheza"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
+# Enable QMI support in ModemManager
+USE="${USE} qmi"
+
 # All firmwares to build from the EC code base
 EC_FIRMWARE="cheza"
