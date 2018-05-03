@@ -2,9 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-sys-boot/chromeos-bootimage u_boot_netboot
-sys-boot/chromeos-u-boot u_boot_netboot
-
 # We don't have the space in the recovery image on linux-3.8 kernels to support
 # this (it pulls in libusb).  https://crbug.com/764753
 sys-apps/flashrom -raiden_debug_spi
