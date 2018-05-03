@@ -8,7 +8,7 @@ GIT_COMMIT_ID="79cdb2a215de2ace7d1bf0a294165a04b726c70a"
 SRC_URI="https://github.com/rhboot/shim/archive/${GIT_COMMIT_ID}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="*"
 
-inherit eutils multilib
+inherit eutils multilib toolchain-funcs
 
 DESCRIPTION="Red Hat UEFI shim loader"
 HOMEPAGE="https://github.com/rhboot/shim"
@@ -28,10 +28,14 @@ src_prepare() {
 }
 
 src_compile() {
+	local arch_ldflags=""
+	tc-ld-is-gold && arch_ldflags="--no-experimental-use-relr"
+
 	emake ARCH="x86_64" \
 		CROSS_COMPILE="${CHOST}-" \
 		EFI_INCLUDE="${ROOT}/usr/include/efi" \
 		EFI_PATH="${ROOT}/usr/$(get_libdir)" \
+		ARCH_LDFLAGS="${arch_ldflags}" \
 		COMMITID="${GIT_COMMIT_ID}" \
 		DEFAULT_LOADER="\\\\\\\\grub-lakitu.efi" \
 		shimx64.efi
