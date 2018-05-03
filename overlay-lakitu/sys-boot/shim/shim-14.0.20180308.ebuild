@@ -22,6 +22,11 @@ DEPEND="dev-libs/openssl
 
 S="${WORKDIR}/${PN}-${GIT_COMMIT_ID}"
 
+src_prepare() {
+	cros_use_gcc
+	default
+}
+
 src_compile() {
 	emake ARCH="x86_64" \
 		CROSS_COMPILE="${CHOST}-" \

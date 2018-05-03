@@ -29,6 +29,7 @@ src_unpack() {
 }
 
 src_prepare() {
+	cros_use_gcc
 	default
 	sed -i -e /autoreconf/d autogen.sh || die
 	bash autogen.sh || die
