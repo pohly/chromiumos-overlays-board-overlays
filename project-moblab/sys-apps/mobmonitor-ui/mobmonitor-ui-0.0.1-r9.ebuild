@@ -34,7 +34,7 @@ DEPEND="
 	${RDEPEND}
 	net-libs/nodejs
 "
-APP_BASE="/usr/local/moblab/mobmonitor/static"
+APP_BASE="/etc/moblab/mobmonitor/static"
 
 src_unpack() {
 	cros-workon_src_unpack
