@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit appid udev
+inherit appid udev cros-audio-configs
 
 DESCRIPTION="Nocturne board-specific ebuild that pulls in necessary ebuilds as
 dependencies or portage actions."
@@ -37,4 +37,8 @@ src_install() {
 	udev_dorules "${FILESDIR}/99-hammerd.rules"
 	insinto /etc/init
 	doins "${FILESDIR}/hammerd.override"
+
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs nocturne "${audio_config_dir}"
 }
