@@ -26,6 +26,9 @@ USE="${USE} cr50_onboard"
 # Building EC
 USE="${USE} cros_ec"
 
+# Add EC logging
+USE="${USE} eclog"
+
 # Use ext4 crypto
 USE="${USE} direncryption"
 
