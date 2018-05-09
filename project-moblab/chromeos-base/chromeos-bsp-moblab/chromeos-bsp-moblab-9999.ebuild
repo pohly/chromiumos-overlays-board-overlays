@@ -85,4 +85,7 @@ src_install() {
 
 	insinto /root
 	newins "${FILESDIR}/bash_profile" .bash_profile
+
+	insinto /etc/init
+	doins "${FILESDIR}/cgroups.override"
 }

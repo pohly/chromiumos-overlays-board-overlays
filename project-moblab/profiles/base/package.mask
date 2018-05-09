@@ -1,5 +1,0 @@
-# Mask newer versions of lxc because they break moblab.
-# TODO(crbug.com/789062): Fix moblab to work with newer versions of lxc
-# and drop the old version in this overlay.
-app-emulation/lxc::chromiumos
-app-emulation/lxc::portage-stable
