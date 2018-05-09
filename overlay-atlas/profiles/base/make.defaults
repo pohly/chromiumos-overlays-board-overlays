@@ -22,6 +22,9 @@ USE="${USE} -tpm tpm2"
 # Enable DPTF
 USE="${USE} dptf"
 
+# Disable ACPI AC driver
+USE="${USE} -acpi_ac"
+
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
 
 # Uncomment these lines to activate the serial port.
