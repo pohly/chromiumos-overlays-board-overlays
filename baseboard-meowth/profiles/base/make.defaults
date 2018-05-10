@@ -17,5 +17,8 @@ USE="${USE} cr50_onboard"
 # Enable touch in Chrome.
 USE="${USE} touchview"
 
+# Enable EC log in Chrome.
+USE="${USE} eclog"
+
 # BT driver firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt_9560"

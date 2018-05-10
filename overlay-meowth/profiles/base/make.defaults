@@ -7,7 +7,6 @@ USE=""
 
 USE="${USE} biod"
 USE="${USE} cros_ec"
-USE="${USE} eclog"
 USE="${USE} meowth"
 
 # Enable ARC by default
