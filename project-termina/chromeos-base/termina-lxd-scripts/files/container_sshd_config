@@ -1,0 +1,13 @@
+Protocol 2
+Port 2222
+HostKey /dev/.ssh/ssh_host_key
+AuthorizedKeysFile /dev/.ssh/authorized_keys
+Subsystem sftp internal-sftp
+
+# Allow only SFTP from this server.
+ForceCommand internal-sftp
+PermitTunnel no
+AllowAgentForwarding no
+AllowTcpForwarding no
+X11Forwarding no
+

@@ -23,4 +23,7 @@ src_install() {
 	dobin "${FILESDIR}"/run_container.sh
 	dosbin "${FILESDIR}"/lxd_setup.sh
 	dosbin "${FILESDIR}"/stateful_setup.sh
+
+	insinto /usr/share/
+	doins "${FILESDIR}"/container_sshd_config
 }

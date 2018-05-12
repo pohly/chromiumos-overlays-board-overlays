@@ -29,6 +29,32 @@ DEFINE_boolean shell "${FLAGS_FALSE}" \
 DEFINE_string user "" \
   "The main user for the container"
 
+DEFINE_string guest_private_key "" \
+  "The private SSH key for the guest container"
+
+DEFINE_string host_public_key "" \
+  "The SSH public key for the CrOS host"
+
+FLAGS "$@" || exit 1
+
+set -e
+
+info() {
+  if [ -t 2 ]; then
+    echo "lxd_setup: info: $*" >&2
+  else
+    logger -p syslog.info -t "lxd_setup" "$*"
+  fi
+}
+
+warning() {
+  if [ -t 2 ]; then
+    echo "run_container: warning: $*" >&2
+  else
+    logger -p syslog.warning -t "run_container" "$*"
+  fi
+}
+
 FLAGS "$@" || exit 1
 
 set -e
@@ -74,6 +100,13 @@ container_running() {
   lxc info "${container_name}" 2>&1 | grep -q "Status: Running"
 }
 
+container_has_bind_mount() {
+  local container_name="$1"
+  local device_name="$2"
+
+  lxc config device get "${container_name}" "${device_name}" source >/dev/null 2>&1
+}
+
 main() {
   # TODO(smbarber): Remove once setup flow is finalized. Use this option
   # to test usage of run_container.sh.
@@ -86,6 +119,15 @@ main() {
   fi
 
   local token_path="/run/tokens/${FLAGS_container_name}_token"
+  local ssh_key_dir="/run/sshd/${FLAGS_container_name}"
+  local ssh_host_key="${ssh_key_dir}/ssh_host_key"
+  local ssh_authorized_keys="${ssh_key_dir}/authorized_keys"
+  mkdir -p "${ssh_key_dir}"
+
+  # Put the keys into the SSH key directory. If they're empty, oh well.
+  printf "%s" "${FLAGS_guest_private_key}" > "${ssh_host_key}"
+  printf "%s" "${FLAGS_host_public_key}" > "${ssh_authorized_keys}"
+
   if ! container_exists "${FLAGS_container_name}"; then
     if [ -z "${FLAGS_lxd_remote}" ]; then
       die "Container does not already exist; you must specify --lxd_remote"
@@ -127,6 +169,34 @@ main() {
         die "Failed to start container '"${FLAGS_container_name}"'"
       info "Started container '${FLAGS_container_name}'"
     fi
+  fi
+
+  # Set up bind mounts for SSH keys and config.
+  if ! container_has_bind_mount "${FLAGS_container_name}" sshd_config; then
+    lxc config device add "${FLAGS_container_name}" \
+                          sshd_config \
+                          disk \
+                          source="/usr/share/container_sshd_config" \
+                          path="/dev/.ssh/sshd_config" \
+                          optional=true || die "Failed to add sshd config"
+  fi
+
+  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_host_key; then
+    lxc config device add "${FLAGS_container_name}" \
+                          ssh_host_key \
+                          disk \
+                          source="${ssh_host_key}" \
+                          path="/dev/.ssh/host_key" \
+                          optional=true || die "Failed to add ssh host key"
+  fi
+
+  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_authorized_keys; then
+    lxc config device add "${FLAGS_container_name}" \
+                          ssh_authorized_keys \
+                          disk \
+                          source="${ssh_authorized_keys}" \
+                          path="/dev/.ssh/authorized_keys" \
+                          optional=true || die "Failed to add ssh authorized keys"
   fi
 
   lxc_exec() { lxc exec "${FLAGS_container_name}" -- "$@"; }
