@@ -16,9 +16,10 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-DEPEND=""
-
-RDEPEND="${DEPEND}"
+RDEPEND="
+	chromeos-base/chromeos-bsp-baseboard-poppy
+"
+DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{BD7F7139-CC18-49C1-A847-33F155CCBCA8}" "CHROMEBOOK"

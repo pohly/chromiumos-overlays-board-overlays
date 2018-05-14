@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # Initial value just for style purposes.
-LINUX_FIRMWARE=""
 USE=""
 
 USE="${USE} nocturne"

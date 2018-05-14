@@ -1,3 +1,1 @@
-chromiumos:default/linux/amd64/10.0/chromeos
-chipset-kbl:base
-freon:base/amd64
+baseboard-poppy:base
