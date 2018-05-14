@@ -28,4 +28,6 @@ src_install() {
 		insinto "/usr/share/power_manager/board_specific"
 		doins "${FILESDIR}"/powerd_prefs/*
 	fi
+	exeinto /usr/share/cros
+	doexe "${FILESDIR}"/oemdata.sh
 }
