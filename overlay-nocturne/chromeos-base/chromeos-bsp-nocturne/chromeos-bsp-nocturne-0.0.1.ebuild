@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit appid
+inherit appid udev
 
 DESCRIPTION="Nocturne board-specific ebuild that pulls in necessary ebuilds as
 dependencies or portage actions."
@@ -22,4 +22,19 @@ RDEPEND="${DEPEND}"
 
 src_install() {
 	doappid "{BD7F7139-CC18-49C1-A847-33F155CCBCA8}" "CHROMEBOOK"
+
+	# Install updated hammer keyboard keymap.
+	# It should probbaly go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 bit boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/61-hammer-keyboard.hwdb"
+
+	# Install a rule tagging keyboard as internal and having updated layout
+	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
+
+	# Install hammerd udev rules and override for chromeos-base/hammerd.
+	udev_dorules "${FILESDIR}/99-hammerd.rules"
+	insinto /etc/init
+	doins "${FILESDIR}/hammerd.override"
 }

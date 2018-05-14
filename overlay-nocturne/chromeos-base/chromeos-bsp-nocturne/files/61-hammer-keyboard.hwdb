@@ -1,0 +1,10 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+#
+# Special mapping for "Whiskers" keyboard that has a special
+# "Assistant" key.
+#
+evdev:input:b0003v18D1p5030*
+ KEYBOARD_KEY_ffd10018=assistant
+ KEYBOARD_KEY_00070068=controlpanel
