@@ -263,6 +263,9 @@
             <isoAnalogGain1 value="36"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
             <nvmDirectory value="i2c-INT3499:00"/> <!--location of the NVM data-->
+            <!-- Test pattern map to align APP and driver. Off, ColorBars are Android test pattern mode,
+              while 0, 1 are driver test pattern index. -->
+            <sensor.testPatternMap value="Off,0,ColorBars,1"/>
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
@@ -524,6 +527,9 @@
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
             <nvmDirectory value=""/> <!--location of the NVM data-->
             <testPattern.bayerFormat value="V4L2_PIX_FMT_IPU3_SBGGR10"/> <!-- bayer order of video node when generate test pattern-->
+            <!-- Test pattern map to align APP and driver. Off, ColorBars are Android test pattern mode,
+              while 0, 1 are driver test pattern index. -->
+            <sensor.testPatternMap value="Off,0,ColorBars,1"/>
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
