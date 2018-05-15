@@ -1,0 +1,26 @@
+/*
+ * Copyright 2018 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	babytiger: babytiger {
+		// TODO(OEM): b/79126385
+		// brand-code = "";
+		powerd-prefs = "babytiger";
+		test-label = "babytiger";
+		audio {
+			main {
+				audio-type = <&audio_type_2mic>;
+				cras-config-dir = "babytiger";
+			};
+		};
+		thermal {
+			// TODO(OEM): Add validated dptf.dv file into BSP, it's
+			// currently using inherited version from the parent.
+			dptf-dv = "babytiger/dptf.dv";
+		};
+	};
+};
