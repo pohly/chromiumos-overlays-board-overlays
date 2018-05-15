@@ -200,6 +200,7 @@ src_prepare() {
 	# TODO(mikewu): remove the patch in milestone 63.
 	epatch "${FILESDIR}/docker-17.03.2-disable-health-check.patch"
 	epatch "${FILESDIR}/docker-17.03.2-log-line-max-size.patch"
+	epatch "${FILESDIR}/docker-17.03.2-fix-tarsum-for-go-1.10.patch"
 	# allow user patches (use sparingly - upstream won't support them)
 	epatch_user
 }
