@@ -42,4 +42,4 @@ INPUT_DEVICES="st wacom"
 USE="${USE} eclog"
 
 # Ability to run guest VMs.
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-plugin"
