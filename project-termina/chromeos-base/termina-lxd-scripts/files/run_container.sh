@@ -124,9 +124,13 @@ main() {
   local ssh_authorized_keys="${ssh_key_dir}/authorized_keys"
   mkdir -p "${ssh_key_dir}"
 
-  # Put the keys into the SSH key directory. If they're empty, oh well.
-  printf "%s" "${FLAGS_guest_private_key}" > "${ssh_host_key}"
-  printf "%s" "${FLAGS_host_public_key}" > "${ssh_authorized_keys}"
+  # If specified, put the keys into the SSH key directory.
+  if [ -n "${FLAGS_guest_private_key}" ]; then
+    printf "%s" "${FLAGS_guest_private_key}" > "${ssh_host_key}"
+  fi
+  if [ -n "${FLAGS_host_public_key}" ]; then
+    printf "%s" "${FLAGS_host_public_key}" > "${ssh_authorized_keys}"
+  fi
 
   if ! container_exists "${FLAGS_container_name}"; then
     if [ -z "${FLAGS_lxd_remote}" ]; then
@@ -181,16 +185,18 @@ main() {
                           optional=true || die "Failed to add sshd config"
   fi
 
-  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_host_key; then
+  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_host_key && \
+       [ -f "${ssh_host_key}" ]; then
     lxc config device add "${FLAGS_container_name}" \
                           ssh_host_key \
                           disk \
                           source="${ssh_host_key}" \
-                          path="/dev/.ssh/host_key" \
+                          path="/dev/.ssh/ssh_host_key" \
                           optional=true || die "Failed to add ssh host key"
   fi
 
-  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_authorized_keys; then
+  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_authorized_keys && \
+       [ -f "${ssh_authorized_keys}" ]; then
     lxc config device add "${FLAGS_container_name}" \
                           ssh_authorized_keys \
                           disk \
