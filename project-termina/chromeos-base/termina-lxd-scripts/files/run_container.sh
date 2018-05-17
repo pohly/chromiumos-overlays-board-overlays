@@ -100,11 +100,32 @@ container_running() {
   lxc info "${container_name}" 2>&1 | grep -q "Status: Running"
 }
 
-container_has_bind_mount() {
+# Add or remove a bind mount, depending on if the source is available.
+container_bind_mount() {
   local container_name="$1"
   local device_name="$2"
+  local source="$3"
+  local dest="$4"
 
-  lxc config device get "${container_name}" "${device_name}" source >/dev/null 2>&1
+  # Remove an existing bind mount if the source doesn't exist.
+  if lxc config device get "${container_name}" \
+                           "${device_name}" \
+                           source >/dev/null 2>&1; then
+    if [ ! -e "${source}" ]; then
+      lxc config device remove "${container_name}" \
+                               "${device_name}" || \
+                               die "Failed to remove ${device_name}"
+    fi
+  else
+    if [ -e "${source}" ]; then
+      lxc config device add "${container_name}" \
+                            "${device_name}" \
+                            disk \
+                            source="${source}" \
+                            path="${dest}" || \
+                            die "Failed to add ${device_name}"
+    fi
+  fi
 }
 
 main() {
@@ -124,12 +145,19 @@ main() {
   local ssh_authorized_keys="${ssh_key_dir}/authorized_keys"
   mkdir -p "${ssh_key_dir}"
 
-  # If specified, put the keys into the SSH key directory.
+  # If specified, put the keys into the SSH key directory, and garcon container
+  # token in place.
   if [ -n "${FLAGS_guest_private_key}" ]; then
     printf "%s" "${FLAGS_guest_private_key}" > "${ssh_host_key}"
   fi
   if [ -n "${FLAGS_host_public_key}" ]; then
     printf "%s" "${FLAGS_host_public_key}" > "${ssh_authorized_keys}"
+  fi
+
+  if [ -n "${FLAGS_container_token}" ]; then
+    printf "%s" "${FLAGS_container_token}" > "${token_path}"
+  else
+    warning "container token not supplied; garcon may not function"
   fi
 
   if ! container_exists "${FLAGS_container_name}"; then
@@ -143,17 +171,13 @@ main() {
 
     lxc remote remove "google" >/dev/null 2>&1 || true
 
-    if [ -z "${FLAGS_container_token}" ]; then
-      warning "container token not supplied; garcon may not function"
-    fi
-
     lxc remote add "google" "${FLAGS_lxd_remote}" --protocol=simplestreams || \
       die "Failed to add lxd remote '${FLAGS_lxd_remote}'"
-    lxc launch "google:${FLAGS_lxd_image}" "${FLAGS_container_name}" || \
-      die "Unable to launch container from image '${FLAGS_lxd_image}'"
+
+    lxc init "google:${FLAGS_lxd_image}" "${FLAGS_container_name}" || \
+      die "Unable to create container from image '${FLAGS_lxd_image}'"
 
     # Set up container token for garcon.
-    printf "%s" "${FLAGS_container_token}" > "${token_path}"
     lxc config device add "${FLAGS_container_name}" \
                           container_token \
                           disk \
@@ -161,48 +185,34 @@ main() {
                           path="/dev/.container_token" || \
       die "Failed to add container token"
     info "Created container '${FLAGS_container_name}'"
-  else
-    if ! container_running "${FLAGS_container_name}"; then
-      if [ -z "${FLAGS_container_token}" ]; then
-        warning "container token not supplied; garcon may not function"
-      fi
-
-      printf "%s" "${FLAGS_container_token}" > "${token_path}"
-
-      lxc start "${FLAGS_container_name}" || \
-        die "Failed to start container '"${FLAGS_container_name}"'"
-      info "Started container '${FLAGS_container_name}'"
-    fi
   fi
 
-  # Set up bind mounts for SSH keys and config.
-  if ! container_has_bind_mount "${FLAGS_container_name}" sshd_config; then
-    lxc config device add "${FLAGS_container_name}" \
-                          sshd_config \
-                          disk \
-                          source="/usr/share/container_sshd_config" \
-                          path="/dev/.ssh/sshd_config" \
-                          optional=true || die "Failed to add sshd config"
-  fi
+  # Start the container if it's not running.
+  if ! container_running "${FLAGS_container_name}"; then
+    # Set up or remove bind mounts as necessary.
+    container_bind_mount "${FLAGS_container_name}" \
+                          "container_token" \
+                          "${token_path}" \
+                          "/dev/.container_token"
 
-  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_host_key && \
-       [ -f "${ssh_host_key}" ]; then
-    lxc config device add "${FLAGS_container_name}" \
-                          ssh_host_key \
-                          disk \
-                          source="${ssh_host_key}" \
-                          path="/dev/.ssh/ssh_host_key" \
-                          optional=true || die "Failed to add ssh host key"
-  fi
+    container_bind_mount "${FLAGS_container_name}" \
+                          "sshd_config" \
+                          "/usr/share/container_sshd_config" \
+                          "/dev/.ssh/sshd_config"
 
-  if ! container_has_bind_mount "${FLAGS_container_name}" ssh_authorized_keys && \
-       [ -f "${ssh_authorized_keys}" ]; then
-    lxc config device add "${FLAGS_container_name}" \
-                          ssh_authorized_keys \
-                          disk \
-                          source="${ssh_authorized_keys}" \
-                          path="/dev/.ssh/authorized_keys" \
-                          optional=true || die "Failed to add ssh authorized keys"
+    container_bind_mount "${FLAGS_container_name}" \
+                          "ssh_host_key" \
+                          "${ssh_host_key}" \
+                          "/dev/.ssh/ssh_host_key"
+
+    container_bind_mount "${FLAGS_container_name}" \
+                          "ssh_authorized_keys" \
+                          "${ssh_authorized_keys}" \
+                          "/dev/.ssh/ssh_authorized_keys"
+
+    lxc start "${FLAGS_container_name}" || \
+      die "Failed to start container '"${FLAGS_container_name}"'"
+    info "Started container '${FLAGS_container_name}'"
   fi
 
   lxc_exec() { lxc exec "${FLAGS_container_name}" -- "$@"; }
