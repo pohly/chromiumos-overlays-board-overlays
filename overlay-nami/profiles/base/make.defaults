@@ -27,5 +27,5 @@ USE="${USE} -tpm tpm2 cr50_onboard"
 EC_FIRMWARE="nami"
 
 # Uncomment these lines to activate the serial port.
-TTY_CONSOLE="ttyS0"
-USE="${USE} pcserial"
+#TTY_CONSOLE="ttyS0"
+#USE="${USE} pcserial"
