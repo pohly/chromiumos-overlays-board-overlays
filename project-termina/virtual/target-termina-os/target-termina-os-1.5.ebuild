@@ -21,6 +21,7 @@ RDEPEND="
 	chromeos-base/minijail
 	chromeos-base/termina_container_tools
 	chromeos-base/termina-lxd-scripts
+	chromeos-base/tremplin
 	chromeos-base/vm_guest_tools
 	sys-apps/iproute2
 	sys-auth/pambase
