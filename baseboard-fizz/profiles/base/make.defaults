@@ -29,3 +29,9 @@ USE="${USE} nvme"
 
 # Enable VMs
 USE="${USE} kvm_host"
+
+# Add CEC support
+USE="${USE} cec"
+
+# Add DP-CEC support
+USE="${USE} dp_cec"
