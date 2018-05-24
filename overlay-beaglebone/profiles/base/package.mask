@@ -1,0 +1,3 @@
+# We don't want to build the main Chrome OS U-Boot. Beaglebone always uses its
+# own private version.
+sys-boot/u-boot::chromiumos
