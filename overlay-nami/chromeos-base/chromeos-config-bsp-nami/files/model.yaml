@@ -51,6 +51,12 @@ common_config: &common_config
     set-wifi-transmit-power-for-tablet-mode: "1"
     $has-ambient-light-sensor: "0"
     has-ambient-light-sensor: "{{$has-ambient-light-sensor}}"
+    $internal-backlight-als-steps: |
+      80.0 50.0 -1 400
+      100.0 80.0 100 -1
+    internal-backlight-als-steps: "{{$internal-backlight-als-steps}}"
+    $internal-backlight-no-als-battery-brightness: "50.0"
+    internal-backlight-no-als-battery-brightness: "{{$internal-backlight-no-als-battery-brightness}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
@@ -101,7 +107,7 @@ chromeos:
         - $sku-id: 0x2a67
           config: *device_config
     - $device-name: "nami"
-      $has-ambient-light-sensor: "0"
+      $has-ambient-light-sensor: "1"
       products:
         - $marketing-name: "TBD"
           $brand-code: "ZZCR"
