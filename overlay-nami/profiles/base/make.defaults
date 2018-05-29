@@ -29,3 +29,7 @@ EC_FIRMWARE="nami"
 # Uncomment these lines to activate the serial port.
 #TTY_CONSOLE="ttyS0"
 #USE="${USE} pcserial"
+
+# Disable touchpad wakeup since it can't be turned off dynamically when the
+# system is converted to tablet mode while it's suspended.
+USE="${USE} -touchpad_wakeup"
