@@ -13,6 +13,8 @@ USE="${USE} containers"
 
 USE="${USE} legacy_keyboard legacy_power_button kernel-4_4"
 
+USE="${USE} direncryption"
+
 # Enable all optional features on generic overlays.
 USE="${USE} buffet"
 

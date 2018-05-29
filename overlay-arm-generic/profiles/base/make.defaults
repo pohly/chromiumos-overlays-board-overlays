@@ -12,6 +12,8 @@ USE="${USE} hardfp legacy_keyboard legacy_power_button neon"
 USE="${USE} -opengl opengles"
 USE="${USE} kernel-4_4 device_tree"
 
+USE="${USE} direncryption"
+
 # Enable all optional features on generic overlays.
 USE="${USE} buffet"
 

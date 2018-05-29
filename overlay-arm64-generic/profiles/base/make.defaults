@@ -12,6 +12,8 @@ USE="${USE} legacy_keyboard legacy_power_button"
 USE="${USE} -opengl opengles"
 USE="${USE} kernel-4_4 device_tree"
 
+USE="${USE} direncryption"
+
 # Disable binary options that are not ported yet.
 USE="${USE} -pepper_flash -netflix -internal"
 
