@@ -45,6 +45,7 @@ RDEPEND="
 	dev-util/mem
 	dev-util/strace
 	net-analyzer/tcpdump
+	net-fs/sshfs
 	net-misc/curl
 	net-misc/iperf:2
 	net-misc/iputils
@@ -56,7 +57,6 @@ RDEPEND="
 	sys-apps/findutils
 	sys-block/fio
 	sys-devel/gdb
-	sys-fs/sshfs-fuse
 	sys-process/procps
 	sys-process/psmisc
 	sys-process/time

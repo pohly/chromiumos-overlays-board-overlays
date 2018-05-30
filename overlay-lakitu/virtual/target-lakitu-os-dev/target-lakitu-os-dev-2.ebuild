@@ -58,6 +58,7 @@ RDEPEND="
 	dev-util/mem
 	dev-util/strace
 	net-analyzer/tcpdump
+	net-fs/sshfs
 	net-misc/iperf:2
 	net-misc/iputils
 	net-misc/rsync
@@ -73,7 +74,6 @@ RDEPEND="
 	sys-boot/syslinux
 	sys-devel/gdb
 	sys-fs/lvm2
-	sys-fs/sshfs-fuse
 	sys-process/procps
 	sys-process/psmisc
 	sys-process/time
