@@ -42,3 +42,9 @@ USE="${USE} eclog"
 # All firmware to build from the EC code base.
 EC_FIRMWARE="nocturne"
 EC_FIRMWARE_EXTRA="nocturne_fp"
+
+# Enable Intel wifi and bt firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
+
+# Allow the option to use QCA Wifi and BT
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174 qca-bt"
