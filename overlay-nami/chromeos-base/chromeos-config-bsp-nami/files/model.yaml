@@ -58,8 +58,9 @@ common_config: &common_config
     $internal-backlight-no-als-battery-brightness: "50.0"
     internal-backlight-no-als-battery-brightness: "{{$internal-backlight-no-als-battery-brightness}}"
   thermal:
+    dptf-dv: "{{$device-name}}/dptf.dv"
     files:
-      - source: "{{$device-name}}/dptf.dv"
+      - source: "{{$device-name}}/thermal/dptf.dv"
         destination: "/etc/dptf/{{$device-name}}/dptf.dv"
   test-label: "{{$device-name}}"
 
