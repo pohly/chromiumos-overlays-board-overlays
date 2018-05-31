@@ -52,8 +52,9 @@ common_config: &common_config
     $has-ambient-light-sensor: "0"
     has-ambient-light-sensor: "{{$has-ambient-light-sensor}}"
   thermal:
+    dptf-dv: "{{$device-name}}/dptf.dv"
     files:
-      - source: "{{$device-name}}/dptf.dv"
+      - source: "{{$device-name}}/thermal/dptf.dv"
         destination: "/etc/dptf/{{$device-name}}/dptf.dv"
   test-label: "{{$device-name}}"
 
