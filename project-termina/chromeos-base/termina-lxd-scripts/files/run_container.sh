@@ -156,7 +156,7 @@ main() {
 
   if [ -n "${FLAGS_container_token}" ]; then
     printf "%s" "${FLAGS_container_token}" > "${token_path}"
-  else
+  elif [ ! -f "${token_path}" ]; then
     warning "container token not supplied; garcon may not function"
   fi
 
