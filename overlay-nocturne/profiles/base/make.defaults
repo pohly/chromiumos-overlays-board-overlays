@@ -52,5 +52,8 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
 # Allow the option to use QCA Wifi and BT
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174 qca-bt"
 
+# Add Intel Camera IMGU ipu3-fw.bin
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
+
 # Enable hammerd for updating base firmware.
 USE="${USE} hammerd"
