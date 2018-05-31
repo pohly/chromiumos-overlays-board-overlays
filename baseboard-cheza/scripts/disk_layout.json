@@ -3,7 +3,7 @@
 {
   "_comment": "See http://www.chromium.org/chromium-os/developer-guide/disk-layout-format",
   "metadata":{
-    "rootdev_base": "/sys/devices/platform/fe330000.sdhci/mmc_host/mmc*/mmc*/block/mmcblk*"
+    "rootdev_base": "/sys/devices/platform/soc/1d84000.ufshc/host*/target*/*/block/sd*"
   },
   "parent": "legacy_disk_layout.json",
   "layouts": {
