@@ -17,9 +17,6 @@ USE="${USE} als touchview"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
-# with some legacy peripherals
-USE="${USE} legacy_keyboard legacy_power_button"
-
 USE="${USE} unibuild"
 
 USE="${USE} arc"
