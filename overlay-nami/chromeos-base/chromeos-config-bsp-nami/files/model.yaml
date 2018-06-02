@@ -89,10 +89,10 @@ chromeos:
           $key-id: "AKALI"
       skus:
         - $sku-id: 0x29e1
-          config: *device_config
+          config: *device_specific_audio_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x2861
-          config: *device_config
+          config: *device_specific_audio_device_config
     - $device-name: "akali360"
       products:
         - $marketing-name: "TBD"
@@ -100,10 +100,10 @@ chromeos:
           $key-id: "AKALI"
       skus:
         - $sku-id: 0x2be7
-          config: *device_config
+          config: *device_specific_audio_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x2a67
-          config: *device_config
+          config: *device_specific_audio_device_config
     - $device-name: "nami"
       $has-ambient-light-sensor: "1"
       products:
