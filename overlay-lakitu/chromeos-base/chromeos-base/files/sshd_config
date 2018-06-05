@@ -7,7 +7,7 @@ AddressFamily inet
 # /etc is read-only.  Fetch keys from stateful partition
 # Not using v1, so no v1 key
 HostKey /mnt/stateful_partition/etc/ssh/ssh_host_rsa_key
-HostKey /mnt/stateful_partition/etc/ssh/ssh_host_dsa_key
+HostKey /mnt/stateful_partition/etc/ssh/ssh_host_ed25519_key
 
 PasswordAuthentication no
 ChallengeResponseAuthentication no
@@ -19,11 +19,11 @@ PrintLastLog no
 UseDns no
 Subsystem sftp internal-sftp
 
-# Settings recommended by
-# https://cloud.google.com/compute/docs/tutorials/building-images#removesshkeys.
 PermitTunnel no
 AllowTcpForwarding yes
 X11Forwarding no
+
+Ciphers aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr
 
 # Compute times out connections after 10 minutes of inactivity.  Keep alive
 # ssh connections by sending a packet every 7 minutes.
