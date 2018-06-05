@@ -133,6 +133,7 @@ chromeos:
         - $sku-id: 0x3e67
           config: *device_config
     - $device-name: "sona"
+      $internal-backlight-no-als-battery-brightness: "63.0"
       products:
         - $marketing-name: "TBD"
           $brand-code: "HFRG"
