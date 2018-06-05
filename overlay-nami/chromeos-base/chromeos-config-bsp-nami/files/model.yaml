@@ -51,7 +51,7 @@ common_config: &common_config
     set-wifi-transmit-power-for-tablet-mode: "1"
     $has-ambient-light-sensor: "0"
     has-ambient-light-sensor: "{{$has-ambient-light-sensor}}"
-    $internal-backlight-als-steps: |
+    $internal-backlight-als-steps: |-
       80.0 50.0 -1 400
       100.0 80.0 100 -1
     internal-backlight-als-steps: "{{$internal-backlight-als-steps}}"
