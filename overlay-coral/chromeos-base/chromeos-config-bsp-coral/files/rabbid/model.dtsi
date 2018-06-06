@@ -1,0 +1,24 @@
+/* Copyright 2018 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	rabbid: rabbid {
+		brand-code = "YPCE";
+		powerd-prefs = "rabbid";
+		test-label = "rabbid";
+		audio {
+			main {
+				audio-type = <&audio_type_2mic>;
+				cras-config-dir = "rabbid";
+			};
+		};
+		thermal {
+			// TODO(OEM): Add validated dptf.dv file into BSP, it's
+			// currently using inherited version from the parent.
+			dptf-dv = "rabbid/dptf.dv";
+		};
+	};
+};
