@@ -192,6 +192,8 @@ src_prepare() {
 		"${FILESDIR}"/232-avoid-calling-unit-free-null-in-device-setup.patch
 		# Lakitu: fix for upstream bug https://github.com/systemd/systemd/issues/7798
 		"${FILESDIR}"/232-mount-prevent-zombie-units.patch
+		# Lakitu: Fix compilation error with util-linux 2.32-r3.
+		"${FILESDIR}"/232-core-don-t-include-libmount-h-in-a-header-file.patch
 	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
