@@ -54,8 +54,8 @@ common_config: &common_config
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
-      - source: "{{$device-name}}/thermal/dptf.dv"
-        destination: "/etc/dptf/{{$device-name}}/dptf.dv"
+      - source: "{{dptf-dv}}"
+        destination: "/etc/dptf/{{dptf-dv}}"
   test-label: "{{$device-name}}"
 
 device_config: &device_config
