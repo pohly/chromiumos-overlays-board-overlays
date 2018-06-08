@@ -29,6 +29,11 @@
 				brand-code = "FBTP";
 				key-id = "CORALF";
 			};
+			// Workaround to make it compatible with "ctl"
+			to-be-determined-bt-loem1 {
+				brand-code = "FBTP";
+				key-id = "CORALF";
+			};
 			// TODO(sie): Replace with correct loem name
 			to-be-determined-bt360-loem2 {
 				brand-code = "TVRZ";
