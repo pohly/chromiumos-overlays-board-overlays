@@ -23,8 +23,8 @@ audio_common: &audio_common
         destination: "{{$cras-dest}}/{{$card}}"
       - source: "{{$cras-source}}/dsp.ini"
         destination: "{{$cras-dest}}/dsp.ini"
-      - source: "{{$ucm-source}}/HiFi"
-        destination: "{{$ucm-dest}}/HiFi"
+      - source: "{{$ucm-source}}/HiFi.conf"
+        destination: "{{$ucm-dest}}/HiFi.conf"
       - source: "{{$ucm-source}}/{{$card}}.conf"
         destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
 
@@ -144,9 +144,9 @@ chromeos:
           $oem-id: "4"
       skus:
         - $sku-id: 0x3ae2
-          config: *device_config
+          config: *device_specific_audio_device_config
         - $sku-id: 0x3ae3
-          config: *device_config
+          config: *device_specific_audio_device_config
     - $device-name: "vayne"
       products:
         - $marketing-name: "TBD"
