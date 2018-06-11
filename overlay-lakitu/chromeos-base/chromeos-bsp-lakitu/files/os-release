@@ -1,4 +1,5 @@
 NAME="Container-Optimized OS"
 ID=cos
 PRETTY_NAME="Container-Optimized OS from Google"
-HOME_URL="https://cloud.google.com/compute/docs/containers/vm-image/"
+HOME_URL="https://cloud.google.com/container-optimized-os/docs"
+BUG_REPORT_URL="https://cloud.google.com/container-optimized-os/docs/resources/support-policy#contact_us"
