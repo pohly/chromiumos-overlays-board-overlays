@@ -1,1 +1,0 @@
-chromeos-bsp-baseboard-kahlee-0.0.1.ebuild
