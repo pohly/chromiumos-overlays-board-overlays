@@ -29,5 +29,5 @@ USE="${USE} eclog"
 # Enable hammerd for updating base firmware
 USE="${USE} hammerd"
 
-# FIXME: enable the following once it's ready
-#USE="${USE} cros_ec cr50_onboard"
+# Enable VMs
+USE="${USE} kvm_host"
