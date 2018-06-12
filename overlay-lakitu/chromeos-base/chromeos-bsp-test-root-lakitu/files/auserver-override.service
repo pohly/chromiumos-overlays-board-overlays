@@ -1,0 +1,14 @@
+[Unit]
+Description=Override AUSERSER for test image
+After=local-fs.target
+Wants=local-fs.target
+Before=sysinit.target update-engine.service
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sed -i -e "s|^CHROMEOS_AUSERVER=.*$|CHROMEOS_AUSERVER=https://localhost:8080/noupdate|g" /etc/lsb-release
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target

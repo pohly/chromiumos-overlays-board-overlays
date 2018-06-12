@@ -1,0 +1,6 @@
+# Default args for device_policy_manager service
+# GLOBAL_ARGS: Arguments to device_policy_manager binary irrespective of any
+#              particular mode. Ex. logging verbosity arg "--v=2"
+# MONITOR_ARGS: Arguments to device_policy_manager monitor mode.
+GLOBAL_ARGS=""
+MONITOR_ARGS="--use_staging_api --update_check_interval=60"
