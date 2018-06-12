@@ -9,6 +9,8 @@ USE=""
 USE="${USE} cros_ec eclog mosys_eventlog -opengl"
 USE="${USE} opengles touchview watchdog"
 USE="${USE} wifi_force_powersave"
+# Make GPU sandboxing failures not fatal because we use LLVM
+USE="${USE} gpu_sandbox_failures_not_fatal"
 
 # For now disable all TPM stuff while on MTP
 # Does not apply to all boards, but is a noop where it is not needed.
