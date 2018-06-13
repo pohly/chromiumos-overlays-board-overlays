@@ -1,0 +1,33 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-mediatek"
+CHROMEOS_KERNEL_ARCH="arm64"
+
+# Initial value just for style purposes.
+USE=""
+
+# Use hardware FPU instead of software
+USE="${USE} hardfp"
+# Support for neon-vfpv3
+USE="${USE} neon"
+
+# For the device tree installation
+USE="${USE} device_tree"
+
+# use kernel 4.14
+USE="${USE} kernel-4_14"
+
+# TODO(b:109850061): build error, need to be fixed
+# needed by drm-tests
+#USE="${USE} vulkan"
+
+# Enables WebGL rendering
+USE="${USE} drm_atomic"
+
+# Set raster thread number=2
+USE="${USE} big_little"
+
+# Turn on the video cards this board uses.
+VIDEO_CARDS="mediatek"

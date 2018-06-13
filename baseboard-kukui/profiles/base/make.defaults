@@ -1,0 +1,35 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+# Add EC logging
+USE="${USE} eclog"
+
+# Tell powerd to use the "mosys eventlog" command to log system events.
+USE="${USE} mosys_eventlog"
+
+# Use opengles
+USE="${USE} -opengl opengles"
+
+# Enable for daisydog
+USE="${USE} watchdog"
+
+#enable ARC by default
+USE="${USE} arc"
+
+# Enable Chrome's tablet mode
+USE="${USE} touchview"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Declare TPM model.
+USE="${USE} -tpm tpm2"
+USE="${USE} cr50_onboard"
+
+# Google USBPD peripheral firmwares
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"

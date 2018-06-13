@@ -1,0 +1,19 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} kukui"
+
+# TODO(b:80159522,b:80501386): Need to enable the ec/firmware build later
+#USE="${USE} bootimage"
+#USE="${USE} cros_ec"
+#EC_FIRMWARE="kukui"
+
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+USE="${USE} pcserial"
+# Declare set of enabled consoles
+TTY_CONSOLE="ttyS0"

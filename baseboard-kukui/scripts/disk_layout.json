@@ -1,0 +1,30 @@
+# Disk layout for baseboard-kukui. Adds space to rootfs filesystem without
+# resizing the partitions.
+{
+  "_comment": "See http://www.chromium.org/chromium-os/developer-guide/disk-layout-format",
+  "metadata":{
+    # TODO(b:109850061): need to check the rootdev_base on DUT.
+    "rootdev_base": "/sys/devices/soc/11230000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0"
+  },
+  "parent": "legacy_disk_layout.json",
+  "layouts": {
+    # common is the standard layout template.
+    "common": [
+      {
+        # Slot A rootfs. Adjust to allow for more space
+        "num": 3,
+        "fs_size_min": "1628 MiB",
+        "size_min": "2000 MiB"
+      }
+    ],
+    # Used for factory install images. No need to adjust fs size or partition
+    # size since these do not need more space.
+    "factory_install": [
+      {
+        "num": 3,
+        "fs_size_min": "0 MiB",
+        "size_min": "0 MiB"
+      }
+    ]
+  }
+}
