@@ -85,7 +85,6 @@ USE="${USE}
   -tests_kernel_ConfigVerify
   -tests_kernel_CryptoAPI
   -tests_logging_UserCrash
-  -tests_logging_CrashSender
   -tests_security_RootCA
   -tests_security_Firewall
   -tests_security_ChromiumOSLSM
