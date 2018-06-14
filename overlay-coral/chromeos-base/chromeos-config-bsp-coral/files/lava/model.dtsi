@@ -20,5 +20,8 @@
 			/* Could also point to astronaut/dptf.dv */
 			dptf-dv = "lava/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "0";
+		};
 	};
 };

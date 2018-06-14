@@ -19,6 +19,9 @@
 			/* Could also point to astronaut/dptf.dv */
 			dptf-dv = "blacktip/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "1";
+		};
 		whitelabels {
 			// *default* LOEM
 			default {

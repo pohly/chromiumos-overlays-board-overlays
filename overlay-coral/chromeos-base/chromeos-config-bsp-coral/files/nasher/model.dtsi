@@ -24,5 +24,8 @@
 		thermal {
 			dptf-dv = "nasher/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "1";
+		};
 	};
 };

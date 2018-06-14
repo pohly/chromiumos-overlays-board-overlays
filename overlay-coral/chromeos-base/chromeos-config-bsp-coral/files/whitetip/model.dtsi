@@ -18,6 +18,9 @@
 		thermal {
 			dptf-dv = "whitetip/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "1";
+		};
 		whitelabels {
 			// *default* LOEM
 			default {

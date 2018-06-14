@@ -22,5 +22,8 @@
 			// currently using inherited version from the parent.
 			dptf-dv = "babytiger/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "1";
+		};
 	};
 };

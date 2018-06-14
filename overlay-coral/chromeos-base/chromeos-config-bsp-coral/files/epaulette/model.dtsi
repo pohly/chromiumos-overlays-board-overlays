@@ -28,5 +28,8 @@
 			//     BSP, it's currently using inherited version from the parent.
 			dptf-dv = "epaulette/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "1";
+		};
 	};
 };

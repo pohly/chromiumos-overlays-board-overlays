@@ -19,5 +19,8 @@
 		thermal {
 			dptf-dv = "coral/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "0";
+		};
 	};
 };

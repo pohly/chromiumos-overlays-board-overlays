@@ -20,5 +20,8 @@
 			/* Could also point to robo/dptf.dv */
 			dptf-dv = "robo360/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "0";
+		};
 	};
 };

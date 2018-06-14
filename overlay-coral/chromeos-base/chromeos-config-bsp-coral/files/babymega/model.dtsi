@@ -21,5 +21,8 @@
 			// currently using inherited version from the parent.
 			dptf-dv = "babymega/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "1";
+		};
 	};
 };

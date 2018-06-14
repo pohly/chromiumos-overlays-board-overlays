@@ -42,5 +42,8 @@
 			/* Could also point to nasher/dptf.dv */
 			dptf-dv = "nasher360/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "0";
+		};
 	};
 };

@@ -19,5 +19,8 @@
 			/* Could also point to astronaut/dptf.dv */
 			dptf-dv = "porbeagle/dptf.dv";
 		};
+		power {
+			touchpad-wakeup = "1";
+		};
 	};
 };
