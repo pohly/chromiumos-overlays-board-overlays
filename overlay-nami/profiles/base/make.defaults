@@ -33,3 +33,6 @@ EC_FIRMWARE="nami"
 # Disable touchpad wakeup since it can't be turned off dynamically when the
 # system is converted to tablet mode while it's suspended.
 USE="${USE} -touchpad_wakeup"
+
+# Avoid inhibiting the keyboard (which reports events from side buttons).
+USE="${USE} keyboard_includes_side_buttons"
