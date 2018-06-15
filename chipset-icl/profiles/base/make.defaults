@@ -8,8 +8,8 @@ CHROMEOS_KERNEL_ARCH="x86_64"
 LINUX_FIRMWARE=""
 USE=""
 
-# Use 4.14 kernel
-USE="${USE} kernel-4_14"
+# Use Intel's provided drm-tip kernel for bringup
+USE="${USE} kernel-experimental"
 
 # Enable native one-copy texture upload.
 USE="${USE} native_gpu_memory_buffers"
