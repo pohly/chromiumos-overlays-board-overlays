@@ -1,5 +1,5 @@
 [Unit]
-Description=Init GCI filesystems
+Description=Mount /etc overlay
 DefaultDependencies=no
 Requires=tmp.mount var.mount
 After=syslog.target tmp.mount var.mount
