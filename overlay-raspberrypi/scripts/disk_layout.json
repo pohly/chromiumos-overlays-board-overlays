@@ -1,0 +1,11 @@
+{
+  "parent": "legacy_disk_layout.json",
+  "layouts":{
+    "common":[
+      {
+        "num": "metadata",
+        "hybrid_mbr": true
+      }
+    ]
+  }
+}
