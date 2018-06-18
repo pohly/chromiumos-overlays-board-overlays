@@ -37,6 +37,7 @@ RDEPEND="
 	sys-apps/ethtool
 	sys-apps/file
 	sys-fs/e2fsprogs
+	net-dns/bind-tools
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
