@@ -18,4 +18,7 @@ USE="${USE} wireless38"
 # Declare TPM model.
 USE="${USE} tpm_slb9645"
 
+# Use ext4 crypto
+USE="${USE} direncryption"
+
 LINUX_FIRMWARE="brcmfmac4354-sdio bcm4354-bt"
