@@ -4,3 +4,36 @@
 # Initial value just for style purposes.
 LINUX_FIRMWARE=""
 USE=""
+
+# Enable ARC by default
+USE="${USE} arc"
+
+# Use ext4 crypto (for NYC Android container)
+USE="${USE} direncryption"
+
+# Include prebuilt (&signed) CR50 FW
+USE="${USE} cr50_onboard"
+
+# Enable TPM2
+USE="${USE} -tpm tpm2"
+
+# Enable DPTF
+USE="${USE} dptf"
+
+# Disable ACPI AC driver
+USE="${USE} -acpi_ac"
+
+# Add Intel Camera IMGU ipu3-fw.bin
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
+
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+USE="${USE} pcserial"
+# Declare set of enabled consoles
+TTY_CONSOLE="ttyS0"
+
+# Log cros_ec/cros_fp consoles with the timberslide daemon
+USE="${USE} eclog"
+
+# Enable Intel wifi and bt firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"

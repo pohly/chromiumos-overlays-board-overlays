@@ -7,26 +7,8 @@ USE=""
 
 USE="${USE} nocturne"
 
-# Enable ARC by default
-USE="${USE} arc"
-
 # Enable biometrics support
 USE="${USE} biod"
-
-# Use ext4 crypto (for NYC Android container)
-USE="${USE} direncryption"
-
-# Include prebuilt (&signed) CR50 FW
-USE="${USE} cr50_onboard"
-
-# Enable TPM2
-USE="${USE} -tpm tpm2"
-
-# Enable DPTF
-USE="${USE} dptf"
-
-# Disable ACPI AC driver
-USE="${USE} -acpi_ac"
 
 # Enable Ambient Light Sensor
 USE="${USE} als"
@@ -34,32 +16,18 @@ USE="${USE} als"
 # Enable keyboard backlight control
 USE="${USE} has_keyboard_backlight"
 
-# Uncomment these lines to activate the serial port.
-# Enable kernel serial drivers
-USE="${USE} pcserial"
-# Declare set of enabled consoles
-TTY_CONSOLE="ttyS0"
-
 # Enable touch in Chrome.
 USE="${USE} touchview"
 
 # Building EC
 USE="${USE} cros_ec"
-# Log cros_ec/cros_fp consoles with the timberslide daemon
-USE="${USE} eclog"
 
 # All firmware to build from the EC code base.
 EC_FIRMWARE="nocturne"
 EC_FIRMWARE_EXTRA="nocturne_fp"
 
-# Enable Intel wifi and bt firmware
-LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
+# Enable hammerd for updating base firmware.
+USE="${USE} hammerd"
 
 # Allow the option to use QCA Wifi and BT
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174 qca-bt"
-
-# Add Intel Camera IMGU ipu3-fw.bin
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
-
-# Enable hammerd for updating base firmware.
-USE="${USE} hammerd"
