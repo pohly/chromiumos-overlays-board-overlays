@@ -40,7 +40,7 @@ common_config: &common_config
   firmware-signing:
     key-id: "{{$key-id}}"
     signature-id: "{{$device-name}}"
-  power:
+  power: &power_common
     charging-ports: |
       CROS_USB_PD_CHARGER0 LEFT
       CROS_USB_PD_CHARGER1 RIGHT
@@ -59,6 +59,8 @@ common_config: &common_config
     min-visible-backlight-level: "75"
     $touchpad-wakeup: "0"
     touchpad-wakeup: "{{$touchpad-wakeup}}"
+    $has-keyboard-backlight: "1"
+    has-keyboard-backlight: "{{$has-keyboard-backlight}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
@@ -122,6 +124,12 @@ chromeos:
           $brand-code: "CBUY"
           $key-id: "PANTHEON"
       skus:
+        - $sku-id: 0x3f62
+          config:
+            <<: *device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
         - $sku-id: 0x3f63
           config: *device_config
         - $sku-id: 0x3f67
@@ -141,7 +149,11 @@ chromeos:
           $key-id: "NAMI"
       skus:
         - $sku-id: 0x3ae2
-          config: *device_specific_audio_device_config
+          config:
+            <<: *device_specific_audio_device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
         - $sku-id: 0x3ae3
           config: *device_specific_audio_device_config
     - $device-name: "vayne"
