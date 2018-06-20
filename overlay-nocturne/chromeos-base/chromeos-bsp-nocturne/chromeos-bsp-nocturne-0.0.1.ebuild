@@ -23,6 +23,10 @@ RDEPEND="${DEPEND}"
 src_install() {
 	doappid "{BD7F7139-CC18-49C1-A847-33F155CCBCA8}" "CHROMEBOOK"
 
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
+
 	# Install updated hammer keyboard keymap.
 	# It should probbaly go into /lib/udev/hwdb.d but
 	# unfortunately udevadm on 64 bit boxes does not check
