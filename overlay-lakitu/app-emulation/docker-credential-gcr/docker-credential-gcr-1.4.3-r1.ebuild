@@ -1,1 +1,0 @@
-docker-credential-gcr-1.4.3.ebuild
