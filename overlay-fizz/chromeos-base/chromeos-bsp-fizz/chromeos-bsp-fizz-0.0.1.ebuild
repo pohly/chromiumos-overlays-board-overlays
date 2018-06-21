@@ -17,6 +17,7 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-fizz
+	chromeos-base/ec-utils
 "
 DEPEND="${RDEPEND}"
 
@@ -30,4 +31,7 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	insinto "/etc/init"
+	doins "${FILESDIR}/check-fan-rpm.conf"
 }
