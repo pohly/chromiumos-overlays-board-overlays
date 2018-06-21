@@ -3,7 +3,7 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="0c45090517223ee739c6e33441f121618c27997f"
+CROS_WORKON_COMMIT="824fd63bbc9cae8f0b91155a6e8395457714b5d2"
 CROS_WORKON_TREE="0c875a0165d16b7c49ca806dfc20bed97e3e5687"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
@@ -39,6 +39,7 @@ RDEPEND="
 	sys-apps/ethtool
 	sys-apps/file
 	sys-fs/e2fsprogs
+	net-dns/bind-tools
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
