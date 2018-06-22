@@ -3,7 +3,7 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="5e7a13de9216a8e378e92d141743acfde9c6e359"
+CROS_WORKON_COMMIT="ac24e0aa136d3ae4b4f6911af6e4c75fa1868feb"
 CROS_WORKON_TREE="39a4c3b5d0a3a478df128ed15f9fc894a293aeeb"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
@@ -16,6 +16,8 @@ DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or port
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
+
+# TODO(haddowk) remove this comment when the issue with uprev is fixed.
 
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
