@@ -114,7 +114,7 @@ chromeos:
       products:
         - $marketing-name: "TBD"
           $brand-code: "ZZCR"
-          $key-id: "NAMI"
+          $key-id: "DEFAULT"
       skus:
         - $sku-id: 0x3a7b
           config: *device_specific_audio_device_config
@@ -145,8 +145,7 @@ chromeos:
       products:
         - $marketing-name: "TBD"
           $brand-code: "HFRG"
-# TODO (change key-id once the key is available)
-          $key-id: "NAMI"
+          $key-id: "SONA"
       skus:
         - $sku-id: 0x3ae2
           config:
