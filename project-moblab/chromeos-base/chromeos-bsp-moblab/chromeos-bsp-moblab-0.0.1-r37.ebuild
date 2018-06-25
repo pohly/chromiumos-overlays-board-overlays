@@ -3,8 +3,8 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="925a306d3bde497d239357e85518e6985d746772"
-CROS_WORKON_TREE="4b25c2da0d8485088360afc76f928d2467c787b0"
+CROS_WORKON_COMMIT="fea5eda9b9b5274cc8da3ace95686f5a940312d8"
+CROS_WORKON_TREE="5f125d1b962f1f097dfc08303c0b55ddf99f6eb6"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
@@ -42,6 +42,7 @@ RDEPEND="
 	sys-apps/file
 	sys-fs/e2fsprogs
 	net-dns/bind-tools
+	net-analyzer/speedtest-cli
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
