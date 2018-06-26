@@ -1,0 +1,13 @@
+#Moblab specific sql settings.
+
+[mysqld]
+
+innodb_buffer_pool_size=9G
+innodb_buffer_pool_instances=20
+
+# We do not want to limit the size of the table
+innodb_data_file_path=ibdata1:50M:autoextend
+
+#Switch off binary logging
+skip-log-bin
+

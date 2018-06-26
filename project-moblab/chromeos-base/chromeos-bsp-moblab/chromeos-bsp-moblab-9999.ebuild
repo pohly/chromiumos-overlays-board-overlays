@@ -91,4 +91,8 @@ src_install() {
 
 	insinto /etc/init
 	doins "${FILESDIR}/cgroups.override"
+
+	insinto /etc/moblab/mysql
+	insopts -m644
+	doins "${FILESDIR}/mysql_defaults_extra.cnf"
 }
