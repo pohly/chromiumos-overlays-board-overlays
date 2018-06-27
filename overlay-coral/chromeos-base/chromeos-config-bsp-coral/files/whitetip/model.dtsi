@@ -35,8 +35,11 @@
 				brand-code = "LOGH";
 				key-id = "CORALH";
 			};
+			sector5 {
+				brand-code = "IULQ";
+				key-id = "CORALI";
+			};
 			// Following are the brand codes allocated but not yet in used.
-			//	brand-code = "IULQ";
 			//	brand-code = "LOGI";
 			//	brand-code = "TPHN";
 			//	brand-code = "URZD";
