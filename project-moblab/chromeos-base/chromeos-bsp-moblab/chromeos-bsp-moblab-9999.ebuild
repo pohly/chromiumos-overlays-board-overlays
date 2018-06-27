@@ -15,8 +15,6 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="~*"
 
-# TODO(haddowk) remove this comment when the issue with uprev is fixed.
-
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
 # TODO(pprabhu, crbug.com/775373) Move virt-what to common VM overlay once that
