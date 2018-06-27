@@ -37,3 +37,6 @@ USE="${USE} dptf"
 
 # Enable TPM2
 USE="${USE} -tpm tpm2"
+
+# VMs are supported by all APL models
+USE="${USE} kvm_host"

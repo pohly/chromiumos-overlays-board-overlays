@@ -36,3 +36,6 @@ USE="${USE} cr50_onboard"
 
 # Add EC logging
 USE="${USE} eclog"
+
+# VMs are supported by all APL models
+USE="${USE} kvm_host"
