@@ -34,6 +34,7 @@ src_install() {
 	insinto /etc/stackdriver
 	doins "${FILESDIR}"/env_vars
 
+	systemd_dounit "${FILESDIR}"/docker-events-collector.service
 	systemd_dounit "${FILESDIR}"/stackdriver-docker-network.service
 	systemd_dounit "${FILESDIR}"/stackdriver-metadata.service
 	systemd_dounit "${FILESDIR}"/stackdriver-monitoring.service

@@ -1,6 +1,7 @@
 [Unit]
 Description=Fluentd container for Stackdriver Logging
 After=stackdriver-metadata.service
+Wants=docker-events-collector.service
 Requires=stackdriver-metadata.service
 
 [Service]
