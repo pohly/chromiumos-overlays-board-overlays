@@ -131,15 +131,15 @@ chromeos:
               <<: *power_common
               $has-keyboard-backlight: "0"
         - $sku-id: 0x3f63
-          config: *device_config
+          config: *device_specific_audio_device_config
         - $sku-id: 0x3f67
-          config: *device_config
+          config: *device_specific_audio_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3e63
-          config: *device_config
+          config: *device_specific_audio_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3e67
-          config: *device_config
+          config: *device_specific_audio_device_config
     - $device-name: "sona"
       $internal-backlight-no-als-battery-brightness: "63.0"
       products:
