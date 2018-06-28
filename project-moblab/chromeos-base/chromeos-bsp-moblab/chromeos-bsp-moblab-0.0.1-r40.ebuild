@@ -3,8 +3,8 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="52486668978f98d91b1890927b23875b78446399"
-CROS_WORKON_TREE="1985630d1bb4aff083067d7b368dec5a93b25e7f"
+CROS_WORKON_COMMIT="ac9ffc23c8fa6c657541c44993998c2ff7fce49a"
+CROS_WORKON_TREE="e25d41e7046bd0c581073ebaa9e8c65942b00ade"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
@@ -92,4 +92,8 @@ src_install() {
 
 	insinto /etc/init
 	doins "${FILESDIR}/cgroups.override"
+
+	insinto /etc/moblab/mysql
+	insopts -m644
+	doins "${FILESDIR}/mysql_defaults_extra.cnf"
 }
