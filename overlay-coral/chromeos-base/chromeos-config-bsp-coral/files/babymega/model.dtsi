@@ -13,8 +13,13 @@
 		test-label = "babymega";
 		audio {
 			main {
-				audio-type = <&audio_type_1mic>;
+				card = "bxtda7219max";
 				cras-config-dir = "babymega";
+				ucm-suffix = "1micBabymega";
+				volume = "${cras-config-dir}/audio/cras-config/${card}";
+				dsp-ini = "${cras-config-dir}/audio/cras-config/dsp.ini";
+				hifi-conf = "${cras-config-dir}/audio/ucm-config/1mic/HiFi";
+				alsa-conf = "${cras-config-dir}/audio/ucm-config/1mic/${card}.conf";
 			};
 		};
 		thermal {
