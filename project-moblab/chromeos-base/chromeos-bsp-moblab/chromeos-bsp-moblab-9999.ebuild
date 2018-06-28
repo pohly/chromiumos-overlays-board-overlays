@@ -3,6 +3,7 @@
 
 EAPI="6"
 
+CROS_WORKON_BLACKLIST=1
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
