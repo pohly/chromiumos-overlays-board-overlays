@@ -28,6 +28,9 @@ USE="${USE} dptf"
 # Disable ACPI AC driver
 USE="${USE} -acpi_ac"
 
+# Enable Ambient Light Sensor
+USE="${USE} als"
+
 # Uncomment these lines to activate the serial port.
 # Enable kernel serial drivers
 USE="${USE} pcserial"
