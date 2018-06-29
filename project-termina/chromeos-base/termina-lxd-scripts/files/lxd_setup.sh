@@ -64,17 +64,9 @@ profiles:
       path: /opt/google/cros-containers
       source: /opt/google/cros-containers
       type: disk
-    garcon:
-      path: /opt/google/garcon
-      source: /opt/google/cros-containers
-      type: disk
     host-ip:
       path: /dev/.host_ip
       source: /run/host_ip
-      type: disk
-    wayland-sock:
-      path: /dev/.wayland-0
-      source: /run/wayland-0
       type: disk
     wl0:
       source: /dev/wl0
@@ -99,17 +91,6 @@ main() {
   if ! lxc profile device get default host-ip source; then
     lxc profile device add default host-ip disk \
         source=/run/host_ip path=/dev/.host_ip || die "Failed to add host_ip"
-  fi
-
-  # Migrations: add cros_containers and garcon bind mounts.
-  # TODO(smbarber): remove garcon once LXD is uprevved.
-  local garcon_dir=$(lxc profile device get default garcon source)
-  if [ ! -d "${garcon_dir}" ]; then
-    lxc profile device remove default garcon
-
-    lxc profile device add default garcon disk \
-        source=/opt/google/cros-containers path=/opt/google/garcon || \
-      die "Failed to add garcon bind mount"
   fi
 
   if ! lxc profile device get default cros_containers source; then
