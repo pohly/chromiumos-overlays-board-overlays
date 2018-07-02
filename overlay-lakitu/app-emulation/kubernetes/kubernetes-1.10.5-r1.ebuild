@@ -1,1 +1,0 @@
-kubernetes-1.10.5.ebuild
