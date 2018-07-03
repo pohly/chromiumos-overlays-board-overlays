@@ -28,8 +28,5 @@ USE="${USE} -transparent_hugepage"
 # Disable containers because kernel-3_8 doesn't support everything needed.
 USE="${USE} -containers"
 
-# Build kernel with AutoFDO.
-USE="${USE} kernel_afdo"
-
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttySAC3"
