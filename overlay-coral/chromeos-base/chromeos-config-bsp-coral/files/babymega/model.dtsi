@@ -23,8 +23,6 @@
 			};
 		};
 		thermal {
-			// TODO(ODM): Add validated dptf.dv file into BSP, it's
-			// currently using inherited version from the parent.
 			dptf-dv = "babymega/dptf.dv";
 		};
 	};
