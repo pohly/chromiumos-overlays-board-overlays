@@ -7,8 +7,7 @@
 
 &models {
 	babytiger: babytiger {
-		// TODO(OEM): b/79126385
-		// brand-code = "";
+		brand-code = "YXED";
 		powerd-prefs = "babytiger";
 		test-label = "babytiger";
 		audio {
