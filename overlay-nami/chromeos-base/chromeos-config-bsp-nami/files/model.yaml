@@ -42,8 +42,8 @@ common_config: &common_config
     signature-id: "{{$device-name}}"
   power: &power_common
     charging-ports: |
-      CROS_USB_PD_CHARGER0 LEFT
-      CROS_USB_PD_CHARGER1 RIGHT
+      CROS_USB_PD_CHARGER0 RIGHT
+      CROS_USB_PD_CHARGER1 LEFT
     low-battery-shutdown-percent: "4.0"
     power-supply-full-factor: "0.94"
     suspend-to-idle: "1"
