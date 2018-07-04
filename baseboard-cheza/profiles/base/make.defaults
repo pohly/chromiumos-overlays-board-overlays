@@ -21,6 +21,9 @@ USE="${USE} gpu_sandbox_failures_not_fatal"
 ## USE="${USE} cr50_onboard"
 USE="${USE} mocktpm"
 
+# ath10k firmware for WCN3990 Wifi
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_wcn3990"
+
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 
