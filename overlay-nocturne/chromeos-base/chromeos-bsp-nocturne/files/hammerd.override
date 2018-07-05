@@ -3,5 +3,5 @@ env TOUCHPAD_IMAGE_PATH="/lib/firmware/whiskers-touchpad.fw"
 env VENDOR_ID=6353  # 0x18d1
 env PRODUCT_ID=20528  # 0x5030
 env USB_BUS=1
-env USB_PORT=3
+env USB_PORT=7
 env AUTOSUSPEND_DELAY_MS="1000"
