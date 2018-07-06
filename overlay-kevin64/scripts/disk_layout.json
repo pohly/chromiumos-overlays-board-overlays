@@ -1,0 +1,44 @@
+# Disk layout for overlay-kevin64. Adds space to rootfs filesystem without
+# resizing the partitions.
+{
+  "_comment": "See http://www.chromium.org/chromium-os/developer-guide/disk-layout-format",
+  "metadata":{
+    "rootdev_base": "/sys/devices/platform/fe330000.sdhci/mmc_host/mmc*/mmc*/block/mmcblk*"
+  },
+  "parent": "legacy_disk_layout.json",
+  "layouts": {
+    # common is the standard layout template.
+    "common": [
+      {
+        # Slot A rootfs. Adjust to allow for more space
+        "num": 3,
+        "fs_size_min": "1628 MiB",
+        "size_min": "2000 MiB"
+      }
+    ],
+    # Used for factory install images. No need to adjust fs size or partition
+    # size since these do not need more space.
+    "factory_install": [
+      {
+        "num": 3,
+        "fs_size_min": "0 MiB",
+        "size_min": "0 MiB"
+      }
+    ],
+    "4gb-rootfs": [
+      {
+        "num": 5,
+        "size": "2 MiB"
+      },
+      {
+        "num": 3,
+        "size": "4096 MiB",
+        "fs_size": "4000 MiB"
+      },
+      {
+        "num": 1,
+        "size": "3072 MiB"
+      }
+    ]
+  }
+}

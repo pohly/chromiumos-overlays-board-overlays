@@ -9,8 +9,10 @@ SLOT="0"
 KEYWORDS="-* arm64 arm"
 IUSE=""
 
+# TODO: Fix this when we have 64bit mali drivers. For now we build a mock library for arm64.
 DEPEND="
-	media-libs/mali-drivers-bin
+	arm64? ( x11-drivers/opengles-9999 )
+	!arm64? ( media-libs/mali-drivers-bin )
 	x11-drivers/opengles-headers
 "
 RDEPEND="${DEPEND}"
