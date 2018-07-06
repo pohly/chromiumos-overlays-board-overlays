@@ -16,7 +16,6 @@ USE="${USE} has_keyboard_backlight als"
 USE="${USE} background_blur"
 USE="${USE} eve_bt_hacks"
 USE="${USE} eve_wifi_etsi"
-USE="${USE} instant_tethering"
 
 # Disable ACPI AC device and use USB PD power supply driver
 USE="${USE} -acpi_ac"
