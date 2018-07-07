@@ -31,6 +31,9 @@ USE="${USE} -acpi_ac"
 # Enable Ambient Light Sensor
 USE="${USE} als"
 
+# Enable keyboard backlight control
+USE="${USE} has_keyboard_backlight"
+
 # Uncomment these lines to activate the serial port.
 # Enable kernel serial drivers
 USE="${USE} pcserial"
