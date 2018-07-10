@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit appid cros-audio-configs
+inherit appid cros-audio-configs udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -35,4 +35,7 @@ src_install() {
 	# Install cpuset adjustments.
 	insinto "/opt/google/containers/android/vendor/etc/init/"
 	doins "${FILESDIR}/init.cpusets.rc"
+
+	# Install udev rules for proximity sensor.
+	udev_dorules "${FILESDIR}"/udev/*.rules
 }
