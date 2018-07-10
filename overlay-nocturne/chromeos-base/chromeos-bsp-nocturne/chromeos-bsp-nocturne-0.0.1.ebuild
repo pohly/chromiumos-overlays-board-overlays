@@ -34,15 +34,14 @@ src_install() {
 	insinto "${EPREFIX}/etc/udev/hwdb.d"
 	doins "${FILESDIR}/61-hammer-keyboard.hwdb"
 
-	# Install a rule tagging keyboard as internal and having updated layout
-	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
-
-	# Install hammerd udev rules and override for chromeos-base/hammerd.
-	udev_dorules "${FILESDIR}/99-hammerd.rules"
+	# Override for chromeos-base/hammerd.
 	insinto /etc/init
 	doins "${FILESDIR}/hammerd.override"
 
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs nocturne "${audio_config_dir}"
+
+	# Install device specific udev rules.
+	udev_dorules "${FILESDIR}"/udev/*.rules
 }
