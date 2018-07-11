@@ -13,3 +13,9 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND=""
 DEPEND="${RDEPEND}"
+
+src_install() {
+	# Install governor config to tune ondemand governor parameters.
+	insinto /etc
+	doins "${FILESDIR}"/cpufreq.conf
+}
