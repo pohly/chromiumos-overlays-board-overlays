@@ -16,3 +16,6 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw ibt_9560 ibt_9260"
 
 # Enable EC logging
 USE="${USE} eclog"
+
+# Enable Virtual Machines
+USE="${USE} kvm_host"
