@@ -19,6 +19,7 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-cheza
 	net-libs/libqrtr
+	net-misc/rmtfs
 "
 DEPEND="${RDEPEND}"
 
