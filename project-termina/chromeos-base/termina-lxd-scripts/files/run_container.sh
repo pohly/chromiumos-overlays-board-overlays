@@ -41,29 +41,9 @@ set -e
 
 info() {
   if [ -t 2 ]; then
-    echo "lxd_setup: info: $*" >&2
+    echo "run_container: info: $*" >&2
   else
-    logger -p syslog.info -t "lxd_setup" "$*"
-  fi
-}
-
-warning() {
-  if [ -t 2 ]; then
-    echo "run_container: warning: $*" >&2
-  else
-    logger -p syslog.warning -t "run_container" "$*"
-  fi
-}
-
-FLAGS "$@" || exit 1
-
-set -e
-
-info() {
-  if [ -t 2 ]; then
-    echo "lxd_setup: info: $*" >&2
-  else
-    logger -p syslog.info -t "lxd_setup" "$*"
+    logger -p syslog.info -t "run_container" "$*"
   fi
 }
 
