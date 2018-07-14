@@ -1,2 +1,1 @@
-chromiumos:default/linux/arm64/10.0/chromeos
-chromiumos:features/llvm/arm64
+chromiumos:default/linux/arm64/10.0/chromeos/little-endian
