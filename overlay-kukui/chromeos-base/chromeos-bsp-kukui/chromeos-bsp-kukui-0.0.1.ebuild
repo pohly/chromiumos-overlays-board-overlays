@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit cros-audio-configs
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -20,6 +20,8 @@ RDEPEND="chromeos-base/chromeos-bsp-baseboard-kukui"
 DEPEND="${RDEPEND}"
 
 src_install() {
+	doappid "{50F3C95B-CA5B-4AF8-87A2-8CD19588BD12}" "CHROMEBOOK"
+
 	local ucm_config="${FILESDIR}/ucm-config"
 	if [[ -d "${ucm_config}" ]] ; then
 		# install ucm config files
