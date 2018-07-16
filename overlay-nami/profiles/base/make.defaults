@@ -32,3 +32,6 @@ EC_FIRMWARE="nami"
 
 # Avoid inhibiting the keyboard (which reports events from side buttons).
 USE="${USE} keyboard_includes_side_buttons"
+
+# Include the wacom firmware updating tool
+INPUT_DEVICES="wacom"
