@@ -1,1 +1,1 @@
-cros-camera-hal-configs-nautilus-0.0.1.ebuild
+cros-camera-hal-configs-atlas-0.0.1.ebuild
