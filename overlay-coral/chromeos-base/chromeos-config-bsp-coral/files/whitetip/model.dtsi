@@ -31,8 +31,12 @@
 				brand-code = "HRIZ";
 				key-id = "CORALE";
 			};
-			ytl {
+			prowise {
 				brand-code = "LOGH";
+				key-id = "CORALC";
+			};
+			ytl {
+				brand-code = "LOGI";
 				key-id = "CORALH";
 			};
 			sector5 {
@@ -40,7 +44,6 @@
 				key-id = "CORALI";
 			};
 			// Following are the brand codes allocated but not yet in used.
-			//	brand-code = "LOGI";
 			//	brand-code = "TPHN";
 			//	brand-code = "URZD";
 			//	brand-code = "QTMI";
