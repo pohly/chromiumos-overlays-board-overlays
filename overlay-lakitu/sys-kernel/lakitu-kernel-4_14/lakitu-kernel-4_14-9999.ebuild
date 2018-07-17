@@ -11,10 +11,21 @@ CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
 inherit cros-workon cros-kernel2 osreleased
 
 STRIP_MASK+=" /usr/src/${P}/build/vmlinux"
+STRIP_MASK+=" *.ko"
 
 DESCRIPTION="Chromium OS Linux Kernel 4.14"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="~*"
+
+src_configure() {
+	# Provide a custom key configuration file, because otherwise the kernel
+	# would auto-generate one.
+	mkdir -p "$(cros-workon_get_build_dir)/certs"
+	cp -f "${FILESDIR}/x509.genkey" \
+		"$(cros-workon_get_build_dir)/certs/x509.genkey" || die
+
+	cros-kernel2_src_configure
+}
 
 src_install() {
 	cros-kernel2_src_install
