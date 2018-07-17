@@ -4,6 +4,8 @@
 
 EAPI=5
 
+inherit appid
+
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
 
@@ -16,3 +18,7 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND=""
 DEPEND="${RDEPEND}"
+
+src_install() {
+	doappid "{625849FA-56A0-4E67-9163-B89BE0C2A6AE}" "CHROMEBOOK"
+}
