@@ -8,7 +8,7 @@ Subsystem sftp internal-sftp
 ForceCommand internal-sftp
 PermitTunnel no
 AllowAgentForwarding no
-AllowTcpForwarding no
+AllowTcpForwarding yes
 X11Forwarding no
 PasswordAuthentication no
 UsePAM yes
