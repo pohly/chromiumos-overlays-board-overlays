@@ -47,6 +47,9 @@ USE="${USE} internal_stylus"
 # Enable VMs.
 USE="${USE} kvm_host"
 
+# Add modemfwd for updating modem firmware.
+USE="${USE} modemfwd"
+
 # To get wacom_flash
 INPUT_DEVICES="wacom"
 
