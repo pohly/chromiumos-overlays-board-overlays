@@ -11,6 +11,9 @@ USE="${USE} arc"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
+# Enable use of PinWeaver.
+USE="${USE} pinweaver"
+
 # All firmwares to build from the EC code base
 EC_FIRMWARE="scarlet"
 
