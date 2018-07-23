@@ -7,8 +7,8 @@ USE=""
 
 USE="${USE} dragonegg"
 
-# Enable ARC by default
-USE="${USE} arc"
+# Disable ARC by default
+USE="${USE} -arc"
 
 # Uncomment these lines to activate the serial port.
 # Enable kernel serial drivers
