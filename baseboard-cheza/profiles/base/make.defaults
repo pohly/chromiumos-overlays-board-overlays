@@ -12,17 +12,11 @@ USE="${USE} wifi_force_powersave"
 # Make GPU sandboxing failures not fatal because we use LLVM
 USE="${USE} gpu_sandbox_failures_not_fatal"
 
-# For now disable all TPM stuff while on MTP
-# Does not apply to all boards, but is a noop where it is not needed.
-## USE="${USE} h1_over_spi"
-# Enable TPM2
-## USE="${USE} -tpm tpm2"
-# Include prebuilt (&signed) CR50 FW
-## USE="${USE} cr50_onboard"
-USE="${USE} mocktpm"
+# Enable TPM2 for H1
+USE="${USE} -tpm tpm2"
 
-# Build gsctool, remove this after we add cr50_onboard
-USE="${USE} cr50_utils"
+# Include prebuilt (&signed) CR50 FW
+USE="${USE} cr50_onboard"
 
 # ath10k firmware for WCN3990 Wifi
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_wcn3990"
