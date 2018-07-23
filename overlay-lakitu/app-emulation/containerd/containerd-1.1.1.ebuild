@@ -4,7 +4,7 @@
 EAPI=6
 EGO_PN="github.com/containerd/${PN}"
 
-inherit toolchain-funcs
+inherit eutils toolchain-funcs
 
 if [[ ${PV} == *9999 ]]; then
 	inherit golang-vcs
@@ -13,7 +13,7 @@ else
 	EGIT_COMMIT="v${MY_PV}"
 	CONTAINERD_COMMIT="d64c661f1d51c48782c9cec8fda7604785f93587"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~ppc64"
+	KEYWORDS="*"
 	inherit golang-vcs-snapshot
 fi
 
@@ -31,6 +31,8 @@ RDEPEND="|| ( >=app-emulation/docker-runc-1.0.0_rc4
 
 S=${WORKDIR}/${P}/src/${EGO_PN}
 
+PATCHES=( "${FILESDIR}"/1.1.1-use-GO-cross-compiler.patch )
+
 RESTRICT="test"
 
 src_prepare() {
@@ -46,6 +48,9 @@ src_prepare() {
 src_compile() {
 	local options=( $(usex btrfs "" "no_btrfs") )
 	export GOPATH="${WORKDIR}/${P}" # ${PWD}/vendor
+	export GOTRACEBACK="crash"
+	GO=$(tc-getGO)
+	export GO
 	LDFLAGS=$(usex hardened '-extldflags -fno-PIC' '') emake BUILDTAGS="${options[@]}"
 }
 

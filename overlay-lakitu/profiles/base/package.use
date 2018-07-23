@@ -7,6 +7,12 @@ sys-libs/libapparmor static-libs
 # Lakitu uses overlayfs graph driver in docker.
 app-emulation/docker -device-mapper overlay
 
+# Btrfs is not supported on lakitu.
+app-emulation/containerd -btrfs
+
+# Docker uses tini, so this should be static
+sys-process/tini static
+
 # Use generated test key.
 chromeos-base/chromeos-ssh-testkeys generated_ssh_key
 
@@ -38,9 +44,6 @@ sys-apps/systemd sysv-utils
 
 # Disable systemd-logind session tracker
 sys-auth/pambase -systemd
-
-# Docker uses tini, so this should be static
-sys-process/tini static
 
 # Disable PAM for busybox, because it conflicts with 'static' use flag.
 sys-apps/busybox -pam static

@@ -1,0 +1,37 @@
+From c17afcc36709265f4907e773d6b01030415c0542 Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Mon, 23 Jul 2018 11:49:09 -0700
+Subject: [PATCH] [PATCH] Change Docker log line max size to 100kB
+
+(From https://chromium-review.googlesource.com/744310 )
+
+Start from docker-1.13, Docker added a limit that the max size for one
+log line is 16k. And log entries longer than 16k will be split to
+multiple lines. This breaks some COS users using Stackdriver because of
+the fragmented log lines and broken jsons. This CL increases the max size
+for one log line from 16k to 100k so it aligns with Stackdriver limit:
+https://cloud.google.com/logging/quotas.
+
+BUG=b:65671098
+TEST=Ran instance locally and verified log entry split to lines when size > 100k
+RELEASE_NOTE=Increase Docker log line max size from 16KB to 100kB
+---
+ components/engine/daemon/logger/copier.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/components/engine/daemon/logger/copier.go b/components/engine/daemon/logger/copier.go
+index e24272f..8f20457 100644
+--- a/components/engine/daemon/logger/copier.go
++++ b/components/engine/daemon/logger/copier.go
+@@ -18,7 +18,7 @@ const (
+ 
+ 	// defaultBufSize provides a reasonable default for loggers that do
+ 	// not have an external limit to impose on log line size.
+-	defaultBufSize = 16 * 1024
++	defaultBufSize = 100 * 1024
+ )
+ 
+ // Copier can copy logs from specified sources to Logger and attach Timestamp.
+-- 
+2.18.0.233.g985f88cf7e-goog
+

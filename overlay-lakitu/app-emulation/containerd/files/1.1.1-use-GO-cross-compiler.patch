@@ -1,0 +1,122 @@
+From 992e39a73822ade5d11471ecf79e133ec7eae86d Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Fri, 20 Jul 2018 16:40:11 -0700
+Subject: [PATCH] [PATCH] use GO cross compiler
+
+---
+ Makefile | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 82926cf..5aae12a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -23,9 +23,9 @@ DESTDIR=/usr/local
+ VERSION=$(shell git describe --match 'v[0-9]*' --dirty='.m' --always)
+ REVISION=$(shell git rev-parse HEAD)$(shell if ! git diff --no-ext-diff --quiet --exit-code; then echo .m; fi)
+ 
+-ifneq "$(strip $(shell command -v go 2>/dev/null))" ""
+-	GOOS ?= $(shell go env GOOS)
+-	GOARCH ?= $(shell go env GOARCH)
++ifneq "$(strip $(shell command -v ${GO} 2>/dev/null))" ""
++	GOOS ?= $(shell ${GO} env GOOS)
++	GOARCH ?= $(shell ${GO} env GOARCH)
+ else
+ 	ifeq ($(GOOS),)
+ 		# approximate GOOS for the platform if we don't have Go and GOOS isn't
+@@ -58,7 +58,7 @@ RELEASE=containerd-$(VERSION:v%=%).${GOOS}-${GOARCH}
+ PKG=github.com/containerd/containerd
+ 
+ # Project packages.
+-PACKAGES=$(shell go list ./... | grep -v /vendor/)
++PACKAGES=$(shell ${GO} list ./... | grep -v /vendor/)
+ INTEGRATION_PACKAGE=${PKG}
+ TEST_REQUIRES_ROOT_PACKAGES=$(filter \
+     ${PACKAGES}, \
+@@ -96,7 +96,7 @@ GO_GCFLAGS=$(shell				\
+ 
+ BINARIES=$(addprefix bin/,$(COMMANDS))
+ 
+-# Flags passed to `go test`
++# Flags passed to `${GO} test`
+ TESTFLAGS ?= -v $(TESTFLAGS_RACE)
+ TESTFLAGS_PARALLEL ?= 8
+ 
+@@ -116,7 +116,7 @@ AUTHORS: .mailmap .git/HEAD
+ 
+ generate: protos
+ 	@echo "$(WHALE) $@"
+-	@PATH=${ROOTDIR}/bin:${PATH} go generate -x ${PACKAGES}
++	@PATH=${ROOTDIR}/bin:${PATH} ${GO} generate -x ${PACKAGES}
+ 
+ protos: bin/protoc-gen-gogoctrd ## generate protobuf
+ 	@echo "$(WHALE) $@"
+@@ -143,34 +143,34 @@ proto-fmt: ## check format of proto files
+ 
+ build: ## build the go packages
+ 	@echo "$(WHALE) $@"
+-	@go build ${GO_GCFLAGS} ${GO_BUILD_FLAGS} ${EXTRA_FLAGS} ${GO_LDFLAGS} ${PACKAGES}
++	@${GO} build ${GO_GCFLAGS} ${GO_BUILD_FLAGS} ${EXTRA_FLAGS} ${GO_LDFLAGS} ${PACKAGES}
+ 
+ test: ## run tests, except integration tests and tests that require root
+ 	@echo "$(WHALE) $@"
+-	@go test ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${PACKAGES})
++	@${GO} test ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${PACKAGES})
+ 
+ root-test: ## run tests, except integration tests
+ 	@echo "$(WHALE) $@"
+-	@go test ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${TEST_REQUIRES_ROOT_PACKAGES}) -test.root
++	@${GO} test ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${TEST_REQUIRES_ROOT_PACKAGES}) -test.root
+ 
+ integration: ## run integration tests
+ 	@echo "$(WHALE) $@"
+-	@go test ${TESTFLAGS} -test.root -parallel ${TESTFLAGS_PARALLEL}
++	@${GO} test ${TESTFLAGS} -test.root -parallel ${TESTFLAGS_PARALLEL}
+ 
+ benchmark: ## run benchmarks tests
+ 	@echo "$(WHALE) $@"
+-	@go test ${TESTFLAGS} -bench . -run Benchmark -test.root
++	@${GO} test ${TESTFLAGS} -bench . -run Benchmark -test.root
+ 
+ FORCE:
+ 
+ # Build a binary from a cmd.
+ bin/%: cmd/% FORCE
+ 	@echo "$(WHALE) $@${BINARY_SUFFIX}"
+-	@go build ${GO_GCFLAGS} ${GO_BUILD_FLAGS} -o $@${BINARY_SUFFIX} ${GO_LDFLAGS} ${GO_TAGS}  ./$<
++	@${GO} build ${GO_GCFLAGS} ${GO_BUILD_FLAGS} -o $@${BINARY_SUFFIX} ${GO_LDFLAGS} ${GO_TAGS}  ./$<
+ 
+ bin/containerd-shim: cmd/containerd-shim FORCE # set !cgo and omit pie for a static shim build: https://github.com/golang/go/issues/17789#issuecomment-258542220
+ 	@echo "$(WHALE) bin/containerd-shim"
+-	@CGO_ENABLED=0 go build ${GO_BUILD_FLAGS} -o bin/containerd-shim ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim
++	@CGO_ENABLED=0 ${GO} build ${GO_BUILD_FLAGS} -o bin/containerd-shim ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim
+ 
+ binaries: $(BINARIES) ## build binaries
+ 	@echo "$(WHALE) $@"
+@@ -218,9 +218,9 @@ uninstall:
+ coverage: ## generate coverprofiles from the unit tests, except tests that require root
+ 	@echo "$(WHALE) $@"
+ 	@rm -f coverage.txt
+-	@go test -i ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${PACKAGES}) 2> /dev/null
++	@${GO} test -i ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${PACKAGES}) 2> /dev/null
+ 	@( for pkg in $(filter-out ${INTEGRATION_PACKAGE},${PACKAGES}); do \
+-		go test ${TESTFLAGS} \
++		${GO} test ${TESTFLAGS} \
+ 			-cover \
+ 			-coverprofile=profile.out \
+ 			-covermode=atomic $$pkg || exit; \
+@@ -232,9 +232,9 @@ coverage: ## generate coverprofiles from the unit tests, except tests that requi
+ 
+ root-coverage: ## generate coverage profiles for unit tests that require root
+ 	@echo "$(WHALE) $@"
+-	@go test -i ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${TEST_REQUIRES_ROOT_PACKAGES}) 2> /dev/null
++	@${GO} test -i ${TESTFLAGS} $(filter-out ${INTEGRATION_PACKAGE},${TEST_REQUIRES_ROOT_PACKAGES}) 2> /dev/null
+ 	@( for pkg in $(filter-out ${INTEGRATION_PACKAGE},${TEST_REQUIRES_ROOT_PACKAGES}); do \
+-		go test ${TESTFLAGS} \
++		${GO} test ${TESTFLAGS} \
+ 			-cover \
+ 			-coverprofile=profile.out \
+ 			-covermode=atomic $$pkg -test.root || exit; \
+-- 
+2.18.0.233.g985f88cf7e-goog
+

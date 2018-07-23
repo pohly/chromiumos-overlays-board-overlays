@@ -2,6 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
+inherit eutils toolchain-funcs
+
 EGO_PN="github.com/opencontainers/${PN}"
 
 if [[ ${PV} == *9999 ]]; then
@@ -11,7 +14,7 @@ else
 	EGIT_COMMIT="v${MY_PV}"
 	RUNC_COMMIT="69663f0bd4b60df09991c08812a60108003fa340" # Change this when you update the ebuild
 	SRC_URI="https://${EGO_PN}/archive/${RUNC_COMMIT}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64"
+	KEYWORDS="*"
 	inherit golang-build golang-vcs-snapshot
 fi
 
@@ -28,12 +31,23 @@ RDEPEND="
 	!app-emulation/docker-runc
 "
 
+src_prepare() {
+	pushd "src/${EGO_PN}" || die
+	eapply "${FILESDIR}/1.0.0_rc5_p20180509-use-GO-cross-compiler.patch"
+
+	eapply_user
+	popd || die
+}
+
 src_compile() {
 	# Taken from app-emulation/docker-1.7.0-r1
 	export CGO_CFLAGS="-I${ROOT}/usr/include"
 	export CGO_LDFLAGS="$(usex hardened '-fno-PIC ' '')
 		-L${ROOT}/usr/$(get_libdir)"
 
+	export GOTRACEBACK="crash"
+	GO=$(tc-getGO)
+	export GO
 	# build up optional flags
 	local options=(
 		$(usex ambient 'ambient')

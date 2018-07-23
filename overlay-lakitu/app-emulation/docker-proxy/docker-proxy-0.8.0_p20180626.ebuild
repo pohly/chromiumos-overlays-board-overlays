@@ -2,6 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
+inherit eutils golang-base
+
 EGO_PN="github.com/docker/libnetwork"
 
 if [[ ${PV} == *9999 ]]; then
@@ -9,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 else
 	EGIT_COMMIT="3ac297bc7fd0afec9051bbb47024c9bc1d75bf5b"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64"
+	KEYWORDS="*"
 	inherit golang-vcs-snapshot
 fi
 
@@ -27,7 +30,10 @@ RDEPEND="!<app-emulation/docker-1.13.0_rc1"
 RESTRICT="test" # needs dockerd
 
 src_compile() {
-	GOPATH="${WORKDIR}/${P}" go build -o "bin/docker-proxy" ./cmd/proxy || die
+	export GOTRACEBACK="crash"
+	GO=$(tc-getGO)
+	export GO
+	GOPATH="${WORKDIR}/${P}" ${GO} build -o "bin/docker-proxy" ./cmd/proxy || die
 }
 
 src_install() {

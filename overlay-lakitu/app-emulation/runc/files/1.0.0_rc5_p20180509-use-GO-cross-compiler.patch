@@ -1,0 +1,39 @@
+From a26bdb3b573fbedecaacd0d99e412d751cf3dc00 Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Fri, 20 Jul 2018 15:42:17 -0700
+Subject: [PATCH] [PATCH] use GO cross compiler
+
+---
+ Makefile          | 2 +-
+ script/release.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index bd886b2..49f33d2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ 	    localtest localunittest localintegration \
+ 	    test unittest integration
+ 
+-GO := go
++GO := ${GO}
+ 
+ SOURCES := $(shell find . 2>&1 | grep -E '.*\.(c|h|go)$$')
+ PREFIX := $(DESTDIR)/usr/local
+diff --git a/script/release.sh b/script/release.sh
+index a1ebc95..4a1bbeb 100755
+--- a/script/release.sh
++++ b/script/release.sh
+@@ -95,7 +95,7 @@ done
+ version="${version:-$(<"$root/VERSION")}"
+ releasedir="${releasedir:-release/$version}"
+ hashcmd="${hashcmd:-sha256sum}"
+-goarch="$(go env GOARCH || echo "amd64")"
++goarch="$(${GO} env GOARCH || echo "amd64")"
+ 
+ log "creating $project release in '$releasedir'"
+ log "  version: $version"
+-- 
+2.18.0.233.g985f88cf7e-goog
+

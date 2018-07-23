@@ -1,0 +1,41 @@
+From 6224a0873a98762834b2b1581c35923c6c55693b Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Mon, 30 Jul 2018 16:51:10 -0700
+Subject: [PATCH] Customize docker.service for COS
+
+---
+ components/engine/contrib/init/systemd/docker.service | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/components/engine/contrib/init/systemd/docker.service b/components/engine/contrib/init/systemd/docker.service
+index 5174631..353da78 100644
+--- a/components/engine/contrib/init/systemd/docker.service
++++ b/components/engine/contrib/init/systemd/docker.service
+@@ -7,11 +7,14 @@ Requires=docker.socket
+ 
+ [Service]
+ Type=notify
++EnvironmentFile=-/etc/default/docker
+ # the default is not to use systemd for cgroups because the delegate issues still
+ # exists and systemd currently does not support the cgroup feature set required
+ # for containers run by docker
+-ExecStart=/usr/bin/dockerd -H fd://
++ExecStartPre=/bin/sh -c 'if [[ -f /var/lib/docker/daemon.json ]]; then cp -f /var/lib/docker/daemon.json /etc/docker/daemon.json; fi'
++ExecStart=/usr/bin/dockerd --registry-mirror=https://mirror.gcr.io --host=fd:// $DOCKER_OPTS
+ ExecReload=/bin/kill -s HUP $MAINPID
++ExecStopPost=/bin/echo "docker daemon exited"
+ LimitNOFILE=1048576
+ # Having non-zero Limit*s causes performance problems due to accounting overhead
+ # in the kernel. We recommend using cgroups to do container-local accounting.
+@@ -19,7 +22,7 @@ LimitNPROC=infinity
+ LimitCORE=infinity
+ # Uncomment TasksMax if your systemd version supports it.
+ # Only systemd 226 and above support this version.
+-#TasksMax=infinity
++TasksMax=infinity
+ TimeoutStartSec=0
+ # set delegate yes so that systemd does not reset the cgroups of docker containers
+ Delegate=yes
+-- 
+2.18.0.597.ga71716f1ad-goog
+
