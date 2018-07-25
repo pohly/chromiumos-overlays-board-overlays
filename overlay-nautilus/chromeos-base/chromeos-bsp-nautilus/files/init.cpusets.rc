@@ -4,7 +4,6 @@
 #
 
 on early-boot
-    copy /dev/cpuset/cpus /dev/cpuset/foreground/cpus
-    copy /dev/cpuset/cpus /dev/cpuset/foreground/boost/cpus
-    copy /dev/cpuset/cpus /dev/cpuset/top-app/cpus
-
+    exec - root root -- /system/bin/cp /dev/cpuset/cpus /dev/cpuset/foreground/cpus
+    exec - root root -- /system/bin/cp /dev/cpuset/cpus /dev/cpuset/foreground/boost/cpus
+    exec - root root -- /system/bin/cp /dev/cpuset/cpus /dev/cpuset/top-app/cpus
