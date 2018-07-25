@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="5f6c0b0bc629ce50c836586d7889fe85c7942a6f"
-CROS_WORKON_TREE="fc3cce1161a9c48875c6e16623702473e58399da"
+CROS_WORKON_COMMIT="c055e9c0dcf22ecd67dfe5fef8388b7d981ba9fd"
+CROS_WORKON_TREE="096a02d1524d79cb8b5d145f624cdbef13a478a7"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/v4.14"
 
@@ -13,10 +13,21 @@ CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
 inherit cros-workon cros-kernel2 osreleased
 
 STRIP_MASK+=" /usr/src/${P}/build/vmlinux"
+STRIP_MASK+=" *.ko"
 
 DESCRIPTION="Chromium OS Linux Kernel 4.14"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="*"
+
+src_configure() {
+	# Provide a custom key configuration file, because otherwise the kernel
+	# would auto-generate one.
+	mkdir -p "$(cros-workon_get_build_dir)/certs"
+	cp -f "${FILESDIR}/x509.genkey" \
+		"$(cros-workon_get_build_dir)/certs/x509.genkey" || die
+
+	cros-kernel2_src_configure
+}
 
 src_install() {
 	cros-kernel2_src_install
