@@ -37,8 +37,10 @@
 				brand-code = "FBTP";
 				key-id = "CORALF";
 			};
-			// Following are the brand code allocated but not yet in used.
-			//	brand-code = "TVRZ";
+			gsa {
+				brand-code = "TVRZ";
+				key-id = "CORALK";
+			};
 		};
 	};
 };
