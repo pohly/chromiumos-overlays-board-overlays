@@ -5,5 +5,9 @@
 # found in the LICENSE file.
 
 modify_kernel_command_line() {
+  # Kernel support for ICL graphics hw is "Alpha quality"
   echo "i915.alpha_support=1" >> "$1"
+
+  # Might be helpful to preserve ramoops in extreme circumstances
+  echo "ramoops.ecc=1" >> "$1"
 }
