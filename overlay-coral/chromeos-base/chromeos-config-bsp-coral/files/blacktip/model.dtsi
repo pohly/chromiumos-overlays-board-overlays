@@ -34,60 +34,19 @@
 				brand-code = "WXZG";
 				key-id = "CORALF";
 			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem2 {
+			gsa {
 				brand-code = "RIKG";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
+				key-id = "CORALK";
 			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem3 {
-				brand-code = "EDHM";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem4 {
-				brand-code = "PWFL";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem5 {
-				brand-code = "XBWL";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem6 {
-				brand-code = "WNNA";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem7 {
-				brand-code = "PCBV";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem8 {
-				brand-code = "VXVH";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem9 {
-				brand-code = "QPMP";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt-loem10 {
-				brand-code = "BMTG";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
-			};
+			// Following are the brand codes allocated but not yet in used.
+			//	brand-code = "EDHM";
+			//	brand-code = "PWFL";
+			//	brand-code = "XBWL";
+			//	brand-code = "WNNA";
+			//	brand-code = "PCBV";
+			//	brand-code = "VXVH";
+			//	brand-code = "QPMP";
+			//	brand-code = "BMTG";
 		};
 	};
 };

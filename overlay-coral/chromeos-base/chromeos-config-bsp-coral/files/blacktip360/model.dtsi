@@ -34,11 +34,9 @@
 				brand-code = "FBTP";
 				key-id = "CORALF";
 			};
-			// TODO(sie): Replace with correct loem name
-			to-be-determined-bt360-loem2 {
+			gsa {
 				brand-code = "TVRZ";
-				// TODO(sie): Replace with correct mp key-id for loem
-				key-id = "CORALC";
+				key-id = "CORALK";
 			};
 		};
 	};
