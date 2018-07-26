@@ -37,8 +37,11 @@
 				brand-code = "WXZG";
 				key-id = "CORALF";
 			};
+			gsa {
+				brand-code = "RIKG";
+				key-id = "CORALK";
+			};
 			// Following are the brand codes allocated but not yet in used.
-			//	brand-code = "RIKG";
 			//	brand-code = "EDHM";
 			//	brand-code = "PWFL";
 			//	brand-code = "XBWL";
