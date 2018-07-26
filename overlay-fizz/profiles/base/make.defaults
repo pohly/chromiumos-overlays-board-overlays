@@ -6,6 +6,9 @@ USE=""
 
 USE="${USE} fizz"
 
+# Add PCA954x I2C mux support
+USE="${USE} pca954x"
+
 # Uncomment these lines to activate the serial port.
 TTY_CONSOLE="ttyS0"
 USE="${USE} pcserial"
