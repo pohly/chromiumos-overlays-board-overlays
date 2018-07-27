@@ -10,7 +10,7 @@ USE="${USE} eclog"
 # Declare TPM model.
 USE="${USE} tpm_slb9645"
 
-USE="${USE} vulkan"
+USE="${USE} -vulkan"
 
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="cros-pd"
