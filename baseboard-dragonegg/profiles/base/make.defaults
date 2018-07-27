@@ -5,6 +5,18 @@
 LINUX_FIRMWARE=""
 USE=""
 
+# Intel wifi firmware, Lets include all the recent ones for now
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7260 iwlwifi-7265 iwlwifi-7265D iwlwifi-9000 iwlwifi-9260"
+
+# BT driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw ibt_9560 ibt_9260"
+
+# DSP firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} fw_sst"
+
+# Google USBPD peripheral firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
+
 # Use ext4 crypto (for NYC Android container)
 USE="${USE} direncryption"
 
