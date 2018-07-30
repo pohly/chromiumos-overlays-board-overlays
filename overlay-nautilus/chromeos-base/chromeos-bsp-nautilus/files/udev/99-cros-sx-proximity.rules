@@ -1,3 +1,3 @@
-ACTION=="add", SUBSYSTEM=="iio", ATTR{name}=="sx932[0-1]", ATTRS{name}=="SX932[0-1]:00", \
+ACTION=="add", SUBSYSTEM=="iio", ATTR{name}=="sx932x", ATTRS{name}=="STH9321:00", \
   SYMLINK+="proximity-lte", OWNER="power", \
   ATTR{events/in_proximity1_UC1_thresh_either_en}="1"
