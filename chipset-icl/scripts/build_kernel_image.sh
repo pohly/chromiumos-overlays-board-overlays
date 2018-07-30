@@ -10,4 +10,7 @@ modify_kernel_command_line() {
 
   # Might be helpful to preserve ramoops in extreme circumstances
   echo "ramoops.ecc=1" >> "$1"
+
+  # Enable console for debug
+  echo "earlyprintk=uart8250,mmio32,0xfe032000,115200n8 console=uart8250,mmio32,0xfe032000,115200n8" >> "$1"
 }
