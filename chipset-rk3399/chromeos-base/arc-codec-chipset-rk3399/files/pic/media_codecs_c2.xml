@@ -53,5 +53,24 @@
             <Feature name="adaptive-playback" />
             <Feature name="secure-playback" required="true" />
         </MediaCodec>
+        <MediaCodec name="c2.vda.vp9.decoder" type="video/x-vnd.on2.vp9" >
+            <Limit name="size" min="64x64" max="4096x2304" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="64x64" />
+            <Limit name="blocks-per-second" min="1" max="69120" />
+            <Limit name="bitrate" range="1-100000000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="c2.vda.vp9.decoder.secure" type="video/x-vnd.on2.vp9" >
+            <Limit name="size" min="64x64" max="4096x2304" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="64x64" />
+            <Limit name="blocks-per-second" min="1" max="69120" />
+            <Limit name="bitrate" range="1-100000000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+            <Feature name="secure-playback" required="true" />
+        </MediaCodec>
     </Decoders>
 </MediaCodecs>
