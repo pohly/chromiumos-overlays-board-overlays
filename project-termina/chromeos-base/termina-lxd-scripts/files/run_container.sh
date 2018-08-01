@@ -140,6 +140,18 @@ main() {
     warning "container token not supplied; garcon may not function"
   fi
 
+  # Wait for tremplin to set the owner of the lxd_conf directory.
+  # This will only happen on the first boot of a VM.
+  local attempts=0
+  while [ "$(stat -c %U "${LXD_CONF}")" != "chronos" ]; do
+    if [ ${attempts} -ge 300 ]; then
+      die "Timed out waiting for tremplin to set LXD_CONF owner"
+    fi
+
+    : $(( attempts += 1 ))
+    sleep 0.1
+  done
+
   if ! container_exists "${FLAGS_container_name}"; then
     if [ -z "${FLAGS_lxd_remote}" ]; then
       die "Container does not already exist; you must specify --lxd_remote"
