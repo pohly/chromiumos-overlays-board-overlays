@@ -25,6 +25,9 @@ modify_kernel_command_line() {
   # Enable AppArmor by default.
   echo "security=apparmor" >> "${config_file}"
 
+  # Turn on tx napi for the virtio_net driver.
+  echo "virtio_net.napi_tx=1" >> "${config_file}"
+
   # Tell systemd to not use unified cgroup hierarchy (cgroups-v2) yet for
   # anything.
   echo "systemd.unified_cgroup_hierarchy=false" >> "${config_file}"
