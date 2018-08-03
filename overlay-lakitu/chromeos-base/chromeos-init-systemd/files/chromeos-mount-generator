@@ -1,39 +1,79 @@
 #!/bin/sh
-# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 #
 # A systemd unit generator that outputs .mount units for
 # /mnt/stateful_partition and /usr/share/oem.
+#
+# This generator admits the following kernel command line arguments:
+#
+# cos.stateful_dev=[device]:[0|1]
+#   The specified device indicates the device (e.g.
+#   /dev/disk/by-id/google-test-disk) that the system should mount as the
+#   stateful partition. If no device is specified, the default stateful
+#   partition device will be used. The following 0 or 1 indicates if the
+#   stateful partition should be reformatted on every boot; 1 indicates that it
+#   should be reformatted on every boot, and 0 indicates that it shouldn't. If
+#   neither a 0 nor 1 is given, the default behavior is to not reformat the
+#   stateful partition on every boot.
+
+gen_stateful_partition_mkfs() {
+  local dev="$1"
+  local fstype="$2"
+  local output_dir="$3"
+  local dev_unit="$(echo "${dev#/}" | \
+                    sed -e 's/-/\\x2d/g' -e 's/\//-/g').device"
+  # We can't use heredocs here because using heredocs creates a tempfile.
+  # A tmpfs isn't mounted at /tmp this early in the boot process, causing /tmp
+  # to be read-only.
+  echo "
+[Unit]
+DefaultDependencies=false
+BindsTo=${dev_unit}
+After=${dev_unit}
+Before=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/mkfs -F -t ${fstype} -E lazy_journal_init ${dev}
+" > "${output_dir}/stateful_partition-mkfs.service"
+}
 
 gen_stateful_partition_mount() {
-  local dev=$1
-  local fstype=$2
-  local output_dir=$3
+  local dev="$1"
+  local fstype="$2"
+  local output_dir="$3"
+  local mkfs_stateful="$4"
 
-  local DIRTY_EXPIRE_CENTISECS=$(sysctl -n vm.dirty_expire_centisecs)
-  local COMMIT_INTERVAL=$(( DIRTY_EXPIRE_CENTISECS / 100 ))
+  local DIRTY_EXPIRE_CENTISECS="$(sysctl -n vm.dirty_expire_centisecs)"
+  local COMMIT_INTERVAL="$(( DIRTY_EXPIRE_CENTISECS / 100 ))"
 
   local FSCK_SERVICE="systemd-fsck@$(systemd-escape ${dev#/}).service"
+  local MKFS_SERVICE="stateful_partition-mkfs.service"
+  local DEPEND="${FSCK_SERVICE}"
+  if [ "${mkfs_stateful}" = "1" ]; then
+    DEPEND="${MKFS_SERVICE}"
+  fi
 
   echo "
 [Unit]
 Before=local-fs.target
-After=${FSCK_SERVICE}
-Requires=mnt-stateful_partition-make-private.service ${FSCK_SERVICE}
+After=${DEPEND}
+Requires=mnt-stateful_partition-make-private.service ${DEPEND}
 
 [Mount]
 What=${dev}
 Where=/mnt/stateful_partition
 Type=${fstype}
 Options=nodev,noexec,nosuid,commit=${COMMIT_INTERVAL}
-" > ${output_dir}/mnt-stateful_partition.mount
+" > "${output_dir}/mnt-stateful_partition.mount"
 }
 
 gen_oem_partition_mount() {
-  local dev=$1
-  local fstype=$2
-  local output_dir=$3
+  local dev="$1"
+  local fstype="$2"
+  local output_dir="$3"
 
   echo "
 [Unit]
@@ -44,21 +84,46 @@ What=${dev}
 Where=/usr/share/oem
 Type=${fstype}
 Options=ro,nodev,noexec,nosuid
-" > ${output_dir}/usr-share-oem.mount
+" > "${output_dir}/usr-share-oem.mount"
 }
 
-output_dir=$1/local-fs.target.wants
-mkdir ${output_dir}
+output_root="$1"
+local_fs_output_dir="${output_root}/local-fs.target.wants"
+mkdir "${local_fs_output_dir}"
 
 # Determine root device and the disk it's on.
 # E.g.: /dev/sda2 -> /dev/sda
-ROOTDEV=$(rootdev -s | sed 's/[0-9_]*$//')
+ROOTDEV="$(rootdev -s | sed 's/[0-9_]*$//')"
 
 # Load the image settings.
 . "/usr/sbin/write_gpt.sh"
 load_base_vars
 
-gen_stateful_partition_mount "${ROOTDEV}${PARTITION_NUM_STATE}" \
-  "${FS_FORMAT_STATE}" "${output_dir}"
+MKFS_STATEFUL=""
+STATEFUL_DEV=""
+set -- $(cat /proc/cmdline)
+for arg in "$@"; do
+  case "${arg}" in
+    cos.stateful_dev=*)
+      STATEFUL_DEV="$(echo "${arg#cos.stateful_dev=}" | cut -d : -f 1)"
+      MKFS_STATEFUL="$(echo "${arg#cos.stateful_dev=}" | cut -d : -f 2)"
+      ;;
+    *)
+      ;;
+  esac
+done
+if [ -z "${MKFS_STATEFUL}" ]; then
+  MKFS_STATEFUL=0
+fi
+if [ -z "${STATEFUL_DEV}" ]; then
+  STATEFUL_DEV="${ROOTDEV}${PARTITION_NUM_STATE}"
+fi
+
 gen_oem_partition_mount "${ROOTDEV}${PARTITION_NUM_OEM}" "${FS_FORMAT_OEM}" \
-  "${output_dir}"
+  "${local_fs_output_dir}"
+if [ "${MKFS_STATEFUL}" = "1" ]; then
+  gen_stateful_partition_mkfs "${STATEFUL_DEV}" \
+    "${FS_FORMAT_STATE}" "${output_root}"
+fi
+gen_stateful_partition_mount "${STATEFUL_DEV}" \
+  "${FS_FORMAT_STATE}" "${local_fs_output_dir}" "${MKFS_STATEFUL}"
