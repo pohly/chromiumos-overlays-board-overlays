@@ -30,4 +30,3 @@ board_setup() {
 }
 
 skip_blacklist_check=1
-skip_test_image_content=1

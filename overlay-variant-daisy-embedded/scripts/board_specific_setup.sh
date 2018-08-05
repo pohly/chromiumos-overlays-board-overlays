@@ -5,4 +5,3 @@
 # found in the LICENSE file.
 
 skip_blacklist_check=1
-skip_test_image_content=1
