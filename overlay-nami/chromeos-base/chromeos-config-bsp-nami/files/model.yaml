@@ -126,7 +126,7 @@ chromeos:
       skus:
         - $sku-id: 0x3f62
           config:
-            <<: *device_config
+            <<: *device_specific_audio_device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
