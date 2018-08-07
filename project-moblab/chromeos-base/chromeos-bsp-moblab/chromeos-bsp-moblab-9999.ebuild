@@ -71,6 +71,8 @@ src_install() {
 
 	# Create the mount point for external storage.
 	dodir "/mnt/moblab"
+	# Create the mount point for settings usb storage
+	dodir "/mnt/moblab-settings"
 
 	insinto /autotest
 	doins "${FILESDIR}/ssp_deploy_shadow_config.json"
