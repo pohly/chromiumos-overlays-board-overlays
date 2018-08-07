@@ -1,6 +1,0 @@
-group:tty
-gid:5
-# Give the power manager access to /dev/tty* so it can disable VT switching
-# before suspending the system.
-# The braille display subsystem also needs access.
-users:power,brltty
