@@ -4,7 +4,9 @@
 
 EAPI=5
 
-inherit appid cros-audio-configs
+inherit appid
+inherit cros-audio-configs
+inherit udev
 
 DESCRIPTION="Atlas board-specific ebuild that pulls in necessary ebuilds as
 dependencies or portage actions."
@@ -30,4 +32,14 @@ src_install() {
 	# Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs atlas "${audio_config_dir}"
+
+	# Install platform-specific internal keyboard keymap.
+	# It should probably go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 bit boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/61-atlas-keyboard.hwdb"
+
+	# Intall a rule tagging keyboard as having updated layout
+	udev_dorules "${FILESDIR}/61-atlas-keyboard.rules"
 }
