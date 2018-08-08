@@ -34,7 +34,7 @@ board_make_image_bootable() {
 write_toolchain_path() {
   local -r cros_overlay="/mnt/host/source/src/third_party/chromiumos-overlay"
   local -r sdk_ver_file="${cros_overlay}/chromeos/binhost/host/sdk_version.conf"
-  local -r ctarget="$(get_ctarget_from_board "${BOARD}")"
+  local -r ctarget="$(portageq-"${BOARD}" envvar CHOST)"
   . "${sdk_ver_file}"
   echo "${TC_PATH/\%\(target\)s/${ctarget}}" | \
       sudo tee "${root_fs_dir}/etc/toolchain-path" > /dev/null
