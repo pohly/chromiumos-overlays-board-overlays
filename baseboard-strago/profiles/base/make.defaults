@@ -11,5 +11,8 @@ USE="${USE} eclog"
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
 
+# VMs are supported by all Braswell models
+USE="${USE} kvm_host"
+
 # WiFi and BT driver firmware
 LINUX_FIRMWARE="marvell-pcie8897 iwlwifi-7260 iwlwifi-7265D ibt-hw fw_sst"
