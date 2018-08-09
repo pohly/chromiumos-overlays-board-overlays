@@ -35,5 +35,8 @@ TTY_CONSOLE="ttyS0"
 # Log cros_ec/cros_fp consoles with the timberslide daemon
 USE="${USE} eclog"
 
+# Enable virtual machines.
+USE="${USE} kvm_host"
+
 # Enable Intel wifi and bt firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
