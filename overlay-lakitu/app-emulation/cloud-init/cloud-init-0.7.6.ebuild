@@ -52,6 +52,7 @@ python_prepare_all() {
 	# Even though it was never enforced, HTTP headers were supposed to be
 	# strings and nothing else.
 	epatch "${FILESDIR}/0.7.6-fix-header-value-type.patch"
+	epatch "${FILESDIR}/0.7.6-write-file-utf8.patch"
 
 	# Note: Gentoo places ip in /sbin/ not /bin/
 	ebegin 'patching cloudinit/sources/DataSourceOpenNebula.py'
