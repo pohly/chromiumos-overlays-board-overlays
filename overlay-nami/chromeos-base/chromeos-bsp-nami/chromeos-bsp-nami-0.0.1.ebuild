@@ -40,7 +40,4 @@ src_install() {
 	newins "${FILESDIR}/sona/bluetooth/main.conf" "sona.conf"
 	newins "${FILESDIR}/vayne/bluetooth/main.conf" "vayne.conf"
 	newins "${FILESDIR}/pantheon/bluetooth/main.conf" "pantheon.conf"
-
-	exeinto /usr/share/cros
-	doexe "${FILESDIR}"/sona/oemdata.sh
 }
