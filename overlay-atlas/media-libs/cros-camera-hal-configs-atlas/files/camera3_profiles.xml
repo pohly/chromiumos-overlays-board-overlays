@@ -28,7 +28,7 @@
             <control.aeAvailableAntibandingModes value="OFF,50HZ,60Hz,AUTO"/>
             <control.aeAvailableModes value="OFF,ON"/>
             <control.aeLockAvailable value="TRUE"/>
-            <control.aeAvailableTargetFpsRanges value="30,60,60,60"/>
+            <control.aeAvailableTargetFpsRanges value="15,30,15,60,30,30,60,60"/>
             <control.aeCompensationRange value="0,0"/>
             <control.aeCompensationStep value="0,1"/>
             <control.afAvailableModes value="OFF"/>
@@ -37,7 +37,7 @@
             <control.awbLockAvailable value="TRUE"/>
             <control.availableSceneModes value="DISABLED"/>
             <control.availableVideoStabilizationModes value="OFF"/>
-            <control.maxRegions value="1,0,1"/>
+            <control.maxRegions value="1,0,0"/>
             <!-- JPEG -->
             <jpeg.maxSize value="3182784"/>  <!-- 1936*1096*1.5 -->
             <jpeg.availableThumbnailSizes value="0,0,160,120,320,180,320,240"/> <!-- INCREASING ORDER -->
@@ -51,7 +51,7 @@
             <lens.info.shadingMapSize value="0,0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.focusDistanceCalibration value="APPROXIMATE"/>
             <!-- Lens -->
-            <lens.facing value="BACK"/>
+            <lens.facing value="FRONT"/>
             <!-- Request -->
             <request.maxNumOutputStreams value="0,2,1"/>
             <request.pipelineMaxDepth value="6"/>
@@ -69,7 +69,6 @@
                 control.aeTargetFpsRange,
                 control.afMode,
                 control.aeRegions,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -105,7 +104,6 @@
                 control.aeTargetFpsRange,
                 control.aePrecaptureTrigger,
                 control.afMode,
-                control.afRegions,
                 control.afTrigger,
                 control.awbLock,
                 control.awbMode,
@@ -188,7 +186,7 @@
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
             <sensor.info.activeArraySize value="16,16,1936,1096"/>
-            <sensor.info.sensitivityRange value="32,2400"/>
+            <sensor.info.sensitivityRange value="85,1360"/>
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
             <sensor.info.maxFrameDuration value="200000000"/>
