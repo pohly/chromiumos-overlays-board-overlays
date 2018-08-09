@@ -1,0 +1,95 @@
+From cd6b9f5e5f0098add49efc3241ae193311e171de Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Thu, 9 Aug 2018 16:00:48 -0700
+Subject: [PATCH] Fix cloud-inti write_files error on non-ascii content
+
+Fixed a bug in cloud-init that write_files can't deal with non-ascii
+content. This CL combines the following commits with modification:
+https://git.launchpad.net/cloud-init/commit/?id=6a660b4
+https://git.launchpad.net/cloud-init/commit/?id=290afe7
+https://git.launchpad.net/cloud-init/commit/?id=f895cb1
+---
+ cloudinit/config/cc_write_files.py |  4 ++--
+ cloudinit/distros/__init__.py      |  9 ++++++++-
+ cloudinit/util.py                  | 19 +++++++++++++++++++
+ 3 files changed, 29 insertions(+), 3 deletions(-)
+
+diff --git a/cloudinit/config/cc_write_files.py b/cloudinit/config/cc_write_files.py
+index a73d6f4e..38df0c33 100644
+--- a/cloudinit/config/cc_write_files.py
++++ b/cloudinit/config/cc_write_files.py
+@@ -91,10 +91,10 @@ def decode_perms(perm, default, log):
+ 
+ 
+ def extract_contents(contents, extraction_types):
+-    result = str(contents)
++    result = contents
+     for t in extraction_types:
+         if t == 'application/x-gzip':
+-            result = util.decomp_gzip(result, quiet=False)
++            result = util.decomp_gzip(result, quiet=False, decode=False)
+         elif t == 'application/base64':
+             result = base64.b64decode(result)
+         elif t == UNKNOWN_ENC:
+diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
+index 2599d9f2..4721877b 100644
+--- a/cloudinit/distros/__init__.py
++++ b/cloudinit/distros/__init__.py
+@@ -861,5 +861,12 @@ def set_etc_timezone(tz, tz_file=None, tz_conf="/etc/timezone",
+     util.write_file(tz_conf, str(tz).rstrip() + "\n")
+     # This ensures that the correct tz will be used for the system
+     if tz_local and tz_file:
+-        util.copy(tz_file, tz_local)
++        # use a symlink if there exists a symlink or tz_local is not present
++        islink = os.path.islink(tz_local)
++        if islink or not os.path.exists(tz_local):
++            if islink:
++                util.del_file(tz_local)
++            os.symlink(tz_file, tz_local)
++        else:
++            util.copy(tz_file, tz_local)
+     return
+diff --git a/cloudinit/util.py b/cloudinit/util.py
+index f236d0bf..018e7f27 100644
+--- a/cloudinit/util.py
++++ b/cloudinit/util.py
+@@ -38,6 +38,7 @@ import pwd
+ import random
+ import re
+ import shutil
++import six
+ import socket
+ import stat
+ import string
+@@ -1514,6 +1515,10 @@ def write_file(filename, content, mode=0644, omode="wb"):
+     @param omode: The open mode used when opening the file (r, rb, a, etc.)
+     """
+     ensure_dir(os.path.dirname(filename))
++    if 'b' in omode.lower():
++        content = encode_text(content)
++    else:
++        content = decode_binary(content)
+     LOG.debug("Writing to %s - %s: [%s] %s bytes",
+                filename, omode, mode, len(content))
+     with SeLinuxGuard(path=filename):
+@@ -2007,3 +2012,17 @@ def human2bytes(size):
+         raise ValueError("'%s': cannot be negative" % size_in)
+ 
+     return int(num * mpliers[mplier])
++
++
++def decode_binary(blob, encoding='utf-8'):
++    # Converts a binary type into a text type using given encoding.
++    if isinstance(blob, six.text_type):
++        return blob
++    return blob.decode(encoding)
++
++
++def encode_text(text, encoding='utf-8'):
++    # Converts a text string into a binary type using given encoding.
++    if isinstance(text, six.binary_type):
++        return text
++    return text.encode(encoding)
+-- 
+2.18.0.597.ga71716f1ad-goog
+
