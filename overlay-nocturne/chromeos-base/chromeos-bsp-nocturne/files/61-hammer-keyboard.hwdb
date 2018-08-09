@@ -5,6 +5,10 @@
 # Special mapping for "Whiskers" keyboard that has a special
 # "Assistant" key.
 #
-evdev:input:b0003v18D1p5030*
+# 'm4' in modalias string below translates to MSC_SCAN capability,
+# which should only be set on keyboard interface, leaving touchpad
+# alone.
+#
+evdev:input:b0003v18D1p5030e*-*m4*
  KEYBOARD_KEY_ffd10018=assistant
  KEYBOARD_KEY_00070068=controlpanel
