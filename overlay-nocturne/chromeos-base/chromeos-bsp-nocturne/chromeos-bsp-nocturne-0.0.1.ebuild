@@ -46,4 +46,9 @@ src_install() {
 
 	# Install device specific udev rules.
 	udev_dorules "${FILESDIR}"/udev/*.rules
+
+	# Install /etc/init/generate_rdc_update.conf, which reads DSM calibration
+	# data from VPD and writes to /run/cras/rdc_update.bin
+	insinto /etc/init
+	doins "${FILESDIR}"/init/generate_rdc_update.conf
 }
