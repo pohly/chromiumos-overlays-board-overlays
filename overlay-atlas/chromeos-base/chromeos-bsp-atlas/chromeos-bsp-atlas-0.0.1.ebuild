@@ -44,4 +44,9 @@ src_install() {
 
 	# Intall a rule tagging keyboard as having updated layout
 	udev_dorules "${FILESDIR}/61-atlas-keyboard.rules"
+
+	# Install /etc/init/generate_rdc_update.conf, which reads DSM calibration
+	# data from VPD and writes to /run/cras/rdc_update.bin
+	insinto /etc/init
+	doins "${FILESDIR}"/init/generate_rdc_update.conf
 }
