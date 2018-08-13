@@ -6,4 +6,5 @@
 
 modify_kernel_command_line() {
   echo "iwlwifi.remove_when_gone=1" >> "$1"
+  echo "disablevmx=off" >> "$1"
 }
