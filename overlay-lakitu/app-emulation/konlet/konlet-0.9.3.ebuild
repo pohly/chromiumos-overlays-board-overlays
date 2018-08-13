@@ -6,10 +6,7 @@ EAPI=5
 
 DESCRIPTION="GCE Containers Startup"
 HOMEPAGE="https://github.com/GoogleCloudPlatform/konlet"
-# For now, we use the Git commit ID to identify the version.
-# This is 0.8 .
-GIT_COMMIT_ID="2b053ba32c1c7c4a539a035c381e44bdcbc44871"
-SRC_URI="https://github.com/GoogleCloudPlatform/konlet/archive/${GIT_COMMIT_ID}.tar.gz -> ${P}-${GIT_COMMIT_ID}.tar.gz"
+SRC_URI="https://github.com/GoogleCloudPlatform/konlet/archive/v.${PV}.tar.gz"
 RESTRICT="mirror"
 
 inherit eutils systemd
@@ -22,11 +19,7 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/${PN}-${GIT_COMMIT_ID}"
-
-src_prepare() {
-	epatch "${FILESDIR}"/konlet-0.0.1-script-fixes.patch
-}
+S="${WORKDIR}/${PN}-v.${PV}"
 
 src_install() {
 	exeinto /usr/share/gce-containers
