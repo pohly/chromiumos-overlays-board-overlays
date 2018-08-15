@@ -49,7 +49,3 @@ sys-apps/busybox -pam static
 # ('ssh-in-browser') does not handle HPN-capable server very well, so disable
 # HPN support in OpenSSH (b/64450408).
 net-misc/openssh -hpn
-
-# Apply kernel patches from FILESDIR.
-# TODO: Remove once they are merged in the kernel tree.
-sys-kernel/lakitu-kernel-4_4 apply_patches
