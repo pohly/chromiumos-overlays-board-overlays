@@ -7,6 +7,9 @@ USE=""
 
 USE="${USE} atlas"
 
+# Enable keyboard backlight control
+USE="${USE} has_keyboard_backlight"
+
 # Building EC
 USE="${USE} cros_ec"
 
