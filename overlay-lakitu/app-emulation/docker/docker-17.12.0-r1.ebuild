@@ -1,1 +1,0 @@
-docker-17.12.0.ebuild

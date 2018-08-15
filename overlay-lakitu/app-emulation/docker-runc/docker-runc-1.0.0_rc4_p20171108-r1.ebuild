@@ -1,1 +1,0 @@
-docker-runc-1.0.0_rc4_p20171108.ebuild
