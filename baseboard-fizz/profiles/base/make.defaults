@@ -35,6 +35,3 @@ USE="${USE} cec"
 
 # Add DP-CEC support
 USE="${USE} dp_cec"
-
-# Add Apex daughtercard support
-USE="${USE} apex"
