@@ -3,5 +3,5 @@
 # found in the LICENSE file.
 
 ACTION=="add", ENV{ID_MODEL}=="Hammer", SUBSYSTEM=="usb", \
-  DEVPATH=="/devices/pci0000:00/0000:00:14.0/usb1/1-3", \
+  DEVPATH=="/devices/pci0000:00/0000:00:14.0/usb1/1-7", \
   RUN+="/sbin/initctl emit --no-wait hammer-device-added"
