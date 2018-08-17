@@ -44,6 +44,9 @@ USE="${USE} touchview"
 # Add internal_stylus.
 USE="${USE} internal_stylus"
 
+# Enable VMs.
+USE="${USE} kvm_host"
+
 # To get wacom_flash
 INPUT_DEVICES="wacom"
 

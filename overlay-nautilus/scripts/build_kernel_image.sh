@@ -16,4 +16,7 @@ modify_kernel_command_line() {
 
   # Might be helpful to preserve ramoops in extreme circumstances
   echo "ramoops.ecc=1" >> "$1"
+
+  # Don't disable the ability to run VMs.
+  echo "disablevmx=off" >> "$1"
 }
