@@ -34,5 +34,8 @@ USE="${USE} drm_atomic"
 # Set raster thread number=2
 USE="${USE} big_little"
 
+# Mali drivers require this
+USE="${USE} gpu_sandbox_start_early"
+
 # Turn on the video cards this board uses.
 VIDEO_CARDS="mediatek"
