@@ -16,8 +16,6 @@
 			};
 		};
 		thermal {
-			// TODO(OEM): Add validated dptf.dv file into BSP, it's
-			// currently using inherited version from the parent.
 			dptf-dv = "rabbid/dptf.dv";
 		};
 		power {
