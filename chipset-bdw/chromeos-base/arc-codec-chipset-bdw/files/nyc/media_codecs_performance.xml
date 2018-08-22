@@ -34,6 +34,13 @@
             <Limit name="measured-frame-rate-1280x720" range="30-69" />
             <Limit name="measured-frame-rate-1920x1080" range="24-55" />
         </MediaCodec>
+        <MediaCodec name="OMX.arc.h264.encode" type="video/avc" update="true">
+            <Limit name="measured-frame-rate-320x240" range="617-619" /> <!-- N=26 v90%=1.0 -->
+            <Limit name="measured-frame-rate-720x480" range="435-435" /> <!-- N=26 v90%=1.0 -->
+            <Limit name="measured-frame-rate-1280x720" range="231-233" /> <!-- N=26 v90%=1.0 -->
+            <!-- measured 90%:21-120 med:117 FLAKY(mn=20.9 < 21 - 120) variance:2.4 -->
+            <Limit name="measured-frame-rate-1920x1080" range="42-60" /> <!-- N=26 -->
+        </MediaCodec>
     </Encoders>
     <Decoders>
         <MediaCodec name="ARC.h264.decode" type="video/avc" update="true">
