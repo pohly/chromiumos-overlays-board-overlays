@@ -13,6 +13,9 @@ USE="${USE} biod"
 # Enable Ambient Light Sensor
 USE="${USE} als"
 
+# Enable background blur.
+USE="${USE} background_blur"
+
 # Enable keyboard backlight control
 USE="${USE} has_keyboard_backlight"
 
