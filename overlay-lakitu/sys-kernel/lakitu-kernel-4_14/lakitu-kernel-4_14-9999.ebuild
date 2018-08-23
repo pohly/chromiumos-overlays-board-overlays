@@ -16,14 +16,18 @@ STRIP_MASK+=" *.ko"
 DESCRIPTION="Chromium OS Linux Kernel 4.14"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="~*"
+IUSE="module_sign"
 
 src_configure() {
-	# Provide a custom key configuration file, because otherwise the kernel
-	# would auto-generate one.
-	mkdir -p "$(cros-workon_get_build_dir)/certs"
-	cp -f "${FILESDIR}/x509.genkey" \
-		"$(cros-workon_get_build_dir)/certs/x509.genkey" || die
-
+	if use module_sign ; then
+		# Provide a custom key configuration file, because otherwise the kernel
+		# would auto-generate one.
+		mkdir -p "$(cros-workon_get_build_dir)/certs"
+		cp -f "${FILESDIR}/x509.genkey" \
+			"$(cros-workon_get_build_dir)/certs/x509.genkey" || die
+		cp -f "${FILESDIR}/testing_trusted_key.pem" \
+			"$(cros-workon_get_build_dir)/certs/trusted_key.pem" || die
+	fi
 	cros-kernel2_src_configure
 }
 
