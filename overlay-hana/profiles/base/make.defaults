@@ -7,7 +7,6 @@ USE=""
 
 USE="${USE} touchview"
 USE="${USE} arc"
-USE="${USE} low_pressure_touch_filtering"
 
 # Disable touchpad wakeup since it can't be turned off dynamically when the
 # system is converted to tablet mode while it's suspended.
