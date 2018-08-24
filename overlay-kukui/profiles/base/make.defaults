@@ -7,9 +7,6 @@ USE=""
 
 USE="${USE} kukui"
 
-# TODO(b:80501386): Need to enable the firmware build later
-#USE="${USE} bootimage"
-
 # Building EC
 USE="${USE} cros_ec"
 
