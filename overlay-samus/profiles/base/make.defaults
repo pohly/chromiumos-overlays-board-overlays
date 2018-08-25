@@ -23,7 +23,7 @@ USE="${USE} arc"
 USE="${USE} allow_consumer_kiosk"
 
 # Firmware
-USE="${USE} bootimage cros_ec"
+USE="${USE} cros_ec"
 
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
