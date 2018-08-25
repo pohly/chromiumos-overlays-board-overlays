@@ -20,11 +20,6 @@
         "num": 1,
         "size": "100 MiB",
         "fs_format": "squashfs"
-      },
-      {
-        # Pad out the rest of the space.
-        "type": "blank",
-        "blocks": "64"
       }
     ]
   }
