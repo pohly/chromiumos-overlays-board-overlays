@@ -119,6 +119,7 @@ chromeos:
         - $sku-id: 0x3a7b
           config: *device_specific_audio_device_config
     - $device-name: "pantheon"
+      $internal-backlight-no-als-battery-brightness: "51.0"
       products:
         - $marketing-name: "TBD"
           $brand-code: "CBUY"
