@@ -160,6 +160,30 @@ chromeos:
               $has-keyboard-backlight: "0"
         - $sku-id: 0x3ae3
           config: *device_config
+    - $device-name: "syndra"
+      products:
+        - $marketing-name: "TBD"
+          $brand-code: "ZZCR"
+# TODO (change key-id once the key is available)
+          $key-id: "NAMI"
+          $oem-id: "4"
+      skus:
+        - $sku-id: 0xbce0
+          config:
+            <<: *device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
+        - $sku-id: 0xbce1
+          config: *device_config
+        - $sku-id: 0xbce2
+          config:
+            <<: *device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
+        - $sku-id: 0xbce3
+          config: *device_config
     - $device-name: "vayne"
       products:
         - $marketing-name: "TBD"
