@@ -155,6 +155,30 @@ chromeos:
               $has-keyboard-backlight: "0"
         - $sku-id: 0x3ae3
           config: *device_specific_audio_device_config
+    - $device-name: "syndra"
+      $touchpad-wakeup: "1"
+      $internal-backlight-no-als-battery-brightness: "63.0"
+      products:
+        - $marketing-name: "TBD"
+          $brand-code: "ZZCR"
+          $key-id: "SONA"
+      skus:
+        - $sku-id: 0xbce0
+          config:
+            <<: *device_specific_audio_device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
+        - $sku-id: 0xbce1
+          config: *device_specific_audio_device_config
+        - $sku-id: 0xbce2
+          config:
+            <<: *device_specific_audio_device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
+        - $sku-id: 0xbce3
+          config: *device_specific_audio_device_config
     - $device-name: "vayne"
       products:
         - $marketing-name: "TBD"
