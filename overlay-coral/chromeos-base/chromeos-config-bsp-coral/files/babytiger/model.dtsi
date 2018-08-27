@@ -12,8 +12,13 @@
 		test-label = "babytiger";
 		audio {
 			main {
-				audio-type = <&audio_type_2mic>;
+				card = "bxtda7219max";
 				cras-config-dir = "babytiger";
+				ucm-suffix = "2micBabytiger";
+				volume = "${cras-config-dir}/audio/cras-config/${card}";
+				dsp-ini = "${cras-config-dir}/audio/cras-config/dsp.ini";
+				hifi-conf = "${cras-config-dir}/audio/ucm-config/2mic/HiFi";
+				alsa-conf = "${cras-config-dir}/audio/ucm-config/2mic/${card}.conf";
 			};
 		};
 		thermal {
