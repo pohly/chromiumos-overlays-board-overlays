@@ -52,3 +52,6 @@ sys-apps/busybox -pam static
 # ('ssh-in-browser') does not handle HPN-capable server very well, so disable
 # HPN support in OpenSSH (b/64450408).
 net-misc/openssh -hpn
+
+# Disable oobe_config to avoid surprising users (b/112722312).
+chromeos-base/chromeos-installer -oobe_config
