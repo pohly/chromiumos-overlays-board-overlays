@@ -13,4 +13,7 @@ modify_kernel_command_line() {
 
   # Enable console for debug
   echo "earlyprintk=uart8250,mmio32,0xfe032000,115200n8 console=uart8250,mmio32,0xfe032000,115200n8" >> "$1"
+
+  # Avoid a cosmetic TPM error (Work around for b/113527055)
+  echo "tpm_tis.force=0" >> "$1"
 }
