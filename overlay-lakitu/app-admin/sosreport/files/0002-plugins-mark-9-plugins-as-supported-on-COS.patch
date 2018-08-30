@@ -1,0 +1,218 @@
+From edb7aa5daa0bfd47d3172b7374bf0879dcbfaa9e Mon Sep 17 00:00:00 2001
+From: Xuewei Zhang <xueweiz@google.com>
+Date: Fri, 31 Aug 2018 15:28:10 -0700
+Subject: [PATCH 2/2] [plugins] mark 9 plugins as supported on COS
+
+9 exisiting plugins already works on Container-Optimized OS. Marking it
+to reflect that.
+
+Signed-off-by: Xuewei Zhang <xueweiz@google.com>
+---
+ sos/plugins/cgroups.py |  5 +++--
+ sos/plugins/devices.py |  5 +++--
+ sos/plugins/docker.py  | 11 ++++++++++-
+ sos/plugins/filesys.py |  5 +++--
+ sos/plugins/kernel.py  |  5 +++--
+ sos/plugins/logs.py    | 22 +++++++++++++++++++++-
+ sos/plugins/memory.py  |  5 +++--
+ sos/plugins/process.py |  5 +++--
+ sos/plugins/systemd.py |  5 +++--
+ 9 files changed, 52 insertions(+), 16 deletions(-)
+
+diff --git a/sos/plugins/cgroups.py b/sos/plugins/cgroups.py
+index f8d76a2d..cd7e832a 100644
+--- a/sos/plugins/cgroups.py
++++ b/sos/plugins/cgroups.py
+@@ -6,10 +6,11 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+-class Cgroups(Plugin, DebianPlugin, UbuntuPlugin):
++class Cgroups(Plugin, DebianPlugin, UbuntuPlugin, CosPlugin):
+     """Control groups subsystem
+     """
+ 
+diff --git a/sos/plugins/devices.py b/sos/plugins/devices.py
+index ad33d91e..3f0a5e2b 100644
+--- a/sos/plugins/devices.py
++++ b/sos/plugins/devices.py
+@@ -6,10 +6,11 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+-class Devices(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin):
++class Devices(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin, CosPlugin):
+     """ devices specific commands
+     """
+ 
+diff --git a/sos/plugins/docker.py b/sos/plugins/docker.py
+index a44264a4..51a22d42 100644
+--- a/sos/plugins/docker.py
++++ b/sos/plugins/docker.py
+@@ -8,7 +8,7 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, UbuntuPlugin
++from sos.plugins import Plugin, RedHatPlugin, UbuntuPlugin, CosPlugin
+ 
+ 
+ class Docker(Plugin):
+@@ -110,4 +110,13 @@ class UbuntuDocker(Docker, UbuntuPlugin):
+             "/var/run/docker/libcontainerd/containerd/events.log"
+         ])
+ 
++
++class CosDocker(Docker, CosPlugin):
++
++    def setup(self):
++        super(CosDocker, self).setup()
++        self.add_copy_spec([
++            "/etc/docker/daemon.json"
++        ])
++
+ # vim: set et ts=4 sw=4 :
+diff --git a/sos/plugins/filesys.py b/sos/plugins/filesys.py
+index 3a721067..035c6f0e 100644
+--- a/sos/plugins/filesys.py
++++ b/sos/plugins/filesys.py
+@@ -6,10 +6,11 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+-class Filesys(Plugin, DebianPlugin, UbuntuPlugin):
++class Filesys(Plugin, DebianPlugin, UbuntuPlugin, CosPlugin):
+     """Local file systems
+     """
+ 
+diff --git a/sos/plugins/kernel.py b/sos/plugins/kernel.py
+index 73109326..ab0e8752 100644
+--- a/sos/plugins/kernel.py
++++ b/sos/plugins/kernel.py
+@@ -6,13 +6,14 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ import os
+ import glob
+ import json
+ 
+ 
+-class Kernel(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin):
++class Kernel(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin, CosPlugin):
+     """Linux kernel
+     """
+ 
+diff --git a/sos/plugins/logs.py b/sos/plugins/logs.py
+index 66fbaebe..1b6ca109 100644
+--- a/sos/plugins/logs.py
++++ b/sos/plugins/logs.py
+@@ -8,7 +8,8 @@
+ 
+ import os
+ import glob
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+ class Logs(Plugin):
+@@ -121,4 +122,23 @@ class DebianLogs(Logs, DebianPlugin, UbuntuPlugin):
+         else:
+             self.add_copy_spec("/var/log/")
+ 
++
++class CosLogs(Logs, CosPlugin):
++
++    option_list = [
++        ("log_days", "the number of days logs to collect", "", 3)
++    ]
++
++    def setup(self):
++        super(CosLogs, self).setup()
++        self.add_cmd_output('ls -alRh /var/log/')
++        if self.get_option("all_logs"):
++            self.add_cmd_output("journalctl -o export")
++        else:
++            try:
++                days = int(self.get_option("log_days"))
++            except ValueError:
++                days = 3
++            self.add_journal(since="-%ddays" % days)
++
+ # vim: set et ts=4 sw=4 :
+diff --git a/sos/plugins/memory.py b/sos/plugins/memory.py
+index 3bfb43f0..7baf2078 100644
+--- a/sos/plugins/memory.py
++++ b/sos/plugins/memory.py
+@@ -6,10 +6,11 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+-class Memory(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin):
++class Memory(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin, CosPlugin):
+     """Memory configuration and use
+     """
+ 
+diff --git a/sos/plugins/process.py b/sos/plugins/process.py
+index 755eec8d..9be759f9 100644
+--- a/sos/plugins/process.py
++++ b/sos/plugins/process.py
+@@ -6,10 +6,11 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+-class Process(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin):
++class Process(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin, CosPlugin):
+     """process information
+     """
+ 
+diff --git a/sos/plugins/systemd.py b/sos/plugins/systemd.py
+index 90d723ff..55442449 100644
+--- a/sos/plugins/systemd.py
++++ b/sos/plugins/systemd.py
+@@ -8,10 +8,11 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+-class Systemd(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin):
++class Systemd(Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin, CosPlugin):
+     """ System management daemon
+     """
+ 
+-- 
+2.19.0.397.gdd90340f6a-goog
+

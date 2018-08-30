@@ -1,0 +1,66 @@
+From 6b1ffe9ed5bbba02d8686b658d843c8e4f311661 Mon Sep 17 00:00:00 2001
+From: Xuewei Zhang <xueweiz@google.com>
+Date: Fri, 31 Aug 2018 15:14:52 -0700
+Subject: [PATCH 1/2] [policies] add COS policy
+
+Add a basic policy class for Container-Optimized OS (COS).
+
+A new CosPlugin tagging class is introduced for COS-specific plugin
+cases.
+
+Signed-off-by: Xuewei Zhang <xueweiz@google.com>
+---
+ sos/plugins/__init__.py |  5 +++++
+ sos/policies/cos.py     | 24 ++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 sos/policies/cos.py
+
+diff --git a/sos/plugins/__init__.py b/sos/plugins/__init__.py
+index 82fef18e..967757f2 100644
+--- a/sos/plugins/__init__.py
++++ b/sos/plugins/__init__.py
+@@ -1253,6 +1253,11 @@ class SuSEPlugin(object):
+     pass
+ 
+ 
++class CosPlugin(object):
++    """Tagging class for Container-Optimized OS distributions"""
++    pass
++
++
+ class IndependentPlugin(object):
+     """Tagging class for plugins that can run on any platform"""
+     pass
+diff --git a/sos/policies/cos.py b/sos/policies/cos.py
+new file mode 100644
+index 00000000..acd9a4ab
+--- /dev/null
++++ b/sos/policies/cos.py
+@@ -0,0 +1,24 @@
++from sos.plugins import CosPlugin
++from sos.policies import LinuxPolicy
++
++import os
++
++
++class CosPolicy(LinuxPolicy):
++    distro = "Container-Optimized OS"
++    vendor = "Google Cloud Platform"
++    vendor_url = "https://cloud.google.com/container-optimized-os/"
++    valid_subclasses = [CosPlugin]
++    PATH = "/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
++
++    @classmethod
++    def check(cls):
++        try:
++            with open('/etc/os-release', 'r') as fp:
++                os_release = dict(line.strip().split('=') for line in fp)
++                id = os_release.get('ID')
++                return id == 'cos'
++        except IOError:
++            return False
++
++# vim: set et ts=4 sw=4 :
+-- 
+2.19.0.397.gdd90340f6a-goog
+
