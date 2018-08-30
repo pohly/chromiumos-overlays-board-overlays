@@ -22,6 +22,8 @@ USE="${USE} has_keyboard_backlight"
 # Enable touch in Chrome.
 USE="${USE} touchview"
 
+USE="${USE} touch_centric_device"
+
 # Building EC
 USE="${USE} cros_ec"
 
