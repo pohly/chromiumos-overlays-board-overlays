@@ -7,8 +7,10 @@ USE=""
 
 USE="${USE} kukui"
 
+USE="${USE} bootimage"
+
 # Building EC
-USE="${USE} cros_ec"
+USE="${USE} cros_ec bootblock_in_ec"
 
 EC_FIRMWARE="kukui"
 
