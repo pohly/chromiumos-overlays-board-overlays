@@ -22,6 +22,7 @@ LAKITU_RDEPEND="
 	watchdog? ( sys-apps/daisydog )
 	app-admin/compute-image-packages
 	stackdriver_alpha? ( app-admin/stackdriver )
+	app-admin/sosreport
 	app-admin/sudo
 	app-admin/toolbox
 	app-arch/tar
