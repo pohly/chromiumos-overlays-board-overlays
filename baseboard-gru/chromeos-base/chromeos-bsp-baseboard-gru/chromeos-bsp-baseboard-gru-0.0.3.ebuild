@@ -11,6 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* arm64 arm"
+IUSE="cheets"
 S="${WORKDIR}"
 
 RDEPEND="
@@ -29,8 +30,10 @@ src_install() {
 	# Install cpuset adjustments.
 	insinto "/etc/init"
 	doins "${FILESDIR}/platform-cpusets.conf"
-	insinto "/opt/google/containers/android/vendor/etc/init/"
-	doins "${FILESDIR}/init.cpusets.rc"
+	if use cheets; then
+		insinto "/opt/google/containers/android/vendor/etc/init/"
+		doins "${FILESDIR}/init.cpusets.rc"
+	fi
 
 	# Install platform specific triggers and udev rules for codecs.
 	insinto "/etc/init"
