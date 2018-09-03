@@ -10,8 +10,7 @@ KEYWORDS="-* arm64 arm"
 IUSE=""
 
 DEPEND="
-	arm64? ( media-libs/mali-drivers )
-	!arm64? ( media-libs/mali-drivers-bin )
+	media-libs/mali-drivers-bin
 	x11-drivers/opengles-headers
 "
 RDEPEND="${DEPEND}"
