@@ -20,7 +20,7 @@ USE=""
 
 USE="${USE} containers kvm_host"
 
-USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_4"
+USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_14"
 
 USE="${USE} direncryption"
 

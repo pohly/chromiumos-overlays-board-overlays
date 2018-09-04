@@ -18,7 +18,7 @@ USE=""
 
 USE="${USE} containers"
 
-USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_4"
+USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_14"
 
 # This is only for the kernel and can be dropped once we merge:
 # https://chromium-review.googlesource.com/42537

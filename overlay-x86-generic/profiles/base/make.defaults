@@ -15,7 +15,7 @@ USE=""
 
 USE="${USE} containers"
 
-USE="${USE} legacy_keyboard legacy_power_button kernel-4_4"
+USE="${USE} legacy_keyboard legacy_power_button kernel-4_14"
 
 USE="${USE} direncryption"
 
