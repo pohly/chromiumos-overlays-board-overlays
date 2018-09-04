@@ -19,4 +19,5 @@ src_install() {
 	insinto "${ARC_VENDOR_DIR}/etc/"
 	doins "${FILESDIR}/media_codecs.xml"
 	doins "${FILESDIR}/media_codecs_performance.xml"
+	doins "${FILESDIR}/media_codecs_cheets_board_specific.xml"
 }
