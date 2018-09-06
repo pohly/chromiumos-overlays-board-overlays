@@ -4,8 +4,6 @@
 EAPI="6"
 
 CROS_WORKON_BLACKLIST=1
-CROS_WORKON_COMMIT="42168677895508b6b99d126d2ebe632da73e7043"
-CROS_WORKON_TREE="e25d41e7046bd0c581073ebaa9e8c65942b00ade"
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="project-moblab/chromeos-base/chromeos-bsp-moblab/files"
@@ -73,6 +71,8 @@ src_install() {
 
 	# Create the mount point for external storage.
 	dodir "/mnt/moblab"
+	# Create the mount point for settings usb storage
+	dodir "/mnt/moblab-settings"
 
 	insinto /autotest
 	doins "${FILESDIR}/ssp_deploy_shadow_config.json"
