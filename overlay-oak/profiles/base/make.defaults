@@ -14,7 +14,7 @@ USE="${USE} touchview"
 USE="${USE} direncryption"
 
 EC_FIRMWARE="oak"
-EC_FIRMWARE_EXTRA="oak_pd"
+EC_FIRMWARE_EXTRA="oak_pd servo_micro servo_v4 sweetberry tigertail"
 PD_FIRMWARE="oak_pd"
 
 # Uncomment these lines to activate the serial port.
