@@ -11,10 +11,14 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
+IUSE="sof"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
+	sof? (
+		chromeos-base/sof-binary
+		chromeos-base/sof-topology
+	)
 "
 DEPEND="${RDEPEND}"
