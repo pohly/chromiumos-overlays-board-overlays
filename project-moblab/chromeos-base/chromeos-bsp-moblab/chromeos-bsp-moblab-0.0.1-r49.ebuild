@@ -50,6 +50,7 @@ RDEPEND="${RDEPEND}
 	sys-apps/moblab-site-utils
 	sys-apps/mobmonitor
 	sys-apps/mobmonitor-ui
+	sys-apps/moblab-upstart-init
 "
 
 DEPEND=""
@@ -60,8 +61,6 @@ pkg_preinst() {
 }
 
 src_install() {
-	insinto /etc/init
-	doins "${FILESDIR}"/init/*.conf
 
 	insinto /etc/apache2/modules.d
 	doins "${FILESDIR}/moblab-apache-settings.conf"
