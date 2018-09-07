@@ -9,10 +9,23 @@
 		brand-code = "YPCE";
 		powerd-prefs = "rabbid";
 		test-label = "rabbid";
-		audio {
-			main {
-				audio-type = <&audio_type_2mic>;
-				cras-config-dir = "rabbid";
+		submodels {
+			rabbid_consumer: rabbid-consumer {
+				audio {
+					main {
+						audio-type = <&audio_type_2mic>;
+						cras-config-dir = "rabbid";
+					};
+				};
+			};
+			// TODO(OEM): Temporarily inherit rabbid's audio configurations.
+			rabbid_rugged: rabbid-rugged {
+				audio {
+					main {
+						audio-type = <&audio_type_2mic>;
+						cras-config-dir = "rabbid";
+					};
+				};
 			};
 		};
 		thermal {

@@ -54,9 +54,10 @@
 				16 &epaulette
 				26 &porbeagle
 				27 &porbeagle
+				28 &rabbid_rugged
 				30 &babytiger
-				31 &rabbid
-				32 &rabbid
+				31 &rabbid_consumer
+				32 &rabbid_consumer
 				33 &babytiger
 				36 &blacktip
 				37 &blacktip360
