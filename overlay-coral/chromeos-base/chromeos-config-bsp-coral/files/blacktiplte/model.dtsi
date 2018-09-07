@@ -1,0 +1,43 @@
+/*
+ * Copyright 2018 The Chromium OS Authors. All rights reserved.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+&models {
+	blacktiplte: blacktiplte {
+		powerd-prefs = "blacktiplte";
+		test-label = "blacktiplte";
+		audio {
+			main {
+				audio-type = <&audio_type_1mic>;
+				cras-config-dir = "blacktiplte";
+			};
+		};
+		thermal {
+			/* Could also point to astronaut/dptf.dv */
+			dptf-dv = "blacktiplte/dptf.dv";
+		};
+		power {
+			touchpad-wakeup = "1";
+		};
+		whitelabels {
+			/* *default* LOEM */
+			default {
+				brand-code = "TEST";
+				key-id = "CORALC";
+			};
+			/* to be changed later */
+			ctl {
+				brand-code = "ZZCR";
+				key-id = "CORALF";
+			};
+			/* to be changed later */
+			gsa {
+				brand-code = "ZZCR";
+				key-id = "CORALK";
+			};
+		};
+	};
+};
