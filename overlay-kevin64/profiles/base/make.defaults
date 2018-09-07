@@ -9,3 +9,5 @@ USE="${USE} -opengl opengles"
 
 # TODO: Re-enable these when the corresponding packages are fixed
 USE="${USE} -usbguard -tts -kvm_host -nacl"
+
+VIDEO_CARDS="rockchip"
