@@ -20,7 +20,7 @@ DEFINE_string container_token "" \
 DEFINE_string lxd_image "debian/stretch" \
   "The image to create a container from"
 
-DEFINE_string lxd_remote "https://storage.googleapis.com/cros-containers" \
+DEFINE_string lxd_remote "https://storage.googleapis.com/cros-containers/70" \
   "The LXD remote URL"
 
 DEFINE_boolean shell "${FLAGS_FALSE}" \
