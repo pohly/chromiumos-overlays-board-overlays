@@ -1,33 +1,22 @@
-# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="4eb47882f6d91e6629dfb812f399b3f3f1aabe2d"
-CROS_WORKON_TREE="6cfe00c69a229f70cc35ce9148054f5a0339bb03"
+CROS_WORKON_COMMIT="d53e0d035b2d4807b6bafefba3471f6b248754ed"
+CROS_WORKON_TREE="d4d1c678418c74cfd6d026d9b8b92a305769ca9a"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
-CROS_WORKON_LOCALNAME="kernel/v4.14"
+CROS_WORKON_LOCALNAME="kernel/v4.4"
 
-CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
+CHROMEOS_KERNEL_CONFIG="${FILESDIR}/lakitu_kernel_config_4_4"
 
 # This must be inherited *after* EGIT/CROS_WORKON variables defined
 inherit cros-workon cros-kernel2 osreleased
 
 STRIP_MASK+=" /usr/src/${P}/build/vmlinux"
-STRIP_MASK+=" *.ko"
 
-DESCRIPTION="Chromium OS Linux Kernel 4.14"
+DESCRIPTION="Chromium OS Linux Kernel 4.4"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="*"
-
-src_configure() {
-	# Provide a custom key configuration file, because otherwise the kernel
-	# would auto-generate one.
-	mkdir -p "$(cros-workon_get_build_dir)/certs"
-	cp -f "${FILESDIR}/x509.genkey" \
-		"$(cros-workon_get_build_dir)/certs/x509.genkey" || die
-
-	cros-kernel2_src_configure
-}
 
 src_install() {
 	cros-kernel2_src_install
@@ -38,12 +27,12 @@ src_install() {
 }
 
 # Change the following (commented out) number to the next prime number
-# when you change base.config.  This workaround will force the
-# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_14 ebuild and pick up the
+# when you change lakitu_kernel_config_4_4.  This workaround will force the
+# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_4 ebuild and pick up the
 # configuration changes.  In absence of this workaround the config changes
 # would not be picked up unless there was a code change in kernel source tree.
 #
 # NOTE: There's nothing magic keeping this number prime but you just need to
 # make _any_ change to this file.  ...so why not keep it prime?
 #
-# The coolest prime number is: 43
+# The coolest prime number is: 11
