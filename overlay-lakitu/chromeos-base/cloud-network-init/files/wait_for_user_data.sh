@@ -4,8 +4,14 @@
 # found in the LICENSE file.
 
 # Waits until 'user-data' metadata key is accessible or $TIMEOUT_SECS seconds
-# have elapsed.
+# have elapsed. Does nothing if cloud-init is configured for nocloud mode.
 TIMEOUT_SECS=3600
+
+
+if grep -E " ds=nocloud( |;)" /proc/cmdline; then
+  echo "cloud-init is configured for nocloud; not waiting for instance metadata"
+  exit 0
+fi
 
 i=0
 while  [ $i -lt $TIMEOUT_SECS ]
