@@ -21,6 +21,9 @@ USE="${USE} gpu_sandbox_failures_not_fatal"
 ## USE="${USE} cr50_onboard"
 USE="${USE} mocktpm"
 
+# Build gsctool, remove this after we add cr50_onboard
+USE="${USE} cr50_utils"
+
 # ath10k firmware for WCN3990 Wifi
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_wcn3990"
 
