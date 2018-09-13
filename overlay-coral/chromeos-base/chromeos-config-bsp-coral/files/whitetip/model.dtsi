@@ -43,8 +43,12 @@
 				brand-code = "IULQ";
 				key-id = "CORALI";
 			};
+			pcmerge {
+				brand-code = "TPHN";
+				/* TODO: change the key once it's ready */
+				key-id = "CORALC";
+			};
 			// Following are the brand codes allocated but not yet in used.
-			//	brand-code = "TPHN";
 			//	brand-code = "URZD";
 			//	brand-code = "QTMI";
 			//	brand-code = "QHTT";
