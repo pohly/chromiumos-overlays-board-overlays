@@ -4,6 +4,7 @@
 EAPI=5
 
 inherit appid
+inherit cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -22,3 +23,11 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}"
+
+src_install() {
+	if  use sof ; then
+		# Install audio config files
+		local audio_config_dir="${FILESDIR}/audio-config"
+		install_audio_configs octopus "${audio_config_dir}"
+	fi
+}
