@@ -20,6 +20,6 @@ S="${WORKDIR}"/"${TARBALL_NAME}"
 
 src_install() {
 	insinto /lib/firmware/intel
-	doins sof-glk.tplg
+	doins *.tplg
 	dodoc README
 }
