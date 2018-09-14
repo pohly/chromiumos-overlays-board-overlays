@@ -7,6 +7,10 @@ sys-libs/libapparmor static-libs
 # Lakitu uses overlayfs graph driver in docker.
 app-emulation/docker -device-mapper overlay
 
+# Pigz is for faster docker image downloads:
+# https://github.com/moby/moby/pull/35697.
+app-emulation/docker pigz
+
 # Btrfs is not supported on lakitu.
 app-emulation/containerd -btrfs
 

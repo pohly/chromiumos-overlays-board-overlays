@@ -30,7 +30,7 @@ DESCRIPTION="The core functions you need to create Docker images and run Docker 
 HOMEPAGE="https://dockerproject.org"
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="apparmor aufs btrfs +container-init +device-mapper hardened +overlay pkcs11 seccomp"
+IUSE="apparmor aufs btrfs +container-init +device-mapper hardened +overlay pkcs11 seccomp pigz"
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#build-dependencies
 CDEPEND="
@@ -64,6 +64,7 @@ RDEPEND="
 	~app-emulation/runc-1.0.0_rc5_p20180509[apparmor?,seccomp?]
 	~app-emulation/docker-proxy-0.8.0_p20180626
 	container-init? ( >=sys-process/tini-0.18.0[static] )
+	pigz? ( app-arch/pigz )
 "
 
 RESTRICT="installsources strip"
