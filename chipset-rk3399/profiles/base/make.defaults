@@ -5,6 +5,10 @@
 CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-rockchip64"
 CHROMEOS_KERNEL_ARCH="arm64"
 
+# TODO(smbarber): see if this should be a72
+# http://crbug.com/588836
+BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57.cortex-a53 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard"
+
 # Initial value just for style purposes.
 USE=""
 

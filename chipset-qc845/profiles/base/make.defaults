@@ -5,6 +5,7 @@
 CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-qualcomm"
 CHROMEOS_KERNEL_ARCH="arm64"
 
+BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57.cortex-a53 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard"
 
 # Initial value just for style purposes.
 USE=""

@@ -4,6 +4,11 @@
 CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-mediatek"
 CHROMEOS_KERNEL_ARCH="arm64"
 
+BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57.cortex-a53 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard"
+# Add the linker option to fix hardware errata. Refer bug here -
+# https://code.google.com/p/chrome-os-partner/issues/detail?id=39170
+LDFLAGS="-Wl,--fix-cortex-a53-843419"
+
 # Turn on the video cards this board uses.
 VIDEO_CARDS="mediatek powervr"
 
