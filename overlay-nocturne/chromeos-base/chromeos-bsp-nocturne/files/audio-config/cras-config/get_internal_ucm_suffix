@@ -4,7 +4,7 @@
 # found in the LICENSE file.
 
 version="$(mosys platform version)"
-rev="${version//[!0-9]/}"
+rev=$(echo "${version}" | sed 's/[^0-9]*//g')
 
 if [ -z "$rev" ]; then
   echo "dmic32"
