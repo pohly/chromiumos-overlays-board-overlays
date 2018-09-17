@@ -5,6 +5,7 @@
 EAPI=5
 
 inherit appid
+inherit cros-model cros-unibuild
 
 DESCRIPTION="Octopus board-specific ebuild that pulls in necessary ebuilds as
 dependencies or portage actions."
@@ -19,7 +20,10 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-octopus
 "
-DEPEND="${RDEPEND}"
+DEPEND="
+	${RDEPEND}
+	chromeos-base/chromeos-config
+"
 
 src_install() {
 	doappid "{9A3BE5D2-C3DC-4AE6-9943-E2C113895DC5}" "CHROMEBOOK"
@@ -27,4 +31,7 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto /etc/bluetooth
 	doins "${FILESDIR}"/main.conf
+
+	unibuild_install_audio_files
+	unibuild_install_thermal_files
 }
