@@ -1,0 +1,55 @@
+From 7935b8e0ad452e63c03f3757874240934cb9b49f Mon Sep 17 00:00:00 2001
+From: Xuewei Zhang <xueweiz@google.com>
+Date: Mon, 17 Jun 2019 15:21:58 -0700
+Subject: [PATCH] lakitu: Use specified Go compiler for cross compilation
+
+---
+ Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index ca3f65e..a7d9823 100644
+--- a/Makefile
++++ b/Makefile
+@@ -71,9 +71,9 @@ ifeq ($(ENABLE_JOURNALD), 1)
+ endif
+ 
+ vet:
+-	GO111MODULE=on go list -mod vendor $(BUILD_TAGS) ./... | \
++	GO111MODULE=on ${GO} list -mod vendor $(BUILD_TAGS) ./... | \
+ 		grep -v "./vendor/*" | \
+-		GO111MODULE=on xargs go vet -mod vendor $(BUILD_TAGS)
++		GO111MODULE=on xargs ${GO} vet -mod vendor $(BUILD_TAGS)
+ 
+ fmt:
+ 	find . -type f -name "*.go" | grep -v "./vendor/*" | xargs gofmt -s -w -l
+@@ -82,7 +82,7 @@ version:
+ 	@echo $(VERSION)
+ 
+ ./bin/log-counter: $(PKG_SOURCES)
+-	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GO111MODULE=on go build \
++	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GO111MODULE=on ${GO} build \
+ 		-mod vendor \
+ 		-o bin/log-counter \
+ 		-ldflags '-X $(PKG)/pkg/version.version=$(VERSION)' \
+@@ -90,7 +90,7 @@ version:
+ 		cmd/logcounter/log_counter.go
+ 
+ ./bin/node-problem-detector: $(PKG_SOURCES)
+-	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GO111MODULE=on go build \
++	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GO111MODULE=on ${GO} build \
+ 		-mod vendor \
+ 		-o bin/node-problem-detector \
+ 		-ldflags '-X $(PKG)/pkg/version.version=$(VERSION)' \
+@@ -101,7 +101,7 @@ Dockerfile: Dockerfile.in
+ 	sed -e 's|@BASEIMAGE@|$(BASEIMAGE)|g' $< >$@
+ 
+ test: vet fmt
+-	GO111MODULE=on go test -mod vendor -timeout=1m -v -race $(BUILD_TAGS) ./...
++	GO111MODULE=on ${GO} test -mod vendor -timeout=1m -v -race $(BUILD_TAGS) ./...
+ 
+ build-binaries: ./bin/node-problem-detector ./bin/log-counter
+ 
+-- 
+2.22.0.410.gd8fdbe21b5-goog
+
