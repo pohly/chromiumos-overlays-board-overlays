@@ -193,3 +193,33 @@ chromeos:
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3a7f
           config: *device_specific_audio_device_config
+    - $device-name: "ekko"
+      $touchpad-wakeup: "1"
+      products:
+        - $marketing-name: "TBD"
+          $brand-code: "ZZCR"
+          $key-id: "AKALI"
+      skus:
+        - $sku-id: 0x118e3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x18e3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x118e1
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x18e1
+          config: *device_specific_audio_device_config
+    - $device-name: "bard"
+      $touchpad-wakeup: "1"
+      products:
+        - $marketing-name: "TBD"
+          $brand-code: "ZZCR"
+          $key-id: "AKALI"
+      skus:
+        - $sku-id: 0x19ce3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x9ce3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x19ce1
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x9ce1
+          config: *device_specific_audio_device_config
