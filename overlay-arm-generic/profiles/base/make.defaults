@@ -3,6 +3,8 @@
 
 CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-arm"
 
+BOARD_COMPILER_FLAGS="-march=armv7-a -mtune=cortex-a15 -mfpu=neon -mfloat-abi=hard"
+
 # Initial value just for style purposes.
 USE=""
 
