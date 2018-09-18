@@ -14,3 +14,5 @@ USE="${USE} -usbguard -tts -kvm_host -nacl"
 USE="${USE} gpu_sandbox_failures_not_fatal -gpu_sandbox_start_early"
 
 VIDEO_CARDS="rockchip"
+
+BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57 -ftree-vectorize"
