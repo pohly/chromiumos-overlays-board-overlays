@@ -4,6 +4,8 @@
 
 CHROMEOS_KERNEL_SPLITCONFIG="chromeos-pinetrail-i386"
 
+BOARD_COMPILER_FLAGS="-march=atom -mtune=atom -mfpmath=sse"
+
 # Initial value just for style purposes.
 USE=""
 
