@@ -3,6 +3,10 @@
 
 CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-i386"
 
+# We assume that our x86 baseline CPU is at least an
+# i686 that supports MMX, SSE, SSE2, and SSE3.
+BOARD_COMPILER_FLAGS="-march=i686 -mfpmath=sse -mmmx -msse -msse2 -msse3"
+
 # Enable a few more video cards as this is a generic board.
 VIDEO_CARDS="intel nouveau radeon"
 

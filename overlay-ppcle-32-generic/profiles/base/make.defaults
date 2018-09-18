@@ -4,6 +4,10 @@
 CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-ppc32"
 CHROMEOS_KERNEL_ARCH="powerpc"
 
+# We assume that our 32bit baseline CPU supports at least altivec and is a
+# POWER4.  Sorry, but we don't see enough POWER3 platforms (right now).
+BOARD_COMPILER_FLAGS="-mcpu=power4 -maltivec -mtune=power5"
+
 # Initial value just for style purposes.
 USE=""
 
