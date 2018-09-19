@@ -7,6 +7,8 @@ U_BOOT_FDT_USE="exynos5420-peach-pit"
 
 CHROMEOS_KERNEL_SPLITCONFIG="chromeos-exynos5"
 
+BOARD_COMPILER_FLAGS="-march=armv7-a -mtune=cortex-a15 -mfpu=neon -mfloat-abi=hard"
+
 # Initial value just for style purposes.
 USE=""
 

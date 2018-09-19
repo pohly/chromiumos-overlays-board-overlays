@@ -11,6 +11,9 @@ LINUX_FIRMWARE="amdgpu"
 # Use LLVM amdgpu target when building LLVM.
 LLVM_TARGETS="AMDGPU"
 
+# Compiler optimization flags.
+BOARD_COMPILER_FLAGS="-march=x86-64 -msse3"
+
 USE=""
 # Use kernel-4_4 with amdgpu support.
 USE="${USE} legacy_keyboard legacy_power_button kernel-4_4 builtin_fw_amdgpu"

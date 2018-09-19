@@ -9,6 +9,8 @@ LINUX_FIRMWARE="iwlwifi-all"
 # Use LLVM amdgpu target when building LLVM.
 LLVM_TARGETS="AMDGPU X86"
 
+BOARD_COMPILER_FLAGS="-march=corei7"
+
 # Initial value just for style purposes.
 USE=""
 

@@ -6,6 +6,8 @@
 CHROMEOS_KERNEL_CONFIG="arch/arm64/configs/chromiumos-container-vm-arm64_defconfig"
 CHROMEOS_KERNEL_ARCH="arm64"
 
+BOARD_COMPILER_FLAGS="-march=armv7-a -mtune=cortex-a15 -mfpu=neon -mfloat-abi=hard"
+
 # Initial value just for style purposes.
 USE=""
 
