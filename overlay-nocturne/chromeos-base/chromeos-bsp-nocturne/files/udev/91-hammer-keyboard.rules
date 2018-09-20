@@ -7,7 +7,6 @@
 
 SUBSYSTEM=="input", ENV{ID_INPUT_KEYBOARD}=="1", \
   ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="5030", \
-  ENV{CROS_KEYBOARD_TOP_ROW_LAYOUT}="2", \
   ENV{POWERD_ROLE}="internal_keyboard"
 SUBSYSTEM=="input", ENV{ID_INPUT_TOUCHPAD}=="1", \
   ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="5030", \
