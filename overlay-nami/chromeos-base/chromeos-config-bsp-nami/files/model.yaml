@@ -141,6 +141,22 @@ chromeos:
           config: *device_config
         - $sku-id: 0x3ae3
           config: *device_config
+    - $device-name: "syndra"
+      $internal-backlight-no-als-battery-brightness: "63.0"
+      products:
+        - $marketing-name: "TBD"
+          $brand-code: "ZZCR"
+# TODO (change key-id once the key is available)
+          $key-id: "NAMI"
+      skus:
+        - $sku-id: 0x3ce0
+          config: *device_config
+        - $sku-id: 0xbce1
+          config: *device_config
+        - $sku-id: 0xbce2
+          config: *device_config
+        - $sku-id: 0xbce3
+          config: *device_config
     - $device-name: "vayne"
       products:
         - $marketing-name: "TBD"
@@ -154,4 +170,34 @@ chromeos:
           config: *device_specific_audio_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3a7f
+          config: *device_specific_audio_device_config
+    - $device-name: "ekko"
+      $touchpad-wakeup: "1"
+      products:
+        - $marketing-name: "TBD"
+          $brand-code: "ZZCR"
+          $key-id: "AKALI"
+      skus:
+        - $sku-id: 0x118e3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x18e3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x118e1
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x18e1
+          config: *device_specific_audio_device_config
+    - $device-name: "bard"
+      $touchpad-wakeup: "1"
+      products:
+        - $marketing-name: "TBD"
+          $brand-code: "ZZCR"
+          $key-id: "AKALI"
+      skus:
+        - $sku-id: 0x19ce3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x9ce3
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x19ce1
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x9ce1
           config: *device_specific_audio_device_config
