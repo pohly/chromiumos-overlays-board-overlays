@@ -13,4 +13,7 @@ IUSE=""
 
 RDEPEND="
 	chromeos-base/chromeos-test-root
+	sys-apps/net-tools
+	sys-apps/pciutils
+	sys-apps/usbutils
 "
