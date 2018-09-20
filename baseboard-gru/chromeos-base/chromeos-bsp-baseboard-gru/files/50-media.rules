@@ -6,5 +6,6 @@ SUBSYSTEM!="video4linux", GOTO="media_end"
 ATTR{name}=="rockchip,rk3399-vdec-dec", SYMLINK+="video-dec video-dec0"
 ATTR{name}=="rockchip,rk3399-vpu-dec", SYMLINK+="video-dec1"
 ATTR{name}=="rockchip,rk3399-vpu-enc", SYMLINK+="video-enc"
+ATTR{name}=="rockchip,rk3399-vpu-enc", SYMLINK+="jpeg-enc"
 
 LABEL="media_end"
