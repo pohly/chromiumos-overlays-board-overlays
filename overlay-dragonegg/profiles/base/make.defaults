@@ -5,6 +5,7 @@
 LINUX_FIRMWARE=""
 USE=""
 
+USE="${USE} cros_ec"
 USE="${USE} dragonegg"
 
 # Disable ARC by default
@@ -17,4 +18,4 @@ USE="${USE} pcserial"
 TTY_CONSOLE="ttyS1"
 
 # All firmware to build from the EC code base.
-#EC_FIRMWARE="dragonegg"
+EC_FIRMWARE="dragonegg"
