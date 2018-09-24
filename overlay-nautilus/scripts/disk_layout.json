@@ -15,7 +15,7 @@
       {
         # Slot A rootfs. Adjust to allow for more space.
         "num": 3,
-        "fs_size_min": "2078 MiB",
+        "fs_size_min": "2300 MiB",
         "size": "4096 MiB"
       }
     ],
@@ -28,7 +28,7 @@
       },
       {
         "num": 3,
-        "size": "2300 MiB"
+        "size": "2400 MiB"
       }
     ],
     # Used for factory install images. No need to adjust fs size or partition
