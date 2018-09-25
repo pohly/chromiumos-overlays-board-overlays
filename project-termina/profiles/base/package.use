@@ -1,5 +1,5 @@
 # Skip the large dbus libraries from libbrillo
 chromeos-base/libbrillo -dbus
-media-libs/mesa -classic egl llvm shared-glapi gles2 wayland X
+media-libs/mesa -classic drm egl llvm shared-glapi gles2 wayland X
 sys-apps/hwids -net -pci udev -usb
 sys-fs/btrfs-progs -convert

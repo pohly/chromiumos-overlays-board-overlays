@@ -23,3 +23,7 @@ USE="${USE} kvm_guest"
 
 # Include the kernel in the base image.
 USE="${USE} include_vmlinuz"
+
+# Mesa's gbm (instead of minigbm) is required for Xwayland to support
+# virtio-gpu.
+USE="${USE} gbm"
