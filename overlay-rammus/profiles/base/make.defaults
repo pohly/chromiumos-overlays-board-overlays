@@ -7,6 +7,9 @@ USE=""
 
 USE="${USE} rammus"
 
+# Enable unibuild
+USE="${USE} unibuild"
+
 # TODO: Default enable for debug purpose, need to disable later
 # Uncomment these lines to activate the serial port.
 TTY_CONSOLE="ttyS0"
