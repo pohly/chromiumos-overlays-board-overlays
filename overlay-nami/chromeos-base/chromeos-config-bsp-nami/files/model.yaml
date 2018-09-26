@@ -160,7 +160,7 @@ chromeos:
       $internal-backlight-no-als-battery-brightness: "63.0"
       products:
         - $marketing-name: "TBD"
-          $brand-code: "ZZCR"
+          $brand-code: "GJZV"
           $key-id: "SONA"
       skus:
         - $sku-id: 0xbce0
