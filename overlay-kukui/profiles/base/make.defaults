@@ -12,6 +12,8 @@ USE="${USE} bootimage"
 # Building EC
 USE="${USE} cros_ec bootblock_in_ec"
 
+USE="${USE} touch_centric_device"
+
 EC_FIRMWARE="kukui"
 
 # Uncomment these lines to activate the serial port.
