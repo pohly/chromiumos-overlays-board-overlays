@@ -2,10 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# dev-lang/python is blacklisted by the build scripts. The following
-# flag makes them ignore the blacklist.
-skip_blacklist_check=1
-
 # This will add console=ttyS0 kernel cmdline flag, thus rerouting
 # dmesg output to ttyS0 (serial port).
 FLAGS_enable_serial=ttyS0

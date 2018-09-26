@@ -28,5 +28,3 @@ install_beaglebone_bootloader() {
 board_setup() {
   install_beaglebone_bootloader "$1"
 }
-
-skip_blacklist_check=1

@@ -28,5 +28,3 @@ install_sama5d3_bootloader() {
 board_setup() {
   install_sama5d3_bootloader "$1"
 }
-
-skip_blacklist_check=1

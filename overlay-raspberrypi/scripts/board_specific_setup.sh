@@ -31,5 +31,3 @@ install_raspberrypi_bootloader() {
 board_setup() {
   install_raspberrypi_bootloader "$1"
 }
-
-skip_blacklist_check=1
