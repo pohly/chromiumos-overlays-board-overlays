@@ -1,0 +1,31 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+# WiFi driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265"
+
+# BT driver firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
+
+USE="${USE} ac_only -display_backlight -subpixel_rendering"
+USE="${USE} -tpm tpm2"
+USE="${USE} arc"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+USE="${USE} cros_ec cr50_onboard"
+
+# Add EC logging
+USE="${USE} eclog"
+
+# Add NVMe support"
+USE="${USE} nvme"
+
+# Enable VMs
+USE="${USE} kvm_host"
