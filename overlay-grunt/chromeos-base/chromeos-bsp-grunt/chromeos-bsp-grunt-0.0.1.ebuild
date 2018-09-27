@@ -19,6 +19,7 @@ S="${WORKDIR}"
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-grunt
 	chromeos-base/chromeos-config
+	chromeos-base/touch_updater
 "
 DEPEND="${RDEPEND}"
 
@@ -26,6 +27,7 @@ src_install() {
 	doappid "{9496CDE8-85E6-4118-960F-E26DC0C69FD6}" "CHROMEBOOK"
 
 	unibuild_install_audio_files
+	unibuild_install_touch_files
 
 	# Install Bluetooth ID override
 	insinto "/etc/bluetooth"
