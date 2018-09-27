@@ -19,3 +19,6 @@ TTY_CONSOLE="ttyS1"
 # All firmware to build from the EC code base.
 # TODO(furquan): uncomment, once octopus board name is added
 # EC_FIRMWARE="octopus"
+
+# Avoid inhibiting the keyboard (which reports events from side buttons).
+USE="${USE} keyboard_includes_side_buttons"
