@@ -13,6 +13,9 @@ USE="${USE} als"
 # Enable keyboard backlight control
 USE="${USE} has_keyboard_backlight"
 
+# Enable NVMe utility
+USE="${USE} nvme"
+
 # Building EC
 USE="${USE} cros_ec"
 
