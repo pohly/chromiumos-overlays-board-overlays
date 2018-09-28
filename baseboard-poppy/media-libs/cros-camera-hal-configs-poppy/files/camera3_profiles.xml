@@ -148,7 +148,7 @@
                 tonemap.curve"/>
             <request.availableCharacteristicsKeys value="0"/>
             <!-- Scaler -->
-            <scaler.availableMaxDigitalZoom value="16.0"/>
+            <scaler.availableMaxDigitalZoom value="1.0"/>
             <scaler.availableInputOutputFormatsMap value="IMPLEMENTATION_DEFINED,2,YCbCr_420_888,BLOB"/>
             <scaler.availableStreamConfigurations value="BLOB,4096x3072,OUTPUT,
                 BLOB,1920x1080,OUTPUT,
@@ -408,7 +408,7 @@
                 tonemap.curve"/>
             <request.availableCharacteristicsKeys value="0"/>
             <!-- Scaler -->
-            <scaler.availableMaxDigitalZoom value="16.0"/>
+            <scaler.availableMaxDigitalZoom value="1.0"/>
             <scaler.availableInputOutputFormatsMap value="IMPLEMENTATION_DEFINED,2,YCbCr_420_888,BLOB"/>
             <scaler.availableStreamConfigurations value="
                 BLOB,2560x1920,OUTPUT,
