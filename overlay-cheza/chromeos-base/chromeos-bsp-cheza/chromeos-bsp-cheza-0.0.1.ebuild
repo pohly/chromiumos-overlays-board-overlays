@@ -27,4 +27,6 @@ src_install() {
 	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
 
 	# TODO: Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs cheza "${audio_config_dir}"
 }
