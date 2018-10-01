@@ -7,6 +7,13 @@ USE=""
 
 USE="${USE} nocturne"
 
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+#USE="${USE} pcserial"
+# Declare set of enabled consoles
+#TTY_CONSOLE="ttyS0"
+
+
 # Enable biometrics support
 USE="${USE} biod"
 
