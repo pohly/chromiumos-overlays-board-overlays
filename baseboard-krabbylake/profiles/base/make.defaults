@@ -26,12 +26,6 @@ USE="${USE} -acpi_ac"
 # Add Intel Camera IMGU ipu3-fw.bin
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
 
-# Uncomment these lines to activate the serial port.
-# Enable kernel serial drivers
-USE="${USE} pcserial"
-# Declare set of enabled consoles
-TTY_CONSOLE="ttyS0"
-
 # Log cros_ec/cros_fp consoles with the timberslide daemon
 USE="${USE} eclog"
 

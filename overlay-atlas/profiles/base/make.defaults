@@ -7,6 +7,12 @@ USE=""
 
 USE="${USE} atlas"
 
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+USE="${USE} pcserial"
+# Declare set of enabled consoles
+TTY_CONSOLE="ttyS0"
+
 # Enable Ambient Light Sensor
 USE="${USE} als"
 
