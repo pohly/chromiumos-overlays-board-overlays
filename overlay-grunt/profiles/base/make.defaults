@@ -19,7 +19,5 @@ USE="${USE} direncryption"
 
 USE="${USE} unibuild"
 
-USE="${USE} arc"
-
 # Ability to run guest VMs.
 USE="${USE} kvm_host"
