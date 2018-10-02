@@ -188,12 +188,22 @@ chromeos:
       $fw-name: "Meep"
       skus:
         - $sku-id-val: 1
+          $mic_config: "2mic"
+          config: *device_config
+        - $sku-id-val: 2
+          $mic_config: "2mic"
+          config: *device_config
+        - $sku-id-val: 3
+          $mic_config: "1mic"
           config: *device_config
     - $device-name: "mimrock"
       $fw-name: "Meep"
+      $mic_config: "1mic"
       $touchpad-wakeup: "1"
       skus:
         - $sku-id-val: 17
+          config: *device_config
+        - $sku-id-val: 18
           config: *device_config
     - $device-name: "ampton"
       $fw-name: "Ampton"
