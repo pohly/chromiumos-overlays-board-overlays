@@ -26,6 +26,10 @@ src_install() {
 	# Install a rule tagging keyboard as internal and having updated layout
 	udev_dorules "${FILESDIR}/91-hammer-keyboard.rules"
 
+	# TODO(mka@): remove in Q1/19
+	insinto /etc/init
+	doins "${FILESDIR}/init/vpd_fix_macs.conf"
+
 	# TODO: Install audio config files
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs cheza "${audio_config_dir}"
