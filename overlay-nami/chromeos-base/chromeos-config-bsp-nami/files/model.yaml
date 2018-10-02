@@ -163,7 +163,7 @@ chromeos:
           $brand-code: "GJZV"
           $key-id: "SONA"
       skus:
-        - $sku-id: 0xbce0
+        - $sku-id: 0x3ce0
           config:
             <<: *device_specific_audio_device_config
             power:
