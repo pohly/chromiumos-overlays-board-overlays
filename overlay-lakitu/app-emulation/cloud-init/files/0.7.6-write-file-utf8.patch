@@ -1,4 +1,4 @@
-From cd6b9f5e5f0098add49efc3241ae193311e171de Mon Sep 17 00:00:00 2001
+From e862fb71d25d031b1c2bd35e55aca7efd15b4530 Mon Sep 17 00:00:00 2001
 From: Ke Wu <mikewu@google.com>
 Date: Thu, 9 Aug 2018 16:00:48 -0700
 Subject: [PATCH] Fix cloud-inti write_files error on non-ascii content
@@ -9,16 +9,16 @@ https://git.launchpad.net/cloud-init/commit/?id=6a660b4
 https://git.launchpad.net/cloud-init/commit/?id=290afe7
 https://git.launchpad.net/cloud-init/commit/?id=f895cb1
 ---
- cloudinit/config/cc_write_files.py |  4 ++--
+ cloudinit/config/cc_write_files.py |  6 +++---
  cloudinit/distros/__init__.py      |  9 ++++++++-
  cloudinit/util.py                  | 19 +++++++++++++++++++
- 3 files changed, 29 insertions(+), 3 deletions(-)
+ 3 files changed, 30 insertions(+), 4 deletions(-)
 
 diff --git a/cloudinit/config/cc_write_files.py b/cloudinit/config/cc_write_files.py
-index a73d6f4e..38df0c33 100644
+index a73d6f4e..7766cca8 100644
 --- a/cloudinit/config/cc_write_files.py
 +++ b/cloudinit/config/cc_write_files.py
-@@ -91,10 +91,10 @@ def decode_perms(perm, default, log):
+@@ -91,12 +91,12 @@ def decode_perms(perm, default, log):
  
  
  def extract_contents(contents, extraction_types):
@@ -27,10 +27,13 @@ index a73d6f4e..38df0c33 100644
      for t in extraction_types:
          if t == 'application/x-gzip':
 -            result = util.decomp_gzip(result, quiet=False)
-+            result = util.decomp_gzip(result, quiet=False, decode=False)
++            result = util.decomp_gzip(str(result), quiet=False)
          elif t == 'application/base64':
-             result = base64.b64decode(result)
+-            result = base64.b64decode(result)
++            result = base64.b64decode(str(result))
          elif t == UNKNOWN_ENC:
+             pass
+     return result
 diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
 index 2599d9f2..4721877b 100644
 --- a/cloudinit/distros/__init__.py
@@ -91,5 +94,5 @@ index f236d0bf..018e7f27 100644
 +        return text
 +    return text.encode(encoding)
 -- 
-2.18.0.597.ga71716f1ad-goog
+2.19.0.605.g01d371f741-goog
 
