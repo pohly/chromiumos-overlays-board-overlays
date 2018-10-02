@@ -195,3 +195,11 @@ chromeos:
       skus:
         - $sku-id-val: 17
           config: *device_config
+    - $device-name: "ampton"
+      $fw-name: "Ampton"
+      skus:
+        - $sku-id-val: 255
+          $card: "glkrt5682max"
+          $ucm_src_root: "{{$device-name}}"
+          $ucm_extra_suffix: "{{$device-name}}"
+          config: *device_config
