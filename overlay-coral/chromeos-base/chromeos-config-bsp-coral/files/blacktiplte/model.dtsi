@@ -22,6 +22,9 @@
 		power {
 			touchpad-wakeup = "1";
 		};
+		modem {
+			firmware-variant = "blacktiplte";
+		};
 		whitelabels {
 			/* *default* LOEM */
 			default {
