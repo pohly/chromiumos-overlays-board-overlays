@@ -32,8 +32,13 @@ write_toolchain_path() {
   local -r sdk_ver_file="${cros_overlay}/chromeos/binhost/host/sdk_version.conf"
   local -r ctarget="$(portageq-"${BOARD}" envvar CHOST)"
   . "${sdk_ver_file}"
-  echo "${TC_PATH/\%\(target\)s/${ctarget}}" | \
+  local -r toolchain_path="${TC_PATH/\%\(target\)s/${ctarget}}"
+  # Write toolchain path to image.
+  echo "${toolchain_path}" | \
       sudo tee "${root_fs_dir}/etc/toolchain-path" > /dev/null
+  # Write toolchain path to build dir so it can be exported as an artifact.
+  echo "${toolchain_path}" | \
+      sudo tee "${BUILD_DIR}/toolchain_path" > /dev/null
 }
 
 # board_finalize_base_image() gets invoked by the build scripts at the
