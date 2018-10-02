@@ -1,37 +1,22 @@
-# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="dd44a60c685c6ef771a560c9b94bc442123ef3b7"
-CROS_WORKON_TREE="a5790063cb9ada61b6cd700e8c7f2fdf0a819092"
+CROS_WORKON_COMMIT="12f4af0d2040ba5435f0be0fbb15f4cfde56f4c0"
+CROS_WORKON_TREE="b4bb34d6c9edaf6ef3a265876dde4607ef9b056f"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
-CROS_WORKON_LOCALNAME="kernel/v4.14"
+CROS_WORKON_LOCALNAME="kernel/v4.4"
 
-CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
+CHROMEOS_KERNEL_CONFIG="${FILESDIR}/lakitu_kernel_config_4_4"
 
 # This must be inherited *after* EGIT/CROS_WORKON variables defined
 inherit cros-workon cros-kernel2 osreleased
 
 STRIP_MASK+=" /usr/src/${P}/build/vmlinux"
-STRIP_MASK+=" *.ko"
 
-DESCRIPTION="Chromium OS Linux Kernel 4.14"
+DESCRIPTION="Chromium OS Linux Kernel 4.4"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="*"
-IUSE="module_sign"
-
-src_configure() {
-	if use module_sign ; then
-		# Provide a custom key configuration file, because otherwise the kernel
-		# would auto-generate one.
-		mkdir -p "$(cros-workon_get_build_dir)/certs"
-		cp -f "${FILESDIR}/x509.genkey" \
-			"$(cros-workon_get_build_dir)/certs/x509.genkey" || die
-		cp -f "${FILESDIR}/testing_trusted_key.pem" \
-			"$(cros-workon_get_build_dir)/certs/trusted_key.pem" || die
-	fi
-	cros-kernel2_src_configure
-}
 
 src_install() {
 	cros-kernel2_src_install
@@ -42,12 +27,12 @@ src_install() {
 }
 
 # Change the following (commented out) number to the next prime number
-# when you change base.config.  This workaround will force the
-# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_14 ebuild and pick up the
+# when you change lakitu_kernel_config_4_4.  This workaround will force the
+# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_4 ebuild and pick up the
 # configuration changes.  In absence of this workaround the config changes
 # would not be picked up unless there was a code change in kernel source tree.
 #
 # NOTE: There's nothing magic keeping this number prime but you just need to
 # make _any_ change to this file.  ...so why not keep it prime?
 #
-# The coolest prime number is: 43
+# The coolest prime number is: 11
