@@ -22,5 +22,8 @@
 		power {
 			touchpad-wakeup = "1";
 		};
+		modem {
+			firmware-variant = "astronaut";
+		};
 	};
 };
