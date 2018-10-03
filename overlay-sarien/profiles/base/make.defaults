@@ -1,0 +1,30 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Distributed under the terms of the GNU General Public License v2
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromeos-intel-pineview"
+CHROMEOS_KERNEL_ARCH="x86_64"
+
+BOARD_COMPILER_FLAGS="-march=corei7"
+
+# Specify DMC firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} i915_kbl"
+
+# Specify default kernel
+USE="${USE} kernel-next"
+
+# Build kernel with serial driver
+USE="${USE} pcserial"
+USE="${USE} tty_console_ttyS0"
+
+# Enable serial console
+TTY_CONSOLE="ttyS0"
+
+# Use Intel WiFi
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9000 iwlwifi-9260"
+
+# Use Intel BT driver
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt ibt-hw ibt_9560 ibt_9260"
