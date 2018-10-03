@@ -1,0 +1,57 @@
+From ef75d98164ea8d580e0251da317ee867996e5c3f Mon Sep 17 00:00:00 2001
+From: Simon Glass <sjg@chromium.org>
+Date: Wed, 3 Oct 2018 13:19:49 -0600
+Subject: [PATCH] Update header guard for libfdt_env.h
+
+The newest u-boot-tools package uses LIBFDT_ENV_H but the old U-Boot built
+by beaglebone uses _LIBFDT_ENV_H. Change it so that it will build.
+
+Signed-off-by: Simon Glass <sjg@chromium.org>
+---
+
+ include/libfdt.h     | 6 +++---
+ include/libfdt_env.h | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/include/libfdt.h b/include/libfdt.h
+index e2bc2e00c18..29d2b1646f3 100644
+--- a/include/libfdt.h
++++ b/include/libfdt.h
+@@ -1,5 +1,5 @@
+-#ifndef _LIBFDT_H
+-#define _LIBFDT_H
++#ifndef LIBFDT_H
++#define LIBFDT_H
+ /*
+  * libfdt - Flat Device Tree manipulation
+  * Copyright (C) 2006 David Gibson, IBM Corporation.
+@@ -2134,4 +2134,4 @@ int fdt_next_region(const void *fdt,
+ int fdt_add_alias_regions(const void *fdt, struct fdt_region *region, int count,
+ 			  int max_regions, struct fdt_region_state *info);
+ 
+-#endif /* _LIBFDT_H */
++#endif /* LIBFDT_H */
+diff --git a/include/libfdt_env.h b/include/libfdt_env.h
+index 6c6845f76cf..1fbcd0ef83b 100644
+--- a/include/libfdt_env.h
++++ b/include/libfdt_env.h
+@@ -6,8 +6,8 @@
+  * SPDX-License-Identifier:	LGPL-2.1+
+  */
+ 
+-#ifndef _LIBFDT_ENV_H
+-#define _LIBFDT_ENV_H
++#ifndef LIBFDT_ENV_H
++#define LIBFDT_ENV_H
+ 
+ #include "compiler.h"
+ #include "linux/types.h"
+@@ -32,4 +32,4 @@ typedef __be64 fdt64_t;
+ /* adding a ramdisk needs 0x44 bytes in version 2008.10 */
+ #define FDT_RAMDISK_OVERHEAD	0x80
+ 
+-#endif /* _LIBFDT_ENV_H */
++#endif /* LIBFDT_ENV_H */
+-- 
+2.19.0.605.g01d371f741-goog
+
