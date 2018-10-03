@@ -57,7 +57,7 @@
             <request.pipelineMaxDepth value="6"/>
             <request.maxNumInputStreams value="0"/>
             <request.partialResultCount value="1"/>
-            <request.availableCapabilities value="BACKWARD_COMPATIBLE"/>
+            <request.availableCapabilities value="BACKWARD_COMPATIBLE,BURST_CAPTURE"/>
             <request.availableRequestKeys value="blackLevel.lock,
                 colorCorrection.aberrationMode,
                 colorCorrection.gains,
@@ -185,7 +185,7 @@
                                                    BLOB,320x240,16666666" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
-            <sensor.info.activeArraySize value="16,16,1936,1096"/>
+            <sensor.info.activeArraySize value="0,0,1936,1096"/>
             <sensor.info.sensitivityRange value="85,1360"/>
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
@@ -250,10 +250,11 @@
             <frame.initialSkip value="3"/> <!-- camera3 HAL CPF parameters moved here end-->
             <isoAnalogGain1 value="36"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
+            <sensor.testPatternMap value="Off,0,ColorBars,2"/>
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
-            <element name="imx208" type="pixel_array"/> <!-- HAL will append Bus id for element name "imx258 8-0010" -->
+            <element name="imx208" type="pixel_array"/> <!-- HAL will append Bus id for element name "imx208 8-0010" -->
             <element name="ipu3-csi2 1" type="csi_receiver"/>
         </MediaCtl_elements_IPU3>
 
