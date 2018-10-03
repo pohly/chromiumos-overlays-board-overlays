@@ -32,7 +32,7 @@ EC_FIRMWARE="nocturne"
 EC_FIRMWARE_EXTRA="nocturne_fp"
 
 # Enable hammerd for updating base firmware.
-USE="${USE} hammerd"
+#USE="${USE} hammerd"
 
 # Allow the option to use QCA Wifi and BT
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174 qca-bt"
