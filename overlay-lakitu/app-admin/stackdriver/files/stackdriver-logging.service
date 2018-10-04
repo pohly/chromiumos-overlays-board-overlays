@@ -1,18 +1,16 @@
 [Unit]
 Description=Fluentd container for Stackdriver Logging
-After=stackdriver-metadata.service
-Wants=docker-events-collector.service
-Requires=stackdriver-metadata.service
+After=gcr-online.target docker.socket
+Wants=gcr-online.target docker.socket docker-events-collector.service
 
 [Service]
 EnvironmentFile=-/etc/stackdriver/env_vars
 ExecStartPre=/bin/mkdir -p /var/log/google-fluentd/
 ExecStart=/usr/bin/docker run --rm \
-    --name="${LOGGING_AGENT_NAME}" --network="${NETWORK_NAME}" \
+    --name="${LOGGING_AGENT_NAME}" \
     -v /etc/stackdriver/logging.config.d/:/etc/google-fluentd/config.d/ \
     -v /var/log:/var/log \
     -v /var/lib/docker/containers/:/var/lib/docker/containers/ \
-    --env=METADATA_AGENT_HOSTNAME="${METADATA_AGENT_NAME}" \
     "${LOGGING_AGENT_DOCKER_IMAGE}"
 
 Restart=on-failure
