@@ -3,7 +3,7 @@
 
 USE=""
 
-USE="${USE} ac_only bluetooth -cros_ec legacy_keyboard"
+USE="${USE} ac_only bluetooth -cros_ec -internal_mic legacy_keyboard"
 USE="${USE} legacy_power_button s3halt veyron_mickey -veyron-brcmfmac-nvram"
 USE="${USE} -display_backlight"
 

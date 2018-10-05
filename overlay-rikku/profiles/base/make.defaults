@@ -6,7 +6,7 @@
 USE=""
 LINUX_FIRMWARE=""
 
-USE="${USE} ac_only rikku"
+USE="${USE} ac_only -internal_mic rikku"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
