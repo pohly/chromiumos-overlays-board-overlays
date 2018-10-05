@@ -45,8 +45,7 @@
 			};
 			pcmerge {
 				brand-code = "TPHN";
-				/* TODO: change the key once it's ready */
-				key-id = "CORALC";
+				key-id = "CORALL";
 			};
 			// Following are the brand codes allocated but not yet in used.
 			//	brand-code = "URZD";
