@@ -51,6 +51,3 @@ USE="${USE} has_keyboard_backlight"
 # (TODO b:110006063): Turn on if the stylus need to be supported.
 # enable stylus ui
 # USE="${USE} internal_stylus"
-
-# (TODO b:110006063): Need to remove later
-USE="${USE} -intel_lpe -kbl_lpe"
