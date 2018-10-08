@@ -168,22 +168,22 @@ chromeos:
           $key-id: "NAMI"
           $oem-id: "9"
       skus:
-        - $sku-id: 0x3ce0
+        - $sku-id: 0x2bc63
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x2bc62
           config:
             <<: *device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
-        - $sku-id: 0xbce1
-          config: *device_config
-        - $sku-id: 0xbce2
+        - $sku-id: 0x2bc61
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x2bc60
           config:
             <<: *device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
-        - $sku-id: 0xbce3
-          config: *device_config
     - $device-name: "vayne"
       products:
         - $marketing-name: "TBD"
