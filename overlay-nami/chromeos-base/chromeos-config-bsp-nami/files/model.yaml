@@ -145,17 +145,17 @@ chromeos:
       $internal-backlight-no-als-battery-brightness: "63.0"
       products:
         - $marketing-name: "TBD"
-          $brand-code: "ZZCR"
+          $brand-code: "GJZV"
 # TODO (change key-id once the key is available)
           $key-id: "NAMI"
       skus:
-        - $sku-id: 0x3ce0
+        - $sku-id: 0x2bc63
           config: *device_config
-        - $sku-id: 0xbce1
+        - $sku-id: 0x2bc62
           config: *device_config
-        - $sku-id: 0xbce2
+        - $sku-id: 0x2bc61
           config: *device_config
-        - $sku-id: 0xbce3
+        - $sku-id: 0x2bc60
           config: *device_config
     - $device-name: "vayne"
       products:
