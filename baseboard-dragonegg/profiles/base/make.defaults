@@ -21,5 +21,5 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 USE="${USE} direncryption"
 
 # Enable TPM
-USE="${USE} -tpm tpm2 -mocktpm"
+USE="${USE} -tpm tpm2 -mocktpm -intel_mrc"
 USE="${USE} cr50_onboard"
