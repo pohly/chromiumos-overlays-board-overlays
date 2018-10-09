@@ -52,6 +52,9 @@ src_install() {
 
 	exeinto $(systemd_get_unitdir)-generators
 	doexe "${FILESDIR}"/chromeos-mount-generator
+
+	insinto "$(systemd_get_unitdir)/update-engine.service.d"
+	newins "${FILESDIR}/efi-disable-update-engine.conf" "efi-disable.conf"
 }
 
 pkg_preinst() {
