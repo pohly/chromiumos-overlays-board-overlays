@@ -7,4 +7,7 @@
 modify_kernel_command_line() {
   # Don't disable the ability to run VMs.
   echo "disablevmx=off" >> "$1"
+
+  # Enable S0ix logging using GSMI
+  echo "gsmi.s0ix_logging_enable=1" >> "$1"
 }
