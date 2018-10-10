@@ -10,9 +10,6 @@ USE="${USE} -opengl opengles"
 # TODO: Re-enable these when the corresponding packages are fixed
 USE="${USE} -tts -nacl"
 
-# Workaround until the sandbox issue is resolved chromium:882033
-USE="${USE} gpu_sandbox_failures_not_fatal -gpu_sandbox_start_early"
-
 VIDEO_CARDS="rockchip"
 
 BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57 -ftree-vectorize"
