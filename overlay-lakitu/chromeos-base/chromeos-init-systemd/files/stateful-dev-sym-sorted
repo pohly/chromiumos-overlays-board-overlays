@@ -1,0 +1,45 @@
+#!/bin/bash
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# This script creates a symlink using udev to the stateful device.
+#
+# Positional arguments: symlink device_path
+# symlink is a relative path in /dev to the desired location of the output
+#     symlink.
+# device_path is an absolute file path or absolute file path prefix. It is
+#     interpreted as an absolute file path prefix if and only if it ends with
+#     a * character.
+
+set -o errexit
+set -o pipefail
+
+get_device() {
+  local -r dev="$1"
+  udevadm settle
+  if [[ "${dev: -1}" != "*" ]]; then
+    echo "${dev}"
+    return
+  fi
+  echo "${dev::-1}"* | tr " " "\n" | sort -V | tail -n 1
+}
+
+main() {
+  local -r symlink="$1"
+  local -r input_dev="$2"
+  local -r dev="$(get_device "${input_dev}")"
+  local real_dev
+  if [[ -b "${dev}" ]]; then
+    real_dev="$(realpath "${dev}")"
+    echo "KERNEL==\"${real_dev#/dev/}\", SYMLINK+=\"${symlink}\"" > \
+      /etc/udev/rules.d/00-stateful-dev.rules
+    udevadm control -R
+    udevadm trigger "${real_dev}"
+  else
+    echo "not a valid device: ${dev}"
+    return 1
+  fi
+}
+
+main "$@"

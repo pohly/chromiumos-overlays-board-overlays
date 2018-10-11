@@ -1,8 +1,8 @@
 [Unit]
 Description=Mount /etc overlay
 DefaultDependencies=no
-Requires=tmp.mount var.mount
-After=syslog.target tmp.mount var.mount
+Requires=tmp.mount
+After=syslog.target tmp.mount
 Before=local-fs.target
 
 [Service]

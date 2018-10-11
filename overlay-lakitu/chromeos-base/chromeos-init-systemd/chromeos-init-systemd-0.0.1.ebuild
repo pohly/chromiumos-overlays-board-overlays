@@ -16,7 +16,7 @@ KEYWORDS="*"
 IUSE=""
 
 # vboot_reference for crossystem
-RDEPEND="${DEPEND}
+RDEPEND="
 	chromeos-base/chromeos-installer
 	chromeos-base/vboot_reference
 	sys-apps/rootdev
@@ -44,17 +44,20 @@ src_install() {
 
 	systemd_newtmpfilesd "${FILESDIR}"/chromeos-init.tmpfiles chromeos-init.conf
 
-	insinto $(systemd_get_unitdir)/sys-kernel-debug.mount.d
+	insinto "$(systemd_get_unitdir)/sys-kernel-debug.mount.d"
 	newins "${FILESDIR}"/sys-kernel-debug-lakitu.conf lakitu.conf
 
-	insinto $(systemd_get_unitdir)/tmp.mount.d
+	insinto "$(systemd_get_unitdir)/tmp.mount.d"
 	newins "${FILESDIR}"/tmp-lakitu.conf lakitu.conf
 
-	exeinto $(systemd_get_unitdir)-generators
+	exeinto "$(systemd_get_unitdir)-generators"
 	doexe "${FILESDIR}"/chromeos-mount-generator
 
 	insinto "$(systemd_get_unitdir)/update-engine.service.d"
 	newins "${FILESDIR}/efi-disable-update-engine.conf" "efi-disable.conf"
+
+	exeinto "/usr/share/cloud"
+	doexe "${FILESDIR}"/stateful-dev-sym-sorted
 }
 
 pkg_preinst() {
