@@ -16,6 +16,9 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} i915_kbl"
 # Specify default kernel
 USE="${USE} kernel-next"
 
+# Enable unibuild
+USE="${USE} unibuild"
+
 # Build kernel with serial driver
 USE="${USE} pcserial"
 USE="${USE} tty_console_ttyS0"
