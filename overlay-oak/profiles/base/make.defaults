@@ -13,6 +13,8 @@ USE="${USE} touchview"
 
 USE="${USE} direncryption"
 
+USE="${USE} kvm_host"
+
 EC_FIRMWARE="oak"
 EC_FIRMWARE_EXTRA="oak_pd"
 PD_FIRMWARE="oak_pd"
