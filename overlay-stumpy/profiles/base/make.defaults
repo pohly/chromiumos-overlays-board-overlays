@@ -13,7 +13,7 @@ BOARD_COMPILER_FLAGS="-march=core2"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} ac_only bluetooth -display_backlight legacy_keyboard"
+USE="${USE} ac_only bluetooth -display_backlight"
 USE="${USE} legacy_power_button stumpy -subpixel_rendering watchdog"
 
 # Allow consumer kiosk.

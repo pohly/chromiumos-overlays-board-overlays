@@ -6,7 +6,7 @@
 LINUX_FIRMWARE=""
 USE=""
 
-USE="${USE} ac_only -display_backlight legacy_keyboard"
+USE="${USE} ac_only -display_backlight"
 USE="${USE} legacy_power_button monroe wireless34"
 
 # Allow consumer kiosk.

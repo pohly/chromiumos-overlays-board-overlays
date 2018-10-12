@@ -16,7 +16,7 @@ USE="${USE} kernel-3_8 wireless34"
 # Disable containers because kernel-3_8 doesn't support everything needed.
 USE="${USE} -containers"
 
-USE="${USE} ac_only -display_backlight legacy_keyboard"
+USE="${USE} ac_only -display_backlight"
 USE="${USE} legacy_power_button panther -subpixel_rendering"
 
 # Allow consumer kiosk.

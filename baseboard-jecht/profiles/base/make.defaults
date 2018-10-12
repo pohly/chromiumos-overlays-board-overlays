@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 USE=""
-USE="${USE} -display_backlight legacy_keyboard legacy_power_button"
+USE="${USE} -display_backlight legacy_power_button"
 USE="${USE} -subpixel_rendering wireless38"
 USE="${USE} direncryption"
 
