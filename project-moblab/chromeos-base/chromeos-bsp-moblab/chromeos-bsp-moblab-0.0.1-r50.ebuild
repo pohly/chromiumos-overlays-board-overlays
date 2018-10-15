@@ -14,7 +14,7 @@ DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies or port
 
 LICENSE="BSD-Google"
 SLOT="0"
-KEYWORDS="~*"
+KEYWORDS="*"
 
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
@@ -51,6 +51,7 @@ RDEPEND="${RDEPEND}
 	sys-apps/moblab-site-utils
 	sys-apps/mobmonitor
 	sys-apps/mobmonitor-ui
+	sys-apps/moblab-upstart-init
 "
 
 DEPEND=""
@@ -61,8 +62,6 @@ pkg_preinst() {
 }
 
 src_install() {
-	insinto /etc/init
-	doins "${FILESDIR}"/init/*.conf
 
 	insinto /etc/apache2/modules.d
 	doins "${FILESDIR}/moblab-apache-settings.conf"
