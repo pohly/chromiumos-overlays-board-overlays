@@ -95,6 +95,9 @@ chromeos:
         - $sku-id-val: 3
           $mic_config: "2mic"
           config: *device_config
+        - $sku-id-val: 4
+          $mic_config: "2mic"
+          config: *device_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
