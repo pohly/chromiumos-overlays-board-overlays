@@ -40,6 +40,7 @@ RDEPEND="
 	sys-fs/e2fsprogs
 	net-dns/bind-tools
 	net-analyzer/speedtest-cli
+	dev-python/cachetools
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
