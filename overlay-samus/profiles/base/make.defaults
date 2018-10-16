@@ -38,7 +38,7 @@ USE="${USE} pd_sync"
 PD_FIRMWARE="samus_pd"
 
 # Audio, WiFi and BT driver firmware
-LINUX_FIRMWARE="cros-pd fw_sst2 ibt-hw iwlwifi-7260 marvell-pcie8897"
+LINUX_FIRMWARE="cros-pd fw_sst2 ibt-hw iwlwifi-7260"
 
 # Use ext4 crypto
 USE="${USE} direncryption"

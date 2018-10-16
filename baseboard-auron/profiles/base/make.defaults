@@ -8,6 +8,6 @@ USE="${USE} wireless38"
 USE="${USE} tpm_slb9655"
 
 # WiFi and BT driver firmware
-LINUX_FIRMWARE="marvell-pcie8897 iwlwifi-7260 ibt-hw"
+LINUX_FIRMWARE="iwlwifi-7260 ibt-hw"
 
 EC_FIRMWARE="auron"
