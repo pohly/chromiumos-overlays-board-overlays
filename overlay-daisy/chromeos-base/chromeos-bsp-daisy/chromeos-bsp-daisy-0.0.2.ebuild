@@ -24,6 +24,7 @@ RDEPEND="${DEPEND}
 	spring? ( chromeos-base/chromeos-init chromeos-base/thermal )
 	chromeos-base/default-zram-size
 	media-libs/mfc-fw
+	net-wireless/marvell_sd8787
 	sys-boot/exynos-pre-boot
 	x11-drivers/mali-rules
 "

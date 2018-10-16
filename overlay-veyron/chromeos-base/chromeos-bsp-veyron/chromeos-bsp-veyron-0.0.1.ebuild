@@ -19,6 +19,7 @@ DEPEND="
 RDEPEND="${DEPEND}
 	x11-drivers/mali-rules
 	bluetooth? ( net-wireless/broadcom )
+	net-wireless/marvell_sd8787
 "
 
 S=${WORKDIR}

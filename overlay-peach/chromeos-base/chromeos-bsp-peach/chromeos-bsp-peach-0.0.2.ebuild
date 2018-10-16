@@ -15,6 +15,7 @@ IUSE=""
 DEPEND=""
 RDEPEND="
 	!media-libs/media-rules
+	net-wireless/marvell_sd8787
 	x11-drivers/mali-rules
 "
 

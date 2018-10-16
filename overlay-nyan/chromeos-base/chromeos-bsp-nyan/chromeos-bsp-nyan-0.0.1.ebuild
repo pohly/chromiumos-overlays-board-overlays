@@ -17,6 +17,7 @@ DEPEND="
 "
 RDEPEND="
 	!variant_build? ( chromeos-base/chromeos-touch-config-nyan )
+	net-wireless/marvell_sd8787
 	sys-kernel/tegra_lp0_resume
 	tegra-ldk? (
 		opengles? ( media-libs/openmax media-libs/openmax-codecs )

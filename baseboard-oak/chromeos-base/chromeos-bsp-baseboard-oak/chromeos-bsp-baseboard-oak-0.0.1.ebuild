@@ -17,6 +17,7 @@ IUSE="cheets kernel-4_4 mt8176"
 # Add dependencies on other ebuilds from within this board overlay
 DEPEND="
 	!media-libs/media-rules
+	net-wireless/marvell_sd8787
 "
 RDEPEND="${DEPEND}"
 
