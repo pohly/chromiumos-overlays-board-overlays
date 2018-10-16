@@ -16,11 +16,11 @@
 
 <Included>
     <Decoders>
-        <!-- Recover max frame size and set block-per-second by obtained performance (b/111500700). -->
+        <!-- Overwrites the decode limit to 1080p (1920x1088) 30fps (b/116621908). -->
         <MediaCodec name="OMX.google.vp9.decoder" type="video/x-vnd.on2.vp9" update="true">
-            <Limit name="size" min="2x2" max="2048x2048" />
-            <Limit name="block-count" range="1-16384" />
-            <Limit name="blocks-per-second" range="1-226800" />
+            <Limit name="size" min="2x2" max="1920x1088" />
+            <Limit name="block-count" range="1-8160" />
+            <Limit name="blocks-per-second" range="1-244800" />
         </MediaCodec>
     </Decoders>
 </Included>
