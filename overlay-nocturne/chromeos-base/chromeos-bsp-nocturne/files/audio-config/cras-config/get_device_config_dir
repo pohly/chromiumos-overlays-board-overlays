@@ -1,0 +1,15 @@
+#!/bin/sh
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+version="$(mosys platform version)"
+rev=$(echo "${version}" | sed 's/[^0-9]*//g')
+
+if [ -z "$rev" ]; then
+  echo "/etc/cras/dmic32"
+elif [ $rev -gt 1 ]; then
+  echo "/etc/cras/dmic10"
+else
+  echo "/etc/cras/dmic32"
+fi
