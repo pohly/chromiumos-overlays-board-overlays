@@ -5,5 +5,8 @@
 LINUX_FIRMWARE=""
 USE=""
 
+# Google USBPD peripheral firmwares
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
+
 # Use ext4 crypto (for NYC Android container)
 USE="${USE} direncryption"
