@@ -5,6 +5,7 @@
 EAPI=5
 
 inherit appid
+inherit cros-model cros-unibuild
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -17,8 +18,13 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND=""
-DEPEND="${RDEPEND}"
+DEPEND="
+	${RDEPEND}
+	chromeos-base/chromeos-config
+"
 
 src_install() {
 	doappid "{073ABAF9-40D3-4065-85F3-74B1FA49675D}" "CHROMEBASE"
+
+	unibuild_install_audio_files
 }
