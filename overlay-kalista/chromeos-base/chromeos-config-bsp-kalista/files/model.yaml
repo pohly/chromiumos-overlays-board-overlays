@@ -1,0 +1,53 @@
+#
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+#
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+audio_common: &audio_common
+  main:
+    $cras_root: "/etc/cras"
+    $ucm_root: "/usr/share/alsa/ucm"
+    $card: "kblda7219max"
+
+    cras-config-dir: "{{$cras}}"
+    ucm-suffix: "{{$ucm}}"
+
+    $cras-source: "{{cras-config-dir}}/audio/cras-config"
+    $cras-dest: "{{$cras_root}}/{{cras-config-dir}}"
+    $ucm-source: "{{cras-config-dir}}/audio/ucm-config{{$ucm-source-suffix}}"
+    $ucm-dest: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}"
+
+    files:
+      - source: "{{$cras-source}}/{{$card}}"
+        destination: "{{$cras-dest}}/{{$card}}"
+      - source: "{{$cras-source}}/dsp.ini"
+        destination: "{{$cras-dest}}/dsp.ini"
+      - source: "{{$ucm-source}}/HiFi.conf"
+        destination: "{{$ucm-dest}}/HiFi.conf"
+      - source: "{{$ucm-source}}/{{$card}}.conf"
+        destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
+
+common_config: &common_config
+  name: "{{$device-name}}"
+  identity:
+    platform-name: "Kalista"
+    smbios-name-match: "Kalista"
+    sku-id: "{{$sku-id}}"
+  firmware:
+    no-firmware: True
+  test-label: "{{$device-name}}"
+  audio:
+    <<: *audio_common
+    $cras: "common"
+    $ucm: "common" # Default
+    $ucm-source-suffix: ""
+  power:
+    suspend-to-idle: "1"
+
+chromeos:
+  devices:
+    - $device-name: "karma"
+      skus:
+        - $sku-id: 0x7
+          config: *common_config
