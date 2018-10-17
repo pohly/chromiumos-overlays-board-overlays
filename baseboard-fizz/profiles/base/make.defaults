@@ -12,8 +12,16 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265"
 # BT driver firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
 
+<<<<<<< HEAD
 USE="${USE} ac_only -display_backlight legacy_keyboard -subpixel_rendering"
 USE="${USE} -tpm tpm2"
+=======
+# Google USBPD peripheral firmwares
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
+
+USE="${USE} ac_only -display_backlight -internal_mic"
+USE="${USE} -subpixel_rendering -tpm tpm2"
+>>>>>>> 2f7d3a4cdb... cros-pd: Add Google USBPD peripheral FW to baseboards with USBC.
 USE="${USE} arc"
 
 # Use ext4 crypto
