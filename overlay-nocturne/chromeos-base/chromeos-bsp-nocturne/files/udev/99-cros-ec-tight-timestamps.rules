@@ -1,0 +1,5 @@
+# Manually tell the kernel that the EC firmware supports tight timestamps.
+# This is temporary until we're using(including overlay uprev / test lab) a
+# firmware that has this CL landed:
+# https://chromium-review.googlesource.com/c/chromiumos/platform/ec/+/1125272
+ACTION=="add", ATTR{name}=="cros-ec-ring", RUN+="/bin/sh -c '[ -f /sys$devpath/tight_timestamps ] && echo 1 > /sys$devpath/tight_timestamps'"
