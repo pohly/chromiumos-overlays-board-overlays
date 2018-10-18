@@ -26,6 +26,11 @@ main() {
     "6"|"7")
       echo "sku${sku_id}"
       ;;
+    # We only use the MSB of SKU strappings as the panel identifier.
+    # So sku0 shares the same panel as sku6.
+    "0")
+      echo "sku6"
+      ;;
     *)
       ## Unknown SKU.
       echo 0000_0000
