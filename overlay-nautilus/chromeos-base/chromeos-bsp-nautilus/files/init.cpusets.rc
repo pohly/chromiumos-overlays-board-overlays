@@ -1,9 +1,0 @@
-# Copyright 2018 The Chromium OS Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-#
-
-on early-boot
-    exec - root root -- /system/bin/cp /dev/cpuset/cpus /dev/cpuset/foreground/cpus
-    exec - root root -- /system/bin/cp /dev/cpuset/cpus /dev/cpuset/foreground/boost/cpus
-    exec - root root -- /system/bin/cp /dev/cpuset/cpus /dev/cpuset/top-app/cpus

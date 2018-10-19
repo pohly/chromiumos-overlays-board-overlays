@@ -32,10 +32,6 @@ src_install() {
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
 
-	# Install cpuset adjustments.
-	insinto "/opt/google/containers/android/vendor/etc/init/"
-	doins "${FILESDIR}/init.cpusets.rc"
-
 	# Install udev rules for proximity sensor.
 	udev_dorules "${FILESDIR}"/udev/*.rules
 }
