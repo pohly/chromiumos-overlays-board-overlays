@@ -1,32 +1,30 @@
-# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="c08031035f14f3a57f54fafcc35060c030ff23fd"
-CROS_WORKON_TREE="22462c7ced44f828c3ac4a8137480e9398b7f21d"
+CROS_WORKON_COMMIT="291a46cecb72a401b0d7044199a1fb8a314e57af"
+CROS_WORKON_TREE="e966edde54e7de3759d9a0e6780938b1d0d79ef7"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
 inherit autotools cros-debug cros-workon libchrome toolchain-funcs
 
-DESCRIPTION="Intel IPU3 (Image Processing Unit) Chrome OS camera HAL"
+DESCRIPTION="Rockchip ISP1 Chrome OS camera HAL"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="-* amd64"
+KEYWORDS="-* arm arm64"
 
 RDEPEND="
 	dev-libs/expat
-	!media-libs/arc-camera3-hal-intel-ipu3
+	!media-libs/arc-camera3-hal-rockchip-isp1
 	media-libs/cros-camera-libcab
 	media-libs/cros-camera-libcamera_client
-	media-libs/cros-camera-libcamera_common
 	media-libs/cros-camera-libcamera_jpeg
 	media-libs/cros-camera-libcamera_metadata
-	media-libs/cros-camera-libcamera_v4l2_device
 	media-libs/cros-camera-libcbm
-	media-libs/intel-3a-libs-bin
-	media-libs/libsync"
+	media-libs/libsync
+	media-libs/rockchip-isp1-3a-libs-bin"
 
 DEPEND="${RDEPEND}
 	media-libs/cros-camera-android-headers
@@ -35,11 +33,10 @@ DEPEND="${RDEPEND}
 	virtual/jpeg:0
 	virtual/pkgconfig"
 
-HAL_DIR="hal/intel"
-
+HAL_DIR="hal/rockchip"
 
 src_prepare() {
-	cd ${HAL_DIR}
+	cd "${HAL_DIR}"
 	eautoreconf
 }
 
@@ -47,7 +44,7 @@ src_configure() {
 	cros-debug-add-NDEBUG
 
 	cd ${HAL_DIR}
-	econf --with-ipu=ipu3 --with-base-version=${BASE_VER} --enable-remote3a
+	econf --with-base-version=${BASE_VER} --enable-remote3a
 }
 
 src_compile() {
@@ -62,5 +59,5 @@ src_install() {
 	cd ${HAL_DIR}
 	dolib.so .libs/libcam_algo.so*
 	dolib.so .libs/libcamerahal.so*
-	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/intel-ipu3.so
+	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/rockchip-isp1.so
 }
