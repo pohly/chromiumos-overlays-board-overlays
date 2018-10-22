@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 #
 
-on boot
+on property:sys.boot_completed=1
     # Adjust cpusets in container to better split work between
     # little and big cores.
     write /dev/cpuset/foreground/cpus 0-5
