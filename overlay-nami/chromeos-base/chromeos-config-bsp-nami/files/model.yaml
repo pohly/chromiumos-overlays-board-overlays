@@ -40,7 +40,6 @@ common_config: &common_config
   firmware-signing:
     key-id: "{{$key-id}}"
     signature-id: "{{$device-name}}"
-  oem-id: "{{$oem-id}}"
   power: &power_common
     charging-ports: |
       CROS_USB_PD_CHARGER0 LEFT
@@ -92,7 +91,6 @@ chromeos:
         - $marketing-name: "TBD"
           $brand-code: "SOCA"
           $key-id: "AKALI"
-          $oem-id: "1"
       skus:
         - $sku-id: 0x29e1
           config: *device_config
@@ -104,7 +102,6 @@ chromeos:
         - $marketing-name: "TBD"
           $brand-code: "SOCA"
           $key-id: "AKALI"
-          $oem-id: "1"
       skus:
         - $sku-id: 0x2be7
           config: *device_config
@@ -117,7 +114,6 @@ chromeos:
         - $marketing-name: "TBD"
           $brand-code: "ZZCR"
           $key-id: "NAMI"
-          $oem-id: "6"
       skus:
         - $sku-id: 0x3a7b
           config: *device_specific_audio_device_config
@@ -126,7 +122,6 @@ chromeos:
         - $marketing-name: "TBD"
           $brand-code: "CBUY"
           $key-id: "PANTHEON"
-          $oem-id: "5"
       skus:
         - $sku-id: 0x3f62
           config:
@@ -150,7 +145,6 @@ chromeos:
           $brand-code: "HFRG"
 # TODO (change key-id once the key is available)
           $key-id: "NAMI"
-          $oem-id: "4"
       skus:
         - $sku-id: 0x3ae2
           config:
@@ -166,7 +160,6 @@ chromeos:
           $brand-code: "GJZV"
 # TODO (change key-id once the key is available)
           $key-id: "NAMI"
-          $oem-id: "9"
       skus:
         - $sku-id: 0x2bc63
           config: *device_specific_audio_device_config
@@ -189,7 +182,6 @@ chromeos:
         - $marketing-name: "TBD"
           $brand-code: "NPEC"
           $key-id: "VAYNE"
-          $oem-id: "3"
       skus:
         - $sku-id: 0x3a67
           config: *device_specific_audio_device_config
@@ -205,7 +197,6 @@ chromeos:
         - $marketing-name: "TBD"
           $brand-code: "ZZCR"
           $key-id: "AKALI"
-          $oem-id: "7"
       skus:
         - $sku-id: 0x118e3
           config: *device_specific_audio_device_config
@@ -221,7 +212,6 @@ chromeos:
         - $marketing-name: "TBD"
           $brand-code: "ZZCR"
           $key-id: "AKALI"
-          $oem-id: "8"
       skus:
         - $sku-id: 0x19ce3
           config: *device_specific_audio_device_config
