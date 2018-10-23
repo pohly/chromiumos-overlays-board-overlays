@@ -27,6 +27,7 @@ USE="${USE} cros_ec"
 
 # All firmware to build from the EC code base.
 EC_FIRMWARE="atlas"
+EC_FIRMWARE_EXTRA="atlas_ish"
 
 # iwlwifi firmware for ThunderPeak2/1216 chip.
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9260"
