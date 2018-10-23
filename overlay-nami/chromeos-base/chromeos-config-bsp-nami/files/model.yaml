@@ -172,7 +172,7 @@ chromeos:
           config: *device_specific_audio_device_config
         - $sku-id: 0x2bc62
           config:
-            <<: *device_config
+            <<: *device_specific_audio_device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
@@ -180,7 +180,7 @@ chromeos:
           config: *device_specific_audio_device_config
         - $sku-id: 0x2bc60
           config:
-            <<: *device_config
+            <<: *device_specific_audio_device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
