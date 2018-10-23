@@ -23,3 +23,6 @@ USE="${USE} direncryption"
 # Enable TPM
 USE="${USE} -tpm tpm2 -mocktpm -intel_mrc"
 USE="${USE} cr50_onboard"
+
+# Add NVMe support
+USE="${USE} nvme"
