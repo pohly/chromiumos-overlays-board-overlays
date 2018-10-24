@@ -40,6 +40,7 @@ RDEPEND="
 	sys-fs/e2fsprogs
 	net-dns/bind-tools
 	net-analyzer/speedtest-cli
+	dev-python/cachetools
 "
 
 # Chromium OS Autotest Server and Devserver Deps.
@@ -60,8 +61,6 @@ pkg_preinst() {
 }
 
 src_install() {
-	insinto /etc/init
-	doins "${FILESDIR}"/init/*.conf
 
 	insinto /etc/apache2/modules.d
 	doins "${FILESDIR}/moblab-apache-settings.conf"
