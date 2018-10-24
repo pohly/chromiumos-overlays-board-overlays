@@ -1,7 +1,7 @@
 # Copyright 2014 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 
 inherit appid cros-audio-configs
 
@@ -14,6 +14,7 @@ IUSE=""
 S="${WORKDIR}"
 
 RDEPEND="
+	net-wireless/iwlwifi_rescan
 "
 DEPEND="${RDEPEND}"
 S="${WORKDIR}"
