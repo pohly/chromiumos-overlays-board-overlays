@@ -10,6 +10,20 @@
     # common is the standard layout template.
     "common": [
       {
+        # Kernel for Slot A, no file system.
+        "num": 2,
+        "label": "KERN-A",
+        "type": "kernel",
+        "size": "32 MiB"
+      },
+      {
+        # Kernel for Slot B, no file system.
+        "num": 4,
+        "label": "KERN-B",
+        "type": "kernel",
+        "size": "32 MiB"
+      },
+      {
         # Slot B rootfs. Updated for more space, like Slot A below
         "num": 5,
         "size": "4096 MiB"
@@ -50,6 +64,20 @@
     # Huge rootfs, suitable for VM only images, should not be used
     # for actual hardware devices.
     "16gb-rootfs": [
+      {
+        # Kernel for Slot A, no file system.
+        "num": 2,
+        "label": "KERN-A",
+        "type": "kernel",
+        "size": "32 MiB"
+      },
+      {
+        # Kernel for Slot B, no file system.
+        "num": 4,
+        "label": "KERN-B",
+        "type": "kernel",
+        "size": "32 MiB"
+      },
       {
         "num": 5,
         "size": "2 MiB"
