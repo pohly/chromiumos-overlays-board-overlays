@@ -16,7 +16,7 @@ USE="${USE} -cros_disks -cros_host -cros_p2p -crypto"
 USE="${USE} -bluetooth -cellular -cras -cups -debugd -encrypted_stateful -kmod"
 USE="${USE} -power_management -shill -systemd -timers -tpm -vaapi -vtconsole -udev"
 
-USE="${USE} kernel-4_14"
+USE="${USE} kernel-4_19"
 
 # This overlay is meant to be run as a VM guest.
 USE="${USE} kvm_guest"
