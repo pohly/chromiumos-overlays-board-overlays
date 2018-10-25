@@ -1,1 +1,2 @@
+sys-kernel/raspberrypi-kernel -clang
 sys-libs/gcc-libs -thumb
