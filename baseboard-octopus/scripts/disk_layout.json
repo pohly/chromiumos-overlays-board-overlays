@@ -58,6 +58,33 @@
         "fs_size_min": "400 MiB",
         "fs_size": "400 MiB"
       }
+    ],
+    # Huge rootfs, suitable for VM only images, should not be used
+    # for actual hardware devices.
+    "16gb-rootfs": [
+      {
+        # Kernel for Slot A, no file system.
+        "num": 2,
+        "label": "KERN-A",
+        "type": "kernel",
+        "size": "32 MiB"
+      },
+      {
+        # Kernel for Slot B, no file system.
+        "num": 4,
+        "label": "KERN-B",
+        "type": "kernel",
+        "size": "32 MiB"
+      },
+      {
+        "num": 5,
+        "size": "2 MiB"
+      },
+      {
+        "num": 3,
+        "fs_size": "16000 MiB",
+        "size": "16384 MiB"
+      }
     ]
   }
 }
