@@ -5,11 +5,14 @@
 # Initial value just for style purposes.
 USE=""
 
+USE="${USE} sarien"
+
 # Enable unibuild
 USE="${USE} unibuild"
-
-USE="${USE} sarien"
 
 # Bring in the diagnostics package, which includes the diagnostics
 # daemon and diagnostics processor.
 USE="${USE} diagnostics"
+
+# Enable ARC++
+USE="${USE} arc"
