@@ -9,3 +9,7 @@ USE=""
 USE="${USE} unibuild"
 
 USE="${USE} sarien"
+
+# Bring in the diagnostics package, which includes the diagnostics
+# daemon and diagnostics processor.
+USE="${USE} diagnostics"
