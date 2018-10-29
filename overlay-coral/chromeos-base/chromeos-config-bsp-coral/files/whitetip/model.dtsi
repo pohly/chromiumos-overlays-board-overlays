@@ -47,8 +47,12 @@
 				brand-code = "TPHN";
 				key-id = "CORALL";
 			};
+			// TODO: change key id once it's ready
+			xma {
+				brand-code = "URZD";
+				key-id = "CORALC";
+			};
 			// Following are the brand codes allocated but not yet in used.
-			//	brand-code = "URZD";
 			//	brand-code = "QTMI";
 			//	brand-code = "QHTT";
 			//	brand-code = "FGNZ";
