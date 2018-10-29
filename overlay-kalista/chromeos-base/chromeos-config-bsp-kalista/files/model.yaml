@@ -32,7 +32,7 @@ common_config: &common_config
   name: "{{$device-name}}"
   identity:
     platform-name: "Kalista"
-    smbios-name-match: "Kalista"
+    smbios-name-match: "{{$fw-name}}"
     sku-id: "{{$sku-id}}"
   firmware:
     no-firmware: True
@@ -48,6 +48,7 @@ common_config: &common_config
 chromeos:
   devices:
     - $device-name: "karma"
+      $fw-name: "Karma"
       skus:
         - $sku-id: 0x7
           config: *common_config
