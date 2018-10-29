@@ -10,8 +10,8 @@ BOARD_COMPILER_FLAGS="-march=corei7"
 LINUX_FIRMWARE=""
 USE=""
 
-# Use Intel's provided drm-tip kernel for bringup
-USE="${USE} kernel-experimental"
+# Use 4.19 kernel
+USE="${USE} kernel-4_19"
 
 # Enable native one-copy texture upload.
 USE="${USE} native_gpu_memory_buffers"
