@@ -28,6 +28,7 @@ DEPEND="${RDEPEND}"
 DEST_DIRECTORY="/usr/share/cloud"
 
 src_configure() {
+	epatch "${FILESDIR}/${PN}-sysmacro.patch"
 	# The source code contains a few tautological comparisons
 	# caused by comparing unsigned integer to 0.
 	# TODO(andreyu): this is not ideal. Separate resize functionality

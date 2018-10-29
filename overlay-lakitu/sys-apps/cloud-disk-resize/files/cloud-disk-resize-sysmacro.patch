@@ -1,0 +1,32 @@
+This backports part of an upstream patch upstream to make it build with glibc 2.27
+The upstream commit is:
+commit faade020043cd40cc7b89594ab1cf32e75f2f544
+Author: Ken Robertson <ken@invalidlogic.com>
+Date:   Wed Nov 8 11:25:38 2017 -0800
+
+    Updated to support changes in glibc
+    
+    This applies a few fixes for compatibility with glibc 2.24 and 2.25. We're
+    building seismograph on some other Gentoo systems to use cgpt and hit this issue
+    recently after a full rebuild since upstream Gentoo recently marked glibc 2.25
+    stable.
+    
+    glibc 2.24 added errors when use `makedev`, `major`, `minor` when included from
+    `sys/types.h`. The definitions have been moved to `sys/macros.h` and are
+    resolevd just by including it.
+    
+    glibc 2.24 deprecated `readdir_r`, and glibc 2.25 made its use an error. glibc
+    implements `readdir` as thread-safe and recommends it over `readdir_r.
+
+diff --git a/src/cgpt/blkid_utils.c b/src/cgpt/blkid_utils.c
+index 0340be3..4d35ff2 100644
+--- a/src/cgpt/blkid_utils.c
++++ b/src/cgpt/blkid_utils.c
+@@ -9,6 +9,7 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <unistd.h>
+ 
+ #include "cgpt.h"
