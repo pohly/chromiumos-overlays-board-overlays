@@ -1,0 +1,77 @@
+commit 5187dd2c403caf92d09f3491e41f1ceb3f10491f
+Author: Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl>
+Date:   Wed Feb 21 14:04:50 2018 +0100
+
+    missing_syscall: when adding syscall replacements, use different names (#8229)
+    
+    In meson.build we check that functions are available using:
+        meson.get_compiler('c').has_function('foo')
+    which checks the following:
+    - if __stub_foo or __stub___foo are defined, return false
+    - if foo is declared (a pointer to the function can be taken), return true
+    - otherwise check for __builtin_memfd_create
+    
+    _stub is documented by glibc as
+       It defines a symbol '__stub_FUNCTION' for each function
+       in the C library which is a stub, meaning it will fail
+       every time called, usually setting errno to ENOSYS.
+    
+    So if __stub is defined, we know we don't want to use the glibc version, but
+    this doesn't tell us if the name itself is defined or not. If it _is_ defined,
+    and we define our replacement as an inline static function, we get an error:
+    
+    In file included from ../src/basic/missing.h:1358:0,
+                     from ../src/basic/util.h:47,
+                     from ../src/basic/calendarspec.h:29,
+                     from ../src/basic/calendarspec.c:34:
+    ../src/basic/missing_syscall.h:65:19: error: static declaration of 'memfd_create' follows non-static declaration
+     static inline int memfd_create(const char *name, unsigned int flags) {
+                       ^~~~~~~~~~~~
+    .../usr/include/bits/mman-shared.h:46:5: note: previous declaration of 'memfd_create' was here
+     int memfd_create (const char *__name, unsigned int __flags) __THROW;
+         ^~~~~~~~~~~~
+    
+    To avoid this problem, call our inline functions different than glibc,
+    and use a #define to map the official name to our replacement.
+    
+    Fixes #8099.
+    
+    v2:
+    - use "missing_" as the prefix instead of "_"
+    
+    v3:
+    - rebase and update for statx()
+    
+      Unfortunately "statx" is also present in "struct statx", so the define
+      causes issues. Work around this by using a typedef.
+    
+    I checked that systemd compiles with current glibc
+    (glibc-devel-2.26-24.fc27.x86_64) if HAVE_MEMFD_CREATE, HAVE_GETTID,
+    HAVE_PIVOT_ROOT, HAVE_SETNS, HAVE_RENAMEAT2, HAVE_KCMP, HAVE_KEYCTL,
+    HAVE_COPY_FILE_RANGE, HAVE_BPF, HAVE_STATX are forced to 0.
+    
+    Setting HAVE_NAME_TO_HANDLE_AT to 0 causes an issue, but it's not because of
+    the define, but because of struct file_handle.
+
+diff --git a/src/basic/missing_syscall.h b/src/basic/missing_syscall.h
+index 2c4a87f31..d7d4e9e45 100644
+--- a/src/basic/missing_syscall.h
++++ b/src/basic/missing_syscall.h
+@@ -62,7 +64,7 @@ static inline int pivot_root(const char *new_root, const char *put_old) {
+ #    endif
+ #  endif
+ 
+-static inline int memfd_create(const char *name, unsigned int flags) {
++static inline int missing_memfd_create(const char *name, unsigned int flags) {
+ #  ifdef __NR_memfd_create
+         return syscall(__NR_memfd_create, name, flags);
+ #  else
+@@ -70,6 +72,8 @@ static inline int memfd_create(const char *name, unsigned int flags) {
+         return -1;
+ #  endif
+ }
++
++#  define memfd_create missing_memfd_create
+ #endif
+ 
+ /* ======================================================================= */

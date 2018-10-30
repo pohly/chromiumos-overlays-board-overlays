@@ -1,0 +1,35 @@
+commit 284d1cd0a12cad96a5ea61d1afb0dd677dbd147e
+Author: Matija Skala <mskala@gmx.com>
+Date:   Wed Mar 15 13:21:10 2017 +0100
+
+    fix includes
+    
+    linux/sockios.h is needed for the SIOCGSTAMPNS macro
+    
+    xlocale.h is included indirectly in glibc and doesn't even exist in
+    other libcs
+
+diff --git a/src/basic/parse-util.c b/src/basic/parse-util.c
+index 6e58ced6f..d86700736 100644
+--- a/src/basic/parse-util.c
++++ b/src/basic/parse-util.c
+@@ -23,7 +23,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <xlocale.h>
+ 
+ #include "alloc-util.h"
+ #include "extract-word.h"
+diff --git a/src/libsystemd-network/sd-lldp.c b/src/libsystemd-network/sd-lldp.c
+index 070224150..39ddb2461 100644
+--- a/src/libsystemd-network/sd-lldp.c
++++ b/src/libsystemd-network/sd-lldp.c
+@@ -19,6 +19,7 @@
+ ***/
+ 
+ #include <arpa/inet.h>
++#include <linux/sockios.h>
+ 
+ #include "sd-lldp.h"
+ 

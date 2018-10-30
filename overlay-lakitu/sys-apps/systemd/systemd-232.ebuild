@@ -194,6 +194,10 @@ src_prepare() {
 		"${FILESDIR}"/232-mount-prevent-zombie-units.patch
 		# Lakitu: Fix compilation error with util-linux 2.32-r3.
 		"${FILESDIR}"/232-core-don-t-include-libmount-h-in-a-header-file.patch
+		# Lakitu: Fix compilation error with glibc 2.27
+		"${FILESDIR}"/232-xlocale.patch
+		# Lakitu: Fix compilation error with glibc 2.27
+		"${FILESDIR}"/232-memfd_create.patch
 	)
 
 	[[ -d "${WORKDIR}"/patches ]] && PATCHES+=( "${WORKDIR}"/patches )
