@@ -18,6 +18,9 @@ USE="${USE} -tpm tpm2"
 # Include prebuilt (&signed) CR50 FW
 USE="${USE} cr50_onboard"
 
+# Enable KVM
+USE="${USE} kvm_host"
+
 # ath10k firmware for WCN3990 Wifi
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_wcn3990"
 
