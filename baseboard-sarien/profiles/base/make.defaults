@@ -18,6 +18,3 @@ USE="${USE} tty_console_ttyS0"
 
 # Enable serial console
 TTY_CONSOLE="ttyS0"
-
-# Enable cr50
-USE="${USE} -tpm tpm2 cr50_onboard"
