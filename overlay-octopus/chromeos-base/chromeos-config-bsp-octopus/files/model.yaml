@@ -150,20 +150,40 @@ chromeos:
           config: *device_config
         - $sku-id-val: 2
           config: *device_config
+        - $sku-id-val: 3
+          config: *device_config
+        - $sku-id-val: 4
+          config: *device_config
     - $device-name: "bobba360"
       $fw-name: "Bobba"
-      $mic_config: "2mic"
       skus:
         - $sku-id-val: 9
+          $mic_config: "2mic"
+          config: *device_config
+        - $sku-id-val: 10
+          $mic_config: "2mic"
+          config: *device_config
+        - $sku-id-val: 11
+          $mic_config: "1mic"
+          config: *device_config
+        - $sku-id-val: 12
+          $mic_config: "1mic"
           config: *device_config
     - $device-name: "sparky"
       $fw-name: "Bobba"
       $touchpad-wakeup: "1"
-      $mic_config: "2mic"
       skus:
         - $sku-id-val: 17
+          $mic_config: "2mic"
           config: *device_config
         - $sku-id-val: 18
+          $mic_config: "2mic"
+          config: *device_config
+        - $sku-id-val: 19
+          $mic_config: "1mic"
+          config: *device_config
+        - $sku-id-val: 20
+          $mic_config: "1mic"
           config: *device_config
     - $device-name: "sparky360"
       $fw-name: "Bobba"
