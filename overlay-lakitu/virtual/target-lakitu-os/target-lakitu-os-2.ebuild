@@ -36,7 +36,6 @@ LAKITU_RDEPEND="
 	chromeos-base/chromeos-installer
 	chromeos-base/cloud-filesystem-init
 	chromeos-base/cloud-udev-config
-	chromeos-base/ima-policy
 	chromeos-base/openssh-server-init
 	chromeos-base/tty
 	chromeos-base/update_engine
