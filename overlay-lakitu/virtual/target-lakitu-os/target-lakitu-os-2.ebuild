@@ -42,6 +42,7 @@ LAKITU_RDEPEND="
 	chromeos-base/update_engine
 	dev-lang/python
 	lakitu_kdump? (
+		app-admin/kdump-helper
 		sys-apps/makedumpfile
 		sys-apps/kexec-tools
 		sys-kernel/dump-capture-kernel

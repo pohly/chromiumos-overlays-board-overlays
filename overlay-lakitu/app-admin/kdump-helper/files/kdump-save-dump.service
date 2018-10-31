@@ -1,0 +1,12 @@
+[Unit]
+Description=Kernel crash dump saving service
+Wants=sysinit.target
+After=sysinit.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+StandardOutput=journal+console
+ExecStart=/usr/sbin/kdump_helper savecore
+ExecStartPost=/sbin/reboot
+RemainAfterExit=yes

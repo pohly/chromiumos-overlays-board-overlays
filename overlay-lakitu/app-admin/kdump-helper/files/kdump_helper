@@ -1,0 +1,235 @@
+#! /bin/bash
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+set -e
+set -u
+set -o pipefail
+
+readonly BOOT_TARGET="systemd.unit=kdump-save-dump.service"
+readonly DUMPFILE_PREFIX="/var/kdump-"
+readonly DUMPFILE_LN="/var/kdump"
+readonly ESP_PARTITION="/dev/sda12"
+readonly KDUMP_KERNEL="/boot/kdump/vmlinuz"
+readonly PROG_NAME="$(basename ${0})"
+
+
+#
+# usage <exit_code>
+#
+# Print usage and exit.
+#
+# A typical workflow is:
+# enable -> (reboot) -> (auto) load -> (crash) -> (auto) savecore -> disable
+#
+usage() {
+        local exit_code="${1}"
+
+        cat <<EOF
+Usage:
+        ${PROG_NAME} {show|enable|disable|load|savecore|help}
+        show     - Show kdump status, kexec command, and any current parameters.
+        enable   - Enable kdump feature (effective after reboot).
+        disable  - Disable kdump feature (effective after reboot).
+        load     - Load kdump kernel if kdump is enabled.
+        savecore - Save /proc/vmcore (only viable when running kdump kernel).
+        help     - Print this message.
+EOF
+        exit "${exit_code}"
+}
+
+#
+# check_kdump_ready
+#
+# Answer the question "are we ready to load kdump kernel?" from:
+# 1. crashkernel command line parameter.
+# 2. /sys/kernel/kexec_crash_size.
+#
+check_kdump_ready() {
+  # if crashkernel parameter is not set in kernel command line
+  if grep -iqv "crashkernel=" /proc/cmdline; then
+    return 1
+  fi
+  # if memory reservation for kdump kernel failed
+  if [[ "$(cat /sys/kernel/kexec_crash_size)" == 0 ]]; then
+    return 1
+  fi
+  return 0
+}
+
+#
+# check_kdump_enabled
+#
+# Answer the question "will kdump be enabled after next reboot?" from:
+# The kernel commandline in grub.cfg.
+#
+check_kdump_enabled() {
+  local dir="$(mktemp -d)"
+  mount "${ESP_PARTITION}" "${dir}"
+  if grep -iq crashkernel= "${dir}/efi/boot/grub.cfg" ; then
+    local ret=0
+  else
+    local ret=1
+  fi
+  umount "${dir}"
+  rm -rf "${dir}"
+  return "${ret}"
+}
+
+#
+# construct_commandline
+#
+# Construct the kernel commandline for kdump kernel.
+#
+# The kdump kernel commandline has below args:
+# 1. noinitrd console=ttyS0: Same as primary kernel commandline.
+# 2. maxcpus=1: Because kdump kernel functionality only supports single CPU.
+# 3. root=PARTUUID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX:
+#    UUID of the block device containing the rootfs.
+# 4. ${BOOT_TARGET}: The userspace target used for kernel dump.
+#
+construct_commandline() {
+  local -r PARTUUID_REGEX=".* ([^[:space:]]*=PARTUUID=[^[:space:]]*).*"
+  # partuuid_arg extracts commandline parameter such as:
+  # root=PARTUUID=4AD47D21-C3E5-1F4E-BDB3-0336CC5AFADC
+  # or
+  # payload=PARTUUID=4AD47D21-C3E5-1F4E-BDB3-0336CC5AFADC
+  local partuuid_arg="$(sed -rn "s/${PARTUUID_REGEX}/\1/p" /proc/cmdline)"
+  echo "${BOOT_TARGET} noinitrd console=ttyS0 ${partuuid_arg} maxcpus=1"
+}
+
+#
+# kdump_enable
+#
+# Enable kdump feature by modifying kernel commandline in grub.cfg.
+# Takes effect after reboot.
+#
+kdump_enable() {
+  local dir="$(mktemp -d)"
+  mount "${ESP_PARTITION}" "${dir}"
+  sed "s/ cros_efi / cros_efi crashkernel=128M /g" -i "${dir}/efi/boot/grub.cfg"
+  sync
+  umount "${dir}"
+  rm -rf "${dir}"
+}
+
+#
+# kdump_disable
+#
+# Disable kdump feature by modifying kernel commandline in grub.cfg.
+# Takes effect after reboot.
+#
+kdump_disable() {
+  local dir="$(mktemp -d)"
+  mount "${ESP_PARTITION}" "${dir}"
+  sed "s/ crashkernel=128M//g" -i "${dir}/efi/boot/grub.cfg"
+  sync
+  umount "${dir}"
+  rm -rf "${dir}"
+}
+
+#
+# kdump_save_core
+#
+# Filter and store /proc/vmcore to disk.
+#
+kdump_save_core() {
+  local filename="${DUMPFILE_PREFIX}$(date +'%Y%m%d%H%M')"
+  echo "Saving vmcore to ${filename}."
+  makedumpfile -c -d 31 /proc/vmcore "${filename}"
+  rm -f "${DUMPFILE_LN}"
+  ln -s "${filename}" "${DUMPFILE_LN}"
+  echo "sync-ing."
+  sync
+  echo "kdump finished."
+}
+
+#
+# kdump_load
+#
+# Load the kdump kernel into reserved memory zone.
+#
+kdump_load() {
+  local cmdline="$(construct_commandline)"
+  kexec -s -p "${KDUMP_KERNEL}" --append="${cmdline}"
+  echo "Loaded kdump kernel ${KDUMP_KERNEL} with command line parameter:"
+  echo "${cmdline}"
+}
+
+#
+# kdump_show
+#
+# Show the current state of kdump feature.
+#
+kdump_show() {
+  if check_kdump_ready; then
+    local kdump_ready=true
+  else
+    local kdump_ready=false
+  fi
+  if check_kdump_enabled; then
+    local kdump_enabled=true
+  else
+    local kdump_enabled=false
+  fi
+  if [[ "$(cat /sys/kernel/kexec_crash_loaded)" != "0" ]]; then
+    local kdump_loaded=true
+  else
+    local kdump_loaded=false
+  fi
+  echo "kdump enabled: ${kdump_enabled}"
+  echo "kdump ready: ${kdump_ready}"
+  echo "kdump kernel loaded: ${kdump_loaded}"
+  if [[ "${kdump_loaded}" == true ]]; then
+    echo "kdump kernel ${KDUMP_KERNEL} is loaded with command line parameter:"
+    echo "$(construct_commandline)"
+  fi
+}
+
+main() {
+  case "${1-help}" in
+    show)
+    kdump_show
+    ;;
+    enable)
+    if ! check_kdump_enabled; then
+      kdump_enable
+    fi
+    if check_kdump_ready; then
+      echo "kdump is enabled and ready. No reboot required."
+    else
+      echo "kdump is enabled and needs a reboot to take effect."
+    fi
+    ;;
+    disable)
+    if check_kdump_enabled; then
+      kdump_disable
+    fi
+    if check_kdump_ready; then
+      echo "kdump is disabled and needs a reboot to take effect."
+    else
+      echo "kdump is disabled completely. No reboot required."
+    fi
+    ;;
+    load)
+    if ! check_kdump_ready; then
+      echo "kdump feature is not ready. Skipping loading kdump kernel."
+      exit 1
+    fi
+    echo "Loading kdump kernel..."
+    kdump_load
+    ;;
+    savecore)
+    kdump_save_core
+    ;;
+    help)
+    usage 0
+    ;;
+    *)
+    usage 1
+    ;;
+  esac
+}
+
+main "$@"

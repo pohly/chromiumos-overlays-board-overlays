@@ -1,0 +1,15 @@
+[Unit]
+Description=Load dump-capture kernel for kdump usage.
+ConditionKernelCommandLine=crashkernel
+Wants=local-fs.target
+After=local-fs.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+StandardOutput=journal+console
+ExecStart=/usr/sbin/kdump_helper load
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target
