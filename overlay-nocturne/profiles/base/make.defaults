@@ -24,7 +24,7 @@ USE="${USE} cros_ec"
 
 # All firmware to build from the EC code base.
 EC_FIRMWARE="nocturne"
-EC_FIRMWARE_EXTRA="nocturne_fp"
+EC_FIRMWARE_EXTRA="nocturne_fp nami_fp"
 
 # Enable hammerd for updating base firmware.
 USE="${USE} hammerd"
