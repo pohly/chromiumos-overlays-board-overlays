@@ -10,7 +10,7 @@ HOMEPAGE="http://dev.chromium.org/"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor criu uefi_bootloaders stackdriver_alpha module_sign"
+IUSE="bootchart +crash_reporting +pam readahead systemd watchdog apparmor criu uefi_bootloaders stackdriver_alpha module_sign lakitu_kdump"
 
 LAKITU_RDEPEND="
 	bootchart? ( app-benchmarks/bootchart )
@@ -41,6 +41,10 @@ LAKITU_RDEPEND="
 	chromeos-base/tty
 	chromeos-base/update_engine
 	dev-lang/python
+	lakitu_kdump? (
+		sys-apps/makedumpfile
+		sys-apps/kexec-tools
+	)
 	net-analyzer/netcat
 	net-firewall/ebtables
 	net-fs/autofs
