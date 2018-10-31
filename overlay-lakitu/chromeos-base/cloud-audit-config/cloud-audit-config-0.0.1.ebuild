@@ -34,6 +34,7 @@ src_install() {
 	doins "${FILESDIR}"/[0-9][0-9]-*.sh
 
 	doins "${FILESDIR}"/exclude.sh
+	doins "${FILESDIR}"/ima-policy
 
 	systemd_dounit "${FILESDIR}"/cloud-audit-setup.service
 }
