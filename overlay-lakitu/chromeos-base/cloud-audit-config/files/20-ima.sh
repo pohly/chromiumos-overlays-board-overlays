@@ -5,3 +5,5 @@
 # Applies audit rules related to IMA.
 
 dont_exclude INTEGRITY_RULE
+
+cat "${AUDIT_DIR}/ima-policy" > /sys/kernel/security/ima/policy
