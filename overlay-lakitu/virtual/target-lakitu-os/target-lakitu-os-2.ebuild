@@ -44,6 +44,7 @@ LAKITU_RDEPEND="
 	lakitu_kdump? (
 		sys-apps/makedumpfile
 		sys-apps/kexec-tools
+		sys-kernel/dump-capture-kernel
 	)
 	net-analyzer/netcat
 	net-firewall/ebtables

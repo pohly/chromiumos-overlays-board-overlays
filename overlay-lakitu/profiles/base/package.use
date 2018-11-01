@@ -63,3 +63,8 @@ chromeos-base/chromeos-installer -oobe_config
 # Use gcc to compile kernel rather than clang. (b/119272876).
 # TODO(xueweiz): Change it back after qualifying clang-built image.
 sys-kernel/lakitu-kernel-4_14 -clang
+
+# Use gcc to compile dump-capture kernel rather than clang.
+# TODO(xueweiz): Change it back after qualifying clang-built image.
+sys-kernel/dump-capture-kernel -clang
+
