@@ -197,7 +197,7 @@ chromeos:
       $touchpad-wakeup: "1"
       products:
         - $marketing-name: "TBD"
-          $brand-code: "ZZCR"
+          $brand-code: "MNZG"
           $key-id: "AKALI"
       skus:
         - $sku-id: 0x118e3
@@ -212,7 +212,7 @@ chromeos:
       $touchpad-wakeup: "1"
       products:
         - $marketing-name: "TBD"
-          $brand-code: "ZZCR"
+          $brand-code: "CYQR"
           $key-id: "AKALI"
       skus:
         - $sku-id: 0x19ce3
