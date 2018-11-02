@@ -31,9 +31,8 @@
 				brand-code = "TEST";
 				key-id = "CORALC";
 			};
-			/* to be changed later */
 			ctl {
-				brand-code = "ZZCR";
+				brand-code = "ZZTB";
 				key-id = "CORALF";
 			};
 			/* to be changed later */
