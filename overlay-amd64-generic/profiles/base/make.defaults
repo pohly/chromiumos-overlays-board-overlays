@@ -39,5 +39,8 @@ USE="${USE} vivid"
 # Enable Downloadable Content (DLC)
 USE="${USE} dlc"
 
+# Include the kernel in the base image.
+USE="${USE} include_vmlinuz"
+
 # Enable a few more video cards as this is a generic board.
 VIDEO_CARDS="intel llvmpipe nouveau radeon"

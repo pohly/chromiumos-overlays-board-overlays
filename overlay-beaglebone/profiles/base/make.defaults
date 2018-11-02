@@ -1,3 +1,6 @@
 U_BOOT_CONFIG_USE="beaglebone"
 
 TTY_CONSOLE="ttyO0"
+
+USE="include_vmlinuz"
+
