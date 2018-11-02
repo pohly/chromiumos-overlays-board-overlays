@@ -251,6 +251,9 @@
             <isoAnalogGain1 value="36"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
             <sensor.testPatternMap value="Off,0,ColorBars,2"/>
+            <ag.multiplier value="32"/>
+            <ag.maxRatio value="8"/>
+            <ag.smiaParameters value="0,-1,256,256"/>
         </Sensor_info_IPU3>
 
         <MediaCtl_elements_IPU3>
