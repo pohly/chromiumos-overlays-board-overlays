@@ -43,7 +43,7 @@ common_config: &common_config
     $ucm: "common" # Default
     $ucm-source-suffix: ""
   power:
-    suspend-to-idle: "1"
+    suspend-to-idle: "0"
 
 chromeos:
   devices:
