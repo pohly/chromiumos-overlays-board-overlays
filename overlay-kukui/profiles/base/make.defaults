@@ -11,6 +11,9 @@ USE="${USE} bootimage"
 
 USE="${USE} detachable_ui"
 
+# TODO(b:119002499): Remove when display stack is ready
+USE="${USE} -bmpblk"
+
 # Building EC
 USE="${USE} cros_ec bootblock_in_ec"
 
