@@ -203,6 +203,8 @@ chromeos:
           config: *unprovisioned_config
     - $device-name: "meep"
       $fw-name: "Meep"
+      $ucm_src_root: "{{$device-name}}"
+      $ucm_extra_suffix: "{{$device-name}}"
       skus:
         - $sku-id-val: 1
           $mic_config: "2mic"
@@ -216,6 +218,8 @@ chromeos:
     - $device-name: "mimrock"
       $fw-name: "Meep"
       $mic_config: "1mic"
+      $ucm_src_root: "{{$device-name}}"
+      $ucm_extra_suffix: "{{$device-name}}"
       $touchpad-wakeup: "1"
       skus:
         - $sku-id-val: 17
