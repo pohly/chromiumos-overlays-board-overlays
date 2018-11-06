@@ -15,9 +15,9 @@ KEYWORDS="-* amd64"
 S="${WORKDIR}"
 
 src_install() {
-	insinto /usr/$(get_libdir)
-	dolib.so usr/$(get_libdir)/*.so*
+	insinto /usr/"$(get_libdir)"
+	dolib.so usr/"$(get_libdir)"/*.so*
 
-	insinto /usr/$(get_libdir)/pkgconfig
-	doins usr/$(get_libdir)/pkgconfig/*
+	insinto /usr/"$(get_libdir)"/pkgconfig
+	doins usr/"$(get_libdir)"/pkgconfig/*
 }
