@@ -8,5 +8,18 @@ ip6tables -P FORWARD DROP -w
 ip6tables -P OUTPUT DROP -w
 
 # Accept everything on the loopback
-ip6tables -I INPUT -i lo -j ACCEPT -w
-ip6tables -I OUTPUT -o lo -j ACCEPT -w
+ip6tables -A INPUT -i lo -j ACCEPT -w
+ip6tables -A OUTPUT -o lo -j ACCEPT -w
+
+# Accept icmp echo (NB: icmp echo ratelimiting is done by the kernel)
+ip6tables -A INPUT -p icmpv6 -j ACCEPT -w
+ip6tables -A OUTPUT -p icmpv6 -j ACCEPT -w
+
+# Accept return traffic inbound
+ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT -w
+
+# Accept new and return traffic outbound
+ip6tables -A OUTPUT -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -w
+
+# Allow DHCPv6 client inbound
+ip6tables -A INPUT -p udp -m udp --dport 546 -j ACCEPT
