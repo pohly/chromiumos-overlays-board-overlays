@@ -12,22 +12,18 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="sof"
+IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
-	sof? (
-		chromeos-base/sof-binary
-		chromeos-base/sof-topology
-	)
+	chromeos-base/sof-binary
+	chromeos-base/sof-topology
 "
 DEPEND="${RDEPEND}"
 
 src_install() {
-	if  use sof ; then
-		# Install audio config files
-		local audio_config_dir="${FILESDIR}/audio-config"
-		install_audio_configs octopus "${audio_config_dir}"
-	fi
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs octopus "${audio_config_dir}"
 }
