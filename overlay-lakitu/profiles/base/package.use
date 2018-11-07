@@ -68,3 +68,5 @@ sys-kernel/lakitu-kernel-4_14 -clang
 # TODO(xueweiz): Change it back after qualifying clang-built image.
 sys-kernel/dump-capture-kernel -clang
 
+# Enable full lvm2 install.
+sys-fs/lvm2 -device-mapper-only
