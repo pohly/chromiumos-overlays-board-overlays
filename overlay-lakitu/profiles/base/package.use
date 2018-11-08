@@ -59,3 +59,7 @@ net-misc/openssh -hpn
 
 # Disable oobe_config to avoid surprising users (b/112722312).
 chromeos-base/chromeos-installer -oobe_config
+
+# Use gcc to compile kernel rather than clang. (b/119272876).
+# TODO(xueweiz): Change it back after qualifying clang-built image.
+sys-kernel/lakitu-kernel-4_14 -clang
