@@ -27,4 +27,7 @@ src_install() {
 	doappid "{073ABAF9-40D3-4065-85F3-74B1FA49675D}" "CHROMEBASE"
 
 	unibuild_install_audio_files
+
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/common/bluetooth/main.conf"
 }
