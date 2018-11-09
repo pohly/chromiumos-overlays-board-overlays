@@ -1,0 +1,93 @@
+SectionVerb {
+	Value {
+		FullySpecifiedUCM "1"
+		OutputDspName "speaker_eq"
+	}
+}
+
+SectionDevice."Speaker".0 {
+	Value {
+		PlaybackPCM "hw:0,0"
+	}
+	EnableSequence [
+		cdev "hw:0"
+		cset "name='I2S3_CH1 DL1_CH1' 1"
+		cset "name='I2S3_CH2 DL1_CH2' 1"
+	]
+	DisableSequence [
+		cdev "hw:0"
+		cset "name='I2S3_CH1 DL1_CH1' 0"
+		cset "name='I2S3_CH2 DL1_CH2' 0"
+	]
+}
+
+SectionDevice."Internal Mic".0 {
+	Value {
+		CapturePCM "hw:0,4"
+	}
+	EnableSequence [
+		cdev "hw:0"
+		cset "name='Mic Type Mux' 2"
+		cset "name='UL2_CH1 ADDA_UL_CH1' 1"
+		cset "name='UL2_CH2 ADDA_UL_CH2' 1"
+	]
+	DisableSequence [
+		cdev "hw:0"
+		cset "name='UL2_CH1 ADDA_UL_CH1' 0"
+		cset "name='UL2_CH2 ADDA_UL_CH2' 0"
+	]
+}
+
+SectionDevice."Headphone".0 {
+	Value {
+		PlaybackPCM "hw:0,0"
+		MixerName "Headphone"
+		JackName "mt8183_mt6358_ts3a227_max98357 Headset Jack"
+		JackType "gpio"
+		JackSwitch "2"
+		OutputDspName ""
+	}
+	EnableSequence [
+		cdev "hw:0"
+		cset "name='ADDA_DL_CH1 DL1_CH1' 1"
+		cset "name='ADDA_DL_CH2 DL1_CH2' 1"
+		cset "name='HPL Mux' 2"
+		cset "name='HPR Mux' 2"
+	]
+	DisableSequence [
+		cdev "hw:0"
+		cset "name='ADDA_DL_CH1 DL1_CH1' 0"
+		cset "name='ADDA_DL_CH2 DL1_CH2' 0"
+		cset "name='HPL Mux' 0"
+		cset "name='HPR Mux' 0"
+	]
+}
+
+SectionDevice."Mic".0 {
+	Value {
+		CapturePCM "hw:0,4"
+		MixerName "Headphone"
+		JackName "mt8183_mt6358_ts3a227_max98357 Headset Jack"
+		JackType "gpio"
+	}
+	EnableSequence [
+		cdev "hw:0"
+		cset "name='PGA L Mux' 2"
+		cset "name='PGA R Mux' 2"
+		cset "name='ADC L Mux' 2"
+		cset "name='ADC R Mux' 2"
+		cset "name='Mic Type Mux' 1"
+		cset "name='UL2_CH1 ADDA_UL_CH1' 1"
+		cset "name='UL2_CH2 ADDA_UL_CH2' 1"
+	]
+	DisableSequence [
+		cdev "hw:0"
+		cset "name='PGA L Mux' 0"
+		cset "name='PGA R Mux' 0"
+		cset "name='ADC L Mux' 0"
+		cset "name='ADC R Mux' 0"
+		cset "name='Mic Type Mux' 0"
+		cset "name='UL2_CH1 ADDA_UL_CH1' 0"
+		cset "name='UL2_CH2 ADDA_UL_CH2' 0"
+	]
+}

@@ -22,17 +22,7 @@ DEPEND="${RDEPEND}"
 src_install() {
 	doappid "{50F3C95B-CA5B-4AF8-87A2-8CD19588BD12}" "CHROMEBOOK"
 
-	local ucm_config="${FILESDIR}/ucm-config"
-	if [[ -d "${ucm_config}" ]] ; then
-		# install ucm config files
-		insinto /usr/share/alsa/ucm
-		doins -r "${ucm_config}"/*
-	fi
-
-	local cras_config="${FILESDIR}/cras-config"
-	if [[ -d "${cras_config}" ]] ; then
-		# install cras config files
-		insinto /etc/cras
-			doins -r "${cras_config}"/*
-	fi
+	# Install audio config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs kukui "${audio_config_dir}"
 }
