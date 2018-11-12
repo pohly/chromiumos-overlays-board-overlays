@@ -226,11 +226,41 @@ chromeos:
           config: *device_config
         - $sku-id-val: 18
           config: *device_config
-    - $device-name: "ampton"
-      $fw-name: "Ampton"
+    # This is a temporary model with SKU ID - 255 which is expected to be
+    # provisioned with correct SKU ID in the factory flow. And HWID verification
+    # will also catch the DUT still with 255 and report error.
+    - $device-name: "unprovisioned_ampton"
       skus:
         - $sku-id-val: 255
-          $card: "glkrt5682max"
-          $ucm_src_root: "{{$device-name}}"
-          $ucm_extra_suffix: "{{$device-name}}"
+          $fw-name: "Ampton"
+          config: *unprovisioned_config
+    - $device-name: "ampton"
+      $fw-name: "Ampton"
+      # TODO(OEM): need update later
+      $mic_config: "2mic"
+      $card: "glkrt5682max"
+      $ucm_src_root: "{{$device-name}}"
+      $ucm_extra_suffix: "{{$device-name}}"
+      skus:
+        - $sku-id-val: 1
+          config: *device_config
+        - $sku-id-val: 2
+          config: *device_config
+        - $sku-id-val: 3
+          config: *device_config
+        - $sku-id-val: 4
+          config: *device_config
+    - $device-name: "apel"
+      $fw-name: "Ampton"
+      # TODO(OEM): need update later
+      $mic_config: "2mic"
+      $card: "glkrt5682max"
+      $ucm_src_root: "{{$device-name}}"
+      $ucm_extra_suffix: "{{$device-name}}"
+      skus:
+        - $sku-id-val: 17
+          config: *device_config
+        - $sku-id-val: 18
+          config: *device_config
+        - $sku-id-val: 19
           config: *device_config
