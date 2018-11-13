@@ -1,0 +1,1 @@
+chromeos-config-bsp-hatch-0.0.1.ebuild

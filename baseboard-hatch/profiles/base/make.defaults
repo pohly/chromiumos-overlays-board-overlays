@@ -1,0 +1,20 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+# Use Intel WiFi
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9000 iwlwifi-9260"
+
+# Use Intel BT driver
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt ibt-hw ibt_9560 ibt_9260"
+
+# Build kernel with serial driver
+USE="${USE} pcserial"
+USE="${USE} tty_console_ttyS0"
+
+# Enable serial console
+TTY_CONSOLE="ttyS0"
