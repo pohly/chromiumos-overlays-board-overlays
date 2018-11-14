@@ -18,3 +18,9 @@ USE="${USE} tty_console_ttyS0"
 
 # Enable serial console
 TTY_CONSOLE="ttyS0"
+
+# Enable NVMe utility
+USE="${USE} nvme"
+
+# Enable legacy power button behavior
+USE="${USE} legacy_power_button"
