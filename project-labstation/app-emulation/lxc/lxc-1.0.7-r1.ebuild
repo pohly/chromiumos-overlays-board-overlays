@@ -91,6 +91,7 @@ src_prepare() {
 	fi
 
 	epatch "${FILESDIR}"/${PN}-1.0.6-bash-completion.patch
+	epatch "${FILESDIR}"/${PN}-1.0.7-readdir.patch
 
 	eautoreconf
 }

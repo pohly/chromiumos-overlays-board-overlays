@@ -1,0 +1,253 @@
+Note: The upstream commit below has been slightly modified
+to apply to version 1.0.7.
+
+commit 74f96976634e30df1c156803047d89a70eba74f8
+Author: Christian Brauner <cbrauner@suse.de>
+Date:   Tue Aug 9 21:05:19 2016 +0200
+
+    tree-wide: replace readdir_r() with readdir()
+    
+    Signed-off-by: Christian Brauner <cbrauner@suse.de>
+
+diff --git a/src/lxc/bdev.c b/src/lxc/bdev.c
+index 7f00da8..fa1865e 100644
+--- a/src/lxc/bdev.c
++++ b/src/lxc/bdev.c
+@@ -37,6 +37,7 @@
+ #include <errno.h>
+ #include <sched.h>
+ #include <sys/mount.h>
++#include <sys/sysmacros.h>
+ #include <sys/wait.h>
+ #include <libgen.h>
+ #include <linux/loop.h>
+@@ -1876,7 +1877,7 @@ static int loop_detect(const char *path)
+ 
+ static int find_free_loopdev(int *retfd, char *namep)
+ {
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	struct loop_info64 lo;
+ 	DIR *dir;
+ 	int fd = -1;
+@@ -1886,7 +1887,7 @@ static int find_free_loopdev(int *retfd, char *namep)
+ 		SYSERROR("Error opening /dev");
+ 		return -1;
+ 	}
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 
+ 		if (!direntp)
+ 			break;
+diff --git a/src/lxc/cgfs.c b/src/lxc/cgfs.c
+index 15346dc..f02da61 100644
+--- a/src/lxc/cgfs.c
++++ b/src/lxc/cgfs.c
+@@ -155,7 +155,7 @@ static struct cgroup_ops cgfs_ops;
+ 
+ static int cgroup_rmdir(char *dirname)
+ {
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	int saved_errno = 0;
+ 	DIR *dir;
+ 	int ret, failed=0;
+@@ -167,7 +167,7 @@ static int cgroup_rmdir(char *dirname)
+ 		return -1;
+ 	}
+ 
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 		struct stat mystat;
+ 		int rc;
+ 
+@@ -1977,26 +1977,15 @@ out:
+ static int cgroup_recursive_task_count(const char *cgroup_path)
+ {
+ 	DIR *d;
+-	struct dirent *dent_buf;
+ 	struct dirent *dent;
+-	ssize_t name_max;
+ 	int n = 0, r;
+ 
+-	/* see man readdir_r(3) */
+-	name_max = pathconf(cgroup_path, _PC_NAME_MAX);
+-	if (name_max <= 0)
+-		name_max = 255;
+-	dent_buf = malloc(offsetof(struct dirent, d_name) + name_max + 1);
+-	if (!dent_buf)
+-		return -1;
+-
+ 	d = opendir(cgroup_path);
+ 	if (!d) {
+-		free(dent_buf);
+ 		return 0;
+ 	}
+ 
+-	while (readdir_r(d, dent_buf, &dent) == 0 && dent) {
++	while ((dent = readdir(d))) {
+ 		const char *parts[3] = {
+ 			cgroup_path,
+ 			dent->d_name,
+@@ -2010,13 +1999,11 @@ static int cgroup_recursive_task_count(const char *cgroup_path)
+ 		sub_path = lxc_string_join("/", parts, false);
+ 		if (!sub_path) {
+ 			closedir(d);
+-			free(dent_buf);
+ 			return -1;
+ 		}
+ 		r = stat(sub_path, &st);
+ 		if (r < 0) {
+ 			closedir(d);
+-			free(dent_buf);
+ 			free(sub_path);
+ 			return -1;
+ 		}
+@@ -2032,7 +2019,6 @@ static int cgroup_recursive_task_count(const char *cgroup_path)
+ 		free(sub_path);
+ 	}
+ 	closedir(d);
+-	free(dent_buf);
+ 
+ 	return n;
+ }
+diff --git a/src/lxc/conf.c b/src/lxc/conf.c
+index 320b6c9..dbc1f8f 100644
+--- a/src/lxc/conf.c
++++ b/src/lxc/conf.c
+@@ -32,6 +32,7 @@
+ #include <inttypes.h>
+ #include <sys/wait.h>
+ #include <sys/syscall.h>
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <pwd.h>
+ #include <grp.h>
+@@ -584,7 +585,7 @@ out:
+ static int mount_rootfs_file(const char *rootfs, const char *target,
+ 				             const char *options)
+ {
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	struct loop_info64 loinfo;
+ 	int ret = -1, fd = -1, rc;
+ 	DIR *dir;
+@@ -596,7 +597,7 @@ static int mount_rootfs_file(const char *rootfs, const char *target,
+ 		return -1;
+ 	}
+ 
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 
+ 		if (!direntp)
+ 			break;
+diff --git a/src/lxc/lxccontainer.c b/src/lxc/lxccontainer.c
+index eb3ea37..3a42643 100644
+--- a/src/lxc/lxccontainer.c
++++ b/src/lxc/lxccontainer.c
+@@ -36,6 +36,7 @@
+ #include <stdint.h>
+ #include <grp.h>
+ #include <sys/syscall.h>
++#include <sys/sysmacros.h>
+ 
+ #include <lxc/lxccontainer.h>
+ #include <lxc/version.h>
+@@ -517,7 +518,7 @@ static bool wait_on_daemonized_start(struct lxc_container *c, int pid)
+ 
+ static bool am_single_threaded(void)
+ {
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	DIR *dir;
+ 	int count=0;
+ 
+@@ -527,7 +528,7 @@ static bool am_single_threaded(void)
+ 		return false;
+ 	}
+ 
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 		if (!direntp)
+ 			break;
+ 
+@@ -3028,7 +3029,7 @@ static int lxcapi_snapshot_list(struct lxc_container *c, struct lxc_snapshot **r
+ {
+ 	char snappath[MAXPATHLEN], path2[MAXPATHLEN];
+ 	int dirlen, count = 0, ret;
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	struct lxc_snapshot *snaps =NULL, *nsnaps;
+ 	DIR *dir;
+ 
+@@ -3047,7 +3048,7 @@ static int lxcapi_snapshot_list(struct lxc_container *c, struct lxc_snapshot **r
+ 		return 0;
+ 	}
+ 
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 		if (!direntp)
+ 			break;
+ 
+@@ -3479,7 +3480,7 @@ int list_defined_containers(const char *lxcpath, char ***names, struct lxc_conta
+ {
+ 	DIR *dir;
+ 	int i, cfound = 0, nfound = 0;
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	struct lxc_container *c;
+ 
+ 	if (!lxcpath)
+@@ -3496,7 +3497,7 @@ int list_defined_containers(const char *lxcpath, char ***names, struct lxc_conta
+ 	if (names)
+ 		*names = NULL;
+ 
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 		if (!direntp)
+ 			break;
+ 		if (!strcmp(direntp->d_name, "."))
+diff --git a/src/lxc/start.c b/src/lxc/start.c
+index 4d84794..f6be9b6 100644
+--- a/src/lxc/start.c
++++ b/src/lxc/start.c
+@@ -172,7 +172,7 @@ static int match_fd(int fd)
+ 
+ int lxc_check_inherited(struct lxc_conf *conf, int fd_to_ignore)
+ {
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	int fd, fddir;
+ 	DIR *dir;
+ 
+@@ -185,7 +185,7 @@ restart:
+ 
+ 	fddir = dirfd(dir);
+ 
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 		if (!direntp)
+ 			break;
+ 
+diff --git a/src/lxc/utils.c b/src/lxc/utils.c
+index 5ef04fc..81803dc 100644
+--- a/src/lxc/utils.c
++++ b/src/lxc/utils.c
+@@ -48,7 +48,7 @@ lxc_log_define(lxc_utils, lxc);
+ 
+ static int _recursive_rmdir_onedev(char *dirname, dev_t pdev)
+ {
+-	struct dirent dirent, *direntp;
++	struct dirent *direntp;
+ 	DIR *dir;
+ 	int ret, failed=0;
+ 	char pathname[MAXPATHLEN];
+@@ -59,7 +59,7 @@ static int _recursive_rmdir_onedev(char *dirname, dev_t pdev)
+ 		return -1;
+ 	}
+ 
+-	while (!readdir_r(dir, &dirent, &direntp)) {
++	while ((direntp = readdir(dir))) {
+ 		struct stat mystat;
+ 		int rc;
+ 
