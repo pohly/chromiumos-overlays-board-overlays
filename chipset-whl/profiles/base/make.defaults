@@ -19,3 +19,6 @@ USE="${USE} kernel-4_19"
 
 # Enable DPTF
 USE="${USE} dptf"
+
+# Enable Intel media-driver
+USE="${USE} -video_cards_i965 video_cards_iHD"
