@@ -27,6 +27,7 @@ src_install() {
 	doappid "{625849FA-56A0-4E67-9163-B89BE0C2A6AE}" "CHROMEBOOK"
 
 	unibuild_install_audio_files
+	unibuild_install_thermal_files
 
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/common/bluetooth/main.conf"

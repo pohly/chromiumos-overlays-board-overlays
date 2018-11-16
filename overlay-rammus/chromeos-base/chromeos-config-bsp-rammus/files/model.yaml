@@ -44,6 +44,11 @@ common_config: &common_config
     $ucm-source-suffix: ""
   power:
     suspend-to-idle: "1"
+  thermal:
+    dptf-dv: "{{$device-name}}/dptf.dv"
+    files:
+      - source: "{{dptf-dv}}"
+        destination: "/etc/dptf/{{dptf-dv}}"
 
 chromeos:
   devices:
