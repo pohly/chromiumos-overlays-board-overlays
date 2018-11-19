@@ -58,7 +58,7 @@ chromeos:
   devices:
     - $device-name: "yorp"
       $fw-name: "Yorp"
-      $num-mic: 1
+      $num-mic: 2
       skus:
         - $sku-id-val: 255
           config: *device_config
