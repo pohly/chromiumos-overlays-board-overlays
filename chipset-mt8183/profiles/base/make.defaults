@@ -21,8 +21,8 @@ USE="${USE} neon"
 # For the device tree installation
 USE="${USE} device_tree"
 
-# use kernel 4.14
-USE="${USE} kernel-4_14"
+# use kernel 4.19
+USE="${USE} kernel-4_19"
 
 # TODO(b:109850061): build error, need to be fixed
 # needed by drm-tests
