@@ -380,8 +380,7 @@ chromeos:
           $key-id: "CORALL"
         - $whitelabel-tag: "xma"
           $brand-code: "URZD"
-          # TODO: change when key is ready
-          $key-id: "CORALC"
+          $key-id: "CORALM"
         # Allocated, but not used
         # $brand-code: "QTMI"
         # $brand-code: "QHTT"
