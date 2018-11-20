@@ -2,12 +2,28 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="d70b8a3ac02487500338be1d83f89d7c1c7dbed6"
-CROS_WORKON_TREE="a82d6dfce0775a0c9c38c7c80d3bf1fe7c31c256"
-CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
-CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
-inherit autotools cros-debug cros-workon libchrome toolchain-funcs
+CROS_WORKON_COMMIT=("65fb571a71df26d167c0c693a9588e9329ae375d" "7e952db80e672b5d14fd8ce0019b3ad28a3e63f9")
+CROS_WORKON_TREE=("6589055d0d41e7fc58d42616ba5075408d810f7d" "6fe849f6084435dceedb04196043db83ef6d9ca6" "5aa2bdc92600cbba67b37a455ef2bedb6334c1ad")
+CROS_WORKON_PROJECT=(
+	"chromiumos/platform/arc-camera"
+	"chromiumos/platform2"
+)
+CROS_WORKON_LOCALNAME=(
+	"../platform/arc-camera"
+	"../platform2"
+)
+CROS_WORKON_DESTDIR=(
+	"${S}/platform/arc-camera"
+	"${S}/platform2"
+)
+CROS_WORKON_SUBTREE=(
+	"build hal/intel"
+	"common-mk"
+)
+PLATFORM_GYP_FILE="hal/intel/libcamera_hal.gyp"
+
+inherit cros-camera cros-workon
 
 DESCRIPTION="Intel IPU3 (Image Processing Unit) Chrome OS camera HAL"
 
@@ -17,7 +33,6 @@ KEYWORDS="-* amd64"
 
 RDEPEND="
 	dev-libs/expat
-	!media-libs/arc-camera3-hal-intel-ipu3
 	media-libs/cros-camera-libcab
 	media-libs/cros-camera-libcamera_client
 	media-libs/cros-camera-libcamera_common
@@ -29,6 +44,7 @@ RDEPEND="
 	media-libs/libsync"
 
 DEPEND="${RDEPEND}
+	chromeos-base/libmojo
 	media-libs/cros-camera-android-headers
 	media-libs/libyuv
 	sys-kernel/linux-headers
@@ -37,30 +53,11 @@ DEPEND="${RDEPEND}
 
 HAL_DIR="hal/intel"
 
-
-src_prepare() {
-	cd ${HAL_DIR}
-	eautoreconf
-}
-
-src_configure() {
-	cros-debug-add-NDEBUG
-
-	cd ${HAL_DIR}
-	econf --with-ipu=ipu3 --with-base-version=${BASE_VER} --enable-remote3a
-}
-
-src_compile() {
-	tc-export CC CXX PKG_CONFIG
-
-	cd ${HAL_DIR}
-	emake
+src_unpack() {
+	cros-camera_src_unpack
 }
 
 src_install() {
-	# install hal libs to dev
-	cd ${HAL_DIR}
-	dolib.so .libs/libcam_algo.so*
-	dolib.so .libs/libcamerahal.so*
-	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/intel-ipu3.so
+	dolib.so "${OUT}/lib/libcam_algo.so"
+	cros-camera_dohal "${OUT}/lib/libcamera_hal.so" intel-ipu3.so
 }
