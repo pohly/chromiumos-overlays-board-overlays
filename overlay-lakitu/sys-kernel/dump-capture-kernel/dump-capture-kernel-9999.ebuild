@@ -25,6 +25,9 @@ src_install() {
 	local version
 	version=$(kmake -s --no-print-directory kernelrelease)
 	ln -sf "vmlinuz-${version}" "${D}/boot/kdump/vmlinuz" || die
+
+	# We also strips the symbol table /boot/kdump/System.map-* at:
+	# overlay-lakitu/scripts/board_specific_setup.sh
 }
 
 # Change the following (commented out) number to the next prime number
