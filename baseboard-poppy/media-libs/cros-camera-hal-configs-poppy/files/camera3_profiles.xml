@@ -537,29 +537,5 @@
             <element name="ipu3-csi2 0" type="csi_receiver"/>
         </MediaCtl_elements_IPU3>
     </Profiles>
-
-
-<!-- ******************PSL specific section end **************************************************************-->
-
-    <hal_tuning> <!-- Parameters to tune the HAL that are camera independent but common across PSL's -->
-        <!-- gfxHalToV4L2PixelFmtTable
-          This table encodes the agreement between the Camera HAL and the
-          Gfx and video HAL's. It maps the gfxHAL pixel formats (that the client
-          can request for a stream) to concrete V4L2 pixel formats that
-          the Camera HW can provide.
-          This is needed for several reasons:
-          - the pixel layout is not well defined (implementation_defined)
-          - the pixel layout changes from sensor to sensor (RAW)
-          Most entries are camera independent but some are not.
-          For camera dependent entries sensorId field is used.
-        -->
-        <gfxHalToV4L2PixelFmtTable.impl_defined_preview value="V4L2_PIX_FMT_NV21"/>
-        <gfxHalToV4L2PixelFmtTable.impl_defined_video value="V4L2_PIX_FMT_NV21"/>
-        <gfxHalToV4L2PixelFmtTable.raw_sensor sensorId="0" value="V4L2_PIX_FMT_SGRBG10"/>
-        <gfxHalToV4L2PixelFmtTable.ycbcr_420_888 value="V4L2_PIX_FMT_NV21"/>
-    </hal_tuning>
-
-    <Common> <!-- Common parameters of camera -->
-    </Common>
 </CameraSettings>
 
