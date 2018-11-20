@@ -2,10 +2,26 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
-CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
-inherit autotools cros-debug cros-workon libchrome toolchain-funcs
+CROS_WORKON_PROJECT=(
+	"chromiumos/platform/arc-camera"
+	"chromiumos/platform2"
+)
+CROS_WORKON_LOCALNAME=(
+	"../platform/arc-camera"
+	"../platform2"
+)
+CROS_WORKON_DESTDIR=(
+	"${S}/platform/arc-camera"
+	"${S}/platform2"
+)
+CROS_WORKON_SUBTREE=(
+	"build hal/rockchip"
+	"common-mk"
+)
+PLATFORM_GYP_FILE="hal/rockchip/libcamera_hal.gyp"
+
+inherit cros-camera cros-workon
 
 DESCRIPTION="Rockchip ISP1 Chrome OS camera HAL"
 
@@ -18,8 +34,10 @@ RDEPEND="
 	!media-libs/arc-camera3-hal-rockchip-isp1
 	media-libs/cros-camera-libcab
 	media-libs/cros-camera-libcamera_client
+	media-libs/cros-camera-libcamera_exif
 	media-libs/cros-camera-libcamera_jpeg
 	media-libs/cros-camera-libcamera_metadata
+	media-libs/cros-camera-libcamera_v4l2_device
 	media-libs/cros-camera-libcbm
 	media-libs/libsync
 	media-libs/rockchip-isp1-3a-libs-bin"
@@ -33,29 +51,11 @@ DEPEND="${RDEPEND}
 
 HAL_DIR="hal/rockchip"
 
-src_prepare() {
-	cd "${HAL_DIR}"
-	eautoreconf
-}
-
-src_configure() {
-	cros-debug-add-NDEBUG
-
-	cd ${HAL_DIR}
-	econf --with-base-version=${BASE_VER} --enable-remote3a
-}
-
-src_compile() {
-	tc-export CC CXX PKG_CONFIG
-
-	cd ${HAL_DIR}
-	emake
+src_unpack() {
+	cros-camera_src_unpack
 }
 
 src_install() {
-	# install hal libs to dev
-	cd ${HAL_DIR}
-	dolib.so .libs/libcam_algo.so*
-	dolib.so .libs/libcamerahal.so*
-	dosym ../libcamerahal.so /usr/$(get_libdir)/camera_hal/rockchip-isp1.so
+	dolib.so "${OUT}/lib/libcam_algo.so"
+	cros-camera_dohal "${OUT}/lib/libcamera_hal.so" rockchip-isp1.so
 }
