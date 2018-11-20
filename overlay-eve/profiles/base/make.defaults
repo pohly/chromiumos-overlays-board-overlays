@@ -43,4 +43,7 @@ USE="${USE} eclog"
 # Ability to run guest VMs.
 USE="${USE} kvm_host crosvm-plugin crosvm-gpu"
 
+# Enable Intel media-driver
+USE="${USE} -video_cards_i965 video_cards_iHD"
+
 AFDO_PROFILE_SOURCE='broadwell'
