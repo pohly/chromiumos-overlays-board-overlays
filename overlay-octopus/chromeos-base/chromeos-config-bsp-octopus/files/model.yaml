@@ -266,3 +266,10 @@ chromeos:
           config: *device_config
         - $sku-id-val: 19
           config: *device_config
+    - $device-name: "casta"
+      $fw-name: "Casta"
+      # TODO(OEM): need update later
+      $num-mic-locations: 2
+      skus:
+        - $sku-id-val: 255
+          config: *device_config
