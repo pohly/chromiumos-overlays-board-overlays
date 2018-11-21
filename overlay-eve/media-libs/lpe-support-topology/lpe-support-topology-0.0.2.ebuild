@@ -9,6 +9,12 @@ LICENSE="LICENCE.IntcSST2"
 SLOT="0"
 KEYWORDS="*"
 
+RDEPEND="
+	media-libs/kbl-tuning-support
+	media-libs/kbl-dsm-param
+"
+DEPEND="${RDEPEND}"
+
 S=${WORKDIR}
 
 src_compile() {
