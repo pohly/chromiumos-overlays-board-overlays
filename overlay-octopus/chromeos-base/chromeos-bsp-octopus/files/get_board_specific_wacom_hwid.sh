@@ -1,0 +1,45 @@
+#!/bin/sh
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+. /usr/share/misc/shflags
+
+# Not used; but caller provides it.
+DEFINE_string 'device' '' "i2c device name" 'd'
+
+# Parse command line.
+FLAGS "$@" || exit 1
+eval set -- "${FLAGS_ARGV}"
+
+
+# Wacom EMR doesn't support power-cut-tolerant ID.
+# Meep reads panel vendor_id and product_id to determine wacom firmware.
+main() {
+  local vendor_id
+  local product_id
+  local hardware_id
+  for path in /sys/class/drm/*eDP*/edid; do
+    # Check path is exist, otherwise hexdump hits error
+    if [ -e "${path}" ]; then
+      # EDID 0x8-0x9 is Manufacturer ID
+      vendor_id="$(hexdump -n 0xc "${path}" | awk '{print $6}' | sed '/^\s*$/d')"
+      # EDID 0xa-0xb is Manufacturer product code
+      product_id="$(hexdump -n 0xc "${path}" | awk '{print $7}' | sed '/^\s*$/d')"
+      if [ -n "${product_id}" ]; then
+        hardware_id="${vendor_id}_${product_id}"
+      fi
+    fi
+  done
+
+  case "${hardware_id}" in
+    "af06_135c"|"e509_0710")
+      ## af06(AUO), e509(BOE)
+      echo "${hardware_id}"
+      ;;
+    *)
+      ## Unknown hardware_id, not ouput anything.
+  esac
+}
+
+main "$@"
