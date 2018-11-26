@@ -1,3 +1,6 @@
 # Mask audit from portage-stable
 sys-process/audit::portage-stable
 sys-process/shadow::portage-stable
+
+# Mask new runc package
+~app-emulation/runc-1.0.0_rc6

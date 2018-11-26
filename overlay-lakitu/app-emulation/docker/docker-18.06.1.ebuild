@@ -61,7 +61,7 @@ RDEPEND="
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
 	~app-emulation/containerd-1.1.1
-	~app-emulation/runc-1.0.0_rc5_p20180509[apparmor?,seccomp?]
+	>=app-emulation/runc-1.0.0_rc5_p20180509[apparmor?,seccomp?]
 	~app-emulation/docker-proxy-0.8.0_p20180626
 	container-init? ( >=sys-process/tini-0.18.0[static] )
 	pigz? ( app-arch/pigz )
