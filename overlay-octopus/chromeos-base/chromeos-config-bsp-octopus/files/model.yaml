@@ -42,6 +42,8 @@ device-config: &device_config
         # ALSA UCM SectionUseCase configuration (defined in UCM conf file)
         - source: "{{$ucm_src_root}}/audio/ucm-config/{{$num-mic-locations}}mic/HiFi.conf"
           destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/HiFi.conf"
+  camera:
+    count: "{{$num-mic-locations}}"
   power:
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
