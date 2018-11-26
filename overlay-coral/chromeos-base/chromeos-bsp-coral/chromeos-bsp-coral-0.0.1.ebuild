@@ -28,15 +28,9 @@ src_install() {
 	cros-model_src_install
 
 	unibuild_install_audio_files
+	unibuild_install_bluetooth_files
 
 	local common_model_dir=${D}${CROS_MODELS_DIR}/${CROS_COMMON_MODEL}
-
-	# Install Bluetooth ID override.
-	for dir in "${D}${CROS_MODELS_DIR}"/*; do
-		local model="${dir##*/}"
-		insinto "/etc/bluetooth/models"
-		newins "${D}${CROS_MODELS_DIR}/${model}/bluetooth/main.conf" "${model}.conf"
-	done
 
 	# TODO(pberny/shapiroc): PowerD config is done differently from other configs.
 	#                        it should not have a separate folder for common

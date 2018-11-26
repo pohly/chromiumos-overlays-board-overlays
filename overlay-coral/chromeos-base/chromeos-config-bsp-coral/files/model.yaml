@@ -35,6 +35,7 @@ audio_common: &audio_common
       destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
 
 base_config: &base_config
+  $bluetooth-device: "common"
   $dptf-device: "{{$device-name}}"
   $touchpad-wakeup: "1"
   $powerd-prefs: "{{$device-name}}"
@@ -42,6 +43,10 @@ base_config: &base_config
   name: "{{$device-name}}"
   audio:
     main: *audio_common
+  bluetooth:
+    config:
+      build-path: "{{$bluetooth-device}}/bluetooth/main.conf"
+      system-path: "/etc/bluetooth/{{$bluetooth-device}}/main.conf"
   brand-code: "{{$brand-code}}"
   firmware:
     no-firmware: True
@@ -131,6 +136,7 @@ chromeos:
         - $sku-id: 33
           config: *device_config
     - $device-name: "blacktip"
+      $bluetooth-device: "blacktip"
       products:
         - $whitelabel-tag: "" # default
           $signature-id: "{{$device-name}}-default"
@@ -159,6 +165,7 @@ chromeos:
         - $sku-id: 36
           config: *wl_device_config
     - $device-name: "blacktip360"
+      $bluetooth-device: "blacktip"
       $ucm: "2mic"
       $touchpad-wakeup: "0"
       $powerd-prefs: "blacktip"
@@ -184,6 +191,7 @@ chromeos:
         - $sku-id: 38
           config: *wl_device_config
     - $device-name: "blacktiplte"
+      $bluetooth-device: "blacktip"
       products:
         - $whitelabel-tag: "" # default
           $signature-id: "{{$device-name}}-default"
