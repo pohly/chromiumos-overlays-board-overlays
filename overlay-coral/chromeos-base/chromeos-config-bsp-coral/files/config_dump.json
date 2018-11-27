@@ -1,0 +1,456 @@
+{
+  "GetArcFiles": [], 
+  "GetAudioFiles": [
+    [
+      "astronaut/audio/cras-config/bxtda7219max", 
+      "/etc/cras/astronaut/bxtda7219max"
+    ], 
+    [
+      "astronaut/audio/cras-config/dsp.ini", 
+      "/etc/cras/astronaut/dsp.ini"
+    ], 
+    [
+      "babymega/audio/cras-config/bxtda7219max", 
+      "/etc/cras/babymega/bxtda7219max"
+    ], 
+    [
+      "babymega/audio/cras-config/dsp.ini", 
+      "/etc/cras/babymega/dsp.ini"
+    ], 
+    [
+      "babymega/audio/ucm-config/1mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.1micBabymega/HiFi"
+    ], 
+    [
+      "babymega/audio/ucm-config/1mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.1micBabymega/bxtda7219max.1micBabymega.conf"
+    ], 
+    [
+      "babytiger/audio/cras-config/bxtda7219max", 
+      "/etc/cras/babytiger/bxtda7219max"
+    ], 
+    [
+      "babytiger/audio/cras-config/dsp.ini", 
+      "/etc/cras/babytiger/dsp.ini"
+    ], 
+    [
+      "babytiger/audio/ucm-config/2mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micBabytiger/HiFi"
+    ], 
+    [
+      "babytiger/audio/ucm-config/2mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micBabytiger/bxtda7219max.2micBabytiger.conf"
+    ], 
+    [
+      "blacktip/audio/cras-config/bxtda7219max", 
+      "/etc/cras/blacktip/bxtda7219max"
+    ], 
+    [
+      "blacktip/audio/cras-config/dsp.ini", 
+      "/etc/cras/blacktip/dsp.ini"
+    ], 
+    [
+      "blacktip360/audio/cras-config/bxtda7219max", 
+      "/etc/cras/blacktip360/bxtda7219max"
+    ], 
+    [
+      "blacktip360/audio/cras-config/dsp.ini", 
+      "/etc/cras/blacktip360/dsp.ini"
+    ], 
+    [
+      "blacktiplte/audio/cras-config/bxtda7219max", 
+      "/etc/cras/blacktiplte/bxtda7219max"
+    ], 
+    [
+      "blacktiplte/audio/cras-config/dsp.ini", 
+      "/etc/cras/blacktiplte/dsp.ini"
+    ], 
+    [
+      "blue/audio/cras-config/bxtda7219max", 
+      "/etc/cras/blue/bxtda7219max"
+    ], 
+    [
+      "blue/audio/cras-config/dsp.ini", 
+      "/etc/cras/blue/dsp.ini"
+    ], 
+    [
+      "bruce/audio/cras-config/bxtda7219max", 
+      "/etc/cras/bruce/bxtda7219max"
+    ], 
+    [
+      "bruce/audio/cras-config/dsp.ini", 
+      "/etc/cras/bruce/dsp.ini"
+    ], 
+    [
+      "bruce/audio/ucm-config/2mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micBruce360/HiFi"
+    ], 
+    [
+      "bruce/audio/ucm-config/2mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micBruce360/bxtda7219max.2micBruce360.conf"
+    ], 
+    [
+      "common/audio/ucm-config/1mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.1mic/HiFi"
+    ], 
+    [
+      "common/audio/ucm-config/1mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.1mic/bxtda7219max.1mic.conf"
+    ], 
+    [
+      "common/audio/ucm-config/2mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.2mic/HiFi"
+    ], 
+    [
+      "common/audio/ucm-config/2mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.2mic/bxtda7219max.2mic.conf"
+    ], 
+    [
+      "epaulette/audio/cras-config/bxtda7219max", 
+      "/etc/cras/epaulette/bxtda7219max"
+    ], 
+    [
+      "epaulette/audio/cras-config/dsp.ini", 
+      "/etc/cras/epaulette/dsp.ini"
+    ], 
+    [
+      "epaulette/audio/ucm-config/2mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micEpaulette/HiFi"
+    ], 
+    [
+      "epaulette/audio/ucm-config/2mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micEpaulette/bxtda7219max.2micEpaulette.conf"
+    ], 
+    [
+      "lava/audio/cras-config/bxtda7219max", 
+      "/etc/cras/lava/bxtda7219max"
+    ], 
+    [
+      "lava/audio/cras-config/dsp.ini", 
+      "/etc/cras/lava/dsp.ini"
+    ], 
+    [
+      "nasher/audio/cras-config/bxtda7219max", 
+      "/etc/cras/nasher/bxtda7219max"
+    ], 
+    [
+      "nasher/audio/cras-config/dsp.ini", 
+      "/etc/cras/nasher/dsp.ini"
+    ], 
+    [
+      "nasher/audio/ucm-config/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.nasher/HiFi"
+    ], 
+    [
+      "nasher/audio/ucm-config/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.nasher/bxtda7219max.nasher.conf"
+    ], 
+    [
+      "nasher360/audio/ucm-config/2mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micNasher360/HiFi"
+    ], 
+    [
+      "nasher360/audio/ucm-config/2mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micNasher360/bxtda7219max.2micNasher360.conf"
+    ], 
+    [
+      "rabbid/audio/cras-config/bxtda7219max", 
+      "/etc/cras/rabbid/bxtda7219max"
+    ], 
+    [
+      "rabbid/audio/cras-config/dsp.ini", 
+      "/etc/cras/rabbid/dsp.ini"
+    ], 
+    [
+      "rabbid/audio/ucm-config/2mic/HiFi", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micRabbid/HiFi"
+    ], 
+    [
+      "rabbid/audio/ucm-config/2mic/bxtda7219max.conf", 
+      "/usr/share/alsa/ucm/bxtda7219max.2micRabbid/bxtda7219max.2micRabbid.conf"
+    ], 
+    [
+      "robo/audio/cras-config/bxtda7219max", 
+      "/etc/cras/robo/bxtda7219max"
+    ], 
+    [
+      "robo/audio/cras-config/dsp.ini", 
+      "/etc/cras/robo/dsp.ini"
+    ], 
+    [
+      "whitetip/audio/cras-config/bxtda7219max", 
+      "/etc/cras/whitetip/bxtda7219max"
+    ], 
+    [
+      "whitetip/audio/cras-config/dsp.ini", 
+      "/etc/cras/whitetip/dsp.ini"
+    ]
+  ], 
+  "GetBluetoothFiles": [
+    [
+      "blacktip/bluetooth/main.conf", 
+      "/etc/bluetooth/blacktip/main.conf"
+    ], 
+    [
+      "common/bluetooth/main.conf", 
+      "/etc/bluetooth/common/main.conf"
+    ]
+  ], 
+  "GetFirmwareBuildCombinations": {}, 
+  "GetFirmwareBuildTargets_coreboot": [], 
+  "GetFirmwareBuildTargets_ec": [], 
+  "GetFirmwareInfo": {}, 
+  "GetFirmwareUris": [], 
+  "GetProperty_astronaut": {
+    "/::powerd-prefs": "astronaut", 
+    "/::test-label": "astronaut", 
+    "/audio/main::cras-config-dir": "astronaut", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/modem::firmware-variant": "astronaut", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_babymega": {
+    "/::powerd-prefs": "babymega", 
+    "/::test-label": "babymega", 
+    "/audio/main::cras-config-dir": "babymega", 
+    "/audio/main::ucm-suffix": "1micBabymega", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_babytiger": {
+    "/::powerd-prefs": "babytiger", 
+    "/::test-label": "babytiger", 
+    "/audio/main::cras-config-dir": "babytiger", 
+    "/audio/main::ucm-suffix": "2micBabytiger", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_blacktip": {
+    "/::powerd-prefs": "blacktip", 
+    "/::test-label": "blacktip", 
+    "/audio/main::cras-config-dir": "blacktip", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_blacktip360": {
+    "/::powerd-prefs": "blacktip", 
+    "/::test-label": "blacktip360", 
+    "/audio/main::cras-config-dir": "blacktip360", 
+    "/audio/main::ucm-suffix": "2mic", 
+    "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
+    "/power::touchpad-wakeup": "0"
+  }, 
+  "GetProperty_blacktiplte": {
+    "/::powerd-prefs": "blacktiplte", 
+    "/::test-label": "blacktiplte", 
+    "/audio/main::cras-config-dir": "blacktiplte", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
+    "/modem::firmware-variant": "blacktiplte", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_blue": {
+    "/::powerd-prefs": "blue", 
+    "/::test-label": "blue", 
+    "/audio/main::cras-config-dir": "blue", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_bruce": {
+    "/::powerd-prefs": "bruce", 
+    "/::test-label": "bruce", 
+    "/audio/main::cras-config-dir": "bruce", 
+    "/audio/main::ucm-suffix": "2micBruce360", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "0"
+  }, 
+  "GetProperty_epaulette": {
+    "/::powerd-prefs": "epaulette", 
+    "/::test-label": "epaulette", 
+    "/audio/main::cras-config-dir": "epaulette", 
+    "/audio/main::ucm-suffix": "2micEpaulette", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_lava": {
+    "/::powerd-prefs": "lava", 
+    "/::test-label": "lava", 
+    "/audio/main::cras-config-dir": "lava", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "0"
+  }, 
+  "GetProperty_nasher": {
+    "/::powerd-prefs": "nasher", 
+    "/::test-label": "nasher", 
+    "/audio/main::cras-config-dir": "nasher", 
+    "/audio/main::ucm-suffix": "nasher", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_nasher360": {
+    "/::powerd-prefs": "nasher", 
+    "/::test-label": "nasher360", 
+    "/audio/main::cras-config-dir": "nasher", 
+    "/audio/main::ucm-suffix": "2micNasher360", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "0"
+  }, 
+  "GetProperty_porbeagle": {
+    "/::powerd-prefs": "porbeagle", 
+    "/::test-label": "porbeagle", 
+    "/audio/main::cras-config-dir": "astronaut", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_rabbid": {
+    "/::powerd-prefs": "rabbid", 
+    "/::test-label": "rabbid", 
+    "/audio/main::cras-config-dir": "rabbid", 
+    "/audio/main::ucm-suffix": "2micRabbid", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_robo": {
+    "/::powerd-prefs": "robo", 
+    "/::test-label": "robo", 
+    "/audio/main::cras-config-dir": "robo", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_robo360": {
+    "/::powerd-prefs": "robo", 
+    "/::test-label": "robo360", 
+    "/audio/main::cras-config-dir": "nasher", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "0"
+  }, 
+  "GetProperty_santa": {
+    "/::powerd-prefs": "santa", 
+    "/::test-label": "santa", 
+    "/audio/main::cras-config-dir": "astronaut", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetProperty_whitetip": {
+    "/::powerd-prefs": "robo", 
+    "/::test-label": "robo", 
+    "/audio/main::cras-config-dir": "whitetip", 
+    "/audio/main::ucm-suffix": "1mic", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
+    "/power::touchpad-wakeup": "1"
+  }, 
+  "GetThermalFiles": [
+    [
+      "astronaut/dptf.dv", 
+      "/etc/dptf/astronaut/dptf.dv"
+    ], 
+    [
+      "babymega/dptf.dv", 
+      "/etc/dptf/babymega/dptf.dv"
+    ], 
+    [
+      "babytiger/dptf.dv", 
+      "/etc/dptf/babytiger/dptf.dv"
+    ], 
+    [
+      "blacktip/dptf.dv", 
+      "/etc/dptf/blacktip/dptf.dv"
+    ], 
+    [
+      "blacktiplte/dptf.dv", 
+      "/etc/dptf/blacktiplte/dptf.dv"
+    ], 
+    [
+      "blue/dptf.dv", 
+      "/etc/dptf/blue/dptf.dv"
+    ], 
+    [
+      "epaulette/dptf.dv", 
+      "/etc/dptf/epaulette/dptf.dv"
+    ], 
+    [
+      "lava/dptf.dv", 
+      "/etc/dptf/lava/dptf.dv"
+    ], 
+    [
+      "nasher/dptf.dv", 
+      "/etc/dptf/nasher/dptf.dv"
+    ], 
+    [
+      "nasher360/dptf.dv", 
+      "/etc/dptf/nasher360/dptf.dv"
+    ], 
+    [
+      "porbeagle/dptf.dv", 
+      "/etc/dptf/porbeagle/dptf.dv"
+    ], 
+    [
+      "rabbid/dptf.dv", 
+      "/etc/dptf/rabbid/dptf.dv"
+    ], 
+    [
+      "robo/dptf.dv", 
+      "/etc/dptf/robo/dptf.dv"
+    ], 
+    [
+      "robo360/dptf.dv", 
+      "/etc/dptf/robo360/dptf.dv"
+    ], 
+    [
+      "santa/dptf.dv", 
+      "/etc/dptf/santa/dptf.dv"
+    ], 
+    [
+      "whitetip/dptf.dv", 
+      "/etc/dptf/whitetip/dptf.dv"
+    ]
+  ], 
+  "GetTouchFirmwareFiles": [], 
+  "GetWallpaperFiles": [], 
+  "ListModels": [
+    "astronaut", 
+    "babymega", 
+    "babytiger", 
+    "blacktip", 
+    "blacktip360", 
+    "blacktiplte", 
+    "blue", 
+    "bruce", 
+    "epaulette", 
+    "lava", 
+    "nasher", 
+    "nasher360", 
+    "porbeagle", 
+    "rabbid", 
+    "robo", 
+    "robo360", 
+    "santa", 
+    "whitetip"
+  ]
+}
