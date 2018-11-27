@@ -61,9 +61,9 @@ base_config: &base_config
     touchpad-wakeup: "{{$touchpad-wakeup}}"
   powerd-prefs: "{{$powerd-prefs}}"
   thermal:
-    dptf-dv: "{{$device-name}}/dptf.dv"
+    dptf-dv: "{{$dptf-device}}/dptf.dv"
     files:
-      - source: "{{$dptf-device}}/dptf.dv"
+      - source: "{{$dptf-device}}/thermal/dptf.dv"
         destination: "/etc/dptf/{{$dptf-device}}/dptf.dv"
 
 device_config: &device_config
@@ -138,6 +138,7 @@ chromeos:
           config: *device_config
     - $device-name: "blacktip"
       $bluetooth-device: "blacktip"
+      $dptf-device: "astronaut"
       products:
         - $whitelabel-tag: "" # default
           $signature-id: "{{$device-name}}-default"
@@ -170,7 +171,7 @@ chromeos:
       $ucm: "2mic"
       $touchpad-wakeup: "0"
       $powerd-prefs: "blacktip"
-      $dptf-device: "blacktip"
+      $dptf-device: "astronaut"
       products:
         - $whitelabel-tag: "" # default
           $signature-id: "{{$device-name}}-default"
@@ -193,6 +194,7 @@ chromeos:
           config: *wl_device_config
     - $device-name: "blacktiplte"
       $bluetooth-device: "blacktip"
+      $dptf-device: "astronaut"
       products:
         - $whitelabel-tag: "" # default
           $signature-id: "{{$device-name}}-default"
@@ -212,6 +214,7 @@ chromeos:
             modem:
               firmware-variant: "{{$device-name}}"
     - $device-name: "blue"
+      $dptf-device: "astronaut"
       products:
         - $brand-code: "VVUC"
           $key-id: "CORALA"
@@ -224,7 +227,7 @@ chromeos:
           config: *device_config
     - $device-name: "bruce"
       $touchpad-wakeup: "0"
-      $dptf-device: "blue"
+      $dptf-device: "common"
       products:
         - $brand-code: "ACBF"
           $key-id: "CORALA"
@@ -237,6 +240,7 @@ chromeos:
           $ucm-target-suffix: "Bruce360"
           config: *device_config
     - $device-name: "epaulette"
+      $dptf-device: "astronaut"
       # TODO(epaulette-odm): Modify the current conf files as
       # required, they are copies from other 2-mic model.
       $ucm: "2mic"
@@ -258,6 +262,7 @@ chromeos:
           config: *device_config
     - $device-name: "lava"
       $touchpad-wakeup: "0"
+      $dptf-device: "astronaut"
       products:
         - $brand-code: "SHAN"
           $key-id: "CORALA"
@@ -292,6 +297,7 @@ chromeos:
       $ucm-target-suffix: "Nasher360"
       $touchpad-wakeup: "0"
       $powerd-prefs: "nasher"
+      $dptf-device: "nasher"
       products:
         - $brand-code: "INUT"
           $key-id: "CORALB"
@@ -309,6 +315,7 @@ chromeos:
           $ucm: "2micNasher360"
           config: *device_config
     - $device-name: "porbeagle"
+      $dptf-device: "astronaut"
       $cras: "astronaut"
       products:
         - $brand-code: ""
@@ -346,6 +353,7 @@ chromeos:
           config: *device_config
     - $device-name: "robo360"
       $cras: "nasher"
+      $dptf-device: "robo"
       $touchpad-wakeup: "0"
       $powerd-prefs: "robo"
       products:
@@ -356,6 +364,7 @@ chromeos:
           config: *device_config
     - $device-name: "santa"
       $cras: "astronaut"
+      $dptf-device: "astronaut"
       products:
         - $brand-code: "ACBE"
           $key-id: "CORALA"

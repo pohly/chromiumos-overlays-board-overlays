@@ -29,6 +29,7 @@ src_install() {
 
 	unibuild_install_audio_files
 	unibuild_install_bluetooth_files
+	unibuild_install_thermal_files
 
 	local common_model_dir=${D}${CROS_MODELS_DIR}/${CROS_COMMON_MODEL}
 
@@ -60,13 +61,6 @@ src_install() {
 				einfo "${model}: no powerd files"
 			fi
 		fi
-	done
-
-	# Install DPTF datavaults
-	for dir in "${D}${CROS_MODELS_DIR}"/*; do
-		local model="${dir##*/}"
-		insinto "/etc/dptf/${model}"
-		doins "${D}${CROS_MODELS_DIR}/${model}/thermal/dptf.dv"
 	done
 
 	# Install into image so the private overlay can use it too

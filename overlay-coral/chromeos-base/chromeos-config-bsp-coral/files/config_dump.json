@@ -240,7 +240,7 @@
     "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
     "/power::touchpad-wakeup": "1", 
-    "/thermal::dptf-dv": "blacktip/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_blacktip360": {
     "/::powerd-prefs": "blacktip", 
@@ -250,7 +250,7 @@
     "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
     "/power::touchpad-wakeup": "0", 
-    "/thermal::dptf-dv": "blacktip360/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_blacktiplte": {
     "/::powerd-prefs": "blacktiplte", 
@@ -261,7 +261,7 @@
     "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
     "/modem::firmware-variant": "blacktiplte", 
     "/power::touchpad-wakeup": "1", 
-    "/thermal::dptf-dv": "blacktiplte/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_blue": {
     "/::powerd-prefs": "blue", 
@@ -271,7 +271,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "1", 
-    "/thermal::dptf-dv": "blue/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_bruce": {
     "/::powerd-prefs": "bruce", 
@@ -281,7 +281,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "0", 
-    "/thermal::dptf-dv": "bruce/dptf.dv"
+    "/thermal::dptf-dv": "common/dptf.dv"
   }, 
   "GetProperty_epaulette": {
     "/::powerd-prefs": "epaulette", 
@@ -291,7 +291,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "1", 
-    "/thermal::dptf-dv": "epaulette/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_lava": {
     "/::powerd-prefs": "lava", 
@@ -301,7 +301,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "0", 
-    "/thermal::dptf-dv": "lava/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_nasher": {
     "/::powerd-prefs": "nasher", 
@@ -321,7 +321,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "0", 
-    "/thermal::dptf-dv": "nasher360/dptf.dv"
+    "/thermal::dptf-dv": "nasher/dptf.dv"
   }, 
   "GetProperty_porbeagle": {
     "/::powerd-prefs": "porbeagle", 
@@ -331,7 +331,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "1", 
-    "/thermal::dptf-dv": "porbeagle/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_rabbid": {
     "/::powerd-prefs": "rabbid", 
@@ -361,7 +361,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "0", 
-    "/thermal::dptf-dv": "robo360/dptf.dv"
+    "/thermal::dptf-dv": "robo/dptf.dv"
   }, 
   "GetProperty_santa": {
     "/::powerd-prefs": "santa", 
@@ -371,7 +371,7 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "1", 
-    "/thermal::dptf-dv": "santa/dptf.dv"
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_whitetip": {
     "/::powerd-prefs": "robo", 
@@ -385,67 +385,35 @@
   }, 
   "GetThermalFiles": [
     [
-      "astronaut/dptf.dv", 
+      "astronaut/thermal/dptf.dv", 
       "/etc/dptf/astronaut/dptf.dv"
     ], 
     [
-      "babymega/dptf.dv", 
+      "babymega/thermal/dptf.dv", 
       "/etc/dptf/babymega/dptf.dv"
     ], 
     [
-      "babytiger/dptf.dv", 
+      "babytiger/thermal/dptf.dv", 
       "/etc/dptf/babytiger/dptf.dv"
     ], 
     [
-      "blacktip/dptf.dv", 
-      "/etc/dptf/blacktip/dptf.dv"
+      "common/thermal/dptf.dv", 
+      "/etc/dptf/common/dptf.dv"
     ], 
     [
-      "blacktiplte/dptf.dv", 
-      "/etc/dptf/blacktiplte/dptf.dv"
-    ], 
-    [
-      "blue/dptf.dv", 
-      "/etc/dptf/blue/dptf.dv"
-    ], 
-    [
-      "epaulette/dptf.dv", 
-      "/etc/dptf/epaulette/dptf.dv"
-    ], 
-    [
-      "lava/dptf.dv", 
-      "/etc/dptf/lava/dptf.dv"
-    ], 
-    [
-      "nasher/dptf.dv", 
+      "nasher/thermal/dptf.dv", 
       "/etc/dptf/nasher/dptf.dv"
     ], 
     [
-      "nasher360/dptf.dv", 
-      "/etc/dptf/nasher360/dptf.dv"
-    ], 
-    [
-      "porbeagle/dptf.dv", 
-      "/etc/dptf/porbeagle/dptf.dv"
-    ], 
-    [
-      "rabbid/dptf.dv", 
+      "rabbid/thermal/dptf.dv", 
       "/etc/dptf/rabbid/dptf.dv"
     ], 
     [
-      "robo/dptf.dv", 
+      "robo/thermal/dptf.dv", 
       "/etc/dptf/robo/dptf.dv"
     ], 
     [
-      "robo360/dptf.dv", 
-      "/etc/dptf/robo360/dptf.dv"
-    ], 
-    [
-      "santa/dptf.dv", 
-      "/etc/dptf/santa/dptf.dv"
-    ], 
-    [
-      "whitetip/dptf.dv", 
+      "whitetip/thermal/dptf.dv", 
       "/etc/dptf/whitetip/dptf.dv"
     ]
   ], 
