@@ -1,3 +1,5 @@
+# Avoid metrics -> system_api -> libmojo dependency (crbug.com/823600).
+chromeos-base/autotest-tests -tests_platform_MetricsUploader
 # Skip the large dbus libraries from libbrillo
 chromeos-base/libbrillo -dbus
 media-libs/mesa -classic drm egl llvm shared-glapi gles2 wayland X
