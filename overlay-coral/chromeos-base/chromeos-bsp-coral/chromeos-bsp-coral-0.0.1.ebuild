@@ -4,7 +4,7 @@
 EAPI=5
 
 inherit appid
-inherit cros-model cros-unibuild
+inherit cros-unibuild
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -25,17 +25,10 @@ DEPEND="
 src_install() {
 	doappid "{5A3AB642-2A67-470A-8F37-37E737A53CFC}" "CHROMEBOOK"
 
-	cros-model_src_install
-
 	unibuild_install_audio_files
 	unibuild_install_bluetooth_files
 	unibuild_install_thermal_files
 
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/common/powerd/*
-
-	# Install into image so the private overlay can use it too
-	insinto "${CROS_MODELS_DIR}"
-	doins "${FILESDIR}"/createInheritanceList.py
-	chmod a+x "${D}${CROS_MODELS_DIR}/createInheritanceList.py"
 }

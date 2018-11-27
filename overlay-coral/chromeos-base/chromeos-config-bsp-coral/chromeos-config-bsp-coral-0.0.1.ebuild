@@ -10,7 +10,7 @@ LICENSE="BSD-Google"
 SLOT="0/${PF}"
 KEYWORDS="-* amd64 x86"
 
-inherit cros-model cros-unibuild
+inherit cros-unibuild
 
 S=${WORKDIR}
 
