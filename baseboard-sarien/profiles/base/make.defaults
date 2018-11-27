@@ -24,3 +24,7 @@ USE="${USE} nvme"
 
 # Enable legacy power button behavior
 USE="${USE} legacy_power_button"
+
+# Enable Virtual Machines
+USE="${USE} kvm_host"
+
