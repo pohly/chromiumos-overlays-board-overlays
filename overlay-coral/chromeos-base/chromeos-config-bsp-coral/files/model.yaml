@@ -61,6 +61,7 @@ base_config: &base_config
     touchpad-wakeup: "{{$touchpad-wakeup}}"
   powerd-prefs: "{{$powerd-prefs}}"
   thermal:
+    dptf-dv: "{{$device-name}}/dptf.dv"
     files:
       - source: "{{$dptf-device}}/dptf.dv"
         destination: "/etc/dptf/{{$dptf-device}}/dptf.dv"

@@ -209,7 +209,8 @@
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/modem::firmware-variant": "astronaut", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_babymega": {
     "/::powerd-prefs": "babymega", 
@@ -218,7 +219,8 @@
     "/audio/main::ucm-suffix": "1micBabymega", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "babymega/dptf.dv"
   }, 
   "GetProperty_babytiger": {
     "/::powerd-prefs": "babytiger", 
@@ -227,7 +229,8 @@
     "/audio/main::ucm-suffix": "2micBabytiger", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "babytiger/dptf.dv"
   }, 
   "GetProperty_blacktip": {
     "/::powerd-prefs": "blacktip", 
@@ -236,7 +239,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "blacktip/dptf.dv"
   }, 
   "GetProperty_blacktip360": {
     "/::powerd-prefs": "blacktip", 
@@ -245,7 +249,8 @@
     "/audio/main::ucm-suffix": "2mic", 
     "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
-    "/power::touchpad-wakeup": "0"
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "blacktip360/dptf.dv"
   }, 
   "GetProperty_blacktiplte": {
     "/::powerd-prefs": "blacktiplte", 
@@ -255,7 +260,8 @@
     "/bluetooth/config::build-path": "blacktip/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/blacktip/main.conf", 
     "/modem::firmware-variant": "blacktiplte", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "blacktiplte/dptf.dv"
   }, 
   "GetProperty_blue": {
     "/::powerd-prefs": "blue", 
@@ -264,7 +270,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "blue/dptf.dv"
   }, 
   "GetProperty_bruce": {
     "/::powerd-prefs": "bruce", 
@@ -273,7 +280,8 @@
     "/audio/main::ucm-suffix": "2micBruce360", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "0"
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "bruce/dptf.dv"
   }, 
   "GetProperty_epaulette": {
     "/::powerd-prefs": "epaulette", 
@@ -282,7 +290,8 @@
     "/audio/main::ucm-suffix": "2micEpaulette", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "epaulette/dptf.dv"
   }, 
   "GetProperty_lava": {
     "/::powerd-prefs": "lava", 
@@ -291,7 +300,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "0"
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "lava/dptf.dv"
   }, 
   "GetProperty_nasher": {
     "/::powerd-prefs": "nasher", 
@@ -300,7 +310,8 @@
     "/audio/main::ucm-suffix": "nasher", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "nasher/dptf.dv"
   }, 
   "GetProperty_nasher360": {
     "/::powerd-prefs": "nasher", 
@@ -309,7 +320,8 @@
     "/audio/main::ucm-suffix": "2micNasher360", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "0"
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "nasher360/dptf.dv"
   }, 
   "GetProperty_porbeagle": {
     "/::powerd-prefs": "porbeagle", 
@@ -318,7 +330,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "porbeagle/dptf.dv"
   }, 
   "GetProperty_rabbid": {
     "/::powerd-prefs": "rabbid", 
@@ -327,7 +340,8 @@
     "/audio/main::ucm-suffix": "2micRabbid", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "rabbid/dptf.dv"
   }, 
   "GetProperty_robo": {
     "/::powerd-prefs": "robo", 
@@ -336,7 +350,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "robo/dptf.dv"
   }, 
   "GetProperty_robo360": {
     "/::powerd-prefs": "robo", 
@@ -345,7 +360,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "0"
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "robo360/dptf.dv"
   }, 
   "GetProperty_santa": {
     "/::powerd-prefs": "santa", 
@@ -354,7 +370,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "santa/dptf.dv"
   }, 
   "GetProperty_whitetip": {
     "/::powerd-prefs": "robo", 
@@ -363,7 +380,8 @@
     "/audio/main::ucm-suffix": "1mic", 
     "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
     "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
-    "/power::touchpad-wakeup": "1"
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "whitetip/dptf.dv"
   }, 
   "GetThermalFiles": [
     [
