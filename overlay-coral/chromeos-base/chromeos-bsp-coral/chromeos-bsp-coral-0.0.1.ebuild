@@ -31,37 +31,8 @@ src_install() {
 	unibuild_install_bluetooth_files
 	unibuild_install_thermal_files
 
-	local common_model_dir=${D}${CROS_MODELS_DIR}/${CROS_COMMON_MODEL}
-
-	# TODO(pberny/shapiroc): PowerD config is done differently from other configs.
-	#                        it should not have a separate folder for common
-	#                        settings, since that defies the purpose of doing
-	#                        inheritance on the model config!
-
-	# Install board-specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
-	# Since these are by definition shared by all models supported by board,
-	# we insist that
-	#   a) they must be in the common root model shared by all models.
-	#      By convention it must be called "common".
-	doins "${common_model_dir}/powerd"/*
-
-	# Install model-specific config files for power_manager.
-	for dir in "${D}${CROS_MODELS_DIR}"/*; do
-		local model="${dir##*/}"
-
-		if [[ "${CROS_COMMON_MODEL}" != "${model}" ]]; then
-			local power_dir="${D}${CROS_MODELS_DIR}/${model}/powerd"
-			einfo "${power_dir}"
-			if [[ -d "${power_dir}" ]]; then
-				insinto "/usr/share/power_manager/model_specific/${model}"
-				# Can't have just an empty folder, need at least one file in there!
-				doins -r "${power_dir}"/*
-			else
-				einfo "${model}: no powerd files"
-			fi
-		fi
-	done
+	doins "${FILESDIR}"/common/powerd/*
 
 	# Install into image so the private overlay can use it too
 	insinto "${CROS_MODELS_DIR}"

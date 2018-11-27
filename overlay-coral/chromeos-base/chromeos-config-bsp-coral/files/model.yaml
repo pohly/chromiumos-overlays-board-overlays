@@ -38,7 +38,6 @@ base_config: &base_config
   $bluetooth-device: "common"
   $dptf-device: "{{$device-name}}"
   $touchpad-wakeup: "1"
-  $powerd-prefs: "{{$device-name}}"
   $test-label: "{{$device-name}}"
   name: "{{$device-name}}"
   audio:
@@ -59,7 +58,6 @@ base_config: &base_config
     power-supply-full-factor: "0.94"
     suspend-to-idle: "1"
     touchpad-wakeup: "{{$touchpad-wakeup}}"
-  powerd-prefs: "{{$powerd-prefs}}"
   thermal:
     dptf-dv: "{{$dptf-device}}/dptf.dv"
     files:
@@ -170,7 +168,6 @@ chromeos:
       $bluetooth-device: "blacktip"
       $ucm: "2mic"
       $touchpad-wakeup: "0"
-      $powerd-prefs: "blacktip"
       $dptf-device: "astronaut"
       products:
         - $whitelabel-tag: "" # default
@@ -296,7 +293,6 @@ chromeos:
       $ucm: "2mic"
       $ucm-target-suffix: "Nasher360"
       $touchpad-wakeup: "0"
-      $powerd-prefs: "nasher"
       $dptf-device: "nasher"
       products:
         - $brand-code: "INUT"
@@ -355,7 +351,6 @@ chromeos:
       $cras: "nasher"
       $dptf-device: "robo"
       $touchpad-wakeup: "0"
-      $powerd-prefs: "robo"
       products:
         - $brand-code: "KABJ"
           $key-id: "CORALD"
@@ -374,7 +369,6 @@ chromeos:
         - $sku-id: 3
           config: *device_config
     - $device-name: "whitetip"
-      $powerd-prefs: "robo"
       $test-label: "robo"
       products:
         - $whitelabel-tag: "" # default

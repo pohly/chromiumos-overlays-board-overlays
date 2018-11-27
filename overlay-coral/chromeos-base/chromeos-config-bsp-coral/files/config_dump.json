@@ -202,7 +202,6 @@
   "GetFirmwareInfo": {}, 
   "GetFirmwareUris": [], 
   "GetProperty_astronaut": {
-    "/::powerd-prefs": "astronaut", 
     "/::test-label": "astronaut", 
     "/audio/main::cras-config-dir": "astronaut", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -213,7 +212,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_babymega": {
-    "/::powerd-prefs": "babymega", 
     "/::test-label": "babymega", 
     "/audio/main::cras-config-dir": "babymega", 
     "/audio/main::ucm-suffix": "1micBabymega", 
@@ -223,7 +221,6 @@
     "/thermal::dptf-dv": "babymega/dptf.dv"
   }, 
   "GetProperty_babytiger": {
-    "/::powerd-prefs": "babytiger", 
     "/::test-label": "babytiger", 
     "/audio/main::cras-config-dir": "babytiger", 
     "/audio/main::ucm-suffix": "2micBabytiger", 
@@ -233,7 +230,6 @@
     "/thermal::dptf-dv": "babytiger/dptf.dv"
   }, 
   "GetProperty_blacktip": {
-    "/::powerd-prefs": "blacktip", 
     "/::test-label": "blacktip", 
     "/audio/main::cras-config-dir": "blacktip", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -243,7 +239,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_blacktip360": {
-    "/::powerd-prefs": "blacktip", 
     "/::test-label": "blacktip360", 
     "/audio/main::cras-config-dir": "blacktip360", 
     "/audio/main::ucm-suffix": "2mic", 
@@ -253,7 +248,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_blacktiplte": {
-    "/::powerd-prefs": "blacktiplte", 
     "/::test-label": "blacktiplte", 
     "/audio/main::cras-config-dir": "blacktiplte", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -264,7 +258,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_blue": {
-    "/::powerd-prefs": "blue", 
     "/::test-label": "blue", 
     "/audio/main::cras-config-dir": "blue", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -274,7 +267,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_bruce": {
-    "/::powerd-prefs": "bruce", 
     "/::test-label": "bruce", 
     "/audio/main::cras-config-dir": "bruce", 
     "/audio/main::ucm-suffix": "2micBruce360", 
@@ -284,7 +276,6 @@
     "/thermal::dptf-dv": "common/dptf.dv"
   }, 
   "GetProperty_epaulette": {
-    "/::powerd-prefs": "epaulette", 
     "/::test-label": "epaulette", 
     "/audio/main::cras-config-dir": "epaulette", 
     "/audio/main::ucm-suffix": "2micEpaulette", 
@@ -294,7 +285,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_lava": {
-    "/::powerd-prefs": "lava", 
     "/::test-label": "lava", 
     "/audio/main::cras-config-dir": "lava", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -304,7 +294,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_nasher": {
-    "/::powerd-prefs": "nasher", 
     "/::test-label": "nasher", 
     "/audio/main::cras-config-dir": "nasher", 
     "/audio/main::ucm-suffix": "nasher", 
@@ -314,7 +303,6 @@
     "/thermal::dptf-dv": "nasher/dptf.dv"
   }, 
   "GetProperty_nasher360": {
-    "/::powerd-prefs": "nasher", 
     "/::test-label": "nasher360", 
     "/audio/main::cras-config-dir": "nasher", 
     "/audio/main::ucm-suffix": "2micNasher360", 
@@ -324,7 +312,6 @@
     "/thermal::dptf-dv": "nasher/dptf.dv"
   }, 
   "GetProperty_porbeagle": {
-    "/::powerd-prefs": "porbeagle", 
     "/::test-label": "porbeagle", 
     "/audio/main::cras-config-dir": "astronaut", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -334,7 +321,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_rabbid": {
-    "/::powerd-prefs": "rabbid", 
     "/::test-label": "rabbid", 
     "/audio/main::cras-config-dir": "rabbid", 
     "/audio/main::ucm-suffix": "2micRabbid", 
@@ -344,7 +330,6 @@
     "/thermal::dptf-dv": "rabbid/dptf.dv"
   }, 
   "GetProperty_robo": {
-    "/::powerd-prefs": "robo", 
     "/::test-label": "robo", 
     "/audio/main::cras-config-dir": "robo", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -354,7 +339,6 @@
     "/thermal::dptf-dv": "robo/dptf.dv"
   }, 
   "GetProperty_robo360": {
-    "/::powerd-prefs": "robo", 
     "/::test-label": "robo360", 
     "/audio/main::cras-config-dir": "nasher", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -364,7 +348,6 @@
     "/thermal::dptf-dv": "robo/dptf.dv"
   }, 
   "GetProperty_santa": {
-    "/::powerd-prefs": "santa", 
     "/::test-label": "santa", 
     "/audio/main::cras-config-dir": "astronaut", 
     "/audio/main::ucm-suffix": "1mic", 
@@ -374,7 +357,6 @@
     "/thermal::dptf-dv": "astronaut/dptf.dv"
   }, 
   "GetProperty_whitetip": {
-    "/::powerd-prefs": "robo", 
     "/::test-label": "robo", 
     "/audio/main::cras-config-dir": "whitetip", 
     "/audio/main::ucm-suffix": "1mic", 
