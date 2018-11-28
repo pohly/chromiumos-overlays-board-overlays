@@ -9,7 +9,7 @@ CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="overlay-sarien/chromeos-base/chromeos-config-bsp-sarien/files"
 
-inherit cros-model cros-unibuild cros-workon
+inherit cros-unibuild cros-workon
 
 DESCRIPTION="Chrome OS Model configuration package for sarien"
 HOMEPAGE="http://src.chromium.org"

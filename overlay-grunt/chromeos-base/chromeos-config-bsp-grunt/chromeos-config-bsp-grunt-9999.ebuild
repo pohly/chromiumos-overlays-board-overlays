@@ -9,7 +9,7 @@ CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
 CROS_WORKON_SUBTREE="overlay-grunt/chromeos-base/chromeos-config-bsp-grunt/files"
 
-inherit cros-model cros-unibuild cros-workon
+inherit cros-unibuild cros-workon
 
 DESCRIPTION="Chrome OS Model configuration package for grunt"
 HOMEPAGE="http://src.chromium.org"

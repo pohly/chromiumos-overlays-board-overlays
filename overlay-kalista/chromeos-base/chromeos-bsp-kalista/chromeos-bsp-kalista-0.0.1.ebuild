@@ -5,7 +5,7 @@
 EAPI=5
 
 inherit appid
-inherit cros-model cros-unibuild
+inherit cros-unibuild
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
