@@ -1,13 +1,13 @@
-# Copyright 2014 The Chromium OS Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 
 inherit unpacker
 
 DESCRIPTION="Mali drivers, binary only install"
-HOMEPAGE=""
-SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/mali-drivers-veyron-${PVR}.run"
+HOMEPAGE="http://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/samsung-arm-chromebook"
+SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/mali-drivers-daisy-${PVR}.run"
 
 LICENSE="Google-TOS"
 SLOT="0"
