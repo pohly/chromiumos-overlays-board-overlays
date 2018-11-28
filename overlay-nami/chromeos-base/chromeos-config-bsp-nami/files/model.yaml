@@ -31,6 +31,11 @@ audio_common: &audio_common
 common_config: &common_config
   name: "{{$device-name}}"
   brand-code: "{{$brand-code}}"
+  $bluetooth-device: "common"
+  bluetooth:
+    config:
+      build-path: "{{$bluetooth-device}}/bluetooth/main.conf"
+      system-path: "/etc/bluetooth/{{$bluetooth-device}}/main.conf"
   identity:
     platform-name: "Nami"
     smbios-name-match: "Nami"
@@ -87,6 +92,7 @@ device_specific_audio_device_config: &device_specific_audio_device_config
 chromeos:
   devices:
     - $device-name: "akali"
+      $bluetooth-device: "{{$device-name}}"
       $touchpad-wakeup: "1"
       products:
         - $marketing-name: "TBD"
@@ -99,6 +105,7 @@ chromeos:
         - $sku-id: 0x2861
           config: *device_specific_audio_device_config
     - $device-name: "akali360"
+      $bluetooth-device: "{{$device-name}}"
       products:
         - $marketing-name: "TBD"
           $brand-code: "SOCA"
@@ -119,6 +126,7 @@ chromeos:
         - $sku-id: 0x3a7b
           config: *device_specific_audio_device_config
     - $device-name: "pantheon"
+      $bluetooth-device: "{{$device-name}}"
       $internal-backlight-no-als-battery-brightness: "51.0"
       products:
         - $marketing-name: "TBD"
@@ -142,6 +150,7 @@ chromeos:
         - $sku-id: 0x3e67
           config: *device_specific_audio_device_config
     - $device-name: "sona"
+      $bluetooth-device: "{{$device-name}}"
       $internal-backlight-no-als-battery-brightness: "63.0"
       products:
         - $marketing-name: "TBD"
@@ -181,6 +190,7 @@ chromeos:
               <<: *power_common
               $has-keyboard-backlight: "0"
     - $device-name: "vayne"
+      $bluetooth-device: "{{$device-name}}"
       products:
         - $marketing-name: "TBD"
           $brand-code: "NPEC"

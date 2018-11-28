@@ -30,14 +30,5 @@ src_install() {
 
 	unibuild_install_audio_files
 	unibuild_install_thermal_files
-
-	insinto "/etc/bluetooth"
-	doins "${FILESDIR}/common/bluetooth/main.conf"
-
-	insinto "/etc/bluetooth/models"
-	newins "${FILESDIR}/akali/bluetooth/main.conf" "akali.conf"
-	newins "${FILESDIR}/akali360/bluetooth/main.conf" "akali360.conf"
-	newins "${FILESDIR}/sona/bluetooth/main.conf" "sona.conf"
-	newins "${FILESDIR}/vayne/bluetooth/main.conf" "vayne.conf"
-	newins "${FILESDIR}/pantheon/bluetooth/main.conf" "pantheon.conf"
+	unibuild_install_bluetooth_files
 }

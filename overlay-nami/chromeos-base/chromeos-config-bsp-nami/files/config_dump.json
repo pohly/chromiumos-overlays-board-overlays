@@ -146,6 +146,32 @@
       "/usr/share/alsa/ucm/kblda7219max.vayne/kblda7219max.vayne.conf"
     ]
   ], 
+  "GetBluetoothFiles": [
+    [
+      "akali/bluetooth/main.conf", 
+      "/etc/bluetooth/akali/main.conf"
+    ], 
+    [
+      "akali360/bluetooth/main.conf", 
+      "/etc/bluetooth/akali360/main.conf"
+    ], 
+    [
+      "common/bluetooth/main.conf", 
+      "/etc/bluetooth/common/main.conf"
+    ], 
+    [
+      "pantheon/bluetooth/main.conf", 
+      "/etc/bluetooth/pantheon/main.conf"
+    ], 
+    [
+      "sona/bluetooth/main.conf", 
+      "/etc/bluetooth/sona/main.conf"
+    ], 
+    [
+      "vayne/bluetooth/main.conf", 
+      "/etc/bluetooth/vayne/main.conf"
+    ]
+  ], 
   "GetFirmwareBuildCombinations": {}, 
   "GetFirmwareBuildTargets_coreboot": [], 
   "GetFirmwareBuildTargets_ec": [], 
@@ -155,6 +181,8 @@
     "/::test-label": "akali", 
     "/audio/main::cras-config-dir": "akali", 
     "/audio/main::ucm-suffix": "akali", 
+    "/bluetooth/config::build-path": "akali/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/akali/main.conf", 
     "/power::touchpad-wakeup": "1", 
     "/thermal::dptf-dv": "akali/dptf.dv"
   }, 
@@ -162,6 +190,8 @@
     "/::test-label": "akali360", 
     "/audio/main::cras-config-dir": "akali360", 
     "/audio/main::ucm-suffix": "akali360", 
+    "/bluetooth/config::build-path": "akali360/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/akali360/main.conf", 
     "/power::touchpad-wakeup": "0", 
     "/thermal::dptf-dv": "akali360/dptf.dv"
   }, 
@@ -169,6 +199,8 @@
     "/::test-label": "bard", 
     "/audio/main::cras-config-dir": "bard", 
     "/audio/main::ucm-suffix": "bard", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "1", 
     "/thermal::dptf-dv": "bard/dptf.dv"
   }, 
@@ -176,6 +208,8 @@
     "/::test-label": "ekko", 
     "/audio/main::cras-config-dir": "ekko", 
     "/audio/main::ucm-suffix": "ekko", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "1", 
     "/thermal::dptf-dv": "ekko/dptf.dv"
   }, 
@@ -183,6 +217,8 @@
     "/::test-label": "nami", 
     "/audio/main::cras-config-dir": "nami", 
     "/audio/main::ucm-suffix": "nami", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "0", 
     "/thermal::dptf-dv": "nami/dptf.dv"
   }, 
@@ -190,6 +226,8 @@
     "/::test-label": "pantheon", 
     "/audio/main::cras-config-dir": "pantheon", 
     "/audio/main::ucm-suffix": "pantheon", 
+    "/bluetooth/config::build-path": "pantheon/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/pantheon/main.conf", 
     "/power::touchpad-wakeup": "0", 
     "/thermal::dptf-dv": "pantheon/dptf.dv"
   }, 
@@ -197,6 +235,8 @@
     "/::test-label": "sona", 
     "/audio/main::cras-config-dir": "sona", 
     "/audio/main::ucm-suffix": "sona", 
+    "/bluetooth/config::build-path": "sona/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/sona/main.conf", 
     "/power::touchpad-wakeup": "0", 
     "/thermal::dptf-dv": "sona/dptf.dv"
   }, 
@@ -204,6 +244,8 @@
     "/::test-label": "syndra", 
     "/audio/main::cras-config-dir": "syndra", 
     "/audio/main::ucm-suffix": "syndra", 
+    "/bluetooth/config::build-path": "common/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/common/main.conf", 
     "/power::touchpad-wakeup": "1", 
     "/thermal::dptf-dv": "syndra/dptf.dv"
   }, 
@@ -211,6 +253,8 @@
     "/::test-label": "vayne", 
     "/audio/main::cras-config-dir": "vayne", 
     "/audio/main::ucm-suffix": "vayne", 
+    "/bluetooth/config::build-path": "vayne/bluetooth/main.conf", 
+    "/bluetooth/config::system-path": "/etc/bluetooth/vayne/main.conf", 
     "/power::touchpad-wakeup": "0", 
     "/thermal::dptf-dv": "vayne/dptf.dv"
   }, 
