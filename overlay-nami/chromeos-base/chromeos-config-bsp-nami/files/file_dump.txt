@@ -1,0 +1,7 @@
+639b99e5efe08a5497a289ce1c278097 /build/nami/etc/bluetooth/main_common.conf
+2ac9fe0cf8c437efdc18491c5db77437 /build/nami/etc/bluetooth/main.conf
+a5d1ade6402be85fe65ae0eb4a32c1c1 /build/nami/etc/bluetooth/models/akali.conf
+abbc1a397edb7091299992e3f61eb1fa /build/nami/etc/bluetooth/models/sona.conf
+0f27647c53e200091f4b202c75825a36 /build/nami/etc/bluetooth/models/pantheon.conf
+a5d1ade6402be85fe65ae0eb4a32c1c1 /build/nami/etc/bluetooth/models/akali360.conf
+0d7fde281cc0d25e459db7c1709d11c9 /build/nami/etc/bluetooth/models/vayne.conf

@@ -1,0 +1,268 @@
+{
+  "GetArcFiles": [], 
+  "GetAudioFiles": [
+    [
+      "akali/audio/cras-config/dsp.ini", 
+      "/etc/cras/akali/dsp.ini"
+    ], 
+    [
+      "akali/audio/cras-config/kblda7219max", 
+      "/etc/cras/akali/kblda7219max"
+    ], 
+    [
+      "akali/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.akali/HiFi.conf"
+    ], 
+    [
+      "akali/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.akali/kblda7219max.akali.conf"
+    ], 
+    [
+      "akali360/audio/cras-config/dsp.ini", 
+      "/etc/cras/akali360/dsp.ini"
+    ], 
+    [
+      "akali360/audio/cras-config/kblda7219max", 
+      "/etc/cras/akali360/kblda7219max"
+    ], 
+    [
+      "akali360/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.akali360/HiFi.conf"
+    ], 
+    [
+      "akali360/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.akali360/kblda7219max.akali360.conf"
+    ], 
+    [
+      "bard/audio/cras-config/dsp.ini", 
+      "/etc/cras/bard/dsp.ini"
+    ], 
+    [
+      "bard/audio/cras-config/kblda7219max", 
+      "/etc/cras/bard/kblda7219max"
+    ], 
+    [
+      "bard/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.bard/HiFi.conf"
+    ], 
+    [
+      "bard/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.bard/kblda7219max.bard.conf"
+    ], 
+    [
+      "ekko/audio/cras-config/dsp.ini", 
+      "/etc/cras/ekko/dsp.ini"
+    ], 
+    [
+      "ekko/audio/cras-config/kblda7219max", 
+      "/etc/cras/ekko/kblda7219max"
+    ], 
+    [
+      "ekko/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.ekko/HiFi.conf"
+    ], 
+    [
+      "ekko/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.ekko/kblda7219max.ekko.conf"
+    ], 
+    [
+      "nami/audio/cras-config/dsp.ini", 
+      "/etc/cras/nami/dsp.ini"
+    ], 
+    [
+      "nami/audio/cras-config/kblda7219max", 
+      "/etc/cras/nami/kblda7219max"
+    ], 
+    [
+      "nami/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.nami/HiFi.conf"
+    ], 
+    [
+      "nami/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.nami/kblda7219max.nami.conf"
+    ], 
+    [
+      "pantheon/audio/cras-config/dsp.ini", 
+      "/etc/cras/pantheon/dsp.ini"
+    ], 
+    [
+      "pantheon/audio/cras-config/kblda7219max", 
+      "/etc/cras/pantheon/kblda7219max"
+    ], 
+    [
+      "pantheon/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.pantheon/HiFi.conf"
+    ], 
+    [
+      "pantheon/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.pantheon/kblda7219max.pantheon.conf"
+    ], 
+    [
+      "sona/audio/cras-config/dsp.ini", 
+      "/etc/cras/sona/dsp.ini"
+    ], 
+    [
+      "sona/audio/cras-config/kblda7219max", 
+      "/etc/cras/sona/kblda7219max"
+    ], 
+    [
+      "sona/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.sona/HiFi.conf"
+    ], 
+    [
+      "sona/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.sona/kblda7219max.sona.conf"
+    ], 
+    [
+      "syndra/audio/cras-config/dsp.ini", 
+      "/etc/cras/syndra/dsp.ini"
+    ], 
+    [
+      "syndra/audio/cras-config/kblda7219max", 
+      "/etc/cras/syndra/kblda7219max"
+    ], 
+    [
+      "syndra/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.syndra/HiFi.conf"
+    ], 
+    [
+      "syndra/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.syndra/kblda7219max.syndra.conf"
+    ], 
+    [
+      "vayne/audio/cras-config/dsp.ini", 
+      "/etc/cras/vayne/dsp.ini"
+    ], 
+    [
+      "vayne/audio/cras-config/kblda7219max", 
+      "/etc/cras/vayne/kblda7219max"
+    ], 
+    [
+      "vayne/audio/ucm-config/HiFi.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.vayne/HiFi.conf"
+    ], 
+    [
+      "vayne/audio/ucm-config/kblda7219max.conf", 
+      "/usr/share/alsa/ucm/kblda7219max.vayne/kblda7219max.vayne.conf"
+    ]
+  ], 
+  "GetFirmwareBuildCombinations": {}, 
+  "GetFirmwareBuildTargets_coreboot": [], 
+  "GetFirmwareBuildTargets_ec": [], 
+  "GetFirmwareInfo": {}, 
+  "GetFirmwareUris": [], 
+  "GetProperty_akali": {
+    "/::test-label": "akali", 
+    "/audio/main::cras-config-dir": "akali", 
+    "/audio/main::ucm-suffix": "akali", 
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "akali/dptf.dv"
+  }, 
+  "GetProperty_akali360": {
+    "/::test-label": "akali360", 
+    "/audio/main::cras-config-dir": "akali360", 
+    "/audio/main::ucm-suffix": "akali360", 
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "akali360/dptf.dv"
+  }, 
+  "GetProperty_bard": {
+    "/::test-label": "bard", 
+    "/audio/main::cras-config-dir": "bard", 
+    "/audio/main::ucm-suffix": "bard", 
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "bard/dptf.dv"
+  }, 
+  "GetProperty_ekko": {
+    "/::test-label": "ekko", 
+    "/audio/main::cras-config-dir": "ekko", 
+    "/audio/main::ucm-suffix": "ekko", 
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "ekko/dptf.dv"
+  }, 
+  "GetProperty_nami": {
+    "/::test-label": "nami", 
+    "/audio/main::cras-config-dir": "nami", 
+    "/audio/main::ucm-suffix": "nami", 
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "nami/dptf.dv"
+  }, 
+  "GetProperty_pantheon": {
+    "/::test-label": "pantheon", 
+    "/audio/main::cras-config-dir": "pantheon", 
+    "/audio/main::ucm-suffix": "pantheon", 
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "pantheon/dptf.dv"
+  }, 
+  "GetProperty_sona": {
+    "/::test-label": "sona", 
+    "/audio/main::cras-config-dir": "sona", 
+    "/audio/main::ucm-suffix": "sona", 
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "sona/dptf.dv"
+  }, 
+  "GetProperty_syndra": {
+    "/::test-label": "syndra", 
+    "/audio/main::cras-config-dir": "syndra", 
+    "/audio/main::ucm-suffix": "syndra", 
+    "/power::touchpad-wakeup": "1", 
+    "/thermal::dptf-dv": "syndra/dptf.dv"
+  }, 
+  "GetProperty_vayne": {
+    "/::test-label": "vayne", 
+    "/audio/main::cras-config-dir": "vayne", 
+    "/audio/main::ucm-suffix": "vayne", 
+    "/power::touchpad-wakeup": "0", 
+    "/thermal::dptf-dv": "vayne/dptf.dv"
+  }, 
+  "GetThermalFiles": [
+    [
+      "akali/dptf.dv", 
+      "/etc/dptf/akali/dptf.dv"
+    ], 
+    [
+      "akali360/dptf.dv", 
+      "/etc/dptf/akali360/dptf.dv"
+    ], 
+    [
+      "bard/dptf.dv", 
+      "/etc/dptf/bard/dptf.dv"
+    ], 
+    [
+      "ekko/dptf.dv", 
+      "/etc/dptf/ekko/dptf.dv"
+    ], 
+    [
+      "nami/dptf.dv", 
+      "/etc/dptf/nami/dptf.dv"
+    ], 
+    [
+      "pantheon/dptf.dv", 
+      "/etc/dptf/pantheon/dptf.dv"
+    ], 
+    [
+      "sona/dptf.dv", 
+      "/etc/dptf/sona/dptf.dv"
+    ], 
+    [
+      "syndra/dptf.dv", 
+      "/etc/dptf/syndra/dptf.dv"
+    ], 
+    [
+      "vayne/dptf.dv", 
+      "/etc/dptf/vayne/dptf.dv"
+    ]
+  ], 
+  "GetTouchFirmwareFiles": [], 
+  "GetWallpaperFiles": [], 
+  "ListModels": [
+    "akali", 
+    "akali360", 
+    "bard", 
+    "ekko", 
+    "nami", 
+    "pantheon", 
+    "sona", 
+    "syndra", 
+    "vayne"
+  ]
+}
