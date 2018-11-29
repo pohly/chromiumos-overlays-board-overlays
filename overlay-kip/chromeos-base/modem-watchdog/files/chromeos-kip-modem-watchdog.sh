@@ -22,7 +22,9 @@ if [ "$1" = '--daemonize' ]; then
 fi
 
 readonly LOG_TAG='modem-watchdog'
-readonly MODEM_USB_VID_PID='12d1:15bb'
+readonly MODEM_USB_VID='12d1'
+readonly MODEM_USB_PID='15bb'
+readonly MODEM_USB_VID_PID="${MODEM_USB_VID}:${MODEM_USB_PID}"
 readonly LOCK_FILE=/run/lock/chromeos-kip-modem-watchdog.lock
 
 # Empirically, it takes about ~10s on average for the modem object to show up
@@ -75,9 +77,32 @@ ec_power_modem() {
   fi
 }
 
+get_modem_devices() {
+  dbus-send --fixed --system --print-reply \
+    --dest=org.freedesktop.ModemManager1 \
+    /org/freedesktop/ModemManager1 \
+    org.freedesktop.DBus.ObjectManager.GetManagedObjects \
+    2>/dev/null | sed -nE 's|.*/Device (/sys/devices/.+)|\1|p'
+}
+
+match_modem_ids() {
+  local device="$1"
+  local vid="$2"
+  local pid="$3"
+
+  if ! grep -iqs "${vid}" "${device}/idVendor"; then
+    return 1
+  fi
+  if ! grep -iqs "${pid}" "${device}/idProduct"; then
+    return 1
+  fi
+  return 0
+}
+
 modem_watchdog() {
   local seconds=0
-  local modem_objects
+  local device
+  local modem_devices
 
   log_info "Start waiting for modem to be ready"
 
@@ -87,16 +112,19 @@ modem_watchdog() {
       return 2
     fi
 
-    modem_objects="$(mmcli --list-modems)"
+    modem_devices="$(get_modem_devices)"
     if [ $? -ne 0 ]; then
       log_warning "ModemManager isn't running? exiting watchdog"
       return 2
     fi
 
-    if echo "${modem_objects}" | grep -iq "${MODEM_USB_VID_PID}"; then
-      log_info "Found modem object for ${MODEM_USB_VID_PID}; exiting watchdog"
-      return
-    fi
+    for device in ${modem_devices}; do
+      if match_modem_ids "${device}" "${MODEM_USB_VID}" "${MODEM_USB_PID}"; then
+        log_info "Found modem object for ${MODEM_USB_VID_PID}; exiting watchdog"
+        return
+      fi
+    done
+
     sleep 1
     : $((seconds += 1))
   done
