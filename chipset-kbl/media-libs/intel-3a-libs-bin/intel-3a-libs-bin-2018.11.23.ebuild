@@ -8,7 +8,7 @@ inherit toolchain-funcs unpacker
 DESCRIPTION="Intel 3A library binaries required by the Intel camera HAL"
 SRC_URI="gs://chromeos-localmirror/distfiles/intel-3a-libs-bin-${PV}.tbz2"
 
-LICENSE="LICENSE.intel_3a_library"
+LICENSE="BSD-Intel+patent-grant"
 SLOT="0"
 KEYWORDS="-* amd64"
 

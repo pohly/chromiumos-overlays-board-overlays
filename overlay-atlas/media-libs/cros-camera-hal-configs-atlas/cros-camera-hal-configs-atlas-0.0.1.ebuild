@@ -7,7 +7,7 @@ KEYWORDS="-* amd64"
 
 DESCRIPTION="Chrome OS camera HAL config files for Atlas"
 
-LICENSE="Apache-2.0 LICENSE.intel_3a_library"
+LICENSE="Apache-2.0 BSD-Intel+patent-grant"
 SLOT="0"
 
 RDEPEND="!media-libs/arc-camera3-hal-configs-atlas"
