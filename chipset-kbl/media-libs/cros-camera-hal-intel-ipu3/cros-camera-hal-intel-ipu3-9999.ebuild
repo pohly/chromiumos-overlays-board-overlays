@@ -39,6 +39,7 @@ RDEPEND="
 	media-libs/cros-camera-libcamera_v4l2_device
 	media-libs/cros-camera-libcbm
 	media-libs/intel-3a-libs-bin
+	media-libs/intel-pvl-libs-bin
 	media-libs/libsync"
 
 DEPEND="${RDEPEND}
