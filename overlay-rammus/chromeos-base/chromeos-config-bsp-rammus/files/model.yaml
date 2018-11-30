@@ -44,6 +44,7 @@ common_config: &common_config
     $ucm-source-suffix: ""
   power:
     suspend-to-idle: "1"
+    set-wifi-transmit-power-for-tablet-mode: "1"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
