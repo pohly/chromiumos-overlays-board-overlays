@@ -3,17 +3,17 @@
 
 EAPI="6"
 
-CROS_WORKON_COMMIT="b2b17fce48803d7822e8e051d8e3de0228a1e141"
+CROS_WORKON_COMMIT="e0c91d66e431b8bcb5a7f68b991f27f0e0b72a92"
 CROS_WORKON_TREE="3428e8d94b255d079d4dbe3bf7a9c7e5f6b042f3"
 inherit cros-constants
 
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
 CROS_WORKON_LOCALNAME="../overlays/"
-CROS_WORKON_SUBTREE="overlay-grunt/chromeos-base/chromeos-config-bsp-grunt/files"
+CROS_WORKON_SUBTREE="overlay-sarien/chromeos-base/chromeos-config-bsp-sarien/files"
 
-inherit cros-model cros-unibuild cros-workon
+inherit cros-unibuild cros-workon
 
-DESCRIPTION="Chrome OS Model configuration package for grunt"
+DESCRIPTION="Chrome OS Model configuration package for sarien"
 HOMEPAGE="http://src.chromium.org"
 
 LICENSE="BSD-Google"
