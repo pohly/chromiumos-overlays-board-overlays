@@ -1,9 +1,9 @@
 # Copyright 2018 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=6
 
-CROS_WORKON_COMMIT="e0c91d66e431b8bcb5a7f68b991f27f0e0b72a92"
+CROS_WORKON_COMMIT="afbba424a5cc15b741f48fab6b8348a2da11a7ce"
 CROS_WORKON_TREE="3428e8d94b255d079d4dbe3bf7a9c7e5f6b042f3"
 inherit cros-constants
 
