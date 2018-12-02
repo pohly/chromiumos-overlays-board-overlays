@@ -46,7 +46,7 @@ device-config: &device_config
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
     set-wifi-transmit-power-for-tablet-mode: "1"
-    $touchpad-wakeup: "0"
+    $touchpad-wakeup: "1"
     touchpad-wakeup: "{{$touchpad-wakeup}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
@@ -81,7 +81,6 @@ chromeos:
           config: *unprovisioned_config
     - $device-name: "phaser"
       $fw-name: "Phaser"
-      $touchpad-wakeup: "1"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 1
@@ -108,7 +107,6 @@ chromeos:
           config: *unprovisioned_config
     - $device-name: "fleex"
       $fw-name: "Fleex"
-      $touchpad-wakeup: "1"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 1
@@ -128,7 +126,6 @@ chromeos:
           config: *device_config
     - $device-name: "orbatrix"
       $fw-name: "Fleex"
-      $touchpad-wakeup: "1"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 65
@@ -143,7 +140,6 @@ chromeos:
           config: *unprovisioned_config
     - $device-name: "bobba"
       $fw-name: "Bobba"
-      $touchpad-wakeup: "1"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 1
@@ -171,7 +167,6 @@ chromeos:
           config: *device_config
     - $device-name: "sparky"
       $fw-name: "Bobba"
-      $touchpad-wakeup: "1"
       skus:
         - $sku-id-val: 17
           $num-mic-locations: 2
@@ -220,7 +215,6 @@ chromeos:
       $num-mic-locations: 1
       $ucm_src_root: "{{$device-name}}"
       $ucm_extra_suffix: "{{$device-name}}"
-      $touchpad-wakeup: "1"
       skus:
         - $sku-id-val: 17
           config: *device_config
