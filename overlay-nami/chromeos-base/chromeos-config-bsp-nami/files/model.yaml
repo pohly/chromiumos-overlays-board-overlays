@@ -198,13 +198,13 @@ chromeos:
           $brand-code: "ZZCR"
           $key-id: "AKALI"
       skus:
-        - $sku-id: 0x118e3
+        - $sku-id: 0x10118e3
           config: *device_specific_audio_device_config
-        - $sku-id: 0x18e3
+        - $sku-id: 0x10018e3
           config: *device_specific_audio_device_config
-        - $sku-id: 0x118e1
+        - $sku-id: 0x10118e1
           config: *device_specific_audio_device_config
-        - $sku-id: 0x18e1
+        - $sku-id: 0x10018e1
           config: *device_specific_audio_device_config
     - $device-name: "bard"
       $touchpad-wakeup: "1"
@@ -213,11 +213,11 @@ chromeos:
           $brand-code: "ZZCR"
           $key-id: "AKALI"
       skus:
-        - $sku-id: 0x19ce3
+        - $sku-id: 0x1019ce3
           config: *device_specific_audio_device_config
-        - $sku-id: 0x9ce3
+        - $sku-id: 0x1009ce3
           config: *device_specific_audio_device_config
-        - $sku-id: 0x19ce1
+        - $sku-id: 0x1019ce1
           config: *device_specific_audio_device_config
-        - $sku-id: 0x9ce1
+        - $sku-id: 0x1009ce1
           config: *device_specific_audio_device_config
