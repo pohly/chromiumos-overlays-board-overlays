@@ -50,6 +50,10 @@ device-config: &device_config
     set-wifi-transmit-power-for-tablet-mode: "1"
     $touchpad-wakeup: "1"
     touchpad-wakeup: "{{$touchpad-wakeup}}"
+    # At least one panel requires 5% PWM for correct function.
+    # Max brightness is 19200, as reported by
+    # /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/max_brightness
+    min-visible-backlight-level: "960"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
