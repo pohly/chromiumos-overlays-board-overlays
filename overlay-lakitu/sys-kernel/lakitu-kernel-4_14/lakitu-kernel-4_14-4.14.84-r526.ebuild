@@ -18,7 +18,7 @@ STRIP_MASK+=" *.ko"
 DESCRIPTION="Chromium OS Linux Kernel 4.14"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="*"
-IUSE="module_sign"
+IUSE="module_sign gpu"
 
 src_configure() {
 	if use module_sign ; then
@@ -27,8 +27,16 @@ src_configure() {
 		mkdir -p "$(cros-workon_get_build_dir)/certs"
 		cp -f "${FILESDIR}/x509.genkey" \
 			"$(cros-workon_get_build_dir)/certs/x509.genkey" || die
-		cp -f "${FILESDIR}/testing_trusted_key.pem" \
-			"$(cros-workon_get_build_dir)/certs/trusted_key.pem" || die
+		# Different board use different root key.
+		if use gpu ; then
+			# The root key belongs to lakitu-gpu board.
+			cp -f "${FILESDIR}/lakitu_gpu_root_cert.pem" \
+				"$(cros-workon_get_build_dir)/certs/trusted_key.pem" || die
+		else
+			# The root key belongs to lakitu_next board.
+			cp -f "${FILESDIR}/testing_trusted_key.pem" \
+				"$(cros-workon_get_build_dir)/certs/trusted_key.pem" || die
+		fi
 	fi
 	cros-kernel2_src_configure
 }
