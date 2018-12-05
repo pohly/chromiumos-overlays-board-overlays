@@ -38,13 +38,15 @@
             <control.availableSceneModes value="DISABLED"/>
             <control.availableVideoStabilizationModes value="OFF"/>
             <control.maxRegions value="1,0,1"/>
+            <!-- EDGE -->
+            <edge.availableEdgeModes value="OFF"/>
             <!-- JPEG -->
             <jpeg.maxSize value="19869696"/>  <!-- 4224*3136*1.5 -->
             <jpeg.availableThumbnailSizes value="0,0,160,120,320,180,320,240"/> <!-- INCREASING ORDER -->
             <!-- Lens Info-->
             <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="3.65,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableFocalLengths value="3.65"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.minimumFocusDistance value="0.1"/> <!-- HAL may override this value from CMC for RAW sensors -->
@@ -78,6 +80,7 @@
                 control.mode,
                 control.sceneMode,
                 control.videoStabilizationMode,
+                edge.mode,
                 flash.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
@@ -86,6 +89,7 @@
                 jpeg.thumbnailSize,
                 scaler.cropRegion,
                 statistics.faceDetectMode,
+                hotPixel.mode,
                 lens.focalLength,
                 lens.aperture,
                 lens.focusDistance,
@@ -118,6 +122,7 @@
                 control.afState,
                 control.awbState,
                 sync.frameNumber,
+                edge.mode,
                 flash.mode,
                 hotPixel.mode,
                 jpeg.gpsLocation,
@@ -197,7 +202,7 @@
                                                    BLOB,320x240,33333333" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
-            <sensor.info.activeArraySize value="48,40,4208,3118"/>
+            <sensor.info.activeArraySize value="0,0,4208,3118"/>
             <sensor.info.sensitivityRange value="32,2400"/>
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
@@ -238,7 +243,7 @@
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
             <!-- Hot Pixel -->
-            <hotPixel.availableHotPixelModes value="FAST"/>
+            <hotPixel.availableHotPixelModes value="OFF"/>
             <!-- Noise Reduction -->
             <noiseReduction.availableNoiseReductionModes value="OFF"/>
 
