@@ -5,7 +5,7 @@
 EAPI=5
 
 inherit appid
-inherit cros-unibuild
+inherit cros-unibuild udev
 
 DESCRIPTION="Octopus board-specific ebuild that pulls in necessary ebuilds as
 dependencies or portage actions."
@@ -42,4 +42,7 @@ src_install() {
 
 	unibuild_install_audio_files
 	unibuild_install_thermal_files
+
+	# Configure Pen Eject as a wakeup source
+	udev_dorules "${FILESDIR}/93-powerd-overrides.rules"
 }
