@@ -8,6 +8,15 @@
     # common is the standard layout template.
     "common": [
       {
+        # Special partition for firmware dignostics data
+        "num": 9,
+        "size": "1 MiB",
+        "fs_format": "vfat",
+        "label": "DIAGNOSTICS",
+        "type": "data",
+        "uuid": "clear"
+      },
+      {
         # Slot B rootfs. Updated for more space, like Slot A below
         "num": 5,
         "size": "4096 MiB"
