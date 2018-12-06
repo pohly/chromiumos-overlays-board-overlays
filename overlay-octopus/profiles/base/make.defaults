@@ -23,6 +23,9 @@ USE="${USE} arc"
 # Avoid inhibiting the keyboard (which reports events from side buttons).
 USE="${USE} keyboard_includes_side_buttons"
 
+# Add internal stylus
+USE="${USE} internal_stylus"
+
 # Include the wacom firmware updating tool
 INPUT_DEVICES="wacom"
 # Include the weida firmware updating tool
