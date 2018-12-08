@@ -1,0 +1,21 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} flapjack"
+
+# Building EC
+#USE="${USE} cros_ec bootblock_in_ec"
+
+USE="${USE} touch_centric_device"
+
+EC_FIRMWARE="flapjack"
+
+# Uncomment these lines to activate the serial port.
+# Enable kernel serial drivers
+USE="${USE} pcserial"
+# Declare set of enabled consoles
+TTY_CONSOLE="ttyS0"
