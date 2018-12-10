@@ -9,6 +9,8 @@ USE="${USE} kukui"
 
 USE="${USE} bootimage"
 
+USE="${USE} detachable_ui"
+
 # Building EC
 USE="${USE} cros_ec bootblock_in_ec"
 
