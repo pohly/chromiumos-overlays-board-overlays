@@ -16,10 +16,6 @@
 
 <CameraSettings>
     <Profiles cameraId="0" name="ov13858">
-        <Supported_hardware>
-            <hwType value="SUPPORTED_HW_IPU3"/>
-        </Supported_hardware>
-
         <Android_metadata> <!-- Android static metadata only -->
             <!-- Color Correction -->
             <colorCorrection.availableAberrationModes value="OFF"/>
@@ -278,10 +274,6 @@
     </Profiles>
 
     <Profiles cameraId="1" name="ov5670">
-        <Supported_hardware>
-            <hwType value="SUPPORTED_HW_IPU3"/>
-        </Supported_hardware>
-
         <Android_metadata> <!-- Android static metadata only -->
             <!-- Color Correction -->
             <colorCorrection.availableAberrationModes value="OFF"/>
