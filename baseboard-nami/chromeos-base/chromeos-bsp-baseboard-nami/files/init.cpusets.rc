@@ -1,0 +1,9 @@
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Pantheon has 0-7 cpus instead of the default 0-3, so it needs custom
+# cpus assignment.
+on property:sys.boot_completed=1
+    copy /dev/cpuset/cpus /dev/cpuset/foreground/cpus
+    copy /dev/cpuset/cpus /dev/cpuset/top-app/cpus
