@@ -14,6 +14,10 @@ inherit cros-unibuild
 
 S=${WORKDIR}
 
+RDEPEND="
+	!<chromeos-base/chromeos-config-bsp-coral-private-0.0.1-r1102
+"
+
 # From an ideological purity perspective, this DEPEND should be there, but
 # it can't be, since otherwise we end up with circular dependencies.
 # DEPEND="virtual/chromeos-bsp"
