@@ -26,7 +26,7 @@ device-config: &device_config
       $ucm_src_root: "common"
       $ucm_extra_suffix: ""
       $ucm_root: "/usr/share/alsa/ucm"
-      $card: "glkda7219max"
+      $card: "sof-glkda7219max"
       cras-config-dir: "{{$device-name}}"
       ucm-suffix: "{{$num-mic-locations}}mic{{$ucm_extra_suffix}}"
       files:
@@ -206,6 +206,7 @@ chromeos:
       $fw-name: "Meep"
       $ucm_src_root: "meep"
       $ucm_extra_suffix: "meep"
+      $card: "glkda7219max"
       skus:
         - $sku-id-val: 1
           $num-mic-locations: 2
@@ -221,6 +222,7 @@ chromeos:
       $num-mic-locations: 1
       $ucm_src_root: "meep"
       $ucm_extra_suffix: "meep"
+      $card: "glkda7219max"
       skus:
         - $sku-id-val: 17
           config: *device_config
