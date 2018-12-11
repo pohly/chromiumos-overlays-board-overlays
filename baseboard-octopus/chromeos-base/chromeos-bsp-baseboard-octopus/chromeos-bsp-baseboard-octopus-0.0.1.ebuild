@@ -4,7 +4,6 @@
 EAPI=5
 
 inherit appid
-inherit cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -21,9 +20,3 @@ RDEPEND="
 	chromeos-base/sof-topology
 "
 DEPEND="${RDEPEND}"
-
-src_install() {
-	# Install audio config files
-	local audio_config_dir="${FILESDIR}/audio-config"
-	install_audio_configs octopus "${audio_config_dir}"
-}
