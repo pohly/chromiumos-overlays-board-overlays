@@ -204,8 +204,8 @@ chromeos:
           config: *unprovisioned_config
     - $device-name: "meep"
       $fw-name: "Meep"
-      $ucm_src_root: "{{$device-name}}"
-      $ucm_extra_suffix: "{{$device-name}}"
+      $ucm_src_root: "meep"
+      $ucm_extra_suffix: "meep"
       skus:
         - $sku-id-val: 1
           $num-mic-locations: 2
@@ -219,8 +219,8 @@ chromeos:
     - $device-name: "mimrock"
       $fw-name: "Meep"
       $num-mic-locations: 1
-      $ucm_src_root: "{{$device-name}}"
-      $ucm_extra_suffix: "{{$device-name}}"
+      $ucm_src_root: "meep"
+      $ucm_extra_suffix: "meep"
       skus:
         - $sku-id-val: 17
           config: *device_config
@@ -239,8 +239,8 @@ chromeos:
       # TODO(OEM): need update later
       $num-mic-locations: 2
       $card: "glkrt5682max"
-      $ucm_src_root: "{{$device-name}}"
-      $ucm_extra_suffix: "{{$device-name}}"
+      $ucm_src_root: "ampton"
+      $ucm_extra_suffix: "ampton"
       skus:
         - $sku-id-val: 1
           config: *device_config
@@ -255,8 +255,8 @@ chromeos:
       # TODO(OEM): need update later
       $num-mic-locations: 2
       $card: "glkrt5682max"
-      $ucm_src_root: "{{$device-name}}"
-      $ucm_extra_suffix: "{{$device-name}}"
+      $ucm_src_root: "ampton"
+      $ucm_extra_suffix: "ampton"
       skus:
         - $sku-id-val: 17
           config: *device_config
