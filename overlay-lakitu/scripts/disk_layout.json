@@ -27,7 +27,13 @@
       {
         # STATE
         "num": 1,
-        "size": "4966 MiB"
+        "size": "4966 MiB",
+        "fs_options": {
+          # A consequence of this option is that some file system
+          # structures are initialized lazily when resizing,
+          # resulting in much faster resize2fs invocations.
+          "ext4": "-O metadata_csum"
+        }
       }
     ]
   }
