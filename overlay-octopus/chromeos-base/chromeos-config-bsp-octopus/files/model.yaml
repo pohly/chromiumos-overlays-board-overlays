@@ -31,7 +31,7 @@ device-config: &device_config
       ucm-suffix: "{{$num-mic-locations}}mic{{$ucm_extra_suffix}}"
       files:
         # Volume Curve
-        - source: "{{$device-name}}/audio/cras-config/{{$card}}"
+        - source: "{{$device-name}}/audio/cras-config/card_settings"
           destination: "{{$cras_root}}/{{cras-config-dir}}/{{$card}}"
         # EQ/DRC DSP configuration
         - source: "{{$device-name}}/audio/cras-config/dsp.ini"
