@@ -23,12 +23,16 @@
 					};
 				};
 			};
-			// TODO(OEM): Temporarily inherit rabbid's audio configurations.
 			rabbid_rugged: rabbid-rugged {
 				audio {
 					main {
-						audio-type = <&audio_type_2mic>;
-						cras-config-dir = "rabbid";
+						card = "bxtda7219max";
+						cras-config-dir = "rabbid_rugged";
+						ucm-suffix = "2micRabbid_rugged";
+						volume = "${cras-config-dir}/audio/cras-config/${card}";
+						dsp-ini = "${cras-config-dir}/audio/cras-config/dsp.ini";
+						hifi-conf = "${cras-config-dir}/audio/ucm-config/2mic/HiFi";
+						alsa-conf = "${cras-config-dir}/audio/ucm-config/2mic/${card}.conf";
 					};
 				};
 			};
