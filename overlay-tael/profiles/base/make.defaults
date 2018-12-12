@@ -11,6 +11,9 @@ BOARD_COMPILER_FLAGS="-march=armv7-a -mtune=cortex-a15 -mfpu=neon -mfloat-abi=ha
 # Initial value just for style purposes.
 USE=""
 
+# Enable VM Containers
+USE="${USE} vm-containers"
+
 USE="${USE} device_tree"
 USE="${USE} hardfp"
 USE="${USE} neon"

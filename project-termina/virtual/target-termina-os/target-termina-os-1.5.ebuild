@@ -9,19 +9,21 @@ HOMEPAGE="http://dev.chromium.org/"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE=""
+IUSE="vm-containers"
 
 RDEPEND="
 	app-arch/bzip2
 	app-arch/gzip
 	app-arch/tar
 	app-arch/xz-utils
-	app-emulation/lxd
+	vm-containers? (
+		app-emulation/lxd
+		chromeos-base/termina_container_tools
+		chromeos-base/tremplin
+		chromeos-base/termina-lxd-scripts
+	)
 	chromeos-base/chromeos-bsp-termina
 	chromeos-base/minijail
-	chromeos-base/termina_container_tools
-	chromeos-base/termina-lxd-scripts
-	chromeos-base/tremplin
 	chromeos-base/vm_guest_tools
 	sys-apps/iproute2
 	sys-auth/pambase

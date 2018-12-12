@@ -4,3 +4,9 @@
 
 # tatl doesn't use splitconfig.
 CHROMEOS_KERNEL_CONFIG="arch/x86/configs/chromiumos-container-vm-x86_64_defconfig"
+
+# Initial value just for style purposes.
+USE=""
+
+# Enable VM Containers
+USE="${USE} vm-containers"
