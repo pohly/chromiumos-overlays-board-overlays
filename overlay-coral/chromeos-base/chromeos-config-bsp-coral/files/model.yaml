@@ -327,7 +327,12 @@ chromeos:
           $key-id: "CORALG"
       skus:
         - $sku-id: 28
-          config: *device_config
+          config:
+            <<: *device_config
+            $cras: "rabbid_rugged"
+            $ucm-device: "rabbid_rugged"
+            $ucm: "2mic"
+            $ucm-target-suffix: "Rabbid_rugged"
         - $sku-id: 31
           config:
             <<: *device_config
