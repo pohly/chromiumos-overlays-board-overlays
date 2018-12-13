@@ -13,17 +13,17 @@ if [[ ${PV} = *9999* ]]; then
 else
 	DOCKER_GITCOMMIT="4d60db4"
 	SRC_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="*"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
 	inherit golang-vcs-snapshot
 fi
-inherit bash-completion-r1 golang-base linux-info systemd udev user
+inherit bash-completion-r1 eutils golang-base linux-info toolchain-funcs systemd udev user
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
 HOMEPAGE="https://dockerproject.org"
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="apparmor aufs btrfs +container-init device-mapper hardened +overlay pkcs11 seccomp"
+IUSE="apparmor aufs btrfs +container-init device-mapper hardened +overlay pigz pkcs11 seccomp"
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#build-dependencies
 CDEPEND="
@@ -33,12 +33,11 @@ CDEPEND="
 	)
 	seccomp? ( >=sys-libs/libseccomp-2.2.1 )
 	apparmor? ( sys-libs/libapparmor )
+	sys-apps/systemd
 "
 
 DEPEND="
 	${CDEPEND}
-
-	dev-go/go-md2man
 
 	btrfs? (
 		>=sys-fs/btrfs-progs-3.16.1
@@ -55,18 +54,27 @@ RDEPEND="
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
 	~app-emulation/containerd-1.1.2
-	~app-emulation/runc-1.0.0_rc5_p20180509[apparmor?,seccomp?]
+	>=app-emulation/runc-1.0.0_rc5_p20180509[apparmor?,seccomp?]
 	~app-emulation/docker-proxy-0.8.0_p20180907
 	container-init? ( >=sys-process/tini-0.18.0[static] )
+	pigz? ( app-arch/pigz )
 "
 
 RESTRICT="installsources strip"
 
 S="${WORKDIR}/${P}/src/${EGO_PN}"
 
-PATCHES=( "${FILESDIR}"/bsc1073877-docker-apparmor-add-signal-r2.patch )
+PATCHES=(
+	"${FILESDIR}"/bsc1073877-docker-apparmor-add-signal-r2.patch
+	"${FILESDIR}"/docker-18.09.0-go-cross-compilation.patch
+	"${FILESDIR}"/docker-18.06.0-log-line-max-size.patch
+	"${FILESDIR}"/docker-18.06.0-customize-docker-service.patch
+)
 
 # see "contrib/check-config.sh" from upstream's sources
+# lakitu: Don't check the following configs as they are not enabled.
+#   ~CRYPTO_GCM ~CRYPTO_GHASH
+# TODO(mikewu): enable the configs after we fully understand the consequence.
 CONFIG_CHECK="
 	~NAMESPACES ~NET_NS ~PID_NS ~IPC_NS ~UTS_NS
 	~CGROUPS ~CGROUP_CPUACCT ~CGROUP_DEVICE ~CGROUP_FREEZER ~CGROUP_SCHED ~CPUSETS ~MEMCG
@@ -90,7 +98,7 @@ CONFIG_CHECK="
 	~IP_VS ~IP_VS_PROTO_TCP ~IP_VS_PROTO_UDP ~IP_VS_NFCT ~IP_VS_RR
 
 	~VXLAN
-	~CRYPTO ~CRYPTO_AEAD ~CRYPTO_GCM ~CRYPTO_SEQIV ~CRYPTO_GHASH ~XFRM_ALGO ~XFRM_USER
+	~CRYPTO ~CRYPTO_AEAD ~CRYPTO_SEQIV ~XFRM_ALGO ~XFRM_USER
 	~IPVLAN
 	~MACVLAN ~DUMMY
 "
@@ -214,6 +222,13 @@ src_compile() {
 		grep -q -- '-fno-PIC' hack/make/dynbinary-daemon || die 'hardened sed failed'
 	fi
 
+	# enable journald
+	DOCKER_BUILDTAGS+=" journald"
+
+	export GOTRACEBACK="crash"
+	GO=$(tc-getGO)
+	export GO
+	echo "GO compiler: '${GO}'"
 	# build daemon
 	VERSION="$(cat ../../VERSION)" \
 	./hack/make.sh dynbinary || die 'dynbinary failed'
@@ -230,12 +245,14 @@ src_compile() {
 		DISABLE_WARN_OUTSIDE_CONTAINER=1 \
 		dynbinary || die
 
-	# build man pages
-	go build -o gen-manpages github.com/docker/cli/man || die
-	./gen-manpages --root . --target ./man/man1 || die
-	./man/md2man-all.sh -q || die
-	rm gen-manpages || die
-	# see "components/cli/scripts/docs/generate-man.sh" (which also does "go get" for go-md2man)
+	# lakitu: Don't build the man pages. This also helps us avoid the
+	# dependency on dev-go/go-md2man.
+	# # build man pages
+	# go build -o gen-manpages github.com/docker/cli/man || die
+	# ./gen-manpages --root . --target ./man/man1 || die
+	# ./man/md2man-all.sh -q || die
+	# rm gen-manpages || die
+	# # see "components/cli/scripts/docs/generate-man.sh" (which also does "go get" for go-md2man)
 
 	popd || die # components/cli
 }
@@ -253,15 +270,18 @@ src_install() {
 	newconfd contrib/init/openrc/docker.confd docker
 
 	systemd_dounit contrib/init/systemd/docker.{service,socket}
+	systemd_enable_service sockets.target docker.socket
+	systemd_enable_service multi-user.target docker.service
 
 	udev_dorules contrib/udev/*.rules
 
+	# lakitu: No need to install development related tools
 	dodoc AUTHORS CONTRIBUTING.md CHANGELOG.md NOTICE README.md
-	dodoc -r docs/*
+	# dodoc -r docs/*
 
-	insinto /usr/share/vim/vimfiles
-	doins -r contrib/syntax/vim/ftdetect
-	doins -r contrib/syntax/vim/syntax
+	# insinto /usr/share/vim/vimfiles
+	# doins -r contrib/syntax/vim/ftdetect
+	# doins -r contrib/syntax/vim/syntax
 
 	# note: intentionally not using "doins" so that we preserve +x bits
 	dodir /usr/share/${PN}/contrib
@@ -272,14 +292,26 @@ src_install() {
 
 	newbin build/docker-* docker
 
-	doman man/man*/*
+	# doman man/man*/*
 
-	dobashcomp contrib/completion/bash/*
-	insinto /usr/share/fish/vendor_completions.d/
-	doins contrib/completion/fish/docker.fish
-	insinto /usr/share/zsh/site-functions
-	doins contrib/completion/zsh/_*
+	# dobashcomp contrib/completion/bash/*
+	# insinto /usr/share/fish/vendor_completions.d/
+	# doins contrib/completion/fish/docker.fish
+	# insinto /usr/share/zsh/site-functions
+	# doins contrib/completion/zsh/_*
 	popd || die # components/cli
+
+	# lakitu: Install the dockercfg_update.sh script which allows Docker to
+	# access the convoy registry. The script is taken from
+	# https://storage.googleapis.com/speckle-umbrella/bin/dockercfg-update.sh.
+	# TODO(mikewu): send CLs to suggest use docker-credential-gcr and then
+	# drop dockercfg_update.sh.
+	exeinto /usr/share/google
+	doexe "${FILESDIR}"/dockercfg_update.sh
+
+	# Install Docker daemon configuration file
+	insinto /etc/docker
+	newins "${FILESDIR}/docker-${PV}-daemon.json" daemon.json
 }
 
 pkg_postinst() {
