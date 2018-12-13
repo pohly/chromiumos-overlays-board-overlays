@@ -10,8 +10,8 @@ audio_common: &audio_common
     $ucm_root: "/usr/share/alsa/ucm"
     $card: "kblda7219max"
 
-    cras-config-dir: "{{$cras}}"
-    ucm-suffix: "{{$ucm}}"
+    cras-config-dir: "{{$device-name}}"
+    ucm-suffix: "{{$device-name}}"
 
     $cras-source: "{{cras-config-dir}}/audio/cras-config"
     $cras-dest: "{{$cras_root}}/{{cras-config-dir}}"
@@ -28,7 +28,7 @@ audio_common: &audio_common
       - source: "{{$ucm-source}}/{{$card}}.conf"
         destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
 
-common_config: &common_config
+device_config: &device_config
   name: "{{$device-name}}"
   identity:
     platform-name: "Kalista"
@@ -39,8 +39,6 @@ common_config: &common_config
   test-label: "{{$device-name}}"
   audio:
     <<: *audio_common
-    $cras: "common"
-    $ucm: "common" # Default
     $ucm-source-suffix: ""
   power:
     suspend-to-idle: "0"
@@ -51,4 +49,4 @@ chromeos:
       $fw-name: "Karma"
       skus:
         - $sku-id: 0x7
-          config: *common_config
+          config: *device_config
