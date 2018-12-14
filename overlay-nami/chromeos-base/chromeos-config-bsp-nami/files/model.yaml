@@ -189,6 +189,22 @@ chromeos:
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
+        - $sku-id: 0x6bc63
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x6bc62
+          config:
+            <<: *device_specific_audio_device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
+        - $sku-id: 0x6bc61
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x6bc60
+          config:
+            <<: *device_specific_audio_device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
     - $device-name: "vayne"
       $bluetooth-device: "{{$device-name}}"
       products:
