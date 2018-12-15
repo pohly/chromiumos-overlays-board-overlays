@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="85e6e13ae4e3ba22f1970ebfe66610866e89132d"
-CROS_WORKON_TREE="f3d756b511089ecead59971d3c1b00ca369a4231"
+CROS_WORKON_COMMIT="80eda34b109abf5118e6c1fd2c4be29048b1cef5"
+CROS_WORKON_TREE="7e526af2a180321c53cf4c9c4fba5685e61461ec"
 CROS_WORKON_PROJECT="chromiumos/platform/cobble"
 CROS_WORKON_LOCALNAME="../platform/cobble"
 CROS_WORKON_SUBTREE="grub-lakitu"
