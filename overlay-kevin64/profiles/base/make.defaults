@@ -9,8 +9,6 @@ USE="${USE} -opengl opengles"
 
 # TODO: Re-enable these when the corresponding packages are fixed
 USE="${USE} -tts -nacl"
-# sci-libs/tensorflow currently can't be built on arm64.
-USE="${USE} -ml_service"
 
 VIDEO_CARDS="rockchip"
 
