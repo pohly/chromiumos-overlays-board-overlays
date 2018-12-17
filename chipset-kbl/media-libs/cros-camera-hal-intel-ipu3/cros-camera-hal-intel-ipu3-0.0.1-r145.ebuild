@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="2c97d8ef1c3a2c0eb415379ebe4ab10c9ea51f93"
-CROS_WORKON_TREE="a5d16e3c02ee702453ee6e3b64c84b54cac9f715"
+CROS_WORKON_COMMIT="3dd594afc0e6b489d80357bf203f24b8e1efc746"
+CROS_WORKON_TREE="21ce58a4a4ed2f9963193dbecb7ffa2192826cce"
 CROS_WORKON_PROJECT="chromiumos/platform/arc-camera"
 CROS_WORKON_LOCALNAME="../platform/arc-camera"
 
