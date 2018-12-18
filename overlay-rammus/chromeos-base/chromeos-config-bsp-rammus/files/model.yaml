@@ -45,6 +45,10 @@ common_config: &common_config
   power:
     suspend-to-idle: "1"
     set-wifi-transmit-power-for-tablet-mode: "1"
+    $internal-backlight-no-als-ac-brightness: "62.5"
+    internal-backlight-no-als-ac-brightness: "{{$internal-backlight-no-als-ac-brightness}}"
+    $internal-backlight-no-als-battery-brightness: "56.27"
+    internal-backlight-no-als-battery-brightness: "{{$internal-backlight-no-als-battery-brightness}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
