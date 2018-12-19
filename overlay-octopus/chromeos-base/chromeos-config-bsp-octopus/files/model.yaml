@@ -249,10 +249,10 @@ chromeos:
     - $device-name: "apel"
       $fw-name: "Ampton"
       # TODO(OEM): need update later
-      $num-mic-locations: 2
-      $card: "glkrt5682max"
-      $ucm_src_root: "ampton"
-      $ucm_extra_suffix: "ampton"
+      $num-mic-locations: 1
+      $card: "sof-glkrt5682max"
+      $ucm_src_root: "apel"
+      $ucm_extra_suffix: "apel"
       skus:
         - $sku-id-val: 17
           config: *device_config
