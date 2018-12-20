@@ -16,3 +16,6 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} i915_kbl"
 
 # Specify default kernel
 USE="${USE} kernel-4_19"
+
+# Enable DPTF
+USE="${USE} dptf"
