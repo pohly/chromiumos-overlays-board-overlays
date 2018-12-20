@@ -8,6 +8,10 @@ CHASSIS_ID="HANA"
 
 if [ "${CHASSIS}" = "MAPLE14" ]; then
 	CHASSIS_ID="MAPLE14"
+elif [ "${CHASSIS}" = "SYCAMORE" ]; then
+        CHASSIS_ID="SYCAMORE"
+elif [ "${CHASSIS}" = "SYCAMORE360" ]; then
+        CHASSIS_ID="SYCAMORE360"
 fi
 
 echo "/etc/cras/${CHASSIS_ID}"
