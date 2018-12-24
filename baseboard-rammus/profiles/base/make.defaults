@@ -48,6 +48,5 @@ USE="${USE} keyboard_includes_side_buttons"
 # Add keyboard backlight detection
 USE="${USE} has_keyboard_backlight"
 
-# (TODO b:110006063): Turn on if the stylus need to be supported.
 # enable stylus ui
-# USE="${USE} internal_stylus"
+USE="${USE} internal_stylus"
