@@ -4,8 +4,7 @@
 
 EAPI=5
 
-inherit appid
-inherit cros-unibuild
+inherit appid cros-unibuild udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -30,4 +29,7 @@ src_install() {
 
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/common/bluetooth/main.conf"
+
+	# Install udev rules
+	udev_dorules "${FILESDIR}"/udev/*.rules
 }
