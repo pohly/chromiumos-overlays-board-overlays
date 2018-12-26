@@ -49,6 +49,8 @@ common_config: &common_config
     internal-backlight-no-als-ac-brightness: "{{$internal-backlight-no-als-ac-brightness}}"
     $internal-backlight-no-als-battery-brightness: "56.27"
     internal-backlight-no-als-battery-brightness: "{{$internal-backlight-no-als-battery-brightness}}"
+    $keyboard-backlight-no-als-brightness: "30.0"
+    keyboard-backlight-no-als-brightness: "{{$keyboard-backlight-no-als-brightness}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
