@@ -1,0 +1,1 @@
+sof-binary-1.8.ebuild
