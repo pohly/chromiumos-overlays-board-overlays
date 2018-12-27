@@ -33,7 +33,7 @@ main() {
   done
 
   case "${hardware_id}" in
-    "af06_135c"|"e509_0710")
+    "af06_135c"|"e509_0710"|"af06_145c"|"e509_0770")
       ## af06(AUO), e509(BOE)
       echo "${hardware_id}"
       ;;
