@@ -13,6 +13,7 @@ readonly DUMPFILE_LN="/var/kdump"
 readonly ESP_PARTITION="/dev/sda12"
 readonly KDUMP_KERNEL="/boot/kdump/vmlinuz"
 readonly PROG_NAME="$(basename ${0})"
+readonly CRASHKERNEL_SIZE="0M-8G:64M,8G-32G:128M,32G-128G:256M,128G-:512M"
 
 
 #
@@ -109,7 +110,8 @@ construct_commandline() {
 kdump_enable() {
   local dir="$(mktemp -d)"
   mount "${ESP_PARTITION}" "${dir}"
-  sed "s/ cros_efi / cros_efi crashkernel=128M /g" -i "${dir}/efi/boot/grub.cfg"
+  sed "s/ cros_efi / cros_efi crashkernel=${CRASHKERNEL_SIZE} /g" \
+    -i "${dir}/efi/boot/grub.cfg"
   sync
   umount "${dir}"
   rm -rf "${dir}"
@@ -124,7 +126,7 @@ kdump_enable() {
 kdump_disable() {
   local dir="$(mktemp -d)"
   mount "${ESP_PARTITION}" "${dir}"
-  sed "s/ crashkernel=128M//g" -i "${dir}/efi/boot/grub.cfg"
+  sed "s/ crashkernel=[^[:space:]]*//g" -i "${dir}/efi/boot/grub.cfg"
   sync
   umount "${dir}"
   rm -rf "${dir}"
