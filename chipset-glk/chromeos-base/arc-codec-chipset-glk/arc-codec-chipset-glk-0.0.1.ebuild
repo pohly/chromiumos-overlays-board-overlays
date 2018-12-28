@@ -17,6 +17,5 @@ RDEPEND="!chromeos-base/arc-codec-software"
 
 src_install() {
 	insinto "${ARC_VENDOR_DIR}/etc/"
-	doins "${FILESDIR}/media_codecs.xml"
-	doins "${FILESDIR}/media_codecs_performance.xml"
+	doins "${FILESDIR}"/*
 }
