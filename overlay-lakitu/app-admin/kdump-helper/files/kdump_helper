@@ -86,17 +86,18 @@ check_kdump_enabled() {
 # 1. noinitrd console=ttyS0: Same as primary kernel commandline.
 # 2. maxcpus=1: Because kdump kernel functionality only supports single CPU.
 # 3. root=PARTUUID=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX:
-#    UUID of the block device containing the rootfs.
+#    UUID of the block device containing the rootfs (reusing the one of primary
+#    kernel).
 # 4. ${BOOT_TARGET}: The userspace target used for kernel dump.
 #
 construct_commandline() {
-  local -r PARTUUID_REGEX=".* ([^[:space:]]*=PARTUUID=[^[:space:]]*).*"
+  local -r PARTUUID_REGEX=".* [^[:space:]]*=(PARTUUID=[^[:space:]]*).*"
   # partuuid_arg extracts commandline parameter such as:
   # root=PARTUUID=4AD47D21-C3E5-1F4E-BDB3-0336CC5AFADC
   # or
   # payload=PARTUUID=4AD47D21-C3E5-1F4E-BDB3-0336CC5AFADC
   local partuuid_arg="$(sed -rn "s/${PARTUUID_REGEX}/\1/p" /proc/cmdline)"
-  echo "${BOOT_TARGET} noinitrd console=ttyS0 ${partuuid_arg} maxcpus=1"
+  echo "${BOOT_TARGET} noinitrd console=ttyS0 root=${partuuid_arg} maxcpus=1"
 }
 
 #
