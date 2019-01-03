@@ -97,7 +97,7 @@ src_install() {
 		-o "${S}/grub-lakitu.efi" \
 		part_gpt gptpriority test fat ext2 normal boot \
 		efi_gop configfile search search_fs_uuid search_label \
-		terminal echo serial linuxefi
+		terminal echo serial linuxefi tpm
 	rm -Rf "${D}"/*
 	insinto /boot/efi/boot
 	doins "grub-lakitu.efi"
