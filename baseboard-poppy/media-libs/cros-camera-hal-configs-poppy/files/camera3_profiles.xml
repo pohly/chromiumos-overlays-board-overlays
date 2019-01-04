@@ -254,8 +254,6 @@
             <gain.lag value="2"/> <!-- camera3 HAL CPF parameters moved here start-->
             <exposure.lag value="2"/>
             <fov value= "54.8" value_v="42.5"/>
-            <statistics.initialSkip value="1"/> <!-- camera3 HAL CPF parameters moved here end-->
-            <frame.initialSkip value="3"/> <!-- camera3 HAL CPF parameters moved here end-->
             <isoAnalogGain1 value="36"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
             <nvmDirectory value="i2c-INT3499:00"/> <!--location of the NVM data-->
@@ -513,8 +511,6 @@
             <gain.lag value="2"/> <!-- camera3 HAL CPF parameters moved here start-->
             <exposure.lag value="2"/>
             <fov value= "54.8" value_v="42.5"/>
-            <statistics.initialSkip value="1"/> <!-- camera3 HAL CPF parameters moved here end-->
-            <frame.initialSkip value="3"/> <!-- camera3 HAL CPF parameters moved here end-->
             <isoAnalogGain1 value="64"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
             <nvmDirectory value=""/> <!--location of the NVM data-->
