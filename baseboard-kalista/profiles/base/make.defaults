@@ -22,7 +22,7 @@ USE="${USE} arc"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
-USE="${USE} cros_ec cr50_onboard"
+USE="${USE} cr50_onboard"
 
 # Add EC logging
 USE="${USE} eclog"
