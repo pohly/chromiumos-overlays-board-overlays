@@ -11,3 +11,8 @@ chromeos-base/common-assets -tts
 
 app-emulation/lxc selinux etcconfigdir
 sys-process/criu selinux
+
+app-emulation/docker -aufs -device-mapper overlay
+
+app-emulation/containerd -btrfs
+
