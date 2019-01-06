@@ -28,3 +28,5 @@ USE="${USE} legacy_power_button"
 # Enable Virtual Machines
 USE="${USE} kvm_host"
 
+# Enable CR50 for TPM
+USE="${USE} -tpm tpm2 cr50_onboard"
