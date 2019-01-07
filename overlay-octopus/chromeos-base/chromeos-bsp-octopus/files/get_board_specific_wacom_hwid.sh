@@ -19,6 +19,7 @@ main() {
   local vendor_id
   local product_id
   local hardware_id
+  local oem_id
   for path in /sys/class/drm/*eDP*/edid; do
     # Check path is exist, otherwise hexdump hits error
     if [ -e "${path}" ]; then
@@ -31,11 +32,18 @@ main() {
       fi
     fi
   done
+  oem_id="$(cros_config / oem-id)"
 
   case "${hardware_id}" in
     "af06_135c"|"e509_0710"|"af06_145c"|"e509_0770")
       ## af06(AUO), e509(BOE)
-      echo "${hardware_id}"
+
+      # The same hardware_id may be returned for projects with two different
+      # OEMs. To prevent collisions, Octopus wacom firmware files are prefixed
+      # with the oem-id.
+      # This would break product_id parsing, but that is never used for Octopus
+      # projects anyway.
+      echo "oem${oem_id}_${hardware_id}"
       ;;
     *)
       ## Unknown hardware_id, not ouput anything.
