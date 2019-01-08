@@ -103,6 +103,15 @@ chromeos:
         - $sku-id-val: 4
           $num-mic-locations: 2
           config: *device_config
+        - $sku-id-val: 5
+          $num-mic-locations: 1
+          config: *device_config
+    - $device-name: "laser14"
+      $fw-name: "Phaser"
+      skus:
+        - $sku-id-val: 6
+          $num-mic-locations: 1
+          config: *device_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
