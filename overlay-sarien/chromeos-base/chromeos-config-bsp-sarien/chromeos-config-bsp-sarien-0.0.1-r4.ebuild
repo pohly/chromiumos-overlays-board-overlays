@@ -22,4 +22,8 @@ KEYWORDS="* amd64 x86"
 
 src_install() {
 	install_model_files
+
+	# Install platform specific config files for power_manager.
+	insinto "/usr/share/power_manager/board_specific"
+	doins "${FILESDIR}"/powerd_prefs/*
 }
