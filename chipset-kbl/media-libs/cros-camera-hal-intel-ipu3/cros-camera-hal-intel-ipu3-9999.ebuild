@@ -3,25 +3,16 @@
 
 EAPI=5
 
-CROS_WORKON_PROJECT=(
-	"chromiumos/platform/arc-camera"
-	"chromiumos/platform2"
-)
-CROS_WORKON_LOCALNAME=(
-	"../platform/arc-camera"
-	"../platform2"
-)
-CROS_WORKON_DESTDIR=(
-	"${S}/platform/arc-camera"
-	"${S}/platform2"
-)
-CROS_WORKON_SUBTREE=(
-	"build hal/intel"
-	"common-mk"
-)
+CROS_WORKON_PROJECT="chromiumos/platform2"
+CROS_WORKON_LOCALNAME="../platform2"
+CROS_WORKON_SUBTREE=".gn camera/build camera/hal/intel common-mk"
+CROS_WORKON_OUTOFTREE_BUILD="1"
+CROS_WORKON_INCREMENTAL_BUILD="1"
+
+PLATFORM_SUBDIR="camera"
 PLATFORM_GYP_FILE="hal/intel/libcamera_hal.gyp"
 
-inherit cros-camera cros-workon
+inherit cros-camera cros-workon platform
 
 DESCRIPTION="Intel IPU3 (Image Processing Unit) Chrome OS camera HAL"
 
@@ -51,10 +42,6 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 HAL_DIR="hal/intel"
-
-src_unpack() {
-	cros-camera_src_unpack
-}
 
 src_install() {
 	dolib.so "${OUT}/lib/libcam_algo.so"
