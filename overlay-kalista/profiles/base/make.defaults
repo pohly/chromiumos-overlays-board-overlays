@@ -10,5 +10,5 @@ USE="${USE} kalista"
 USE="${USE} unibuild"
 
 # Uncomment these lines to activate the serial port.
-TTY_CONSOLE="ttyS0"
-USE="${USE} pcserial"
+# TTY_CONSOLE="ttyS0"
+# USE="${USE} pcserial"
