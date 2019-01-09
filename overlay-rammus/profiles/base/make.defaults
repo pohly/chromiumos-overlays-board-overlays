@@ -13,7 +13,6 @@ USE="${USE} unibuild"
 # Include the sis firmware updating tool
 INPUT_DEVICES="sis"
 
-# TODO: Default enable for debug purpose, need to disable later
 # Uncomment these lines to activate the serial port.
-TTY_CONSOLE="ttyS0"
-USE="${USE} pcserial"
+# TTY_CONSOLE="ttyS0"
+# USE="${USE} pcserial"
