@@ -140,7 +140,7 @@ kdump_disable() {
 kdump_save_core() {
   local filename="${DUMPFILE_PREFIX}$(date +'%Y%m%d%H%M')"
   echo "Saving vmcore to ${filename}."
-  makedumpfile -c -d 31 /proc/vmcore "${filename}"
+  makedumpfile -E -d 31 /proc/vmcore "${filename}"
   rm -f "${DUMPFILE_LN}"
   ln -s "${filename}" "${DUMPFILE_LN}"
   echo "sync-ing."
