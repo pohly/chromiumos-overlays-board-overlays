@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="samus-cheets"
+IUSE="samus-cheets samus-kernelnext"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
@@ -27,6 +27,8 @@ S="${WORKDIR}"
 src_install() {
 	if use samus-cheets; then
 		doappid "{FFF4E98C-0E01-EBE0-7D68-20E395E36AC5}" "CHROMEBOOK"
+	elif use samus-kernelnext; then
+		doappid "{A0835D9A-14EE-11E9-A27A-E38AF0F07D14}" "CHROMEBOOK"
 	else
 		doappid "{F67500C1-C6D8-5287-E4EC-F9BBB4AEE5C5}" "CHROMEBOOK"
 	fi
