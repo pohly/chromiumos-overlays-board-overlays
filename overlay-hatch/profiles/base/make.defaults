@@ -7,8 +7,8 @@ USE=""
 
 USE="${USE} hatch"
 
-# TODO: Enable unibuild
-#USE="${USE} unibuild"
+# Enable unibuild
+USE="${USE} unibuild"
 
 # TODO: Bring in the diagnostics package, which includes the diagnostics
 # daemon and diagnostics processor.
