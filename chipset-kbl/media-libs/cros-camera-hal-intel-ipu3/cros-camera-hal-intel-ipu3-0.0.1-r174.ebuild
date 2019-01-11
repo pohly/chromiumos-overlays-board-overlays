@@ -1,10 +1,10 @@
-# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
 
-CROS_WORKON_COMMIT=("2c78b80821109c53542b6f515c6e32918806e9c4" "fca6461b71173517726ea32fd24a552f8392a6cf")
-CROS_WORKON_TREE=("6589055d0d41e7fc58d42616ba5075408d810f7d" "4d0bc6fc33bfaa26d2857316ad0506b2a7a170ac" "b5aa4e3640aa1e5657c8aaeebbc02636b9279212")
+CROS_WORKON_COMMIT=("2c78b80821109c53542b6f515c6e32918806e9c4" "cfa618093faf678504f6978a28afe8534063c920")
+CROS_WORKON_TREE=("6589055d0d41e7fc58d42616ba5075408d810f7d" "6523a69905b131bbdd45bf9d179b5b7e0117f073" "3c6e7444df70a3721b538dc3324d5870233d39a0")
 CROS_WORKON_PROJECT=(
 	"chromiumos/platform/arc-camera"
 	"chromiumos/platform2"
@@ -18,40 +18,41 @@ CROS_WORKON_DESTDIR=(
 	"${S}/platform2"
 )
 CROS_WORKON_SUBTREE=(
-	"build hal/rockchip"
+	"build hal/intel"
 	"common-mk"
 )
-PLATFORM_GYP_FILE="hal/rockchip/libcamera_hal.gyp"
+PLATFORM_GYP_FILE="hal/intel/libcamera_hal.gyp"
 
 inherit cros-camera cros-workon
 
-DESCRIPTION="Rockchip ISP1 Chrome OS camera HAL"
+DESCRIPTION="Intel IPU3 (Image Processing Unit) Chrome OS camera HAL"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="-* arm arm64"
+KEYWORDS="-* amd64"
 
 RDEPEND="
 	dev-libs/expat
-	!media-libs/arc-camera3-hal-rockchip-isp1
 	media-libs/cros-camera-libcab
 	media-libs/cros-camera-libcamera_client
-	media-libs/cros-camera-libcamera_exif
+	media-libs/cros-camera-libcamera_common
 	media-libs/cros-camera-libcamera_jpeg
 	media-libs/cros-camera-libcamera_metadata
 	media-libs/cros-camera-libcamera_v4l2_device
 	media-libs/cros-camera-libcbm
-	media-libs/libsync
-	media-libs/rockchip-isp1-3a-libs-bin"
+	media-libs/intel-3a-libs-bin
+	media-libs/intel-pvl-libs-bin
+	media-libs/libsync"
 
 DEPEND="${RDEPEND}
+	chromeos-base/libmojo
 	media-libs/cros-camera-android-headers
 	media-libs/libyuv
 	sys-kernel/linux-headers
 	virtual/jpeg:0
 	virtual/pkgconfig"
 
-HAL_DIR="hal/rockchip"
+HAL_DIR="hal/intel"
 
 src_unpack() {
 	cros-camera_src_unpack
@@ -59,5 +60,5 @@ src_unpack() {
 
 src_install() {
 	dolib.so "${OUT}/lib/libcam_algo.so"
-	cros-camera_dohal "${OUT}/lib/libcamera_hal.so" rockchip-isp1.so
+	cros-camera_dohal "${OUT}/lib/libcamera_hal.so" intel-ipu3.so
 }
