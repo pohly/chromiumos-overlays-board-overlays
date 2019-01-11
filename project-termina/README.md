@@ -35,7 +35,6 @@ example invocation of the repacking script is below.
 
 ```sh
 export BOARD=tatl
-./setup_board --board=${BOARD}
 ./build_packages --board=${BOARD} --nowithautotest
 ./build_image --board=${BOARD} --noenable_rootfs_verification test
 ./termina_build_image --image=../build/images/${BOARD}/latest/chromiumos_test_image.bin --output=${BOARD}
