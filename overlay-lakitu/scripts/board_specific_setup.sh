@@ -6,13 +6,6 @@
 # dmesg output to ttyS0 (serial port).
 FLAGS_enable_serial=ttyS0
 
-# Remove systemd paths from all INSTALL_MASKs
-for var in $(compgen -v |grep INSTALL_MASK); do
-  local mask=${!var}
-  mask=$(echo $mask | sed -re 's| (/usr)?/lib/systemd | |g')
-  eval "$var='${mask}'"
-done
-
 # Don't install upstart files.
 INSTALL_MASK+=" /etc/init"
 
