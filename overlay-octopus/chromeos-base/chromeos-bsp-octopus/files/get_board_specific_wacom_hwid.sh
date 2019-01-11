@@ -35,7 +35,7 @@ main() {
   oem_id="$(cros_config / oem-id)"
 
   case "${hardware_id}" in
-    "af06_135c"|"e509_0710"|"af06_145c"|"e509_0770")
+    "af06_135c"|"e509_0710"|"af06_145c"|"e509_0770"|"af06_1062")
       ## af06(AUO), e509(BOE)
 
       # The same hardware_id may be returned for projects with two different
