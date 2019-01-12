@@ -1,0 +1,25 @@
+From 6295d3f926c09e908c2265eb86742d52ac22db34 Mon Sep 17 00:00:00 2001
+From: Ke Wu <mikewu@google.com>
+Date: Fri, 11 Jan 2019 16:48:53 -0800
+Subject: [PATCH] Correct ExecStart path of containerd.service
+
+---
+ containerd.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/containerd.service b/containerd.service
+index d86eb06..e098b97 100644
+--- a/containerd.service
++++ b/containerd.service
+@@ -5,7 +5,7 @@ After=network.target
+ 
+ [Service]
+ ExecStartPre=/sbin/modprobe overlay
+-ExecStart=/usr/local/bin/containerd
++ExecStart=/usr/bin/containerd
+ Delegate=yes
+ KillMode=process
+ LimitNOFILE=1048576
+-- 
+2.20.1.97.g81188d93c3-goog
+

@@ -4,7 +4,7 @@
 EAPI=6
 EGO_PN="github.com/containerd/${PN}"
 
-inherit eutils toolchain-funcs
+inherit eutils toolchain-funcs systemd
 
 if [[ ${PV} == *9999 ]]; then
 	inherit golang-vcs
@@ -28,11 +28,15 @@ DEPEND="btrfs? ( sys-fs/btrfs-progs )
 	seccomp? ( sys-libs/libseccomp )"
 RDEPEND="|| ( >=app-emulation/docker-runc-1.0.0_rc4
 	>=app-emulation/runc-1.0.0_rc4 )
-	seccomp? ( sys-libs/libseccomp )"
+	seccomp? ( sys-libs/libseccomp )
+	sys-apps/systemd"
 
 S=${WORKDIR}/${P}/src/${EGO_PN}
 
-PATCHES=( "${FILESDIR}"/1.1.2-use-GO-cross-compiler.patch )
+PATCHES=(
+	"${FILESDIR}"/1.1.2-use-GO-cross-compiler.patch
+	"${FILESDIR}"/1.1.2-correct-execstart-path.patch
+)
 
 RESTRICT="test"
 
@@ -57,4 +61,8 @@ src_compile() {
 
 src_install() {
 	dobin bin/containerd{-shim,-stress,} bin/ctr
+
+	# lakitu: run containerd as an individual service. This prevents
+	# docker from supervising containerd.
+	systemd_dounit containerd.service
 }
