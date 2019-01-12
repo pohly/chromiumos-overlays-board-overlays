@@ -3,8 +3,8 @@
 
 EAPI=6
 
-CROS_WORKON_COMMIT="afbba424a5cc15b741f48fab6b8348a2da11a7ce"
-CROS_WORKON_TREE="3428e8d94b255d079d4dbe3bf7a9c7e5f6b042f3"
+CROS_WORKON_COMMIT="f9b374f1d0167bfea1d32000972e3ffa5a659516"
+CROS_WORKON_TREE="ef619bbc5c512426e5da5042f12d512a571009d7"
 inherit cros-constants
 
 CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
@@ -22,8 +22,4 @@ KEYWORDS="* amd64 x86"
 
 src_install() {
 	install_model_files
-
-	# Install platform specific config files for power_manager.
-	insinto "/usr/share/power_manager/board_specific"
-	doins "${FILESDIR}"/powerd_prefs/*
 }
