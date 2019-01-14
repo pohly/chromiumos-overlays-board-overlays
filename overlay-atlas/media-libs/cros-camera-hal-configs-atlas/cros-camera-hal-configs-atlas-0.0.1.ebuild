@@ -18,6 +18,7 @@ src_install() {
 	insinto /etc/camera
 	doins "${FILESDIR}"/camera3_profiles.xml
 	doins "${FILESDIR}"/gcss/*.xml
+	doins "${FILESDIR}"/setup-hooks.sh
 
 	insinto /etc/camera/ipu3
 	doins "${FILESDIR}"/tuning_files/*.aiqb
