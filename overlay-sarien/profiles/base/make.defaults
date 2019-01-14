@@ -19,3 +19,6 @@ USE="${USE} arc"
 
 # Disable Chromium EC utilities
 USE="${USE} -cros_ec_utils"
+
+# Enable fwupd
+USE="${USE} fwupd"
