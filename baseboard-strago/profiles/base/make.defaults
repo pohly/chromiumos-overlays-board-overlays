@@ -8,6 +8,9 @@ USE="${USE} cros_ec_mec"
 # Add EC logging
 USE="${USE} eclog"
 
+# Enable iwlwifi remove/rescan PCI reliability workaround.
+USE="${USE} iwlwifi_rescan"
+
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
 

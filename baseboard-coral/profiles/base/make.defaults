@@ -35,6 +35,9 @@ USE="${USE} direncryption"
 # Enable DPTF
 USE="${USE} dptf"
 
+# Enable iwlwifi remove/rescan PCI reliability workaround.
+USE="${USE} iwlwifi_rescan"
+
 # Enable TPM2
 USE="${USE} -tpm tpm2"
 

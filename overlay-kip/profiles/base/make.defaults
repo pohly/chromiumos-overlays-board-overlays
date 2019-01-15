@@ -17,6 +17,9 @@ USE="${USE} direncryption"
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
 
+# Enable iwlwifi remove/rescan PCI reliability workaround.
+USE="${USE} iwlwifi_rescan"
+
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
 

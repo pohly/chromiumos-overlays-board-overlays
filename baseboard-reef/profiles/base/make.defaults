@@ -28,6 +28,9 @@ USE="${USE} dptf"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
+# Enable iwlwifi remove/rescan PCI reliability workaround.
+USE="${USE} iwlwifi_rescan"
+
 # Enable TPM2
 USE="${USE} -tpm tpm2"
 
