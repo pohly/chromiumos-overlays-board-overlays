@@ -32,4 +32,7 @@ modify_kernel_command_line() {
   # anything.
   echo "systemd.unified_cgroup_hierarchy=false" >> "${config_file}"
   echo "systemd.legacy_systemd_cgroup_controller=true" >> "${config_file}"
+
+  # Disable Container Security Monitor by default.
+  echo "csm.disabled=1" >> "${config_file}"
 }
