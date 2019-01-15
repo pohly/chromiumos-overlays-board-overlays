@@ -14,7 +14,6 @@ IUSE=""
 S="${WORKDIR}"
 
 RDEPEND="
-	net-wireless/iwlwifi_rescan
 "
 DEPEND="${RDEPEND}"
 

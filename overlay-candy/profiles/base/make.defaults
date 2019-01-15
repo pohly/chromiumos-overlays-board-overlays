@@ -1,2 +1,8 @@
+# Initial value just for style purposes.
+USE=""
+
+# Enable iwlwifi remove/rescan PCI reliability workaround.
+USE="${USE} iwlwifi_rescan"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"

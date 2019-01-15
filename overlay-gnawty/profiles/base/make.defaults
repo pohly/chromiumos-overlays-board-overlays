@@ -11,6 +11,9 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7260 ibt-hw fw_sst"
 USE="${USE} dptf gnawty kernel-4_4"
 USE="${USE} direncryption"
 
+# Enable iwlwifi remove/rescan PCI reliability workaround.
+USE="${USE} iwlwifi_rescan"
+
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"

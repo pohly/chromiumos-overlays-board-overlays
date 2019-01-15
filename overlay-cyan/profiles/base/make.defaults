@@ -14,6 +14,9 @@ USE="${USE} arc"
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
 
+# Enable iwlwifi remove/rescan PCI reliability workaround.
+USE="${USE} iwlwifi_rescan"
+
 # Avoid inhibiting the keyboard (which reports events from side buttons).
 USE="${USE} keyboard_includes_side_buttons"
 
