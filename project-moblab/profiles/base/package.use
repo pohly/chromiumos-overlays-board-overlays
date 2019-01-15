@@ -4,7 +4,6 @@
 net-misc/dhcp server -client
 
 # For ft2232_spi support in flashrom.
-dev-libs/libusb static-libs
 sys-apps/flashrom ft2232_spi
 
 # To reduce the size of the image - take out text to speach
