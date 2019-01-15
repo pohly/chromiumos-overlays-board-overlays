@@ -3,27 +3,18 @@
 
 EAPI=5
 
-CROS_WORKON_COMMIT=("2c78b80821109c53542b6f515c6e32918806e9c4" "45041591bd6b64dafbcff1d871df29832c95927d")
-CROS_WORKON_TREE=("6589055d0d41e7fc58d42616ba5075408d810f7d" "4d0bc6fc33bfaa26d2857316ad0506b2a7a170ac" "2174922822266644c39b7b650dab64513453484e")
-CROS_WORKON_PROJECT=(
-	"chromiumos/platform/arc-camera"
-	"chromiumos/platform2"
-)
-CROS_WORKON_LOCALNAME=(
-	"../platform/arc-camera"
-	"../platform2"
-)
-CROS_WORKON_DESTDIR=(
-	"${S}/platform/arc-camera"
-	"${S}/platform2"
-)
-CROS_WORKON_SUBTREE=(
-	"build hal/rockchip"
-	"common-mk"
-)
+CROS_WORKON_COMMIT="b548b650267258f203514ed37b9d02dc85cd5dc7"
+CROS_WORKON_TREE=("dc1506ef7c8cfd2c5ffd1809dac05596ec18773c" "c1d6f47d810546f7412d95791a85fb4d35831af3" "4d0bc6fc33bfaa26d2857316ad0506b2a7a170ac" "72afe39ddbec739006799d0868bb23ca72501e46" "685ac64e26e21b14bc11ff4e62d61a23f47cbdf2")
+CROS_WORKON_PROJECT="chromiumos/platform2"
+CROS_WORKON_LOCALNAME="../platform2"
+CROS_WORKON_SUBTREE=".gn camera/build camera/hal/rockchip camera/include common-mk"
+CROS_WORKON_OUTOFTREE_BUILD="1"
+CROS_WORKON_INCREMENTAL_BUILD="1"
+
+PLATFORM_SUBDIR="camera"
 PLATFORM_GYP_FILE="hal/rockchip/libcamera_hal.gyp"
 
-inherit cros-camera cros-workon
+inherit cros-camera cros-workon platform
 
 DESCRIPTION="Rockchip ISP1 Chrome OS camera HAL"
 
@@ -52,10 +43,6 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 HAL_DIR="hal/rockchip"
-
-src_unpack() {
-	cros-camera_src_unpack
-}
 
 src_install() {
 	dolib.so "${OUT}/lib/libcam_algo.so"
