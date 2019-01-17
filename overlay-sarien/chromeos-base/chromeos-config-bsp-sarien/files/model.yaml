@@ -1,2 +1,22 @@
+common_config: &common_config
+  name: "{{$device-name}}"
+  identity:
+    platform-name: "Sarien"
+    smbios-name-match: "{{$fw-name}}"
+    sku-id: "{{$sku-id}}"
+  firmware:
+    no-firmware: True
+  power:
+    suspend-to-idle: "1"
 chromeos:
-  devices: []
+  devices:
+    - $device-name: "sarien"
+      $fw-name: "Sarien"
+      skus:
+        - $sku-id: 1
+          config: *common_config
+    - $device-name: "arcada"
+      $fw-name: "Arcada"
+      skus:
+        - $sku-id: 2
+          config: *common_config
