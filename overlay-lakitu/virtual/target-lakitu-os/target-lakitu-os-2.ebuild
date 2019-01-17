@@ -63,6 +63,7 @@ LAKITU_RDEPEND="
 	sys-apps/less
 	sys-apps/mosys
 	sys-apps/pv
+	sys-fs/mdadm
 	uefi_bootloaders? (
 		sys-boot/grub-lakitu
 		sys-boot/shim
