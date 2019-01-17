@@ -149,6 +149,14 @@ chromeos:
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3e67
           config: *device_specific_audio_device_config
+        - $sku-id: 0xbf62
+          config:
+            <<: *device_specific_audio_device_config
+            power:
+              <<: *power_common
+              $has-keyboard-backlight: "0"
+        - $sku-id: 0xbf63
+          config: *device_specific_audio_device_config
     - $device-name: "sona"
       $bluetooth-device: "{{$device-name}}"
       $internal-backlight-no-als-battery-brightness: "63.0"
