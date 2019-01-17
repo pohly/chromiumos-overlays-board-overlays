@@ -15,6 +15,7 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}
+	sys-apps/makedumpfile
 	sys-apps/systemd
 "
 
