@@ -13,3 +13,7 @@ USE="
 	-tests_security_StatefulPermissions
 	-tests_security_SuidBinaries
 "
+
+# Excludes Downloadable Content (DLC) until we have tast coverage for dlcservice
+# in CQ.
+USE="${USE} -dlc"
