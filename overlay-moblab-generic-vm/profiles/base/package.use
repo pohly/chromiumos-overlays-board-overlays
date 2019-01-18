@@ -1,0 +1,4 @@
+
+# Moblab VM images should install the base container to avoid 
+# network flakes on bootup.
+chromeos-base/chromeos-bsp-moblab moblab-install-base-container

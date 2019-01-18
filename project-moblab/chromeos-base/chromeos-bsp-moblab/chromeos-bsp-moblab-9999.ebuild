@@ -16,6 +16,8 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="~*"
 
+IUSE="-moblab-install-base-container"
+
 # These packages are meant to set up the Chromium OS Basic environment to
 # properly handle the services required by the lab infrastructure.
 # TODO(pprabhu, crbug.com/775373) Move virt-what to common VM overlay once that
@@ -55,6 +57,11 @@ RDEPEND="${RDEPEND}
 "
 
 DEPEND=""
+
+LXC_STORAGE_BASE_URI="https://storage.googleapis.com/abci-ssp/autotest-containers"
+LXC_BASE_IMAGE_FILE="moblab_base_07.tar.xz"
+SRC_URI="moblab-install-base-container?
+			( ${LXC_STORAGE_BASE_URI}/${LXC_BASE_IMAGE_FILE} ) "
 
 pkg_preinst() {
 	enewgroup moblab
@@ -97,4 +104,9 @@ src_install() {
 	insinto /etc/moblab/mysql
 	insopts -m644
 	doins "${FILESDIR}/mysql_defaults_extra.cnf"
+
+	if use moblab-install-base-container; then
+		insinto /moblab-base-container
+		doins "${DISTDIR}/${LXC_BASE_IMAGE_FILE}"
+	fi
 }
