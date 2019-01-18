@@ -25,5 +25,13 @@ USE="${USE} iwlwifi_rescan"
 # Declare TPM model.
 USE="${USE} tpm_slb9655"
 
+# Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)
+# boards as all new boards must be unibuild enabled moving forward. Do not copy this
+# to new boards as it will be rejected. See
+# https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/chromeos-config/README.md
+# for further details about chromeos-config, which is the required entry point for
+# unified builds.
+USE="${USE} -unibuild"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"

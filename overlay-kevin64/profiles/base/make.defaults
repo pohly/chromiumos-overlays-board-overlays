@@ -10,6 +10,14 @@ USE="${USE} -opengl opengles"
 # TODO: Re-enable these when the corresponding packages are fixed
 USE="${USE} -tts -nacl"
 
+# Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)
+# boards as all new boards must be unibuild enabled moving forward. Do not copy this
+# to new boards as it will be rejected. See
+# https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/chromeos-config/README.md
+# for further details about chromeos-config, which is the required entry point for
+# unified builds.
+USE="${USE} -unibuild"
+
 VIDEO_CARDS="rockchip"
 
 BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57 -ftree-vectorize"

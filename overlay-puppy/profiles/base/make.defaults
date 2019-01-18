@@ -1,7 +1,18 @@
 # Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-USE="-bootflash-emmc bootflash-spi highdpi"
+# Initial value just for style purposes.
+USE=""
+
+# Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)
+# boards as all new boards must be unibuild enabled moving forward. Do not copy this
+# to new boards as it will be rejected. See
+# https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/chromeos-config/README.md
+# for further details about chromeos-config, which is the required entry point for
+# unified builds.
+USE="${USE} -unibuild"
+
+USE="${USE} -bootflash-emmc bootflash-spi highdpi"
 U_BOOT_CONFIG_USE="venice"
 U_BOOT_FDT_USE="tegra114-venice"
 
