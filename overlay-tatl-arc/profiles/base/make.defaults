@@ -1,0 +1,9 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# tatl doesn't use splitconfig.
+CHROMEOS_KERNEL_CONFIG="arch/x86/configs/x86_64_arcvm_defconfig"
+
+# Initial value just for style purposes.
+USE=""

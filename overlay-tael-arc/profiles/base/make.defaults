@@ -1,0 +1,16 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# tael doesn't use splitconfig.
+CHROMEOS_KERNEL_CONFIG="arch/arm64/configs/arcvm-arm64_defconfig"
+CHROMEOS_KERNEL_ARCH="arm64"
+
+BOARD_COMPILER_FLAGS="-march=armv7-a -mtune=cortex-a15 -mfpu=neon -mfloat-abi=hard"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} device_tree"
+USE="${USE} hardfp"
+USE="${USE} neon"
