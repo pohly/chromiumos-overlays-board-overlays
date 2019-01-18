@@ -34,7 +34,6 @@ RDEPEND="
 	media-libs/libsync"
 
 DEPEND="${RDEPEND}
-	chromeos-base/libmojo
 	media-libs/cros-camera-android-headers
 	media-libs/libyuv
 	sys-kernel/linux-headers
