@@ -6,8 +6,10 @@
 Driver=virtio_net
 
 [Network]
-DHCP=yes
-IPv6AcceptRA=yes
+DHCP=ipv4
+# Disable IPv6 completely.
+# https://github.com/systemd/systemd/issues/1982#issuecomment-158779777
+IPv6AcceptRA=no
 
 [DHCP]
 UseMTU=true
