@@ -29,8 +29,9 @@ usage() {
 
         cat <<EOF
 Usage:
-        ${PROG_NAME} {show|enable|disable|load|savecore|help}
+        ${PROG_NAME} {show|cleanup|enable|disable|load|savecore|help}
         show     - Show kdump status, kexec command, and any current parameters.
+        cleanup  - Cleanup the collected kernel crash dumps.
         enable   - Enable kdump feature (effective after reboot).
         disable  - Disable kdump feature (effective after reboot).
         load     - Load kdump kernel if kdump is enabled.
@@ -188,12 +189,31 @@ kdump_show() {
     echo "kdump kernel ${KDUMP_KERNEL} is loaded with command line parameter:"
     echo "$(construct_commandline)"
   fi
+
+  if [[ ! -f "${DUMPFILE_LN}" ]]; then
+    return
+  fi
+  echo "Collected kernel dumps:"
+  stat -c "path:%n    date:%y    size:%s bytes" "${DUMPFILE_PREFIX}"*
+}
+
+#
+# kdump_cleanup
+#
+# Cleanup the collected kernel dumps.
+#
+kdump_cleanup() {
+  rm -f "${DUMPFILE_LN}"
+  rm -f "${DUMPFILE_PREFIX}"*
 }
 
 main() {
   case "${1-help}" in
     show)
     kdump_show
+    ;;
+    cleanup)
+    kdump_cleanup
     ;;
     enable)
     if ! check_kdump_enabled; then
