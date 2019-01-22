@@ -36,6 +36,9 @@ USE="${USE} arc-camera3"
 # Enable vivid
 USE="${USE} vivid"
 
+# Enable usbip
+USE="${USE} usbip"
+
 # Enable Downloadable Content (DLC)
 USE="${USE} dlc"
 
