@@ -13,3 +13,5 @@ USE="${USE} -tts -nacl"
 VIDEO_CARDS="rockchip"
 
 BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57 -ftree-vectorize"
+
+INPUT_DEVICES="wacom"
