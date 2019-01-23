@@ -41,6 +41,8 @@ src_install() {
 	systemd_dounit "${FILESDIR}"/mnt-stateful_partition-make-private.service
 	systemd_dounit "${FILESDIR}"/dev-shm-remount.service
 	systemd_enable_service local-fs.target dev-shm-remount.service
+	systemd_dounit "${FILESDIR}"/check-secure-boot.service
+	systemd_enable_service multi-user.target check-secure-boot.service
 
 	systemd_newtmpfilesd "${FILESDIR}"/chromeos-init.tmpfiles chromeos-init.conf
 
@@ -54,10 +56,11 @@ src_install() {
 	doexe "${FILESDIR}"/chromeos-mount-generator
 
 	insinto "$(systemd_get_unitdir)/update-engine.service.d"
-	newins "${FILESDIR}/efi-disable-update-engine.conf" "efi-disable.conf"
+	newins "${FILESDIR}"/update-engine-secure-boot.conf secure-boot.conf
 
 	exeinto "/usr/share/cloud"
 	doexe "${FILESDIR}"/stateful-dev-sym-sorted
+	doexe "${FILESDIR}"/is-secure-boot
 }
 
 pkg_preinst() {

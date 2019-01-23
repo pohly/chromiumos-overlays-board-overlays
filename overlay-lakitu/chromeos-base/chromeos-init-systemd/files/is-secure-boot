@@ -1,0 +1,28 @@
+#!/bin/bash
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# Determines if the system is booted in UEFI secure boot mode or not.
+# Return code of 1 indicates no secure boot; return code of 0 indicates
+# secure boot.
+
+main() {
+  if [[ ! -d "/sys/firmware/efi" ]]; then
+    return 1
+  fi
+  local efi
+  local sb_value
+  efi="$(mktemp -d)"
+  mount -t efivarfs none "${efi}"
+  # shellcheck disable=SC2086
+  sb_value="$(hexdump -v -e '/1 "%02X "' ${efi}/SecureBoot-*)"
+  umount "${efi}"
+  rmdir "${efi}"
+  if [[ "${sb_value}" == "06 00 00 00 01 " ]]; then
+    return 0
+  fi
+  return 1
+}
+
+main
