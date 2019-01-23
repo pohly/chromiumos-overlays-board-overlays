@@ -44,7 +44,7 @@
             <!-- Lens Info-->
             <lens.info.availableApertures value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableFilterDensities value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
-            <lens.info.availableFocalLengths value="3.69,4.28"/> <!-- HAL may override this value from CMC for RAW sensors -->
+            <lens.info.availableFocalLengths value="3.69"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.availableOpticalStabilization value="OFF"/> <!-- OPTIONS: OFF, ON -->
             <lens.info.hyperfocalDistance value="0.0"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <lens.info.minimumFocusDistance value="0.1"/> <!-- HAL may override this value from CMC for RAW sensors -->
@@ -86,6 +86,7 @@
                 jpeg.thumbnailSize,
                 scaler.cropRegion,
                 statistics.faceDetectMode,
+                hotPixel.mode,
                 lens.focalLength,
                 lens.aperture,
                 lens.focusDistance,
@@ -197,7 +198,7 @@
                                                    BLOB,320x240,33333333" />
             <scaler.croppingType value="CENTER_ONLY"/>
             <!-- Sensor Info -->
-            <sensor.info.activeArraySize value="48,40,4224,3136"/>
+            <sensor.info.activeArraySize value="0,0,4224,3136"/>
             <sensor.info.sensitivityRange value="32,2400"/>
             <sensor.info.colorFilterArrangement value="GRBG"/> <!-- HAL may override this value from CMC for RAW sensors -->
             <sensor.info.exposureTimeRange value="100000,200000000"/>
@@ -238,7 +239,7 @@
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
             <!-- Hot Pixel -->
-            <hotPixel.availableHotPixelModes value="FAST"/>
+            <hotPixel.availableHotPixelModes value="OFF"/>
             <!-- Noise Reduction -->
             <noiseReduction.availableNoiseReductionModes value="OFF"/>
 
@@ -347,6 +348,7 @@
                 jpeg.thumbnailSize,
                 scaler.cropRegion,
                 statistics.faceDetectMode,
+                hotPixel.mode,
                 lens.focalLength,
                 lens.aperture,
                 lens.focusDistance,
@@ -501,7 +503,7 @@
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
             <!-- Hot Pixel -->
-            <hotPixel.availableHotPixelModes value="FAST"/>
+            <hotPixel.availableHotPixelModes value="OFF"/>
             <!-- Noise Reduction -->
             <noiseReduction.availableNoiseReductionModes value="OFF"/>
 
