@@ -37,6 +37,12 @@ src_install() {
 
 	insinto /etc/profile.d/
 	doins ${FILESDIR}/editor.sh
+
+	systemd_dounit "${FILESDIR}"/report-system-info.service
+	systemd_enable_service multi-user.target report-system-info.service
+
+	insinto "$(systemd_get_unitdir)"/systemd-fsck@.service.d
+	doins "${FILESDIR}"/fsck-log-to-serial-console.conf
 }
 
 pkg_postinst() {

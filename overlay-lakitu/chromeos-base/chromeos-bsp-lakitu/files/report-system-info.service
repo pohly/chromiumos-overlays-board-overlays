@@ -1,0 +1,15 @@
+[Unit]
+Description=Reports operating system info
+After=basic.target
+Wants=basic.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/cat /etc/os-release
+ExecStart=/bin/echo 'Showing disk capacity'
+ExecStart=/bin/df -h
+StandardOutput=journal+console
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
