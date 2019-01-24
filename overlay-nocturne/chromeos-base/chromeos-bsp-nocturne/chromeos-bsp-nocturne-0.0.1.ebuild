@@ -37,6 +37,10 @@ src_install() {
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs nocturne "${audio_config_dir}"
 
+	# Install modprobe.d conf for dmic modeswitch delay
+	insinto /etc/modprobe.d
+	doins "${FILESDIR}"/snd_soc_dmic.conf
+
 	# Install device specific udev rules.
 	udev_dorules "${FILESDIR}"/udev/*.rules
 
