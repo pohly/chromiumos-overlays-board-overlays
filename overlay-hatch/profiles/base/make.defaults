@@ -5,6 +5,7 @@
 # Initial value just for style purposes.
 USE=""
 
+USE="${USE} cros_ec"
 USE="${USE} hatch"
 
 # Enable unibuild
