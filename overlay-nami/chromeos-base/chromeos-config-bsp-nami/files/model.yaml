@@ -66,6 +66,7 @@ common_config: &common_config
     touchpad-wakeup: "{{$touchpad-wakeup}}"
     $has-keyboard-backlight: "1"
     has-keyboard-backlight: "{{$has-keyboard-backlight}}"
+    battery-stabilized-after-startup-ms: "10000"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
