@@ -19,10 +19,13 @@ USE="${USE} kernel-4_14 device_tree"
 USE="${USE} direncryption"
 
 # Disable binary options that are not ported yet.
-USE="${USE} -pepper_flash -netflix -internal"
+USE="${USE} -pepper_flash -netflix -internal -nacl -tts"
 
 # Enable all optional features on generic overlays.
 USE="${USE} buffet"
+
+# Enable llvm for mesa.
+USE="${USE} llvm"
 
 # Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)
 # boards as all new boards must be unibuild enabled moving forward. Do not copy this
@@ -36,4 +39,4 @@ USE="${USE} -unibuild"
 # wide variety of platforms with who knows what kind of hardware.
 LINUX_FIRMWARE="iwlwifi-all"
 
-CROS_WORKON_CLANG=0
+VIDEO_CARDS="llvmpipe"
