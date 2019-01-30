@@ -50,10 +50,7 @@ RDEPEND="${RDEPEND}
 	chromeos-base/autotest-server
 	chromeos-base/devserver
 	chromeos-base/whining
-	sys-apps/moblab-site-utils
-	sys-apps/mobmonitor
-	sys-apps/mobmonitor-ui
-	sys-apps/moblab-upstart-init
+	sys-apps/moblab
 "
 
 DEPEND=""
