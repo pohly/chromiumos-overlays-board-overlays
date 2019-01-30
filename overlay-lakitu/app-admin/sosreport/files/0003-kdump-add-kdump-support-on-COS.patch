@@ -1,0 +1,53 @@
+From 354d7404f641beb6cb99add96f6a9dcd33b07460 Mon Sep 17 00:00:00 2001
+From: Xuewei Zhang <xueweiz@google.com>
+Date: Tue, 29 Jan 2019 16:13:11 -0800
+Subject: [PATCH 3/4] [kdump] add kdump support on COS
+
+Signed-off-by: Xuewei Zhang <xueweiz@google.com>
+---
+ sos/plugins/kdump.py | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/sos/plugins/kdump.py b/sos/plugins/kdump.py
+index 48522767..44e87cf3 100644
+--- a/sos/plugins/kdump.py
++++ b/sos/plugins/kdump.py
+@@ -6,7 +6,8 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+ class KDump(Plugin):
+@@ -45,4 +46,25 @@ class DebianKDump(KDump, DebianPlugin, UbuntuPlugin):
+             "/etc/default/kdump-tools"
+         ])
+ 
++
++class CosKDump(KDump, CosPlugin):
++
++    option_list = [
++        ("all_dumps", "enable capture for all kernel dumps", "", False),
++        ("latest_dump", "enable capture for latest kernel crash dump",
++            "", False),
++    ]
++
++    def setup(self):
++        super(CosKDump, self).setup()
++        self.add_cmd_output('ls -alRh /var/kdump*')
++        if self.get_option("all_dumps"):
++            self.add_copy_spec([
++                "/var/kdump-*"
++            ])
++        if self.get_option("latest_dump"):
++            self.add_copy_spec([
++                "/var/kdump"
++            ])
++
+ # vim: set et ts=4 sw=4 :
+-- 
+2.20.1.495.gaa96b0ce6b-goog
+
