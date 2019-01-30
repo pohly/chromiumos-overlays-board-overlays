@@ -1,0 +1,31 @@
+From 3e8853df3569b4052d78c22afae34935a6e39e07 Mon Sep 17 00:00:00 2001
+From: Xuewei Zhang <xueweiz@google.com>
+Date: Tue, 29 Jan 2019 17:23:53 -0800
+Subject: [PATCH 4/4] [release] add Linux release support on COS
+
+Signed-off-by: Xuewei Zhang <xueweiz@google.com>
+---
+ sos/plugins/release.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/sos/plugins/release.py b/sos/plugins/release.py
+index 62b59255..c90b5d21 100644
+--- a/sos/plugins/release.py
++++ b/sos/plugins/release.py
+@@ -6,10 +6,11 @@
+ #
+ # See the LICENSE file in the source distribution for further information.
+ 
+-from sos.plugins import Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin
++from sos.plugins import (Plugin, RedHatPlugin, DebianPlugin, UbuntuPlugin,
++                         CosPlugin)
+ 
+ 
+-class Release(Plugin, RedHatPlugin, UbuntuPlugin):
++class Release(Plugin, RedHatPlugin, UbuntuPlugin, CosPlugin):
+     """Linux release information
+     """
+ 
+-- 
+2.20.1.495.gaa96b0ce6b-goog
+
