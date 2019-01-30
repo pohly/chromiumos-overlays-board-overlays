@@ -28,8 +28,15 @@ RDEPEND="
 S="${WORKDIR}/sos-${PV}"
 
 PATCHES=(
+	# TODO(xueweiz): Clean up below patches when
+	# https://github.com/sosreport/sos/pull/1419 got merged
 	"${FILESDIR}/0001-policies-add-COS-policy.patch"
 	"${FILESDIR}/0002-plugins-mark-9-plugins-as-supported-on-COS.patch"
+
+	# TODO(xueweiz): Clean up below patches when
+	# https://github.com/sosreport/sos/pull/1549 got merged
+	"${FILESDIR}/0003-kdump-add-kdump-support-on-COS.patch"
+	"${FILESDIR}/0004-release-add-Linux-release-support-on-COS.patch"
 )
 
 python_install() {
