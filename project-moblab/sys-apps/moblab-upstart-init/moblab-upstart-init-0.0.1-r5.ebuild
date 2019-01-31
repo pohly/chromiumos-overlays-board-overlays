@@ -3,8 +3,8 @@
 
 EAPI=6
 
-CROS_WORKON_COMMIT="0d6d9274e11e8a23b29ba72b334aad7ab2856774"
-CROS_WORKON_TREE="deaeb350d51f7b0300047841808118e709ffc629"
+CROS_WORKON_COMMIT="6f7a57b70c944c5bbd52df8af109ae41443b2d3c"
+CROS_WORKON_TREE="ff1765f388f0b62416964f7cef05704b5f78bbe9"
 CROS_WORKON_INCREMENTAL_BUILD=1
 CROS_WORKON_OUTOFTREE_BUILD=1
 CROS_WORKON_PROJECT="chromiumos/platform/moblab"
@@ -12,21 +12,22 @@ CROS_WORKON_LOCALNAME="../platform/moblab"
 
 inherit cros-workon
 
-DESCRIPTION="Autotest site_utils specific to Moblab"
-HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/moblab/+/master/src/tools"
+DESCRIPTION="Install moblab specific upstart init configs"
+HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/moblab/+/master/src/"
 
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
 IUSE=""
 
-RDEPEND="chromeos-base/autotest-server"
+RDEPEND="
+	!!<chromeos-base/chromeos-bsp-moblab-0.0.1-r49
+"
 
 DEPEND="
-	${RDEPEND}
 "
 
 src_install() {
-	insinto /autotest/site_utils
-	doins src/tools/*.py
+	insinto /etc/init
+	doins src/upstart_init/*.conf
 }
