@@ -76,6 +76,7 @@
                 control.sceneMode,
                 control.videoStabilizationMode,
                 flash.mode,
+                hotPixel.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
                 jpeg.quality,
@@ -237,7 +238,7 @@
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
             <!-- Hot Pixel -->
-            <hotPixel.availableHotPixelModes value="FAST"/>
+            <hotPixel.availableHotPixelModes value="OFF"/>
             <!-- Noise Reduction -->
             <noiseReduction.availableNoiseReductionModes value="OFF"/>
 
@@ -334,6 +335,7 @@
                 control.sceneMode,
                 control.videoStabilizationMode,
                 flash.mode,
+                hotPixel.mode,
                 jpeg.gpsLocation,
                 jpeg.orientation,
                 jpeg.quality,
@@ -486,7 +488,7 @@
             <!-- Sync -->
             <sync.maxLatency value="PER_FRAME_CONTROL"/>
             <!-- Hot Pixel -->
-            <hotPixel.availableHotPixelModes value="FAST"/>
+            <hotPixel.availableHotPixelModes value="OFF"/>
             <!-- Noise Reduction -->
             <noiseReduction.availableNoiseReductionModes value="OFF"/>
 
