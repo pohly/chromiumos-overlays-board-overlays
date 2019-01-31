@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${P}/src/${EGO_PN}"
 	inherit git-r3
 else
-	DOCKER_GITCOMMIT="4d60db4"
+	DOCKER_GITCOMMIT="4c52b90"
 	SRC_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
@@ -53,9 +53,9 @@ RDEPEND="
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
-	~app-emulation/containerd-1.1.2
-	>=app-emulation/runc-1.0.0_rc5_p20180509[apparmor?,seccomp?]
-	~app-emulation/docker-proxy-0.8.0_p20180907
+	~app-emulation/containerd-1.2.2
+	~app-emulation/runc-1.0.0_rc6_p20181203[apparmor?,seccomp?]
+	~app-emulation/docker-proxy-0.8.0_p20181207
 	container-init? ( >=sys-process/tini-0.18.0[static] )
 	pigz? ( app-arch/pigz )
 "
@@ -65,7 +65,6 @@ RESTRICT="installsources strip"
 S="${WORKDIR}/${P}/src/${EGO_PN}"
 
 PATCHES=(
-	"${FILESDIR}"/bsc1073877-docker-apparmor-add-signal-r2.patch
 	"${FILESDIR}"/docker-18.09.0-go-cross-compilation.patch
 	"${FILESDIR}"/docker-18.06.0-log-line-max-size.patch
 	"${FILESDIR}"/docker-18.09.0-customize-docker-service.patch

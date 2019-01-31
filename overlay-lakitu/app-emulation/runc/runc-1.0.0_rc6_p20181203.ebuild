@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit golang-build golang-vcs
 else
 	MY_PV="${PV/_/-}"
-	RUNC_COMMIT="ccb5efd37fb7c86364786e9137e22948751de7ed" # Change this when you update the ebuild
+	RUNC_COMMIT="96ec2177ae841256168fcf76954f7177af9446eb" # Change this when you update the ebuild
 	SRC_URI="https://${EGO_PN}/archive/${RUNC_COMMIT}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	inherit golang-build golang-vcs-snapshot
