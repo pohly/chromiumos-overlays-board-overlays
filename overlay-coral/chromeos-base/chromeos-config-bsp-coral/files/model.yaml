@@ -398,6 +398,9 @@ chromeos:
         - $whitelabel-tag: "xma"
           $brand-code: "URZD"
           $key-id: "CORALM"
+        - $whitelabel-tag: "multilaser"
+          $brand-code: "QTMI"
+          $key-id: "CORALN"
         # Allocated, but not used
         # $brand-code: "QTMI"
         # $brand-code: "QHTT"
