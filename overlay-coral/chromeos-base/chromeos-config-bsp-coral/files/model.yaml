@@ -400,8 +400,7 @@ chromeos:
           $key-id: "CORALM"
         - $whitelabel-tag: "multilaser"
           $brand-code: "QTMI"
-          # TODO: Change the key-id once the key is available.
-          $key-id: "CORALC"
+          $key-id: "CORALN"
         # Allocated, but not used
         # $brand-code: "QHTT"
         # $brand-code: "FGNZ"
