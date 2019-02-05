@@ -193,7 +193,7 @@ chromeos:
       $bluetooth-device: "blacktip"
       $dptf-device: "astronaut"
       products:
-        - $whitelabel-tag: "" # default
+        - $whitelabel-tag: "default" # default
           $signature-id: "{{$device-name}}-default"
           $brand-code: "TEST"
           $key-id: "CORALC"
