@@ -91,6 +91,9 @@ USE="${USE} module_sign"
 # unified builds.
 USE="${USE} -unibuild"
 
+# Enable kdump feature.
+USE="${USE} lakitu_kdump kexec_file"
+
 # The following tests from smoke suite are currently failing on lakitu.
 # TODO(andreyu): find out which of these tests could or should be enabled.
 USE="${USE}

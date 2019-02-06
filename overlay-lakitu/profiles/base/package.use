@@ -68,5 +68,8 @@ sys-kernel/lakitu-kernel-4_14 -clang
 # TODO(xueweiz): Change it back after qualifying clang-built image.
 sys-kernel/dump-capture-kernel -clang
 
+# Disable kernel module signing for dump capture kernel.
+sys-kernel/dump-capture-kernel -module_sign
+
 # Enable full lvm2 install.
 sys-fs/lvm2 -device-mapper-only
