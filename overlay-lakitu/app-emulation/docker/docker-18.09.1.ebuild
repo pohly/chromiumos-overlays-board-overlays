@@ -46,6 +46,9 @@ DEPEND="
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#optional-dependencies
+# lakitu: RDEPEND on app-emulation/containerd-1.2.3 rather than
+# app-emulation/containerd-1.2.2 to get critical fixes in containerd
+# (b/124052947).
 RDEPEND="
 	${CDEPEND}
 	>=net-firewall/iptables-1.4
@@ -53,7 +56,7 @@ RDEPEND="
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
-	~app-emulation/containerd-1.2.2
+	~app-emulation/containerd-1.2.3
 	~app-emulation/runc-1.0.0_rc6_p20181203[apparmor?,seccomp?]
 	~app-emulation/docker-proxy-0.8.0_p20181207
 	container-init? ( >=sys-process/tini-0.18.0[static] )

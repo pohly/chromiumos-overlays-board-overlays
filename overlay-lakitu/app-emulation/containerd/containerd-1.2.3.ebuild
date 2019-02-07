@@ -4,6 +4,7 @@
 EAPI=6
 EGO_PN="github.com/containerd/${PN}"
 
+# lakitu: inherits eutils and systemd to install the containerd.service.
 inherit eutils toolchain-funcs systemd
 
 if [[ ${PV} == *9999 ]]; then
@@ -11,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 else
 	MY_PV="${PV/_rc/-rc.}"
 	EGIT_COMMIT="v${MY_PV}"
-	CONTAINERD_COMMIT="9754871865f7fe2f4e74d43e2fc7ccd237edcbce"
+	CONTAINERD_COMMIT="7f5f1176dd9fb3cc8d3ce5de91759ed3dc969fa2"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	inherit golang-vcs-snapshot
@@ -26,6 +27,9 @@ IUSE="apparmor +btrfs +cri hardened +seccomp"
 
 DEPEND="btrfs? ( sys-fs/btrfs-progs )
 	seccomp? ( sys-libs/libseccomp )"
+
+# lakitu: RDEPEND on sys-apps/systemd because of the dependency on
+# containerd.service.
 RDEPEND=">=app-emulation/runc-1.0.0_rc5
 	seccomp? ( sys-libs/libseccomp )
 	sys-apps/systemd"
@@ -33,7 +37,12 @@ RDEPEND=">=app-emulation/runc-1.0.0_rc5
 S=${WORKDIR}/${P}/src/${EGO_PN}
 
 PATCHES=(
+	# lakitu: uses Go cross compiler in the builder (i.e. ${GO}) rather than
+	# the default go compiler in the builders (i.e. go).
 	"${FILESDIR}"/1.1.2-use-GO-cross-compiler.patch
+	# lakitu: patches upstream containerd.service because lakitu installs
+	# containerd at /usr/bin/containerd, different than upstream's default at
+	# /usr/local/bin/containerd
 	"${FILESDIR}"/1.2.2-correct-execstart-path.patch
 )
 
@@ -52,7 +61,10 @@ src_prepare() {
 src_compile() {
 	local options=( $(usex btrfs "" "no_btrfs") $(usex cri "" "no_cri") $(usex seccomp "seccomp" "") $(usex apparmor "apparmor" "") )
 	export GOPATH="${WORKDIR}/${P}" # ${PWD}/vendor
+	# lakitu: specifies containerd failure behavior.
 	export GOTRACEBACK="crash"
+	# lakitu: create environment variable ${GO} to point to the Go cross
+	# compiler.
 	GO=$(tc-getGO)
 	export GO
 	LDFLAGS=$(usex hardened '-extldflags -fno-PIC' '') BUILDTAGS="${options[@]}" emake
@@ -64,7 +76,7 @@ src_install() {
 	keepdir /var/lib/containerd
 	dobin bin/containerd{-shim,-stress,} bin/ctr
 
-	# lakitu: run containerd as an individual service. This prevents
+	# lakitu: runs containerd as an individual service. This prevents
 	# docker from supervising containerd.
 	systemd_dounit containerd.service
 }
