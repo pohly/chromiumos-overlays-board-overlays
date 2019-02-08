@@ -5,6 +5,7 @@
 EAPI=5
 
 inherit appid
+inherit cros-audio-configs
 inherit cros-unibuild
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
@@ -28,4 +29,9 @@ src_install() {
 
 	# Install Bluetooth ID override.
 	unibuild_install_bluetooth_files
+
+	# Install audio config files
+	# unibuild_install_audio_files (TODO: add this to config later).
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs flapjack "${audio_config_dir}"
 }
