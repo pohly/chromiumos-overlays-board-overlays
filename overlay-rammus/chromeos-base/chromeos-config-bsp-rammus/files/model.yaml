@@ -43,6 +43,7 @@ common_config: &common_config
     $ucm: "common" # Default
     $ucm-source-suffix: ""
   power:
+    low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
     set-wifi-transmit-power-for-tablet-mode: "1"
     $internal-backlight-no-als-ac-brightness: "62.5"
