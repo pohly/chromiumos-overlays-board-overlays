@@ -1,14 +1,14 @@
-From 07f6b776bd732a7f5470ef4b7c49e53df7529bd1 Mon Sep 17 00:00:00 2001
+From dbb7dce5287b0fb6e725c537442f1fc5efe119a2 Mon Sep 17 00:00:00 2001
 From: Ke Wu <mikewu@google.com>
-Date: Mon, 30 Jul 2018 16:51:10 -0700
+Date: Tue, 12 Feb 2019 15:32:13 -0800
 Subject: [PATCH] Customize docker.service for COS
 
 ---
- components/engine/contrib/init/systemd/docker.service | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ .../engine/contrib/init/systemd/docker.service    | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/components/engine/contrib/init/systemd/docker.service b/components/engine/contrib/init/systemd/docker.service
-index 5174631..97366cf 100644
+index 5174631..aa64b0a 100644
 --- a/components/engine/contrib/init/systemd/docker.service
 +++ b/components/engine/contrib/init/systemd/docker.service
 @@ -1,17 +1,21 @@
@@ -34,7 +34,7 @@ index 5174631..97366cf 100644
  LimitNOFILE=1048576
  # Having non-zero Limit*s causes performance problems due to accounting overhead
  # in the kernel. We recommend using cgroups to do container-local accounting.
-@@ -19,7 +23,7 @@ LimitNPROC=infinity
+@@ -19,16 +23,15 @@ LimitNPROC=infinity
  LimitCORE=infinity
  # Uncomment TasksMax if your systemd version supports it.
  # Only systemd 226 and above support this version.
@@ -43,6 +43,18 @@ index 5174631..97366cf 100644
  TimeoutStartSec=0
  # set delegate yes so that systemd does not reset the cgroups of docker containers
  Delegate=yes
+ # kill only the docker process, not all processes in the cgroup
+ KillMode=process
+-# restart the docker process if it exits prematurely
+-Restart=on-failure
+-StartLimitBurst=3
+-StartLimitInterval=60s
++# restart the docker process if it exits
++Restart=always
++RestartSec=10
+ 
+ [Install]
+ WantedBy=multi-user.target
 -- 
-2.20.1.97.g81188d93c3-goog
+2.20.1.791.gb4d0f1c61a-goog
 
