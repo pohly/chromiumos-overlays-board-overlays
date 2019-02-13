@@ -19,6 +19,7 @@ common_config: &common_config
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
     touchpad-wakeup: "1"
+    has-keyboard-backlight: "1"
 
 chromeos:
   devices:
