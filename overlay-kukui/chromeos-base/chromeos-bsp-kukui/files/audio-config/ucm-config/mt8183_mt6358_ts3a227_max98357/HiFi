@@ -3,19 +3,25 @@ SectionVerb {
 		FullySpecifiedUCM "1"
 		OutputDspName "speaker_eq"
 	}
+	EnableSequence [
+		cdev "hw:mt8183mt6358ts3"
+		cset "name='Headphone Volume' 1"
+	]
+	DisableSequence [
+	]
 }
 
 SectionDevice."Speaker".0 {
 	Value {
-		PlaybackPCM "hw:0,0"
+		PlaybackPCM "hw:mt8183mt6358ts3,0"
 	}
 	EnableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='I2S3_CH1 DL1_CH1' 1"
 		cset "name='I2S3_CH2 DL1_CH2' 1"
 	]
 	DisableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='I2S3_CH1 DL1_CH1' 0"
 		cset "name='I2S3_CH2 DL1_CH2' 0"
 	]
@@ -23,16 +29,16 @@ SectionDevice."Speaker".0 {
 
 SectionDevice."Internal Mic".0 {
 	Value {
-		CapturePCM "hw:0,4"
+		CapturePCM "hw:mt8183mt6358ts3,4"
 	}
 	EnableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='Mic Type Mux' 2"
 		cset "name='UL2_CH1 ADDA_UL_CH1' 1"
 		cset "name='UL2_CH2 ADDA_UL_CH2' 1"
 	]
 	DisableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='UL2_CH1 ADDA_UL_CH1' 0"
 		cset "name='UL2_CH2 ADDA_UL_CH2' 0"
 	]
@@ -40,22 +46,21 @@ SectionDevice."Internal Mic".0 {
 
 SectionDevice."Headphone".0 {
 	Value {
-		PlaybackPCM "hw:0,0"
-		MixerName "Headphone"
+		PlaybackPCM "hw:mt8183mt6358ts3,0"
 		JackName "mt8183_mt6358_ts3a227_max98357 Headset Jack"
 		JackType "gpio"
 		JackSwitch "2"
 		OutputDspName ""
 	}
 	EnableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='ADDA_DL_CH1 DL1_CH1' 1"
 		cset "name='ADDA_DL_CH2 DL1_CH2' 1"
 		cset "name='HPL Mux' 2"
 		cset "name='HPR Mux' 2"
 	]
 	DisableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='ADDA_DL_CH1 DL1_CH1' 0"
 		cset "name='ADDA_DL_CH2 DL1_CH2' 0"
 		cset "name='HPL Mux' 0"
@@ -65,13 +70,12 @@ SectionDevice."Headphone".0 {
 
 SectionDevice."Mic".0 {
 	Value {
-		CapturePCM "hw:0,4"
-		MixerName "Headphone"
+		CapturePCM "hw:mt8183mt6358ts3,4"
 		JackName "mt8183_mt6358_ts3a227_max98357 Headset Jack"
 		JackType "gpio"
 	}
 	EnableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='PGA L Mux' 2"
 		cset "name='PGA R Mux' 2"
 		cset "name='ADC L Mux' 2"
@@ -81,7 +85,7 @@ SectionDevice."Mic".0 {
 		cset "name='UL2_CH2 ADDA_UL_CH2' 1"
 	]
 	DisableSequence [
-		cdev "hw:0"
+		cdev "hw:mt8183mt6358ts3"
 		cset "name='PGA L Mux' 0"
 		cset "name='PGA R Mux' 0"
 		cset "name='ADC L Mux' 0"
