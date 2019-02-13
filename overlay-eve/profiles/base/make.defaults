@@ -52,6 +52,8 @@ USE="${USE} kvm_host crosvm-gpu"
 USE="${USE} -unibuild"
 
 # Enable Intel media-driver
+# When you disable this, you have to remove special autotest-capability settings
+# for eve, which is merged in https://crrev.com/c/1469567.
 USE="${USE} -video_cards_i965 video_cards_iHD"
 
 AFDO_PROFILE_SOURCE='broadwell'

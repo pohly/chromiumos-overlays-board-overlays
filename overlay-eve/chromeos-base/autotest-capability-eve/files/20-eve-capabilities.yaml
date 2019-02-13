@@ -1,0 +1,4 @@
+# iHD driver is only enabled on eve among KBL devices.
+# iHD driver doesn't have VP8/VP9 HW encoding capability on KBL. (b/124360022)
+- no hw_enc_vp8_1080_30
+- no hw_enc_vp9_1080_30
