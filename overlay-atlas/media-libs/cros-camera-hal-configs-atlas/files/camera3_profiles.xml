@@ -259,6 +259,8 @@
             <frame.initialSkip value="3"/> <!-- camera3 HAL CPF parameters moved here end-->
             <isoAnalogGain1 value="85"/> <!--Pseudo ISO corresponding analog gain value 1.0. -->
             <cITMaxMargin value="10"/> <!--coarse integration time max margin -->
+            <maxNvmDataSize value="320"/> <!--the max NVM data size saved in makernote. -->
+            <nvmDirectory value="i2c-INT3499:00"/> <!--location of the NVM data-->
             <sensor.testPatternMap value="Off,0,ColorBars,2"/>
             <ag.multiplier value="32"/>
             <ag.maxRatio value="8"/>
