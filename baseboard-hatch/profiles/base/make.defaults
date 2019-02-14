@@ -12,9 +12,21 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9000 iwlwifi-9260"
 # Use Intel BT driver
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt ibt-hw ibt_9560 ibt_9260"
 
+# Google USBPD peripheral firmwares
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
+
 # Build kernel with serial driver
 USE="${USE} pcserial"
 USE="${USE} tty_console_ttyS0"
+
+# Add EC logging
+USE="${USE} eclog"
+
+# Disable AC ACPI driver
+USE="${USE} -acpi_ac"
+
+# Enable VMs
+USE="${USE} kvm_host crosvm-gpu"
 
 # Enable serial console
 TTY_CONSOLE="ttyS0"
