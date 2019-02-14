@@ -27,6 +27,9 @@ TimeoutStartSec=0
 Delegate=yes
 # kill only the docker process, not all processes in the cgroup
 KillMode=process
+# restart the docker process if it exits
+Restart=always
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
