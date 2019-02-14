@@ -23,12 +23,12 @@ main() {
 
   case "${sku_id}" in
     # Product IDs are the same. Just make something up.
-    "6"|"7")
+    "0"|"6"|"7")
       echo "sku${sku_id}"
       ;;
     # We only use the MSB of SKU strappings as the panel identifier.
-    # So sku0/sku2 share the same panel as sku6.
-    "0"|"2")
+    # So sku2 shares the same panel as sku6.
+    "2")
       echo "sku6"
       ;;
     *)
