@@ -15,5 +15,5 @@ USE="${USE} unibuild"
 # daemon and diagnostics processor.
 #USE="${USE} diagnostics"
 
-# TODO: Enable ARC++
-#USE="${USE} arc"
+# Enable ARC++
+USE="${USE} arc"
