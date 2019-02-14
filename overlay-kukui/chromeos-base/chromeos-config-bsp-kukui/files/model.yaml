@@ -1,0 +1,33 @@
+#
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+#
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+common_config: &common_config
+  name: "{{$device-name}}"
+  identity:
+    sku-id: "{{$sku-id}}"
+    platform-name: "Kukui"
+    device-tree-compatible-match: "google,kukui"
+  firmware:
+    build-targets:
+      coreboot: "kukui"
+      ec: "kukui"
+      ec_extras: [ "kukui_scp" ]
+      depthcharge: "kukui"
+      libpayload: "kukui"
+    no-firmware: true
+  firmware-signing:
+    key-id: "{{$key-id}}"
+    signature-id: "{{$device-name}}"
+  test-label: "{{$device-name}}"
+
+chromeos:
+  devices:
+    - $device-name: "kukui"
+      products:
+        - $key-id: "KUKUI"
+      skus:
+        - $sku-id: 0
+          config: *common_config

@@ -11,6 +11,9 @@ USE="${USE} bootimage"
 
 USE="${USE} detachable_ui"
 
+# Enable unibuild
+USE="${USE} unibuild"
+
 # Building EC
 USE="${USE} cros_ec bootblock_in_ec"
 
