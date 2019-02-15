@@ -27,18 +27,11 @@ DEPEND="
 # devserver: we rely on devserver on test images for AU tests.
 RDEPEND="${DEPEND}
 	chromeos-base/devserver
-	!sys-apps/spiny-testconfig
 "
 
 S="${WORKDIR}"
 
 src_install() {
-	# Install default args for device policy manager monitor mode. In case of
-	# test build, we make it use staging backend and decrease the polling
-	# interval.
-	insinto /etc/default
-	newins "${FILESDIR}"/etc.default.device_policy_manager device_policy_manager
-
 	# Change default AUSERVER used on test images to a non-existant one.
 	systemd_dounit "${FILESDIR}"/auserver-override.service
 	systemd_enable_service sysinit.target auserver-override.service
