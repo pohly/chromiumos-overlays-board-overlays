@@ -13,6 +13,17 @@ unprovisioned-config: &unprovisioned_config
   firmware:
     no-firmware: True
 
+unprovisioned-convertible-config: &unprovisioned_convertible_config
+  <<: *unprovisioned_config
+  hardware-properties:
+    is-lid-convertible: True
+    has-lid-accelerometer: True
+    has-base-accelerometer: True
+    has-base-gyroscope: True
+    has-base-magnetometer: False
+    has-fingerprint-sensor: False
+    has-touchscreen: True
+
 device-config: &device_config
   <<: *unprovisioned_config
   audio:
@@ -60,6 +71,39 @@ device-config: &device_config
       - source: "{{$device-name}}/thermal/dptf.dv"
         destination: "/etc/dptf/{{$device-name}}/dptf.dv"
 
+clamshell-config: &clamshell_config
+  <<: *device_config
+  hardware-properties:
+    is-lid-convertible: False
+    has-lid-accelerometer: False
+    has-base-accelerometer: False
+    has-base-gyroscope: False
+    has-base-magnetometer: False
+    has-fingerprint-sensor: False
+    has-touchscreen: False
+
+clamshell-touchscreen-config: &clamshell_touchscreen_config
+  <<: *device_config
+  hardware-properties:
+    is-lid-convertible: False
+    has-lid-accelerometer: False
+    has-base-accelerometer: False
+    has-base-gyroscope: False
+    has-base-magnetometer: False
+    has-fingerprint-sensor: False
+    has-touchscreen: True
+
+convertible-config: &convertible_config
+  <<: *device_config
+  hardware-properties:
+    is-lid-convertible: True
+    has-lid-accelerometer: True
+    has-base-accelerometer: True
+    has-base-gyroscope: True
+    has-base-magnetometer: False
+    has-fingerprint-sensor: False
+    has-touchscreen: True
+
 chromeos:
   devices:
     - $device-name: "yorp"
@@ -67,7 +111,7 @@ chromeos:
       $num-mic-locations: 2
       skus:
         - $sku-id-val: 255
-          config: *device_config
+          config: *convertible_config
     - $device-name: "bip"
       $fw-name: "Bip"
       $num-mic-locations: 2
@@ -76,7 +120,7 @@ chromeos:
           $card: "sof-glkrt5682max"
           $ucm_src_root: "{{$device-name}}"
           $ucm_extra_suffix: "{{$device-name}}"
-          config: *device_config
+          config: *convertible_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
@@ -84,37 +128,37 @@ chromeos:
       skus:
         - $sku-id-val: 255
           $fw-name: "Phaser"
-          config: *unprovisioned_config
+          config: *unprovisioned_convertible_config
     - $device-name: "phaser"
       $fw-name: "Phaser"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 1
-          config: *device_config
+          config: *clamshell_config
     - $device-name: "phaser360"
       $fw-name: "Phaser"
       skus:
         - $sku-id-val: 2
           $num-mic-locations: 1
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 3
           $num-mic-locations: 2
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 4
           $num-mic-locations: 2
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 5
           $num-mic-locations: 1
-          config: *device_config
+          config: *convertible_config
     - $device-name: "laser14"
       $fw-name: "Phaser"
       skus:
         - $sku-id-val: 6
           $num-mic-locations: 1
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 7
           $num-mic-locations: 1
-          config: *device_config
+          config: *clamshell_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
@@ -122,32 +166,32 @@ chromeos:
       skus:
         - $sku-id-val: 255
           $fw-name: "Fleex"
-          config: *unprovisioned_config
+          config: *unprovisioned_convertible_config
     - $device-name: "fleex"
       $fw-name: "Fleex"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 1
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 2
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 3
-          config: *device_config
+          config: *clamshell_touchscreen_config
     - $device-name: "grabbiter"
       $fw-name: "Fleex"
       skus:
         - $sku-id-val: 33
           $num-mic-locations: 1
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 34
           $num-mic-locations: 2
-          config: *device_config
+          config: *convertible_config
     - $device-name: "orbatrix"
       $fw-name: "Fleex"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 65
-          config: *device_config
+          config: *clamshell_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
@@ -155,57 +199,57 @@ chromeos:
       skus:
         - $sku-id-val: 255
           $fw-name: "Bobba"
-          config: *unprovisioned_config
+          config: *unprovisioned_convertible_config
     - $device-name: "bobba"
       $fw-name: "Bobba"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 1
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 2
-          config: *device_config
+          config: *clamshell_touchscreen_config
         - $sku-id-val: 3
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 4
-          config: *device_config
+          config: *clamshell_touchscreen_config
     - $device-name: "bobba360"
       $fw-name: "Bobba"
       skus:
         - $sku-id-val: 9
           $num-mic-locations: 2
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 10
           $num-mic-locations: 2
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 11
           $num-mic-locations: 1
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 12
           $num-mic-locations: 1
-          config: *device_config
+          config: *convertible_config
     - $device-name: "sparky"
       $fw-name: "Bobba"
       skus:
         - $sku-id-val: 17
           $num-mic-locations: 2
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 18
           $num-mic-locations: 2
-          config: *device_config
+          config: *clamshell_touchscreen_config
         - $sku-id-val: 19
           $num-mic-locations: 1
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 20
           $num-mic-locations: 1
-          config: *device_config
+          config: *clamshell_touchscreen_config
     - $device-name: "sparky360"
       $fw-name: "Bobba"
       $num-mic-locations: 2
       skus:
         - $sku-id-val: 25
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 26
-          config: *device_config
+          config: *convertible_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
@@ -213,27 +257,27 @@ chromeos:
       skus:
         - $sku-id-val: 255
           $fw-name: "Meep"
-          config: *unprovisioned_config
+          config: *unprovisioned_convertible_config
     - $device-name: "meep"
       $fw-name: "Meep"
       skus:
         - $sku-id-val: 1
           $num-mic-locations: 2
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 2
           $num-mic-locations: 2
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 3
           $num-mic-locations: 1
-          config: *device_config
+          config: *convertible_config
     - $device-name: "mimrock"
       $fw-name: "Meep"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 17
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 18
-          config: *device_config
+          config: *clamshell_touchscreen_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
@@ -241,7 +285,7 @@ chromeos:
       skus:
         - $sku-id-val: 255
           $fw-name: "Ampton"
-          config: *unprovisioned_config
+          config: *unprovisioned_convertible_config
     - $device-name: "ampton"
       $fw-name: "Ampton"
       # TODO(OEM): need update later
@@ -251,13 +295,13 @@ chromeos:
       $ucm_extra_suffix: "ampton"
       skus:
         - $sku-id-val: 1
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 2
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 3
-          config: *device_config
+          config: *convertible_config
         - $sku-id-val: 4
-          config: *device_config
+          config: *convertible_config
     - $device-name: "apel"
       $fw-name: "Ampton"
       # TODO(OEM): need update later
@@ -267,18 +311,18 @@ chromeos:
       $ucm_extra_suffix: "apel"
       skus:
         - $sku-id-val: 17
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 18
-          config: *device_config
+          config: *clamshell_touchscreen_config
         - $sku-id-val: 19
-          config: *device_config
+          config: *clamshell_config
     - $device-name: "casta"
       $fw-name: "Casta"
       # TODO(OEM): need update later
       $num-mic-locations: 2
       skus:
         - $sku-id-val: 255
-          config: *device_config
+          config: *clamshell_config
     - $device-name: "nospike"
       $fw-name: "Ampton"
       # TODO(OEM): need update later
@@ -288,6 +332,6 @@ chromeos:
       $ucm_extra_suffix: "nospike"
       skus:
         - $sku-id-val: 33
-          config: *device_config
+          config: *clamshell_config
         - $sku-id-val: 34
-          config: *device_config
+          config: *clamshell_config
