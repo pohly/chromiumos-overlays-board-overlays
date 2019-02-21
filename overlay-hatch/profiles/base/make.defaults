@@ -17,3 +17,6 @@ USE="${USE} unibuild"
 
 # Enable ARC++
 USE="${USE} arc"
+
+# Enable Ambient Light Sensor
+USE="${USE} als"

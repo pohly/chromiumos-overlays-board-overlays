@@ -23,6 +23,7 @@ common_config: &common_config
     suspend-to-idle: "1"
     touchpad-wakeup: "1"
     has-keyboard-backlight: "1"
+    has-ambient-light-sensor: "1"
 
 chromeos:
   devices:
