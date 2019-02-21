@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2018 The Android Open Source Project
+<!-- Copyright 2019 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,12 +13,14 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <MediaCodecs>
-    <Settings>
-        <Setting name="max-video-encoder-input-buffers" value="4" />
-    </Settings>
-    <Include href="media_codecs_google_audio.xml" />
-    <Include href="media_codecs_google_video.xml" />
-    <Include href="media_codecs_cheets.xml" />
-    <Include href="media_codecs_cheets_board_specific.xml" />
+    <Decoders>
+        <MediaCodec name="c2.vda.avc.decoder" type="video/avc" update="true">
+            <Limit name="measured-frame-rate-320x240" range="216-216" />
+            <Limit name="measured-frame-rate-720x480" range="190-211" />
+            <Limit name="measured-frame-rate-1280x720" range="175-197" />
+            <Limit name="measured-frame-rate-1920x1088" range="145-166" />
+        </MediaCodec>
+    </Decoders>
 </MediaCodecs>
