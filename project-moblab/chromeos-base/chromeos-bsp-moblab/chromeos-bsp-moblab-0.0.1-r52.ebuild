@@ -56,7 +56,7 @@ RDEPEND="${RDEPEND}
 DEPEND=""
 
 LXC_STORAGE_BASE_URI="https://storage.googleapis.com/abci-ssp/autotest-containers"
-LXC_BASE_IMAGE_FILE="moblab_base_07.tar.xz"
+LXC_BASE_IMAGE_FILE="moblab_base_08.tar.xz"
 SRC_URI="moblab-install-base-container?
 			( ${LXC_STORAGE_BASE_URI}/${LXC_BASE_IMAGE_FILE} ) "
 
