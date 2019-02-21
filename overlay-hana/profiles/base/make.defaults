@@ -31,4 +31,4 @@ USE="${USE} -unibuild"
 
 # Declare set of enabled consoles
 #TTY_CONSOLE="ttyS0"
-INPUT_DEVICES="synaptics"
+INPUT_DEVICES="synaptics pixart"
