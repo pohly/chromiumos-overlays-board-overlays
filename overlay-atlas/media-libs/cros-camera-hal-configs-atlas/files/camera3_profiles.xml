@@ -35,7 +35,7 @@
             <control.availableEffects value="OFF"/>
             <control.awbAvailableModes value="AUTO"/>
             <control.awbLockAvailable value="TRUE"/>
-            <control.availableSceneModes value="DISABLED"/>
+            <control.availableSceneModes value="FACE_PRIORITY"/>
             <control.availableVideoStabilizationModes value="OFF"/>
             <control.maxRegions value="1,0,0"/>
             <edge.availableEdgeModes value="OFF,FAST,HIGH_QUALITY,ZERO_SHUTTER_LAG"/>
@@ -213,9 +213,9 @@
             <!-- shading -->
             <shading.availableModes value="OFF"/>
             <!-- Statistics Info -->
-            <statistics.info.availableFaceDetectModes value="OFF"/>
+            <statistics.info.availableFaceDetectModes value="OFF,SIMPLE"/>
             <statistics.info.histogramBucketCount value="0"/>
-            <statistics.info.maxFaceCount value="0"/>
+            <statistics.info.maxFaceCount value="10"/>
             <statistics.info.maxHistogramCount value="0"/>
             <statistics.info.maxSharpnessMapValue value="0"/>
             <statistics.info.sharpnessMapSize value="0,0"/>
@@ -272,6 +272,9 @@
             <element name="ipu3-csi2 1" type="csi_receiver"/>
         </MediaCtl_elements_IPU3>
 
+        <Common>
+            <faceAeEnabled value="true"/>
+        </Common>
 <!-- ******************PSL specific section end **************************************************************-->
     </Profiles>
 
