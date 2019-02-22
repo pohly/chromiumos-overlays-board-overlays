@@ -25,3 +25,6 @@ USE="${USE} fwupd"
 
 # Enable building kernel support for the EC
 USE="${USE} wilco_ec"
+
+# ISH firmware in filesystem
+USE="${USE} cros_ish"
