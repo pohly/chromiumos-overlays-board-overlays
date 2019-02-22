@@ -60,4 +60,8 @@ src_install() {
 	if [[ -d "${cras_config}" ]] ; then
 		doins -r "${cras_config}"/*
 	fi
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
