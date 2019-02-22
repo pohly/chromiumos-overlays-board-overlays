@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit appid
+inherit appid cros-unibuild udev
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -15,11 +15,16 @@ S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND=""
-DEPEND="${RDEPEND}"
+DEPEND="
+        ${RDEPEND}
+        chromeos-base/chromeos-config
+"
 
 src_install() {
 	doappid "{E3B85B97-1771-4440-9691-D1983FEF60EB}" "CHROMEBOOK"
 
 	# Intall a rule tagging keyboard as having updated layout
 	udev_dorules "${FILESDIR}/81-sarien-keyboard.rules"
+
+	unibuild_install_audio_files
 }
