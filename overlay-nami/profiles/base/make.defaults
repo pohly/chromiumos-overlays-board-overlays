@@ -32,3 +32,6 @@ USE="${USE} pcserial"
 
 # Include the wacom firmware updating tool
 INPUT_DEVICES="wacom"
+
+# Include the g2touch touchscreen firmware updating tool
+INPUT_DEVICES="${INPUT_DEVICES} g2touch"
