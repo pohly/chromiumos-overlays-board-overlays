@@ -19,4 +19,7 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{E3B85B97-1771-4440-9691-D1983FEF60EB}" "CHROMEBOOK"
+
+	# Intall a rule tagging keyboard as having updated layout
+	udev_dorules "${FILESDIR}/81-sarien-keyboard.rules"
 }
