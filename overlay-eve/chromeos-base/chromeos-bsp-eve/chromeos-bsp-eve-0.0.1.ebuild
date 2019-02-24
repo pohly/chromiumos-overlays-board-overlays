@@ -57,4 +57,8 @@ src_install() {
 
 	# Intall a rule tagging keyboard as having updated layout
 	udev_dorules "${FILESDIR}/61-eve-keyboard.rules"
+
+	# Install device-specific automatic brightness model parameters.
+	insinto "/usr/share/chromeos-assets/autobrightness"
+	doins "${FILESDIR}/autobrightness/model_params.json"
 }

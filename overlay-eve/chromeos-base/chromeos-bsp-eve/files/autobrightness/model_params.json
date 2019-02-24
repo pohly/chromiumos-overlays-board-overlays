@@ -1,0 +1,23 @@
+{
+  "auto_brightness_als_horizon_seconds": 4,
+  "global_curve": {
+    "log_lux": [
+      3.69,
+      4.83,
+      6.54,
+      7.68,
+      8.25,
+      8.82
+    ],
+    "brightness": [
+      36.14,
+      47.62,
+      85.83,
+      93.27,
+      93.27,
+      100
+    ]
+  },
+  "metrics_key": "eve",
+  "model_als_horizon_seconds": 10
+}
