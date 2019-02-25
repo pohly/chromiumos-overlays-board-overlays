@@ -4,5 +4,42 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+device-config: &device_config
+  name: "{{$device-name}}"
+  bluetooth:
+    config:
+      build-path: "bluetooth/main.conf"
+      system-path: "/etc/bluetooth/main.conf"
+  identity:
+    platform-name: "Flapjack"
+    device-tree-compatible-match: "google,flapjack"
+    sku-id: "{{$sku-id}}"
+  firmware:
+    no-firmware: true
+
 chromeos:
-  devices: []
+  devices:
+    - $device-name: "flapjack"
+      skus:
+        - $sku-id: 0x0
+          config:
+            <<: *device_config
+    - $device-name: "c18"
+      skus:
+        - $sku-id: 0x1
+          config:
+            <<: *device_config
+        - $sku-id: 0x25
+          config:
+            <<: *device_config
+        - $sku-id: 0x45
+          config:
+            <<: *device_config
+    - $device-name: "c19"
+      skus:
+        - $sku-id: 0x3
+          config:
+            <<: *device_config
+        - $sku-id: 0x67
+          config:
+            <<: *device_config

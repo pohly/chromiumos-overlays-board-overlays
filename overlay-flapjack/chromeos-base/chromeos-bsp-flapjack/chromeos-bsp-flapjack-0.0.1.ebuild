@@ -25,4 +25,7 @@ DEPEND="
 
 src_install() {
 	doappid "{B02960B4-54E0-42B7-92DC-F430A3DBDEFB}" "CHROMEBOOK"
+
+	# Install Bluetooth ID override.
+	unibuild_install_bluetooth_files
 }
