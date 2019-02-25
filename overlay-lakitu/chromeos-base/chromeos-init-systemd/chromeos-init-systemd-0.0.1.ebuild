@@ -43,6 +43,7 @@ src_install() {
 	systemd_enable_service local-fs.target dev-shm-remount.service
 	systemd_dounit "${FILESDIR}"/check-secure-boot.service
 	systemd_enable_service multi-user.target check-secure-boot.service
+	systemd_dounit "${FILESDIR}"/prep-logs-dev@.service
 
 	systemd_newtmpfilesd "${FILESDIR}"/chromeos-init.tmpfiles chromeos-init.conf
 
@@ -61,6 +62,7 @@ src_install() {
 	exeinto "/usr/share/cloud"
 	doexe "${FILESDIR}"/stateful-dev-sym-sorted
 	doexe "${FILESDIR}"/is-secure-boot
+	doexe "${FILESDIR}"/prep-logs-dev
 }
 
 pkg_preinst() {
