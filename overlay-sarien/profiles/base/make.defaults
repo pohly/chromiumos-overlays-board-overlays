@@ -28,3 +28,7 @@ USE="${USE} wilco_ec"
 
 # ISH firmware in filesystem
 USE="${USE} cros_ish"
+
+# Load GuC/HuC Binaries
+USE="${USE} builtin_fw_guc_g9"
+USE="${USE} builtin_fw_huc_g9"
