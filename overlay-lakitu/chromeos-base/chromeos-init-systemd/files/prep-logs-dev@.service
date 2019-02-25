@@ -1,0 +1,12 @@
+[Unit]
+Description=Prepares a logs device for mounting.
+DefaultDependencies=no
+BindsTo=%i.device
+After=%i.device
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/share/cloud/prep-logs-dev %f
+StandardOutput=journal+console
+StandardError=journal+console

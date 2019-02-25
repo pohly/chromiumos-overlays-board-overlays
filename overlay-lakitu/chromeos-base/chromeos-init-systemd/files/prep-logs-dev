@@ -1,0 +1,23 @@
+#!/bin/bash
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# Positional arguments: device_path
+# device_path is an absolute file path to a block device. If the device
+#     has no file system, make an ext4 file system. Otherwise, run fsck on
+#     it.
+
+set -o errexit
+
+main() {
+  local -r device="$1"
+  local -r fstype="$(lsblk -o FSTYPE -n "${device}")"
+  if [[ -z "${fstype}" ]]; then
+    mkfs -F -t ext4 -E lazy_journal_init "${device}"
+  else
+    e2fsck -p "${device}"
+  fi
+}
+
+main "$@"
