@@ -128,6 +128,7 @@
                 lens.filterDensity,
                 lens.focusDistance,
                 lens.opticalStabilizationMode,
+                lens.state,
                 request.pipelineDepth,
                 scaler.cropRegion,
                 sensor.testPatternData,
@@ -186,7 +187,7 @@
                 IMPLEMENTATION_DEFINED,1280x960,33333333,
                 IMPLEMENTATION_DEFINED,1280x720,33333333,
                 IMPLEMENTATION_DEFINED,640x480,33333333,
-                IMPLEMENTATION_DEFINED,320x240," />
+                IMPLEMENTATION_DEFINED,320x240,33333333" />
             <scaler.availableStallDurations value="BLOB,2592x1944,33333333,
                                                    BLOB,1920x1080,33333333,
                                                    BLOB,1600x1200,33333333,
@@ -387,6 +388,7 @@
                 lens.filterDensity,
                 lens.focusDistance,
                 lens.opticalStabilizationMode,
+                lens.state,
                 request.pipelineDepth,
                 scaler.cropRegion,
                 sensor.testPatternData,
