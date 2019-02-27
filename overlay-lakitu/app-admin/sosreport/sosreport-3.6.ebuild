@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 KEYWORDS="*"
 
 SLOT="0"
-IUSE=""
+IUSE="nls"
 
 DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
@@ -31,6 +31,14 @@ PATCHES=(
 	"${FILESDIR}/0001-policies-add-COS-policy.patch"
 	"${FILESDIR}/0002-plugins-mark-9-plugins-as-supported-on-COS.patch"
 )
+
+src_prepare() {
+	distutils-r1_src_prepare
+
+	if ! use nls ; then
+		rm po/*.po
+	fi
+}
 
 python_install() {
 	distutils-r1_python_install
