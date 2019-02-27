@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 KEYWORDS="*"
 
 SLOT="0"
-IUSE=""
+IUSE="nls"
 
 DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
@@ -38,6 +38,14 @@ PATCHES=(
 	"${FILESDIR}/0003-kdump-add-kdump-support-on-COS.patch"
 	"${FILESDIR}/0004-release-add-Linux-release-support-on-COS.patch"
 )
+
+src_prepare() {
+	distutils-r1_src_prepare
+
+	if ! use nls ; then
+		rm po/*.po
+	fi
+}
 
 python_install() {
 	distutils-r1_python_install
