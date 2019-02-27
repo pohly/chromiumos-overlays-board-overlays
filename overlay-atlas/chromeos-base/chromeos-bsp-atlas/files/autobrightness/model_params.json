@@ -1,0 +1,31 @@
+{
+  "auto_brightness_als_horizon_seconds": 1,
+  "global_curve": {
+    "log_lux": [
+      3.69,
+      4.11,
+      4.52,
+      4.94,
+      5.36,
+      5.77,
+      6.19,
+      6.61,
+      7.02,
+      7.44
+    ],
+    "brightness": [
+      41.04,
+      47.63,
+      54.22,
+      56.22,
+      65.11,
+      74,
+      82.89,
+      91.78,
+      95.89,
+      100
+    ]
+  },
+  "metrics_key": "atlas",
+  "model_als_horizon_seconds": 2
+}
