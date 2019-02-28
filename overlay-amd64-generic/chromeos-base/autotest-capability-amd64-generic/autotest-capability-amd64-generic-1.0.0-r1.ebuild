@@ -1,1 +1,0 @@
-./autotest-capability-amd64-generic-1.0.0.ebuild
