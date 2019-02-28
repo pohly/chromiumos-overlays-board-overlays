@@ -279,3 +279,15 @@ chromeos:
       skus:
         - $sku-id-val: 255
           config: *device_config
+    - $device-name: "nospike"
+      $fw-name: "Ampton"
+      # TODO(OEM): need update later
+      $num-mic-locations: 1
+      $card: "sof-glkrt5682max"
+      $ucm_src_root: "nospike"
+      $ucm_extra_suffix: "nospike"
+      skus:
+        - $sku-id-val: 33
+          config: *device_config
+        - $sku-id-val: 34
+          config: *device_config
