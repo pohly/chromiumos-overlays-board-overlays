@@ -73,7 +73,7 @@ chromeos:
       $num-mic-locations: 2
       skus:
         - $sku-id-val: 255
-          $card: "glkrt5682max"
+          $card: "sof-glkrt5682max"
           $ucm_src_root: "{{$device-name}}"
           $ucm_extra_suffix: "{{$device-name}}"
           config: *device_config
@@ -246,7 +246,7 @@ chromeos:
       $fw-name: "Ampton"
       # TODO(OEM): need update later
       $num-mic-locations: 2
-      $card: "glkrt5682max"
+      $card: "sof-glkrt5682max"
       $ucm_src_root: "ampton"
       $ucm_extra_suffix: "ampton"
       skus:
