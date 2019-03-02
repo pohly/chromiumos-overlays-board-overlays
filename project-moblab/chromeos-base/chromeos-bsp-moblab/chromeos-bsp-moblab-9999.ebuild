@@ -51,14 +51,11 @@ RDEPEND="${RDEPEND}
 	chromeos-base/devserver
 	chromeos-base/whining
 	sys-apps/moblab
+	moblab-install-base-container? ( chromeos-base/install-base-container )
 "
 
 DEPEND=""
 
-LXC_STORAGE_BASE_URI="https://storage.googleapis.com/abci-ssp/autotest-containers"
-LXC_BASE_IMAGE_FILE="moblab_base_08.tar.xz"
-SRC_URI="moblab-install-base-container?
-			( ${LXC_STORAGE_BASE_URI}/${LXC_BASE_IMAGE_FILE} ) "
 
 pkg_preinst() {
 	enewgroup moblab
@@ -101,9 +98,4 @@ src_install() {
 	insinto /etc/moblab/mysql
 	insopts -m644
 	doins "${FILESDIR}/mysql_defaults_extra.cnf"
-
-	if use moblab-install-base-container; then
-		insinto /moblab-base-container
-		doins "${DISTDIR}/${LXC_BASE_IMAGE_FILE}"
-	fi
 }
