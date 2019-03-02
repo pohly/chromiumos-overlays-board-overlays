@@ -21,11 +21,12 @@ IUSE=""
 SRC_URI="${BASE_SRC_URI}/mobmonitor-ui-node_modules-0.0.1.tar.gz"
 
 RDEPEND="
-		!!sys-apps/mobmonitor
-		!!sys-apps/mobmonitor-ui
-		!!sys-apps/moblab-site-utils
-		!!sys-apps/moblab-upstart-init
+		dev-python/futures
+		net-libs/grpc
+		dev-python/protobuf-python
+		dev-python/google-cloud-storage
 "
+
 DEPEND="${RDEPEND}
 "
 
