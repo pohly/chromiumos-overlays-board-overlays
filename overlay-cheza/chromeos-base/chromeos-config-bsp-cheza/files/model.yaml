@@ -1,0 +1,30 @@
+#
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+#
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+common_config: &common_config
+  name: "{{$device-name}}"
+  identity:
+    platform-name: "Cheza"
+    device-tree-compatible-match: "google,cheza"
+  firmware:
+    build-targets:
+      base: "wand"
+      coreboot: "cheza"
+      ec: "cheza"
+      depthcharge: "cheza"
+      libpayload: "cheza"
+    no-firmware: True
+  firmware-signing:
+    key-id: "{{$key-id}}"
+    signature-id: "{{$device-name}}"
+  test-label: "{{$device-name}}"
+chromeos:
+  devices:
+    - $device-name: "cheza"
+      products:
+        - $key-id: "CHEZA"
+      skus:
+        - config: *common_config
