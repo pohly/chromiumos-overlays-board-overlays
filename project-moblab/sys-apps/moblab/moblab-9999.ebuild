@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="~*"
 IUSE=""
 
-SRC_URI="${BASE_SRC_URI}/mobmonitor-ui-node_modules-0.0.1.tar.gz"
+SRC_URI="${BASE_SRC_URI}/mobmonitor-ui-node_modules-0.0.2.tar.gz"
 
 RDEPEND="
 		dev-python/futures
