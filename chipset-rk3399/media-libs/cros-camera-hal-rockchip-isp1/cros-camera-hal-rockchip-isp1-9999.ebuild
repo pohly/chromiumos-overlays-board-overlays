@@ -5,7 +5,7 @@ EAPI=5
 
 CROS_WORKON_PROJECT="chromiumos/platform2"
 CROS_WORKON_LOCALNAME="../platform2"
-CROS_WORKON_SUBTREE=".gn camera/build camera/hal/rockchip camera/include common-mk"
+CROS_WORKON_SUBTREE=".gn camera/build camera/common camera/hal/rockchip camera/include camera/mojo common-mk"
 CROS_WORKON_OUTOFTREE_BUILD="1"
 CROS_WORKON_INCREMENTAL_BUILD="1"
 
@@ -26,7 +26,6 @@ RDEPEND="
 	media-libs/cros-camera-libcab
 	media-libs/cros-camera-libcamera_client
 	media-libs/cros-camera-libcamera_exif
-	media-libs/cros-camera-libcamera_jpeg
 	media-libs/cros-camera-libcamera_metadata
 	media-libs/cros-camera-libcamera_v4l2_device
 	media-libs/cros-camera-libcbm
