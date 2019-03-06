@@ -23,7 +23,7 @@ USE="${USE} unibuild"
 EC_FIRMWARE="coral"
 
 # Include the wacom firmware updating tool
-INPUT_DEVICES="wacom"
+INPUT_DEVICES="wacom pixart"
 
 # Uncomment these lines to activate the serial port.
 #TTY_CONSOLE="ttyS2"
