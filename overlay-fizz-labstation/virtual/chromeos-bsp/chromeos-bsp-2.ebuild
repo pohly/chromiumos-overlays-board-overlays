@@ -10,4 +10,7 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
 
-RDEPEND="chromeos-base/chromeos-bsp-fizz-labstation"
+RDEPEND="chromeos-base/chromeos-bsp-mobbase
+	chromeos-base/chromeos-bsp-labstation
+	chromeos-base/chromeos-test-testauthkeys
+	chromeos-base/chromeos-bsp-fizz-labstation"
