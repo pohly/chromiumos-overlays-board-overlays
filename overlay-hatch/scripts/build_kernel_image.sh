@@ -10,4 +10,7 @@ modify_kernel_command_line() {
 
   # Avoid a cosmetic TPM error (Work around for b/113527055)
   echo "tpm_tis.force=0" >> "$1"
+
+  # Enable S0ix logging using GSMI
+  echo "gsmi.s0ix_logging_enable=1" >> "$1"
 }

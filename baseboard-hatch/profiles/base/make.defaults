@@ -26,7 +26,10 @@ USE="${USE} eclog"
 USE="${USE} -acpi_ac"
 
 # Enable VMs
-USE="${USE} kvm_host crosvm-gpu"
+USE="${USE} kvm_host"
 
 # Enable serial console
 TTY_CONSOLE="ttyS0"
+
+# Allow Chrome to use Tablet mode
+USE="${USE} touchview"
