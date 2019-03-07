@@ -23,6 +23,8 @@ unprovisioned-convertible-config: &unprovisioned_convertible_config
     has-base-magnetometer: False
     has-fingerprint-sensor: False
     has-touchscreen: True
+    $stylus-category: "none"
+    stylus-category: "{{$stylus-category}}"
 
 device-config: &device_config
   <<: *unprovisioned_config
@@ -83,6 +85,8 @@ clamshell-config: &clamshell_config
     has-base-magnetometer: False
     has-fingerprint-sensor: False
     has-touchscreen: False
+    $stylus-category: "none"
+    stylus-category: "{{$stylus-category}}"
 
 clamshell-touchscreen-config: &clamshell_touchscreen_config
   <<: *device_config
@@ -94,6 +98,8 @@ clamshell-touchscreen-config: &clamshell_touchscreen_config
     has-base-magnetometer: False
     has-fingerprint-sensor: False
     has-touchscreen: True
+    $stylus-category: "none"
+    stylus-category: "{{$stylus-category}}"
 
 convertible-config: &convertible_config
   <<: *device_config
@@ -105,6 +111,8 @@ convertible-config: &convertible_config
     has-base-magnetometer: False
     has-fingerprint-sensor: False
     has-touchscreen: True
+    $stylus-category: "none"
+    stylus-category: "{{$stylus-category}}"
 
 chromeos:
   devices:
@@ -135,6 +143,7 @@ chromeos:
           $num-mic-locations: 1
           config: *convertible_config
         - $sku-id-val: 3
+          $stylus-category: "internal"
           $num-mic-locations: 2
           config: *convertible_config
         - $sku-id-val: 4
@@ -210,12 +219,14 @@ chromeos:
       $fw-name: "Bobba"
       skus:
         - $sku-id-val: 9
+          $stylus-category: "internal"
           $num-mic-locations: 2
           config: *convertible_config
         - $sku-id-val: 10
           $num-mic-locations: 2
           config: *convertible_config
         - $sku-id-val: 11
+          $stylus-category: "internal"
           $num-mic-locations: 1
           config: *convertible_config
         - $sku-id-val: 12
@@ -256,6 +267,7 @@ chromeos:
       $fw-name: "Meep"
       skus:
         - $sku-id-val: 1
+          $stylus-category: "external"
           $num-mic-locations: 2
           config: *convertible_config
         - $sku-id-val: 2
@@ -291,10 +303,12 @@ chromeos:
         - $sku-id-val: 1
           config: *convertible_config
         - $sku-id-val: 2
+          $stylus-category: "internal"
           config: *convertible_config
         - $sku-id-val: 3
           config: *convertible_config
         - $sku-id-val: 4
+          $stylus-category: "internal"
           config: *convertible_config
     - $device-name: "apel"
       $fw-name: "Ampton"
