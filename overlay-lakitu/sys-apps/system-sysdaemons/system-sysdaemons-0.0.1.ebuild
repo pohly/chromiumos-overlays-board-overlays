@@ -16,7 +16,7 @@ SERVICES="
 	device_policy_manager.service
 	google-accounts-daemon.service
 	google-clock-skew-daemon.service
-	google-ip-forwarding-daemon.service
+	google-network-daemon.service
 	metrics-daemon.service
 	update-engine.service
 "

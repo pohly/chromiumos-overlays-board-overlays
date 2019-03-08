@@ -9,6 +9,8 @@ inherit distutils-r1 eutils systemd
 
 SRC_URI="https://github.com/GoogleCloudPlatform/compute-image-packages/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
+S="${WORKDIR}/${P}/packages/python-google-compute-engine"
+
 DESCRIPTION="Linux Guest Environment for Google Compute Engine"
 HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages"
 LICENSE="Apache-2.0"
@@ -29,9 +31,15 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	epatch "${FILESDIR}/20171006-homedir-uid-fix.patch"
-	epatch "${FILESDIR}/20171006-do-not-block-sshd-for-google.service.patch"
-	epatch "${FILESDIR}/20170227-no-boto.patch"
+	# ${S} is set to '${WORKDIR}/${P}/packages/python-google-compute-engine'
+	# i.e where setup.py is located as distutils-r1 expect setup.py to be
+	# at ${S}. As we have patches which are outside
+	# packages/python-google-compute-engine, we cd two level up.
+	pushd "${S}"/../../
+	epatch "${FILESDIR}/20190304-homedir-uid-fix.patch"
+	epatch "${FILESDIR}/20190304-no-boto.patch"
+	epatch "${FILESDIR}/20190304-do-not-block-sshd-for-google.service.patch"
+	popd
 	distutils-r1_python_prepare_all
 }
 
@@ -44,7 +52,7 @@ python_install() {
 python_install_all() {
 	distutils-r1_python_install_all
 
-	local init_path="${S}/google_compute_engine_init/systemd"
+	local init_path="${S}/../google-compute-engine/src/lib/systemd/system"
 	local service
 	for service in "${init_path}"/*.service; do
 		systemd_dounit "${service}"
@@ -62,5 +70,5 @@ python_install_all() {
 
 	# Install distro specific default configuration.
 	insinto /etc/default/
-	newins "${FILESDIR}/20170227-instance_configs.cfg.distro" instance_configs.cfg.distro
+	newins "${FILESDIR}/20190304-instance_configs.cfg.distro" instance_configs.cfg.distro
 }

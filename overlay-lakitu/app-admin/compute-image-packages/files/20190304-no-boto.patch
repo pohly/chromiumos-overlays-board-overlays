@@ -1,0 +1,25 @@
+From 7a0c39e16bcc3cf6d19a07f5a7266078d59f273a Mon Sep 17 00:00:00 2001
+From: vaibhavrustagi <vaibhavrustagi@google.com>
+Date: Thu, 7 Mar 2019 14:04:08 -0800
+Subject: [PATCH] Remove boto dependency
+
+---
+ packages/python-google-compute-engine/setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/python-google-compute-engine/setup.py b/packages/python-google-compute-engine/setup.py
+index 59a61b3..6df6b5e 100755
+--- a/packages/python-google-compute-engine/setup.py
++++ b/packages/python-google-compute-engine/setup.py
+@@ -20,7 +20,7 @@ import sys
+ 
+ import setuptools
+ 
+-install_requires = ['boto', 'setuptools']
++install_requires = ['setuptools']
+ if sys.version_info >= (3, 6):
+   install_requires += ['distro']
+ 
+-- 
+2.21.0.360.g471c308f928-goog
+

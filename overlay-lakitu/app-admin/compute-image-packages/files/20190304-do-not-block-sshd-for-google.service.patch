@@ -1,0 +1,75 @@
+From d5510849f30c0198ea40833d4af439d8aae771b1 Mon Sep 17 00:00:00 2001
+From: vaibhavrustagi <vaibhavrustagi@google.com>
+Date: Thu, 7 Mar 2019 13:42:52 -0800
+Subject: [PATCH] Do not block sshd for google.service
+
+---
+ packages/google-compute-engine/src/lib/systemd/system/google-instance-setup.service     | 5 ++---
+ packages/google-compute-engine/src/lib/systemd/system/google-network-daemon.service     | 4 ++--
+ packages/google-compute-engine/src/lib/systemd/system/google-shutdown-scripts.service   | 4 ++--
+ packages/google-compute-engine/src/lib/systemd/system/google-startup-scripts.service    | 4 ++--
+ 4 files changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/packages/google-compute-engine/src/lib/systemd/system/google-instance-setup.service b/packages/google-compute-engine/src/lib/systemd/system/google-instance-setup.service
+index afa639a..6db20e1 100644
+--- a/packages/google-compute-engine/src/lib/systemd/system/google-instance-setup.service
++++ b/packages/google-compute-engine/src/lib/systemd/system/google-instance-setup.service
+@@ -1,8 +1,7 @@
+ [Unit]
+ Description=Google Compute Engine Instance Setup
+-After=local-fs.target network-online.target network.target rsyslog.service
+-Before=sshd.service
+-Wants=local-fs.target network-online.target network.target
++After=network-online.target
++Wants=network-online.target
+ 
+ [Service]
+ Type=oneshot
+diff --git a/packages/google-compute-engine/src/lib/systemd/system/google-network-daemon.service b/packages/google-compute-engine/src/lib/systemd/system/google-network-daemon.service
+index 74bf82e..e552631 100644
+--- a/packages/google-compute-engine/src/lib/systemd/system/google-network-daemon.service
++++ b/packages/google-compute-engine/src/lib/systemd/system/google-network-daemon.service
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=Google Compute Engine Network Daemon
+-After=local-fs.target network-online.target network.target rsyslog.service
++After=network-online.target
+ After=google-instance-setup.service
+-Wants=local-fs.target network-online.target network.target
++Wants=network-online.target
+ Requires=network.target
+ PartOf=network.service
+ 
+diff --git a/packages/google-compute-engine/src/lib/systemd/system/google-shutdown-scripts.service b/packages/google-compute-engine/src/lib/systemd/system/google-shutdown-scripts.service
+index 069405e..e4fb04f 100644
+--- a/packages/google-compute-engine/src/lib/systemd/system/google-shutdown-scripts.service
++++ b/packages/google-compute-engine/src/lib/systemd/system/google-shutdown-scripts.service
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=Google Compute Engine Shutdown Scripts
+-After=local-fs.target network-online.target network.target rsyslog.service systemd-resolved.service
++After=network-online.target systemd-resolved.service
+ After=google-instance-setup.service google-network-daemon.service
+-Wants=local-fs.target network-online.target network.target
++Wants=network-online.target
+ 
+ [Service]
+ ExecStart=/bin/true
+diff --git a/packages/google-compute-engine/src/lib/systemd/system/google-startup-scripts.service b/packages/google-compute-engine/src/lib/systemd/system/google-startup-scripts.service
+index 73ee8db..e07f404 100644
+--- a/packages/google-compute-engine/src/lib/systemd/system/google-startup-scripts.service
++++ b/packages/google-compute-engine/src/lib/systemd/system/google-startup-scripts.service
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=Google Compute Engine Startup Scripts
+-After=local-fs.target network-online.target network.target rsyslog.service
++After=network-online.target
+ After=google-instance-setup.service google-network-daemon.service
+-Wants=local-fs.target network-online.target network.target
++Wants=network-online.target
+ 
+ [Service]
+ ExecStart=/usr/bin/google_metadata_script_runner --script-type startup
+-- 
+2.21.0.360.g471c308f928-goog
+

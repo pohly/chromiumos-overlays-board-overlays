@@ -1,1 +1,0 @@
-compute-image-packages-20180129.ebuild

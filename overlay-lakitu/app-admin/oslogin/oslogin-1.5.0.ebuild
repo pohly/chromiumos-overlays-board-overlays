@@ -7,10 +7,10 @@ EAPI=5
 inherit eutils pam flag-o-matic
 
 DESCRIPTION="Google Compute Engine OS Login libraries, applications and configurations."
-HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages/tree/master/google_compute_engine_oslogin"
+HOMEPAGE="https://github.com/GoogleCloudPlatform/compute-image-packages/tree/master/packages/google-compute-engine-oslogin"
 
 # Release tag of compute-image-packages.
-CIP_PV="20180129"
+CIP_PV="20190304"
 SRC_URI="https://github.com/GoogleCloudPlatform/compute-image-packages/archive/${CIP_PV}.tar.gz -> compute-image-packages-${CIP_PV}.tar.gz"
 
 LICENSE="Apache-2.0"
@@ -24,11 +24,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/compute-image-packages-${CIP_PV}/google_compute_engine_oslogin"
-
-src_prepare() {
-	epatch "${FILESDIR}/${P}-makefile.patch"
-}
+S="${WORKDIR}/compute-image-packages-${CIP_PV}/packages/google-compute-engine-oslogin"
 
 src_compile() {
 	emake JSON_INCLUDE_PATH="${SYSROOT}/usr/include/json-c"

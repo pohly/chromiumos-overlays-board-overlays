@@ -1,6 +1,6 @@
-From c346d84e45f956c3d4e8147d3567287290d5287b Mon Sep 17 00:00:00 2001
-From: Ke Wu <mikewu@google.com>
-Date: Mon, 30 Oct 2017 23:26:19 -0700
+From 4e899c84387e932c0df858d671f5e7e78851c728 Mon Sep 17 00:00:00 2001
+From: vaibhavrustagi <vaibhavrustagi@google.com>
+Date: Thu, 7 Mar 2019 12:26:56 -0800
 Subject: [PATCH] When creating users try to derive the UID/GID from the
  homedir
 
@@ -13,23 +13,23 @@ This fixes potential problems if for some reason the new accounts that
 were previously added into passwd/group were not preserved after reboot,
 but the correspondinghome directory was.
 ---
- google_compute_engine/accounts/accounts_utils.py | 37 ++++++++++++++++++++----
- 1 file changed, 32 insertions(+), 5 deletions(-)
+ packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py                | 38 ++++++++++++++++---
+ 1 file changed, 33 insertions(+), 5 deletions(-)
 
-diff --git a/google_compute_engine/accounts/accounts_utils.py b/google_compute_engine/accounts/accounts_utils.py
-index f52af05..01d846c 100644
---- a/google_compute_engine/accounts/accounts_utils.py
-+++ b/google_compute_engine/accounts/accounts_utils.py
-@@ -28,7 +28,7 @@ from google_compute_engine import file_utils
- 
- USER_REGEX = re.compile(r'\A[A-Za-z0-9._][A-Za-z0-9._-]*\Z')
+diff --git a/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py b/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py
+index 56732c5..bb0ea31 100644
+--- a/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py
++++ b/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py
+@@ -30,7 +30,7 @@ USER_REGEX = re.compile(r'\A[A-Za-z0-9._][A-Za-z0-9._-]{0,31}\Z')
+ DEFAULT_GPASSWD_ADD_CMD = 'gpasswd -a {user} {group}'
+ DEFAULT_GPASSWD_REMOVE_CMD = 'gpasswd -d {user} {group}'
  DEFAULT_GROUPADD_CMD = 'groupadd {group}'
 -DEFAULT_USERADD_CMD = 'useradd -m -s /bin/bash -p * {user}'
 +DEFAULT_USERADD_CMD = 'useradd -s /bin/bash -p * {user}'
  DEFAULT_USERDEL_CMD = 'userdel -r {user}'
  DEFAULT_USERMOD_CMD = 'usermod -G {groups} {user}'
  
-@@ -121,18 +121,28 @@ class AccountsUtils(object):
+@@ -127,18 +127,28 @@ class AccountsUtils(object):
      except KeyError:
        return None
  
@@ -60,12 +60,12 @@ index f52af05..01d846c 100644
      try:
        subprocess.check_call(command.split(' '))
      except subprocess.CalledProcessError as e:
-@@ -300,8 +310,25 @@ class AccountsUtils(object):
+@@ -342,9 +352,27 @@ class AccountsUtils(object):
      if not self._GetUser(user):
        # User does not exist. Attempt to create the user and add them to the
        # appropriate user groups.
--      if not (self._AddUser(user) and
--              self._UpdateUserGroups(user, self.groups)):
+-      if not (self._AddUser(user)
+-              and self._UpdateUserGroups(user, self.groups)):
 +      user_created = False
 +
 +      # Check if the homedir already exists and if yes try to derive UID
@@ -82,12 +82,14 @@ index f52af05..01d846c 100644
 +          user_created = True
 +
 +      if not user_created and not self._AddUser(user):
-+        return False
+         return False
 +
 +      if not self._UpdateUserGroups(user, self.groups):
-         return False
- 
-     # Don't try to manage account SSH keys with a shell set to disable
++        return False
++
+     # Add the user to the google sudoers group.
+     if not self._UpdateSudoer(user, sudoer=True):
+       return False
 -- 
-2.15.0.rc2.357.g7e34df9404-goog
+2.21.0.360.g471c308f928-goog
 
