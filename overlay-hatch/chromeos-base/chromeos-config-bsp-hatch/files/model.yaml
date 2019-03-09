@@ -28,3 +28,8 @@ chromeos:
       skus:
         - $sku-id: 255
           config: *common_config
+    - $device-name: "hatch_whl"
+      $fw-name: "Hatch_whl"
+      skus:
+        - $sku-id: 255
+          config: *common_config
