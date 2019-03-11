@@ -30,7 +30,7 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
 USE="${USE} eclog"
 
 # Enable virtual machines.
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
 
 # Enable Intel wifi and bt firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw cros-pd"
