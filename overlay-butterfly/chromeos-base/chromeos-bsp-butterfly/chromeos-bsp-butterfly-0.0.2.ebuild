@@ -27,4 +27,8 @@ src_install() {
 	# Determine kernel version.
 	local audio_config_dir="${FILESDIR}/audio-config-$(usex kernel-3_8 3_8 3_4)"
 	install_audio_configs butterfly "${audio_config_dir}"
+
+	# Install Bluetooth ID override.
+	insinto "/etc/bluetooth"
+	doins "${FILESDIR}/main.conf"
 }
