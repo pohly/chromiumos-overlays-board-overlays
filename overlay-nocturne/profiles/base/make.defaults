@@ -50,4 +50,4 @@ USE="${USE} hammerd"
 USE="${USE} -unibuild"
 
 # Allow the option to use QCA Wifi and BT
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174 qca6174a-5-bt"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174a-5 qca6174a-5-bt"

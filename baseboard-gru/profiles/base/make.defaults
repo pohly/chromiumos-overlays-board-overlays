@@ -24,7 +24,7 @@ USE="${USE} cr50_onboard"
 USE="${USE} kvm_host"
 
 # QCA Wifi.
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174a-5"
 
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
