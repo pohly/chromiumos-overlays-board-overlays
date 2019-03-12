@@ -11,6 +11,7 @@ USE=""
 
 USE="${USE} als cros_ec intel_hdcp peppy watchdog"
 USE="${USE} wireless34"
+USE="${USE} bt_unsupported_read_enc_key_size"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
