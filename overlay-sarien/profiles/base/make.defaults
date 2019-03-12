@@ -32,3 +32,6 @@ USE="${USE} cros_ish touchview"
 # Load GuC/HuC Binaries
 USE="${USE} builtin_fw_guc_g9"
 USE="${USE} builtin_fw_huc_g9"
+
+# Enable Display port DPCD driver
+USE="${USE} drm_dp_aux_chardev"
