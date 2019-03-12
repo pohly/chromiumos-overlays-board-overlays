@@ -59,6 +59,11 @@ src_install() {
 	insinto "$(systemd_get_unitdir)/update-engine.service.d"
 	newins "${FILESDIR}"/update-engine-secure-boot.conf secure-boot.conf
 
+	# Upstream crash-sender.service has a random delay up to 6 minutes.
+	# The drop-in file forces immediate uploading by setting max_spread_time=0.
+	insinto "$(systemd_get_unitdir)/crash-sender.service.d"
+	newins "${FILESDIR}"/crash-sender-send-immediately.conf send-immediately.conf
+
 	exeinto "/usr/share/cloud"
 	doexe "${FILESDIR}"/stateful-dev-sym-sorted
 	doexe "${FILESDIR}"/is-secure-boot
