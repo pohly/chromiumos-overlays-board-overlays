@@ -1,4 +1,4 @@
-USE="moblab lxc -X -chaos_lab criu "
+USE="moblab lxc -X -chaos_lab criu -cheets -arc"
 
 # Additional modules to enable.
 APACHE2_MODULES="version"
