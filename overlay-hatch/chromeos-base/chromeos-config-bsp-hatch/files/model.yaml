@@ -12,6 +12,9 @@ common_config: &common_config
     sku-id: "{{$sku-id}}"
   firmware:
     no-firmware: True
+  firmware-signing:
+    key-id: "{{$key-id}}"
+    signature-id: "{{$device-name}}"
   power: &power_common
     charging-ports: |
       CROS_USB_PD_CHARGER0 LEFT
@@ -25,6 +28,8 @@ chromeos:
   devices:
     - $device-name: "hatch"
       $fw-name: "Hatch"
+      products:
+        - $key-id: "HATCH"
       skus:
         - $sku-id: 255 # Unprovisioned
           config: *common_config
@@ -32,6 +37,8 @@ chromeos:
           config: *common_config
     - $device-name: "hatch_whl"
       $fw-name: "Hatch_whl"
+      products:
+        - $key-id: "HATCH"
       skus:
         - $sku-id: 255
           config: *common_config
