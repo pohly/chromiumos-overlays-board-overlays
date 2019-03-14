@@ -1,14 +1,14 @@
-From 996bf7e9c47bafe0a2d09688851c8fe845bed18b Mon Sep 17 00:00:00 2001
+From 9b8912acf16fd291e6d86fd94cbd9530acde3eda Mon Sep 17 00:00:00 2001
 From: Ke Wu <mikewu@google.com>
-Date: Fri, 20 Jul 2018 16:40:11 -0700
+Date: Thu, 14 Mar 2019 14:19:38 -0700
 Subject: [PATCH] use GO cross compiler
 
 ---
- Makefile | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ Makefile | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 82926cf2..5aae12a0 100644
+index 8557d2e..6730814 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -23,9 +23,9 @@ DESTDIR=/usr/local
@@ -33,25 +33,16 @@ index 82926cf2..5aae12a0 100644
  INTEGRATION_PACKAGE=${PKG}
  TEST_REQUIRES_ROOT_PACKAGES=$(filter \
      ${PACKAGES}, \
-@@ -96,7 +96,7 @@ GO_GCFLAGS=$(shell				\
- 
- BINARIES=$(addprefix bin/,$(COMMANDS))
- 
--# Flags passed to `go test`
-+# Flags passed to `${GO} test`
- TESTFLAGS ?= -v $(TESTFLAGS_RACE)
- TESTFLAGS_PARALLEL ?= 8
- 
 @@ -116,7 +116,7 @@ AUTHORS: .mailmap .git/HEAD
  
  generate: protos
  	@echo "$(WHALE) $@"
--	@PATH=${ROOTDIR}/bin:${PATH} go generate -x ${PACKAGES}
-+	@PATH=${ROOTDIR}/bin:${PATH} ${GO} generate -x ${PACKAGES}
+-	@PATH="${ROOTDIR}/bin:${PATH}" go generate -x ${PACKAGES}
++	@PATH="${ROOTDIR}/bin:${PATH}" ${GO} generate -x ${PACKAGES}
  
  protos: bin/protoc-gen-gogoctrd ## generate protobuf
  	@echo "$(WHALE) $@"
-@@ -143,34 +143,34 @@ proto-fmt: ## check format of proto files
+@@ -143,42 +143,42 @@ proto-fmt: ## check format of proto files
  
  build: ## build the go packages
  	@echo "$(WHALE) $@"
@@ -91,9 +82,19 @@ index 82926cf2..5aae12a0 100644
 -	@CGO_ENABLED=0 go build ${GO_BUILD_FLAGS} -o bin/containerd-shim ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim
 +	@CGO_ENABLED=0 ${GO} build ${GO_BUILD_FLAGS} -o bin/containerd-shim ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim
  
+ bin/containerd-shim-runc-v1: cmd/containerd-shim-runc-v1 FORCE # set !cgo and omit pie for a static shim build: https://github.com/golang/go/issues/17789#issuecomment-258542220
+ 	@echo "$(WHALE) bin/containerd-shim-runc-v1"
+-	@CGO_ENABLED=0 go build ${GO_BUILD_FLAGS} -o bin/containerd-shim-runc-v1 ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim-runc-v1
++	@CGO_ENABLED=0 ${GO} build ${GO_BUILD_FLAGS} -o bin/containerd-shim-runc-v1 ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim-runc-v1
+ 
+ bin/containerd-shim-runhcs-v1: cmd/containerd-shim-runhcs-v1 FORCE # set !cgo and omit pie for a static shim build: https://github.com/golang/go/issues/17789#issuecomment-258542220
+ 	@echo "$(WHALE) bin/containerd-shim-runhcs-v1${BINARY_SUFFIX}"
+-	@CGO_ENABLED=0 go build ${GO_BUILD_FLAGS} -o bin/containerd-shim-runhcs-v1${BINARY_SUFFIX} ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim-runhcs-v1
++	@CGO_ENABLED=0 ${GO} build ${GO_BUILD_FLAGS} -o bin/containerd-shim-runhcs-v1${BINARY_SUFFIX} ${SHIM_GO_LDFLAGS} ${GO_TAGS} ./cmd/containerd-shim-runhcs-v1
+ 
  binaries: $(BINARIES) ## build binaries
  	@echo "$(WHALE) $@"
-@@ -218,9 +218,9 @@ uninstall:
+@@ -226,9 +226,9 @@ uninstall:
  coverage: ## generate coverprofiles from the unit tests, except tests that require root
  	@echo "$(WHALE) $@"
  	@rm -f coverage.txt
@@ -105,7 +106,7 @@ index 82926cf2..5aae12a0 100644
  			-cover \
  			-coverprofile=profile.out \
  			-covermode=atomic $$pkg || exit; \
-@@ -232,9 +232,9 @@ coverage: ## generate coverprofiles from the unit tests, except tests that requi
+@@ -240,9 +240,9 @@ coverage: ## generate coverprofiles from the unit tests, except tests that requi
  
  root-coverage: ## generate coverage profiles for unit tests that require root
  	@echo "$(WHALE) $@"
@@ -118,5 +119,5 @@ index 82926cf2..5aae12a0 100644
  			-coverprofile=profile.out \
  			-covermode=atomic $$pkg -test.root || exit; \
 -- 
-2.20.0.405.gbc1bbc6f85-goog
+2.21.0.360.g471c308f928-goog
 
