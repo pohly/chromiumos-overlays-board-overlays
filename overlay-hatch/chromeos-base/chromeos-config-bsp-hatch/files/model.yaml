@@ -26,7 +26,9 @@ chromeos:
     - $device-name: "hatch"
       $fw-name: "Hatch"
       skus:
-        - $sku-id: 255
+        - $sku-id: 255 # Unprovisioned
+          config: *common_config
+        - $sku-id: 1
           config: *common_config
     - $device-name: "hatch_whl"
       $fw-name: "Hatch_whl"
