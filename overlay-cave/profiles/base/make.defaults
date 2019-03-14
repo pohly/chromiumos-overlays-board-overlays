@@ -11,8 +11,6 @@ USE="${USE} als cave touchview has_keyboard_backlight"
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"
 
-USE="${USE} arc"
-
 USE="${USE} direncryption"
 
 # Avoid inhibiting the keyboard (which reports events from side buttons).

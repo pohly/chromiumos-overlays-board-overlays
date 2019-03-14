@@ -21,9 +21,6 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ipu3_fw"
 # Add EC logging
 USE="${USE} eclog"
 
-#enable ARC by default
-USE="${USE} arc"
-
 # Use ext4 crypto
 USE="${USE} direncryption"
 

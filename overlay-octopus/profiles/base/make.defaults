@@ -7,9 +7,6 @@ USE=""
 
 USE="${USE} octopus cros_ec touchview"
 
-# Enable ARC by default
-USE="${USE} arc"
-
 # Uncomment these lines to activate the serial port.
 # Enable kernel serial drivers
 # USE="${USE} pcserial"

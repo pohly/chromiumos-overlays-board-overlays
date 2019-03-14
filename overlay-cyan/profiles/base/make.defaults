@@ -7,9 +7,6 @@ USE=""
 
 USE="${USE} cyan dptf touchview"
 
-# Enable ARC by default
-USE="${USE} arc"
-
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.
 USE="${USE} allow_consumer_kiosk"

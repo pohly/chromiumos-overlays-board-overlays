@@ -5,8 +5,6 @@
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} arc"
-
 USE="${USE} cros_ec pd_sync"
 
 USE="${USE} touchview"

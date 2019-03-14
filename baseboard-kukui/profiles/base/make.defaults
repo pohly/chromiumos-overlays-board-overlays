@@ -18,9 +18,6 @@ USE="${USE} -opengl opengles"
 # Enable for daisydog
 USE="${USE} watchdog"
 
-#enable ARC by default
-USE="${USE} arc"
-
 # Enable Chrome's tablet mode
 USE="${USE} touchview"
 

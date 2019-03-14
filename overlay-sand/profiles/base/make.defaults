@@ -8,7 +8,6 @@ LINUX_FIRMWARE=""
 USE=""
 
 USE="${USE} has_keyboard_backlight sand"
-USE="${USE} arc"
 
 # Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)
 # boards as all new boards must be unibuild enabled moving forward. Do not copy this

@@ -9,7 +9,6 @@ USE="${USE} kevin"
 USE="${USE} pointer_events"
 USE="${USE} passive_event_listeners"
 USE="${USE} edge_touch_filtering"
-USE="${USE} arc"
 USE="${USE} internal_stylus"
 
 # override the baseboard in this one exception (combo of TPM2 + cr50)

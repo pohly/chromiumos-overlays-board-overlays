@@ -15,8 +15,6 @@ USE="${USE} has_keyboard_backlight"
 
 USE="${USE} cros_ec"
 
-USE="${USE} arc"
-
 USE="${USE} internal_stylus"
 
 # Use ext4 crypto

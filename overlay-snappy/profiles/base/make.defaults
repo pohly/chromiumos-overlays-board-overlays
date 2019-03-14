@@ -8,7 +8,6 @@ LINUX_FIRMWARE=""
 USE=""
 
 USE="${USE} has_keyboard_backlight snappy cros_ec touchview stylus pointer_events"
-USE="${USE} arc"
 
 # Avoid inhibiting the keyboard (which reports events from side buttons).
 USE="${USE} keyboard_includes_side_buttons"

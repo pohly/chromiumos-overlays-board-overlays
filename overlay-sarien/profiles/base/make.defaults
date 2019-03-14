@@ -13,9 +13,6 @@ USE="${USE} unibuild"
 # Bring in the diagnostics package
 USE="${USE} diagnostics"
 
-# Enable ARC++
-USE="${USE} arc"
-
 # Disable Chromium EC utilities
 USE="${USE} -cros_ec_utils"
 

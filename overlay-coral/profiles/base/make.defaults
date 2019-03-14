@@ -4,8 +4,6 @@
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} arc"
-
 USE="${USE} has_keyboard_backlight coral"
 
 USE="${USE} touchview"

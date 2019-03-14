@@ -29,8 +29,6 @@ USE="${USE} eclog"
 
 USE="${USE} -tpm tpm2 cr50_onboard"
 
-USE="${USE} arc"
-
 # Add keyboard
 USE="${USE} keyboard_includes_side_buttons"
 

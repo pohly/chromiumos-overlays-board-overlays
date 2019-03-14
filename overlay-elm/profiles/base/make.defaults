@@ -6,7 +6,6 @@
 USE=""
 
 USE="${USE} touchview"
-USE="${USE} arc"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.

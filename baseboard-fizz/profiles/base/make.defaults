@@ -17,7 +17,6 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 
 USE="${USE} ac_only -display_backlight -internal_mic"
 USE="${USE} -subpixel_rendering -tpm tpm2"
-USE="${USE} arc"
 
 # Use ext4 crypto
 USE="${USE} direncryption"

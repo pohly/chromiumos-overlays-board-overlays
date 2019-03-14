@@ -5,7 +5,6 @@
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} arc"
 USE="${USE} cheza"
 
 # Enable firmware detachable ui

@@ -13,8 +13,6 @@ USE="${USE} allow_consumer_kiosk"
 
 USE="${USE} containers"
 
-USE="${USE} arc"
-
 USE="${USE} direncryption"
 
 # Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)

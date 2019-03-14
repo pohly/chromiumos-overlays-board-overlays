@@ -6,7 +6,6 @@
 USE=""
 
 USE="${USE} nefario"
-USE="${USE} arc"
 
 # Use ext4 crypto
 USE="${USE} direncryption"

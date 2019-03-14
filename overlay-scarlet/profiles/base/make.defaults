@@ -6,7 +6,6 @@
 USE=""
 
 USE="${USE} scarlet"
-USE="${USE} arc"
 USE="${USE} internal_stylus"
 
 # Use ext4 crypto

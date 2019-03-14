@@ -18,6 +18,4 @@ USE="${USE} allow_consumer_kiosk"
 # Use ext4 crypto
 USE="${USE} direncryption"
 
-USE="${USE} arc"
-
 AFDO_PROFILE_SOURCE='broadwell'
