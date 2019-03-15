@@ -158,21 +158,24 @@ chromeos:
           config: *clamshell_config
     - $device-name: "phaser360"
       $fw-name: "Phaser"
+      products:
+        - $whitelabel-tag: ""
+        - $whitelabel-tag: "dopefish"
       skus:
         - $sku-id-val: 2
           $num-mic-locations: 1
-          config: *convertible_config
+          config: *convertible_wl_config
         - $sku-id-val: 3
           $stylus-category: "internal"
           $num-mic-locations: 2
-          config: *convertible_config
+          config: *convertible_wl_config
         - $sku-id-val: 4
           $num-mic-locations: 2
-          config: *convertible_config
+          config: *convertible_wl_config
         - $sku-id-val: 5
           $num-mic-locations: 1
           $sub_cras_config: ".laser"
-          config: *convertible_config
+          config: *convertible_wl_config
     - $device-name: "laser14"
       $fw-name: "Phaser"
       skus:
