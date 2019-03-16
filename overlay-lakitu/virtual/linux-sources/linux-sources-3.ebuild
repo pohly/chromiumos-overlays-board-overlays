@@ -13,8 +13,8 @@ SLOT="0"
 KEYWORDS="*"
 
 IUSE_KERNEL_VERS=(
-	kernel-4_4
 	kernel-4_14
+        kernel-4_19
 )
 IUSE="kernel_sources ${IUSE_KERNEL_VERS[*]}"
 REQUIRED_USE="?? ( ${IUSE_KERNEL_VERS[*]} )"
@@ -25,8 +25,8 @@ RDEPEND="
 	!sys-kernel/lakitu-kernel
 	!sys-kernel/upstream-kernel-mainline
 	!sys-kernel/upstream-kernel-next
-	kernel-4_4? ( sys-kernel/lakitu-kernel-4_4[kernel_sources=] )
 	kernel-4_14? ( sys-kernel/lakitu-kernel-4_14[kernel_sources=] )
+	kernel-4_19? ( sys-kernel/lakitu-kernel-4_19[kernel_sources=] )
 "
 
 # Add blockers so when migrating between USE flags, the old version gets
