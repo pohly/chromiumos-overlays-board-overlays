@@ -109,11 +109,9 @@ container_bind_mount() {
 }
 
 main() {
-  # TODO(smbarber): Remove once setup flow is finalized. Use this option
-  # to test usage of run_container.sh.
-  if [ "${FLAGS_dummy}" -eq "${FLAGS_TRUE}" ]; then
-    exit 0
-  fi
+  warning "run_container.sh is deprecated and will be removed"
+  warning "use vmc container <vm> <container> from crosh instead"
+  sleep 5
 
   if [ -z "${FLAGS_container_name}" ]; then
     die "--container_name is required"
