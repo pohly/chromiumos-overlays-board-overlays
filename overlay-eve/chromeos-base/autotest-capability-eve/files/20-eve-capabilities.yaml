@@ -1,4 +1,7 @@
 # iHD driver is only enabled on eve among KBL devices.
 # iHD driver doesn't have VP9 HW encoding capability on KBL. (b/124360022)
+# The maximum resolution on VP8 HW encoding is (1920, 1920) with media-driver.
+#   (https://github.com/intel/media-driver/issues/565)
+- no hw_enc_vp8_2160_30
 - no hw_enc_vp9_1080_30
 - no hw_enc_vp9_2160_30
