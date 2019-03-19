@@ -26,6 +26,13 @@ src_install() {
 	# Intall a rule tagging keyboard as having updated layout
 	udev_dorules "${FILESDIR}/81-sarien-keyboard.rules"
 
+	# Install platform-specific internal keyboard keymap.
+	# It should probbaly go into /lib/udev/hwdb.d but
+	# unfortunately udevadm on 64 bit boxes does not check
+	# that directory (it wants to look in /lib64/udev).
+	insinto "${EPREFIX}/etc/udev/hwdb.d"
+	doins "${FILESDIR}/81-sarien-keyboard.hwdb"
+
 	unibuild_install_audio_files
 	unibuild_install_bluetooth_files
 }
