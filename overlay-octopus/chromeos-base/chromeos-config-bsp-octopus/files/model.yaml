@@ -38,14 +38,16 @@ device-config: &device_config
       $ucm_extra_suffix: ""
       $ucm_root: "/usr/share/alsa/ucm"
       $card: "sof-glkda7219max"
-      cras-config-dir: "{{$device-name}}"
+      $sub_cras_config: ""
+      $cras-source-config-dir: "cras-config{{$sub_cras_config}}"
+      cras-config-dir: "{{$device-name}}{{$sub_cras_config}}"
       ucm-suffix: "{{$num-mic-locations}}mic{{$ucm_extra_suffix}}"
       files:
         # Volume Curve
-        - source: "{{$device-name}}/audio/cras-config/card_settings"
+        - source: "{{$device-name}}/audio/{{$cras-source-config-dir}}/card_settings"
           destination: "{{$cras_root}}/{{cras-config-dir}}/{{$card}}"
         # EQ/DRC DSP configuration
-        - source: "{{$device-name}}/audio/cras-config/dsp.ini"
+        - source: "{{$device-name}}/audio/{{$cras-source-config-dir}}/dsp.ini"
           destination: "{{$cras_root}}/{{cras-config-dir}}/dsp.ini"
         # ALSA UCM configuration file
         - source: "{{$ucm_src_root}}/audio/ucm-config/{{$card}}.{{$num-mic-locations}}mic/{{$card}}.conf"
@@ -149,6 +151,7 @@ chromeos:
           config: *convertible_config
         - $sku-id-val: 5
           $num-mic-locations: 1
+          $sub_cras_config: ".laser"
           config: *convertible_config
     - $device-name: "laser14"
       $fw-name: "Phaser"
