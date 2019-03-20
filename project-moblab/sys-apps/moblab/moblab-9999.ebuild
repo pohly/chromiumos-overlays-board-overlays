@@ -16,15 +16,17 @@ HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/moblab/+/master/
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="~*"
-IUSE=""
+IUSE="docker"
 
 SRC_URI="${BASE_SRC_URI}/mobmonitor-ui-node_modules-0.0.2.tar.gz"
 
 RDEPEND="
+		docker? ( app-emulation/docker )
 		dev-python/futures
-		net-libs/grpc
-		dev-python/protobuf-python
 		dev-python/google-cloud-storage
+		dev-python/grpcio
+		dev-python/protobuf-python
+		net-libs/grpc
 "
 
 DEPEND="${RDEPEND}
