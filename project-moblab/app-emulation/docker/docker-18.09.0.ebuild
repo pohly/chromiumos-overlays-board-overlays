@@ -38,7 +38,6 @@ CDEPEND="
 DEPEND="
 	${CDEPEND}
 
-	dev-go/go-md2man
 
 	btrfs? (
 		>=sys-fs/btrfs-progs-3.16.1
