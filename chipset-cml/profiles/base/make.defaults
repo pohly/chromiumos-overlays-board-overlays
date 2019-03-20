@@ -22,3 +22,7 @@ USE="${USE} -video_cards_i965 video_cards_iHD"
 
 # Enable DPTF
 USE="${USE} dptf"
+
+# Load GuC/HuC Binaries
+USE="${USE} builtin_fw_guc_g9"
+USE="${USE} builtin_fw_huc_g9"
