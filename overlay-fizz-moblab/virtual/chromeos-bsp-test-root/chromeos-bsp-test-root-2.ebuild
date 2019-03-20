@@ -12,5 +12,4 @@ KEYWORDS="*"
 
 DEPEND="chromeos-base/chromeos-test-testauthkeys"
 RDEPEND="${DEPEND}
-	chromeos-base/install-base-container
 "
