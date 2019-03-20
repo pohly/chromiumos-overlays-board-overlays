@@ -327,10 +327,15 @@ chromeos:
           config: *unprovisioned_convertible_config
     - $device-name: "casta"
       $fw-name: "Casta"
-      # TODO(OEM): need update later
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 1
+          config: *clamshell_config
+    - $device-name: "bluebird"
+      $fw-name: "Casta"
+      $num-mic-locations: 1
+      skus:
+        - $sku-id-val: 2
           config: *clamshell_config
     - $device-name: "nospike"
       $fw-name: "Ampton"
