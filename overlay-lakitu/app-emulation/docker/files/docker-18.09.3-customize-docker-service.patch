@@ -1,6 +1,6 @@
-From dbb7dce5287b0fb6e725c537442f1fc5efe119a2 Mon Sep 17 00:00:00 2001
+From 92260341f65355f4e05a9ed458f51dd67060cf0f Mon Sep 17 00:00:00 2001
 From: Ke Wu <mikewu@google.com>
-Date: Tue, 12 Feb 2019 15:32:13 -0800
+Date: Wed, 20 Mar 2019 16:32:14 -0700
 Subject: [PATCH] Customize docker.service for COS
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] Customize docker.service for COS
  1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/components/engine/contrib/init/systemd/docker.service b/components/engine/contrib/init/systemd/docker.service
-index 5174631..aa64b0a 100644
+index 5174631..7e1a886 100644
 --- a/components/engine/contrib/init/systemd/docker.service
 +++ b/components/engine/contrib/init/systemd/docker.service
 @@ -1,17 +1,21 @@
@@ -28,7 +28,7 @@ index 5174631..aa64b0a 100644
  # for containers run by docker
 -ExecStart=/usr/bin/dockerd -H fd://
 +ExecStartPre=/bin/sh -c 'if [[ -f /var/lib/docker/daemon.json ]]; then cp -f /var/lib/docker/daemon.json /etc/docker/daemon.json; fi'
-+ExecStart=/usr/bin/dockerd --registry-mirror=https://mirror.gcr.io --host=fd:// $DOCKER_OPTS
++ExecStart=/usr/bin/dockerd --registry-mirror=https://mirror.gcr.io --host=fd:// --containerd=/var/run/containerd/containerd.sock $DOCKER_OPTS
  ExecReload=/bin/kill -s HUP $MAINPID
 +ExecStopPost=/bin/echo "docker daemon exited"
  LimitNOFILE=1048576
@@ -56,5 +56,5 @@ index 5174631..aa64b0a 100644
  [Install]
  WantedBy=multi-user.target
 -- 
-2.20.1.791.gb4d0f1c61a-goog
+2.21.0.225.g810b269d1ac-goog
 

@@ -70,7 +70,7 @@ S="${WORKDIR}/${P}/src/${EGO_PN}"
 PATCHES=(
 	"${FILESDIR}"/docker-18.09.0-go-cross-compilation.patch
 	"${FILESDIR}"/docker-18.06.0-log-line-max-size.patch
-	"${FILESDIR}"/docker-18.09.1-customize-docker-service.patch
+	"${FILESDIR}"/docker-18.09.3-customize-docker-service.patch
 )
 
 # see "contrib/check-config.sh" from upstream's sources
