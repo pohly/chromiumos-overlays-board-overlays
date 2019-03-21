@@ -8,6 +8,7 @@ common_config: &common_config
     no-firmware: True
   power:
     suspend-to-idle: "1"
+    has-charge-controller: "1"
   audio:
     main:
       # If the generic ucm is not sufficient, the device
