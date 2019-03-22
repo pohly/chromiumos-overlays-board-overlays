@@ -8,56 +8,12 @@ set -u
 set -o pipefail
 
 readonly BOOT_TARGET="systemd.unit=kdump-save-dump.service"
-readonly DUMPFILE_PREFIX="kdump-"
-readonly DUMPFILE_LN="kdump"
-readonly RESERVE_FILE="pre_alloc"
+readonly DUMPFILE_PREFIX="/var/kdump-"
+readonly DUMPFILE_LN="/var/kdump"
 readonly ESP_PARTITION="/dev/sda12"
 readonly KDUMP_KERNEL="/boot/kdump/vmlinuz"
 readonly PROG_NAME="$(basename ${0})"
-readonly CONFIG_DEFAULT="/etc/kdump/kdump.conf"
-readonly CONFIG_OVERWRITE="/var/kdump/kdump.conf"
-
-declare -A CONFIG
-CONFIG=(
-    [MAKEDUMP_ARGS]='-c -d 31'
-    [CRASHKERNEL_SIZE]='0M-8G:64M,8G-32G:128M,32G-128G:256M,128G-:512M'
-    [KDUMP_PRE_ALLOC_PERCENT]='10'
-    [KDUMP_DIR]='/var/kdump'
-    [KDUMP_NUM_DUMPS]='3'
-)
-
-
-#
-# read_config <config_file_path>
-#
-# Reads the configuration specified in config_file_path into the CONFIG array.
-#
-# Args:
-# config_file_path: The path of the config file.
-#
-read_config() {
-  local -r config_file_path="${1}"
-  while read line; do
-    if [[ "${line}" =~ ^[^#]*= ]]; then
-      varname="$(echo "${line}" | cut -d '=' -f 1)"
-      value="$(echo "${line}" | cut -d '=' -f 2-)"
-      CONFIG["${varname}"]="${value}"
-    fi
-  done < "${config_file_path}"
-}
-
-
-#
-# setup
-#
-# Sets up the common dependency of all functionalities, such as reading config
-# file and creating working directory.
-#
-setup() {
-  [[ -r "${CONFIG_DEFAULT}" ]] && read_config "${CONFIG_DEFAULT}"
-  [[ -r "${CONFIG_OVERWRITE}" ]] && read_config "${CONFIG_OVERWRITE}" || true
-  mkdir -p "${CONFIG[KDUMP_DIR]}"
-}
+readonly CRASHKERNEL_SIZE="0M-8G:64M,8G-32G:128M,32G-128G:256M,128G-:512M"
 
 
 #
@@ -155,7 +111,7 @@ construct_commandline() {
 kdump_enable() {
   local dir="$(mktemp -d)"
   mount "${ESP_PARTITION}" "${dir}"
-  sed "s/ cros_efi / cros_efi crashkernel=${CONFIG[CRASHKERNEL_SIZE]} /g" \
+  sed "s/ cros_efi / cros_efi crashkernel=${CRASHKERNEL_SIZE} /g" \
     -i "${dir}/efi/boot/grub.cfg"
   sync
   umount "${dir}"
@@ -183,23 +139,11 @@ kdump_disable() {
 # Filter and store /proc/vmcore to disk.
 #
 kdump_save_core() {
-  local dumpfile_prefix="${CONFIG[KDUMP_DIR]}/${DUMPFILE_PREFIX}"
-  local num_dumps="$((find ${dumpfile_prefix}* 2>/dev/null || true) | wc -l)"
-  if [[ ${num_dumps} -ge ${CONFIG[KDUMP_NUM_DUMPS]} ]]; then
-    echo -n "Number of currently stored dumps ${num_dumps} is over the limit:"
-    echo " ${CONFIG[KDUMP_NUM_DUMPS]}."
-    return 0
-  fi
-
-  local pre_alloc_bytes="$(stat --printf="%s" ${CONFIG[KDUMP_DIR]}/${RESERVE_FILE})"
-  echo "Reclaiming pre-allocated disk space ${pre_alloc_bytes} bytes."
-  rm -f "${CONFIG[KDUMP_DIR]}/${RESERVE_FILE}"
-
-  local filename="${dumpfile_prefix}$(date +'%Y%m%d%H%M')"
+  local filename="${DUMPFILE_PREFIX}$(date +'%Y%m%d%H%M')"
   echo "Saving vmcore to ${filename}."
-  makedumpfile ${CONFIG[MAKEDUMP_ARGS]} /proc/vmcore "${filename}"
-  rm -f "${CONFIG[KDUMP_DIR]}/${DUMPFILE_LN}"
-  ln -s "${filename}" "${CONFIG[KDUMP_DIR]}/${DUMPFILE_LN}"
+  makedumpfile -c -d 31 /proc/vmcore "${filename}"
+  rm -f "${DUMPFILE_LN}"
+  ln -s "${filename}" "${DUMPFILE_LN}"
   echo "sync-ing."
   sync
   echo "kdump finished."
@@ -208,22 +152,13 @@ kdump_save_core() {
 #
 # kdump_load
 #
-# Load the kdump kernel into reserved memory zone, and do per-dump setup work
-# such as setting up disk space allocation.
+# Load the kdump kernel into reserved memory zone.
 #
 kdump_load() {
   local cmdline="$(construct_commandline)"
   kexec -s -p "${KDUMP_KERNEL}" --append="${cmdline}"
   echo "Loaded kdump kernel ${KDUMP_KERNEL} with command line parameter:"
   echo "${cmdline}"
-
-  local mem_total_regex="Mem\:[[:space:]]*([0-9]*) .*"
-  local total_mem_bytes="$(free -tb | grep Mem | sed -rn "s/${mem_total_regex}/\1/p")"
-  local pre_alloc_bytes="$((total_mem_bytes * CONFIG[KDUMP_PRE_ALLOC_PERCENT] / 100))"
-  echo -n "Pre-allocating ${pre_alloc_bytes} bytes at"
-  echo " ${CONFIG[KDUMP_DIR]}/${RESERVE_FILE}."
-  truncate -s "${pre_alloc_bytes}" "${CONFIG[KDUMP_DIR]}/${RESERVE_FILE}"
-  echo "Pre-allocation successful."
 }
 
 #
@@ -255,11 +190,11 @@ kdump_show() {
     echo "$(construct_commandline)"
   fi
 
-  if [[ ! -f "${CONFIG[KDUMP_DIR]}/${DUMPFILE_LN}" ]]; then
+  if [[ ! -f "${DUMPFILE_LN}" ]]; then
     return
   fi
   echo "Collected kernel dumps:"
-  stat -c "path:%n    date:%y    size:%s bytes" "${CONFIG[KDUMP_DIR]}/${DUMPFILE_PREFIX}"*
+  stat -c "path:%n    date:%y    size:%s bytes" "${DUMPFILE_PREFIX}"*
 }
 
 #
@@ -268,12 +203,11 @@ kdump_show() {
 # Cleanup the collected kernel dumps.
 #
 kdump_cleanup() {
-  rm -f "${CONFIG[KDUMP_DIR]}/${DUMPFILE_LN}"
-  rm -f "${CONFIG[KDUMP_DIR]}/${DUMPFILE_PREFIX}"*
+  rm -f "${DUMPFILE_LN}"
+  rm -f "${DUMPFILE_PREFIX}"*
 }
 
 main() {
-  setup
   case "${1-help}" in
     show)
     kdump_show

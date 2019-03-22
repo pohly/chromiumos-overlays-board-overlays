@@ -26,9 +26,6 @@ src_install() {
 	systemd_dounit "${FILESDIR}"/kdump-load-kernel.service
 	systemd_enable_service sysinit.target kdump-load-kernel.service
 
-	insinto /etc/kdump
-	doins "${FILESDIR}"/kdump.conf
-
 	exeinto /usr/sbin
 	doexe "${FILESDIR}"/kdump_helper
 }

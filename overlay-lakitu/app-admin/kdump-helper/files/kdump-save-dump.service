@@ -7,6 +7,6 @@ DefaultDependencies=no
 [Service]
 Type=oneshot
 StandardOutput=journal+console
-ExecStart=-/usr/sbin/kdump_helper savecore
+ExecStart=/usr/sbin/kdump_helper savecore
 ExecStartPost=/sbin/reboot
 RemainAfterExit=yes
