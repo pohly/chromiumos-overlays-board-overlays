@@ -22,4 +22,8 @@ src_install() {
 	insinto "/etc/init"
 	doins "${FILESDIR}/rf-led-handler.conf"
 	doins "${FILESDIR}/set-battery-first-use-date.conf"
+
+	# Install touchpad settings.
+	insinto /etc/gesture
+	doins "${FILESDIR}"/50-touchpad-cmt-*.conf
 }

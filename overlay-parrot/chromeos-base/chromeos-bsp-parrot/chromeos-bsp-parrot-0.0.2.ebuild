@@ -64,4 +64,8 @@ src_install() {
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Install touchpad settings.
+	insinto /etc/gesture
+	doins "${FILESDIR}"/50-touchpad-cmt-*.conf
 }

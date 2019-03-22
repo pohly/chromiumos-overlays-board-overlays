@@ -39,4 +39,8 @@ src_install() {
 	# Install audio configs.
 	local audio_config_dir="${FILESDIR}/audio-config"
 	install_audio_configs x86-zgb "${audio_config_dir}"
+
+	# Install touchpad settings.
+	insinto /etc/gesture
+	doins "${FILESDIR}"/50-touchpad-cmt-*.conf
 }
