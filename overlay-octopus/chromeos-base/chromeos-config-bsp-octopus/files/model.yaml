@@ -65,6 +65,8 @@ device-config: &device_config
     # Max brightness is 19200, as reported by
     # /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/max_brightness
     min-visible-backlight-level: "960"
+    $has-keyboard-backlight: "0"
+    has-keyboard-backlight: "{{$has-keyboard-backlight}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
@@ -417,9 +419,19 @@ chromeos:
       skus:
         - $sku-id-val: 33
           config: *convertible_config
+        - $sku-id-val: 34
+          $has-keyboard-backlight: 1
+          config: *convertible_config
+        - $sku-id-val: 35
+          $has-keyboard-backlight: 1
+          config: *convertible_config
     - $device-name: "blooguard"
       $fw-name: "Bloog"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 49
+          $has-keyboard-backlight: 1
+          config: *convertible_config
+        - $sku-id-val: 50
+          $has-keyboard-backlight: 1
           config: *convertible_config
