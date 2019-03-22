@@ -13,6 +13,8 @@
 
 
 # camera
+- builtin_usb_camera
+- no builtin_mipi_camera
+- no vivid_camera
 - builtin_camera
-- usb_camera
-- no mipi_camera
+- builtin_or_vivid_camera
