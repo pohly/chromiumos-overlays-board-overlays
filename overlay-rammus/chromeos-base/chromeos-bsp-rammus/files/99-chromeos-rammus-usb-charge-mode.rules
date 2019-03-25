@@ -10,10 +10,20 @@
 # This feature can reduce the power consumption of suspend mode by
 # turning off the type-a redriver.
 
+# monitor USB2 port 2
 ACTION=="add", DRIVERS=="usb", SUBSYSTEM=="usb", \
   DEVPATH=="/devices/pci0000:00/0000:00:14.0/usb1/1-2", \
   RUN+="/usr/sbin/ectool usbchargemode 0 2 0"
 
 ACTION=="remove", DRIVERS=="usb", SUBSYSTEM=="usb", \
   DEVPATH=="/devices/pci0000:00/0000:00:14.0/usb1/1-2", \
+  RUN+="/usr/sbin/ectool usbchargemode 0 2 1"
+
+# monitor USB3 port 3
+ACTION=="add", DRIVERS=="usb", SUBSYSTEM=="usb", \
+  DEVPATH=="/devices/pci0000:00/0000:00:14.0/usb2/2-3", \
+  RUN+="/usr/sbin/ectool usbchargemode 0 2 0"
+
+ACTION=="remove", DRIVERS=="usb", SUBSYSTEM=="usb", \
+  DEVPATH=="/devices/pci0000:00/0000:00:14.0/usb2/2-3", \
   RUN+="/usr/sbin/ectool usbchargemode 0 2 1"
