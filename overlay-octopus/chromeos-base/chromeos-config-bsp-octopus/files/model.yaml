@@ -112,15 +112,6 @@ chromeos:
       skus:
         - $sku-id-val: 255
           config: *convertible_config
-    - $device-name: "bip"
-      $fw-name: "Bip"
-      $num-mic-locations: 2
-      skus:
-        - $sku-id-val: 255
-          $card: "sof-glkrt5682max"
-          $ucm_src_root: "{{$device-name}}"
-          $ucm_extra_suffix: "{{$device-name}}"
-          config: *convertible_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
     # will also catch the DUT still with 255 and report error.
