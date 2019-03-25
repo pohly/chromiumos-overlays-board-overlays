@@ -40,6 +40,7 @@ LAKITU_RDEPEND="
 	chromeos-base/tty
 	chromeos-base/update_engine
 	dev-lang/python
+	dev-util/perf
 	net-analyzer/netcat
 	net-firewall/ebtables
 	net-fs/autofs
