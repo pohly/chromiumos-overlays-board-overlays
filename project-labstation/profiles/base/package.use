@@ -3,3 +3,6 @@
 
 # For ft2232_spi support in flashrom.
 sys-apps/flashrom ft2232_spi
+
+# Disable oobe check from update_engine for labstation(crbug.com/944723).
+virtual/update-policy cros_embedded
