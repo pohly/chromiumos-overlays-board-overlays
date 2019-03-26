@@ -2,5 +2,6 @@ ACTION!="add", GOTO="media_end"
 SUBSYSTEM!="video4linux", GOTO="media_end"
 
 ATTR{name}=="mtk-vcodec-dec", SYMLINK+="video-dec0"
+ATTR{name}=="mtk-vcodec-enc", SYMLINK+="video-enc"
 
 LABEL="media_end"
