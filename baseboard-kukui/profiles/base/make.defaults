@@ -31,8 +31,8 @@ USE="${USE} direncryption"
 USE="${USE} -tpm tpm2"
 USE="${USE} cr50_onboard"
 
-# QCA Wifi.
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174a-3"
+# QCA Wifi and BT
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174a-3 qca6174a-3-bt"
 
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
