@@ -31,7 +31,7 @@ USE="${USE} eclog"
 USE="${USE} nvme"
 
 # Enable VMs
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
 
 # Add CEC support
 USE="${USE} cec"
