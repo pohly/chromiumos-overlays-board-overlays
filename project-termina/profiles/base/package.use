@@ -2,6 +2,6 @@
 chromeos-base/autotest-tests -tests_platform_MetricsUploader
 # Skip the large dbus and lvm2 libraries from libbrillo
 chromeos-base/libbrillo -dbus -device-mapper
-media-libs/mesa -classic drm egl llvm shared-glapi gles2 wayland X
+media-libs/mesa drm egl llvm shared-glapi gles2 wayland X
 sys-apps/hwids -net -pci udev -usb
 sys-fs/btrfs-progs -convert
