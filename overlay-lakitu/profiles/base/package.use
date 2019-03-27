@@ -18,9 +18,6 @@ sys-apps/util-linux -systemd
 # which "systemd-cgls" can do. Disabling it avoids a circ dep.
 sys-process/procps -systemd
 
-# Enable metrics uploader.
-chromeos-base/metrics metrics_uploader
-
 # Enable full-featured vim.
 app-editors/vim -minimal
 
