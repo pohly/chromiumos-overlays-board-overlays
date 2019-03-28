@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2016 The Android Open Source Project
+<!-- Copyright 2019 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -81,26 +81,6 @@ Only the three quirks included above are recognized at this point:
     <Settings>
         <Setting name="max-video-encoder-input-buffers" value="4" />
     </Settings>
-    <Decoders>
-        <MediaCodec name="ARC.h264.decode" type="video/avc" >
-            <Limit name="size" min="48x48" max="3840x2160" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="783360" />
-            <Limit name="bitrate" range="1-62500000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-        </MediaCodec>
-        <MediaCodec name="ARC.vp8.decode" type="video/x-vnd.on2.vp8" >
-            <Limit name="size" min="48x48" max="3840x2160" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="777600" />
-            <Limit name="bitrate" range="1-60000000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-        </MediaCodec>
-    </Decoders>
     <Include href="media_codecs_google_audio.xml" />
     <Include href="media_codecs_google_video.xml" />
     <Include href="media_codecs_cheets.xml" />
