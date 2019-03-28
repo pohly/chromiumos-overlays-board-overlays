@@ -41,6 +41,11 @@ common_config: &common_config
         # EQ/DRC DSP configuration file
         - source: "{{$device-name}}/audio/cras-config/dsp.ini"
           destination: "{{$cras_root}}/{{cras-config-dir}}/dsp.ini"
+  $bluetooth-device: "common"
+  bluetooth:
+    config:
+      build-path: "{{$bluetooth-device}}/bluetooth/main.conf"
+      system-path: "/etc/bluetooth/{{$bluetooth-device}}/main.conf"
 chromeos:
   devices:
     - $device-name: "sarien"

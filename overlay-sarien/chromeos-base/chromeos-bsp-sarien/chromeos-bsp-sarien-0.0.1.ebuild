@@ -27,4 +27,5 @@ src_install() {
 	udev_dorules "${FILESDIR}/81-sarien-keyboard.rules"
 
 	unibuild_install_audio_files
+	unibuild_install_bluetooth_files
 }
