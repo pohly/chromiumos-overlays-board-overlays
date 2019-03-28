@@ -1,7 +1,7 @@
 # Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=6
 
 inherit cros-constants
 
@@ -13,14 +13,17 @@ KEYWORDS="*"
 IUSE="android-container-nyc"
 S="${WORKDIR}"
 
+RDEPEND="!chromeos-base/arc-codec-software"
+
 src_install() {
+	insinto "${ARC_VENDOR_DIR}/etc/"
+
 	if use android-container-nyc; then
 		ARC_CODEC_DIR="${FILESDIR}/nyc"
 	else
-		ARC_CODEC_DIR="${FILESDIR}/mnc"
+		# Adopt for pic and future desserts
+		ARC_CODEC_DIR="${FILESDIR}/pic"
 	fi
 
-	insinto "${ARC_VENDOR_DIR}/etc/"
-	doins "${ARC_CODEC_DIR}/media_codecs.xml"
-	doins "${ARC_CODEC_DIR}/media_codecs_performance.xml"
+	doins "${ARC_CODEC_DIR}"/*
 }
