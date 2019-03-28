@@ -7,6 +7,7 @@ common_config: &common_config
   firmware:
     no-firmware: True
   power:
+    low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
     has-charge-controller: "1"
   hardware-properties:
