@@ -68,7 +68,8 @@ common_config: &common_config
     has-keyboard-backlight: "{{$has-keyboard-backlight}}"
     battery-stabilized-after-startup-ms: "10000"
   thermal:
-    dptf-dv: "{{$device-name}}/dptf.dv"
+    $dptf-file: "dptf.dv"
+    dptf-dv: "{{$device-name}}/{{$dptf-file}}"
     files:
       - source: "{{dptf-dv}}"
         destination: "/etc/dptf/{{dptf-dv}}"
@@ -156,8 +157,11 @@ chromeos:
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
+            $dptf-file: "dptf-pyke.dv"
         - $sku-id: 0x100bf63
-          config: *device_specific_audio_device_config
+          config:
+            <<: *device_specific_audio_device_config
+            $dptf-file: "dptf-pyke.dv"
     - $device-name: "sona"
       $bluetooth-device: "{{$device-name}}"
       $internal-backlight-no-als-battery-brightness: "63.0"
