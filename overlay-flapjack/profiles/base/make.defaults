@@ -7,8 +7,15 @@ USE=""
 
 USE="${USE} flapjack"
 
+USE="${USE} bootimage"
+
 USE="${USE} detachable_ui"
 
+# Enable unibuild
+USE="${USE} unibuild"
+
+# Enable camera
+USE="${USE} arc-camera3"
 
 # Building EC
 USE="${USE} cros_ec bootblock_in_ec"
