@@ -1,5 +1,5 @@
 {
-  "auto_brightness_als_horizon_seconds": 1,
+  "auto_brightness_als_horizon_seconds": 4,
   "global_curve": {
     "log_lux": [
       3.69,
@@ -27,5 +27,5 @@
     ]
   },
   "metrics_key": "atlas",
-  "model_als_horizon_seconds": 2
+  "model_als_horizon_seconds": 4
 }
