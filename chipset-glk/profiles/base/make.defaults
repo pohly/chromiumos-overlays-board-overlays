@@ -9,6 +9,10 @@ USE=""
 
 LINUX_FIRMWARE="${LINUX_FIRMWARE} i915_glk adsp_apl adsp_glk"
 
+# Based on goldmont-plus microarchitecture.
+# TODO: Change to "goldmont-plus" once ARC++ toolchain supports it.
+BOARD_COMPILER_FLAGS="-march=goldmont"
+
 USE="${USE} kernel-4_14"
 USE="${USE} apl_lpe glk_lpe intel_lpe"
 USE="${USE} dptf"
