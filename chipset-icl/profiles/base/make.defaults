@@ -4,7 +4,8 @@
 CHROMEOS_KERNEL_SPLITCONFIG="chromeos-intel-pineview"
 CHROMEOS_KERNEL_ARCH="x86_64"
 
-BOARD_COMPILER_FLAGS="-march=corei7"
+# Based on goldmont microarchitecture.
+BOARD_COMPILER_FLAGS="-march=goldmont"
 
 # Initial value just for style purposes.
 LINUX_FIRMWARE=""
