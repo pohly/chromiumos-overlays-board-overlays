@@ -6,7 +6,7 @@
 LINUX_FIRMWARE=""
 USE=""
 
-USE="${USE} ac_only -display_backlight"
+USE="${USE} ac_only -display_backlight -internal_mic"
 USE="${USE} legacy_power_button -subpixel_rendering tricky"
 USE="${USE} bt_unsupported_read_enc_key_size"
 

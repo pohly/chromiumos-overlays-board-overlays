@@ -1,14 +1,13 @@
 # Initial value just for style purposes.
 USE=""
 
+USE="${USE} -internal_mic"
+
 # Enable iwlwifi remove/rescan PCI reliability workaround.
 USE="${USE} iwlwifi_rescan"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
-
-# Initial value just for style purposes.
-USE=""
 
 # Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)
 # boards as all new boards must be unibuild enabled moving forward. Do not copy this
