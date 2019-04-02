@@ -49,3 +49,10 @@ chromeos:
         - $sku-id: 255
           $stylus-category: "internal"
           config: *common_config
+    - $device-name: "kohaku"
+      $fw-name: "Kohaku"
+      products:
+        - $key-id: "KOHAKU"
+      skus:
+        - $sku-id: 255
+          config: *common_config
