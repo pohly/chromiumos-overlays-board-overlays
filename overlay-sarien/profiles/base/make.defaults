@@ -10,9 +10,8 @@ USE="${USE} sarien"
 # Enable unibuild
 USE="${USE} unibuild"
 
-# Bring in the diagnostics package with its wilco-specific components,
-# which includes the diagnostics daemon and diagnostics processor.
-USE="${USE} diagnostics wilco"
+# Bring in the diagnostics package
+USE="${USE} diagnostics"
 
 # Enable ARC++
 USE="${USE} arc"
