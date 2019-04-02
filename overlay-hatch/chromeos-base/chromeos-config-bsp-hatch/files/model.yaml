@@ -24,6 +24,9 @@ common_config: &common_config
     touchpad-wakeup: "1"
     has-keyboard-backlight: "1"
     has-ambient-light-sensor: "1"
+  hardware-properties:
+    $stylus-category: "none"
+    stylus-category: "{{$stylus-category}}"
 
 chromeos:
   devices:
@@ -33,8 +36,10 @@ chromeos:
         - $key-id: "HATCH"
       skus:
         - $sku-id: 255 # Unprovisioned
+          $stylus-category: "internal"
           config: *common_config
         - $sku-id: 1
+          $stylus-category: "internal"
           config: *common_config
     - $device-name: "hatch_whl"
       $fw-name: "Hatch_whl"
@@ -42,4 +47,5 @@ chromeos:
         - $key-id: "HATCH"
       skus:
         - $sku-id: 255
+          $stylus-category: "internal"
           config: *common_config
