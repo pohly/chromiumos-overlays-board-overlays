@@ -9,6 +9,8 @@ common_config: &common_config
   power:
     suspend-to-idle: "1"
     has-charge-controller: "1"
+  hardware-properties:
+    is-lid-convertible: "{{$is-lid-convertible-val}}"
   audio:
     main:
       # If the generic ucm is not sufficient, the device
@@ -50,11 +52,13 @@ chromeos:
   devices:
     - $device-name: "sarien"
       $fw-name: "Sarien"
+      $is-lid-convertible-val: False
       skus:
         - $sku-id: 1
           config: *common_config
     - $device-name: "arcada"
       $fw-name: "Arcada"
+      $is-lid-convertible-val: True
       skus:
         - $sku-id: 2
           config: *common_config
