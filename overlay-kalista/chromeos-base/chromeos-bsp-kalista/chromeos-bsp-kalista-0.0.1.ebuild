@@ -20,6 +20,7 @@ RDEPEND=""
 DEPEND="
 	${RDEPEND}
 	chromeos-base/chromeos-config
+	chromeos-base/jabra-vold
 "
 
 src_install() {
