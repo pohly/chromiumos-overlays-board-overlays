@@ -29,17 +29,8 @@ chromeos:
         - $sku-id: 0x1
           config:
             <<: *device_config
-        - $sku-id: 0x25
-          config:
-            <<: *device_config
-        - $sku-id: 0x45
-          config:
-            <<: *device_config
     - $device-name: "c19"
       skus:
         - $sku-id: 0x3
-          config:
-            <<: *device_config
-        - $sku-id: 0x67
           config:
             <<: *device_config
