@@ -39,12 +39,26 @@ src_configure() {
 	cros-kernel2_src_configure
 }
 
+tar_kernel_source() {
+	# Put kernel source tarball under /opt to avoid it gets
+	# masked by INSTALL_MASK.
+	local source_dir=opt/google/src
+	dodir "${source_dir}"
+	pushd "${D}/usr/src/${P}"
+	tar --exclude="./build" -czf "${D}/${source_dir}/kernel-src.tar.gz" .
+	popd
+}
+
 src_install() {
 	cros-kernel2_src_install
 
 	# VCSID variable is unconditionally set by the cros-workon eclass, and
 	# is in the form of "<ebuild_revision>-<sha1>".
 	do_osrelease_field "KERNEL_COMMIT_ID" "${VCSID##*-}"
+
+	# Install kernel source tarball so it can be exported as an
+	# artifact later.
+	tar_kernel_source
 }
 
 # Change the following (commented out) number to the next prime number
