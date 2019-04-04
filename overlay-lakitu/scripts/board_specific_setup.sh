@@ -37,10 +37,19 @@ write_toolchain_path() {
       sudo tee "${BUILD_DIR}/toolchain_path" > /dev/null
 }
 
+move_kernel_source() {
+  # Move kernel source tarball to build dir so it can be exported as an
+  # artifact.
+  cp "${root_fs_dir}/opt/google/src/kernel-src.tar.gz" \
+      "${BUILD_DIR}/kernel-src.tar.gz"
+  sudo rm -rf "${root_fs_dir}/opt/google/src"
+}
+
 # board_finalize_base_image() gets invoked by the build scripts at the
 # end of building base image.
 board_finalize_base_image() {
   write_toolchain_path
+  move_kernel_source
 
   # /etc/machine-id gets installed by sys-apps/dbus and is a symlink.
   # This conflicts with systemd's machine-id generation mechanism,
