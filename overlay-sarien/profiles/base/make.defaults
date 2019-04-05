@@ -34,3 +34,6 @@ USE="${USE} drm_dp_aux_chardev"
 
 # Enable keyboard backlight support
 USE="${USE} has_keyboard_backlight"
+
+#Include the wacom firmware updating tool
+INPUT_DEVICES="wacom"
