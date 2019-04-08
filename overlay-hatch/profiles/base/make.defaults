@@ -17,3 +17,6 @@ USE="${USE} unibuild"
 
 # Enable Ambient Light Sensor
 USE="${USE} als"
+
+# Enable biometrics support
+USE="${USE} biod"
