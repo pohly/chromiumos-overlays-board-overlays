@@ -21,6 +21,12 @@ audio_common: &audio_common
     files:
       - source: "{{$cras-source}}/{{$card}}"
         destination: "{{$cras-dest}}/{{$card}}"
+      - source: "{{$cras-source}}/aec.ini"
+        destination: "{{$cras-dest}}/aec.ini"
+      - source: "{{$cras-source}}/apm.ini"
+        destination: "{{$cras-dest}}/apm.ini"
+      - source: "{{$cras-source}}/board.ini"
+        destination: "{{$cras-dest}}/board.ini"
       - source: "{{$cras-source}}/dsp.ini"
         destination: "{{$cras-dest}}/dsp.ini"
       - source: "{{$ucm-source}}/HiFi.conf"
