@@ -1,1 +1,2 @@
 media-libs/mesa egl gles2 shared-glapi
+sys-kernel/chromeos-kernel-4_19 -clang
