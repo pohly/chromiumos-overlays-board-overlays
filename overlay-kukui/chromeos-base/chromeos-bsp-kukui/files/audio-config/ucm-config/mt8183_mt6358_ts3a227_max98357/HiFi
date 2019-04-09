@@ -5,7 +5,7 @@ SectionVerb {
 	}
 	EnableSequence [
 		cdev "hw:mt8183mt6358ts3"
-		cset "name='Headphone Volume' 1"
+		cset "name='Headphone Volume' 0"
 	]
 	DisableSequence [
 	]
