@@ -20,3 +20,7 @@ USE="${USE} als"
 
 # Enable biometrics support
 USE="${USE} biod"
+
+# Include the goodix firmware updating tool
+INPUT_DEVICES="goodix"
+
