@@ -6,7 +6,7 @@
 
 unprovisioned-config: &unprovisioned_config
   name: "{{$device-name}}"
-  identity:
+  identity: &unprovisioned_identity
     platform-name: "octopus"
     smbios-name-match: "{{$fw-name}}"
     sku-id: "{{$sku-id-val}}"
@@ -114,6 +114,24 @@ convertible-config: &convertible_config
     $stylus-category: "none"
     stylus-category: "{{$stylus-category}}"
 
+clamshell-wl-config: &clamshell_wl_config
+  <<: *clamshell_config
+  identity:
+    <<: *unprovisioned_identity
+    whitelabel-tag: "{{$whitelabel-tag}}"
+
+clamshell-touchscreen-wl-config: &clamshell_touchscreen_wl_config
+  <<: *clamshell_touchscreen_config
+  identity:
+    <<: *unprovisioned_identity
+    whitelabel-tag: "{{$whitelabel-tag}}"
+
+convertible-wl-config: &convertible_wl_config
+  <<: *convertible_config
+  identity:
+    <<: *unprovisioned_identity
+    whitelabel-tag: "{{$whitelabel-tag}}"
+
 chromeos:
   devices:
     - $device-name: "yorp"
@@ -206,32 +224,38 @@ chromeos:
     - $device-name: "bobba"
       $fw-name: "Bobba"
       $num-mic-locations: 1
+      products:
+        - $whitelabel-tag: ""
+        - $whitelabel-tag: "gik"
       skus:
         - $sku-id-val: 1
-          config: *clamshell_config
+          config: *clamshell_wl_config
         - $sku-id-val: 2
-          config: *clamshell_touchscreen_config
+          config: *clamshell_touchscreen_wl_config
         - $sku-id-val: 3
-          config: *clamshell_config
+          config: *clamshell_wl_config
         - $sku-id-val: 4
-          config: *clamshell_touchscreen_config
+          config: *clamshell_touchscreen_wl_config
     - $device-name: "bobba360"
       $fw-name: "Bobba"
+      products:
+        - $whitelabel-tag: ""
+        - $whitelabel-tag: "gik360"
       skus:
         - $sku-id-val: 9
           $stylus-category: "internal"
           $num-mic-locations: 2
-          config: *convertible_config
+          config: *convertible_wl_config
         - $sku-id-val: 10
           $num-mic-locations: 2
-          config: *convertible_config
+          config: *convertible_wl_config
         - $sku-id-val: 11
           $stylus-category: "internal"
           $num-mic-locations: 1
-          config: *convertible_config
+          config: *convertible_wl_config
         - $sku-id-val: 12
           $num-mic-locations: 1
-          config: *convertible_config
+          config: *convertible_wl_config
     - $device-name: "sparky"
       $fw-name: "Bobba"
       skus:
