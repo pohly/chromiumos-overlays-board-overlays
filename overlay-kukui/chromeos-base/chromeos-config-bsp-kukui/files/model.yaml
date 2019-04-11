@@ -6,16 +6,15 @@
 
 common_config: &common_config
   name: "{{$device-name}}"
-  identity:
-    sku-id: "{{$sku-id}}"
+  identity: &identity
     platform-name: "Kukui"
-    device-tree-compatible-match: "google,kukui"
+    device-tree-compatible-match: "{{$fw-name}}"
   firmware:
     build-targets:
-      coreboot: "kukui"
-      ec: "kukui"
+      coreboot: "{{$fw-build-name}}"
+      ec: "{{$fw-build-name}}"
       ec_extras: [ "kukui_scp" ]
-      depthcharge: "kukui"
+      depthcharge: "{{$fw-build-name}}"
       libpayload: "kukui"
     no-firmware: true
   firmware-signing:
@@ -23,11 +22,26 @@ common_config: &common_config
     signature-id: "{{$device-name}}"
   test-label: "{{$device-name}}"
 
+kukui-config: &kukui_config
+  <<: *common_config
+  $fw-name: "google,kukui"
+  $fw-build-name: "kukui"
+  $key-id: "KUKUI"
+  identity:
+    <<: *identity
+    sku-id: 0
+
+krane-config: &krane_config
+  <<: *common_config
+  $fw-name: "google,krane"
+  $fw-build-name: "krane"
+  $key-id: "DEFAULT"
+
 chromeos:
   devices:
     - $device-name: "kukui"
-      products:
-        - $key-id: "KUKUI"
       skus:
-        - $sku-id: 0
-          config: *common_config
+        - config: *kukui_config
+    - $device-name: "krane"
+      skus:
+        - config: *krane_config
