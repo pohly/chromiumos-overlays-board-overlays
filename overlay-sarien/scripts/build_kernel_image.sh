@@ -16,4 +16,7 @@ modify_kernel_command_line() {
 
   # Check for S0ix failures and show warnings on failures
   echo "intel_pmc_core.warn_on_s0ix_failures=1" >> "$1"
+
+  # Disable LoadPin in factory (Work around for b/129240949)
+  echo "loadpin.enabled=0" >> "$1"
 }
