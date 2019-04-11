@@ -90,12 +90,27 @@ index 3a55c454b65d..285e05e7c0a6 100644
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev3-sku1-hwconfig1.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev3-sku3-hwconfig0.dtb
 \ No newline at end of file
+diff --git a/arch/arm64/boot/dts/mediatek/mt6358.dtsi b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
+index e95cb4c0910a..5dc7753b12d8 100644
+--- a/arch/arm64/boot/dts/mediatek/mt6358.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
+@@ -309,8 +309,8 @@
+ 			};
+ 			mt6358_vsim2_reg: ldo_vsim2 {
+ 				regulator-name = "vsim2";
+-				regulator-min-microvolt = <1700000>;
+-				regulator-max-microvolt = <3100000>;
++				regulator-min-microvolt = <2700000>;
++				regulator-max-microvolt = <2700000>;
+ 				regulator-enable-ramp-delay = <540>;
+ 			};
+ 		};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku1-hwconfig1.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku1-hwconfig1.dts
 new file mode 100644
-index 000000000000..687ebf0c07c1
+index 000000000000..aca1cad658c3
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku1-hwconfig1.dts
-@@ -0,0 +1,255 @@
+@@ -0,0 +1,260 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -144,6 +159,11 @@ index 000000000000..687ebf0c07c1
 +			};
 +		};
 +	};
++};
++
++
++&it6505dptx{
++	ovdd-supply = <&mt6358_vsim2_reg>;
 +};
 +
 +&pio {
@@ -353,10 +373,10 @@ index 000000000000..687ebf0c07c1
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku3-hwconfig0.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku3-hwconfig0.dts
 new file mode 100644
-index 000000000000..00305b341f0b
+index 000000000000..705552c8a12f
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku3-hwconfig0.dts
-@@ -0,0 +1,257 @@
+@@ -0,0 +1,261 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -407,6 +427,10 @@ index 000000000000..00305b341f0b
 +			};
 +		};
 +	};
++};
++
++&it6505dptx{
++	ovdd-supply = <&mt6358_vsim2_reg>;
 +};
 +
 +&pio {
@@ -761,6 +785,161 @@ index 000000000000..4ccd2c91db5c
 +	};
 +};
 +
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index 698a10f30b62..c26232ac256c 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -59,6 +59,15 @@
+ 		regulator-boot-on;
+ 	};
+ 
++	it6505_pp18_reg: regulator@0 {
++		compatible = "regulator-fixed";
++		regulator-name = "it6505_pp18";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		gpio = <&pio 178 0>;
++		enable-active-high;
++	};
++
+ 	reserved_memory: reserved-memory {
+ 		#address-cells = <2>;
+ 		#size-cells = <2>;
+@@ -154,6 +163,17 @@
+ 	proc-supply = <&mt6358_vproc11_reg>;
+ };
+ 
++&dpi0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&dpi_pin_default>;
++	status = "okay";
++	port {
++		dpi_out: endpoint {
++			remote-endpoint = <&it6505_in>;
++		};
++	};
++};
++
+ &dsi0 {
+ 	status = "okay";
+ 	#address-cells = <1>;
+@@ -241,6 +261,29 @@
+ 	pinctrl-0 = <&i2c3_pins>;
+ 	status = "okay";
+ 	clock-frequency = <100000>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	it6505dptx: it6505dptx@5c {
++		compatible = "ite,it6505";
++		status = "okay";
++		interrupt-parent = <&pio>;
++		interrupts = <152 IRQ_TYPE_EDGE_RISING 152 0>;
++		reg = <0x5c>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&it6505_pins>;
++		ovdd-supply = <&mt6358_vsim1_reg>;
++		pwr18-supply = <&it6505_pp18_reg>;
++		reset-gpios = <&pio 179 1>;
++		hpd-gpios = <&pio 9 0>;
++		cros-ec = <&cros_ec>;
++		extcon = <&usbc_extcon0>;
++		port {
++			it6505_in: endpoint {
++				remote-endpoint = <&dpi_out>;
++			};
++		};
++	};
+ };
+ 
+ &i2c4 {
+@@ -372,6 +415,28 @@
+ 		};
+ 	};
+ 
++	dpi_pin_default: dpi_pin_default{
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO13__FUNC_DBPI_D0>,
++				<PINMUX_GPIO14__FUNC_DBPI_D1>,
++				<PINMUX_GPIO15__FUNC_DBPI_D2>,
++				<PINMUX_GPIO16__FUNC_DBPI_D3>,
++				<PINMUX_GPIO17__FUNC_DBPI_D4>,
++				<PINMUX_GPIO18__FUNC_DBPI_D5>,
++				<PINMUX_GPIO19__FUNC_DBPI_D6>,
++				<PINMUX_GPIO20__FUNC_DBPI_D7>,
++				<PINMUX_GPIO21__FUNC_DBPI_D8>,
++				<PINMUX_GPIO22__FUNC_DBPI_D9>,
++				<PINMUX_GPIO23__FUNC_DBPI_D10>,
++				<PINMUX_GPIO24__FUNC_DBPI_D11>,
++				<PINMUX_GPIO25__FUNC_DBPI_HSYNC>,
++				<PINMUX_GPIO26__FUNC_DBPI_VSYNC>,
++				<PINMUX_GPIO27__FUNC_DBPI_DE>,
++				<PINMUX_GPIO28__FUNC_DBPI_CK>;
++				drive-strength = <MTK_DRIVE_6mA>;
++		};
++	};
++
+ 	ec_ap_int_odl: ec_ap_int_odl {
+ 		pins1 {
+ 			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
+@@ -457,6 +522,22 @@
+ 		};
+ 	};
+ 
++	it6505_pins: it6505_pins{
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO178__FUNC_GPIO178>,
++					<PINMUX_GPIO179__FUNC_GPIO179>;
++			output-low;
++			bias-pull-up;
++		};
++
++		pins_cmd_dat1 {
++			pinmux = <PINMUX_GPIO9__FUNC_GPIO9>,
++					<PINMUX_GPIO152__FUNC_GPIO152>;
++			input-enable;
++			bias-pull-up;
++		};
++	};
++
+ 	mmc0_pins_default: mmc0default {
+ 		pins_cmd_dat {
+ 			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
+@@ -788,6 +869,12 @@
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 		};
++
++		usbc_extcon0: extcon@0 {
++			compatible = "google,extcon-usbc-cros-ec";
++			google,usb-port-id = <0>;
++			#extcon-cells = <0>;
++		};
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 52daeac38875..f7a70e7df10c 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1552,6 +1552,17 @@
+ 			phy-names = "dphy";
+ 		};
+ 
++		dpi0: dpi@14015000 {
++			compatible = "mediatek,mt8183-dpi";
++			reg = <0 0x14015000 0 0x1000>;
++			interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_LOW 0>;
++			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_DPI_IF>,
++				 <&mmsys CLK_MM_DPI_MM>,
++				 <&apmixedsys CLK_APMIXED_TVDPLL>;
++			clock-names = "pixel", "engine", "pll";
++		};
++
+ 		mutex: mutex@14016000 {
+ 			compatible = "mediatek,mt8183-disp-mutex";
+ 			reg = <0 0x14016000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 index e6a7ea7aa6e6..d4c1104fd944 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
@@ -800,6 +979,3045 @@ index 233c489ba83a..c67e1d2f570a 100644
  # CONFIG_VIRTIO_NET is not set
  # CONFIG_VIRTIO_WL is not set
 +CONFIG_SX9311=y
+diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
+index 4934fcf5a6f8..a83507bf6300 100644
+--- a/drivers/gpu/drm/bridge/Makefile
++++ b/drivers/gpu/drm/bridge/Makefile
+@@ -16,4 +16,5 @@ obj-$(CONFIG_DRM_ANALOGIX_DP) += analogix/
+ obj-$(CONFIG_DRM_I2C_ADV7511) += adv7511/
+ obj-$(CONFIG_DRM_TI_SN65DSI86) += ti-sn65dsi86.o
+ obj-$(CONFIG_DRM_TI_TFP410) += ti-tfp410.o
++obj-y += ite-it6505.o
+ obj-y += synopsys/
+diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+new file mode 100755
+index 000000000000..35f0bede1ace
+--- /dev/null
++++ b/drivers/gpu/drm/bridge/ite-it6505.c
+@@ -0,0 +1,2948 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
++ */
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/extcon.h>
++#include <linux/interrupt.h>
++#include <linux/i2c.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_gpio.h>
++#include <linux/of_irq.h>
++#include <linux/of_platform.h>
++#include <linux/regmap.h>
++#include <linux/types.h>
++#include <linux/gpio/consumer.h>
++#include <linux/regulator/consumer.h>
++#include <linux/mfd/cros_ec.h>
++#include <linux/mfd/cros_ec_commands.h>
++#include <linux/spi/spi.h>
++#include <linux/fs.h>
++#include <linux/bits.h>
++#include <linux/of_platform.h>
++#include <drm/drmP.h>
++#include <drm/drm_atomic_helper.h>
++#include <drm/drm_crtc.h>
++#include <drm/drm_crtc_helper.h>
++#include <drm/drm_dp_helper.h>
++#include <drm/drm_edid.h>
++#include <crypto/sha.h>
++#include <crypto/hash.h>
++
++#define AX 0
++#define BX 1
++#define ENAUD 1
++#define AUDSEL I2S
++#define AUDTYPE LPCM
++#define AUDFS AUD48K
++#define AUDCH 2
++/* 0: Standard I2S;1: 32bit I2S */
++#define I2SINPUTFMT 1
++/* 0: Left-justified;1: Right-justified */
++#define I2SJUSTIFIED 0
++/* 0: Data delay 1T correspond to WS;1: No data delay correspond to WS */
++#define I2SDATADELAY 0
++/* 0: is left channel;1: is right channel */
++#define I2SWSCHANNEL 0
++/* 0: MSB shift first;1: LSB shift first */
++#define I2SDATASEQ 0
++
++#define LANESWAP 0
++#define LANE 4
++#define _HBR 1
++#define ENHFRAME 1
++#define ENSSC 1
++
++#define FLAGTRAINDOWN 100
++#define TRAINFAILCNT 5
++#define AUX_WAIT_TIMEOUT_MS 15
++#define PCLK_DELAY 1
++#define PCLK_INV 0
++#define EDIDRETRYTIME 5
++#define SHOWVIDEOTIMING 2
++#define PWROFFRETRYTIME 5
++
++/* AX or BX */
++#define CHIP_VERSION BX
++#define ENHDCP 1
++
++/* if use this define will enable power on/off option */
++#define ENPWRONOFF
++
++/* if use this define will power on in probe */
++/* #define TEST_MODE */
++
++/* if use this define will enable AUX debug option */
++/* #define ENAUX_TRANSFER_DEBUG */
++
++/* if use this define will enable SHA debug */
++/* #define SHA_DEBUG */
++
++/* register char device for it6505 */
++#define IT6505_CLASS_NAME "it6505_class"
++#define IT6505_DEVICE_NAME "it6505_device"
++#define IT6505_MAX_DEV 128
++/* The device-driver class struct pointer */
++static int it6505_major_num;
++
++enum sys_status {
++	SYS_UNPLUG = 0,
++	SYS_HPD,
++	SYS_AUTOTRAIN,
++	SYS_WAIT,
++	SYS_TRAINFAIL,
++	SYS_ReHDCP,
++	SYS_PWRDN,
++	SYS_NOROP,
++	SYS_Unknown,
++};
++
++enum it6505_aud_sel {
++	I2S = 0,
++	SPDIF,
++};
++
++enum it6505_aud_fs {
++	AUD24K = 0x6,
++	AUD32K = 0x3,
++	AUD48K = 0x2,
++	AUD96K = 0xA,
++	AUD192K = 0xE,
++	AUD44P1K = 0x0,
++	AUD88P2K = 0x8,
++	AUD176P4K = 0xC,
++};
++
++enum it6505_aud_type {
++	LPCM = 0,
++	NLPCM,
++	DSS,
++	HBR,
++};
++
++enum aud_word_length {
++	AUD16BIT = 0,
++	AUD18BIT,
++	AUD20BIT,
++	AUD24BIT,
++};
++
++/* Audio Sample Word Length: AUD16BIT, AUD18BIT, AUD20BIT, AUD24BIT */
++#define AUDWORDLENGTH AUD24BIT
++
++enum SWITCH {
++	Off = 0,
++	On
++};
++
++struct it6505_platform_data {
++	struct regulator *pwr18;
++	struct regulator *ovdd;
++	struct gpio_desc *gpiod_hpd;
++	struct gpio_desc *gpiod_pd;
++	struct gpio_desc *gpiod_reset;
++
++	int hpd_irq;
++	int intp_irq;
++};
++
++struct it6505_dp_port {
++	struct it6505 *it6505_dp;
++	struct notifier_block event_nb;
++	struct extcon_dev *extcon;
++	struct work_struct extcon_wq;
++	u8 id;
++};
++
++struct it6505 {
++	struct cros_ec_device *cros_ec;
++	struct drm_dp_aux aux;
++	struct drm_bridge bridge;
++	struct i2c_client *client;
++	struct edid *edid;
++	struct drm_connector connector;
++	struct drm_dp_link link;
++	struct it6505_platform_data pdata;
++	struct mutex lock;
++	struct regmap *regmap;
++	struct cdev cdev;
++	struct device class_dev;
++	struct it6505_dp_port *port;
++
++	u8 dpcd[DP_RECEIVER_CAP_SIZE];
++	enum sys_status status;
++	u8 dumpdpcd[30];
++	u8 dpcd_rev;
++	bool hbr;
++	u8 lane;
++	u8 en_ssc;
++	bool en_hframe;
++	bool laneswap;
++	u8 hpd_status;
++
++	enum it6505_aud_sel aud_sel;
++	enum it6505_aud_fs aud_fs;
++	enum it6505_aud_type aud_type;
++	u8 aud_ch;
++	u8 i2s_input_fmt;
++	u8 i2s_justified;
++	u8 i2s_data_delay;
++	u8 i2s_ws_channel;
++	u8 i2s_data_seq;
++	u8 vidstable_done;
++	enum aud_word_length audwordlength;
++	u8 cntfsm;
++	u8 enhdcp;
++	bool cp_ready;
++	unsigned int bstatus;
++	bool cp_done;
++	u8 downstreamrepeater;
++	u8 am0[8];
++	u8 binfo[2];
++	u8 ksvlist[5*12];
++	unsigned int sha[5];
++	unsigned int w[80];
++	u8 shainput[64];
++	u8 av[5][4];
++	u8 bv[5][4];
++	u8 passsha;
++	bool powered;
++	/* it6505 driver hold option */
++	unsigned int it6505_drv_hold;
++};
++
++static int it6505_poweron(struct it6505 *it6505);
++#ifdef ENPWRONOFF
++static int it6505_poweroff(struct it6505 *it6505);
++#endif
++
++static const struct regmap_range it6505_bridge_volatile_ranges[] = {
++	{ .range_min = 0, .range_max = 0xFF },
++};
++
++static const struct regmap_access_table it6505_bridge_volatile_table = {
++	.yes_ranges = it6505_bridge_volatile_ranges,
++	.n_yes_ranges = ARRAY_SIZE(it6505_bridge_volatile_ranges),
++};
++
++static const struct regmap_config it6505_bridge_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.volatile_table = &it6505_bridge_volatile_table,
++	.cache_type = REGCACHE_NONE,
++};
++
++static int dptxrd(struct it6505 *it6505,
++		unsigned int reg_addr, unsigned int *value)
++{
++	int err;
++
++	err = regmap_read(it6505->regmap, reg_addr, value);
++	if (err < 0) {
++		DRM_ERROR("%s read fail err reg_addr[0x%x] err:%d\n",
++			__func__, reg_addr, err);
++		return err;
++	}
++
++	return 0;
++}
++
++static void it6505_dump(struct it6505 *it6505)
++{
++	unsigned int value, i;
++
++	DRM_DEBUG_DRIVER("\n----------%s start----------\n", __func__);
++	for (i = 0; i <= 0xff; i++) {
++		dptxrd(it6505, i, &value);
++		DRM_DEBUG_DRIVER("%s[0x%x] = 0x%x\n", __func__, i, value);
++	}
++	DRM_DEBUG_DRIVER("\n----------%s end----------\n\n", __func__);
++}
++
++static int dptxwr(struct it6505 *it6505,
++		unsigned int reg_addr, unsigned int reg_val)
++{
++	int err;
++
++	err = regmap_write(it6505->regmap, reg_addr, reg_val);
++
++	if (err < 0) {
++		DRM_ERROR(
++			"%s write fail err reg_addr[0x%x] = 0x%x err = %d\n",
++			__func__, reg_addr, reg_val, err);
++		return err;
++	}
++
++	return 0;
++}
++
++static int dptxset(struct it6505 *it6505, unsigned int reg,
++		unsigned int mask, unsigned int setvalue)
++{
++	int err;
++
++	err = regmap_update_bits(it6505->regmap, reg, mask, setvalue);
++	if (err < 0) {
++		DRM_ERROR("%s write fail err %d\n", __func__, err);
++		return err;
++	}
++
++	return 0;
++}
++
++static inline struct it6505 *connector_to_it6505(struct drm_connector *c)
++{
++	return container_of(c, struct it6505, connector);
++}
++
++static inline struct it6505 *bridge_to_it6505(struct drm_bridge *bridge)
++{
++	return container_of(bridge, struct it6505, bridge);
++}
++
++
++void it6505_initfsm(struct it6505 *it6505)
++{
++	it6505->aud_sel = AUDSEL;
++	it6505->aud_fs = AUDFS;
++	it6505->aud_ch = AUDCH;
++	it6505->aud_type = AUDTYPE;
++	it6505->i2s_input_fmt = I2SINPUTFMT;
++	it6505->i2s_justified = I2SJUSTIFIED;
++	it6505->i2s_data_delay = I2SDATADELAY;
++	it6505->i2s_ws_channel = I2SWSCHANNEL;
++	it6505->i2s_data_seq = I2SDATASEQ;
++	it6505->audwordlength = AUDWORDLENGTH;
++
++	it6505->status = SYS_Unknown;
++	it6505->enhdcp = ENHDCP;
++	it6505->hbr = _HBR;
++	it6505->lane = LANE;
++	it6505->en_ssc = ENSSC;
++	it6505->en_hframe = ENHFRAME;
++	it6505->laneswap = LANESWAP;
++	it6505->vidstable_done = 0;
++}
++
++#if (CHIP_VERSION == BX)
++void iTE6505_termination(struct it6505 *it6505, enum SWITCH s)
++{
++	DRM_DEBUG_DRIVER("%s switch!!\n", __func__);
++	if (s) {
++		dptxset(it6505, 0x5D, 0x80, 0x00);
++		dptxset(it6505, 0x5E, 0x02, 0x02);
++		DRM_DEBUG_DRIVER("%s ON!!\n", __func__);
++	} else {
++		dptxset(it6505, 0x5D, 0x80, 0x80);
++		dptxset(it6505, 0x5E, 0x02, 0x00);
++		dptxset(it6505, 0x5C, 0xF0, 0x00);
++		DRM_DEBUG_DRIVER("%s OFF!!\n", __func__);
++	}
++}
++#endif
++
++static bool dptx_getsinkhpd(struct it6505 *it6505)
++{
++	unsigned int value;
++	int ret;
++
++	ret = dptxrd(it6505, 0x0D, &value);
++
++	if (ret < 0)
++		return false;
++
++	return (value & 2) == 2;
++}
++
++void show_vid_info(struct it6505 *it6505)
++{
++	int HSyncPol, VSyncPol, InterLaced;
++	int HTotal, HDES, HDEW, HFPH, HSYNCW;
++	int VTotal, VDES, VDEW, VFPH, VSYNCW;
++	int rddata, rddata1, i;
++	int PCLK, sum;
++
++	usleep_range(10000, 15000);
++	dptxwr(it6505, 0x0F, 0x00);
++	dptxrd(it6505, 0xa0, &rddata);
++	HSyncPol = rddata & BIT(0);
++	VSyncPol = (rddata & BIT(2)) >> 2;
++	InterLaced = (rddata & BIT(4)) >> 4;
++
++	dptxrd(it6505, 0xa1, &rddata);
++	dptxrd(it6505, 0xa2, &rddata1);
++	HTotal = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa3, &rddata);
++	dptxrd(it6505, 0xa4, &rddata1);
++
++	HDES = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa5, &rddata);
++	dptxrd(it6505, 0xa6, &rddata1);
++
++	HDEW = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa7, &rddata);
++	dptxrd(it6505, 0xa8, &rddata1);
++
++	HFPH = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa9, &rddata);
++	dptxrd(it6505, 0xaa, &rddata1);
++
++	HSYNCW = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xab, &rddata);
++	dptxrd(it6505, 0xac, &rddata1);
++	VTotal = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xad, &rddata);
++	dptxrd(it6505, 0xae, &rddata1);
++	VDES = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xaf, &rddata);
++	dptxrd(it6505, 0xb0, &rddata1);
++	VDEW = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xb1, &rddata);
++	dptxrd(it6505, 0xb2, &rddata1);
++	VFPH = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xb3, &rddata);
++	dptxrd(it6505, 0xb4, &rddata1);
++	VSYNCW = ((rddata1 & 0x0F) << 8) + rddata;
++
++	sum = 0;
++	for (i = 0; i < 100; i++) {
++		dptxset(it6505, 0x12, 0x80, 0x80);
++		usleep_range(10000, 15000);
++		dptxset(it6505, 0x12, 0x80, 0x00);
++
++		dptxrd(it6505, 0x13, &rddata);
++		dptxrd(it6505, 0x14, &rddata1);
++		rddata = ((rddata1 & 0x0F) << 8)+rddata;
++
++		sum += rddata;
++	}
++
++	sum /= 100;
++	PCLK = 13500 * 2048 / sum;
++
++	DRM_DEBUG_DRIVER("\n----------Video Input Timing----------\n");
++	DRM_DEBUG_DRIVER("PCLK = %d.%dMHz\n", PCLK / 1000, PCLK % 1000);
++	DRM_DEBUG_DRIVER("HTotal = %d\n", HTotal);
++	DRM_DEBUG_DRIVER("HActive = %d\n", HDEW);
++	DRM_DEBUG_DRIVER("HFrontPorch = %d\n", HFPH);
++	DRM_DEBUG_DRIVER("HSyncWidth = %d\n", HSYNCW);
++	DRM_DEBUG_DRIVER("HBackPorch = %d\n", HTotal - HDEW - HFPH - HSYNCW);
++	DRM_DEBUG_DRIVER("VTotal = %d\n", VTotal);
++	DRM_DEBUG_DRIVER("VActive = %d\n", VDEW);
++	DRM_DEBUG_DRIVER("VFrontPorch = %d\n", VFPH);
++	DRM_DEBUG_DRIVER("VSyncWidth = %d\n", VSYNCW);
++	DRM_DEBUG_DRIVER("VBackPorch = %d\n", VTotal - VDEW - VFPH - VSYNCW);
++}
++
++void dptx_sys_chg(struct it6505 *it6505, enum sys_status newstate)
++{
++	unsigned int i = 0;
++	unsigned int reg06, reg07, reg08, reg0d, reg0e;
++
++	dptxrd(it6505, 0x06, &reg06);
++	dptxrd(it6505, 0x07, &reg07);
++	dptxrd(it6505, 0x08, &reg08);
++	dptxrd(it6505, 0x0d, &reg0d);
++	dptxrd(it6505, 0x0e, &reg0e);
++
++	DRM_DEBUG_DRIVER("%s  reg06 = 0x%x\n", __func__, reg06);
++	DRM_DEBUG_DRIVER("%s  reg07 = 0x%x\n", __func__, reg07);
++	DRM_DEBUG_DRIVER("%s  reg08 = 0x%x\n", __func__, reg08);
++	DRM_DEBUG_DRIVER("%s  reg0d = 0x%x\n", __func__, reg0d);
++	DRM_DEBUG_DRIVER("%s  reg0e = 0x%x\n", __func__, reg0e);
++
++	if (newstate != SYS_UNPLUG) {
++		if (!dptx_getsinkhpd(it6505))
++			newstate = SYS_UNPLUG;
++	}
++
++	it6505->status = newstate;
++
++	switch (it6505->status) {
++	case SYS_UNPLUG:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_UNPLUG!!\n");
++		kfree(it6505->edid);
++		it6505->edid = NULL;
++		DRM_DEBUG_DRIVER("Free it6505 EDID memory!!\n");
++#if (CHIP_VERSION == BX)
++		iTE6505_termination(it6505, Off);
++#endif
++		break;
++	case SYS_HPD:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_HPD!!\n");
++#if (CHIP_VERSION == BX)
++		iTE6505_termination(it6505, On);
++#endif
++		break;
++	case SYS_AUTOTRAIN:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_AUTOTRAIN!!\n");
++		break;
++	case SYS_WAIT:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_WAIT!!\n");
++		break;
++#if ENHDCP
++	case SYS_ReHDCP:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_ReHDCP!!\n");
++		break;
++#endif
++	case SYS_NOROP:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_NOROP!!\n");
++		for (i = 0; i < SHOWVIDEOTIMING; i++)
++			show_vid_info(it6505);
++#ifdef TEST_MODE
++		it6505->it6505_drv_hold = 1;
++		DRM_DEBUG_DRIVER("set it6505_drv_hold:%d",
++			it6505->it6505_drv_hold);
++#endif
++		break;
++	case SYS_PWRDN:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_PWRDN!!\n");
++		/* Reset and PwrDn AFE */
++		break;
++	default:
++		DRM_DEBUG_DRIVER("sys_state is changing to SYS_UNKNOWN!!\n");
++		break;
++	}
++}
++
++static bool it6505_aux_op_finished(struct it6505 *it6505)
++{
++	unsigned int value;
++	int err;
++
++	err = regmap_read(it6505->regmap, 0x2b, &value);
++	if (err < 0)
++		return false;
++
++	return (value & BIT(5)) == 0;
++}
++
++
++static int dptx_auxwait(struct it6505 *it6505)
++{
++	unsigned int status;
++	unsigned long timeout;
++	int err;
++
++	timeout = jiffies + msecs_to_jiffies(AUX_WAIT_TIMEOUT_MS) + 1;
++
++	while (!it6505_aux_op_finished(it6505)) {
++		if (time_after(jiffies, timeout)) {
++			DRM_DEBUG_DRIVER("Timed out waiting AUX to finish\n");
++			return -ETIMEDOUT;
++		}
++		usleep_range(1000, 2000);
++	}
++
++	err = dptxrd(it6505, 0x9f, &status);
++	if (err < 0) {
++		DRM_ERROR("Failed to read from AUX channel: %d\n", err);
++		return err;
++	}
++
++	if (status & 0x03) {
++		DRM_ERROR("Failed to wait for AUX channel (status: 0x%x)\n",
++			status);
++		return -ETIMEDOUT;
++	}
++
++	return 0;
++}
++
++static int dptx_aux_r_edid(struct it6505 *it6505,
++		unsigned int nosegw, unsigned int block, unsigned int offset)
++{
++	unsigned int value, status;
++	int ret;
++
++	/* enable pc aux access */
++	dptxwr(it6505, 0x23, (nosegw << 6) + 0x03);
++	/* edid fifo clr */
++	dptxwr(it6505, 0x23, (nosegw << 6) + 0x82);
++	/* start address[7:0] */
++	dptxwr(it6505, 0x24, (block % 2) * 128 + offset);
++	/* start address[15:8] */
++	dptxwr(it6505, 0x25, block / 256);
++	/* writenum[3:0]+startadr[19:16] */
++	dptxwr(it6505, 0x26, 0xf0);
++	/* aux edid read fire */
++	dptxwr(it6505, 0x2b, 0x0b);
++	dptx_auxwait(it6505);
++
++	ret = dptxrd(it6505, 0x07, &value);
++	if (ret) {
++		DRM_DEBUG_DRIVER("Failed to read reg07: %d\n", ret);
++		return ret;
++	}
++
++	if (value & BIT(0)) {
++		DRM_DEBUG_DRIVER("aux channel request fail interrupt\n");
++
++		ret = dptxrd(it6505, 0x9f, &status);
++		if (ret) {
++			DRM_DEBUG_DRIVER("AUX channel failed : %d !\n",
++				ret);
++			return ret;
++		}
++
++		switch ((status & 0xc0) >> 6) {
++		case 0:
++			DRM_DEBUG_DRIVER("no error !!!\n");
++			return 0;
++		case 1:
++			DRM_DEBUG_DRIVER("defer > 7 times status: 0x%x!!!\n",
++				status);
++			return -ETIMEDOUT;
++
++		case 2:
++			DRM_DEBUG_DRIVER("Nack response status: 0x%x!!!\n",
++				status);
++			return -ETIMEDOUT;
++
++		default:
++			DRM_DEBUG_DRIVER("timeout status: 0x%x!!!\n",
++				status);
++			return -ETIMEDOUT;
++		}
++
++	}
++	return 0;
++}
++
++unsigned int dptx_getedidblock(struct it6505 *it6505, u8 *pedidbuff,
++	unsigned int blockno)
++{
++	ushort i;
++	unsigned int offset, checksum, value;
++
++	if (pedidbuff == NULL)
++		return 0xff;
++
++	dptxset(it6505, 0x05, 0x08, 0x08);
++	dptxset(it6505, 0x05, 0x08, 0x00);
++
++	for (offset = 0; offset < 0x80; offset += 8) {
++		dptx_aux_r_edid(it6505, 1, blockno, offset);
++
++		for (i = 0; i < 8; i++) {
++			dptxrd(it6505, 0x2f, &value);
++			pedidbuff[offset + i] = value;
++			DRM_DEBUG_DRIVER("%s[%d][%d]: 0x%x !!\n",
++				__func__, blockno, i, value);
++		}
++	}
++	/* disable pc aux access */
++	dptxwr(it6505, 0x23, 1 << 6);
++	checksum = 0;
++	for (i = 0; i < 0x80; i++)
++		checksum += pedidbuff[i];
++
++	checksum &= 0xff;
++
++	return checksum;
++}
++
++static u8 it6505_get_extension_num(struct it6505 *it6505)
++{
++	unsigned int checksum = 0, retrytime = 0, reg0D;
++	u8 buff[EDID_LENGTH];
++
++	DRM_DEBUG_DRIVER("start %s!\n", __func__);
++
++	do {
++		dptxrd(it6505, 0x0D, &reg0D);
++		checksum = dptx_getedidblock(it6505, buff, 0);
++		retrytime++;
++		DRM_DEBUG_DRIVER("read EDID %d time", retrytime);
++		if (!(reg0D & BIT(1))) {
++			dptx_sys_chg(it6505, SYS_UNPLUG);
++			break;
++		}
++	} while (checksum != 0 && retrytime < EDIDRETRYTIME);
++
++	DRM_DEBUG_DRIVER("extension number:%d",buff[0x7e]);
++	DRM_DEBUG_DRIVER("end %s!\n", __func__);
++	return buff[0x7e];
++}
++
++static struct edid *it6505_get_edid(struct it6505 *it6505)
++{
++	unsigned int checksum = 0, retrytime = 0;
++	unsigned int i, block, reg0D, total_size;
++	u8 *pedidbuff = kmalloc(EDID_LENGTH, GFP_KERNEL);
++
++	DRM_DEBUG_DRIVER("start %s", __func__);
++	if (!pedidbuff) {
++		DRM_DEBUG_DRIVER("%s(null)!\n", __func__);
++		return NULL;
++	}
++
++	it6505_dump(it6505);
++	block = it6505_get_extension_num(it6505);
++
++	/* dp does not have the hdmi tx four block test requirement */
++	if (block > 2)
++		block = 2;
++
++	total_size = (block + 1) * EDID_LENGTH;
++	if (total_size > EDID_LENGTH)
++		pedidbuff = krealloc(pedidbuff, total_size, GFP_KERNEL);
++
++	for (i = 0; i <= block; i++) {
++		DRM_DEBUG_DRIVER("Read block 0x%x", i);
++		retrytime = 0;
++		do {
++			dptxrd(it6505, 0x0D, &reg0D);
++			checksum = dptx_getedidblock(it6505,
++				pedidbuff + i * EDID_LENGTH, i);
++			DRM_DEBUG_DRIVER("%s in block %d %s",
++				checksum ? "Fake" : "True", i,
++				checksum ? "and read again!" : "!");
++			retrytime++;
++			DRM_DEBUG_DRIVER("read EDID %d time", retrytime);
++			if (!(reg0D & BIT(1))) {
++				dptx_sys_chg(it6505, SYS_UNPLUG);
++				break;
++			}
++		} while (checksum != 0 && retrytime < EDIDRETRYTIME);
++		if (checksum || it6505->status == SYS_UNPLUG)
++			break;
++	}
++	DRM_DEBUG_DRIVER("end %s and edid correct!", __func__);
++	return (struct edid *)pedidbuff;
++}
++
++static int it6505_get_modes(struct drm_connector *connector)
++{
++	struct it6505 *ctx = connector_to_it6505(connector);
++	int err, num_modes = 0;
++	u8 *p;
++	unsigned int reg9F, reg0D;
++
++	DRM_DEBUG_DRIVER("start %s", __func__);
++	err = it6505_poweron(ctx);
++	if (err) {
++		DRM_DEBUG_DRIVER("power on fail!");
++		goto unlock;
++	}
++	DRM_DEBUG_DRIVER("power on success!");
++	if (ctx->edid) {
++		DRM_DEBUG_DRIVER("ctx->edid is exist\n");
++		return drm_add_edid_modes(connector, ctx->edid);
++	}
++	DRM_DEBUG_DRIVER("ctx->edid not exist\n");
++	DRM_DEBUG_DRIVER("call it6505_get_edid to get EDID!\n");
++	mutex_lock(&ctx->lock);
++	dptxrd(ctx, 0x0D, &reg0D);
++	if (reg0D & BIT(1))
++		dptx_sys_chg(ctx, SYS_HPD);
++	else
++		dptx_sys_chg(ctx, SYS_UNPLUG);
++	
++	dptxrd(ctx, 0x9F, &reg9F);
++	DRM_DEBUG_DRIVER("Aux status reg9F:0x%02x\n", reg9F);
++	ctx->edid = it6505_get_edid(ctx);
++	DRM_DEBUG_DRIVER("After it6505_get_edid, show the EDID:\n");
++	err = 256;
++	p = (u8 *)ctx->edid;
++	while (err) {
++		DRM_DEBUG_DRIVER("err = %d\n", err);
++		DRM_DEBUG_DRIVER("0x%02x 0x%02x 0x%02x 0x%02x\n",
++			p[0], p[1], p[2], p[3]);
++		DRM_DEBUG_DRIVER("0x%02x 0x%02x 0x%02x 0x%02x\n",
++			p[4], p[5], p[6], p[7]);
++		DRM_DEBUG_DRIVER("0x%02x 0x%02x 0x%02x 0x%02x\n",
++			p[8], p[9], p[10], p[11]);
++		DRM_DEBUG_DRIVER("0x%02x 0x%02x 0x%02x 0x%02x\n",
++			p[12], p[13], p[14], p[15]);
++
++		err -= 16;
++		p += 16;
++	}
++	if (!ctx->edid) {
++		DRM_ERROR("Failed to read EDID\n");
++		goto unlock;
++	}
++
++	err = drm_connector_update_edid_property(connector, ctx->edid);
++	if (err) {
++		DRM_ERROR("Failed to update EDID property: %d\n", err);
++		goto unlock;
++	}
++
++	num_modes = drm_add_edid_modes(connector, ctx->edid);
++
++unlock:
++	mutex_unlock(&ctx->lock);
++
++	return num_modes;
++}
++
++static const struct drm_connector_helper_funcs it6505_connector_helper_funcs = {
++	.get_modes = it6505_get_modes,
++};
++
++static enum drm_connector_status it6505_detect(struct drm_connector *connector,
++						bool force)
++{
++	struct it6505 *ctx = connector_to_it6505(connector);
++
++	if (gpiod_get_value(ctx->pdata.gpiod_hpd))
++		return connector_status_disconnected;
++
++	return connector_status_connected;
++}
++
++static const struct drm_connector_funcs it6505_connector_funcs = {
++	.fill_modes = drm_helper_probe_single_connector_modes,
++	.detect = it6505_detect,
++	.destroy = drm_connector_cleanup,
++	.reset = drm_atomic_helper_connector_reset,
++	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
++	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
++};
++
++/* reverved for future use */
++/*
++ *BYTE iTE6505_dptx_aux(char *RORW, char *addr,
++ *		int offset, BYTE *array, BYTE size)
++ *{
++ *	BYTE i = 0;
++ *	if (!strcmp(RORW, "w") || !strcmp(RORW, "W")) {
++ *		while (i < size) {
++ *			if (!dptx_dpcdwr(offset++, array[i++])) {
++ *				DRM_DEBUG_DRIVER(("DPCD write fail!!\n"));
++ *				return 3;
++ *			}
++ *			else {
++ *				DRM_DEBUG_DRIVER(("DPCD write success!!\n"));
++ *				return 0;
++ *			}
++ *		}
++ *	}
++ *	else if (!strcmp(RORW, "r") || !strcmp(RORW, "R")) {
++ *		if (!strcmp(addr, "EDID")) {
++ *			BYTE blocknum = offset / 0x80;
++ *			offset = offset%0x80;
++ *			dptx_AUX_R_EDID(1, blocknum, offset);
++ *			while (i < size) {
++ *				array[i] = dptxrd(0x2F);
++ *				i++;
++ *			}
++ *			return 0;
++ *		}
++ *		else if (!strcmp(addr, "DPCD")) {
++ *			while (i < size) {
++ *				array[i++] = dptx_dpcdrd(offset++);
++ *			}
++ *			return 0;
++ *		}
++ *		else {
++ *			DRM_DEBUG_DRIVER(("%s second parameter error!!\n"));
++ *			return 2;
++ *		}
++ *	}
++ *	else {
++ *		DRM_DEBUG_DRIVER(%s first parameter error!!\n",
++			__func__);
++ *		return 1;
++ *	}
++ *}
++ */
++
++
++static ssize_t it6505_aux_transfer(struct drm_dp_aux *aux,
++					struct drm_dp_aux_msg *msg)
++{
++	/* reserved code for future debug using */
++#ifdef ENAUX_TRANSFER_DEBUG
++
++	struct it6505 *ctx = container_of(aux, struct it6505, aux);
++	u8 ctrl1 = msg->request;
++	u8 ctrl2 = SP_AUX_EN;
++	u8 *buffer = msg->buffer;
++	int err;
++
++	/* The DP AUX transmit and receive buffer has 16 bytes. */
++	if (WARN_ON(msg->size > AUX_CH_BUFFER_SIZE))
++		return -E2BIG;
++
++	/* Zero-sized messages specify address-only transactions. */
++	if (msg->size < 1)
++		ctrl2 |= SP_ADDR_ONLY;
++	else	/* For non-zero-sized set the length field. */
++		ctrl1 |= (msg->size - 1) << SP_AUX_LENGTH_SHIFT;
++
++	if ((msg->request & DP_AUX_I2C_READ) == 0) {
++		/* When WRITE | MOT write values to data buffer */
++		err = regmap_bulk_write(ctx->map[I2C_IDX_TX_P0],
++					SP_DP_BUF_DATA0_REG, buffer,
++					msg->size);
++		if (err)
++			return err;
++	}
++
++	/* Write address and request */
++	err = it6505_aux_address(ctx, msg->address);
++	if (err)
++		return err;
++
++	err = regmap_write(ctx->map[I2C_IDX_TX_P0], SP_DP_AUX_CH_CTRL1_REG,
++			ctrl1);
++	if (err)
++		return err;
++
++	/* Start transaction */
++	err = regmap_update_bits(ctx->map[I2C_IDX_TX_P0],
++				SP_DP_AUX_CH_CTRL2_REG, SP_ADDR_ONLY |
++				SP_AUX_EN, ctrl2);
++	if (err)
++		return err;
++
++	err = it6505_aux_wait(ctx);
++	if (err)
++		return err;
++
++	msg->reply = DP_AUX_I2C_REPLY_ACK;
++
++	if ((msg->size > 0) && (msg->request & DP_AUX_I2C_READ)) {
++		/* Read values from data buffer */
++		err = regmap_bulk_read(ctx->map[I2C_IDX_TX_P0],
++					SP_DP_BUF_DATA0_REG, buffer,
++					msg->size);
++		if (err)
++			return err;
++	}
++
++	err = it6505_clear_bits(ctx->map[I2C_IDX_TX_P0],
++				SP_DP_AUX_CH_CTRL2_REG, SP_ADDR_ONLY);
++	if (err)
++		return err;
++
++	return msg->size;
++
++#endif
++	return 0;
++}
++
++static int it6505_extcon_notifier(struct notifier_block *self,
++			unsigned long event, void *ptr)
++{
++	struct it6505_dp_port *port =
++		container_of(self, struct it6505_dp_port, event_nb);
++
++	schedule_work(&port->extcon_wq);
++	DRM_DEBUG_DRIVER("[%s]", __func__);
++	return NOTIFY_DONE;
++}
++
++static void it6505_extcon_work(struct work_struct *work)
++{
++	struct it6505_dp_port *port =
++		container_of(work, struct it6505_dp_port, extcon_wq);
++	struct it6505 *ctx = port->it6505_dp;
++	int state = extcon_get_state(port->extcon, EXTCON_DISP_DP);
++#ifdef ENPWRONOFF
++	unsigned int pwroffretry = 0;
++#endif
++
++	mutex_lock(&ctx->lock);
++	DRM_DEBUG_DRIVER("[%s] state:%d %s", __func__, state,
++			state ? "cable in": "cable out");
++	if (state > 0) {
++		DRM_DEBUG_DRIVER("[%s] state:%d",
++				__func__, state);
++		DRM_DEBUG_DRIVER("[%s] start to power on!", __func__);
++		it6505_poweron(ctx);
++	} else {
++		DRM_DEBUG_DRIVER("[%s] state:%d",
++				__func__, state);
++#ifdef ENPWRONOFF
++		DRM_DEBUG_DRIVER("[%s] start to power off!", __func__);
++		while (it6505_poweroff(ctx) &&
++			pwroffretry++ < PWROFFRETRYTIME) {
++			DRM_DEBUG_DRIVER("power off it6505 fail! %d times",
++				pwroffretry);
++		}
++		DRM_DEBUG_DRIVER("power off it6505 success!");
++#endif
++	}
++	mutex_unlock(&ctx->lock);
++}
++
++static int use_notifier_module(struct it6505 *ctx)
++{
++	struct it6505_dp_port *port = ctx->port;
++	int ret;
++
++	DRM_DEBUG_DRIVER("[%s]", __func__);
++	port->event_nb.notifier_call = it6505_extcon_notifier;
++	INIT_WORK(&port->extcon_wq, it6505_extcon_work);
++	ret = devm_extcon_register_notifier(&ctx->client->dev,
++		port->extcon, EXTCON_DISP_DP, &port->event_nb);
++	if (ret) {
++		DRM_DEBUG_DRIVER("failed to register notifier for DP");
++		return ret;
++	}
++	return 0;
++}
++
++static int it6505_bridge_attach(struct drm_bridge *bridge)
++{
++	struct it6505 *ctx = bridge_to_it6505(bridge);
++	struct cros_ec_device *cros_ec;
++	struct extcon_dev *extcon;
++	struct it6505_dp_port *port;
++	struct device *dev;
++	int err;
++
++	DRM_DEBUG_DRIVER(" This is %s~start!!\n", __func__);
++	dev = &ctx->client->dev;
++	if (!bridge->encoder) {
++		DRM_ERROR("Parent encoder object not found");
++		return -ENODEV;
++	}
++
++	/* Register aux channel */
++	ctx->aux.name = "DP-AUX";
++	ctx->aux.dev = &ctx->client->dev;
++	ctx->aux.transfer = it6505_aux_transfer;
++
++	err = drm_dp_aux_register(&ctx->aux);
++	if (err < 0) {
++		DRM_ERROR("Failed to register aux channel: %d\n", err);
++		return err;
++	}
++
++	err = drm_connector_init(bridge->dev, &ctx->connector,
++				&it6505_connector_funcs,
++				DRM_MODE_CONNECTOR_DisplayPort);
++	if (err) {
++		DRM_ERROR("Failed to initialize connector: %d\n", err);
++		return err;
++	}
++
++	drm_connector_helper_add(&ctx->connector,
++				&it6505_connector_helper_funcs);
++
++	err = drm_connector_register(&ctx->connector);
++	if (err) {
++		DRM_ERROR("Failed to register connector: %d\n", err);
++		return err;
++	}
++
++	ctx->connector.polled = DRM_CONNECTOR_POLL_HPD;
++
++	err = drm_connector_attach_encoder(&ctx->connector,
++						bridge->encoder);
++	if (err) {
++		DRM_ERROR("Failed to link up connector to encoder: %d\n", err);
++		return err;
++	}
++
++	/* get extcon device from DTS */
++	extcon = extcon_get_edev_by_phandle(dev, 0);
++	if (PTR_ERR(extcon) == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++	if (IS_ERR(extcon)){
++		DRM_DEBUG_DRIVER("%s can not get extcon device!", __func__);
++		return -EINVAL;
++	} else
++		DRM_DEBUG_DRIVER("%s get extcon device!", __func__);
++	port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
++	if (!port)
++		return -ENOMEM;
++	port->extcon = extcon;
++	port->it6505_dp = ctx;
++	port->id = 0;
++	ctx->port = port;
++
++	err = use_notifier_module(ctx);
++	if (err < 0) {
++		DRM_DEBUG_DRIVER("%s fail to use notifier module!", __func__);
++		return err;
++	}
++	DRM_DEBUG_DRIVER("ctx->cros_ec = 0x%p\n", cros_ec);
++	DRM_DEBUG_DRIVER(" This is %s~end!!\n", __func__);
++	return 0;
++}
++
++static enum drm_mode_status
++it6505_bridge_mode_valid(struct drm_bridge *bridge,
++			const struct drm_display_mode *mode)
++{
++	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
++		return MODE_NO_INTERLACE;
++
++	/* Max 1200p at 5.4 Ghz, one lane */
++	if (mode->clock > 80000)
++		return MODE_CLOCK_HIGH;
++
++	return MODE_OK;
++}
++
++static int it6505_send_video_infoframe(struct it6505 *it6505,
++					struct hdmi_avi_infoframe *frame)
++{
++	u8 buffer[HDMI_INFOFRAME_HEADER_SIZE + HDMI_AVI_INFOFRAME_SIZE];
++	int err;
++
++	err = hdmi_avi_infoframe_pack(frame, buffer, sizeof(buffer));
++	if (err < 0) {
++		DRM_ERROR("Failed to pack AVI infoframe: %d\n", err);
++		return err;
++	}
++
++	err = dptxset(it6505, 0xe8, 1, 0);
++	if (err)
++		return err;
++
++	err = regmap_bulk_write(it6505->regmap, 0xe9, buffer, frame->length);
++	if (err)
++		return err;
++
++	err = dptxset(it6505, 0xe8, 1, 1);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static void it6505_bridge_mode_set(struct drm_bridge *bridge,
++				struct drm_display_mode *mode,
++				struct drm_display_mode *adjusted_mode)
++{
++	struct it6505 *ctx = bridge_to_it6505(bridge);
++	struct hdmi_avi_infoframe frame;
++	int err;
++
++	mutex_lock(&ctx->lock);
++
++	DRM_DEBUG_DRIVER("%s\n", __func__);
++
++	err = drm_hdmi_avi_infoframe_from_display_mode(&frame,
++						adjusted_mode, false);
++	if (err) {
++		DRM_ERROR("Failed to setup AVI infoframe: %d\n", err);
++		goto unlock;
++	}
++
++	err = it6505_send_video_infoframe(ctx, &frame);
++	if (err)
++		DRM_ERROR("Failed to send AVI infoframe: %d\n", err);
++
++unlock:
++	mutex_unlock(&ctx->lock);
++}
++
++void dptx_init(struct it6505 *it6505)
++{
++	dptxwr(it6505, 0x05, 0x3B);
++	usleep_range(1000, 2000);
++	dptxwr(it6505, 0x05, 0x1F);
++	usleep_range(1000, 1500);
++
++	DRM_DEBUG_DRIVER("this is %s end !!\n", __func__);
++}
++
++void iTE6505_INT_mask(struct it6505 *it6505)
++{
++#if ENHDCP
++	dptxwr(it6505, 0x09, 0x1F);
++#else
++	dptxwr(it6505, 0x09, 0x07);
++#endif
++
++#if ENAUD
++	dptxwr(it6505, 0x0A, 0x07);
++#else
++	dptxwr(it6505, 0x0A, 0x03);
++#endif
++	dptxwr(it6505, 0x0B, 0x90);
++}
++
++void dptx_set_aud_fmt(struct it6505 *it6505,
++		enum it6505_aud_sel audsel, unsigned int audch)
++{
++	unsigned int audsrc;
++	/* I2S MODE */
++	dptxwr(it6505, 0xB9, (it6505->audwordlength << 5)
++		| (it6505->i2s_data_seq << 4) | (it6505->i2s_ws_channel << 3)
++		| (it6505->i2s_data_delay << 2) | (it6505->i2s_justified << 1)
++		| it6505->i2s_input_fmt);
++	if (audsel == SPDIF) {
++		dptxwr(it6505, 0xBA, 0x00);
++		/* 0x30 = 128*FS */
++		dptxset(it6505, 0x11, 0xF0, 0x30);
++	} else {
++		dptxwr(it6505, 0xBA, 0xe4);
++	}
++
++	dptxwr(it6505, 0xBB, 0x00);
++	dptxwr(it6505, 0xBC, 0x00);
++	audsrc = 1;
++
++	if (audch > 2)
++		audsrc |= 2;
++
++	if (audch > 4)
++		audsrc |= 4;
++
++	if (audch == 8)
++		audsrc |= 8;
++
++	audsrc |= audsel << 4;
++
++	dptxwr(it6505, 0xB8, audsrc);
++}
++
++void dptx_set_aud_chsts(struct it6505 *it6505,
++		enum it6505_aud_type audtype, enum it6505_aud_fs audfs)
++{
++	/* Channel Status */
++	dptxwr(it6505, 0xBF, audtype << 1);
++	dptxwr(it6505, 0xC0, 0x00);
++	dptxwr(it6505, 0xC1, 0x00);
++	dptxwr(it6505, 0xC2, audfs);
++	switch (it6505->audwordlength) {
++	case AUD16BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x02);
++		break;
++
++	case AUD18BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x04);
++		break;
++
++	case AUD20BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x03);
++		break;
++
++	case AUD24BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x0B);
++		break;
++	}
++}
++
++
++void dptx_set_audio_infoframe(struct it6505 *it6505, unsigned int audch)
++{
++	dptxwr(it6505, 0xf7, audch - 1);
++
++	switch (audch) {
++	case 2:
++		dptxwr(it6505, 0xF9, 0x00);
++		break;
++	case 3:
++		dptxwr(it6505, 0xF9, 0x01);
++		break;
++	case 4:
++		dptxwr(it6505, 0xF9, 0x03);
++		break;
++	case 5:
++		dptxwr(it6505, 0xF9, 0x07);
++		break;
++	case 6:
++		dptxwr(it6505, 0xF9, 0x0B);
++		break;
++	case 7:
++		dptxwr(it6505, 0xF9, 0x0F);
++		break;
++	case 8:
++		dptxwr(it6505, 0xF9, 0x1F);
++		break;
++	default:
++		DRM_DEBUG_DRIVER("Error:Audio Channel Number Error !!!\n");
++	}
++	/* Enable Audio InfoFrame */
++	dptxset(it6505, 0xE8, 0x22, 0x22);
++}
++
++
++void iTE6505_SetAudio(struct it6505 *it6505, enum it6505_aud_sel audsel,
++		enum it6505_aud_type audtype, enum it6505_aud_fs audfs,
++		unsigned int audch)
++{
++	/* Audio Clock Domain Reset */
++	dptxset(it6505, 0x05, 0x02, 0x02);
++	/* Audio mute */
++	dptxset(it6505, 0xD3, 0x20, 0x20);
++	/* Release Audio Clock Domain Reset */
++	dptxset(it6505, 0x05, 0x02, 0x00);
++
++	dptx_set_aud_chsts(it6505, audtype, audfs);
++	dptx_set_audio_infoframe(it6505, audch);
++	dptx_set_aud_fmt(it6505, audsel, audch);
++	/* Enable Enhanced Audio TimeStmp Mode */
++	dptxset(it6505, 0xD4, 0x04, 0x04);
++	/* Disable Full Audio Packet */
++	dptxset(it6505, 0xBB, 0x10, 0x00);
++
++	dptxwr(it6505, 0xDE, 0x00);
++	dptxwr(it6505, 0xDF, 0x80);
++	dptxwr(it6505, 0xE0, 0x00);
++	dptxset(it6505, 0xD3, 0x20, 0x00);
++
++	/* Clear Video M Error Interrupt */
++	dptxset(it6505, 0x08, 0x08, 0x08);
++	/* Clear Audio FIFO OverFlow Interrupt */
++	dptxset(it6505, 0x07, 0x04, 0x04);
++}
++
++/***************************************************************************
++ * DPCD Read and EDID
++ ***************************************************************************/
++
++static unsigned int dptx_dpcdrd(struct it6505 *it6505,
++		unsigned long offset)
++{
++	unsigned int startadr0, startadr1, startadr2;
++
++	startadr0 = (unsigned int)((offset >> 0) & 0xFF);
++	startadr1 = (unsigned int)((offset >> 8) & 0xFF);
++	startadr2 = (unsigned int)((offset >> 16) & 0x0F);
++	/* Enable PC Aux Access */
++	dptxwr(it6505, 0x23, (0 << 6) + 0x02);
++	/* Start Address[7:0] */
++	dptxwr(it6505, 0x24, startadr0);
++	/* Start Address[15:8] */
++	dptxwr(it6505, 0x25, startadr1);
++	/* WriteNum[3:0]+StartAdr[19:16] */
++	dptxwr(it6505, 0x26, startadr2);
++	/* Aux Read Fire */
++	dptxwr(it6505, 0x2B, 0x00);
++	dptx_auxwait(it6505);
++	/* Disable PC Aux Access */
++	dptxwr(it6505, 0x23, (0 << 6) + 0x00);
++
++	dptxrd(it6505, 0x2C, &startadr0);
++
++	return startadr0;
++}
++
++static int dptx_dpcdwr(struct it6505 *it6505,
++		unsigned long offset, unsigned long datain)
++{
++	unsigned int startadr0, startadr1, startadr2;
++
++	startadr0 = (unsigned int)(offset >> 0) & 0xFF;
++	startadr1 = (unsigned int)(offset >> 8) & 0xFF;
++	startadr2 = (unsigned int)(offset >> 16) & 0x0F;
++	/* Enable PC Aux Access */
++	dptxwr(it6505, 0x23, (1 << 6) + 0x02);
++	/* Start Address[7:0] */
++	dptxwr(it6505, 0x24, startadr0);
++	/* Start Address[15:8] */
++	dptxwr(it6505, 0x25, startadr1);
++	/* WriteNum[3:0]+StartAdr[19:16] */
++	dptxwr(it6505, 0x26, startadr2);
++	/* WriteData Byte 1 */
++	dptxwr(it6505, 0x27, datain);
++	/* Aux Write Fire */
++	dptxwr(it6505, 0x2B, 0x05);
++	dptx_auxwait(it6505);
++	/* Aux Read Fire */
++	dptxwr(it6505, 0x2B, 0x00);
++	dptx_auxwait(it6505);
++	/* Disable PC Aux Access */
++	dptxwr(it6505, 0x23, (1 << 6) + 0x00);
++
++	dptxrd(it6505, 0x2C, &startadr0);
++
++	if (startadr0 != datain)
++		return -EINVAL;
++
++	return 0;
++}
++
++int iTE6505_GetSinkSupportHDCP(struct it6505 *it6505)
++{
++	unsigned int rddata;
++
++	dptxrd(it6505, 0x0D, &rddata);
++	if (!(rddata & BIT(1))) {
++		DRM_DEBUG_DRIVER("sys is unplug!! ...\n");
++		dptx_sys_chg(it6505, SYS_UNPLUG);
++		it6505->cp_ready = -1;
++	} else {
++		if (dptx_dpcdrd(it6505, 0x68028) & BIT(0)) {
++			DRM_DEBUG_DRIVER("Sink support HDCP!!\n");
++			it6505->cp_ready = 1;
++			DRM_DEBUG_DRIVER("Config ENHDCP, output with HDCP!!\n");
++		} else {
++			DRM_DEBUG_DRIVER("Sink not support HDCP !!\n");
++			it6505->cp_ready = 0;
++			DRM_DEBUG_DRIVER("Config ENHDCP, output no HDCP!\n");
++		}
++	}
++	return it6505->cp_ready;
++}
++
++static void iTE6505_GetDPCD(struct it6505 *it6505)
++{
++	unsigned int offset = 0;
++
++	DRM_DEBUG_DRIVER("\n ========== [DPCD] ===========\n");
++	for (offset = 0; offset < 0x10; offset++) {
++		it6505->dumpdpcd[offset] = dptx_dpcdrd(it6505, offset);
++		DRM_DEBUG_DRIVER("DPCD[0x%02x]=0x%02x ",
++			offset, it6505->dumpdpcd[offset]);
++		if (offset == 0x07)
++			DRM_DEBUG_DRIVER("\n");
++	}
++	DRM_DEBUG_DRIVER("\n =============================\n");
++}
++
++static void iTE6505_ParseDPCD(struct it6505 *it6505)
++{
++	it6505->dpcd_rev = it6505->dumpdpcd[0];
++	DRM_DEBUG_DRIVER(" =========== Start Parse DPCD! !===========\n");
++	DRM_DEBUG_DRIVER("#########DPCD Rev.: %d.%d###########\n",
++		it6505->dpcd_rev >> 4, it6505->dpcd_rev & 0x0F);
++
++	switch (it6505->dumpdpcd[1]) {
++	case 0x06:
++		DRM_DEBUG_DRIVER("Maximum Link Rate: 1.62Gbps per lane\n");
++		if (it6505->hbr) {
++			DRM_DEBUG_DRIVER("Not support HBR Mode");
++			DRM_DEBUG_DRIVER("will train LBR\n");
++			it6505->hbr = false;
++		} else
++			DRM_DEBUG_DRIVER("Training LBR\n");
++		break;
++
++	case 0x0A:
++		DRM_DEBUG_DRIVER("Maximum Link Rate: 2.7Gbps per lane\n");
++		if (!it6505->hbr) {
++			DRM_DEBUG_DRIVER("Support HBR Mode");
++			DRM_DEBUG_DRIVER("will train LBR\n");
++			it6505->hbr = false;
++		} else
++			DRM_DEBUG_DRIVER("Training HBR\n");
++		break;
++
++	case 0x14:
++		DRM_DEBUG_DRIVER("Maximum Link Rate: 2.7Gbps per lane\n");
++		break;
++
++	default:
++		DRM_DEBUG_DRIVER("Unknown Maximum Link Rate!!\n");
++		break;
++	}
++
++	switch (it6505->dumpdpcd[2] & 0x1F) {
++	case 1:
++		DRM_DEBUG_DRIVER("Maximum Lane Count : 1 lane\n");
++		if (it6505->lane > 1) {
++			DRM_DEBUG_DRIVER("Not support %d lane training\n",
++				it6505->lane);
++			DRM_DEBUG_DRIVER("Training 1 lane\n");
++			it6505->lane = 1;
++		} else
++			DRM_DEBUG_DRIVER("Training %d lane!!\n", it6505->lane);
++		break;
++	case 2:
++		DRM_DEBUG_DRIVER("Maximum Lane Count : 2 lanes\n");
++		if (it6505->lane > 2) {
++			DRM_DEBUG_DRIVER("Not support %d lane training\n",
++				it6505->lane);
++			DRM_DEBUG_DRIVER("Training 2 lane\n");
++			it6505->lane = 2;
++		} else
++			DRM_DEBUG_DRIVER("Training %d lane!!\n", it6505->lane);
++		break;
++	case 4:
++		DRM_DEBUG_DRIVER("Maximum Lane Count : 4 lanes\n");
++		if (it6505->lane > 4) {
++			DRM_DEBUG_DRIVER("Not support %d lane training\n",
++				it6505->lane);
++			DRM_DEBUG_DRIVER("Training 4 lane\n");
++			it6505->lane = 4;
++		} else
++			DRM_DEBUG_DRIVER("Training %d lane!!\n", it6505->lane);
++		break;
++	default:
++		DRM_DEBUG_DRIVER("Maximum Lane Count : Error !!!\n");
++	}
++
++	if (it6505->dpcd_rev == 0x11 && it6505->dumpdpcd[2] & BIT(7)) {
++		DRM_DEBUG_DRIVER("Support Enhanced Framing Mode\n");
++	} else {
++		DRM_DEBUG_DRIVER("Can not support Enhanced Framing Mode\n");
++		if (it6505->en_hframe) {
++			DRM_DEBUG_DRIVER("Can not support Enhanced Framing!\n");
++			it6505->en_hframe = 0;
++		}
++	}
++
++	if (it6505->dumpdpcd[3] & BIT(0)) {
++		DRM_DEBUG_DRIVER("Maximum Down-Spread: 0.5, support SSC!\n");
++	} else {
++		DRM_DEBUG_DRIVER("Maximum Down-Spread: 0, No support SSC!\n");
++		if (it6505->en_ssc) {
++			DRM_DEBUG_DRIVER("Can not support SSC!!\n");
++			it6505->en_ssc = 0;
++		}
++	}
++
++	if (it6505->dpcd_rev == 0x11 && it6505->dumpdpcd[3] & BIT(6))
++		DRM_DEBUG_DRIVER("Support No AUX Training\n");
++	else
++		DRM_DEBUG_DRIVER("Can not support No AUX Training\n");
++
++	if (dptx_dpcdrd(it6505, 0x68028) & BIT(0)) {
++		DRM_DEBUG_DRIVER("Sink support HDCP!\n");
++		it6505->cp_ready = true;
++#if ENHDCP
++		DRM_DEBUG_DRIVER("Config ENHDCP output with HDCP!\n");
++#else
++		DRM_DEBUG_DRIVER("Not config ENHDCP output no HDCP!\n");
++#endif
++	} else {
++		DRM_DEBUG_DRIVER("Sink not support HDCP !\n");
++		it6505->cp_ready = false;
++#if ENHDCP
++		DRM_DEBUG_DRIVER("Config ENHDCP output no HDCP!\n");
++#else
++		DRM_DEBUG_DRIVER("Not config ENHDCP output no HDCP!\n");
++#endif
++	}
++
++	if (dptx_dpcdrd(it6505, 0x68028) & BIT(1)) {
++		DRM_DEBUG_DRIVER("Downstream is repeater!!\n");
++		it6505->downstreamrepeater = true;
++	} else {
++		DRM_DEBUG_DRIVER("Downstream is receiver!!\n");
++		it6505->downstreamrepeater = false;
++	}
++
++	DRM_DEBUG_DRIVER(" ======== Parse DPCD END! ========\n");
++}
++
++void iTE6505_EnableHDCP(struct it6505 *it6505)
++{
++	int i;
++	u8 c;
++	unsigned long BKSV[5], bksv;
++
++	DRM_DEBUG_DRIVER("%s start!!", __func__);
++	/* Disable CP_Desired */
++	dptxset(it6505, 0x38, 0x0B, 0x00);
++	dptxset(it6505, 0x05, 0x10, 0x10);
++
++	usleep_range(1000, 1500);
++	c = dptx_dpcdrd(it6505, 0x68028);
++	DRM_DEBUG_DRIVER("DPCD[0x68028]:0x%x!!\n", c);
++	if (!c)
++		return;
++
++	dptxset(it6505, 0x05, 0x10, 0x00);
++	/* Disable CP_Desired */
++	dptxset(it6505, 0x38, 0x01, 0x00);
++	/* Use R0' 100ms waiting */
++	dptxset(it6505, 0x38, 0x08, 0x00);
++	/* clear the repeater List Chk Done and fail bit */
++	dptxset(it6505, 0x39, 0x30, 0x00);
++
++	for (i = 0; i < 5; i++)
++		BKSV[i] = dptx_dpcdrd(it6505, 0x68000 + i);
++
++	bksv = BKSV[0] + (BKSV[1] << 8) + (BKSV[2] << 16)
++			+ (BKSV[3] << 24) + (BKSV[4] << 32);
++	DRM_DEBUG_DRIVER("Sink BKSV = 0x%lx", bksv);
++
++	/* Select An Generator */
++	dptxset(it6505, 0x3A, 0x01, 0x01);
++	/* Enable An Generator */
++	dptxset(it6505, 0x3A, 0x02, 0x02);
++	/* delay1ms(10);*/
++	usleep_range(10000, 15000);
++	/* Stop An Generator */
++	dptxset(it6505, 0x3A, 0x02, 0x00);
++
++	dptxset(it6505, 0x38, 0x01, 0x01);
++	dptxset(it6505, 0x39, 0x01, 0x01);
++
++	DRM_DEBUG_DRIVER("%s end !!\n", __func__);
++}
++
++void iTE6505_lanespeed_setup(struct it6505 *it6505)
++{
++	if (!it6505->hbr) {
++		dptxset(it6505, 0x16, 0x01, 1);
++		dptxset(it6505, 0x5C, 0x02, 0x00);
++	} else {
++		dptxset(it6505, 0x16, 0x01, 0);
++		dptxset(it6505, 0x5C, 0x02, 0x02);
++	}
++}
++
++void iTE6505_lane_swap(struct it6505 *it6505)
++{
++	int err;
++	union extcon_property_value property;
++
++	if (it6505->hpd_status == 0) {
++		err = extcon_get_property(it6505->port->extcon,
++				EXTCON_DISP_DP,
++				EXTCON_PROP_USB_TYPEC_POLARITY, &property);
++		if (err) {
++			DRM_DEBUG_DRIVER("%s get property fail!",
++				__func__);
++		}
++		it6505->laneswap = property.intval;
++		DRM_DEBUG_DRIVER("property.intval = 0x%d\n", property.intval);
++	}
++
++	dptxset(it6505, 0x16, 0x08, (it6505->laneswap) ? 8 : 0);
++	dptxset(it6505, 0x16, 0x06, (it6505->lane - 1) << 1);
++	DRM_DEBUG_DRIVER("it6505->laneswap = 0x%x\n", it6505->laneswap);
++
++	if (it6505->laneswap) {
++		switch (it6505->lane) {
++		case 1:
++			dptxset(it6505, 0x5C, 0xF1, 0x81);
++			break;
++		case 2:
++			dptxset(it6505, 0x5C, 0xF1, 0xC1);
++			break;
++		default:
++			dptxset(it6505, 0x5C, 0xF1, 0xF1);
++			break;
++		}
++	} else {
++		switch (it6505->lane) {
++		case 1:
++			dptxset(it6505, 0x5C, 0xF1, 0x11);
++			break;
++		case 2:
++			dptxset(it6505, 0x5C, 0xF1, 0x31);
++			break;
++		default:
++			dptxset(it6505, 0x5C, 0xF1, 0xF1);
++			break;
++		}
++	}
++}
++
++void iTE6505_lane_config(struct it6505 *it6505)
++{
++	iTE6505_lanespeed_setup(it6505);
++	iTE6505_lane_swap(it6505);
++}
++
++void dptx_chgbank(struct it6505 *it6505, unsigned int bank_id)
++{
++	dptxset(it6505, 0x0F, 0x01, bank_id & BIT(0));
++}
++
++void iTE6505_set_ssc(struct it6505 *it6505)
++{
++	dptxset(it6505, 0x16, 0x10, it6505->en_ssc << 4);
++	if (it6505->en_ssc) {
++		dptx_chgbank(it6505, 1);
++		dptxwr(it6505, 0x88, 0x9e);
++		dptxwr(it6505, 0x89, 0x1c);
++		dptxwr(it6505, 0x8A, 0x42);
++		dptx_chgbank(it6505, 0);
++		dptxwr(it6505, 0x58, 0x07);
++		dptxwr(it6505, 0x59, 0x29);
++		dptxwr(it6505, 0x5A, 0x03);
++		DRM_DEBUG_DRIVER("Enable 27M 4463 PPM SSC\n");
++		/* Stamp Interrupt Step */
++		dptxset(it6505, 0xD4, 0x30, 0x10);
++		dptx_dpcdwr(it6505, 0x107, 0x10);
++	} else {
++		dptx_dpcdwr(it6505, 0x107, 0x00);
++		dptxset(it6505, 0xD4, 0x30, 0x00);
++	}
++}
++
++void PCLK_phase(struct it6505 *it6505)
++{
++	dptxset(it6505, 0x10, 0x03, PCLK_DELAY);
++	dptxset(it6505, 0x12, 0x10, PCLK_INV << 4);
++}
++
++void AFE_driving_setting(struct it6505 *it6505)
++{
++	dptxset(it6505, 0x0F, 0x01, 0x01);
++	dptxwr(it6505, 0x7E, 0x93);
++	dptxwr(it6505, 0x7F, 0x2A);
++	dptxwr(it6505, 0x81, 0x85);
++	dptxset(it6505, 0x0F, 0x01, 0x00);
++}
++
++void dptx_output(struct it6505 *it6505, unsigned int HBR, unsigned int lane,
++		unsigned int laneswap, unsigned int en_ssc,
++		unsigned int EnhFraming)
++{
++	dptxwr(it6505, 0x05, 0x13);
++	/* change bank 0 */
++	dptxset(it6505, 0x0F, 0x01, 0x00);
++	/* RegTxFFRst set */
++	dptxset(it6505, 0x61, 0x02, 0x02);
++	/* RegTxFFRst clear */
++	dptxset(it6505, 0x61, 0x02, 0x00);
++	dptxwr(it6505, 0x64, 0x10);
++	dptxwr(it6505, 0x65, 0x80);
++	dptxwr(it6505, 0x66, 0x10);
++	dptxwr(it6505, 0x67, 0x4F);
++	dptxwr(it6505, 0x68, 0x09);
++	dptxwr(it6505, 0x69, 0xBA);
++	dptxwr(it6505, 0x6A, 0x3B);
++	dptxwr(it6505, 0x6B, 0x4B);
++	dptxwr(it6505, 0x6C, 0x3E);
++	dptxwr(it6505, 0x6D, 0x4F);
++	dptxwr(it6505, 0x6E, 0x09);
++	dptxwr(it6505, 0x6F, 0x56);
++	dptxwr(it6505, 0x70, 0x0E);
++	dptxwr(it6505, 0x71, 0x00);
++	dptxwr(it6505, 0x72, 0x00);
++	dptxwr(it6505, 0x73, 0x4F);
++	dptxwr(it6505, 0x74, 0x09);
++	dptxwr(it6505, 0x75, 0x00);
++	dptxwr(it6505, 0x76, 0x00);
++	dptxwr(it6505, 0x77, 0xE7);
++	dptxwr(it6505, 0x78, 0x10);
++	dptxwr(it6505, 0xE8, 0x00);
++	dptxset(it6505, 0xCE, 0x70, 0x60);
++	dptxset(it6505, 0xD0, 0xC0, 0x80);
++	dptxwr(it6505, 0xCA, 0x4D);
++	dptxwr(it6505, 0xC9, 0xF5);
++	dptxwr(it6505, 0x5C, 0x02);
++
++	dptx_dpcdwr(it6505, 0x600, 0x01);
++	dptxset(it6505, 0x59, 0x01, 0x01);
++	dptxset(it6505, 0x5A, 0x05, 0x01);
++	dptxwr(it6505, 0x12, 0x01);
++	dptxwr(it6505, 0xCB, 0x17);
++	dptxwr(it6505, 0x11, 0x09);
++	dptxwr(it6505, 0x20, 0x28);
++	dptxset(it6505, 0x23, 0x30, 00);
++	dptxset(it6505, 0x3A, 0x04, 0x04);
++	dptxset(it6505, 0x15, 0x01, 0x01);
++	dptxwr(it6505, 0x0C, 0x08);
++
++	dptxset(it6505, 0x5F, 0x20, 0x00);
++	iTE6505_lane_config(it6505);
++
++	iTE6505_set_ssc(it6505);
++
++	if (EnhFraming)
++		dptxwr(it6505, 0xD3, 0x33);
++	else
++		dptxwr(it6505, 0xD3, 0x32);
++
++	dptxset(it6505, 0x15, 0x02, 0x02);
++	dptxset(it6505, 0x15, 0x02, 0x00);
++	dptxset(it6505, 0x05, 0x03, 0x02);
++	dptxset(it6505, 0x05, 0x03, 0x00);
++
++	/* reg60[2] = InDDR */
++	dptxwr(it6505, 0x60, 0x44);
++	/* M444B24 foramt */
++	dptxwr(it6505, 0x62, 1);
++	/* select RGB Bypass CSC */
++	dptxwr(it6505, 0x63, 0);
++
++	PCLK_phase(it6505);
++	dptxset(it6505, 0x61, 0x01, 0x01);
++	dptxwr(it6505, 0x06, 0xFF);
++	dptxwr(it6505, 0x07, 0xFF);
++	dptxwr(it6505, 0x08, 0xFF);
++
++	dptxset(it6505, 0xd3, 0x30, 0x00);
++	dptxset(it6505, 0xd4, 0x41, 0x41);
++	dptxset(it6505, 0xe8, 0x11, 0x11);
++
++	AFE_driving_setting(it6505);
++	dptxwr(it6505, 0x17, 0x04);
++	dptxwr(it6505, 0x17, 0x01);
++	DRM_DEBUG_DRIVER(" ======= end main flow! !========\n");
++}
++
++
++void dptx_sys_fsm(struct it6505 *it6505)
++{
++	unsigned int value, temp1, temp2, temp3;
++	unsigned int count, dpcd1[0x09], dpcd2[0x18];
++	unsigned int temp, i, dpcdstart = 0x100;
++	int ret, reg0D, reg9F;
++#if ENHDCP
++	unsigned int Ar0_low, Ar0_high, Br0_low, Br0_high;
++#endif
++
++	DRM_DEBUG_DRIVER("%s start state: %d\n", __func__,
++		it6505->status);
++
++	dptxrd(it6505, 0x0D, &reg0D);
++
++	if (it6505->status != SYS_UNPLUG && !(reg0D & BIT(1)))
++		dptx_sys_chg(it6505, SYS_UNPLUG);
++
++	switch (it6505->status) {
++	case SYS_PWRDN:
++		break;
++	case SYS_UNPLUG:
++		DRM_DEBUG_DRIVER("sys_state is in SYS_UNPLUG!!\n");
++		break;
++
++	case SYS_HPD:
++		DRM_DEBUG_DRIVER("Is in SYS_HPD!!\n");
++		dptxrd(it6505, 0x9f, &reg9F);
++		DRM_DEBUG_DRIVER("Aux channel status reg9F=0x%02x\n", reg9F);
++		/* GETDPCD */
++		iTE6505_GetDPCD(it6505);
++		iTE6505_ParseDPCD(it6505);
++
++		/*
++		 * training fail TRAINFAILCNT times,
++		 * then change to HPD to restart
++		 */
++		it6505->cntfsm = TRAINFAILCNT;
++		DRM_DEBUG_DRIVER("will Train %s %d lanes\n",
++			it6505->hbr ? "HBR" : "LBR", it6505->lane);
++		dptx_sys_chg(it6505, SYS_AUTOTRAIN);
++		break;
++
++	case SYS_AUTOTRAIN:
++		DRM_DEBUG_DRIVER("%s in SYS_AUTOTRAIN!\n", __func__);
++		dptx_output(it6505,
++			it6505->hbr,
++			it6505->lane,
++			it6505->laneswap,
++			it6505->en_ssc,
++			it6505->en_hframe);
++
++		/*
++		 * waiting for training down flag
++		 * because we don't know
++		 * how long this step will be completed
++		 * so use step 1ms to wait
++		 */
++		for (count = 0; count < FLAGTRAINDOWN; count++) {
++			msleep(1);
++			dptxrd(it6505, 0x0E, &temp3);
++			if (temp3 & BIT(4))
++				break;
++		}
++
++		dptx_sys_chg(it6505, SYS_WAIT);
++		break;
++
++	case SYS_WAIT:
++		DRM_DEBUG_DRIVER("%s in SYS_WAIT!!\n", __func__);
++		ret = dptxrd(it6505, 0x0E, &value);
++		i = dpcdstart;
++		temp = ARRAY_SIZE(dpcd1);
++		DRM_DEBUG_DRIVER("SYS_WAIT state parse %d dpcd offset!\n",
++			temp + ARRAY_SIZE(dpcd2));
++
++		for (i = 0; i < temp; i++) {
++			dpcd1[i] = dptx_dpcdrd(it6505, dpcdstart + i);
++			DRM_DEBUG_DRIVER("dpcd[0x%02x]:0x%02x",
++								dpcdstart + i, dpcd1[i]);
++		}
++		dpcdstart = 0x200;
++		i = dpcdstart;
++		temp = ARRAY_SIZE(dpcd2);
++
++		for (i = 0; i < temp; i++) {
++			dpcd2[i] = dptx_dpcdrd(it6505, dpcdstart + i);
++			DRM_DEBUG_DRIVER("dpcd[0x%02x]:0x%02x",
++								dpcdstart + i, dpcd2[i]);
++		}
++
++		if (value & BIT(4)) {
++			DRM_DEBUG_DRIVER("Auto Link Training Success ...\n");
++			DRM_DEBUG_DRIVER("Link State : 0x%X\n", value & 0x1F);
++#if ENAUD
++			iTE6505_SetAudio(it6505,
++				it6505->aud_sel, it6505->aud_type,
++				it6505->aud_fs, it6505->aud_ch);
++#endif
++			DRM_DEBUG_DRIVER("it6505->VidStable_Done = %02x\n",
++				it6505->vidstable_done);
++#if ENHDCP
++			DRM_DEBUG_DRIVER("Config ENHDCP\n");
++			if (it6505->cp_ready) {
++				DRM_DEBUG_DRIVER("Sink cp_ready:%02x\n",
++					it6505->cp_ready);
++				DRM_DEBUG_DRIVER("Support HDCP\n");
++				dptx_sys_chg(it6505, SYS_ReHDCP);
++			} else {
++				DRM_DEBUG_DRIVER("Sink cp_ready:%02x\n",
++					it6505->cp_ready);
++					DRM_DEBUG_DRIVER("Not support HDCP\n");
++				dptx_sys_chg(it6505, SYS_NOROP);
++			}
++#else
++			DRM_DEBUG_DRIVER("Not config ENHDCP\n");
++			dptx_sys_chg(it6505, SYS_NOROP);
++#endif
++		} else {
++			dptxrd(it6505, 0x0D, &temp2);
++			dptxrd(it6505, 0x0E, &temp1);
++			DRM_DEBUG_DRIVER("Auto Link Training fail step %d!\n",
++				it6505->cntfsm);
++			DRM_DEBUG_DRIVER("reg0E:0x%x, reg0D:0x%x!\n",
++				temp1, temp2);
++			if (it6505->cntfsm > 0) {
++				it6505->cntfsm--;
++				dptx_sys_chg(it6505, SYS_AUTOTRAIN);
++			} else {
++				DRM_DEBUG_DRIVER("Auto Training Fail");
++				DRM_DEBUG_DRIVER("0x%x times\n",
++					TRAINFAILCNT);
++				DRM_DEBUG_DRIVER("Sys change to SYS_HPD!\n");
++				dptx_dpcdwr(it6505, 0x102, 0x00);
++				dptx_sys_chg(it6505, SYS_HPD);
++			}
++		}
++		break;
++
++#if ENHDCP
++	case SYS_ReHDCP:
++		msleep(600);
++		dptxrd(it6505, 0x3B, &Ar0_low);
++		dptxrd(it6505, 0x3C, &Ar0_high);
++		dptxrd(it6505, 0x45, &Br0_low);
++		dptxrd(it6505, 0x46, &Br0_high);
++		DRM_DEBUG_DRIVER("Before EnableHDCP\n");
++		DRM_DEBUG_DRIVER("Ar0_low:%x, Ar0_high:%x\n",
++			Ar0_low, Ar0_high);
++		DRM_DEBUG_DRIVER("Br0_low:%x, Br0_high:%x\n",
++			Br0_low, Br0_high);
++		iTE6505_EnableHDCP(it6505);
++		msleep(200);
++		DRM_DEBUG_DRIVER("SYS_ReHDCP end !!\n");
++		break;
++
++#endif
++	case SYS_NOROP:
++		break;
++
++	default:
++		DRM_DEBUG_DRIVER("sys_state change to unknown_state!!\n");
++		break;
++	}
++
++	DRM_DEBUG_DRIVER("%s end!!\n", __func__);
++
++}
++
++static int it6505_poweron(struct it6505 *it6505)
++{
++	struct it6505_platform_data *pdata = &it6505->pdata;
++	int err = 0;
++
++	DRM_DEBUG_DRIVER("%s\n", __func__);
++
++	if (it6505->powered) {
++		DRM_DEBUG_DRIVER("[%s] had already been power on!", __func__);
++		return 0;
++	}
++
++	DRM_DEBUG_DRIVER("it6505 start to power on\n");
++
++	err = regulator_enable(pdata->pwr18);
++	DRM_DEBUG_DRIVER("%s to enable pwr18 regulator",
++		err ? "Failed" : "Successed");
++	/* time interval between IVDD and OVDD at least be 1ms */
++	msleep(5);
++	err = regulator_enable(pdata->ovdd);
++	DRM_DEBUG_DRIVER("%s to enable ovdd regulator",
++		err ? "Failed" : "Successed");
++	/* time interval between OVDD and SYSRSTN at least be 10ms */
++	msleep(15);
++	usleep_range(10000, 20000);
++	gpiod_set_value_cansleep(pdata->gpiod_reset, 0);
++	usleep_range(1000, 2000);
++	gpiod_set_value_cansleep(pdata->gpiod_reset, 1);
++	usleep_range(10000, 20000);
++
++	dptx_init(it6505);
++	if (err == 0)
++		it6505->powered = true;
++	return err;
++}
++
++#ifdef ENPWRONOFF
++static int it6505_poweroff(struct it6505 *it6505)
++{
++	struct it6505_platform_data *pdata = &it6505->pdata;
++	int err = 0;
++
++	DRM_DEBUG_DRIVER("[%s]\n", __func__);
++	if (!(it6505->powered)) {
++		DRM_DEBUG_DRIVER("[%s] power had been already off", __func__);
++		return 0;
++	}
++	gpiod_set_value_cansleep(pdata->gpiod_reset, 0);
++	err = regulator_disable(pdata->pwr18);
++	DRM_DEBUG_DRIVER("%s to disable pwr18 regulator",
++		err ? "Failed" : "Successed");
++
++	err = regulator_disable(pdata->ovdd);
++	DRM_DEBUG_DRIVER("%s to disable ovdd regulator",
++		err ? "Failed" : "Successed");
++	if (err == 0) {
++		kfree(it6505->edid);
++		it6505->edid = NULL;
++		it6505->powered = false;
++	}
++	return err;
++}
++#endif
++
++static irqreturn_t it6505_hpd_threaded_handler(int irq, void *data)
++{
++	struct it6505 *ctx = data;
++
++	DRM_DEBUG_DRIVER("start %s", __func__);
++
++	mutex_lock(&ctx->lock);
++
++	DRM_DEBUG_DRIVER("[%s]it6505->hpd_status = 0x%02x\n",
++		__func__, ctx->hpd_status);
++	DRM_DEBUG_DRIVER("[%s]GPIO hpd status = 0x%02x\n",
++		__func__,
++		gpiod_get_value(ctx->pdata.gpiod_hpd));
++
++	if ((ctx->it6505_drv_hold == 0)
++			&& (ctx->hpd_status
++			!= gpiod_get_value(ctx->pdata.gpiod_hpd))) {
++		drm_helper_hpd_irq_event(ctx->connector.dev);
++		DRM_DEBUG_DRIVER("it6505->hpd_status = 0x%02x",
++			ctx->hpd_status);
++		DRM_DEBUG_DRIVER("GPIO hpd status = 0x%02x",
++			gpiod_get_value(ctx->pdata.gpiod_hpd));
++		DRM_DEBUG_DRIVER("after drm_helper_hpd_irq_event!\n");
++		ctx->hpd_status = gpiod_get_value(ctx->pdata.gpiod_hpd);
++	}
++
++	mutex_unlock(&ctx->lock);
++
++	DRM_DEBUG_DRIVER("end %s", __func__);
++
++	return IRQ_HANDLED;
++}
++
++void SHA1_digest(u8 *sha1_input, u8 size, u8 *output_av)
++{
++	struct shash_desc *desc;
++	struct sha1_state *sha1_st;
++	struct crypto_shash *tfm = crypto_alloc_shash("sha1", 0, 0);
++
++	DRM_DEBUG_DRIVER("start %s",__func__);
++	DRM_DEBUG_DRIVER("sha_input size:%d", size);
++	desc = kzalloc(sizeof(*desc)
++		+ crypto_shash_descsize(tfm), GFP_KERNEL);
++	desc->tfm = tfm;
++	DRM_DEBUG_DRIVER("crypto_alloc_shash %s!",
++		IS_ERR(desc->tfm) ? "fail" : "success");
++	DRM_DEBUG_DRIVER("crypto_shash_init %s!",
++		crypto_shash_init(desc) ? "fail" : "success");
++	DRM_DEBUG_DRIVER("crypto_shash_update %s!",
++		crypto_shash_update(desc, sha1_input, size)
++			? "fail" : "success");
++	sha1_st = (struct sha1_state *)(desc->__ctx);
++#ifdef SHA_DEBUG
++	DRM_DEBUG_DRIVER("sha1_state.state[0]:0x%lx",
++		sha1_st->state[0]);
++	DRM_DEBUG_DRIVER("sha1_state.state[1]:0x%lx",
++		sha1_st->state[1]);
++	DRM_DEBUG_DRIVER("sha1_state.state[2]:0x%lx",
++		sha1_st->state[2]);
++	DRM_DEBUG_DRIVER("sha1_state.state[3]:0x%lx",
++		sha1_st->state[3]);
++	DRM_DEBUG_DRIVER("sha1_state.state[4]:0x%lx",
++		sha1_st->state[4]);
++#endif
++	memcpy(output_av, sha1_st->state, sizeof(u8)*20);
++	crypto_free_shash(tfm);
++	tfm = NULL;
++	kfree(desc);
++	desc = NULL;
++	sha1_st = NULL;
++	DRM_DEBUG_DRIVER("end %s", __func__);
++}
++
++void it6505_makeup_sha1_input(struct it6505 *it6505)
++{
++	int msgcnt = 0, i;
++	unsigned long ksvlist;
++
++	dptxset(it6505, 0x3A, 0x20, 0x20);
++	DRM_DEBUG_DRIVER("read am0: ");
++	for (i = 0; i < 8; i++) {
++		dptxrd(it6505,
++			0x4C + i,
++			(unsigned int *)(it6505->am0 + i));
++		DRM_DEBUG_DRIVER("0x%02X , ", it6505->am0[i]);
++	}
++	DRM_DEBUG_DRIVER("\n\n");
++	dptxset(it6505, 0x3A, 0x20, 0x00);
++
++	it6505->binfo[0] = dptx_dpcdrd(it6505,
++		0x6802A);
++	it6505->binfo[1] = dptx_dpcdrd(it6505,
++		0x6802B);
++	DRM_DEBUG_DRIVER("read Binfo!!");
++	DRM_DEBUG_DRIVER("Attached devices:%02x\n",
++		it6505->binfo[0] & 0x7F);
++
++	DRM_DEBUG_DRIVER("%s 127 devices are attached\n",
++		((it6505->binfo[0] & BIT(7)) >> 7) ?
++			"over" : "under");
++	DRM_DEBUG_DRIVER("depth, attached levels:%02x\n",
++		it6505->binfo[1] & 0x07);
++	DRM_DEBUG_DRIVER("%s seven levels cascaded\n",
++		((it6505->binfo[1] & BIT(3)) >> 3) ?
++			"more than" : "less");
++
++	for (i = 0; i < (it6505->binfo[0] & 0x7F); i++) {
++		it6505->shainput[msgcnt]
++			= it6505->ksvlist[msgcnt]
++			= dptx_dpcdrd(it6505,
++				0x6802C + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt]
++			= it6505->ksvlist[msgcnt]
++			= dptx_dpcdrd(it6505,
++				0x6802D + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt]
++			= it6505->ksvlist[msgcnt]
++			= dptx_dpcdrd(it6505,
++				0x6802E + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt]
++			= it6505->ksvlist[msgcnt]
++			= dptx_dpcdrd(it6505,
++				0x6802F + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt]
++			= it6505->ksvlist[msgcnt]
++			= dptx_dpcdrd(it6505,
++				0x68030 + (i % 3) * 5);
++		msgcnt++;
++		ksvlist
++			= ((unsigned long)
++			(it6505->ksvlist[i * 5 + 4]) << 32)
++			+ (it6505->ksvlist[i * 5 + 3] << 24)
++			+ (it6505->ksvlist[i * 5 + 2] << 16)
++			+ (it6505->ksvlist[i * 5 + 1] << 8)
++			+ it6505->ksvlist[i * 5];
++
++		DRM_DEBUG_DRIVER("KSV List %d device:0x%lx\n",
++			i, ksvlist);
++	}
++	DRM_DEBUG_DRIVER("\n");
++	it6505->shainput[msgcnt++] = it6505->binfo[0];
++	it6505->shainput[msgcnt++] = it6505->binfo[1];
++	for (i = 0; i < 8; i++) {
++		it6505->shainput[msgcnt++] =
++			it6505->am0[i];
++	}
++	DRM_DEBUG_DRIVER("SHA Message Count = %d\n", msgcnt);
++	it6505->shainput[msgcnt] = 0x80;
++
++	for (i = msgcnt+1; i < 62; i++)
++		it6505->shainput[i] = 0x00;
++
++	it6505->shainput[62] = ((8 * msgcnt) >> 8) & 0xFF;
++	it6505->shainput[63] = (8 * msgcnt) & 0xFF;
++}
++
++void it6505_check_sha1_result(struct it6505 *it6505)
++{
++	unsigned int i, value;
++
++	DRM_DEBUG_DRIVER("SHA calculate complete!\n");
++	for (i = 0; i < 5; i++) {
++		value
++			= (it6505->av[i][3] << 24)
++			+ (it6505->av[i][2] << 16)
++			+ (it6505->av[i][1] << 8)
++			+ it6505->av[i][0];
++		DRM_DEBUG_DRIVER("av %d :0x%08x\n",
++			i, value);
++	}
++	DRM_DEBUG_DRIVER("\n");
++
++	it6505->passsha = 1;
++	for (i = 0; i < 5; i++) {
++		it6505->bv[i][0]
++			= dptx_dpcdrd(it6505, 0x68014 + i * 4);
++		it6505->bv[i][1]
++			= dptx_dpcdrd(it6505, 0x68015 + i * 4);
++		it6505->bv[i][2]
++			= dptx_dpcdrd(it6505, 0x68016 + i * 4);
++		it6505->bv[i][3]
++			= dptx_dpcdrd(it6505, 0x68017 + i * 4);
++		value
++			= (it6505->bv[i][3] << 24)
++			+ (it6505->bv[i][2] << 16)
++			+ (it6505->bv[i][1] << 8)
++			+ it6505->bv[i][0];
++		DRM_DEBUG_DRIVER("bv %d :0x%08x\n",
++			i, value);
++		if ((it6505->bv[i][0]
++				!= it6505->av[i][0]) ||
++			(it6505->bv[i][1]
++				!= it6505->av[i][1]) ||
++			(it6505->bv[i][2]
++				!= it6505->av[i][2]) ||
++			(it6505->bv[i][3]
++				!= it6505->av[i][3])) {
++			it6505->passsha = 0;
++		}
++	}
++	if (it6505->passsha) {
++		DRM_DEBUG_DRIVER("SHA check result pass!\n");
++		DRM_DEBUG_DRIVER("trigger reg0x39[4] = 1\n");
++		dptxset(it6505, 0x39, 0x10, 0x10);
++	} else {
++		DRM_DEBUG_DRIVER("SHA check result fail\n");
++		DRM_DEBUG_DRIVER("trigger reg0x39[5] = 1\n");
++		dptxset(it6505, 0x39, 0x20, 0x20);
++	}
++}
++
++void HPD_IRQ(struct it6505 *it6505)
++{
++	unsigned int dpcd200, dpcd201, dpcd202, dpcd203;
++	unsigned int dpcd204, dpcd205, auxbusycnt, AuxBusy, value, reg55;
++	int ret;
++#ifdef SHA_DEBUG
++	int i;
++#endif
++
++	dpcd200 = dptx_dpcdrd(it6505, 0x200);
++	dpcd201 = dptx_dpcdrd(it6505, 0x201);
++	dpcd202 = dptx_dpcdrd(it6505, 0x202);
++	dpcd203 = dptx_dpcdrd(it6505, 0x203);
++	dpcd204 = dptx_dpcdrd(it6505, 0x204);
++	dpcd205 = dptx_dpcdrd(it6505, 0x205);
++
++	DRM_DEBUG_DRIVER("dpcd200 = 0x%x\n", dpcd200);
++	DRM_DEBUG_DRIVER("dpcd201 = 0x%x\n", dpcd201);
++	DRM_DEBUG_DRIVER("dpcd202 = 0x%x\n", dpcd202);
++	DRM_DEBUG_DRIVER("dpcd203 = 0x%x\n", dpcd203);
++	DRM_DEBUG_DRIVER("dpcd204 = 0x%x\n", dpcd204);
++	DRM_DEBUG_DRIVER("dpcd205 = 0x%x\n", dpcd205);
++
++	if (dpcd201 & BIT(2)) {
++		ret = dptxrd(it6505, 0x38, &value);
++		it6505->bstatus = dptx_dpcdrd(it6505, 0x68029);
++		dptxrd(it6505, 0x55, &reg55);
++		DRM_DEBUG_DRIVER("reg0x55 = 0x%02x, reg0x68029 = 0x%02x\n",
++			reg55, it6505->bstatus);
++		if (value & BIT(0)) {
++
++			if (it6505->cp_done) {
++				DRM_DEBUG_DRIVER("Received CP_IRQ");
++				DRM_DEBUG_DRIVER(" cp_done = '1'");
++				DRM_DEBUG_DRIVER("Current bstatus = 0x%x\n",
++					it6505->bstatus);
++			} else {
++				DRM_DEBUG_DRIVER("Received CP_IRQ\n");
++				DRM_DEBUG_DRIVER("cp_done = '0'\n");
++			}
++
++			if (!it6505->cp_done || it6505->bstatus & BIT(2)) {
++				DRM_DEBUG_DRIVER("Trigger CP_IRQ");
++				DRM_DEBUG_DRIVER(" to HDCP Engine\n");
++
++				dptxset(it6505, 0x39, 0x02, 0x02);
++
++				auxbusycnt = 0;
++				do {
++					usleep_range(1000, 1500);
++
++					auxbusycnt++;
++					ret = dptxrd(it6505, 0x2B, &value);
++					AuxBusy = (value & BIT(5)) >> 5;
++				} while (AuxBusy == 1 && auxbusycnt < 20);
++
++
++				if (AuxBusy) {
++					DRM_DEBUG_DRIVER("AUX Busy Period!");
++				} else {
++					msleep(1000);
++					dptxrd(it6505, 0x55, &it6505->bstatus);
++					DRM_DEBUG_DRIVER("Link Integrity Fail");
++					DRM_DEBUG_DRIVER(" = %d\n",
++						(it6505->bstatus & BIT(2)) >> 2);
++					DRM_DEBUG_DRIVER("R0' Available = %d\n",
++						(it6505->bstatus & BIT(1)) >> 1);
++					DRM_DEBUG_DRIVER("KSV List Ready=%d\n",
++						(it6505->bstatus & BIT(0)));
++				}
++			}
++		}
++		DRM_DEBUG_DRIVER("Receive CP_IRQ!\n");
++		it6505->bstatus = dptx_dpcdrd(it6505, 0x68029);
++		dptxrd(it6505, 0x55, &reg55);
++		DRM_DEBUG_DRIVER("Cause of the interrupt!");
++		DRM_DEBUG_DRIVER("reg0x68029 = 0x%02x, reg0x55 = 0x%02x\n",
++			it6505->bstatus, reg55);
++
++		if (it6505->bstatus & BIT(0)) {
++			DRM_DEBUG_DRIVER("HDCP KSV list ready!! ...\n");
++			it6505_makeup_sha1_input(it6505);
++			SHA1_digest(it6505->shainput,
++				sizeof(it6505->shainput), (u8 *)it6505->av);
++
++			/* for SHA debug */
++#ifdef SHA_DEBUG
++			DRM_DEBUG_DRIVER("SHA_input:\n");
++			for (i = 0; i < 64; i++) {
++				if (!(i % 16))
++					DRM_DEBUG_DRIVER("\n");
++				DRM_DEBUG_DRIVER("0x%02x", it6505->shainput[i]);
++			}
++#endif
++			it6505_check_sha1_result(it6505);
++		}
++	}
++
++	if ((dpcd204 & BIT(7)) == 0x80) {
++		if ((it6505->lane == 1 && (dpcd202 & BIT(2)) != 0x04) ||
++			(it6505->lane == 2 && (dpcd202 & 0x44) != 0x44) ||
++			(it6505->lane == 4 && ((dpcd202 & 0x44) != 0x44 ||
++			(dpcd203 & 0x44) != 0x44)) ||
++			(it6505->lane == 1 && (dpcd203 & BIT(6)) != 0x40) ||
++			(it6505->lane == 2 && (dpcd203 & 0x44) != 0x44) ||
++			(it6505->lane == 4 && ((dpcd203 & 0x44) != 0x44 ||
++			(dpcd202 & 0x44) != 0x44)) ||
++			(dpcd204 & BIT(0)) != 0x01) {
++
++			DRM_DEBUG_DRIVER("Link Re-Training\n");
++			dptxset(it6505, 0xD3, 0x30, 0x30);
++			dptxset(it6505, 0xE8, 0x33, 0x00);
++			msleep(500);
++			dptx_sys_chg(it6505, SYS_HPD);
++#if ENHDCP
++			DRM_DEBUG_DRIVER("INT_MODE:Config ENHDCP\n");
++			if (it6505->cp_ready) {
++				DRM_DEBUG_DRIVER("INT_MODE:Sink cp_ready:%d\n",
++					it6505->cp_ready);
++				DRM_DEBUG_DRIVER("Support HDCP\n");
++				while (it6505->status != SYS_ReHDCP) {
++					dptx_sys_fsm(it6505);
++					if (it6505->status
++						== SYS_UNPLUG)
++						break;
++				}
++				dptx_sys_fsm(it6505);
++				if (it6505->downstreamrepeater) {
++					DRM_DEBUG_DRIVER("This is repeater!\n");
++					HPD_IRQ(it6505);
++				}
++			} else {
++				DRM_DEBUG_DRIVER("INT_MODE:Sink cp_ready:%d\n",
++					it6505->cp_ready);
++				DRM_DEBUG_DRIVER("Not support HDCP\n");
++				while (it6505->status != SYS_NOROP) {
++					dptx_sys_fsm(it6505);
++					if (it6505->status
++						== SYS_UNPLUG)
++						break;
++				}
++			}
++#else
++				DRM_DEBUG_DRIVER("INT_MODE:Unconfig ENHDCP\n");
++				while (it6505->status != SYS_NOROP) {
++					dptx_sys_fsm(it6505);
++					if (it6505->status
++						== SYS_UNPLUG)
++						break;
++				}
++#endif
++		}
++	}
++}
++
++void it6505_check_reg06(struct it6505 *it6505, unsigned int reg06)
++{
++	unsigned int rddata, err;
++	union extcon_property_value property;
++
++	if (reg06 & BIT(0)) {
++		/* hpd pin status change */
++		DRM_DEBUG_DRIVER("HPD Change Interrupt\n");
++		dptxrd(it6505, 0x0D, &rddata);
++		if (rddata & BIT(1)) {
++			err = extcon_get_property(it6505->port->extcon,
++				EXTCON_DISP_DP,
++				EXTCON_PROP_USB_TYPEC_POLARITY, &property);
++			if (err) {
++				DRM_DEBUG_DRIVER("%s get property fail!",
++					__func__);
++			}
++
++			it6505->laneswap = property.intval;
++			DRM_DEBUG_DRIVER("laneswap:%d", it6505->laneswap);
++			dptx_sys_chg(it6505, SYS_HPD);
++			dptx_sys_fsm(it6505);
++#if ENHDCP
++			DRM_DEBUG_DRIVER("Config ENHDCP\n");
++			if (it6505->cp_ready) {
++				DRM_DEBUG_DRIVER("Sink cp_ready:%d\n",
++					it6505->cp_ready);
++				DRM_DEBUG_DRIVER("Support HDCP\n");
++				while (it6505->status != SYS_ReHDCP) {
++					dptx_sys_fsm(it6505);
++					if (it6505->status
++					== SYS_UNPLUG)
++						break;
++				}
++				dptx_sys_fsm(it6505);
++				if (it6505->downstreamrepeater) {
++					DRM_DEBUG_DRIVER("Is repeater");
++					HPD_IRQ(it6505);
++				}
++			} else {
++				DRM_DEBUG_DRIVER("Sink cp_ready:%d\n",
++					it6505->cp_ready);
++				DRM_DEBUG_DRIVER("Not support HDCP\n");
++				while (it6505->status != SYS_NOROP) {
++					dptx_sys_fsm(it6505);
++					if (it6505->status
++					== SYS_UNPLUG)
++						break;
++				}
++			}
++#else
++			DRM_DEBUG_DRIVER("Not config ENHDCP\n");
++			while (it6505->status != SYS_NOROP) {
++				dptx_sys_fsm(it6505);
++				if (it6505->status == SYS_UNPLUG)
++					break;
++			}
++#endif
++		} else {
++			dptx_sys_chg(it6505, SYS_UNPLUG);
++		}
++	}
++
++	if (reg06 & BIT(1)) {
++		DRM_DEBUG_DRIVER("HPD IRQ Interrupt\n");
++		HPD_IRQ(it6505);
++	}
++
++	if (reg06 & BIT(2)) {
++		dptxrd(it6505, 0x0D, &rddata);
++
++		if ((rddata & BIT(2)) >> 2) {
++			DRM_DEBUG_DRIVER("Video Stable On Interrupt\n");
++			it6505->vidstable_done = 1;
++			DRM_DEBUG_DRIVER("Set vidstable_done = 0x%x\n",
++				it6505->vidstable_done);
++		} else {
++			DRM_DEBUG_DRIVER("Video Stable Off Interrupt");
++			it6505->vidstable_done = 0;
++			DRM_DEBUG_DRIVER("Set vidstable_done = 0x%x\n",
++				it6505->vidstable_done);
++		}
++	}
++
++#if ENHDCP
++	if (reg06 & BIT(3)) {
++		DRM_DEBUG_DRIVER("HDCP encryption Fail Interrupt\n");
++		DRM_DEBUG_DRIVER("HDCP retry! ...\n");
++		it6505->cp_done = 0;
++		DRM_DEBUG_DRIVER("Set it6505->cp_done = 0x%x ...\n",
++			it6505->cp_done);
++		dptx_sys_fsm(it6505);
++	}
++
++	if (reg06 & BIT(4)) {
++		DRM_DEBUG_DRIVER("HDCP encryption Done Interrupt\n");
++		it6505->cp_done = 1;
++		DRM_DEBUG_DRIVER("Set it6505->cp_done = 0x%x ...\n",
++			it6505->cp_done);
++		dptx_sys_chg(it6505, SYS_NOROP);
++	}
++#endif
++}
++
++void it6505_check_reg07(struct it6505 *it6505, unsigned int reg07)
++{
++	if (reg07 & BIT(0))
++		DRM_DEBUG_DRIVER("AUX PC Request Fail Interrupt\n");
++
++	if (reg07 & BIT(1)) {
++		unsigned int Ar0_low, Ar0_high, Br0_low, Br0_high;
++
++		DRM_DEBUG_DRIVER("HDCP event Interrupt\n");
++		it6505->bstatus = dptx_dpcdrd(it6505, 0x68029);
++		dptxrd(it6505, 0x3B, &Ar0_low);
++		dptxrd(it6505, 0x3C, &Ar0_high);
++		dptxrd(it6505, 0x45, &Br0_low);
++		dptxrd(it6505, 0x46, &Br0_high);
++		/*
++		 * Read Bstatus to determine what happened
++		 */
++		DRM_DEBUG_DRIVER("Bstatus reg0x68029:%02x!\n",
++			it6505->bstatus);
++		if (!(it6505->bstatus & BIT(0))) {
++			DRM_DEBUG_DRIVER("R0' read back by TX!\n");
++			DRM_DEBUG_DRIVER("HDCP part I complete!");
++			DRM_DEBUG_DRIVER("Ar0_low:%02x",
++				Ar0_low);
++			DRM_DEBUG_DRIVER("Ar0_high:%02x\n",
++				Ar0_high);
++			DRM_DEBUG_DRIVER("Br0_low:%02x",
++				Br0_low);
++			DRM_DEBUG_DRIVER("Br0_high:%02x\n",
++				Br0_high);
++		}
++	}
++#if ENAUD
++	if (reg07 & BIT(2)) {
++		DRM_DEBUG_DRIVER("Audio FIFO OverFlow Interrupt\n");
++		dptxset(it6505, 0xD3, 0x20, 0x20);
++		dptxset(it6505, 0xE8, 0x22, 0x00);
++
++		dptxset(it6505, 0xB8, 0x80, 0x80);
++		dptxset(it6505, 0xB8, 0x80, 0x00);
++		iTE6505_SetAudio(it6505,
++			it6505->aud_sel,
++			it6505->aud_type,
++			it6505->aud_fs,
++			it6505->aud_ch);
++	}
++#endif
++}
++
++void it6505_check_reg08(struct it6505 *it6505, unsigned int reg08)
++{
++	if (reg08 & BIT(4)) {
++		DRM_DEBUG_DRIVER("Link Training Fail Interrupt\n");
++		/* restart training */
++		dptx_sys_chg(it6505, SYS_AUTOTRAIN);
++#if ENHDCP
++		DRM_DEBUG_DRIVER("Config ENHDCP ...\n");
++		if (it6505->cp_ready) {
++			DRM_DEBUG_DRIVER("Sink cp_ready:%d",
++				it6505->cp_ready);
++			DRM_DEBUG_DRIVER("Support HDCP\n");
++			while (it6505->status != SYS_ReHDCP) {
++				dptx_sys_fsm(it6505);
++				if (it6505->status == SYS_UNPLUG)
++					break;
++			}
++			dptx_sys_fsm(it6505);
++			if (it6505->downstreamrepeater) {
++				DRM_DEBUG_DRIVER("This is repeater!\n");
++				HPD_IRQ(it6505);
++			}
++		} else {
++			DRM_DEBUG_DRIVER("Sink cp_ready:%d",
++				it6505->cp_ready);
++			DRM_DEBUG_DRIVER("Not support HDCP\n");
++			while (it6505->status != SYS_NOROP) {
++				dptx_sys_fsm(it6505);
++				if (it6505->status == SYS_UNPLUG)
++					break;
++			}
++		}
++#else
++		DRM_DEBUG_DRIVER("Not config ENHDCP\n");
++			while (it6505->status != SYS_NOROP) {
++				dptx_sys_fsm(it6505);
++				if (it6505->status == SYS_UNPLUG)
++					break;
++			}
++#endif
++	}
++
++	if (reg08 & BIT(7)) {
++		DRM_DEBUG_DRIVER("IO Latch FIFO OverFlow Interrupt\n");
++		dptxset(it6505, 0x61, 0x02, 0x02);
++		dptxset(it6505, 0x61, 0x02, 0x00);
++	}
++}
++
++void it6505_dptx_irq(struct it6505 *it6505)
++{
++	unsigned int reg06, reg07, reg08, reg0d;
++
++	dptxrd(it6505, 0x06, &reg06);
++	dptxrd(it6505, 0x07, &reg07);
++	dptxrd(it6505, 0x08, &reg08);
++	dptxrd(it6505, 0x0D, &reg0d);
++
++	dptxwr(it6505, 0x06, reg06);
++	dptxwr(it6505, 0x07, reg07);
++	dptxwr(it6505, 0x08, reg08);
++
++	DRM_DEBUG_DRIVER("[%s]  reg06 = 0x%x\n", __func__, reg06);
++	DRM_DEBUG_DRIVER("reg07 = 0x%x\n", reg07);
++	DRM_DEBUG_DRIVER("reg08 = 0x%x\n", reg08);
++	DRM_DEBUG_DRIVER("reg0d = 0x%x\n", reg0d);
++
++	if (reg06 != 0)
++		it6505_check_reg06(it6505, reg06);
++
++	if (reg07 != 0)
++		it6505_check_reg07(it6505, reg07);
++
++	if (reg08 != 0)
++		it6505_check_reg08(it6505, reg08);
++}
++
++
++static void it6505_bridge_enable(struct drm_bridge *bridge)
++{
++	struct it6505 *ctx = bridge_to_it6505(bridge);
++
++	DRM_DEBUG_DRIVER("start %s\n", __func__);
++
++	it6505_initfsm(ctx);
++	iTE6505_INT_mask(ctx);
++	dptx_sys_chg(ctx, SYS_HPD);
++
++	DRM_DEBUG_DRIVER("%s end\n", __func__);
++}
++
++static void it6505_bridge_disable(struct drm_bridge *bridge)
++{
++	DRM_DEBUG_DRIVER("start %s\n", __func__);
++	DRM_DEBUG_DRIVER("end %s\n", __func__);
++}
++
++static const struct drm_bridge_funcs it6505_bridge_funcs = {
++	.attach = it6505_bridge_attach,
++	.mode_valid = it6505_bridge_mode_valid,
++	.disable = it6505_bridge_disable,
++	.mode_set = it6505_bridge_mode_set,
++	.enable = it6505_bridge_enable,
++};
++
++static irqreturn_t it6505_intp_threaded_handler(int unused, void *data)
++{
++	struct it6505 *ctx = data;
++
++	DRM_DEBUG_DRIVER("[%s]  start\n", __func__);
++
++	if (ctx->it6505_drv_hold == 0 && ctx->powered) {
++		mutex_lock(&ctx->lock);
++
++		it6505_dptx_irq(ctx);
++
++		mutex_unlock(&ctx->lock);
++	}
++
++	DRM_DEBUG_DRIVER("[%s]	end\n", __func__);
++
++	return IRQ_HANDLED;
++}
++
++static int it6505_init_pdata(struct it6505 *it6505)
++{
++	struct it6505_platform_data *pdata = &it6505->pdata;
++	struct device *dev = &it6505->client->dev;
++
++	/* 1.0V digital core power regulator  */
++	pdata->pwr18 = devm_regulator_get(dev, "pwr18");
++	if (IS_ERR(pdata->pwr18)) {
++		DRM_ERROR("pwr18 regulator not found\n");
++		return PTR_ERR(pdata->pwr18);
++	}
++
++	pdata->ovdd = devm_regulator_get(dev, "ovdd");
++	if (IS_ERR(pdata->ovdd)) {
++		DRM_ERROR("ovdd regulator not found\n");
++		return PTR_ERR(pdata->ovdd);
++	}
++
++	/* GPIO for HPD */
++	pdata->gpiod_hpd = devm_gpiod_get(dev, "hpd", GPIOD_IN);
++	if (IS_ERR(pdata->gpiod_hpd))
++		return PTR_ERR(pdata->gpiod_hpd);
++
++	/* GPIO for chip reset */
++	pdata->gpiod_reset = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
++
++	return PTR_ERR_OR_ZERO(pdata->gpiod_reset);
++}
++
++static int it6505_open(struct inode *inode,
++	struct file *file)
++{
++	struct it6505 *ctx = container_of(inode->i_cdev, struct it6505, cdev);
++	
++	DRM_DEBUG_DRIVER("[%s]: successful", __func__);
++	if (!ctx)
++		DRM_DEBUG_DRIVER("[%s]:get it6505 struct fail!", __func__);
++	file->private_data = ctx;
++	return 0;
++}
++
++static int it6505_release(struct inode *inode,
++	struct file *file)
++{
++	struct it6505 *ctx = file->private_data;
++
++	DRM_DEBUG_DRIVER("[%s]: successful", __func__);
++	put_device(&ctx->class_dev);
++	return 0;
++}
++
++static ssize_t it6505_read(struct file *file,
++	char *buf, size_t count, loff_t *ptr)
++{
++	DRM_DEBUG_DRIVER("[%s]: successful", __func__);
++
++	DRM_DEBUG_DRIVER("it6505_drv_hold:%d",
++		((struct it6505 *)(file->private_data))->it6505_drv_hold);
++	return count;
++}
++
++static ssize_t it6505_write(struct file *file,
++	const char *buff, size_t count, loff_t *ptr)
++{
++	unsigned int num;
++
++	DRM_DEBUG_DRIVER("[%s]:count=%d",__func__,count);
++	kstrtoint(buff, 10, &num);
++	((struct it6505 *)(file->private_data))->it6505_drv_hold = num;
++	DRM_DEBUG_DRIVER("num:%d it6505_drv_hold:%d", num,
++		((struct it6505 *)(file->private_data))->it6505_drv_hold);
++	DRM_DEBUG_DRIVER("[%s]: successful", __func__);
++	DRM_DEBUG_DRIVER("set it6505_drv_hold:%d",
++		((struct it6505 *)(file->private_data))->it6505_drv_hold);
++	return count;
++}
++
++static struct class it6505_class_file = {
++	.owner          = THIS_MODULE,
++	.name           = IT6505_CLASS_NAME,
++};
++
++static struct file_operations it6505_fops = {
++	.owner = THIS_MODULE,
++	.read  = it6505_read,
++	.write = it6505_write,
++	.open  = it6505_open,
++	.release = it6505_release
++};
++
++static void it6505_release_device(struct device *dev)
++{
++	struct it6505 *ctx = container_of(dev, struct it6505, class_dev);
++
++	kfree(ctx);
++}
++
++static int it6505_i2c_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
++{
++	struct it6505 *ctx;
++	struct it6505_platform_data *pdata;
++	int err = 0;
++
++	ctx = devm_kzalloc(&client->dev, sizeof(*ctx), GFP_KERNEL);
++	DRM_DEBUG_DRIVER("%s function~start!!\n", __func__);
++	if (!ctx)
++		return -ENOMEM;
++
++	mutex_init(&ctx->lock);
++
++	pdata = &ctx->pdata;
++
++	ctx->bridge.of_node = client->dev.of_node;
++	ctx->client = client;
++	i2c_set_clientdata(client, ctx);
++
++	err = it6505_init_pdata(ctx);
++	if (err) {
++		DRM_ERROR("Failed to initialize pdata: %d\n", err);
++		goto exit;
++	}
++
++	ctx->regmap = devm_regmap_init_i2c(client,
++				 &it6505_bridge_regmap_config);
++	if (IS_ERR(ctx->regmap)) {
++		DRM_ERROR("regmap i2c init failed\n");
++		return PTR_ERR(ctx->regmap);
++	}
++
++	pdata->hpd_irq = gpiod_to_irq(pdata->gpiod_hpd);
++	DRM_DEBUG_DRIVER("get HPD IRQ: %d\n", pdata->hpd_irq);
++	if (pdata->hpd_irq < 0) {
++		DRM_ERROR("Failed to get HPD IRQ: %d\n", pdata->hpd_irq);
++		return -ENODEV;
++	}
++
++	pdata->intp_irq = client->irq;
++	DRM_DEBUG_DRIVER("get IT6505: %d\n", pdata->intp_irq);
++	if (!pdata->intp_irq) {
++		DRM_ERROR("Failed to get CABLE_DET and INTP IRQ\n");
++		return -ENODEV;
++	}
++
++	err = devm_request_threaded_irq(&client->dev, pdata->hpd_irq, NULL,
++					it6505_hpd_threaded_handler,
++					IRQF_TRIGGER_RISING
++					| IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
++					"it6505-hpd", ctx);
++	if (err) {
++		DRM_ERROR("Failed to request CABLE_DET threaded IRQ: %d\n",
++			err);
++		goto exit;
++	}
++
++	err = devm_request_threaded_irq(&client->dev, pdata->intp_irq, NULL,
++					it6505_intp_threaded_handler,
++					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
++					"it6505-intp", ctx);
++	if (err) {
++		DRM_ERROR("Failed to request INTP threaded IRQ: %d\n", err);
++		goto exit;
++	}
++
++	ctx->powered = 0;
++	ctx->hpd_status = 1;
++	DRM_DEBUG_DRIVER("Set it6505->hpd_status=0x%02x\n",
++		ctx->hpd_status);
++	ctx->it6505_drv_hold = 0;
++#ifdef TEST_MODE
++	err = it6505_poweron(ctx);
++	if (err) {
++		DRM_DEBUG_DRIVER("power on fail!");
++		goto exit;
++	}
++	DRM_DEBUG_DRIVER("power on success!");
++	ctx->it6505_drv_hold = 1;
++#endif
++
++	ctx->bridge.funcs = &it6505_bridge_funcs;
++
++	drm_bridge_add(&ctx->bridge);
++	device_initialize(&ctx->class_dev);
++	ctx->class_dev.parent = &client->dev;
++	ctx->class_dev.release = it6505_release_device;
++	cdev_init(&ctx->cdev, &it6505_fops);
++	err = dev_set_name(&ctx->class_dev, "%s", IT6505_DEVICE_NAME);
++	DRM_DEBUG_DRIVER("[%s] dev_set_name:%s",
++		__func__, err ? "failed" : "success");
++	if (err) {
++		DRM_DEBUG_DRIVER("dev_set_name failed => %d", err);
++		goto failed;
++	}
++	/*
++	 * Add the class device
++	 * Link to the character device for creating the /dev entry
++	 * in devtmpfs.
++	 */
++	ctx->class_dev.devt = MKDEV(it6505_major_num, 0);
++	ctx->class_dev.class = &it6505_class_file;
++
++	/* We can now add the sysfs class, we know which parameter to show */
++	err = cdev_device_add(&ctx->cdev, &ctx->class_dev);
++	if (err) {
++		DRM_DEBUG_DRIVER("cdev_device_add failed => %d",
++				err);
++		goto failed;
++	}
++	DRM_DEBUG_DRIVER("[%s] probe~end~Suss\n", __func__);
++	return 0;
++
++exit:
++	return err;
++failed:
++	put_device(&ctx->class_dev);
++	return err;
++}
++
++static int it6505_remove(struct i2c_client *client)
++{
++	struct it6505 *ctx = i2c_get_clientdata(client);
++
++	DRM_DEBUG_DRIVER("start %s\n", __func__);
++	drm_bridge_remove(&ctx->bridge);
++	kfree(ctx->edid);
++	ctx->edid = NULL;
++	DRM_DEBUG_DRIVER("end %s\n", __func__);
++	return 0;
++}
++
++static int __init it6505_init()
++{
++	int err;
++	dev_t dev = 0;
++
++	DRM_DEBUG_DRIVER("start %s", __func__);
++	/* Register the device class */
++	err = class_register(&it6505_class_file);
++	err = alloc_chrdev_region(&dev, 0, IT6505_MAX_DEV,
++			IT6505_DEVICE_NAME);
++	it6505_major_num = MAJOR(dev);
++	if (err < 0) {
++		DRM_DEBUG_DRIVER("alloc_chrdev_region() fail!");
++		goto failed_chrdevreg;
++	}
++
++	DRM_DEBUG_DRIVER("end %s", __func__);
++	return 0;
++
++failed_chrdevreg:
++	class_unregister(&it6505_class_file);
++	return err;
++}
++
++static void __exit it6505_exit()
++{
++	DRM_DEBUG_DRIVER("start %s", __func__);
++	unregister_chrdev(it6505_major_num, IT6505_DEVICE_NAME);
++	class_unregister(&it6505_class_file);
++	DRM_DEBUG_DRIVER("end %s", __func__);
++}
++
++static const struct i2c_device_id it6505_id[] = {
++	{ "it6505", 0 },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(i2c, it6505_id);
++
++static const struct of_device_id it6505_of_match[] = {
++	{ .compatible = "ite,it6505"},
++	{ }
++};
++
++struct i2c_driver it6505_i2c_driver = {
++	.driver = {
++		.name = "it6505_dptx",
++		.owner = THIS_MODULE,
++		.of_match_table = it6505_of_match,
++	},
++	.probe = it6505_i2c_probe,
++	.remove = it6505_remove,
++	.id_table = it6505_id,
++};
++
++module_i2c_driver(it6505_i2c_driver);
++module_init(it6505_init);
++module_exit(it6505_exit);
++
++MODULE_AUTHOR("Jitao Shi <jitao.shi@mediatek.com>");
++MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+index 62a9d47df948..189d04ed0f41 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dpi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+@@ -117,6 +117,7 @@ struct mtk_dpi_conf {
+ 	unsigned int (*cal_factor)(int clock);
+ 	u32 reg_h_fre_con;
+ 	bool edge_sel_en;
++	bool dual_edge;
+ };
+ 
+ static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 mask)
+@@ -353,6 +354,14 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
+ 		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0, EDGE_SEL_EN);
+ }
+ 
++static void mtk_dpi_config_dual_edge(struct mtk_dpi *dpi)
++{
++	if (dpi->conf->dual_edge) {
++		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE, DDR_EN | DDR_4PHASE);
++		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, EDGE_SEL, EDGE_SEL);
++	}
++}
++
+ static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+ 					enum mtk_dpi_out_color_format format)
+ {
+@@ -509,6 +518,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+ 	mtk_dpi_config_color_format(dpi, dpi->color_format);
+ 	mtk_dpi_config_2n_h_fre(dpi);
+ 	mtk_dpi_config_disable_edge(dpi);
++	mtk_dpi_config_dual_edge(dpi);
+ 	mtk_dpi_sw_reset(dpi, false);
+ 
+ 	return 0;
+@@ -671,6 +681,16 @@ static unsigned int mt2701_calculate_factor(int clock)
+ 		return 2;
+ }
+ 
++static unsigned int mt8183_calculate_factor(int clock)
++{
++	if (clock <= 27000)
++		return 8;
++	else if (clock <= 167000)
++		return 4;
++	else
++		return 2;
++}
++
+ static const struct mtk_dpi_conf mt8173_conf = {
+ 	.cal_factor = mt8173_calculate_factor,
+ 	.reg_h_fre_con = 0xe0,
+@@ -682,6 +702,12 @@ static const struct mtk_dpi_conf mt2701_conf = {
+ 	.edge_sel_en = true,
+ };
+ 
++static const struct mtk_dpi_conf mt8183_conf = {
++	.cal_factor = mt8183_calculate_factor,
++	.reg_h_fre_con = 0xe0,
++	.dual_edge = true,
++};
++
+ static int mtk_dpi_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -777,6 +803,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
+ 	{ .compatible = "mediatek,mt8173-dpi",
+ 	  .data = &mt8173_conf,
+ 	},
++	{ .compatible = "mediatek,mt8183-dpi",
++	  .data = &mt8183_conf,
++	},
+ 	{ },
+ };
+ 
 diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
 index 6020c30a33b3..4aae4a7d9f71 100644
 --- a/drivers/gpu/drm/panel/Kconfig
