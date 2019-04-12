@@ -1,7 +1,7 @@
 # Copyright 2014 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 
 inherit udev
 
@@ -50,6 +50,9 @@ src_install() {
 	# Disable autosuspend for ac_only to make webcams work a bit
 	# better on boxes
 	use ac_only && udev_dorules "${FILESDIR}/99-rk3288-no-dwc2-autosuspend.rules"
+
+	# On non-ac_only at least make hubs behave a little better
+	use ac_only || udev_dorules "${FILESDIR}/99-rk3288-delay-hub-autosuspend.rules"
 
 	# Install platform specific NVRAM files for brcmfmac.
 	if use veyron-brcmfmac-nvram ; then
