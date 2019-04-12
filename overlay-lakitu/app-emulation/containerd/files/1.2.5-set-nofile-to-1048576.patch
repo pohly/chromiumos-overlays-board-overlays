@@ -1,0 +1,28 @@
+From 1a1f8f11a54ae2e3a1bfe770f6b7850c2c49a261 Mon Sep 17 00:00:00 2001
+From: Michael Crosby <crosbymichael@gmail.com>
+Date: Wed, 10 Apr 2019 11:39:17 -0400
+Subject: [PATCH] Set nofile to 1048576
+
+Closes #3201
+
+Signed-off-by: Michael Crosby <crosbymichael@gmail.com>
+---
+ containerd.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/containerd.service b/containerd.service
+index 1ae7fe86..62332cb2 100644
+--- a/containerd.service
++++ b/containerd.service
+@@ -13,7 +13,7 @@ KillMode=process
+ # in the kernel. We recommend using cgroups to do container-local accounting.
+ LimitNPROC=infinity
+ LimitCORE=infinity
+-LimitNOFILE=infinity
++LimitNOFILE=1048576
+ # Comment TasksMax if your systemd version does not supports it.
+ # Only systemd 226 and above support this version.
+ TasksMax=infinity
+-- 
+2.21.0.392.gf8f6787159e-goog
+

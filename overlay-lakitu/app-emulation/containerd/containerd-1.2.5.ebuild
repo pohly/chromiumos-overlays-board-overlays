@@ -44,6 +44,9 @@ PATCHES=(
 	# containerd at /usr/bin/containerd, different than upstream's default at
 	# /usr/local/bin/containerd
 	"${FILESDIR}"/1.2.2-correct-execstart-path.patch
+	# lakitu: cherrypick of an upstream patch to set LimitNOFILE to 1048576:
+	# https://github.com/containerd/containerd/pull/3202
+	"${FILESDIR}"/1.2.5-set-nofile-to-1048576.patch
 )
 
 RESTRICT="test"
