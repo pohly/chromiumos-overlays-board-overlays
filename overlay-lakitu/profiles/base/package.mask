@@ -1,3 +1,7 @@
 # Mask audit from portage-stable
 sys-process/audit::portage-stable
 sys-process/shadow::portage-stable
+
+# Needed to make sure lakitu uses
+# current systemd version - 232
+>sys-apps/systemd-232
