@@ -2,7 +2,7 @@
 0x10ec0236 0x102808b8 0
 
 [model]
-alc-sense-combo
+alc-chrome-book
 
 [hint]
 auto_mute = no
@@ -12,7 +12,7 @@ auto_mic = no
 0x10ec0295 0x102808b6 0
 
 [model]
-alc-sense-combo
+alc-chrome-book
 
 [hint]
 auto_mute = no
