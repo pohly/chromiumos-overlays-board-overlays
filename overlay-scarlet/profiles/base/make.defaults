@@ -14,6 +14,9 @@ USE="${USE} direncryption"
 # Enable use of PinWeaver.
 USE="${USE} pinweaver"
 
+# Enable Kiosk Next
+USE="${USE} kiosk_next"
+
 # All firmwares to build from the EC code base
 EC_FIRMWARE="scarlet"
 
