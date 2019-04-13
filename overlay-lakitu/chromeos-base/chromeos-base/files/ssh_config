@@ -1,3 +1,7 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 Host *
 
 Protocol 2
@@ -5,7 +9,7 @@ ForwardAgent no
 ForwardX11 no
 HostbasedAuthentication no
 StrictHostKeyChecking no
-Ciphers aes128-ctr,aes192-ctr,aes256-ctr,arcfour256,arcfour128,aes128-cbc,3des-cbc
+Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc
 Tunnel no
 
 # Google Compute Engine times out connections after 10 minutes of inactivity.
