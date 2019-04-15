@@ -48,6 +48,3 @@ USE="${USE} hammerd"
 # for further details about chromeos-config, which is the required entry point for
 # unified builds.
 USE="${USE} -unibuild"
-
-# Allow the option to use QCA Wifi and BT
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ath10k_qca6174a-5 qca6174a-5-bt"
