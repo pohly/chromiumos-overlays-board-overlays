@@ -34,3 +34,5 @@ USE="${USE} drm_atomic"
 # Turn on the video cards this chip uses.
 # TODO: Remove radeon when amdgpu works by itself
 VIDEO_CARDS="-* radeon amdgpu"
+
+USE="${USE} android_aep"
