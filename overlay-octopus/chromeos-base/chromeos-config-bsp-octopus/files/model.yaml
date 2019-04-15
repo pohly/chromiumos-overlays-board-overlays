@@ -360,6 +360,8 @@ chromeos:
     - $device-name: "casta"
       $fw-name: "Casta"
       $num-mic-locations: 1
+      $ucm_src_root: "casta"
+      $ucm_extra_suffix: "casta"
       skus:
         - $sku-id-val: 1
           config: *clamshell_config
