@@ -48,3 +48,7 @@ USE="${USE} hammerd"
 # for further details about chromeos-config, which is the required entry point for
 # unified builds.
 USE="${USE} -unibuild"
+
+# Enable PCI rescan for Intel wifi NIC disappearing from the bus
+# See b/117960007 and crbug.com/922232 for details.
+USE="${USE} iwlwifi_rescan"
