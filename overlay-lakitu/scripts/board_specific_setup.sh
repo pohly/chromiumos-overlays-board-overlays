@@ -39,9 +39,14 @@ write_toolchain_path() {
 
 move_kernel_source() {
   # Move kernel source tarball to build dir so it can be exported as an
-  # artifact.
-  cp "${root_fs_dir}/opt/google/src/kernel-src.tar.gz" \
-      "${BUILD_DIR}/kernel-src.tar.gz"
+  # artifact. If it doesn't exist, create a fake tarball to be exported.
+  local tarball="${root_fs_dir}/opt/google/src/kernel-src.tar.gz"
+  local artifact="${BUILD_DIR}/kernel-src.tar.gz"
+  if [[ -f "$tarball" ]]; then
+    cp "$tarball" "$artifact"
+  else
+    touch "$artifact"
+  fi
   sudo rm -rf "${root_fs_dir}/opt/google/src"
 }
 
