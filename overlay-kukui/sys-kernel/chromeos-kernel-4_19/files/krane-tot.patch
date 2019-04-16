@@ -1,5 +1,80 @@
+diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
+index 7d72b21c9e94d4a..755b30fd6041b65 100644
+--- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
++++ b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
+@@ -9,7 +9,7 @@ CMDQ driver uses mailbox framework for communication. Please refer to
+ mailbox.txt for generic information about mailbox device-tree bindings.
+ 
+ Required properties:
+-- compatible: Must be "mediatek,mt8173-gce"
++- compatible: can be "mediatek,mt8173-gce" or "mediatek,mt8183-gce"
+ - reg: Address range of the GCE unit
+ - interrupts: The interrupt signal from the GCE block
+ - clock: Clocks according to the common clock binding
+@@ -21,15 +21,31 @@ Required properties:
+ 	priority: Priority of GCE thread.
+ 	atomic_exec: GCE processing continuous packets of commands in atomic
+ 		way.
++- #event-cells: Should be 1.
++	<&phandle event_number>
++	phandle: Label name of a gce node.
++	event_number: the event number defined in 'dt-bindings/gce/mt8173-gce.h'
++		      or 'dt-binding/gce/mt8183-gce.h'.
++- #subsys-cells: Should be 3.
++	<&phandle subsys_number start_offset size>
++	phandle: Label name of a gce node.
++	subsys_number: specify the sub-system id which is corresponding
++		       to the register address.
++	start_offset: the start offset of register address that GCE can access.
++	size: the total size of register address that GCE can access.
+ 
+ Required properties for a client device:
+ - mboxes: Client use mailbox to communicate with GCE, it should have this
+   property and list of phandle, mailbox specifiers.
+-- mediatek,gce-subsys: u32, specify the sub-system id which is corresponding
++Optional propertier for a client device:
++- mediatek,gce-client-reg: u32, specify the sub-system id which is corresponding
+   to the register address.
++- mediatek,gce-event-names: the event name can be defined by user.
++- mediatek,gce-events: u32, the event number defined in
++  'dt-bindings/gce/mt8173-gce.h' or 'dt-binding/gce/mt8183-gce.h'.
+ 
+-Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h'. Such as
+-sub-system ids, thread priority, event ids.
++Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h'
++or 'dt-binding/gce/mt8183-gce.h'. Such as sub-system ids, thread priority, event ids.
+ 
+ Example:
+ 
+@@ -39,8 +55,9 @@ Example:
+ 		interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&infracfg CLK_INFRA_GCE>;
+ 		clock-names = "gce";
+-		thread-num = CMDQ_THR_MAX_COUNT;
+ 		#mbox-cells = <3>;
++		#event-cells = <1>;
++		#subsys-cells = <2>;
+ 	};
+ 
+ Example for a client device:
+@@ -49,9 +66,11 @@ Example for a client device:
+ 		compatible = "mediatek,mt8173-mmsys";
+ 		mboxes = <&gce 0 CMDQ_THR_PRIO_LOWEST 1>,
+ 			 <&gce 1 CMDQ_THR_PRIO_LOWEST 1>;
+-		mediatek,gce-subsys = <SUBSYS_1400XXXX>;
+-		mutex-event-eof = <CMDQ_EVENT_MUTEX0_STREAM_EOF
+-				CMDQ_EVENT_MUTEX1_STREAM_EOF>;
+-
++		mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>,
++					  <&gce SUBSYS_1401XXXX 0x2000 0x100>;
++		mediatek,gce-event-names = "rdma0_sof",
++					   "rsz0_sof";
++		mediatek,gce-events = <&gce CMDQ_EVENT_MDP_RDMA0_SOF>,
++				      <&gce CMDQ_EVENT_MDP_RSZ0_SOF>;
+ 		...
+ 	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-vpu.txt b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
-index 2a5bac37f9a2..015123250b82 100644
+index 2a5bac37f9a2268..015123250b82571 100644
 --- a/Documentation/devicetree/bindings/media/mediatek-vpu.txt
 +++ b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
 @@ -4,7 +4,7 @@ Video Processor Unit is a HW video controller. It controls HW Codec including
@@ -11,8 +86,33 @@ index 2a5bac37f9a2..015123250b82 100644
    - reg: Must contain an entry for each entry in reg-names.
    - reg-names: Must include the following entries:
      "tcm": tcm base
+diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt b/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
+new file mode 100644
+index 000000000000000..a19e3b39ba66164
+--- /dev/null
++++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
+@@ -0,0 +1,19 @@
++EMI (External Memory Interface)
++
++Required properties:
++- compatible : must be one of :
++	"mediatek,mt8183-emi"
++- reg : the register and size of the EMI block.
++- interrupts : includes MPU, CGM, ELM.
++
++Example:
++	emi@10219000 {
++	compatible = "mediatek,mt8183-emi";
++	reg = <0 0x10219000 0 0x1000>, /* CEN EMI */
++		  <0 0x10226000 0 0x1000>, /* EMI MPU */
++		  <0 0x1022d000 0 0x1000>, /* CHA EMI */
++		  <0 0x10235000 0 0x1000>; /* CHB EMI */
++	interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>, /* MPU */
++			 <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>, /* CGM */
++			 <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
++};
 diff --git a/Documentation/devicetree/bindings/mfd/cros-ec.txt b/Documentation/devicetree/bindings/mfd/cros-ec.txt
-index 6245c9b1a68b..4860eabd0f72 100644
+index 6245c9b1a68bbc4..4860eabd0f7296c 100644
 --- a/Documentation/devicetree/bindings/mfd/cros-ec.txt
 +++ b/Documentation/devicetree/bindings/mfd/cros-ec.txt
 @@ -3,7 +3,7 @@ ChromeOS Embedded Controller
@@ -36,7 +136,7 @@ index 6245c9b1a68b..4860eabd0f72 100644
    time to wake up from sleep before they can receive SPI transfers at a high
 diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
 new file mode 100644
-index 000000000000..3ba668bab14b
+index 000000000000000..3ba668bab14b229
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
 @@ -0,0 +1,36 @@
@@ -77,7 +177,7 @@ index 000000000000..3ba668bab14b
 +		clock-names = "main";
 +	};
 diff --git a/Makefile b/Makefile
-index 53e3a826debf..3f4d0d2a28b2 100644
+index 53e3a826debf0d5..3f4d0d2a28b2440 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -86,26 +186,27 @@ index 53e3a826debf..3f4d0d2a28b2 100644
  VERSION = 4
  PATCHLEVEL = 19
 diff --git a/README b/README
-index 2c927ccbd970..8dce9827f6dd 100644
+index 2c927ccbd97055c..dadf580c61dfe74 100644
 --- a/README
 +++ b/README
 @@ -1,3 +1,4 @@
-+MTK TOT rev2
++MTK TOT krane
  Linux kernel
  ============
  
 diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index 458bbc422a94..3a55c454b65d 100644
+index 458bbc422a943ca..d09409979c8447a 100644
 --- a/arch/arm64/boot/dts/mediatek/Makefile
 +++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -8,3 +8,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+@@ -8,3 +8,6 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-evb.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-evb.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-index b12c6ea464db..a0dbbfb89602 100644
+index b12c6ea464db2a0..a0dbbfb89602a23 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
 @@ -7,6 +7,8 @@
@@ -327,9 +428,345 @@ index b12c6ea464db..a0dbbfb89602 100644
 +	vbus-supply = <&usb_p0_vbus>;
 +	status = "okay";
 +};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
+new file mode 100755
+index 000000000000000..d55a856f366ca49
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
+@@ -0,0 +1,330 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright (c) 2018 Google LLC
++ */
++
++/dts-v1/;
++#include "mt8183-kukui.dtsi"
++
++/ {
++	model = "MediaTek krane rev3 board";
++	compatible = "google,krane-rev3", "google,krane", "google,kukui", "mediatek,mt8183";
++};
++
++&backlight_lcd0 {
++	status = "disabled";
++};
++
++&i2c0 {
++	status = "okay";
++
++	touchscreen4: touchscreen@5d {
++		compatible = "hid-over-i2c";
++		reg = <0x5d>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&open_touch>;
++
++		interrupt-parent = <&pio>;
++		interrupts = <155 IRQ_TYPE_EDGE_FALLING>;
++
++		post-power-on-delay-ms = <10>;
++		hid-descr-addr = <0x0001>;
++	};
++};
++
++&pio {
++	/* 192 lines */
++	gpio-line-names =
++		"SPI_AP_EC_CS_L",
++		"SPI_AP_EC_MOSI",
++		"SPI_AP_EC_CLK",
++		"I2S3_DO",
++		"USB_PD_INT_ODL",
++		"",
++		"",
++		"",
++		"",
++		"IT6505_HPD_L",
++		"I2S3_TDM_D3",
++		"SOC_I2C6_1V8_SCL",
++		"SOC_I2C6_1V8_SDA",
++		"DPI_D0",
++		"DPI_D1",
++		"DPI_D2",
++		"DPI_D3",
++		"DPI_D4",
++		"DPI_D5",
++		"DPI_D6",
++		"DPI_D7",
++		"DPI_D8",
++		"DPI_D9",
++		"DPI_D10",
++		"DPI_D11",
++		"DPI_HSYNC",
++		"DPI_VSYNC",
++		"DPI_DE",
++		"DPI_CK",
++		"AP_MSDC1_CLK",
++		"AP_MSDC1_DAT3",
++		"AP_MSDC1_CMD",
++		"AP_MSDC1_DAT0",
++		"AP_MSDC1_DAT2",
++		"AP_MSDC1_DAT1",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"OTG_EN",
++		"DRVBUS",
++		"DISP_PWM",
++		"DSI_TE",
++		"LCM_RST_1V8",
++		"AP_CTS_WIFI_RTS",
++		"AP_RTS_WIFI_CTS",
++		"SOC_I2C5_1V8_SCL",
++		"SOC_I2C5_1V8_SDA",
++		"SOC_I2C3_1V8_SCL",
++		"SOC_I2C3_1V8_SDA",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"SOC_I2C1_1V8_SDA",
++		"SOC_I2C0_1V8_SDA",
++		"SOC_I2C0_1V8_SCL",
++		"SOC_I2C1_1V8_SCL",
++		"AP_SPI_H1_MISO",
++		"AP_SPI_H1_CS_L",
++		"AP_SPI_H1_MOSI",
++		"AP_SPI_H1_CLK",
++		"I2S5_BCK",
++		"I2S5_LRCK",
++		"I2S5_DO",
++		"BOOTBLOCK_EN_L",
++		"MT8183_KPCOL0",
++		"SPI_AP_EC_MISO",
++		"UART_DBG_TX_AP_RX",
++		"UART_AP_TX_DBG_RX",
++		"I2S2_MCK",
++		"I2S2_BCK",
++		"CLK_5M_WCAM",
++		"CLK_2M_UCAM",
++		"I2S2_LRCK",
++		"I2S2_DI",
++		"SOC_I2C2_1V8_SCL",
++		"SOC_I2C2_1V8_SDA",
++		"SOC_I2C4_1V8_SCL",
++		"SOC_I2C4_1V8_SDA",
++		"",
++		"SCL8",
++		"SDA8",
++		"FCAM_PWDN_L",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		/*
++		 * AP_FLASH_WP_L is crossystem ABI. Rev1 schematics
++		 * call it BIOS_FLASH_WP_R_L.
++		 */
++		"AP_FLASH_WP_L",
++		"EC_AP_INT_ODL",
++		"IT6505_INT_ODL",
++		"H1_INT_OD_L",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"AP_SPI_FLASH_MISO",
++		"AP_SPI_FLASH_CS_L",
++		"AP_SPI_FLASH_MOSI",
++		"AP_SPI_FLASH_CLK",
++		"DA7219_IRQ",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"";
++};
++
++/ {
++	ppvarn_lcd: ppvarn-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "ppvarn_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&ppvarn_lcd_en>;
++
++		enable-active-high;
++
++		gpio = <&pio 66 GPIO_ACTIVE_HIGH>;
++	};
++
++	ppvarp_lcd: ppvarp-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "ppvarp_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&ppvarp_lcd_en>;
++
++		enable-active-high;
++
++		gpio = <&pio 166 GPIO_ACTIVE_HIGH>;
++	};
++
++	pp1800_lcd: pp1800-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "pp1800_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pp1800_lcm_en>;
++
++		enable-active-high;
++
++		gpio = <&pio 36 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&panel {
++	status = "okay";
++	compatible = "boe,tv101wum";
++	reg = <0>;
++	enable-gpios = <&pio 45 0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&panel_pins_default>;
++	avdd-supply = <&ppvarn_lcd>;
++	avee-supply = <&ppvarp_lcd>;
++	pp1800-supply = <&pp1800_lcd>;
++	/delete-property/backlight;
++};
++
++&pio {
++	ppvarp_lcd_en: ppvarp-lcd-en {
++		pins1 {
++			pinmux = <PINMUX_GPIO66__FUNC_GPIO66>;
++			output-low;
++		};
++	};
++
++	ppvarn_lcd_en: ppvarn-lcd-en {
++		pins1 {
++			pinmux = <PINMUX_GPIO166__FUNC_GPIO166>;
++			output-low;
++		};
++	};
++
++	pp1800_lcm_en: pp1800-lcd-en {
++		pins1 {
++			pinmux = <PINMUX_GPIO36__FUNC_GPIO36>;
++			output-low;
++		};
++	};
++
++	open_touch: open_touch {
++		irq_pin {
++			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		rst_pin {
++			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
++
++			/*
++			 * The pen driver doesn't currently support  driving
++			 * this reset line.  By specifying output-high here
++			 * we're relying on the fact that this pin has a default
++			 * pulldown at boot (which makes sure the pen was in
++			 * reset if it was powered) and then we set it high here
++			 * to take it out of reset.  Better would be if the pen
++			 * driver could control this and we could remove
++			 * "output-high" here.
++			 */
++			output-high;
++		};
++	};
++};
++
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 new file mode 100644
-index 000000000000..9a19b9d7a8fd
+index 000000000000000..9a19b9d7a8fdb7d
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 @@ -0,0 +1,234 @@
@@ -569,7 +1006,7 @@ index 000000000000..9a19b9d7a8fd
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 new file mode 100644
-index 000000000000..b12a09aeba4e
+index 000000000000000..b12a09aeba4ef52
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 @@ -0,0 +1,430 @@
@@ -1005,7 +1442,7 @@ index 000000000000..b12a09aeba4e
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 new file mode 100644
-index 000000000000..6c5fc23455cb
+index 000000000000000..85ee0cd364cf2ab
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -0,0 +1,852 @@
@@ -1400,7 +1837,7 @@ index 000000000000..6c5fc23455cb
 +		pins_bus {
 +			pinmux = <PINMUX_GPIO103__FUNC_SCL2>,
 +				 <PINMUX_GPIO104__FUNC_SDA2>;
-+			mediatek,pull-up-adv = <3>;
++			bias-disable;
 +			mediatek,drive-strength-adv = <00>;
 +		};
 +	};
@@ -1418,7 +1855,7 @@ index 000000000000..6c5fc23455cb
 +		pins_bus {
 +			pinmux = <PINMUX_GPIO105__FUNC_SCL4>,
 +				 <PINMUX_GPIO106__FUNC_SDA4>;
-+			mediatek,pull-up-adv = <3>;
++			bias-disable;
 +			mediatek,drive-strength-adv = <00>;
 +		};
 +	};
@@ -1862,15 +2299,19 @@ index 000000000000..6c5fc23455cb
 +#include <arm/cros-ec-sbs.dtsi>
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 5a01ab31faed..c80b2275eb9b 100644
+index 5a01ab31faedd84..a6b719cfbe6c6a7 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -10,6 +10,10 @@
+@@ -6,10 +6,14 @@
+  */
+ 
+ #include <dt-bindings/clock/mt8183-clk.h>
++#include <dt-bindings/gce/mt8183-gce.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
  #include <dt-bindings/interrupt-controller/irq.h>
  #include <dt-bindings/memory/mt8183-larb-port.h>
  #include <dt-bindings/power/mt8183-power.h>
 +#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/gce/mt8183-gce.h>
 +#include <dt-bindings/reset-controller/mt8183-resets.h>
 +#include <dt-bindings/thermal/thermal.h>
  #include "mt8183-pinfunc.h"
@@ -2284,15 +2725,25 @@ index 5a01ab31faed..c80b2275eb9b 100644
  		apmixedsys: syscon@1000c000 {
  			compatible = "mediatek,mt8183-apmixedsys", "syscon";
  			reg = <0 0x1000c000 0 0x1000>;
-@@ -324,6 +638,50 @@
+@@ -324,6 +638,60 @@
  			#iommu-cells = <1>;
  		};
  
++		emi@10219000 {
++			compatible = "mediatek,mt8183-emi";
++			reg = <0 0x10219000 0 0x1000>, /* CEN EMI */
++			      <0 0x10226000 0 0x1000>, /* EMI MPU */
++			      <0 0x1022d000 0 0x1000>, /* CHA EMI */
++			      <0 0x10235000 0 0x1000>; /* CHB EMI */
++			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>, /* MPU */
++				     <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>, /* CGM */
++				     <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
++		};
++
 +		gce: gce@10238000 {
 +			compatible = "mediatek,mt8183-gce";
 +			reg = <0 0x10238000 0 0x4000>;
 +			interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_LOW>;
-+			thread-num = <CMDQ_THR_MAX_COUNT>;
 +			#mbox-cells = <3>;
 +			#gce-event-cells = <1>;
 +			#gce-subsys-cells = <2>;
@@ -2335,7 +2786,7 @@ index 5a01ab31faed..c80b2275eb9b 100644
  		uart0: serial@11002000 {
  			compatible = "mediatek,mt8183-uart",
  				     "mediatek,mt6577-uart";
-@@ -413,6 +771,122 @@
+@@ -413,6 +781,122 @@
  			status = "disabled";
  		};
  
@@ -2458,7 +2909,7 @@ index 5a01ab31faed..c80b2275eb9b 100644
  		i2c3: i2c@1100f000 {
  			compatible = "mediatek,mt8183-i2c";
  			reg = <0 0x1100f000 0 0x1000>,
-@@ -607,10 +1081,195 @@
+@@ -607,10 +1091,195 @@
  			status = "disabled";
  		};
  
@@ -2655,7 +3106,7 @@ index 5a01ab31faed..c80b2275eb9b 100644
  		};
  
  		mfgcfg: syscon@13000000 {
-@@ -619,6 +1278,160 @@
+@@ -619,6 +1288,160 @@
  			#clock-cells = <1>;
  		};
  
@@ -2816,7 +3267,7 @@ index 5a01ab31faed..c80b2275eb9b 100644
  		mmsys: syscon@14000000 {
  			compatible = "mediatek,mt8183-mmsys", "syscon";
  			reg = <0 0x14000000 0 0x1000>;
-@@ -724,6 +1537,28 @@
+@@ -724,6 +1547,28 @@
  			clocks = <&mmsys CLK_MM_DISP_DITHER0>;
  		};
  
@@ -2846,7 +3297,7 @@ index 5a01ab31faed..c80b2275eb9b 100644
  			compatible = "mediatek,mt8183-smi-larb";
  			reg = <0 0x14017000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index b9ed799be450..e6a7ea7aa6e6 100644
+index b9ed799be4500c0..c415e9a2f7c850b 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 @@ -31,7 +31,8 @@ CONFIG_ARM64_ERRATUM_832075=y
@@ -2859,7 +3310,15 @@ index b9ed799be450..e6a7ea7aa6e6 100644
  CONFIG_ARM_QCOM_CPUFREQ_HW=y
  # CONFIG_ARM_QCOM_CPUFREQ_KRYO is not set
  # CONFIG_ARM_RK3399_DMC_DEVFREQ is not set
-@@ -202,7 +203,7 @@ CONFIG_EFI_STUB=y
+@@ -123,6 +124,7 @@ CONFIG_COMMON_CLK_RK808=y
+ CONFIG_COMMON_CLK_XGENE=y
+ CONFIG_CPUFREQ_DT=y
+ CONFIG_CPUFREQ_DT_PLATDEV=y
++CONFIG_CROS_EC_RPMSG=m
+ # CONFIG_CRYPTO_DEV_CAVIUM_ZIP is not set
+ # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
+ # CONFIG_CRYPTO_DEV_QCE is not set
+@@ -202,7 +204,7 @@ CONFIG_EFI_STUB=y
  # CONFIG_EFI_VARS is not set
  CONFIG_EINT_MTK=y
  # CONFIG_EMAC_ROCKCHIP is not set
@@ -2868,7 +3327,7 @@ index b9ed799be450..e6a7ea7aa6e6 100644
  # CONFIG_ENIC is not set
  # CONFIG_EPIC100 is not set
  # CONFIG_ET131X is not set
-@@ -387,8 +388,10 @@ CONFIG_MSM_GCC_8916=y
+@@ -387,13 +389,17 @@ CONFIG_MSM_GCC_8916=y
  # CONFIG_MTD_INTEL_VR_NOR is not set
  CONFIG_MTD_MT81xx_NOR=y
  # CONFIG_MTD_PMC551 is not set
@@ -2879,9 +3338,24 @@ index b9ed799be450..e6a7ea7aa6e6 100644
 +CONFIG_MTK_CMDQ_DEBUG_SOC=8183
 +CONFIG_MTK_CMDQ_MBOX=y
  CONFIG_MTK_EFUSE=y
++CONFIG_MTK_EMI_MBW=y
  # CONFIG_MTK_HSDMA is not set
  CONFIG_MTK_INFRACFG=y
-@@ -845,6 +848,7 @@ CONFIG_SND_PCI=y
+ CONFIG_MTK_IOMMU=y
+ CONFIG_MTK_PMIC_WRAP=y
++CONFIG_MTK_SCP=m
+ CONFIG_MTK_SCPSYS=y
+ CONFIG_MTK_SMI=y
+ CONFIG_MTK_THERMAL=y
+@@ -666,6 +672,7 @@ CONFIG_ROCKCHIP_THERMAL=y
+ CONFIG_ROCKCHIP_TIMER=y
+ CONFIG_RPMSG=y
+ CONFIG_RPMSG_CHAR=y
++CONFIG_RPMSG_MTK_SCP=m
+ CONFIG_RPMSG_QCOM_GLINK_NATIVE=y
+ CONFIG_RPMSG_QCOM_GLINK_SMEM=y
+ CONFIG_RPMSG_QCOM_SMD=y
+@@ -845,6 +852,7 @@ CONFIG_SND_PCI=y
  # CONFIG_SND_RME96 is not set
  # CONFIG_SND_RME9652 is not set
  # CONFIG_SND_SE6X is not set
@@ -2889,7 +3363,7 @@ index b9ed799be450..e6a7ea7aa6e6 100644
  CONFIG_SND_SOC_DA7219=y
  CONFIG_SND_SOC_DMIC=y
  CONFIG_SND_SOC_GENERIC_DMAENGINE_PCM=y
-@@ -852,13 +856,16 @@ CONFIG_SND_SOC_MAX98357A=y
+@@ -852,13 +860,16 @@ CONFIG_SND_SOC_MAX98357A=y
  CONFIG_SND_SOC_MEDIATEK=y
  # CONFIG_SND_SOC_MSM8916_WCD_ANALOG is not set
  # CONFIG_SND_SOC_MT2701 is not set
@@ -2907,7 +3381,7 @@ index b9ed799be450..e6a7ea7aa6e6 100644
  # CONFIG_SND_SOC_QCOM is not set
  # CONFIG_SND_SOC_RK3288_HDMI_ANALOG is not set
  CONFIG_SND_SOC_RK3399_GRU_SOUND=y
-@@ -914,22 +921,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
+@@ -914,22 +925,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
  # CONFIG_TYPHOON is not set
  CONFIG_UCS2_STRING=y
  # CONFIG_USB_AMD5536UDC is not set
@@ -2945,7 +3419,7 @@ index b9ed799be450..e6a7ea7aa6e6 100644
  CONFIG_VGA_ARB=y
  CONFIG_VGA_ARB_MAX_GPUS=16
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index f6a8da8cb5c2..233c489ba83a 100644
+index f6a8da8cb5c2364..39e8b65c96f3eaf 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 @@ -10,7 +10,8 @@ CONFIG_ARM64_ERRATUM_826319=y
@@ -2966,7 +3440,7 @@ index f6a8da8cb5c2..233c489ba83a 100644
  # CONFIG_BT_HCIUART_3WIRE is not set
  # CONFIG_BT_HCIUART_BCM is not set
  # CONFIG_BT_HCIUART_LL is not set
-@@ -56,6 +58,9 @@ CONFIG_COMMON_CLK_MT8183_VDECSYS=y
+@@ -56,11 +58,15 @@ CONFIG_COMMON_CLK_MT8183_VDECSYS=y
  CONFIG_COMMON_CLK_MT8183_VENCSYS=y
  CONFIG_COMMON_CLK_XGENE=y
  # CONFIG_CPUFREQ_DT is not set
@@ -2976,7 +3450,13 @@ index f6a8da8cb5c2..233c489ba83a 100644
  CONFIG_DRM_ANALOGIX_ANX78XX=y
  CONFIG_DRM_GEM_CMA_HELPER=y
  CONFIG_DRM_MEDIATEK=y
-@@ -73,14 +78,16 @@ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
+ CONFIG_DRM_MEDIATEK_HDMI=y
+ CONFIG_DRM_MIPI_DSI=y
++CONFIG_DRM_PANEL_BOE_TV101WUM=y
+ # CONFIG_DRM_PANEL_ILITEK_ILI9881C is not set
+ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
+ # CONFIG_DRM_PANEL_JDI_LT070ME05000 is not set
+@@ -73,14 +79,16 @@ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  # CONFIG_DRM_PANEL_SHARP_LQ101R1SX01 is not set
  # CONFIG_DRM_PANEL_SHARP_LS043T1LE01 is not set
  # CONFIG_DRM_TI_SN65DSI86 is not set
@@ -2994,7 +3474,7 @@ index f6a8da8cb5c2..233c489ba83a 100644
  CONFIG_I2C_HID=y
  CONFIG_I2C_MT65XX=y
  # CONFIG_I2C_RK3X is not set
-@@ -112,13 +119,16 @@ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
+@@ -112,13 +120,17 @@ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
  # CONFIG_MMC_DW is not set
  CONFIG_MMC_MTK=y
  CONFIG_MTD_MT81xx_NOR=y
@@ -3005,6 +3485,7 @@ index f6a8da8cb5c2..233c489ba83a 100644
 +CONFIG_MTK_CMDQ_DEBUG_SOC=8183
 +CONFIG_MTK_CMDQ_MBOX=y
  CONFIG_MTK_EFUSE=y
++CONFIG_MTK_EMI_MBW=y
  # CONFIG_MTK_HSDMA is not set
  CONFIG_MTK_INFRACFG=y
  CONFIG_MTK_IOMMU=y
@@ -3013,7 +3494,7 @@ index f6a8da8cb5c2..233c489ba83a 100644
  CONFIG_MTK_SCPSYS=y
  CONFIG_MTK_SMI=y
  CONFIG_MTK_THERMAL=y
-@@ -150,13 +160,17 @@ CONFIG_REGULATOR_MT6358=y
+@@ -150,13 +162,17 @@ CONFIG_REGULATOR_MT6358=y
  # CONFIG_REGULATOR_TPS51632 is not set
  # CONFIG_REGULATOR_TPS62360 is not set
  # CONFIG_REGULATOR_TPS6586X is not set
@@ -3032,7 +3513,7 @@ index f6a8da8cb5c2..233c489ba83a 100644
  # CONFIG_SENSORS_LM90 is not set
  # CONFIG_SENSORS_NTC_THERMISTOR is not set
  CONFIG_SENSORS_TMP401=y
-@@ -166,15 +180,20 @@ CONFIG_SERIAL_8250_MT6577=y
+@@ -166,15 +182,20 @@ CONFIG_SERIAL_8250_MT6577=y
  # CONFIG_SERIAL_AMBA_PL011 is not set
  CONFIG_SERIAL_DEV_BUS=y
  CONFIG_SERIAL_DEV_CTRL_TTYPORT=y
@@ -3054,7 +3535,7 @@ index f6a8da8cb5c2..233c489ba83a 100644
  CONFIG_SND_SOC_RL6231=y
  CONFIG_SND_SOC_RT5514=y
  CONFIG_SND_SOC_RT5645=y
-@@ -187,15 +206,27 @@ CONFIG_SPI_MT65XX=y
+@@ -187,15 +208,27 @@ CONFIG_SPI_MT65XX=y
  # CONFIG_SPMI is not set
  CONFIG_STAGING_MEDIA=y
  CONFIG_TCG_CR50_I2C=y
@@ -3085,7 +3566,7 @@ index f6a8da8cb5c2..233c489ba83a 100644
  CONFIG_V4L2_MEM2MEM_DEV=y
  CONFIG_VIDEOBUF2_CORE=y
  CONFIG_VIDEOBUF2_DMA_CONTIG=y
-@@ -205,4 +236,11 @@ CONFIG_VIDEO_MEDIATEK_MDP=y
+@@ -205,4 +238,11 @@ CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIDEO_MEDIATEK_VPU=y
  # CONFIG_VIDEO_V4L2_SUBDEV_API is not set
@@ -3098,10 +3579,18 @@ index f6a8da8cb5c2..233c489ba83a 100644
 +# CONFIG_VIRTIO_NET is not set
 +# CONFIG_VIRTIO_WL is not set
 diff --git a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-index 0648875a2f93..ca65a8cc24d6 100644
+index 0648875a2f93632..8bea0ed9c9dd560 100644
 --- a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-@@ -258,7 +258,9 @@ CONFIG_SERIAL_DEV_CTRL_TTYPORT=y
+@@ -43,6 +43,7 @@ CONFIG_COMMON_CLK_QCOM=y
+ # CONFIG_COMMON_CLK_XGENE is not set
+ CONFIG_CPUFREQ_DT=y
+ CONFIG_CPUFREQ_DT_PLATDEV=y
++# CONFIG_CROS_EC_RPMSG is not set
+ # CONFIG_CRYPTO_DEV_QCE is not set
+ # CONFIG_CRYPTO_DEV_QCOM_RNG is not set
+ CONFIG_CRYPTO_DEV_VIRTIO=m
+@@ -258,7 +259,9 @@ CONFIG_SERIAL_DEV_CTRL_TTYPORT=y
  # CONFIG_SERIAL_MSM is not set
  CONFIG_SERIAL_QCOM_GENI=y
  CONFIG_SERIAL_QCOM_GENI_CONSOLE=y
@@ -3111,7 +3600,7 @@ index 0648875a2f93..ca65a8cc24d6 100644
  # CONFIG_SND_SOC_QCOM is not set
  # CONFIG_SPI_BITBANG is not set
  # CONFIG_SPI_GPIO is not set
-@@ -275,7 +277,13 @@ CONFIG_SPMI_MSM_PMIC_ARB=y
+@@ -275,7 +278,13 @@ CONFIG_SPMI_MSM_PMIC_ARB=y
  CONFIG_THERMAL_GOV_FAIR_SHARE=y
  CONFIG_THERMAL_WRITABLE_TRIPS=y
  # CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
@@ -3126,7 +3615,7 @@ index 0648875a2f93..ca65a8cc24d6 100644
  CONFIG_VIDEOBUF2_MEMOPS=m
  CONFIG_VIDEOBUF2_V4L2=m
 diff --git a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-index da6c6fd05b1e..74542fedbd29 100644
+index da6c6fd05b1e241..74542fedbd29b74 100644
 --- a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 @@ -496,10 +496,12 @@ CONFIG_SND_PCI=y
@@ -3159,8 +3648,21 @@ index da6c6fd05b1e..74542fedbd29 100644
  # CONFIG_USB_NET2280 is not set
  CONFIG_USB_OHCI_HCD_PCI=y
  CONFIG_USB_PCI=y
+diff --git a/chromeos/config/arm64/common.config b/chromeos/config/arm64/common.config
+index e31977035cfe4a4..7073cb8566dc952 100644
+--- a/chromeos/config/arm64/common.config
++++ b/chromeos/config/arm64/common.config
+@@ -161,7 +161,7 @@ CONFIG_CHARGER_CROS_USBPD=y
+ CONFIG_CHARGER_GPIO=y
+ # CONFIG_CHARGER_MANAGER is not set
+ # CONFIG_CHARGER_TPS65090 is not set
+-CONFIG_CLANG_VERSION=90000
++CONFIG_CLANG_VERSION=80000
+ # CONFIG_CLK_HSDK is not set
+ # CONFIG_CLK_QORIQ is not set
+ # CONFIG_CLOCK_THERMAL is not set
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index be96cbe2b300..30563a3254bc 100644
+index be96cbe2b3002c1..ad4208944c777f1 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
 @@ -799,10 +799,12 @@ CONFIG_SND_PCM_IEC958=y
@@ -3176,8 +3678,30 @@ index be96cbe2b300..30563a3254bc 100644
  # CONFIG_SND_SOC_RK3288_HDMI_ANALOG is not set
  # CONFIG_SND_SOC_RK3399_GRU_SOUND is not set
  CONFIG_SND_SOC_ROCKCHIP=y
+@@ -866,15 +868,21 @@ CONFIG_TIMER_PROBE=y
+ # CONFIG_TOUCHSCREEN_WDT87XX_I2C is not set
+ # CONFIG_UACCESS_WITH_MEMCPY is not set
+ CONFIG_UNCOMPRESS_INCLUDE="debug/uncompress.h"
++CONFIG_USB_CONFIGFS=m
++# CONFIG_USB_CONFIGFS_ACM is not set
++# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
++# CONFIG_USB_CONFIGFS_SERIAL is not set
+ CONFIG_USB_DWC2=y
+ # CONFIG_USB_DWC2_DEBUG is not set
+ CONFIG_USB_DWC2_HOST=y
+ # CONFIG_USB_DWC2_TRACK_MISSED_SOFS is not set
+ # CONFIG_USB_DWC3 is not set
+ CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_F_FS=m
+ CONFIG_USB_GADGET=m
+ # CONFIG_USB_GADGET_XILINX is not set
+ # CONFIG_USB_HCD_BCMA is not set
++CONFIG_USB_LIBCOMPOSITE=m
+ # CONFIG_USB_SNP_UDC_PLAT is not set
+ # CONFIG_USB_STORAGE_REALTEK is not set
+ CONFIG_USE_OF=y
 diff --git a/chromeos/config/base.config b/chromeos/config/base.config
-index ef26e5ac1408..f7109fbb39de 100644
+index ef26e5ac1408f0d..b222ecdf7f55719 100644
 --- a/chromeos/config/base.config
 +++ b/chromeos/config/base.config
 @@ -2555,7 +2555,6 @@ CONFIG_SND_SOC=y
@@ -3196,10 +3720,56 @@ index ef26e5ac1408..f7109fbb39de 100644
  # CONFIG_SND_SOC_NAU8540 is not set
  # CONFIG_SND_SOC_NAU8810 is not set
  # CONFIG_SND_SOC_NAU8824 is not set
+@@ -3010,8 +3008,6 @@ CONFIG_USB_ARCH_HAS_HCD=y
+ # CONFIG_USB_CHAOSKEY is not set
+ # CONFIG_USB_CHIPIDEA is not set
+ CONFIG_USB_COMMON=y
+-CONFIG_USB_CONFIGFS=m
+-# CONFIG_USB_CONFIGFS_ACM is not set
+ # CONFIG_USB_CONFIGFS_ECM is not set
+ # CONFIG_USB_CONFIGFS_ECM_SUBSET is not set
+ # CONFIG_USB_CONFIGFS_EEM is not set
+@@ -3025,11 +3021,9 @@ CONFIG_USB_CONFIGFS_F_FS=y
+ # CONFIG_USB_CONFIGFS_F_UAC1_LEGACY is not set
+ # CONFIG_USB_CONFIGFS_F_UAC2 is not set
+ # CONFIG_USB_CONFIGFS_F_UVC is not set
+-# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
+ # CONFIG_USB_CONFIGFS_NCM is not set
+ # CONFIG_USB_CONFIGFS_OBEX is not set
+ # CONFIG_USB_CONFIGFS_RNDIS is not set
+-# CONFIG_USB_CONFIGFS_SERIAL is not set
+ CONFIG_USB_CONFIGFS_UEVENT=y
+ # CONFIG_USB_CYPRESS_CY7C63 is not set
+ # CONFIG_USB_CYTHERM is not set
+@@ -3046,7 +3040,6 @@ CONFIG_USB_EZUSB_FX2=m
+ # CONFIG_USB_FOTG210_HCD is not set
+ # CONFIG_USB_FOTG210_UDC is not set
+ # CONFIG_USB_FTDI_ELAN is not set
+-CONFIG_USB_F_FS=m
+ # CONFIG_USB_GADGET_DEBUG is not set
+ # CONFIG_USB_GADGET_DEBUG_FILES is not set
+ # CONFIG_USB_GADGET_DEBUG_FS is not set
+@@ -3076,7 +3069,6 @@ CONFIG_USB_HIDDEV=y
+ # CONFIG_USB_LEDS_TRIGGER_USBPORT is not set
+ # CONFIG_USB_LED_TRIG is not set
+ # CONFIG_USB_LEGOTOWER is not set
+-CONFIG_USB_LIBCOMPOSITE=m
+ # CONFIG_USB_LINK_LAYER_TEST is not set
+ # CONFIG_USB_M66592 is not set
+ # CONFIG_USB_MAX3421_HCD is not set
 diff --git a/chromeos/config/x86_64/common.config b/chromeos/config/x86_64/common.config
-index 01b0d425752f..de448d408582 100644
+index 01b0d425752f436..89cc91210bc5c99 100644
 --- a/chromeos/config/x86_64/common.config
 +++ b/chromeos/config/x86_64/common.config
+@@ -235,7 +235,7 @@ CONFIG_CHROMEOS=y
+ CONFIG_CHROMEOS_LAPTOP=y
+ CONFIG_CHROMEOS_PSTORE=y
+ CONFIG_CHROMEOS_TBMC=y
+-CONFIG_CLANG_VERSION=90000
++CONFIG_CLANG_VERSION=80000
+ CONFIG_CLKBLD_I8253=y
+ CONFIG_CLKEVT_I8253=y
+ CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE=y
 @@ -1180,8 +1180,10 @@ CONFIG_SND_PCI=y
  # CONFIG_SND_RME9652 is not set
  # CONFIG_SND_SE6X is not set
@@ -3211,8 +3781,30 @@ index 01b0d425752f..de448d408582 100644
  # CONFIG_SND_SOC_TLV320AIC23_I2C is not set
  # CONFIG_SND_SOC_WM8753 is not set
  # CONFIG_SND_SOC_WM8903 is not set
+@@ -1268,6 +1270,10 @@ CONFIG_UEFI_CPER_X86=y
+ # CONFIG_UNWINDER_GUESS is not set
+ CONFIG_UNWINDER_ORC=y
+ # CONFIG_USB_AMD5536UDC is not set
++CONFIG_USB_CONFIGFS=m
++# CONFIG_USB_CONFIGFS_ACM is not set
++# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
++# CONFIG_USB_CONFIGFS_SERIAL is not set
+ # CONFIG_USB_DWC2 is not set
+ CONFIG_USB_DWC3=m
+ CONFIG_USB_DWC3_GADGET=y
+@@ -1277,8 +1283,10 @@ CONFIG_USB_DWC3_PCI=m
+ # CONFIG_USB_EG20T is not set
+ # CONFIG_USB_EHCI_HCD_PLATFORM is not set
+ CONFIG_USB_EHCI_PCI=y
++CONFIG_USB_F_FS=m
+ CONFIG_USB_GADGET=m
+ # CONFIG_USB_GOKU is not set
++CONFIG_USB_LIBCOMPOSITE=m
+ # CONFIG_USB_NET2280 is not set
+ CONFIG_USB_OHCI_HCD=y
+ CONFIG_USB_OHCI_HCD_PCI=y
 diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 4ea995d610d2..a80c3bc90904 100644
+index 4ea995d610d2577..a80c3bc90904279 100644
 --- a/drivers/bluetooth/hci_qca.c
 +++ b/drivers/bluetooth/hci_qca.c
 @@ -523,6 +523,8 @@ static int qca_open(struct hci_uart *hu)
@@ -3225,7 +3817,7 @@ index 4ea995d610d2..a80c3bc90904 100644
  			hu->init_speed = qcadev->init_speed;
  			hu->oper_speed = qcadev->oper_speed;
 diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index 3dc1b9f15ea2..5df0e476e94d 100644
+index 3dc1b9f15ea2f2f..5df0e476e94d807 100644
 --- a/drivers/clk/mediatek/Makefile
 +++ b/drivers/clk/mediatek/Makefile
 @@ -44,3 +44,5 @@ obj-$(CONFIG_COMMON_CLK_MT8183_MFGCFG) += clk-mt8183-mfgcfg.o
@@ -3235,7 +3827,7 @@ index 3dc1b9f15ea2..5df0e476e94d 100644
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkdbg.o clkdbg-mt8183.o
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkchk.o clkchk-mt8183.o
 diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index 68f157b31b28..d1458b431463 100644
+index 68f157b31b28999..d1458b4314630ce 100644
 --- a/drivers/clk/mediatek/clk-mt8183.c
 +++ b/drivers/clk/mediatek/clk-mt8183.c
 @@ -1204,13 +1204,21 @@ static int clk_mt8183_infra_probe(struct platform_device *pdev)
@@ -3262,7 +3854,7 @@ index 68f157b31b28..d1458b431463 100644
  
  static int clk_mt8183_mcu_probe(struct platform_device *pdev)
 diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
-index 37ae944548e9..8f6282ec4000 100644
+index 37ae944548e9b69..8f6282ec40006a6 100644
 --- a/drivers/clk/mediatek/clk-mtk.h
 +++ b/drivers/clk/mediatek/clk-mtk.h
 @@ -236,4 +236,7 @@ struct clk *mtk_clk_register_ref2usb_tx(const char *name,
@@ -3275,7 +3867,7 @@ index 37ae944548e9..8f6282ec4000 100644
  #endif /* __DRV_CLK_MTK_H */
 diff --git a/drivers/clk/mediatek/clkchk-mt8183.c b/drivers/clk/mediatek/clkchk-mt8183.c
 new file mode 100644
-index 000000000000..99813e053fca
+index 000000000000000..99813e053fcad23
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk-mt8183.c
 @@ -0,0 +1,409 @@
@@ -3690,7 +4282,7 @@ index 000000000000..99813e053fca
 +subsys_initcall(clkchk_platform_init);
 diff --git a/drivers/clk/mediatek/clkchk.c b/drivers/clk/mediatek/clkchk.c
 new file mode 100644
-index 000000000000..d50110a0d538
+index 000000000000000..d50110a0d53837e
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk.c
 @@ -0,0 +1,188 @@
@@ -3884,7 +4476,7 @@ index 000000000000..d50110a0d538
 +}
 diff --git a/drivers/clk/mediatek/clkchk.h b/drivers/clk/mediatek/clkchk.h
 new file mode 100644
-index 000000000000..d99e1acb6477
+index 000000000000000..d99e1acb6477f6a
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk.h
 @@ -0,0 +1,18 @@
@@ -3908,7 +4500,7 @@ index 000000000000..d99e1acb6477
 +int clkchk_init(struct clkchk_cfg_t *cfg);
 diff --git a/drivers/clk/mediatek/clkdbg-mt8183.c b/drivers/clk/mediatek/clkdbg-mt8183.c
 new file mode 100644
-index 000000000000..89060ec19e88
+index 000000000000000..89060ec19e88a30
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg-mt8183.c
 @@ -0,0 +1,857 @@
@@ -4771,7 +5363,7 @@ index 000000000000..89060ec19e88
 +device_initcall(clkdbg_mt8183_init);
 diff --git a/drivers/clk/mediatek/clkdbg.c b/drivers/clk/mediatek/clkdbg.c
 new file mode 100644
-index 000000000000..8c9f67968160
+index 000000000000000..8c9f679681605c7
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg.c
 @@ -0,0 +1,2242 @@
@@ -7019,7 +7611,7 @@ index 000000000000..8c9f67968160
 +module_init(clkdbg_debug_init);
 diff --git a/drivers/clk/mediatek/clkdbg.h b/drivers/clk/mediatek/clkdbg.h
 new file mode 100644
-index 000000000000..b9cddf3445ff
+index 000000000000000..b9cddf3445ffcf0
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg.h
 @@ -0,0 +1,83 @@
@@ -7107,7 +7699,7 @@ index 000000000000..b9cddf3445ff
 +void print_regs(void);
 +void print_fmeter_all(void);
 diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
-index d3551d5efef2..e6dff4db7430 100644
+index d3551d5efef241e..e6dff4db74300cb 100644
 --- a/drivers/clk/mediatek/reset.c
 +++ b/drivers/clk/mediatek/reset.c
 @@ -27,6 +27,23 @@ struct mtk_reset {
@@ -7199,7 +7791,7 @@ index d3551d5efef2..e6dff4db7430 100644
 +}
 +
 diff --git a/drivers/gpu/arm/midgard/platform/mediatek/mali_kbase_runtime_pm.c b/drivers/gpu/arm/midgard/platform/mediatek/mali_kbase_runtime_pm.c
-index 9922246a07f7..79418bd66942 100644
+index 9922246a07f76c4..79418bd66942513 100644
 --- a/drivers/gpu/arm/midgard/platform/mediatek/mali_kbase_runtime_pm.c
 +++ b/drivers/gpu/arm/midgard/platform/mediatek/mali_kbase_runtime_pm.c
 @@ -472,6 +472,8 @@ static int platform_init(struct kbase_device *kbdev)
@@ -7212,7 +7804,7 @@ index 9922246a07f7..79418bd66942 100644
  	kfree(mfg);
  	return err;
 diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
-index 82ae49c64221..7e69db4b5cca 100644
+index 82ae49c64221166..7e69db4b5ccaa56 100644
 --- a/drivers/gpu/drm/mediatek/Makefile
 +++ b/drivers/gpu/drm/mediatek/Makefile
 @@ -12,6 +12,8 @@ mediatek-drm-y := mtk_disp_color.o \
@@ -7225,7 +7817,7 @@ index 82ae49c64221..7e69db4b5cca 100644
  
  obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 28d5766ecb74..faea76259457 100644
+index 28d5766ecb74703..faea76259457996 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
 +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
 @@ -703,8 +703,8 @@ static struct platform_driver * const mtk_drm_drivers[] = {
@@ -7239,7 +7831,7 @@ index 28d5766ecb74..faea76259457 100644
  
  static int __init mtk_drm_init(void)
 diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 27b507eb4a99..3445758f1d79 100644
+index 27b507eb4a997d5..3445758f1d7957c 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
 @@ -21,10 +21,12 @@
@@ -7720,7 +8312,7 @@ index 27b507eb4a99..3445758f1d79 100644
  	.probe = mtk_dsi_probe,
  	.remove = mtk_dsi_remove,
 diff --git a/drivers/gpu/drm/mediatek/mtk_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
-index 90e913108950..ec5e4e4fa2e6 100644
+index 90e913108950de7..ec5e4e4fa2e6fbb 100644
 --- a/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
 +++ b/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
 @@ -11,292 +11,45 @@
@@ -8190,7 +8782,7 @@ index 90e913108950..ec5e4e4fa2e6 100644
  struct platform_driver mtk_mipi_tx_driver = {
 diff --git a/drivers/gpu/drm/mediatek/mtk_mipi_tx.h b/drivers/gpu/drm/mediatek/mtk_mipi_tx.h
 new file mode 100644
-index 000000000000..af83023e81cf
+index 000000000000000..af83023e81cf570
 --- /dev/null
 +++ b/drivers/gpu/drm/mediatek/mtk_mipi_tx.h
 @@ -0,0 +1,52 @@
@@ -8248,7 +8840,7 @@ index 000000000000..af83023e81cf
 +#endif
 diff --git a/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c
 new file mode 100644
-index 000000000000..8e57cdf85b06
+index 000000000000000..8e57cdf85b06a2c
 --- /dev/null
 +++ b/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c
 @@ -0,0 +1,290 @@
@@ -8544,7 +9136,7 @@ index 000000000000..8e57cdf85b06
 +
 diff --git a/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c
 new file mode 100644
-index 000000000000..07f70a3cad13
+index 000000000000000..07f70a3cad13f95
 --- /dev/null
 +++ b/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c
 @@ -0,0 +1,168 @@
@@ -8716,8 +9308,829 @@ index 000000000000..07f70a3cad13
 +	.mipi_tx_disable_signal = mtk_mipi_tx_power_off_signal,
 +};
 +
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index 6020c30a33b39ab..5fff1d905a24602 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -186,4 +186,13 @@ config DRM_PANEL_SITRONIX_ST7789V
+ 	  Say Y here if you want to enable support for the Sitronix
+ 	  ST7789V controller for 240x320 LCD panels
+ 
++config DRM_PANEL_BOE_TV101WUM
++	tristate "boe TV101WUM WUXGA video mode panel"
++	depends on OF
++	depends on DRM_MIPI_DSI
++	depends on BACKLIGHT_CLASS_DEVICE
++	help
++	  Say Y here if you want to enable support for boe TV101WUM WUXGA
++	  (1920x1200) DSI panel
++
+ endmenu
+diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+index 5ccaaa9d13af50c..e6ec5e60eceab34 100644
+--- a/drivers/gpu/drm/panel/Makefile
++++ b/drivers/gpu/drm/panel/Makefile
+@@ -19,3 +19,4 @@ obj-$(CONFIG_DRM_PANEL_SEIKO_43WVF1G) += panel-seiko-43wvf1g.o
+ obj-$(CONFIG_DRM_PANEL_SHARP_LQ101R1SX01) += panel-sharp-lq101r1sx01.o
+ obj-$(CONFIG_DRM_PANEL_SHARP_LS043T1LE01) += panel-sharp-ls043t1le01.o
+ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
++obj-$(CONFIG_DRM_PANEL_BOE_TV101WUM) += panel-boe-tv101wum.o
+diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum.c b/drivers/gpu/drm/panel/panel-boe-tv101wum.c
+new file mode 100644
+index 000000000000000..f8e9f98469f3cfe
+--- /dev/null
++++ b/drivers/gpu/drm/panel/panel-boe-tv101wum.c
+@@ -0,0 +1,788 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2018 MediaTek Inc.
++ * Author: Jitao Shi <jitao.shi@mediatek.com>
++ */
++
++#include <linux/backlight.h>
++#include <linux/gpio/consumer.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/regulator/consumer.h>
++
++#include <drm/drmP.h>
++#include <drm/drm_crtc.h>
++#include <drm/drm_mipi_dsi.h>
++#include <drm/drm_panel.h>
++
++#include <video/mipi_display.h>
++
++struct boe_ft_panel {
++	struct drm_panel base;
++	struct mipi_dsi_device *dsi;
++
++	struct backlight_device *backlight;
++	struct regulator *pp1800;
++	struct regulator *avee;
++	struct regulator *avdd;
++	struct gpio_desc *enable_gpio;
++
++	bool prepared;
++	bool enabled;
++
++	const struct drm_display_mode *mode;
++};
++
++enum dsi_cmd_type {
++	INIT_GENENIC_CMD,
++	INIT_DCS_CMD,
++	DELAY_CMD,
++};
++
++struct panel_init_cmd {
++	enum dsi_cmd_type type;
++	size_t len;
++	const char *data;
++};
++
++#define _INIT_CMD(...) { \
++	.type = INIT_GENENIC_CMD,\
++	.len = sizeof((char[]){__VA_ARGS__}), \
++	.data = (char[]){__VA_ARGS__} }
++
++#define _INIT_DCS_CMD(...) { \
++	.type = INIT_DCS_CMD, \
++	.len = sizeof((char[]){__VA_ARGS__}), \
++	.data = (char[]){__VA_ARGS__} }
++
++#define _INIT_DELAY_CMD(...) { \
++	.type = DELAY_CMD,\
++	.len = sizeof((char[]){__VA_ARGS__}), \
++	.data = (char[]){__VA_ARGS__} }
++
++static const struct panel_init_cmd boe_ft_init_cmd[] = {
++	_INIT_DCS_CMD(0x10),
++	_INIT_DELAY_CMD(34),
++	_INIT_CMD(0xB0, 0x05),
++	_INIT_CMD(0xB1, 0xE5),
++	_INIT_CMD(0xB3, 0x52),
++
++	_INIT_CMD(0xB0, 0x00),
++	_INIT_CMD(0xB3, 0x88),
++	_INIT_CMD(0xB0, 0x04),
++	_INIT_CMD(0xB8, 0x00),
++
++	_INIT_CMD(0xB0, 0x00),
++	_INIT_CMD(0xB6, 0x03),
++	_INIT_CMD(0xBA, 0x8B),
++	_INIT_CMD(0xBF, 0x1A),
++	_INIT_CMD(0xC0, 0x0F),
++	_INIT_CMD(0xC2, 0x0C),
++	_INIT_CMD(0xC3, 0x02),
++	_INIT_CMD(0xC4, 0x0C),
++	_INIT_CMD(0xC5, 0x02),
++
++	_INIT_CMD(0xB0, 0x01),
++	_INIT_CMD(0xE0, 0x26),
++	_INIT_CMD(0xE1, 0x26),
++	_INIT_CMD(0xDC, 0x00),
++	_INIT_CMD(0xDD, 0x00),
++	_INIT_CMD(0xCC, 0x26),
++	_INIT_CMD(0xCD, 0x26),
++	_INIT_CMD(0xC8, 0x00),
++	_INIT_CMD(0xC9, 0x00),
++	_INIT_CMD(0xD2, 0x03),
++	_INIT_CMD(0xD3, 0x03),
++	_INIT_CMD(0xE6, 0x04),
++	_INIT_CMD(0xE7, 0x04),
++	_INIT_CMD(0xC4, 0x09),
++	_INIT_CMD(0xC5, 0x09),
++	_INIT_CMD(0xD8, 0x0A),
++	_INIT_CMD(0xD9, 0x0A),
++	_INIT_CMD(0xC2, 0x0B),
++	_INIT_CMD(0xC3, 0x0B),
++	_INIT_CMD(0xD6, 0x0C),
++	_INIT_CMD(0xD7, 0x0C),
++	_INIT_CMD(0xC0, 0x05),
++	_INIT_CMD(0xC1, 0x05),
++	_INIT_CMD(0xD4, 0x06),
++	_INIT_CMD(0xD5, 0x06),
++	_INIT_CMD(0xCA, 0x07),
++	_INIT_CMD(0xCB, 0x07),
++	_INIT_CMD(0xDE, 0x08),
++	_INIT_CMD(0xDF, 0x08),
++
++	_INIT_CMD(0xB0, 0x02),
++	_INIT_CMD(0xC0, 0x00),
++	_INIT_CMD(0xC1, 0x0D),
++	_INIT_CMD(0xC2, 0x17),
++	_INIT_CMD(0xC3, 0x26),
++	_INIT_CMD(0xC4, 0x31),
++	_INIT_CMD(0xC5, 0x1C),
++	_INIT_CMD(0xC6, 0x2C),
++	_INIT_CMD(0xC7, 0x33),
++	_INIT_CMD(0xC8, 0x31),
++	_INIT_CMD(0xC9, 0x37),
++	_INIT_CMD(0xCA, 0x37),
++	_INIT_CMD(0xCB, 0x37),
++	_INIT_CMD(0xCC, 0x39),
++	_INIT_CMD(0xCD, 0x2E),
++	_INIT_CMD(0xCE, 0x2F),
++	_INIT_CMD(0xCF, 0x2F),
++	_INIT_CMD(0xD0, 0x07),
++	_INIT_CMD(0xD2, 0x00),
++	_INIT_CMD(0xD3, 0x0D),
++	_INIT_CMD(0xD4, 0x17),
++	_INIT_CMD(0xD5, 0x26),
++	_INIT_CMD(0xD6, 0x31),
++	_INIT_CMD(0xD7, 0x3F),
++	_INIT_CMD(0xD8, 0x3F),
++	_INIT_CMD(0xD9, 0x3F),
++	_INIT_CMD(0xDA, 0x3F),
++	_INIT_CMD(0xDB, 0x37),
++	_INIT_CMD(0xDC, 0x37),
++	_INIT_CMD(0xDD, 0x37),
++	_INIT_CMD(0xDE, 0x39),
++	_INIT_CMD(0xDF, 0x2E),
++	_INIT_CMD(0xE0, 0x2F),
++	_INIT_CMD(0xE1, 0x2F),
++	_INIT_CMD(0xE2, 0x07),
++
++	_INIT_CMD(0xB0, 0x03),
++	_INIT_CMD(0xC8, 0x0B),
++	_INIT_CMD(0xC9, 0x07),
++	_INIT_CMD(0xC3, 0x00),
++	_INIT_CMD(0xE7, 0x00),
++	_INIT_CMD(0xC5, 0x2A),
++	_INIT_CMD(0xDE, 0x2A),
++	_INIT_CMD(0xCA, 0x43),
++	_INIT_CMD(0xC9, 0x07),
++	_INIT_CMD(0xE4, 0xC0),
++	_INIT_CMD(0xE5, 0x0D),
++	_INIT_CMD(0xCB, 0x00),
++
++	_INIT_CMD(0xB0, 0x06),
++	_INIT_CMD(0xB8, 0xA5),
++	_INIT_CMD(0xC0, 0xA5),
++	_INIT_CMD(0xC7, 0x0F),
++	_INIT_CMD(0xD5, 0x32),
++	_INIT_CMD(0xB8, 0x00),
++	_INIT_CMD(0xC0, 0x00),
++	_INIT_CMD(0xBC, 0x00),
++
++	_INIT_CMD(0xB0, 0x07),
++	_INIT_CMD(0xB1, 0x00),
++	_INIT_CMD(0xB2, 0x02),
++	_INIT_CMD(0xB3, 0x0F),
++	_INIT_CMD(0xB4, 0x25),
++	_INIT_CMD(0xB5, 0x39),
++	_INIT_CMD(0xB6, 0x4E),
++	_INIT_CMD(0xB7, 0x72),
++	_INIT_CMD(0xB8, 0x97),
++	_INIT_CMD(0xB9, 0xDC),
++	_INIT_CMD(0xBA, 0x22),
++	_INIT_CMD(0xBB, 0xA4),
++	_INIT_CMD(0xBC, 0x2B),
++	_INIT_CMD(0xBD, 0x2F),
++	_INIT_CMD(0xBE, 0xA9),
++	_INIT_CMD(0xBF, 0x25),
++	_INIT_CMD(0xC0, 0x61),
++	_INIT_CMD(0xC1, 0x97),
++	_INIT_CMD(0xC2, 0xB2),
++	_INIT_CMD(0xC3, 0xCD),
++	_INIT_CMD(0xC4, 0xD9),
++	_INIT_CMD(0xC5, 0xE7),
++	_INIT_CMD(0xC6, 0xF4),
++	_INIT_CMD(0xC7, 0xFA),
++	_INIT_CMD(0xC8, 0xFC),
++	_INIT_CMD(0xC9, 0x00),
++	_INIT_CMD(0xCA, 0x00),
++	_INIT_CMD(0xCB, 0x16),
++	_INIT_CMD(0xCC, 0xAF),
++	_INIT_CMD(0xCD, 0xFF),
++	_INIT_CMD(0xCE, 0xFF),
++
++	_INIT_CMD(0xB0, 0x08),
++	_INIT_CMD(0xB1, 0x04),
++	_INIT_CMD(0xB2, 0x05),
++	_INIT_CMD(0xB3, 0x11),
++	_INIT_CMD(0xB4, 0x24),
++	_INIT_CMD(0xB5, 0x39),
++	_INIT_CMD(0xB6, 0x4F),
++	_INIT_CMD(0xB7, 0x72),
++	_INIT_CMD(0xB8, 0x98),
++	_INIT_CMD(0xB9, 0xDC),
++	_INIT_CMD(0xBA, 0x23),
++	_INIT_CMD(0xBB, 0xA6),
++	_INIT_CMD(0xBC, 0x2C),
++	_INIT_CMD(0xBD, 0x30),
++	_INIT_CMD(0xBE, 0xAA),
++	_INIT_CMD(0xBF, 0x26),
++	_INIT_CMD(0xC0, 0x62),
++	_INIT_CMD(0xC1, 0x9B),
++	_INIT_CMD(0xC2, 0xB5),
++	_INIT_CMD(0xC3, 0xCF),
++	_INIT_CMD(0xC4, 0xDB),
++	_INIT_CMD(0xC5, 0xE8),
++	_INIT_CMD(0xC6, 0xF5),
++	_INIT_CMD(0xC7, 0xFA),
++	_INIT_CMD(0xC8, 0xFC),
++	_INIT_CMD(0xC9, 0x00),
++	_INIT_CMD(0xCA, 0x00),
++	_INIT_CMD(0xCB, 0x16),
++	_INIT_CMD(0xCC, 0xAF),
++	_INIT_CMD(0xCD, 0xFF),
++	_INIT_CMD(0xCE, 0xFF),
++
++	_INIT_CMD(0xB0, 0x09),
++	_INIT_CMD(0xB1, 0x04),
++	_INIT_CMD(0xB2, 0x02),
++	_INIT_CMD(0xB3, 0x16),
++	_INIT_CMD(0xB4, 0x24),
++	_INIT_CMD(0xB5, 0x3B),
++	_INIT_CMD(0xB6, 0x4F),
++	_INIT_CMD(0xB7, 0x73),
++	_INIT_CMD(0xB8, 0x99),
++	_INIT_CMD(0xB9, 0xE0),
++	_INIT_CMD(0xBA, 0x26),
++	_INIT_CMD(0xBB, 0xAD),
++	_INIT_CMD(0xBC, 0x36),
++	_INIT_CMD(0xBD, 0x3A),
++	_INIT_CMD(0xBE, 0xAE),
++	_INIT_CMD(0xBF, 0x2A),
++	_INIT_CMD(0xC0, 0x66),
++	_INIT_CMD(0xC1, 0x9E),
++	_INIT_CMD(0xC2, 0xB8),
++	_INIT_CMD(0xC3, 0xD1),
++	_INIT_CMD(0xC4, 0xDD),
++	_INIT_CMD(0xC5, 0xE9),
++	_INIT_CMD(0xC6, 0xF6),
++	_INIT_CMD(0xC7, 0xFA),
++	_INIT_CMD(0xC8, 0xFC),
++	_INIT_CMD(0xC9, 0x00),
++	_INIT_CMD(0xCA, 0x00),
++	_INIT_CMD(0xCB, 0x16),
++	_INIT_CMD(0xCC, 0xAF),
++	_INIT_CMD(0xCD, 0xFF),
++	_INIT_CMD(0xCE, 0xFF),
++
++	_INIT_CMD(0xB0, 0x0A),
++	_INIT_CMD(0xB1, 0x00),
++	_INIT_CMD(0xB2, 0x02),
++	_INIT_CMD(0xB3, 0x0F),
++	_INIT_CMD(0xB4, 0x25),
++	_INIT_CMD(0xB5, 0x39),
++	_INIT_CMD(0xB6, 0x4E),
++	_INIT_CMD(0xB7, 0x72),
++	_INIT_CMD(0xB8, 0x97),
++	_INIT_CMD(0xB9, 0xDC),
++	_INIT_CMD(0xBA, 0x22),
++	_INIT_CMD(0xBB, 0xA4),
++	_INIT_CMD(0xBC, 0x2B),
++	_INIT_CMD(0xBD, 0x2F),
++	_INIT_CMD(0xBE, 0xA9),
++	_INIT_CMD(0xBF, 0x25),
++	_INIT_CMD(0xC0, 0x61),
++	_INIT_CMD(0xC1, 0x97),
++	_INIT_CMD(0xC2, 0xB2),
++	_INIT_CMD(0xC3, 0xCD),
++	_INIT_CMD(0xC4, 0xD9),
++	_INIT_CMD(0xC5, 0xE7),
++	_INIT_CMD(0xC6, 0xF4),
++	_INIT_CMD(0xC7, 0xFA),
++	_INIT_CMD(0xC8, 0xFC),
++	_INIT_CMD(0xC9, 0x00),
++	_INIT_CMD(0xCA, 0x00),
++	_INIT_CMD(0xCB, 0x16),
++	_INIT_CMD(0xCC, 0xAF),
++	_INIT_CMD(0xCD, 0xFF),
++	_INIT_CMD(0xCE, 0xFF),
++
++	_INIT_CMD(0xB0, 0x0B),
++	_INIT_CMD(0xB1, 0x04),
++	_INIT_CMD(0xB2, 0x05),
++	_INIT_CMD(0xB3, 0x11),
++	_INIT_CMD(0xB4, 0x24),
++	_INIT_CMD(0xB5, 0x39),
++	_INIT_CMD(0xB6, 0x4F),
++	_INIT_CMD(0xB7, 0x72),
++	_INIT_CMD(0xB8, 0x98),
++	_INIT_CMD(0xB9, 0xDC),
++	_INIT_CMD(0xBA, 0x23),
++	_INIT_CMD(0xBB, 0xA6),
++	_INIT_CMD(0xBC, 0x2C),
++	_INIT_CMD(0xBD, 0x30),
++	_INIT_CMD(0xBE, 0xAA),
++	_INIT_CMD(0xBF, 0x26),
++	_INIT_CMD(0xC0, 0x62),
++	_INIT_CMD(0xC1, 0x9B),
++	_INIT_CMD(0xC2, 0xB5),
++	_INIT_CMD(0xC3, 0xCF),
++	_INIT_CMD(0xC4, 0xDB),
++	_INIT_CMD(0xC5, 0xE8),
++	_INIT_CMD(0xC6, 0xF5),
++	_INIT_CMD(0xC7, 0xFA),
++	_INIT_CMD(0xC8, 0xFC),
++	_INIT_CMD(0xC9, 0x00),
++	_INIT_CMD(0xCA, 0x00),
++	_INIT_CMD(0xCB, 0x16),
++	_INIT_CMD(0xCC, 0xAF),
++	_INIT_CMD(0xCD, 0xFF),
++	_INIT_CMD(0xCE, 0xFF),
++
++	_INIT_CMD(0xB0, 0x0C),
++	_INIT_CMD(0xB1, 0x04),
++	_INIT_CMD(0xB2, 0x02),
++	_INIT_CMD(0xB3, 0x16),
++	_INIT_CMD(0xB4, 0x24),
++	_INIT_CMD(0xB5, 0x3B),
++	_INIT_CMD(0xB6, 0x4F),
++	_INIT_CMD(0xB7, 0x73),
++	_INIT_CMD(0xB8, 0x99),
++	_INIT_CMD(0xB9, 0xE0),
++	_INIT_CMD(0xBA, 0x26),
++	_INIT_CMD(0xBB, 0xAD),
++	_INIT_CMD(0xBC, 0x36),
++	_INIT_CMD(0xBD, 0x3A),
++	_INIT_CMD(0xBE, 0xAE),
++	_INIT_CMD(0xBF, 0x2A),
++	_INIT_CMD(0xC0, 0x66),
++	_INIT_CMD(0xC1, 0x9E),
++	_INIT_CMD(0xC2, 0xB8),
++	_INIT_CMD(0xC3, 0xD1),
++	_INIT_CMD(0xC4, 0xDD),
++	_INIT_CMD(0xC5, 0xE9),
++	_INIT_CMD(0xC6, 0xF6),
++	_INIT_CMD(0xC7, 0xFA),
++	_INIT_CMD(0xC8, 0xFC),
++	_INIT_CMD(0xC9, 0x00),
++	_INIT_CMD(0xCA, 0x00),
++	_INIT_CMD(0xCB, 0x16),
++	_INIT_CMD(0xCC, 0xAF),
++	_INIT_CMD(0xCD, 0xFF),
++	_INIT_CMD(0xCE, 0xFF),
++
++	_INIT_CMD(0xB0, 0x00),
++	_INIT_CMD(0xB3, 0x08),
++	_INIT_CMD(0xB0, 0x04),
++	_INIT_CMD(0xB8, 0x68),
++	_INIT_DELAY_CMD(10),
++	_INIT_DCS_CMD(0x11),
++	_INIT_DELAY_CMD(120),
++	_INIT_DCS_CMD(0x29),
++	_INIT_DELAY_CMD(20),
++	{},
++};
++
++static inline struct boe_ft_panel *to_boe_ft_panel(struct drm_panel *panel)
++{
++	return container_of(panel, struct boe_ft_panel, base);
++}
++
++static int boe_ft_panel_init(struct boe_ft_panel *boe_hx)
++{
++	struct mipi_dsi_device *dsi = boe_hx->dsi;
++	struct drm_panel *panel = &boe_hx->base;
++	int err, i;
++
++	for (i = 0; boe_ft_init_cmd[i].len != 0; i++) {
++		const struct panel_init_cmd *cmd = &boe_ft_init_cmd[i];
++
++		switch (cmd->type) {
++		case INIT_DCS_CMD:
++			err = mipi_dsi_dcs_write(dsi, cmd->data[0],
++						 &cmd->data[1], cmd->len - 1);
++			break;
++
++		case DELAY_CMD:
++			msleep(cmd->data[0]);
++			err = 0;
++			break;
++
++		case INIT_GENENIC_CMD:
++		default:
++			err = mipi_dsi_generic_write(dsi, cmd->data, cmd->len);
++			break;
++		}
++
++		if (err < 0) {
++			dev_err(panel->dev,
++				"failed to write command %u\n", i);
++			return err;
++		}
++
++		err = mipi_dsi_dcs_nop(dsi);
++		if (err < 0) {
++			dev_err(panel->dev,
++				"failed to send DCS nop: %d\n", err);
++			return err;
++		}
++	}
++
++	return 0;
++}
++
++static int boe_ft_panel_on(struct boe_ft_panel *boe_hx)
++{
++	struct mipi_dsi_device *dsi = boe_hx->dsi;
++	int ret;
++
++	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
++
++	ret = mipi_dsi_dcs_set_display_on(dsi);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int boe_ft_panel_off(struct boe_ft_panel *boe_hx)
++{
++	struct mipi_dsi_device *dsi = boe_hx->dsi;
++	int ret;
++
++	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
++
++	ret = mipi_dsi_dcs_set_display_off(dsi);
++	if (ret < 0)
++		return ret;
++
++	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int boe_ft_panel_disable(struct drm_panel *panel)
++{
++	struct boe_ft_panel *boe_hx = to_boe_ft_panel(panel);
++
++	if (!boe_hx->enabled)
++		return 0;
++
++	backlight_disable(boe_hx->backlight);
++
++	boe_hx->enabled = false;
++
++	return 0;
++}
++
++static int boe_ft_panel_unprepare(struct drm_panel *panel)
++{
++	struct boe_ft_panel *boe_hx = to_boe_ft_panel(panel);
++	int ret;
++
++	if (!boe_hx->prepared)
++		return 0;
++
++	ret = boe_ft_panel_off(boe_hx);
++	if (ret < 0) {
++		dev_err(panel->dev, "failed to set panel off: %d\n", ret);
++		return ret;
++	}
++
++	msleep(150);
++	regulator_disable(boe_hx->avee);
++	regulator_disable(boe_hx->avdd);
++	usleep_range(5000, 7000);
++	regulator_disable(boe_hx->pp1800);
++	if (boe_hx->enable_gpio)
++		gpiod_set_value(boe_hx->enable_gpio, 0);
++
++	boe_hx->prepared = false;
++
++	return 0;
++}
++
++static int boe_ft_panel_prepare(struct drm_panel *panel)
++{
++	struct boe_ft_panel *boe_hx = to_boe_ft_panel(panel);
++	int ret;
++
++	if (boe_hx->prepared)
++		return 0;
++
++	if (boe_hx->enable_gpio) {
++		gpiod_set_value(boe_hx->enable_gpio, 0);
++		usleep_range(1000, 1500);
++	}
++
++	ret = regulator_enable(boe_hx->pp1800);
++	if (ret < 0)
++		return ret;
++
++	usleep_range(3000, 5000);
++
++	ret = regulator_enable(boe_hx->avdd);
++	if (ret < 0)
++		goto poweroff1v8;
++	ret = regulator_enable(boe_hx->avee);
++	if (ret < 0)
++		goto poweroffavdd;
++
++	msleep(100);
++
++	if (boe_hx->enable_gpio) {
++		gpiod_set_value(boe_hx->enable_gpio, 1);
++		usleep_range(10000, 12000);
++	}
++
++	ret = boe_ft_panel_init(boe_hx);
++	if (ret < 0) {
++		dev_err(panel->dev, "failed to init panel: %d\n", ret);
++		goto poweroff;
++	}
++
++	ret = boe_ft_panel_on(boe_hx);
++	if (ret < 0) {
++		dev_err(panel->dev, "failed to set panel on: %d\n", ret);
++		goto poweroff;
++	}
++
++	boe_hx->prepared = true;
++
++	return 0;
++
++poweroff:
++	regulator_disable(boe_hx->avee);
++poweroffavdd:
++	regulator_disable(boe_hx->avdd);
++poweroff1v8:
++	usleep_range(5000, 7000);
++	regulator_disable(boe_hx->pp1800);
++	if (boe_hx->enable_gpio)
++		gpiod_set_value(boe_hx->enable_gpio, 0);
++	return ret;
++}
++
++static int boe_ft_panel_enable(struct drm_panel *panel)
++{
++	struct boe_ft_panel *boe_hx = to_boe_ft_panel(panel);
++
++	if (boe_hx->enabled)
++		return 0;
++
++	backlight_enable(boe_hx->backlight);
++
++	boe_hx->enabled = true;
++
++	return 0;
++}
++
++static const struct drm_display_mode default_mode = {
++	.clock = 156800,
++	.hdisplay = 1200,
++	.hsync_start = 1200 + 110,
++	.hsync_end = 1200 + 110 + 1,
++	.htotal = 1200 + 110 + 1 + 32,
++	.vdisplay = 1920,
++	.vsync_start = 1920 + 11,
++	.vsync_end = 1920 + 11 + 1,
++	.vtotal = 1920 + 11 + 1 + 14,
++	.vrefresh = 60,
++};
++
++static int boe_ft_panel_get_modes(struct drm_panel *panel)
++{
++	struct drm_display_mode *mode;
++
++	mode = drm_mode_duplicate(panel->drm, &default_mode);
++	if (!mode) {
++		dev_err(panel->drm->dev, "failed to add mode %ux%ux@%u\n",
++			default_mode.hdisplay, default_mode.vdisplay,
++			default_mode.vrefresh);
++		return -ENOMEM;
++	}
++
++	drm_mode_set_name(mode);
++
++	drm_mode_probed_add(panel->connector, mode);
++
++	panel->connector->display_info.width_mm = 135;
++	panel->connector->display_info.height_mm = 216;
++	panel->connector->display_info.bpc = 8;
++
++	return 1;
++}
++
++static const struct drm_panel_funcs boe_ft_panel_funcs = {
++	.disable = boe_ft_panel_disable,
++	.unprepare = boe_ft_panel_unprepare,
++	.prepare = boe_ft_panel_prepare,
++	.enable = boe_ft_panel_enable,
++	.get_modes = boe_ft_panel_get_modes,
++};
++
++static int dsi_dcs_bl_get_brightness(struct backlight_device *bl)
++{
++	struct mipi_dsi_device *dsi = bl_get_data(bl);
++	int ret;
++	u16 brightness = bl->props.brightness;
++
++	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
++
++	ret = mipi_dsi_dcs_get_display_brightness(dsi, &brightness);
++	if (ret < 0)
++		return ret;
++
++	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
++
++	return brightness & 0xff;
++}
++
++static int dsi_dcs_bl_update_status(struct backlight_device *bl)
++{
++	struct mipi_dsi_device *dsi = bl_get_data(bl);
++	int ret;
++
++	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
++
++	ret = mipi_dsi_dcs_set_display_brightness(dsi, bl->props.brightness);
++	if (ret < 0)
++		return ret;
++
++	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
++
++	return 0;
++}
++
++static const struct backlight_ops dsi_bl_ops = {
++	.update_status = dsi_dcs_bl_update_status,
++	.get_brightness = dsi_dcs_bl_get_brightness,
++};
++
++static struct backlight_device *
++drm_panel_create_dsi_backlight(struct mipi_dsi_device *dsi)
++{
++	struct device *dev = &dsi->dev;
++	struct backlight_properties props;
++
++	memset(&props, 0, sizeof(props));
++	props.type = BACKLIGHT_RAW;
++	props.brightness = 255;
++	props.max_brightness = 255;
++
++	return devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
++					      &dsi_bl_ops, &props);
++}
++
++static int boe_ft_panel_add(struct boe_ft_panel *boe_hx)
++{
++	struct device *dev = &boe_hx->dsi->dev;
++	int ret;
++
++	boe_hx->avdd = devm_regulator_get(dev, "avdd");
++	if (IS_ERR(boe_hx->avdd))
++		return PTR_ERR(boe_hx->avdd);
++
++	boe_hx->avee = devm_regulator_get(dev, "avee");
++	if (IS_ERR(boe_hx->avee))
++		return PTR_ERR(boe_hx->avee);
++
++	boe_hx->pp1800 = devm_regulator_get(dev, "pp1800");
++	if (IS_ERR(boe_hx->pp1800))
++		return PTR_ERR(boe_hx->pp1800);
++
++	boe_hx->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
++	if (IS_ERR(boe_hx->enable_gpio)) {
++		dev_err(dev, "cannot get reset-gpios %ld\n",
++			PTR_ERR(boe_hx->enable_gpio));
++		boe_hx->enable_gpio = NULL;
++	} else {
++		gpiod_set_value(boe_hx->enable_gpio, 0);
++	}
++
++	boe_hx->backlight = drm_panel_create_dsi_backlight(boe_hx->dsi);
++	if (IS_ERR(boe_hx->backlight)) {
++		ret = PTR_ERR(boe_hx->backlight);
++		dev_err(dev, "failed to register backlight %d\n", ret);
++		return ret;
++	}
++
++	if (IS_ERR(boe_hx->backlight))
++		return PTR_ERR(boe_hx->backlight);
++
++	drm_panel_init(&boe_hx->base);
++	boe_hx->base.funcs = &boe_ft_panel_funcs;
++	boe_hx->base.dev = &boe_hx->dsi->dev;
++
++	return drm_panel_add(&boe_hx->base);
++}
++
++static void boe_ft_panel_del(struct boe_ft_panel *boe_hx)
++{
++	if (boe_hx->base.dev)
++		drm_panel_remove(&boe_hx->base);
++}
++
++static int boe_ft_panel_probe(struct mipi_dsi_device *dsi)
++{
++	struct boe_ft_panel *boe_hx;
++	int ret;
++
++	dsi->lanes = 4;
++	dsi->format = MIPI_DSI_FMT_RGB888;
++	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++		 MIPI_DSI_MODE_LPM;
++
++	boe_hx = devm_kzalloc(&dsi->dev, sizeof(*boe_hx), GFP_KERNEL);
++	if (!boe_hx)
++		return -ENOMEM;
++
++	mipi_dsi_set_drvdata(dsi, boe_hx);
++
++	boe_hx->dsi = dsi;
++
++	ret = boe_ft_panel_add(boe_hx);
++	if (ret < 0)
++		return ret;
++
++	return mipi_dsi_attach(dsi);
++}
++
++static int boe_ft_panel_remove(struct mipi_dsi_device *dsi)
++{
++	struct boe_ft_panel *boe_hx = mipi_dsi_get_drvdata(dsi);
++	int ret;
++
++	ret = boe_ft_panel_disable(&boe_hx->base);
++	if (ret < 0)
++		dev_err(&dsi->dev, "failed to disable panel: %d\n", ret);
++
++	ret = mipi_dsi_detach(dsi);
++	if (ret < 0)
++		dev_err(&dsi->dev, "failed to detach from DSI host: %d\n", ret);
++
++	boe_ft_panel_del(boe_hx);
++
++	return 0;
++}
++
++static void boe_ft_panel_shutdown(struct mipi_dsi_device *dsi)
++{
++	struct boe_ft_panel *boe_hx = mipi_dsi_get_drvdata(dsi);
++
++	boe_ft_panel_disable(&boe_hx->base);
++}
++
++static const struct of_device_id boe_ft_of_match[] = {
++	{ .compatible = "boe,tv101wum", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, boe_ft_of_match);
++
++static struct mipi_dsi_driver boe_ft_panel_driver = {
++	.driver = {
++		.name = "panel-boe-tv101wum",
++		.of_match_table = boe_ft_of_match,
++	},
++	.probe = boe_ft_panel_probe,
++	.remove = boe_ft_panel_remove,
++	.shutdown = boe_ft_panel_shutdown,
++};
++module_mipi_dsi_driver(boe_ft_panel_driver);
++
++MODULE_AUTHOR("Jitao Shi <jitao.shi@mediatek.com>");
++MODULE_DESCRIPTION("BOE tv101wum FT8201-based wuxga (1200x1920) video mode panel driver");
++MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/panel/panel-innolux-p079zca.c b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
-index 88c7d035ace6..3fbc90218c5e 100644
+index 88c7d035ace66c5..3fbc90218c5eb4e 100644
 --- a/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 +++ b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 @@ -56,7 +56,7 @@ struct innolux_panel {
@@ -8934,7 +10347,7 @@ index 88c7d035ace6..3fbc90218c5e 100644
  
  	innolux->backlight = devm_of_find_backlight(dev);
 diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 841c005d8ebb..31dc4c5e37e1 100644
+index 841c005d8ebb2f7..31dc4c5e37e1c9f 100644
 --- a/drivers/mailbox/Kconfig
 +++ b/drivers/mailbox/Kconfig
 @@ -205,4 +205,22 @@ config MTK_CMDQ_MBOX
@@ -8961,7 +10374,7 @@ index 841c005d8ebb..31dc4c5e37e1 100644
 +	  You must enter the id.
  endif
 diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-index c818b5d011ae..b356e36d8f2a 100644
+index c818b5d011aef28..b356e36d8f2acdb 100644
 --- a/drivers/mailbox/Makefile
 +++ b/drivers/mailbox/Makefile
 @@ -44,3 +44,4 @@ obj-$(CONFIG_TEGRA_HSP_MBOX)	+= tegra-hsp.o
@@ -8971,7 +10384,7 @@ index c818b5d011ae..b356e36d8f2a 100644
 +obj-$(CONFIG_MTK_CMDQ_DEBUG)	+= mtk-cmdq-debug.o
 diff --git a/drivers/mailbox/mtk-cmdq-debug.c b/drivers/mailbox/mtk-cmdq-debug.c
 new file mode 100644
-index 000000000000..61985342d564
+index 000000000000000..61985342d5644e9
 --- /dev/null
 +++ b/drivers/mailbox/mtk-cmdq-debug.c
 @@ -0,0 +1,582 @@
@@ -9559,7 +10972,7 @@ index 000000000000..61985342d564
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/mailbox/mtk-cmdq-debug.h b/drivers/mailbox/mtk-cmdq-debug.h
 new file mode 100644
-index 000000000000..5392b00c9394
+index 000000000000000..5392b00c93949e1
 --- /dev/null
 +++ b/drivers/mailbox/mtk-cmdq-debug.h
 @@ -0,0 +1,21 @@
@@ -9585,7 +10998,7 @@ index 000000000000..5392b00c9394
 +
 +#endif /* MTK_CMDQ_DEBUG_H */
 diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index aec46d5d3506..569d97145b83 100644
+index aec46d5d3506181..2c53ece47abd759 100644
 --- a/drivers/mailbox/mtk-cmdq-mailbox.c
 +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
 @@ -15,9 +15,11 @@
@@ -9704,7 +11117,7 @@ index aec46d5d3506..569d97145b83 100644
  		return IRQ_NONE;
  
 -	for_each_clear_bit(bit, &irq_status, fls(CMDQ_IRQ_MASK)) {
-+	for_each_clear_bit(bit, &irq_status, fls(cmdq->irq_mask)) {
++	for_each_clear_bit(bit, &irq_status, cmdq->thread_nr) {
  		struct cmdq_thread *thread = &cmdq->thread[bit];
  
  		spin_lock_irqsave(&thread->chan->lock, flags);
@@ -9765,25 +11178,30 @@ index aec46d5d3506..569d97145b83 100644
  	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
  			       "mtk_cmdq", cmdq);
  	if (err < 0) {
-@@ -495,6 +576,7 @@ static int cmdq_probe(struct platform_device *pdev)
+@@ -494,7 +575,6 @@ static int cmdq_probe(struct platform_device *pdev)
+ 		return PTR_ERR(cmdq->clock);
  	}
  
- 	cmdq->thread_nr = (u32)(unsigned long)of_device_get_match_data(dev);
-+	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
+-	cmdq->thread_nr = (u32)(unsigned long)of_device_get_match_data(dev);
  	cmdq->mbox.dev = dev;
  	cmdq->mbox.chans = devm_kcalloc(dev, cmdq->thread_nr,
  					sizeof(*cmdq->mbox.chans), GFP_KERNEL);
-@@ -532,6 +614,9 @@ static int cmdq_probe(struct platform_device *pdev)
+@@ -532,6 +612,14 @@ static int cmdq_probe(struct platform_device *pdev)
  
  	cmdq_init(cmdq);
  
++#ifdef CONFIG_MTK_CMDQ_DEBUG
++	cmdq->buf_dump_wq = alloc_ordered_workqueue(
++			"%s", WQ_MEM_RECLAIM | WQ_HIGHPRI,
++			"cmdq_buf_dump");
++#endif
 +	for (i = 0; i <= CMDQ_MAX_EVENT; i++)
 +		writel(i, cmdq->base + CMDQ_SYNC_TOKEN_UPDATE);
 +
  	return 0;
  }
  
-@@ -542,6 +627,7 @@ static const struct dev_pm_ops cmdq_pm_ops = {
+@@ -542,6 +630,7 @@ static const struct dev_pm_ops cmdq_pm_ops = {
  
  static const struct of_device_id cmdq_of_ids[] = {
  	{.compatible = "mediatek,mt8173-gce", .data = (void *)16},
@@ -9792,7 +11210,7 @@ index aec46d5d3506..569d97145b83 100644
  };
  
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index f8d35e3ac1dc..01cab05e7b81 100644
+index f8d35e3ac1dccce..01cab05e7b81869 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
 @@ -49,25 +49,63 @@
@@ -10458,7 +11876,7 @@ index f8d35e3ac1dc..01cab05e7b81 100644
  };
  
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.h b/drivers/media/platform/mtk-vpu/mtk_vpu.h
-index aec0268be3d0..ca09de70ceda 100644
+index aec0268be3d0108..ca09de70cedaeb9 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.h
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.h
 @@ -100,6 +100,10 @@ enum rst_id {
@@ -10498,17 +11916,460 @@ index aec0268be3d0..ca09de70ceda 100644
 +#endif
 +
  #endif /* _MTK_VPU_H */
+diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+index 63389f075f1dcab..4a291dabf2ccb59 100644
+--- a/drivers/memory/Kconfig
++++ b/drivers/memory/Kconfig
+@@ -129,6 +129,15 @@ config JZ4780_NEMC
+ 	  the Ingenic JZ4780. This controller is used to handle external
+ 	  memory devices such as NAND and SRAM.
+ 
++config MTK_EMI_MBW
++	bool "Mediatek EMI bandwidth driver"
++	depends on ARCH_MEDIATEK || COMPILE_TEST
++	help
++	  This driver is for MTK EMI control.
++	  If unsure, use N.
++	  This is the first time emi upstream.
++	  Only support emi bw statistics.
++
+ config MTK_SMI
+ 	bool
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
+index a01ab3e22f94db6..dbd49ba94cab5ce 100644
+--- a/drivers/memory/Makefile
++++ b/drivers/memory/Makefile
+@@ -17,6 +17,7 @@ obj-$(CONFIG_FSL_CORENET_CF)	+= fsl-corenet-cf.o
+ obj-$(CONFIG_FSL_IFC)		+= fsl_ifc.o
+ obj-$(CONFIG_MVEBU_DEVBUS)	+= mvebu-devbus.o
+ obj-$(CONFIG_JZ4780_NEMC)	+= jz4780-nemc.o
++obj-$(CONFIG_MTK_EMI_MBW)	+= mtk-emi.o
+ obj-$(CONFIG_MTK_SMI)		+= mtk-smi.o
+ obj-$(CONFIG_DA8XX_DDRCTL)	+= da8xx-ddrctl.o
+ 
+diff --git a/drivers/memory/mtk-emi.c b/drivers/memory/mtk-emi.c
+new file mode 100644
+index 000000000000000..cb6a988c4d7093a
+--- /dev/null
++++ b/drivers/memory/mtk-emi.c
+@@ -0,0 +1,405 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2015-2016 MediaTek Inc.
++ * Author: Xi Chen <xixi.chen@mediatek.com>
++ */
++
++#include <linux/cdev.h>
++#include <linux/clk.h>
++#include <linux/component.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/fs.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/time.h>
++#include <linux/timer.h>
++#include <soc/mediatek/emi.h>
++
++/* 67ms emi bw  */
++#define EMI_BW_ARRAY_SIZE	67
++
++#define MT8173_SMI_LARB_NR	6
++#define MT8167_SMI_LARB_NR	3
++#define MTK_SMI_LARB_NR_MAX	8
++#define MT8173_MMU_EN		0xf00
++#define MT8167_MMU_EN		0xfc0
++#define MT8167_LARB0_OFF	0
++#define MT8167_LARB1_OFF	8
++#define MT8167_LARB2_OFF	21
++
++/*****************************************************************************
++ *  Type Definitions
++ *****************************************************************************/
++enum DDRTYPE {
++	TYPE_LPDDR3 = 1,
++	TYPE_LPDDR4,
++	TYPE_LPDDR4X
++};
++
++enum {
++	EMI_BASE_IDX_EMI = 0,
++	EMI_BASE_IDX_EMI_CH0,
++	EMI_BASE_IDX_EMI_CH1,
++
++	NR_EMI_BASE_IDX,
++};
++
++struct emi_base_addr {
++	unsigned int phy_addr;
++	unsigned int remap_addr;
++};
++
++struct mtk_emi {
++	void __iomem *cen_emi_base;
++	void __iomem *chn_emi_base[MAX_CH];
++	void __iomem *emi_mpu_base;
++
++	struct emi_info_t emi_info;
++
++	struct timer_list emi_bw_timer;
++	struct timeval old_tv;
++
++	unsigned long long emi_bw_array[EMI_BW_ARRAY_SIZE];
++	int emi_bw_cur_idx;
++	int emi_bw_max_idx;
++};
++
++/* because timer can't pass argument, so add the global
++ * static struct device * for timer callback usage
++ */
++static struct device *emi_dev;
++
++static unsigned long long emi_get_max_bw_in_last_array(struct device *dev,
++	unsigned long long arr[], unsigned int size)
++{
++	unsigned int i = 0;
++	unsigned long long max = arr[0];
++
++	while (i < size) {
++		if (arr[i] > max)
++			max = arr[i];
++		++i;
++	}
++	return max;
++}
++
++unsigned long long mtk_emi_get_max_bw(void)
++{
++	struct mtk_emi *emi;
++
++	if (!emi_dev)
++		return 0;
++
++	emi = dev_get_drvdata(emi_dev);
++	return emi_get_max_bw_in_last_array(emi_dev,
++		emi->emi_bw_array, ARRAY_SIZE(emi->emi_bw_array));
++}
++EXPORT_SYMBOL(mtk_emi_get_max_bw);
++
++static void emi_update_bw_array(struct device *dev, unsigned int val)
++{
++	struct mtk_emi *emi = dev_get_drvdata(emi_dev);
++
++	if (emi->emi_bw_cur_idx == emi->emi_bw_max_idx) {
++		/* remove the first array element */
++		memmove(emi->emi_bw_array, emi->emi_bw_array + 1,
++			sizeof(unsigned long long) * (emi->emi_bw_max_idx - 1));
++		emi->emi_bw_array[emi->emi_bw_max_idx - 1] = val;
++	} else
++		emi->emi_bw_array[emi->emi_bw_cur_idx++] = val;
++}
++
++static void emi_dump_bw_array(struct device *dev)
++{
++	int i = 0;
++	int unit = 10;
++	struct mtk_emi *emi = dev_get_drvdata(emi_dev);
++
++	while (i < emi->emi_bw_max_idx) {
++		if (i != 0 && i % unit == 0)
++			pr_info("\n");
++		pr_info("0x%x ", emi->emi_bw_array[i]);
++
++		++i;
++	}
++
++	pr_info("\n");
++}
++
++static void emi_counter_reset(struct device *dev)
++{
++	struct mtk_emi *emi = dev_get_drvdata(dev);
++
++	writel(EMI_BMEN_DEFAULT_VALUE, EMI_BMEN);
++	writel(EMI_MSEL_DEFAULT_VALUE, EMI_MSEL);
++	writel(EMI_MSEL2_DEFAULT_VALUE, EMI_MSEL2);
++	writel(EMI_BMEN2_DEFAULT_VALUE, EMI_BMEN2);
++	writel(EMI_BMRW0_DEFAULT_VALUE, EMI_BMRW0);
++}
++
++static void emi_counter_pause(struct device *dev)
++{
++	struct mtk_emi *emi = dev_get_drvdata(dev);
++	const unsigned int value = readl(EMI_BMEN);
++
++	/* BW monitor */
++	writel(value | BUS_MON_PAUSE, EMI_BMEN);
++}
++
++static void emi_counter_continue(struct device *dev)
++{
++	struct mtk_emi *emi = dev_get_drvdata(dev);
++	const unsigned int value = readl(EMI_BMEN);
++
++	/* BW monitor */
++	writel(value & (~BUS_MON_PAUSE), EMI_BMEN);
++}
++
++static void emi_counter_enable(struct device *dev, const unsigned int enable)
++{
++	unsigned int value, value_set;
++	struct mtk_emi *emi = dev_get_drvdata(dev);
++
++	value = readl(EMI_BMEN);
++	if (enable == 0) {	/* disable monitor circuit */
++		/*  bit3 =1	bit0 = 0-> clear */
++		value_set = (value) | (BUS_MON_IDLE);
++		writel(value_set, EMI_BMEN);
++
++		value_set = ((value) | (BUS_MON_IDLE)) & ~(BUS_MON_EN);
++		writel(value_set, EMI_BMEN);
++
++		value_set = ((value) & ~(BUS_MON_IDLE)) & ~(BUS_MON_EN);
++		writel(value_set, EMI_BMEN);
++	} else {		/* enable monitor circuit */
++		/*  bit3 =0	&   bit0=1 */
++		value_set = (value & ~(BUS_MON_IDLE));
++		writel(value_set, EMI_BMEN);
++
++		value_set = (value & ~(BUS_MON_IDLE)) | (BUS_MON_EN);
++		writel(value_set, EMI_BMEN);
++	}
++}
++
++static void mtk_emi_mon_start(struct device *dev)
++{
++	emi_counter_enable(dev, 0);
++	emi_counter_reset(dev);
++	emi_counter_enable(dev, 1);
++}
++
++static void mtk_emi_mon_restart(struct device *dev)
++{
++	emi_counter_continue(dev);
++	emi_counter_enable(dev, 0);
++	emi_counter_reset(dev);
++	emi_counter_enable(dev, 1);
++}
++
++static void mtk_emi_mon_stop(struct device *dev)
++{
++	emi_counter_pause(dev);
++}
++
++static ssize_t emi_show_max_bw(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	unsigned long long var, bw_cpu;
++	unsigned int bw_gpu;
++	struct mtk_emi *emi = dev_get_drvdata(dev);
++
++	if (!dev) {
++		pr_warn("dev is null!!\n");
++		return 0;
++	}
++
++	var = mtk_emi_get_max_bw();
++	bw_gpu = readl(EMI_BWVL_4TH) & 0x7f;
++	bw_cpu = readl(EMI_WSCT3);
++
++	return scnprintf(buf, PAGE_SIZE,
++		"gpu_max_bw:%llu(0x%x) EMI_BWVL_4TH:0x%x, cpu:%llu(0x%x)\n",
++		var, var, bw_gpu, bw_cpu, bw_cpu);
++}
++DEVICE_ATTR(bw,  0440, emi_show_max_bw, NULL);
++
++static ssize_t emi_dump_bw(struct device *dev, struct device_attribute *attr,
++			   char *buf)
++{
++	unsigned long long var;
++
++	if (!dev) {
++		pr_warn("dev is null!!\n");
++		return 0;
++	}
++
++	emi_dump_bw_array(dev);
++	var = mtk_emi_get_max_bw();
++
++	return scnprintf(buf, PAGE_SIZE,
++		"\temi_max_bw:%llu(0x%x)\n", var, var);
++}
++DEVICE_ATTR(dump_bw,  0440, emi_dump_bw, NULL);
++
++static int emi_bw_ms = 1;
++module_param_named(bw_ms, emi_bw_ms, int, 0664);
++
++static void emi_bw_timer_callback(struct timer_list *tm)
++{
++	struct timeval tv;
++	unsigned long long val, cur_max;
++	struct mtk_emi *emi = dev_get_drvdata(emi_dev);
++
++	do_gettimeofday(&tv);
++
++	/* pasue emi monitor for get WACT value*/
++	mtk_emi_mon_stop(emi_dev);
++
++	val = readl(EMI_WSCT4);	/* GPU BW */
++	val *= 8;
++
++	cur_max = mtk_emi_get_max_bw();
++	emi_update_bw_array(emi_dev, val);
++
++	/* set mew timer expires and restart emi monitor */
++	emi->old_tv = tv;
++	emi->emi_bw_timer.expires = jiffies + msecs_to_jiffies(emi_bw_ms);
++
++	add_timer(&(emi->emi_bw_timer));
++	mtk_emi_mon_restart(emi_dev);
++}
++
++static int emi_probe(struct platform_device *pdev)
++{
++	struct mtk_emi *emi;
++	struct resource *res;
++	struct device *dev = &pdev->dev;
++	int i, ret;
++
++	emi = devm_kzalloc(dev, sizeof(*emi), GFP_KERNEL);
++	if (!emi)
++		return -ENOMEM;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	emi->cen_emi_base = devm_ioremap_resource(dev, res);
++	if (IS_ERR(emi->cen_emi_base)) {
++		pr_err("[EMI] unable to map cen_emi_base\n");
++		devm_kfree(dev, emi);
++		return -EINVAL;
++	}
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	emi->emi_mpu_base = devm_ioremap_resource(dev, res);
++	if (IS_ERR(emi->emi_mpu_base)) {
++		pr_err("[EMI] unable to map emi_mpu_base\n");
++		devm_kfree(dev, emi);
++		return -EINVAL;
++	}
++
++	for (i = 0; i < MAX_CH; i++) {
++		res = platform_get_resource(pdev, IORESOURCE_MEM, 2 + i);
++		emi->chn_emi_base[i] = devm_ioremap_resource(dev, res);
++		if (IS_ERR(emi->chn_emi_base[i])) {
++			pr_err("[EMI] unable to map ch%d_emi_base\n", i);
++			devm_kfree(dev, emi);
++			return -EINVAL;
++		}
++	}
++
++	platform_set_drvdata(pdev, emi);
++
++	emi_dev = dev;
++	/* start emi bw monitor */
++	mtk_emi_mon_start(dev);
++
++	emi->emi_bw_max_idx = ARRAY_SIZE(emi->emi_bw_array);
++	/* setup timer */
++	timer_setup(&(emi->emi_bw_timer), NULL, 0);
++	do_gettimeofday(&(emi->old_tv));
++
++	emi->emi_bw_timer.function = emi_bw_timer_callback;
++	emi->emi_bw_timer.expires = jiffies + msecs_to_jiffies(1);
++	add_timer(&(emi->emi_bw_timer));
++
++	/* debug node */
++	ret = device_create_file(dev, &dev_attr_bw);
++	if (ret) {
++		dev_err(dev, "create bw file failed!\n");
++		goto err_create_attr_bw;
++	}
++	ret = device_create_file(dev, &dev_attr_dump_bw);
++	if (ret) {
++		dev_err(dev, "create dump_bw file failed!\n");
++		goto err_create_attr_dump_bw;
++	}
++
++	return 0;
++
++err_create_attr_dump_bw:
++	del_timer(&(emi->emi_bw_timer));
++	device_remove_file(dev, &dev_attr_bw);
++err_create_attr_bw:
++	devm_kfree(dev, emi);
++	return -ENOMEM;
++}
++
++static int emi_remove(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mtk_emi *emi = dev_get_drvdata(dev);
++
++	del_timer(&(emi->emi_bw_timer));
++	device_remove_file(dev, &dev_attr_dump_bw);
++	device_remove_file(dev, &dev_attr_bw);
++
++	devm_kfree(dev, emi);
++	return 0;
++}
++
++#ifdef CONFIG_OF
++static const struct of_device_id emi_of_ids[] = {
++	{.compatible = "mediatek,mt8183-emi",},
++	{}
++};
++#endif
++
++static struct platform_driver emi_bw_driver = {
++	.probe = emi_probe,
++	.remove = emi_remove,
++	.driver = {
++		.name = "emi_bw",
++		.owner = THIS_MODULE,
++		.pm = NULL,
++#ifdef CONFIG_OF
++		.of_match_table = emi_of_ids,
++#endif
++	},
++};
++
++static int __init emi_bw_init(void)
++{
++	int ret;
++
++	/* register EMI ctrl interface */
++	ret = platform_driver_register(&emi_bw_driver);
++	if (ret) {
++		pr_err("[EMI/BWL] fail to register emi_bw_driver\n");
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
++static void __exit emi_bw_exit(void)
++{
++	platform_driver_unregister(&emi_bw_driver);
++}
++
++postcore_initcall(emi_bw_init);
++module_exit(emi_bw_exit);
++
 diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index fef424efd65d..dfc6b40f82aa 100644
+index fef424efd65d2f7..41eb0510e080d44 100644
 --- a/drivers/mfd/cros_ec_dev.c
 +++ b/drivers/mfd/cros_ec_dev.c
 @@ -667,6 +667,16 @@ static int ec_device_probe(struct platform_device *pdev)
  		ec_platform->ec_name = CROS_EC_DEV_ISH_NAME;
  	}
  
-+	/* check whether this is actually a SCP rather than an EC */
++	/* Check whether this is actually a SCP rather than an EC. */
 +	if (cros_ec_check_features(ec, EC_FEATURE_SCP)) {
-+		dev_info(dev, "SCP detected.\n");
++		dev_info(dev, "CrOS SCP MCU detected.\n");
 +		/*
 +		 * Help userspace differentiating ECs from SCP,
 +		 * regardless of the probing order.
@@ -10520,7 +12381,7 @@ index fef424efd65d..dfc6b40f82aa 100644
  	 * Add the class device
  	 * Link to the character device for creating the /dev entry
 diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-index ce8398e6f2c0..c8f3fe701ea7 100644
+index ce8398e6f2c0e49..c8f3fe701ea7bbf 100644
 --- a/drivers/mmc/host/Makefile
 +++ b/drivers/mmc/host/Makefile
 @@ -23,7 +23,7 @@ obj-$(CONFIG_MMC_SDHCI_F_SDH30)	+= sdhci_f_sdh30.o
@@ -10533,7 +12394,7 @@ index ce8398e6f2c0..c8f3fe701ea7 100644
  obj-$(CONFIG_MMC_OMAP_HS)	+= omap_hsmmc.o
  obj-$(CONFIG_MMC_ATMELMCI)	+= atmel-mci.o
 diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 0de3749c9311..8aaa5d405987 100644
+index 0de3749c9311c4d..8aaa5d405987155 100644
 --- a/drivers/mmc/host/mtk-sd.c
 +++ b/drivers/mmc/host/mtk-sd.c
 @@ -39,6 +39,8 @@
@@ -10557,7 +12418,7 @@ index 0de3749c9311..8aaa5d405987 100644
  	pm_runtime_disable(host->dev);
 diff --git a/drivers/mmc/host/mtk-sdio-proc.c b/drivers/mmc/host/mtk-sdio-proc.c
 new file mode 100644
-index 000000000000..6f4c3cd96d42
+index 000000000000000..6f4c3cd96d42977
 --- /dev/null
 +++ b/drivers/mmc/host/mtk-sdio-proc.c
 @@ -0,0 +1,342 @@
@@ -10905,7 +12766,7 @@ index 000000000000..6f4c3cd96d42
 +}
 diff --git a/drivers/mmc/host/mtk-sdio-proc.h b/drivers/mmc/host/mtk-sdio-proc.h
 new file mode 100644
-index 000000000000..33659ba69be3
+index 000000000000000..33659ba69be321a
 --- /dev/null
 +++ b/drivers/mmc/host/mtk-sdio-proc.h
 @@ -0,0 +1,48 @@
@@ -10958,7 +12819,7 @@ index 000000000000..33659ba69be3
 +	burn
 +};
 diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 6a4c7b488782..80a38ad0db15 100644
+index 6a4c7b48878271d..80a38ad0db15a34 100644
 --- a/drivers/net/wireless/ath/ath10k/core.c
 +++ b/drivers/net/wireless/ath/ath10k/core.c
 @@ -167,6 +167,32 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
@@ -11013,7 +12874,7 @@ index 6a4c7b488782..80a38ad0db15 100644
  	ret = ath10k_bmi_write32(ar, hi_dbg_uart_txpin, ar->hw_params.uart_pin);
  	if (ret) {
 diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
-index 9373a63b8646..8c86359354af 100644
+index 9373a63b8646125..8c86359354afd35 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_rx.c
 +++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
 @@ -2043,7 +2043,9 @@ static void ath10k_htt_rx_tx_compl_ind(struct ath10k *ar,
@@ -11028,7 +12889,7 @@ index 9373a63b8646..8c86359354af 100644
  				    tx_done.msdu_id, tx_done.status);
  			ath10k_txrx_tx_unref(htt, &tx_done);
 diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
-index f54ef2c37044..d099681da42b 100644
+index f54ef2c3704410e..d099681da42b621 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_tx.c
 +++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
 @@ -554,7 +554,8 @@ void ath10k_htt_tx_free(struct ath10k_htt *htt)
@@ -11076,7 +12937,7 @@ index f54ef2c37044..d099681da42b 100644
  	/* Initialize peer_id to INVALID_PEER because this is NOT
  	 * Reinjection path
 diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 70682dff865f..d863b57effdb 100644
+index 70682dff865f8c2..d863b57effdbea7 100644
 --- a/drivers/net/wireless/ath/ath10k/hw.h
 +++ b/drivers/net/wireless/ath/ath10k/hw.h
 @@ -35,6 +35,7 @@ enum ath10k_bus {
@@ -11098,7 +12959,7 @@ index 70682dff865f..d863b57effdb 100644
  	bool rri_on_ddr;
  
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 9f631120a9be..1ea6d2dc2f29 100644
+index 9f631120a9be02a..1ea6d2dc2f290e2 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
 @@ -2083,8 +2083,6 @@ static void ath10k_sdio_remove(struct sdio_func *func)
@@ -11111,7 +12972,7 @@ index 9f631120a9be..1ea6d2dc2f29 100644
  	ath10k_core_destroy(ar);
  }
 diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
-index f13d88906b5a..6a87bd89418c 100644
+index f13d88906b5a723..6a87bd89418cb38 100644
 --- a/drivers/net/wireless/ath/ath10k/txrx.c
 +++ b/drivers/net/wireless/ath/ath10k/txrx.c
 @@ -91,7 +91,7 @@ int ath10k_txrx_tx_unref(struct ath10k_htt *htt,
@@ -11124,7 +12985,7 @@ index f13d88906b5a..6a87bd89418c 100644
  	spin_unlock_bh(&htt->tx_lock);
  
 diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index 2bb68f3edea4..bd394cbf3ff6 100644
+index 2bb68f3edea40b0..bd394cbf3ff6674 100644
 --- a/drivers/platform/chrome/Kconfig
 +++ b/drivers/platform/chrome/Kconfig
 @@ -84,6 +84,15 @@ config CROS_EC_ISHTP
@@ -11144,7 +13005,7 @@ index 2bb68f3edea4..bd394cbf3ff6 100644
  	tristate "ChromeOS Embedded Controller (SPI)"
  	depends on MFD_CROS_EC && SPI
 diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
-index efdb50b91134..32e8bb50381a 100644
+index efdb50b9113477c..32e8bb50381a944 100644
 --- a/drivers/platform/chrome/Makefile
 +++ b/drivers/platform/chrome/Makefile
 @@ -9,6 +9,7 @@ cros_ec_ctl-objs			:= cros_ec_sysfs.o cros_ec_lightbar.o \
@@ -11157,10 +13018,10 @@ index efdb50b91134..32e8bb50381a 100644
  cros_ec_lpcs-$(CONFIG_CROS_EC_LPC_MEC)	+= cros_ec_lpc_mec.o
 diff --git a/drivers/platform/chrome/cros_ec_rpmsg.c b/drivers/platform/chrome/cros_ec_rpmsg.c
 new file mode 100644
-index 000000000000..2ecae806cfc5
+index 000000000000000..6a174fa79296a1f
 --- /dev/null
 +++ b/drivers/platform/chrome/cros_ec_rpmsg.c
-@@ -0,0 +1,265 @@
+@@ -0,0 +1,258 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
 +// Copyright 2018 Google LLC.
@@ -11364,7 +13225,6 @@ index 000000000000..2ecae806cfc5
 +	struct device *dev = &rpdev->dev;
 +	struct cros_ec_device *ec_dev;
 +	struct cros_ec_rpmsg *ec_rpmsg;
-+	int ret;
 +
 +	ec_dev = devm_kzalloc(dev, sizeof(*ec_dev), GFP_KERNEL);
 +	if (!ec_dev)
@@ -11389,13 +13249,7 @@ index 000000000000..2ecae806cfc5
 +	INIT_WORK(&ec_rpmsg->host_event_work,
 +		  cros_ec_rpmsg_host_event_function);
 +
-+	ret = cros_ec_register(ec_dev);
-+	if (ret) {
-+		dev_err(dev, "cannot register EC\n");
-+		return ret;
-+	}
-+
-+	return 0;
++	return cros_ec_register(ec_dev);
 +}
 +
 +static void cros_ec_rpmsg_remove(struct rpmsg_device *rpdev)
@@ -11427,7 +13281,7 @@ index 000000000000..2ecae806cfc5
 +MODULE_LICENSE("GPL v2");
 +MODULE_DESCRIPTION("ChromeOS EC multi function device (rpmsg)");
 diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index 893940d45f0d..15803c71fe80 100644
+index 893940d45f0d085..15803c71fe80dda 100644
 --- a/drivers/pwm/pwm-mtk-disp.c
 +++ b/drivers/pwm/pwm-mtk-disp.c
 @@ -277,10 +277,21 @@ static const struct mtk_pwm_data mt8173_pwm_data = {
@@ -11453,7 +13307,7 @@ index 893940d45f0d..15803c71fe80 100644
  };
  MODULE_DEVICE_TABLE(of, mtk_disp_pwm_of_match);
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index f0abd2608044..01182936f4fa 100644
+index f0abd2608044738..01182936f4fa8f7 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -22,6 +22,16 @@ config IMX_REMOTEPROC
@@ -11474,7 +13328,7 @@ index f0abd2608044..01182936f4fa 100644
  	tristate "OMAP remoteproc support"
  	depends on ARCH_OMAP4 || SOC_OMAP5
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index ce5d061e92be..16b3e5e7a81c 100644
+index ce5d061e92be525..16b3e5e7a81c8ef 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
 @@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_sysfs.o
@@ -11487,7 +13341,7 @@ index ce5d061e92be..16b3e5e7a81c 100644
  obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
 diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
 new file mode 100644
-index 000000000000..19a907810271
+index 000000000000000..19a907810271251
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_common.h
 @@ -0,0 +1,77 @@
@@ -11570,7 +13424,7 @@ index 000000000000..19a907810271
 +#endif
 diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
 new file mode 100644
-index 000000000000..4d24e8bd7aab
+index 000000000000000..4d24e8bd7aab19d
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_scp.c
 @@ -0,0 +1,654 @@
@@ -12230,7 +14084,7 @@ index 000000000000..4d24e8bd7aab
 +MODULE_DESCRIPTION("MediaTek SCP control driver");
 diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
 new file mode 100644
-index 000000000000..10b0cbda7aee
+index 000000000000000..10b0cbda7aee38b
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_scp_ipi.c
 @@ -0,0 +1,163 @@
@@ -12398,7 +14252,7 @@ index 000000000000..10b0cbda7aee
 +MODULE_LICENSE("GPL v2");
 +MODULE_DESCRIPTION("MediaTek scp IPI interface");
 diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index d0322b41eca5..85e3cc075cb4 100644
+index d0322b41eca54c8..85e3cc075cb4732 100644
 --- a/drivers/rpmsg/Kconfig
 +++ b/drivers/rpmsg/Kconfig
 @@ -15,6 +15,15 @@ config RPMSG_CHAR
@@ -12418,7 +14272,7 @@ index d0322b41eca5..85e3cc075cb4 100644
  	tristate
  	select RPMSG
 diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
-index 9aa859502d27..ae92a7fb08f6 100644
+index 9aa859502d27520..ae92a7fb08f6234 100644
 --- a/drivers/rpmsg/Makefile
 +++ b/drivers/rpmsg/Makefile
 @@ -1,6 +1,7 @@
@@ -12431,7 +14285,7 @@ index 9aa859502d27..ae92a7fb08f6 100644
  obj-$(CONFIG_RPMSG_QCOM_GLINK_SMEM) += qcom_glink_smem.o
 diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
 new file mode 100644
-index 000000000000..e5e988941ea6
+index 000000000000000..e5e988941ea67e7
 --- /dev/null
 +++ b/drivers/rpmsg/mtk_rpmsg.c
 @@ -0,0 +1,396 @@
@@ -12832,10 +14686,10 @@ index 000000000000..e5e988941ea6
 +MODULE_LICENSE("GPL v2");
 +MODULE_DESCRIPTION("MediaTek scp rpmsg driver");
 diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index ff9fef5a032b..146625159690 100644
+index ff9fef5a032b3d8..317ec441ad6092c 100644
 --- a/drivers/soc/mediatek/mtk-cmdq-helper.c
 +++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
-@@ -9,17 +9,122 @@
+@@ -9,17 +9,109 @@
  #include <linux/mailbox_controller.h>
  #include <linux/soc/mediatek/mtk-cmdq.h>
  
@@ -12878,46 +14732,30 @@ index ff9fef5a032b..146625159690 100644
 +	pkt->cmd_buf_size += CMDQ_INST_SIZE;
 +}
 +
-+u8 cmdq_subsys_base_to_id(struct cmdq_base *clt_base, u32 base)
++struct cmdq_subsys *cmdq_dev_get_subsys(struct device *dev, int idx)
 +{
-+	u8 i;
-+
-+	if (!clt_base)
-+		return -EINVAL;
-+
-+	base = base & 0xFFFF0000;
-+	for (i = 0; i < clt_base->count; i++) {
-+		if (clt_base->subsys[i].base == base)
-+			return clt_base->subsys[i].id;
-+	}
-+
-+	return -EINVAL;
-+}
-+EXPORT_SYMBOL(cmdq_subsys_base_to_id);
-+
-+struct cmdq_base *cmdq_register_device(struct device *dev)
-+{
-+	struct cmdq_base *clt_base;
++	struct cmdq_subsys *subsys;
 +	struct of_phandle_args spec;
-+	u32 idx;
 +
-+	clt_base = devm_kzalloc(dev, sizeof(*clt_base), GFP_KERNEL);
-+	if (!clt_base)
++	subsys = devm_kzalloc(dev, sizeof(*subsys), GFP_KERNEL);
++	if (!subsys)
 +		return NULL;
 +
-+	/* parse subsys */
-+	for (idx = 0; idx < ARRAY_SIZE(clt_base->subsys); idx++) {
-+		if (of_parse_phandle_with_args(dev->of_node, "gce-subsys",
-+			"#gce-subsys-cells", idx, &spec))
-+			break;
-+		clt_base->subsys[idx].base = spec.args[0];
-+		clt_base->subsys[idx].id = spec.args[1];
-+	}
-+	clt_base->count = idx;
++	if (of_parse_phandle_with_args(dev->of_node, "mediatek,gce-client-reg",
++				       "#subsys-cells", idx, &spec)) {
++		dev_err(dev, "can't parse gce-client-reg property");
 +
-+	return clt_base;
++		return(struct cmdq_subsys *)-ENODEV;
++	}
++
++	subsys->id = spec.args[0];
++	subsys->offset = spec.args[1];
++	subsys->size = spec.args[2];
++	of_node_put(spec.np);
++
++	return subsys;
 +}
-+EXPORT_SYMBOL(cmdq_register_device);
++EXPORT_SYMBOL(cmdq_dev_get_subsys);
 +
 +s32 cmdq_dev_get_event(struct device *dev, const char *name)
 +{
@@ -12928,16 +14766,19 @@ index ff9fef5a032b..146625159690 100644
 +	if (!dev)
 +		return -EINVAL;
 +
-+	index = of_property_match_string(dev->of_node, "gce-event-names", name);
++	index = of_property_match_string(dev->of_node,
++					 "mediatek,gce-event-names", name);
 +	if (index < 0) {
 +		dev_err(dev, "no gce-event-names property or no such event:%s",
 +			name);
++
 +		return index;
 +	}
 +
-+	if (of_parse_phandle_with_args(dev->of_node, "gce-events",
-+		"#gce-event-cells", index, &spec)) {
++	if (of_parse_phandle_with_args(dev->of_node, "mediatek,gce-events",
++				       "#event-cells", index, &spec)) {
 +		dev_err(dev, "can't parse gce-events property");
++
 +		return -ENODEV;
 +	}
 +
@@ -12959,7 +14800,7 @@ index ff9fef5a032b..146625159690 100644
  }
  
  struct cmdq_client *cmdq_mbox_create(struct device *dev, int index, u32 timeout)
-@@ -110,10 +215,11 @@ void cmdq_pkt_destroy(struct cmdq_pkt *pkt)
+@@ -110,10 +202,11 @@ void cmdq_pkt_destroy(struct cmdq_pkt *pkt)
  }
  EXPORT_SYMBOL(cmdq_pkt_destroy);
  
@@ -12974,7 +14815,7 @@ index ff9fef5a032b..146625159690 100644
  
  	if (unlikely(pkt->cmd_buf_size + CMDQ_INST_SIZE > pkt->buf_size)) {
  		/*
-@@ -129,77 +235,110 @@ static int cmdq_pkt_append_command(struct cmdq_pkt *pkt, enum cmdq_code code,
+@@ -129,77 +222,129 @@ static int cmdq_pkt_append_command(struct cmdq_pkt *pkt, enum cmdq_code code,
  			__func__, (u32)pkt->buf_size);
  		return -ENOMEM;
  	}
@@ -12988,17 +14829,12 @@ index ff9fef5a032b..146625159690 100644
  }
  
 -int cmdq_pkt_write(struct cmdq_pkt *pkt, u32 value, u32 subsys, u32 offset)
-+int cmdq_pkt_write(struct cmdq_pkt *pkt, struct cmdq_base *clt_base,
-+		   dma_addr_t addr, u32 value)
++int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value)
  {
 -	u32 arg_a = (offset & CMDQ_ARG_A_WRITE_MASK) |
 -		    (subsys << CMDQ_SUBSYS_SHIFT);
 -
 -	return cmdq_pkt_append_command(pkt, CMDQ_CODE_WRITE, arg_a, value);
-+	const u32 base = (addr >> 32) ? 0 : addr & 0xFFFF0000;
-+	u8 subsys = cmdq_subsys_base_to_id(clt_base, base);
-+	s16 offset = addr & 0x0000FFFF;
-+
 +	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(value),
 +				       CMDQ_GET_ARG_B(value), offset, subsys,
 +				       CMDQ_IMMEDIATE_VALUE,
@@ -13009,31 +14845,28 @@ index ff9fef5a032b..146625159690 100644
  
 -int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u32 value,
 -			u32 subsys, u32 offset, u32 mask)
-+int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, struct cmdq_base *clt_base,
-+			dma_addr_t addr, u32 value, u32 mask)
++int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys, u16 offset,
++			u32 value, u32 mask)
  {
--	u32 offset_mask = offset;
-+	const u32 base = (addr >> 32) ? 0 : addr & 0xFFFF0000;
-+	u8 subsys = cmdq_subsys_base_to_id(clt_base, base);
-+	s16 offset = addr & 0x0000FFFF;
+ 	u32 offset_mask = offset;
  	int err = 0;
  
  	if (mask != 0xffffffff) {
 -		err = cmdq_pkt_append_command(pkt, CMDQ_CODE_MASK, 0, ~mask);
--		offset_mask |= CMDQ_WRITE_ENABLE_MASK;
 +		err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(~mask),
-+					      CMDQ_GET_ARG_B(~mask), 0, 0, 0, 0,
-+					      0, CMDQ_CODE_MASK);
-+		offset |= CMDQ_WRITE_ENABLE_MASK;
++					      CMDQ_GET_ARG_B(~mask),
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_CODE_MASK);
+ 		offset_mask |= CMDQ_WRITE_ENABLE_MASK;
  	}
 -	err |= cmdq_pkt_write(pkt, value, subsys, offset_mask);
++	err |= cmdq_pkt_write(pkt, subsys, offset_mask, value);
  
--	return err;
-+	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(value),
-+				       CMDQ_GET_ARG_B(value), offset, subsys,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE, CMDQ_CODE_WRITE);
+ 	return err;
  }
  EXPORT_SYMBOL(cmdq_pkt_write_mask);
  
@@ -13057,7 +14890,11 @@ index ff9fef5a032b..146625159690 100644
 -	return cmdq_pkt_append_command(pkt, CMDQ_CODE_WFE, event, arg_b);
 +	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_WFE_OPTION),
 +				       CMDQ_GET_ARG_B(CMDQ_WFE_OPTION), event,
-+				       0, 0, 0, 0, CMDQ_CODE_WFE);
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_CODE_WFE);
  }
  EXPORT_SYMBOL(cmdq_pkt_wfe);
  
@@ -13071,22 +14908,28 @@ index ff9fef5a032b..146625159690 100644
 -				       CMDQ_WFE_UPDATE);
 +	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_WFE_UPDATE),
 +				       CMDQ_GET_ARG_B(CMDQ_WFE_UPDATE), event,
-+				       0, 0, 0, 0, CMDQ_CODE_WFE);
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_CODE_WFE);
  }
  EXPORT_SYMBOL(cmdq_pkt_clear_event);
  
-+int cmdq_pkt_poll(struct cmdq_pkt *pkt, struct cmdq_base *clt_base,
-+		  dma_addr_t addr, u32 value, u32 mask)
++int cmdq_pkt_poll(struct cmdq_pkt *pkt, u8 subsys,
++		  u16 offset, u32 value, u32 mask)
 +{
 +	int err;
-+	const u32 base = (addr >> 32) ? 0 : addr & 0xFFFF0000;
-+	u8 subsys = cmdq_subsys_base_to_id(clt_base, base);
-+	s16 offset = addr & 0x0000FFFF;
 +
 +	if (mask != 0xffffffff) {
 +		err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(~mask),
 +					      CMDQ_GET_ARG_B(~mask),
-+					      0, 0, 0, 0, 0, CMDQ_CODE_MASK);
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_IMMEDIATE_VALUE,
++					      CMDQ_CODE_MASK);
 +
 +		if (err != 0)
 +			return err;
@@ -13095,7 +14938,11 @@ index ff9fef5a032b..146625159690 100644
 +
 +	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(value),
 +				       CMDQ_GET_ARG_B(value),
-+				       offset, subsys, 0, 0, 0, CMDQ_CODE_POLL);
++				       offset, subsys,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_IMMEDIATE_VALUE,
++				       CMDQ_CODE_POLL);
 +}
 +EXPORT_SYMBOL(cmdq_pkt_poll);
 +
@@ -13108,19 +14955,29 @@ index ff9fef5a032b..146625159690 100644
 -
 +	err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_EOC_IRQ_EN),
 +				      CMDQ_GET_ARG_B(CMDQ_EOC_IRQ_EN),
-+				      0, 0, 0, 0, 0, CMDQ_CODE_EOC);
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_CODE_EOC);
 +	if (err < 0)
 +		return err;
  	/* JUMP to end */
 -	err |= cmdq_pkt_append_command(pkt, CMDQ_CODE_JUMP, 0, CMDQ_JUMP_PASS);
 +	err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_JUMP_PASS),
 +				      CMDQ_GET_ARG_B(CMDQ_JUMP_PASS),
-+				      0, 0, 0, 0, 0, CMDQ_CODE_JUMP);
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_IMMEDIATE_VALUE,
++				      CMDQ_CODE_JUMP);
  
  	return err;
  }
 diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index c3f933d10295..2c7593702954 100644
+index c3f933d10295eba..2c7593702954378 100644
 --- a/drivers/tty/serial/8250/8250_mtk.c
 +++ b/drivers/tty/serial/8250/8250_mtk.c
 @@ -1,11 +1,23 @@
@@ -13772,7 +15629,7 @@ index c3f933d10295..2c7593702954 100644
  static const struct dev_pm_ops mtk8250_pm_ops = {
  	SET_SYSTEM_SLEEP_PM_OPS(mtk8250_suspend, mtk8250_resume)
 diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
-index 48d10a61e271..542b67a6b5a6 100644
+index 48d10a61e271c9c..542b67a6b5a659d 100644
 --- a/drivers/usb/mtu3/mtu3_core.c
 +++ b/drivers/usb/mtu3/mtu3_core.c
 @@ -94,6 +94,7 @@ static int mtu3_device_enable(struct mtu3 *mtu)
@@ -13832,7 +15689,7 @@ index 48d10a61e271..542b67a6b5a6 100644
  	dev_info(mtu->dev, "IP version 0x%x(%s IP)\n", mtu->hw_version,
  		mtu->is_u3_ip ? "U3" : "U2");
 diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
-index ac60e9c8564e..7660d107e5bc 100644
+index ac60e9c8564e222..7660d107e5bcc42 100644
 --- a/drivers/usb/mtu3/mtu3_dr.c
 +++ b/drivers/usb/mtu3/mtu3_dr.c
 @@ -401,7 +401,7 @@ void ssusb_set_force_mode(struct ssusb_mtk *ssusb,
@@ -13846,22 +15703,14 @@ index ac60e9c8564e..7660d107e5bc 100644
  		value &= ~(SSUSB_U2_PORT_FORCE_IDDIG | SSUSB_U2_PORT_RG_IDDIG);
 diff --git a/include/dt-bindings/gce/mt8183-gce.h b/include/dt-bindings/gce/mt8183-gce.h
 new file mode 100644
-index 000000000000..4639845f73a0
+index 000000000000000..aeb95154fac28d8
 --- /dev/null
 +++ b/include/dt-bindings/gce/mt8183-gce.h
-@@ -0,0 +1,185 @@
+@@ -0,0 +1,177 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ *  Copyright (C) 2018 MediaTek Inc.
-+ *  Author: Bibby Hsieh <bibby.hsieh@mediatek.com>
-+ *
-+ *  This program is free software; you can redistribute it and/or modify
-+ *  it under the terms of the GNU General Public License version 2 as
-+ *  published by the Free Software Foundation.
-+ *
-+ *  This program is distributed in the hope that it will be useful,
-+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-+ *  See http://www.gnu.org/licenses/gpl-2.0.html for more details.
++ * Copyright (c) 2019 MediaTek Inc.
++ * Author: Bibby Hsieh <bibby.hsieh@mediatek.com>
 + *
 + */
 +
@@ -14037,7 +15886,7 @@ index 000000000000..4639845f73a0
 +#endif
 diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset-controller/mt8183-resets.h
 new file mode 100644
-index 000000000000..f0d92af29f3f
+index 000000000000000..f0d92af29f3fa7a
 --- /dev/null
 +++ b/include/dt-bindings/reset-controller/mt8183-resets.h
 @@ -0,0 +1,89 @@
@@ -14131,14 +15980,14 @@ index 000000000000..f0d92af29f3f
 +
 +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8183 */
 diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
-index ccb73422c2fa..9e3502945bc1 100644
+index ccb73422c2fa22d..1dfd5ed5c8c5284 100644
 --- a/include/linux/mailbox/mtk-cmdq-mailbox.h
 +++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
 @@ -19,6 +19,10 @@
  #define CMDQ_WFE_UPDATE			BIT(31)
  #define CMDQ_WFE_WAIT			BIT(15)
  #define CMDQ_WFE_WAIT_VALUE		0x1
-+#define CMDQ_WFE_OPTION			(CMDQ_WFE_UPDATE | CMDQ_WFE_WAIT | \
++#define CMDQ_WFE_OPTION                 (CMDQ_WFE_UPDATE | CMDQ_WFE_WAIT | \
 +					CMDQ_WFE_WAIT_VALUE)
 +/** cmdq event maximum */
 +#define CMDQ_MAX_EVENT			0x3ff
@@ -14154,7 +16003,7 @@ index ccb73422c2fa..9e3502945bc1 100644
  	CMDQ_CODE_WFE = 0x20,
  	CMDQ_CODE_EOC = 0x40,
 diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-index c0920348441b..fe47c0f813b4 100644
+index c0920348441bf59..fe47c0f813b43ab 100644
 --- a/include/linux/mfd/cros_ec.h
 +++ b/include/linux/mfd/cros_ec.h
 @@ -28,6 +28,7 @@
@@ -14166,24 +16015,32 @@ index c0920348441b..fe47c0f813b4 100644
  /*
   * The EC is unresponsive for a time after a reboot command.  Add a
 diff --git a/include/linux/mfd/cros_ec_commands.h b/include/linux/mfd/cros_ec_commands.h
-index 7913dd1a0b11..b185e547078d 100644
+index 7913dd1a0b11ed1..1edeaa23b7b7fb5 100644
 --- a/include/linux/mfd/cros_ec_commands.h
 +++ b/include/linux/mfd/cros_ec_commands.h
-@@ -1299,6 +1299,8 @@ enum ec_feature_code {
+@@ -1299,6 +1299,16 @@ enum ec_feature_code {
  	EC_FEATURE_CEC = 35,
  	/* EC supports tight sensor timestamping. */
  	EC_FEATURE_MOTION_SENSE_TIGHT_TIMESTAMPS = 36,
-+	/* The MCU exposes a SCP */
++	/*
++	 * EC supports tablet mode detection aligned to Chrome and allows
++	 * setting of threshold by host command using
++	 * MOTIONSENSE_CMD_TABLET_MODE_LID_ANGLE.
++	 */
++	EC_FEATURE_REFINED_TABLET_MODE_HYSTERESIS = 37,
++	/* EC supports audio codec. */
++	EC_FEATURE_AUDIO_CODEC = 38,
++	/* The MCU is a System Companion Processor (SCP). */
 +	EC_FEATURE_SCP = 39,
  	/* The MCU is an Integrated Sensor Hub */
  	EC_FEATURE_ISH = 40,
  };
 diff --git a/include/linux/platform_data/mtk_scp.h b/include/linux/platform_data/mtk_scp.h
 new file mode 100644
-index 000000000000..e26e5f6146e6
+index 000000000000000..b9c970b19bcc1aa
 --- /dev/null
 +++ b/include/linux/platform_data/mtk_scp.h
-@@ -0,0 +1,157 @@
+@@ -0,0 +1,163 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2018 MediaTek Inc.
@@ -14218,7 +16075,13 @@ index 000000000000..e26e5f6146e6
 +	SCP_IPI_VDEC_VP9,
 +	SCP_IPI_VENC_H264,
 +	SCP_IPI_VENC_VP8,
-+	SCP_IPI_MDP,
++	SCP_IPI_MDP_INIT,
++	SCP_IPI_MDP_DEINIT,
++	SCP_IPI_MDP_FRAME,
++	SCP_IPI_DIP,
++	SCP_IPI_ISP_CMD,
++	SCP_IPI_ISP_FRAME,
++	SCP_IPI_FD_CMD,
 +	SCP_IPI_CROS_HOST_CMD,
 +	SCP_IPI_NS_SERVICE = 0xFF,
 +	SCP_IPI_MAX = 0x100,
@@ -14343,7 +16206,7 @@ index 000000000000..e26e5f6146e6
 +#endif /* _MTK_SCP_H */
 diff --git a/include/linux/rpmsg/mtk_rpmsg.h b/include/linux/rpmsg/mtk_rpmsg.h
 new file mode 100644
-index 000000000000..90f848696161
+index 000000000000000..90f848696161f40
 --- /dev/null
 +++ b/include/linux/rpmsg/mtk_rpmsg.h
 @@ -0,0 +1,30 @@
@@ -14378,10 +16241,10 @@ index 000000000000..90f848696161
 +
 +#endif
 diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
-index 54ade13a9b15..f6227bfbe2cd 100644
+index 54ade13a9b15730..15884354af20a19 100644
 --- a/include/linux/soc/mediatek/mtk-cmdq.h
 +++ b/include/linux/soc/mediatek/mtk-cmdq.h
-@@ -13,11 +13,18 @@
+@@ -13,11 +13,14 @@
  
  #define CMDQ_NO_TIMEOUT		0xffffffffu
  
@@ -14391,54 +16254,47 @@ index 54ade13a9b15..f6227bfbe2cd 100644
  struct cmdq_pkt;
  
 +struct cmdq_subsys {
-+	u32 base;
 +	u8 id;
-+};
-+
-+struct cmdq_base {
-+	struct cmdq_subsys subsys[32];
-+	u8 count;
++	u16 offset;
++	u16 size;
 +};
 +
  struct cmdq_client {
  	spinlock_t lock;
  	u32 pkt_cnt;
-@@ -63,26 +70,26 @@ void cmdq_pkt_destroy(struct cmdq_pkt *pkt);
+@@ -63,26 +66,26 @@ void cmdq_pkt_destroy(struct cmdq_pkt *pkt);
  /**
   * cmdq_pkt_write() - append write command to the CMDQ packet
   * @pkt:	the CMDQ packet
-+ * @cmdq_base:	the CMDQ sub system code and base address
-+ * @addr:	register address
-  * @value:	the specified target register value
-- * @subsys:	the CMDQ sub system code
-- * @offset:	register offset from CMDQ sub system
+- * @value:	the specified target register value
+  * @subsys:	the CMDQ sub system code
+  * @offset:	register offset from CMDQ sub system
++ * @value:	the specified target register value
   *
   * Return: 0 for success; else the error code is returned
   */
 -int cmdq_pkt_write(struct cmdq_pkt *pkt, u32 value, u32 subsys, u32 offset);
--
-+int cmdq_pkt_write(struct cmdq_pkt *pkt, struct cmdq_base *clt_base,
-+		   dma_addr_t addr, u32 value);
++int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value);
+ 
  /**
   * cmdq_pkt_write_mask() - append write command with mask to the CMDQ packet
   * @pkt:	the CMDQ packet
-+ * @cmdq_base:	the CMDQ sub system code and base address
-+ * @addr:	register address
-  * @value:	the specified target register value
-- * @subsys:	the CMDQ sub system code
-- * @offset:	register offset from CMDQ sub system
+- * @value:	the specified target register value
+  * @subsys:	the CMDQ sub system code
+  * @offset:	register offset from CMDQ sub system
++ * @value:	the specified target register value
   * @mask:	the specified target register mask
   *
   * Return: 0 for success; else the error code is returned
   */
 -int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u32 value,
 -			u32 subsys, u32 offset, u32 mask);
-+int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, struct cmdq_base *clt_base,
-+			dma_addr_t addr, u32 value, u32 mask);
++int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys, u16 offset,
++			u32 value, u32 mask);
  
  /**
   * cmdq_pkt_wfe() - append wait for event command to the CMDQ packet
-@@ -91,7 +98,7 @@ int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u32 value,
+@@ -91,7 +94,7 @@ int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u32 value,
   *
   * Return: 0 for success; else the error code is returned
   */
@@ -14447,7 +16303,7 @@ index 54ade13a9b15..f6227bfbe2cd 100644
  
  /**
   * cmdq_pkt_clear_event() - append clear event command to the CMDQ packet
-@@ -100,8 +107,23 @@ int cmdq_pkt_wfe(struct cmdq_pkt *pkt, u32 event);
+@@ -100,8 +103,23 @@ int cmdq_pkt_wfe(struct cmdq_pkt *pkt, u32 event);
   *
   * Return: 0 for success; else the error code is returned
   */
@@ -14460,29 +16316,171 @@ index 54ade13a9b15..f6227bfbe2cd 100644
 + *		     register to check for the value. All GCE hardware
 + *		     threads will be blocked by this instruction.
 + * @pkt:	the CMDQ packet
-+ * @cmdq_base:	the CMDQ sub system code and base address
-+ * @addr:	register address
++ * @subsys:	the CMDQ sub system code
++ * @offset:	register offset from CMDQ sub system
 + * @value:	the specified target register value
 + * @mask:	the specified target register mask
 + *
 + * Return: 0 for success; else the error code is returned
 + */
-+int cmdq_pkt_poll(struct cmdq_pkt *pkt, struct cmdq_base *clt_base,
-+		  dma_addr_t addr, u32 value, u32 mask);
++int cmdq_pkt_poll(struct cmdq_pkt *pkt, u8 subsys,
++		  u16 offset, u32 value, u32 mask);
  /**
   * cmdq_pkt_flush_async() - trigger CMDQ to asynchronously execute the CMDQ
   *                          packet and call back at the end of done packet
-@@ -130,4 +152,8 @@ int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb,
+@@ -130,4 +148,28 @@ int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb,
   */
  int cmdq_pkt_flush(struct cmdq_pkt *pkt);
  
-+u8 cmdq_subsys_base_to_id(struct cmdq_base *clt_base, u32 base);
-+struct cmdq_base *cmdq_register_device(struct device *dev);
++/**
++ * cmdq_dev_get_subsys() - parse sub system from the device node of CMDQ client
++ * @dev:	device of CMDQ mailbox client
++ * @idx:	the index of desired subsys
++ *
++ * Return: CMDQ subsys pointer
++ *
++ * Help CMDQ client pasing the sub system number
++ * from the device node of CMDQ client.
++ */
++struct cmdq_subsys *cmdq_dev_get_subsys(struct device *dev, int idx);
++
++/**
++ * cmdq_dev_get_event() - parse event from the device node of CMDQ client
++ * @dev:	device of CMDQ mailbox client
++ * @name:	the name of desired event
++ *
++ * Return: CMDQ event number
++ *
++ * Help CMDQ client pasing the event number
++ * from the device node of CMDQ client.
++ */
 +s32 cmdq_dev_get_event(struct device *dev, const char *name);
 +
  #endif	/* __MTK_CMDQ_H__ */
+diff --git a/include/soc/mediatek/emi.h b/include/soc/mediatek/emi.h
+new file mode 100644
+index 000000000000000..83bdaeb6840b839
+--- /dev/null
++++ b/include/soc/mediatek/emi.h
+@@ -0,0 +1,116 @@
++/* SPDX-License-Identifier: GPL-2.0  */
++/*
++ * Copyright (c) 2015-2016 MediaTek Inc.
++ * Author: Xi Chen <xixi.chen@mediatek.com>
++ */
++
++#ifndef _MTK_EMI_H_
++#define _MTK_EMI_H_
++
++#define MAX_CH		2
++#define MAX_RK		2
++
++struct emi_info_t {
++	unsigned int dram_type;
++	unsigned int ch_num;
++	unsigned int rk_num;
++	unsigned int rank_size[MAX_RK];
++};
++
++/*****************************************************************************
++ *  Macro Definiations
++ *****************************************************************************/
++#define EMI_REG_BASE                (0x10219000)
++#define EMI_REG_BASE_MAPPED         (emi->cen_emi_base)
++
++#define EMI_MDCT                    (EMI_REG_BASE_MAPPED + 0x078)
++#define EMI_MDCT_2ND                (EMI_REG_BASE_MAPPED + 0x07C)
++
++#define EMI_ARBA                    (EMI_REG_BASE_MAPPED + 0x100)
++#define EMI_ARBB                    (EMI_REG_BASE_MAPPED + 0x108)
++#define EMI_ARBC                    (EMI_REG_BASE_MAPPED + 0x110)
++#define EMI_ARBD                    (EMI_REG_BASE_MAPPED + 0x118)
++#define EMI_ARBE                    (EMI_REG_BASE_MAPPED + 0x120)
++#define EMI_ARBF                    (EMI_REG_BASE_MAPPED + 0x128)
++#define EMI_ARBG                    (EMI_REG_BASE_MAPPED + 0x130)
++#define EMI_ARBH                    (EMI_REG_BASE_MAPPED + 0x138)
++
++#define EMI_BMEN                    (EMI_REG_BASE_MAPPED + 0x400)
++#define EMI_BCNT                    (EMI_REG_BASE_MAPPED + 0x408)
++#define EMI_TACT                    (EMI_REG_BASE_MAPPED + 0x410)
++#define EMI_TSCT                    (EMI_REG_BASE_MAPPED + 0x418)
++#define EMI_WACT                    (EMI_REG_BASE_MAPPED + 0x420)
++#define EMI_WSCT                    (EMI_REG_BASE_MAPPED + 0x428)
++#define EMI_BACT                    (EMI_REG_BASE_MAPPED + 0x430)
++#define EMI_BSCT                    (EMI_REG_BASE_MAPPED + 0x438)
++#define EMI_MSEL                    (EMI_REG_BASE_MAPPED + 0x440)
++#define EMI_TSCT2                   (EMI_REG_BASE_MAPPED + 0x448)
++#define EMI_TSCT3                   (EMI_REG_BASE_MAPPED + 0x450)
++#define EMI_WSCT2                   (EMI_REG_BASE_MAPPED + 0x458)
++#define EMI_WSCT3                   (EMI_REG_BASE_MAPPED + 0x460)
++#define EMI_WSCT4                   (EMI_REG_BASE_MAPPED + 0x464)
++#define EMI_MSEL2                   (EMI_REG_BASE_MAPPED + 0x468)
++
++#define EMI_BMEN2                   (EMI_REG_BASE_MAPPED + 0x4E8)
++
++#define EMI_BMRW0                   (EMI_REG_BASE_MAPPED + 0x4F8)
++
++#define EMI_TTYPE1                  (EMI_REG_BASE_MAPPED + 0x500)
++#define EMI_TTYPE17                 (EMI_REG_BASE_MAPPED + 0x580)
++
++#define EMI_BWVL                    (EMI_REG_BASE_MAPPED + 0x7D0)
++#define EMI_BWVL_2ND                (EMI_REG_BASE_MAPPED + 0x7D4)
++#define EMI_BWVL_3RD                (EMI_REG_BASE_MAPPED + 0x7D8)
++#define EMI_BWVL_4TH                (EMI_REG_BASE_MAPPED + 0x7DC)
++#define EMI_BWVL_5TH                (EMI_REG_BASE_MAPPED + 0x7E0)
++
++#define EMI_CH0_REG_BASE            (0x1022D000)
++#define EMI_CH0_REG_BASE_MAPPED     (emi->chn_emi_base[0])
++#define EMI_CH0_DRS_ST2             (EMI_CH0_REG_BASE_MAPPED + 0x17C)
++#define EMI_CH0_DRS_ST3             (EMI_CH0_REG_BASE_MAPPED + 0x180)
++#define EMI_CH0_DRS_ST4             (EMI_CH0_REG_BASE_MAPPED + 0x184)
++
++#define EMI_CH1_REG_BASE            (0x10235000)
++#define EMI_CH1_REG_BASE_MAPPED     (emi->chn_emi_base[1])
++#define EMI_CH1_DRS_ST2             (EMI_CH1_REG_BASE_MAPPED + 0x17C)
++#define EMI_CH1_DRS_ST3             (EMI_CH1_REG_BASE_MAPPED + 0x180)
++#define EMI_CH1_DRS_ST4             (EMI_CH1_REG_BASE_MAPPED + 0x184)
++
++/*
++ * DEFAULT_VALUE
++ */
++#define EMI_BMEN_DEFAULT_VALUE    (0x00FF0000)
++#define EMI_BMEN2_DEFAULT_VALUE   (0x02000000)
++#define EMI_BMRW0_DEFAULT_VALUE   (0xFFFFFFFF)
++#define EMI_MSEL_DEFAULT_VALUE    (0x00030024)
++#define EMI_MSEL2_DEFAULT_VALUE   (0x000000C0)
++#define BC_OVERRUN                (0x00000100)
++
++/* EMI_BMEN */
++#define BUS_MON_EN          BIT(0)
++#define BUS_MON_PAUSE       BIT(1)
++#define BUS_MON_IDLE        BIT(3)
++
++#define MAX_DRAM_CH_NUM     (2)
++#define DRAM_RANK_NUM       (2)
++#define DRAM_PDIR_NUM       (8)
++#define EMI_TTYPE_NUM       (21)
++#define EMI_TSCT_NUM        (3)
++#define EMI_MDCT_NUM        (2)
++#define EMI_DRS_ST_NUM      (3)
++#define EMI_BW_LIMIT_NUM    (8)
++
++#define DRAMC_CG_SHIFT      (9)
++
++#define EMI_IDX_SIZE        (1024)
++
++#define EMI_BWVL_UNIT       (271)
++
++#define MBW_BUF_LEN         (0x800000)
++#define DATA_CNT_PER_BLK    (35)
++#define BLK_CNT_PER_BUF     (0x800)
++
++/* public apis */
++unsigned long long emi_get_max_bw(void);
++
++#endif
 diff --git a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
-index 43be51bf0329..1bc0fafe5e29 100644
+index 43be51bf0329b9b..1bc0fafe5e2902a 100644
 --- a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 @@ -291,11 +291,15 @@ static struct snd_soc_dai_driver mt8183_memif_dai_driver[] = {
@@ -14659,7 +16657,7 @@ index 43be51bf0329..1bc0fafe5e29 100644
  		.irq_en_reg = AFE_IRQ_MCU_CON0,
  		.irq_en_shift = IRQ8_MCU_ON_SFT,
 diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-index 93536659a859..1e7e8aed8707 100644
+index 93536659a85904f..1e7e8aed87078d3 100644
 --- a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 @@ -410,7 +410,7 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
@@ -14672,7 +16670,7 @@ index 93536659a859..1e7e8aed8707 100644
  		if (dai_link->platform_name)
  			continue;
 diff --git a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-index 2da56232a9e1..a50c6af5c945 100644
+index 2da56232a9e10a3..a50c6af5c945087 100644
 --- a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
 @@ -322,7 +322,7 @@ mt8183_mt6358_ts3a227_max98357_dev_probe(struct platform_device *pdev)
