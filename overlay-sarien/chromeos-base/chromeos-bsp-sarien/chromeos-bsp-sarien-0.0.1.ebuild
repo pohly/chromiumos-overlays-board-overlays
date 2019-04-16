@@ -35,4 +35,9 @@ src_install() {
 
 	unibuild_install_audio_files
 	unibuild_install_bluetooth_files
+
+	# Install per-board hardware features for Arc++.
+	insinto /etc
+	doins "${FILESDIR}/hardware_features.xml"
+	dosbin "${FILESDIR}/board_hardware_features"
 }

@@ -1,0 +1,120 @@
+#!/bin/sh
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# Customization script to detect and modify board hardware feature list, based
+# on /etc/hardware_features.xml. Read go/arc-board-features for how to use this
+# file.
+
+die() {
+  echo "ERROR: $@" >&2
+  exit 1
+}
+
+modify_feature() {
+  local file="$1"
+  local feature="$2"
+  local pattern="$3"
+  local replace="$4"
+
+  # Assume each feature is already defined in one line.
+  sed -e "/name=\"${feature}\"/s/${pattern}/${replace}/" -i "${file}"
+}
+
+enable_feature() {
+  modify_feature "$@" "<unavailable-feature " "<feature "
+}
+
+disable_feature() {
+  modify_feature "$@" "<feature " "<unavailable-feature "
+}
+
+has_accelerometer() {
+  local has_base_accelerometer
+  has_base_accelerometer="$(/usr/bin/cros_config /hardware-properties has-base-accelerometer)"
+  local has_lid_accelerometer
+  has_lid_accelerometer="$(/usr/bin/cros_config /hardware-properties has-lid-accelerometer)"
+  [ "${has_base_accelerometer}" = "true" ] || [ "${has_lid_accelerometer}" = "true" ]
+}
+
+has_gyro() {
+  local has_base_gyroscope
+  has_base_gyroscope="$(/usr/bin/cros_config /hardware-properties has-base-gyroscope)"
+  [ "${has_base_gyroscope}" = "true" ]
+}
+
+has_compass() {
+  local has_base_magnetometer
+  has_base_magnetometer="$(/usr/bin/cros_config /hardware-properties has-base-magnetometer)"
+  [ "${has_base_magnetometer}" = "true" ]
+}
+
+has_multicamera() {
+  local camera_count
+  camera_count="$(/usr/bin/cros_config /camera count)"
+  [ "${camera_count}" = "2" ]
+}
+
+has_touchscreen() {
+  local has_touchscreen
+  has_touchscreen="$(/usr/bin/cros_config /hardware-properties has-touchscreen)"
+  [ "${has_touchscreen}" = "true" ]
+}
+
+main() {
+  if [ "$#" != 1 ]; then
+    die "Usage: board_hardware_features PATH_TO_PLATFORM_XML"
+  fi
+  local file="$1"
+
+  if ! has_accelerometer; then
+    echo "Disable accelerometer feature."
+    disable_feature "${file}" android.hardware.sensor.accelerometer
+  else
+    echo "Enable accelerometer feature."
+    enable_feature "${file}" android.hardware.sensor.accelerometer
+  fi
+
+  if ! has_gyro; then
+    echo "Disable gyro feature."
+    disable_feature "${file}" android.hardware.sensor.gyroscope
+  else
+    echo "Enable gyro feature."
+    enable_feature "${file}" android.hardware.sensor.gyroscope
+  fi
+
+  if ! has_compass; then
+    echo "Disable compass feature."
+    disable_feature "${file}" android.hardware.sensor.compass
+  else
+    echo "Enable compass feature."
+    enable_feature "${file}" android.hardware.sensor.compass
+  fi
+
+  if ! has_multicamera; then
+    echo "Disable back camera features."
+    disable_feature "${file}" android.hardware.camera
+    disable_feature "${file}" android.hardware.camera.autofocus
+  else
+    echo "Enable back camera features."
+    enable_feature "${file}" android.hardware.camera
+    enable_feature "${file}" android.hardware.camera.autofocus
+  fi
+
+  if ! has_touchscreen; then
+    echo "Disable touchscreen features."
+    disable_feature "${file}" android.hardware.touchscreen
+    disable_feature "${file}" android.hardware.touchscreen.multitouch
+    disable_feature "${file}" android.hardware.touchscreen.multitouch.distinct
+    disable_feature "${file}" android.hardware.touchscreen.multitouch.jazzhand
+  else
+    echo "Enable touchscreen features."
+    enable_feature "${file}" android.hardware.touchscreen
+    enable_feature "${file}" android.hardware.touchscreen.multitouch
+    enable_feature "${file}" android.hardware.touchscreen.multitouch.distinct
+    enable_feature "${file}" android.hardware.touchscreen.multitouch.jazzhand
+  fi
+}
+
+main "$@"

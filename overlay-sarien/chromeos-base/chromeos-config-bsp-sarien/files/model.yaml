@@ -12,6 +12,11 @@ common_config: &common_config
     has-charge-controller: "1"
   hardware-properties:
     is-lid-convertible: "{{$is-lid-convertible-val}}"
+    has-lid-accelerometer: "{{$has-lid-accelerometer-val}}"
+    has-base-accelerometer: "{{$has-base-accelerometer-val}}"
+    has-base-gyroscope: "{{$has-base-gyroscope-val}}"
+    has-base-magnetometer: "{{$has-base-magnetometer-val}}"
+    has-touchscreen: "{{$has-touchscreen-val}}"
   audio:
     main:
       # If the generic ucm is not sufficient, the device
@@ -54,6 +59,11 @@ chromeos:
     - $device-name: "sarien"
       $fw-name: "Sarien"
       $is-lid-convertible-val: False
+      $has-lid-accelerometer-val: False
+      $has-base-accelerometer-val: False
+      $has-base-gyroscope-val: False
+      $has-base-magnetometer-val: False
+      $has-touchscreen-val: True
       skus:
         - $sku-id: 1
           config: *common_config
@@ -62,6 +72,12 @@ chromeos:
     - $device-name: "arcada"
       $fw-name: "Arcada"
       $is-lid-convertible-val: True
+      $has-lid-accelerometer-val: True
+      $has-base-accelerometer-val: True
+      $has-base-gyroscope-val: True
+      # TODO:(b/128619310) Enable magnetometer when fixed
+      $has-base-magnetometer-val: False
+      $has-touchscreen-val: True
       skus:
         - $sku-id: 2
           config: *common_config
