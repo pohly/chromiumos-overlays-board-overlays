@@ -3,8 +3,8 @@
 
 EAPI=6
 
-CROS_WORKON_COMMIT="77b6954280942791a4b80ecc6f15669f8bdfd9d5"
-CROS_WORKON_TREE="88d70adcaabc4db62530c37aab7e35785e4251b8"
+CROS_WORKON_COMMIT="57a39ca6900094d756fa584c550c9728e5de7ea2"
+CROS_WORKON_TREE="93115d8d1a1ffff8c0adae7f85fa0d63bf33a7c3"
 CROS_WORKON_INCREMENTAL_BUILD=1
 CROS_WORKON_OUTOFTREE_BUILD=1
 CROS_WORKON_PROJECT="chromiumos/platform/moblab"
@@ -18,15 +18,17 @@ HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/moblab/+/master/
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE=""
+IUSE="docker"
 
 SRC_URI="${BASE_SRC_URI}/mobmonitor-ui-node_modules-0.0.2.tar.gz"
 
 RDEPEND="
+		docker? ( app-emulation/docker )
 		dev-python/futures
-		net-libs/grpc
-		dev-python/protobuf-python
 		dev-python/google-cloud-storage
+		dev-python/grpcio
+		dev-python/protobuf-python
+		net-libs/grpc
 "
 
 DEPEND="${RDEPEND}
