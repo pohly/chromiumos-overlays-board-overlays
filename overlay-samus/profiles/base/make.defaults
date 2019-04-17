@@ -33,8 +33,11 @@ USE="${USE} pd_sync"
 # The firmware in PD_FIRMWARE must belong to EC_FIRMWARE_EXTRA.
 PD_FIRMWARE="samus_pd"
 
+# Google USBPD peripheral firmwares
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
+
 # Audio, WiFi and BT driver firmware
-LINUX_FIRMWARE="cros-pd fw_sst2 ibt-hw iwlwifi-7260"
+LINUX_FIRMWARE="fw_sst2 ibt-hw iwlwifi-7260"
 
 # Use ext4 crypto
 USE="${USE} direncryption"
