@@ -40,9 +40,13 @@ src_install() {
 	exeinto "/opt/google/touch/scripts"
 	doexe "${FILESDIR}"/get_board_specific_wacom_hwid.sh
 
+	dosbin "${FILESDIR}"/control_usb_charge_mode.sh
+
 	unibuild_install_audio_files
 	unibuild_install_thermal_files
 
 	# Configure Pen Eject as a wakeup source
 	udev_dorules "${FILESDIR}/93-powerd-overrides.rules"
+	# Monitor udev event for USB A ports to control power of re-driver.
+	udev_dorules "${FILESDIR}/99-chromeos-octopus-usb-charge-mode.rules"
 }
