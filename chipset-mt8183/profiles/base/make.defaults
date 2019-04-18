@@ -39,3 +39,6 @@ USE="${USE} gpu_sandbox_start_early"
 
 # Turn on the video cards this board uses.
 VIDEO_CARDS="mediatek"
+
+# For MT8183 MINIGBM only
+MTK_MINIGBM_PLATFORM="MT8183"
