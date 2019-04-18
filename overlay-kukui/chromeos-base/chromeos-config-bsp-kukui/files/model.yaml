@@ -35,7 +35,7 @@ krane-config: &krane_config
   <<: *common_config
   $fw-name: "google,krane"
   $fw-build-name: "krane"
-  $key-id: "DEFAULT"
+  $key-id: "KRANE"
 
 chromeos:
   devices:
