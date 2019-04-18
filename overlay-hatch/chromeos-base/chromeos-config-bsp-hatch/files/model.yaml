@@ -24,6 +24,10 @@ common_config: &common_config
     touchpad-wakeup: "1"
     has-keyboard-backlight: "1"
     has-ambient-light-sensor: "1"
+    $internal-backlight-als-steps: |-
+      80.0 55.0 -1 400
+      100.0 80.0 100 -1
+    internal-backlight-als-steps: "{{$internal-backlight-als-steps}}"
   hardware-properties:
     $stylus-category: "none"
     stylus-category: "{{$stylus-category}}"
@@ -43,6 +47,9 @@ chromeos:
           config: *common_config
     - $device-name: "hatch_whl"
       $fw-name: "Hatch_whl"
+      $internal-backlight-als-steps: |-
+        80.0 52.0 -1 400
+        100.0 80.0 100 -1
       products:
         - $key-id: "HATCH"
       skus:
