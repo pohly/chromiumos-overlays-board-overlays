@@ -33,7 +33,7 @@ SectionDevice."Headphone".0 {
 		JackName "mt8183_mt6358_ts3a227_max98357 Headset Jack"
 		JackType "gpio"
 		JackSwitch "2"
-		OutputDspName ""
+		DspName ""
 	}
 	EnableSequence [
 		cdev "hw:mt8183mt6358ts3"

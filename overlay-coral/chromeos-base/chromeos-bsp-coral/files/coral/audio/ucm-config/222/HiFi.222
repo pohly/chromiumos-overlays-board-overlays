@@ -59,7 +59,7 @@ SectionDevice."Headphone".0 {
 		JackName "bxtda7219max Headset Jack"
 		JackType "gpio"
 		JackSwitch "2"
-		OutputDspName ""
+		DspName ""
 	}
 	EnableSequence [
 		cdev "hw:bxtda7219max"
@@ -82,7 +82,7 @@ SectionDevice."Line Out".0 {
 		JackName "bxtda7219max Headset Jack"
 		JackType "gpio"
 		JackSwitch "6"
-		OutputDspName ""
+		DspName ""
 	}
 	EnableSequence [
 		cdev "hw:bxtda7219max"
