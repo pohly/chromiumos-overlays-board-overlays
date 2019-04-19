@@ -26,11 +26,25 @@ chromeos:
             <<: *device_config
     - $device-name: "c18"
       skus:
+        # TODO: sku-id 0x1 to be removed.
         - $sku-id: 0x1
+          config:
+            <<: *device_config
+        - $sku-id: 0x20001
+          config:
+            <<: *device_config
+        - $sku-id: 0x40001
           config:
             <<: *device_config
     - $device-name: "c19"
       skus:
+        # TODO: sku-id 0x3 to be removed.
         - $sku-id: 0x3
+          config:
+            <<: *device_config
+        - $sku-id: 0x10003
+          config:
+            <<: *device_config
+        - $sku-id: 0x30003
           config:
             <<: *device_config
