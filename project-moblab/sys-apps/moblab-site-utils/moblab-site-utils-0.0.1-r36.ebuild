@@ -3,8 +3,8 @@
 
 EAPI=6
 
-CROS_WORKON_COMMIT="6de4b38bf1aceeed300b9066e9d6621f581cd7fe"
-CROS_WORKON_TREE="fdea22921de9a44333b3bf96395fb13b2c465a99"
+CROS_WORKON_COMMIT="ab055f6bfc42c2d459d20f07feb6be68eaad4f10"
+CROS_WORKON_TREE="3e1059fe6a2fe25b6aa191ee94bbb2abf3e88277"
 CROS_WORKON_INCREMENTAL_BUILD=1
 CROS_WORKON_OUTOFTREE_BUILD=1
 CROS_WORKON_PROJECT="chromiumos/platform/moblab"
@@ -12,22 +12,21 @@ CROS_WORKON_LOCALNAME="../platform/moblab"
 
 inherit cros-workon
 
-DESCRIPTION="MobLab sys-app that monitors system essential services"
-HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/moblab/+/master/src/mobmonitor/"
+DESCRIPTION="Autotest site_utils specific to Moblab"
+HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/moblab/+/master/src/tools"
 
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
 IUSE=""
 
-RDEPEND=""
+RDEPEND="chromeos-base/autotest-server"
 
 DEPEND="
 	${RDEPEND}
 "
-MOBMONITOR_BASE="/etc/moblab/mobmonitor"
 
 src_install() {
-	insinto "${MOBMONITOR_BASE}"
-	doins -r src/mobmonitor/*
+	insinto /autotest/site_utils
+	doins src/tools/*.py
 }
