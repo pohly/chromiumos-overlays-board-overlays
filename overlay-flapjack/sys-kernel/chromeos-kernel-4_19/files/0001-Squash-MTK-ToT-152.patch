@@ -1,9 +1,9 @@
-From 863cd99de70af2f5c03c6b351f00bd442ef5c795 Mon Sep 17 00:00:00 2001
+From a0bcda69afa771861cb9fb528678b07be469d124 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 18 Apr 2019 12:12:42 -0700
-Subject: [PATCH 1/2] MTK TOT #150
+Date: Sun, 21 Apr 2019 09:47:13 -0700
+Subject: [PATCH 1/4] Squash MTK ToT #152.
 
-Change-Id: I2a2fb4006a08823dd291ce0dcd5b16efa54e37d4
+Change-Id: Ic3d5e3ab135ed2fe52e69a66b3ad003013bec303
 ---
  .../display/mediatek/mediatek,dsi.txt         |    2 +-
  .../devicetree/bindings/mailbox/mtk-gce.txt   |   37 +-
@@ -14,11 +14,11 @@ Change-Id: I2a2fb4006a08823dd291ce0dcd5b16efa54e37d4
  Makefile                                      |    1 +
  README                                        |    1 +
  arch/arm64/boot/dts/mediatek/Makefile         |    1 +
- arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |   21 +
- .../boot/dts/mediatek/mt8183-kukui-rev1.dts   |  222 ++
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |    4 +
+ .../boot/dts/mediatek/mt8183-kukui-rev1.dts   |   11 +
  .../boot/dts/mediatek/mt8183-kukui-rev2.dts   |  430 ++++
- .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  576 ++++-
- arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  765 +++++-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  295 ++-
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  611 ++++-
  .../arm64/chromiumos-arm64.flavour.config     |   29 +-
  .../arm64/chromiumos-mediatek.flavour.config  |   47 +-
  .../arm64/chromiumos-qualcomm.flavour.config  |    7 +
@@ -61,15 +61,14 @@ Change-Id: I2a2fb4006a08823dd291ce0dcd5b16efa54e37d4
  drivers/mmc/host/mtk-sd.c                     |    5 +
  drivers/mmc/host/mtk-sdio-proc.c              |  342 +++
  drivers/mmc/host/mtk-sdio-proc.h              |   48 +
- drivers/net/wireless/ath/ath10k/core.c        |   36 +-
- drivers/net/wireless/ath/ath10k/htt_rx.c      |    4 +-
- drivers/net/wireless/ath/ath10k/htt_tx.c      |   16 +-
- drivers/net/wireless/ath/ath10k/hw.h          |    4 +
- drivers/net/wireless/ath/ath10k/sdio.c        |    2 -
- drivers/net/wireless/ath/ath10k/txrx.c        |    2 +-
- drivers/platform/chrome/Kconfig               |    9 +
- drivers/platform/chrome/Makefile              |    1 +
- drivers/platform/chrome/cros_ec_rpmsg.c       |  258 ++
+ drivers/net/wireless/ath/ath10k/core.c        |   37 +-
+ drivers/net/wireless/ath/ath10k/core.h        |    9 +
+ drivers/net/wireless/ath/ath10k/htt.h         |   54 +-
+ drivers/net/wireless/ath/ath10k/htt_rx.c      |  377 ++-
+ drivers/net/wireless/ath/ath10k/htt_tx.c      |   20 +-
+ drivers/net/wireless/ath/ath10k/hw.h          |    7 +
+ drivers/net/wireless/ath/ath10k/sdio.c        |   12 +-
+ drivers/net/wireless/ath/ath10k/txrx.c        |    3 +
  drivers/pwm/pwm-mtk-disp.c                    |   54 +-
  drivers/remoteproc/Kconfig                    |   10 +
  drivers/remoteproc/Makefile                   |    1 +
@@ -93,7 +92,7 @@ Change-Id: I2a2fb4006a08823dd291ce0dcd5b16efa54e37d4
  include/linux/soc/mediatek/mtk-cmdq.h         |   62 +-
  include/soc/mediatek/emi.h                    |  116 +
  sound/soc/mediatek/mt8183/mt8183-afe-pcm.c    |   16 +
- 88 files changed, 11777 insertions(+), 626 deletions(-)
+ 87 files changed, 11293 insertions(+), 634 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
  create mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
  create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
@@ -111,7 +110,6 @@ Change-Id: I2a2fb4006a08823dd291ce0dcd5b16efa54e37d4
  create mode 100644 drivers/memory/mtk-emi.c
  create mode 100644 drivers/mmc/host/mtk-sdio-proc.c
  create mode 100644 drivers/mmc/host/mtk-sdio-proc.h
- create mode 100644 drivers/platform/chrome/cros_ec_rpmsg.c
  create mode 100644 drivers/remoteproc/mtk_common.h
  create mode 100644 drivers/remoteproc/mtk_scp.c
  create mode 100644 drivers/remoteproc/mtk_scp_ipi.c
@@ -314,7 +312,7 @@ index 000000000000..3ba668bab14b
 +		clock-names = "main";
 +	};
 diff --git a/Makefile b/Makefile
-index 125bed3ba01c..8640fe6adb54 100644
+index cb22f3dc7848..520a4f465963 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -341,10 +339,10 @@ index d9124842fdd0..3a55c454b65d 100644
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-index 194e0a749910..d9980051f9b6 100644
+index 50dc1e1a6881..d9980051f9b6 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-@@ -38,6 +38,27 @@
+@@ -38,6 +38,10 @@
  	};
  };
  
@@ -352,236 +350,17 @@ index 194e0a749910..d9980051f9b6 100644
 +	status = "okay";
 +};
 +
-+&gpu {
-+	supply-names = "mali","mali_sram";
-+	mali-supply = <&mt6358_vgpu_reg>;
-+	mali_sram-supply = <&mt6358_vsram_gpu_reg>;
-+	operating-points-v2 = <&gpu_opp_table>;
-+	power_model@0 {
-+		compatible = "arm,mali-simple-power-model";
-+		static-coefficient = <2427750>;
-+		dynamic-coefficient = <4687>;
-+		ts = <20000 2000 (-20) 2>;
-+		thermal-zone = "cpu_thermal";
-+	};
-+	power_model@1 {
-+		compatible = "arm,mali-g72-power-model";
-+		scale = <15000>;
-+	};
-+};
- 
- &mmc0 {
- 	status = "okay";
+ &gpu {
+ 	supply-names = "mali","mali_sram";
+ 	mali-supply = <&mt6358_vgpu_reg>;
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-index c8fef9e15ace..9a19b9d7a8fd 100644
+index 46b8f0c16d7b..9a19b9d7a8fd 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-@@ -10,3 +10,225 @@
- 	model = "MediaTek kukui rev1 board";
- 	compatible = "google,kukui-rev1", "google,kukui", "mediatek,mt8183";
+@@ -212,6 +212,17 @@
+ 		"";
  };
-+
-+&pio {
-+	/* 192 lines */
-+	gpio-line-names =
-+		"SPI_AP_EC_CS_L",
-+		"SPI_AP_EC_MOSI",
-+		"SPI_AP_EC_CLK",
-+		"I2S3_DO",
-+		"USB_PD_INT_ODL",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"IT6505_HPD_L",
-+		"I2S3_TDM_D3",
-+		"SOC_I2C6_1V8_SCL",
-+		"SOC_I2C6_1V8_SDA",
-+		"DPI_D0",
-+		"DPI_D1",
-+		"DPI_D2",
-+		"DPI_D3",
-+		"DPI_D4",
-+		"DPI_D5",
-+		"DPI_D6",
-+		"DPI_D7",
-+		"DPI_D8",
-+		"DPI_D9",
-+		"DPI_D10",
-+		"DPI_D11",
-+		"DPI_HSYNC",
-+		"DPI_VSYNC",
-+		"DPI_DE",
-+		"DPI_CK",
-+		"AP_MSDC1_CLK",
-+		"AP_MSDC1_DAT3",
-+		"AP_MSDC1_CMD",
-+		"AP_MSDC1_DAT0",
-+		"AP_MSDC1_DAT2",
-+		"AP_MSDC1_DAT1",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"OTG_EN",
-+		"DRVBUS",
-+		"DISP_PWM",
-+		"DSI_TE",
-+		"LCM_RST_1V8",
-+		"AP_CTS_WIFI_RTS",
-+		"AP_RTS_WIFI_CTS",
-+		"SOC_I2C5_1V8_SCL",
-+		"SOC_I2C5_1V8_SDA",
-+		"SOC_I2C3_1V8_SCL",
-+		"SOC_I2C3_1V8_SDA",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"SOC_I2C1_1V8_SDA",
-+		"SOC_I2C0_1V8_SDA",
-+		"SOC_I2C0_1V8_SCL",
-+		"SOC_I2C1_1V8_SCL",
-+		"AP_SPI_H1_MISO",
-+		"AP_SPI_H1_CS_L",
-+		"AP_SPI_H1_MOSI",
-+		"AP_SPI_H1_CLK",
-+		"I2S5_BCK",
-+		"I2S5_LRCK",
-+		"I2S5_DO",
-+		"BOOTBLOCK_EN_L",
-+		"MT8183_KPCOL0",
-+		"SPI_AP_EC_MISO",
-+		"UART_DBG_TX_AP_RX",
-+		"UART_AP_TX_DBG_RX",
-+		"I2S2_MCK",
-+		"I2S2_BCK",
-+		"CLK_5M_WCAM",
-+		"CLK_2M_UCAM",
-+		"I2S2_LRCK",
-+		"I2S2_DI",
-+		"SOC_I2C2_1V8_SCL",
-+		"SOC_I2C2_1V8_SDA",
-+		"SOC_I2C4_1V8_SCL",
-+		"SOC_I2C4_1V8_SDA",
-+		"",
-+		"SCL8",
-+		"SDA8",
-+		"FCAM_PWDN_L",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		/*
-+		 * AP_FLASH_WP_L is crossystem ABI. Rev1 schematics
-+		 * call it BIOS_FLASH_WP_R_L.
-+		 */
-+		"AP_FLASH_WP_L",
-+		"EC_AP_INT_ODL",
-+		"IT6505_INT_ODL",
-+		"H1_INT_OD_L",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"AP_SPI_FLASH_MISO",
-+		"AP_SPI_FLASH_CS_L",
-+		"AP_SPI_FLASH_MOSI",
-+		"AP_SPI_FLASH_CLK",
-+		"DA7219_IRQ",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"";
-+};
-+
+ 
 +&scp_pins {
 +	pins_scp_uart {
 +		pinmux = <PINMUX_GPIO11__FUNC_TP_URXD1_AO>,
@@ -593,15 +372,9 @@ index c8fef9e15ace..9a19b9d7a8fd 100644
 +	status = "disabled";
 +};
 +
-+/* Touch reset pin is active-high on rev1. */
-+&touchscreen {
-+	reset-gpios = <&pio 156 0>;
-+};
-+
-+&touch_pin_reset {
-+	/delete-property/ output-low;
-+	output-high;
-+};
+ /* Touch reset pin is active-high on rev1. */
+ &touchscreen {
+ 	reset-gpios = <&pio 156 0>;
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 new file mode 100644
 index 000000000000..b12a09aeba4e
@@ -1039,7 +812,7 @@ index 000000000000..b12a09aeba4e
 +	};
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 023ff1d49736..467bc98f551e 100644
+index f8e1c7f9f603..467bc98f551e 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -14,6 +14,17 @@
@@ -1092,7 +865,7 @@ index 023ff1d49736..467bc98f551e 100644
  	reserved_memory: reserved-memory {
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -37,13 +73,133 @@
+@@ -37,6 +73,94 @@
  			alloc-ranges = <0 0x40000000 0 0x60000000>;
  		};
  	};
@@ -1184,50 +957,10 @@ index 023ff1d49736..467bc98f551e 100644
 +			};
 +		};
 +	};
-+};
-+
-+&gpu {
-+	supply-names = "mali","mali_sram";
-+	mali-supply = <&mt6358_vgpu_reg>;
-+	mali_sram-supply = <&mt6358_vsram_gpu_reg>;
-+	operating-points-v2 = <&gpu_opp_table>;
-+	power_model@0 {
-+		compatible = "arm,mali-simple-power-model";
-+		static-coefficient = <2427750>;
-+		dynamic-coefficient = <4687>;
-+		ts = <20000 2000 (-20) 2>;
-+		thermal-zone = "cpu_thermal";
-+	};
-+	power_model@1 {
-+		compatible = "arm,mali-g72-power-model";
-+		scale = <15000>;
-+	};
  };
  
- &i2c0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c0_pins>;
- 	status = "okay";
--	clock-frequency = <100000>;
-+	clock-frequency = <400000>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	touchscreen: touchscreen@10 {
-+		compatible = "elan,ekth3500";
-+		reg = <0x10>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <155 IRQ_TYPE_LEVEL_LOW>;
-+		int-gpio = <&pio 155 0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&touch_default>;
-+
-+		reset-gpios = <&pio 156 1>;
-+	};
- };
- 
- &i2c1 {
-@@ -79,6 +235,17 @@
+ &gpu {
+@@ -111,6 +235,17 @@
  	pinctrl-0 = <&i2c5_pins>;
  	status = "okay";
  	clock-frequency = <100000>;
@@ -1245,7 +978,7 @@ index 023ff1d49736..467bc98f551e 100644
  };
  
  &i2c6 {
-@@ -95,6 +262,10 @@
+@@ -127,6 +262,10 @@
  	clock-frequency = <100000>;
  };
  
@@ -1256,32 +989,7 @@ index 023ff1d49736..467bc98f551e 100644
  &mmc0 {
  	status = "okay";
  	pinctrl-names = "default", "state_uhs";
-@@ -116,11 +287,86 @@
- 	non-removable;
- };
- 
-+&mmc1 {
-+	status = "okay";
-+	pinctrl-names = "default", "state_uhs";
-+	pinctrl-0 = <&mmc1_pins_default>;
-+	pinctrl-1 = <&mmc1_pins_uhs>;
-+	vmmc-supply = <&mt6358_vmch_reg>;
-+	vqmmc-supply = <&mt6358_vmc_reg>;
-+	bus-width = <4>;
-+	max-frequency = <200000000>;
-+	drv-type = <2>;
-+	cap-sd-highspeed;
-+	sd-uhs-sdr50;
-+	sd-uhs-sdr104;
-+	keep-power-in-suspend;
-+	enable-sdio-wakeup;
-+	cap-sdio-irq;
-+	non-removable;
-+	no-mmc;
-+	no-sd;
-+};
-+
- &mt6358_vdram2_reg {
+@@ -173,7 +312,46 @@
  	regulator-always-on;
  };
  
@@ -1325,72 +1033,25 @@ index 023ff1d49736..467bc98f551e 100644
 +		};
 +	};
 +
-+	ec_ap_int_odl: ec_ap_int_odl {
-+		pins1 {
-+			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	h1_int_od_l: h1_int_od_l {
-+		pins1 {
-+			pinmux = <PINMUX_GPIO153__FUNC_GPIO153>;
-+			input-enable;
-+		};
-+	};
-+
- 	i2c0_pins: i2c0 {
- 		pins_bus {
- 			pinmux = <PINMUX_GPIO82__FUNC_SDA0>,
-@@ -254,14 +500,319 @@
- 			mediatek,pull-up-adv = <01>;
+ 	ec_ap_int_odl: ec_ap_int_odl {
+ 		pins1 {
+ 			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
+@@ -344,11 +522,6 @@
+ 			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
+ 			output-high;
+ 		};
+-
+-		pins_bt {
+-			pinmux = <PINMUX_GPIO120__FUNC_GPIO120>;
+-			output-high;
+-		};
+ 	};
+ 
+ 	mmc1_pins_uhs: mmc1@0 {
+@@ -371,6 +544,38 @@
  		};
  	};
-+
-+	mmc1_pins_default: mmc1default {
-+		pins_cmd_dat {
-+			pinmux = <PINMUX_GPIO31__FUNC_MSDC1_CMD>,
-+				 <PINMUX_GPIO32__FUNC_MSDC1_DAT0>,
-+				 <PINMUX_GPIO34__FUNC_MSDC1_DAT1>,
-+				 <PINMUX_GPIO33__FUNC_MSDC1_DAT2>,
-+				 <PINMUX_GPIO30__FUNC_MSDC1_DAT3>;
-+			input-enable;
-+			mediatek,pull-up-adv = <10>;
-+		};
-+
-+		pins_clk {
-+			pinmux = <PINMUX_GPIO29__FUNC_MSDC1_CLK>;
-+			input-enable;
-+			mediatek,pull-down-adv = <10>;
-+		};
-+
-+		pins_wifi {
-+			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
-+			output-high;
-+		};
-+	};
-+
-+	mmc1_pins_uhs: mmc1@0 {
-+		pins_cmd_dat {
-+			pinmux = <PINMUX_GPIO31__FUNC_MSDC1_CMD>,
-+				 <PINMUX_GPIO32__FUNC_MSDC1_DAT0>,
-+				 <PINMUX_GPIO34__FUNC_MSDC1_DAT1>,
-+				 <PINMUX_GPIO33__FUNC_MSDC1_DAT2>,
-+				 <PINMUX_GPIO30__FUNC_MSDC1_DAT3>;
-+			drive-strength = <MTK_DRIVE_6mA>;
-+			input-enable;
-+			mediatek,pull-up-adv = <10>;
-+		};
-+
-+		pins_clk {
-+			pinmux = <PINMUX_GPIO29__FUNC_MSDC1_CLK>;
-+			drive-strength = <MTK_DRIVE_8mA>;
-+			mediatek,pull-down-adv = <10>;
-+			input-enable;
-+		};
-+	};
-+
+ 
 +	panel_pins_default: panel_pins_default {
 +		panel_reset {
 +			pinmux = <PINMUX_GPIO45__FUNC_GPIO45>;
@@ -1423,81 +1084,13 @@ index 023ff1d49736..467bc98f551e 100644
 +		};
 +	};
 +
-+	spi_pins_0: spi0@0 {
-+		pins_spi{
-+			pinmux = <PINMUX_GPIO85__FUNC_SPI0_MI>,
-+				 <PINMUX_GPIO86__FUNC_SPI0_CSB>,
-+				 <PINMUX_GPIO87__FUNC_SPI0_MO>,
-+				 <PINMUX_GPIO88__FUNC_SPI0_CLK>;
-+			bias-disable;
-+		};
-+	};
-+
-+	spi_pins_1: spi1@0 {
-+		pins_spi{
-+			pinmux = <PINMUX_GPIO161__FUNC_SPI1_A_MI>,
-+				 <PINMUX_GPIO162__FUNC_SPI1_A_CSB>,
-+				 <PINMUX_GPIO163__FUNC_SPI1_A_MO>,
-+				 <PINMUX_GPIO164__FUNC_SPI1_A_CLK>;
-+			bias-disable;
-+		};
-+	};
-+
-+	spi_pins_2: spi2@0 {
-+		pins_spi{
-+			pinmux = <PINMUX_GPIO0__FUNC_SPI2_CSB>,
-+				 <PINMUX_GPIO1__FUNC_SPI2_MO>,
-+				 <PINMUX_GPIO2__FUNC_SPI2_CLK>;
-+			bias-disable;
-+		};
-+		pins_spi_mi {
-+			pinmux = <PINMUX_GPIO94__FUNC_SPI2_MI>;
-+			mediatek,pull-down-adv = <00>;
-+		};
-+	};
-+
-+	spi_pins_3: spi3@0 {
-+		pins_spi{
-+			pinmux = <PINMUX_GPIO21__FUNC_SPI3_MI>,
-+				 <PINMUX_GPIO22__FUNC_SPI3_CSB>,
-+				 <PINMUX_GPIO23__FUNC_SPI3_MO>,
-+				 <PINMUX_GPIO24__FUNC_SPI3_CLK>;
-+			bias-disable;
-+		};
-+	};
-+
-+	spi_pins_4: spi4@0 {
-+		pins_spi{
-+			pinmux = <PINMUX_GPIO17__FUNC_SPI4_MI>,
-+				 <PINMUX_GPIO18__FUNC_SPI4_CSB>,
-+				 <PINMUX_GPIO19__FUNC_SPI4_MO>,
-+				 <PINMUX_GPIO20__FUNC_SPI4_CLK>;
-+			bias-disable;
-+		};
-+	};
-+
-+	spi_pins_5: spi5@0 {
-+		pins_spi{
-+			pinmux = <PINMUX_GPIO13__FUNC_SPI5_MI>,
-+				 <PINMUX_GPIO14__FUNC_SPI5_CSB>,
-+				 <PINMUX_GPIO15__FUNC_SPI5_MO>,
-+				 <PINMUX_GPIO16__FUNC_SPI5_CLK>;
-+			bias-disable;
-+		};
-+	};
-+
-+	touch_default: touchdefault {
-+		pin_irq {
-+			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		touch_pin_reset: pin_reset {
-+			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
-+			output-low;
-+		};
-+	};
+ 	spi_pins_0: spi0@0 {
+ 		pins_spi{
+ 			pinmux = <PINMUX_GPIO85__FUNC_SPI0_MI>,
+@@ -446,12 +651,72 @@
+ 			output-low;
+ 		};
+ 	};
 +
 +	ts3a227e_pins: ts3a227e_pins {
 +		pins1 {
@@ -1564,99 +1157,12 @@ index 023ff1d49736..467bc98f551e 100644
 +	status = "okay";
 +};
 +
-+&spi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_pins_0>;
-+	mediatek,pad-select = <0>;
-+	status = "okay";
-+
-+	cr50@0 {
-+		compatible = "google,cr50";
-+		reg = <0>;
-+		spi-max-frequency = <1000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&h1_int_od_l>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <153 IRQ_TYPE_EDGE_RISING>;
-+	};
-+};
-+
-+&spi1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_pins_1>;
-+	mediatek,pad-select = <0>;
-+	status = "okay";
-+
-+	spi@0 {
-+		compatible = "winbond,w25q64dw", "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <25000000>;
-+	};
-+};
-+
-+&spi2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_pins_2>;
-+	mediatek,pad-select = <0>;
-+	status = "okay";
-+
-+	cros_ec: ec@0 {
-+		compatible = "google,cros-ec-spi";
-+		reg = <0>;
-+		spi-max-frequency = <3000000>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <151 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ec_ap_int_odl>;
-+
-+		i2c_tunnel: i2c-tunnel {
-+			compatible = "google,cros-ec-i2c-tunnel";
-+			google,remote-bus = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&spi3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_pins_3>;
-+	mediatek,pad-select = <0>;
-+	status = "disabled";
-+
-+	spidev3: spi@0 {
-+		compatible = "linux,spidev";
-+		reg = <0>;
-+		spi-max-frequency = <1000000>;
-+	};
-+};
-+
-+&spi4 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_pins_4>;
-+	mediatek,pad-select = <0>;
-+	status = "disabled";
-+
-+	spidev4: spi@0 {
-+		compatible = "linux,spidev";
-+		reg = <0>;
-+		spi-max-frequency = <1000000>;
-+	};
-+};
-+
-+&spi5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_pins_5>;
-+	mediatek,pad-select = <0>;
-+	status = "disabled";
-+
-+	spidev5: spi@0 {
-+		compatible = "linux,spidev";
-+		reg = <0>;
-+		spi-max-frequency = <1000000>;
-+	};
-+};
-+
+ &spi0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi_pins_0>;
+@@ -546,7 +811,8 @@
+ };
+ 
  &ssusb {
 -	dr_mode = "host";
 +	maximum-speed = "high-speed";
@@ -1664,7 +1170,7 @@ index 023ff1d49736..467bc98f551e 100644
  	vusb33-supply = <&mt6358_vusb_reg>;
  	status = "okay";
  };
-@@ -276,5 +827,26 @@
+@@ -561,9 +827,26 @@
  };
  
  &uart0 {
@@ -1672,7 +1178,7 @@ index 023ff1d49736..467bc98f551e 100644
 +	pinctrl-0 = <&uart0_pin>;
  	status = "okay";
  };
-+
+ 
 +&uart1 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart1_pin>;
@@ -1688,11 +1194,11 @@ index 023ff1d49736..467bc98f551e 100644
 +	};
 +};
 +
-+#include <arm/cros-ec-keyboard.dtsi>
-+#include <arm/cros-ec-sbs.dtsi>
-+
+ #include <arm/cros-ec-keyboard.dtsi>
+ #include <arm/cros-ec-sbs.dtsi>
+ 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 0915a8aafbb7..3c8c6fd1a26e 100644
+index 77357ae4ebbe..eaf3be4b3568 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 @@ -6,11 +6,14 @@
@@ -2289,7 +1795,7 @@ index 0915a8aafbb7..3c8c6fd1a26e 100644
  		i2c3: i2c@1100f000 {
  			compatible = "mediatek,mt8183-i2c";
  			reg = <0 0x1100f000 0 0x1000>,
-@@ -635,10 +1112,120 @@
+@@ -635,10 +1112,100 @@
  			};
  		};
  
@@ -2388,8 +1894,13 @@ index 0915a8aafbb7..3c8c6fd1a26e 100644
 +						  /*"top_apll12_div5",*/
 +						  "top_clk26m_clk";
 +			};
-+		};
-+
+ 		};
+ 
+ 		mmc0: mmc@11230000 {
+@@ -665,6 +1232,26 @@
+ 			status = "disabled";
+ 		};
+ 
 +		mipi_tx0: mipi-dphy@11e50000 {
 +			compatible = "mediatek,mt8183-mipi-tx";
 +			reg = <0 0x11e50000 0 0x1000>;
@@ -2408,171 +1919,12 @@ index 0915a8aafbb7..3c8c6fd1a26e 100644
 +			thermal_calibration: calib@180 {
 +				reg = <0x180 0xc>;
 +			};
- 		};
- 
- 		mmc0: mmc@11230000 {
-@@ -695,6 +1282,160 @@
- 			#clock-cells = <1>;
- 		};
- 
-+		gpu: mali@13040000 {
-+			compatible = "arm,mali-midgard";
-+			reg = <0 0x13040000 0 0x4000>;
-+			interrupts =
-+				<GIC_SPI 278 IRQ_TYPE_LEVEL_LOW>,
-+				<GIC_SPI 279 IRQ_TYPE_LEVEL_LOW>,
-+				<GIC_SPI 280 IRQ_TYPE_LEVEL_LOW>;
-+			interrupt-names = "GPU", "MMU", "JOB";
-+
-+			clocks =
-+				<&topckgen CLK_TOP_MFGPLL_CK>,
-+				<&topckgen CLK_TOP_MUX_MFG>,
-+				<&clk26m>,
-+				<&mfgcfg CLK_MFG_BG3D>;
-+			clock-names =
-+				"clk_main_parent",
-+				"clk_mux",
-+				"clk_sub_parent",
-+				"subsys_mfg_cg";
-+
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_CORE0>;
-+
-+			#cooling-cells = <2>;
-+			cooling-min-level = <0>;
-+			cooling-max-level = <15>;
 +		};
 +
-+		gpu_core1: mali_gpu_core1 {
-+			compatible = "mediatek,gpu_core1";
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_CORE1>;
-+		};
-+
-+		gpu_core2: mali_gpu_core2 {
-+			compatible = "mediatek,gpu_core2";
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
-+		};
-+
-+		gpu_opp_table: opp_table0 {
-+			compatible = "operating-points-v2", "operating-points-v2-mali";
-+			opp-shared;
-+
-+			opp-300000000 {
-+				opp-hz = /bits/ 64 <300000000>;
-+				opp-microvolt = <625000>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-320000000 {
-+				opp-hz = /bits/ 64 <320000000>;
-+				opp-microvolt = <631250>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-340000000 {
-+				opp-hz = /bits/ 64 <340000000>;
-+				opp-microvolt = <637500>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-360000000 {
-+				opp-hz = /bits/ 64 <360000000>;
-+				opp-microvolt = <643750>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-380000000 {
-+				opp-hz = /bits/ 64 <380000000>;
-+				opp-microvolt = <650000>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-400000000 {
-+				opp-hz = /bits/ 64 <400000000>;
-+				opp-microvolt = <656250>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-420000000 {
-+				opp-hz = /bits/ 64 <420000000>;
-+				opp-microvolt = <662500>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-460000000 {
-+				opp-hz = /bits/ 64 <460000000>;
-+				opp-microvolt = <675000>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-500000000 {
-+				opp-hz = /bits/ 64 <500000000>;
-+				opp-microvolt = <687500>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-540000000 {
-+				opp-hz = /bits/ 64 <540000000>;
-+				opp-microvolt = <700000>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-580000000 {
-+				opp-hz = /bits/ 64 <580000000>;
-+				opp-microvolt = <712500>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-620000000 {
-+				opp-hz = /bits/ 64 <620000000>;
-+				opp-microvolt = <725000>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-653000000 {
-+				opp-hz = /bits/ 64 <653000000>;
-+				opp-microvolt = <743750>, /* Supply 0 */
-+						<850000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-698000000 {
-+				opp-hz = /bits/ 64 <698000000>;
-+				opp-microvolt = <768750>, /* Supply 0 */
-+						<868750>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-743000000 {
-+				opp-hz = /bits/ 64 <743000000>;
-+				opp-microvolt = <793750>, /* Supply 0 */
-+						<893750>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+
-+			opp-800000000 {
-+				opp-hz = /bits/ 64 <800000000>;
-+				opp-microvolt = <825000>, /* Supply 0 */
-+						<925000>; /* Supply 1 */
-+				opp-core-mask = /bits/ 64 <0xf>;
-+			};
-+		};
-+
- 		mmsys: syscon@14000000 {
- 			compatible = "mediatek,mt8183-mmsys", "syscon";
- 			reg = <0 0x14000000 0 0x1000>;
-@@ -800,6 +1541,28 @@
+ 		u3phy: usb-phy@11f40000 {
+ 			compatible = "mediatek,generic-tphy-v2";
+ 			#address-cells = <2>;
+@@ -954,6 +1541,28 @@
  			clocks = <&mmsys CLK_MM_DISP_DITHER0>;
  		};
  
@@ -2602,7 +1954,7 @@ index 0915a8aafbb7..3c8c6fd1a26e 100644
  			compatible = "mediatek,mt8183-smi-larb";
  			reg = <0 0x14017000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 6df094a05a7b..c415e9a2f7c8 100644
+index 14dbbc992e29..86ef390d6160 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 @@ -124,6 +124,7 @@ CONFIG_COMMON_CLK_RK808=y
@@ -2613,7 +1965,7 @@ index 6df094a05a7b..c415e9a2f7c8 100644
  # CONFIG_CRYPTO_DEV_CAVIUM_ZIP is not set
  # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
  # CONFIG_CRYPTO_DEV_QCE is not set
-@@ -203,7 +204,7 @@ CONFIG_EFI_STUB=y
+@@ -204,7 +205,7 @@ CONFIG_EFI_STUB=y
  # CONFIG_EFI_VARS is not set
  CONFIG_EINT_MTK=y
  # CONFIG_EMAC_ROCKCHIP is not set
@@ -2622,7 +1974,7 @@ index 6df094a05a7b..c415e9a2f7c8 100644
  # CONFIG_ENIC is not set
  # CONFIG_EPIC100 is not set
  # CONFIG_ET131X is not set
-@@ -388,13 +389,17 @@ CONFIG_MSM_GCC_8916=y
+@@ -389,13 +390,17 @@ CONFIG_MSM_GCC_8916=y
  # CONFIG_MTD_INTEL_VR_NOR is not set
  CONFIG_MTD_MT81xx_NOR=y
  # CONFIG_MTD_PMC551 is not set
@@ -2642,7 +1994,7 @@ index 6df094a05a7b..c415e9a2f7c8 100644
  CONFIG_MTK_SCPSYS=y
  CONFIG_MTK_SMI=y
  CONFIG_MTK_THERMAL=y
-@@ -667,6 +672,7 @@ CONFIG_ROCKCHIP_THERMAL=y
+@@ -668,6 +673,7 @@ CONFIG_ROCKCHIP_THERMAL=y
  CONFIG_ROCKCHIP_TIMER=y
  CONFIG_RPMSG=y
  CONFIG_RPMSG_CHAR=y
@@ -2650,7 +2002,7 @@ index 6df094a05a7b..c415e9a2f7c8 100644
  CONFIG_RPMSG_QCOM_GLINK_NATIVE=y
  CONFIG_RPMSG_QCOM_GLINK_SMEM=y
  CONFIG_RPMSG_QCOM_SMD=y
-@@ -919,22 +925,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
+@@ -920,22 +926,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
  # CONFIG_TYPHOON is not set
  CONFIG_UCS2_STRING=y
  # CONFIG_USB_AMD5536UDC is not set
@@ -2688,7 +2040,7 @@ index 6df094a05a7b..c415e9a2f7c8 100644
  CONFIG_VGA_ARB=y
  CONFIG_VGA_ARB_MAX_GPUS=16
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 31c87251d0be..580f6fa0ddba 100644
+index 30e9317390a8..cf176ec20448 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 @@ -24,6 +24,7 @@ CONFIG_ATH10K_TRACING=y
@@ -2709,7 +2061,7 @@ index 31c87251d0be..580f6fa0ddba 100644
  CONFIG_DRM_ANALOGIX_ANX78XX=y
  CONFIG_DRM_GEM_CMA_HELPER=y
  CONFIG_DRM_MEDIATEK=y
-@@ -74,14 +78,16 @@ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
+@@ -75,14 +79,16 @@ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  # CONFIG_DRM_PANEL_SHARP_LQ101R1SX01 is not set
  # CONFIG_DRM_PANEL_SHARP_LS043T1LE01 is not set
  # CONFIG_DRM_TI_SN65DSI86 is not set
@@ -2727,7 +2079,7 @@ index 31c87251d0be..580f6fa0ddba 100644
  CONFIG_I2C_HID=y
  CONFIG_I2C_MT65XX=y
  # CONFIG_I2C_RK3X is not set
-@@ -113,13 +119,17 @@ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
+@@ -114,13 +120,17 @@ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
  # CONFIG_MMC_DW is not set
  CONFIG_MMC_MTK=y
  CONFIG_MTD_MT81xx_NOR=y
@@ -2747,7 +2099,7 @@ index 31c87251d0be..580f6fa0ddba 100644
  CONFIG_MTK_SCPSYS=y
  CONFIG_MTK_SMI=y
  CONFIG_MTK_THERMAL=y
-@@ -151,13 +161,17 @@ CONFIG_REGULATOR_MT6358=y
+@@ -152,13 +162,17 @@ CONFIG_REGULATOR_MT6358=y
  # CONFIG_REGULATOR_TPS51632 is not set
  # CONFIG_REGULATOR_TPS62360 is not set
  # CONFIG_REGULATOR_TPS6586X is not set
@@ -2766,7 +2118,7 @@ index 31c87251d0be..580f6fa0ddba 100644
  # CONFIG_SENSORS_LM90 is not set
  # CONFIG_SENSORS_NTC_THERMISTOR is not set
  CONFIG_SENSORS_TMP401=y
-@@ -193,15 +207,27 @@ CONFIG_SPI_MT65XX=y
+@@ -194,15 +208,27 @@ CONFIG_SPI_MT65XX=y
  # CONFIG_SPMI is not set
  CONFIG_STAGING_MEDIA=y
  CONFIG_TCG_CR50_I2C=y
@@ -2797,7 +2149,7 @@ index 31c87251d0be..580f6fa0ddba 100644
  CONFIG_V4L2_MEM2MEM_DEV=y
  CONFIG_VIDEOBUF2_CORE=y
  CONFIG_VIDEOBUF2_DMA_CONTIG=y
-@@ -211,4 +237,11 @@ CONFIG_VIDEO_MEDIATEK_MDP=y
+@@ -212,4 +238,11 @@ CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIDEO_MEDIATEK_VPU=y
  # CONFIG_VIDEO_V4L2_SUBDEV_API is not set
@@ -2810,7 +2162,7 @@ index 31c87251d0be..580f6fa0ddba 100644
 +# CONFIG_VIRTIO_NET is not set
 +# CONFIG_VIRTIO_WL is not set
 diff --git a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-index a431cfe9a7f2..8bea0ed9c9dd 100644
+index d80920df41f9..df8dee5a9ad2 100644
 --- a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 @@ -43,6 +43,7 @@ CONFIG_COMMON_CLK_QCOM=y
@@ -2821,7 +2173,7 @@ index a431cfe9a7f2..8bea0ed9c9dd 100644
  # CONFIG_CRYPTO_DEV_QCE is not set
  # CONFIG_CRYPTO_DEV_QCOM_RNG is not set
  CONFIG_CRYPTO_DEV_VIRTIO=m
-@@ -277,7 +278,13 @@ CONFIG_SPMI_MSM_PMIC_ARB=y
+@@ -278,7 +279,13 @@ CONFIG_SPMI_MSM_PMIC_ARB=y
  CONFIG_THERMAL_GOV_FAIR_SHARE=y
  CONFIG_THERMAL_WRITABLE_TRIPS=y
  # CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
@@ -2870,10 +2222,10 @@ index e31977035cfe..7073cb8566dc 100644
  # CONFIG_CLK_QORIQ is not set
  # CONFIG_CLOCK_THERMAL is not set
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index f709e2c858c7..60a7d60bc6ed 100644
+index 879eb506cb82..d7ddad0f26b4 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
-@@ -869,15 +869,21 @@ CONFIG_TIMER_PROBE=y
+@@ -870,15 +870,21 @@ CONFIG_TIMER_PROBE=y
  # CONFIG_TOUCHSCREEN_WDT87XX_I2C is not set
  # CONFIG_UACCESS_WITH_MEMCPY is not set
  CONFIG_UNCOMPRESS_INCLUDE="debug/uncompress.h"
@@ -2896,10 +2248,10 @@ index f709e2c858c7..60a7d60bc6ed 100644
  # CONFIG_USB_STORAGE_REALTEK is not set
  CONFIG_USE_OF=y
 diff --git a/chromeos/config/base.config b/chromeos/config/base.config
-index f7109fbb39de..b222ecdf7f55 100644
+index e76dd4414e68..f9fcd8e0e4ea 100644
 --- a/chromeos/config/base.config
 +++ b/chromeos/config/base.config
-@@ -3008,8 +3008,6 @@ CONFIG_USB_ARCH_HAS_HCD=y
+@@ -3009,8 +3009,6 @@ CONFIG_USB_ARCH_HAS_HCD=y
  # CONFIG_USB_CHAOSKEY is not set
  # CONFIG_USB_CHIPIDEA is not set
  CONFIG_USB_COMMON=y
@@ -2908,7 +2260,7 @@ index f7109fbb39de..b222ecdf7f55 100644
  # CONFIG_USB_CONFIGFS_ECM is not set
  # CONFIG_USB_CONFIGFS_ECM_SUBSET is not set
  # CONFIG_USB_CONFIGFS_EEM is not set
-@@ -3023,11 +3021,9 @@ CONFIG_USB_CONFIGFS_F_FS=y
+@@ -3024,11 +3022,9 @@ CONFIG_USB_CONFIGFS_F_FS=y
  # CONFIG_USB_CONFIGFS_F_UAC1_LEGACY is not set
  # CONFIG_USB_CONFIGFS_F_UAC2 is not set
  # CONFIG_USB_CONFIGFS_F_UVC is not set
@@ -2920,7 +2272,7 @@ index f7109fbb39de..b222ecdf7f55 100644
  CONFIG_USB_CONFIGFS_UEVENT=y
  # CONFIG_USB_CYPRESS_CY7C63 is not set
  # CONFIG_USB_CYTHERM is not set
-@@ -3044,7 +3040,6 @@ CONFIG_USB_EZUSB_FX2=m
+@@ -3045,7 +3041,6 @@ CONFIG_USB_EZUSB_FX2=m
  # CONFIG_USB_FOTG210_HCD is not set
  # CONFIG_USB_FOTG210_UDC is not set
  # CONFIG_USB_FTDI_ELAN is not set
@@ -2928,7 +2280,7 @@ index f7109fbb39de..b222ecdf7f55 100644
  # CONFIG_USB_GADGET_DEBUG is not set
  # CONFIG_USB_GADGET_DEBUG_FILES is not set
  # CONFIG_USB_GADGET_DEBUG_FS is not set
-@@ -3074,7 +3069,6 @@ CONFIG_USB_HIDDEV=y
+@@ -3075,7 +3070,6 @@ CONFIG_USB_HIDDEV=y
  # CONFIG_USB_LEDS_TRIGGER_USBPORT is not set
  # CONFIG_USB_LED_TRIG is not set
  # CONFIG_USB_LEGOTOWER is not set
@@ -11143,10 +10495,10 @@ index 000000000000..33659ba69be3
 +	burn
 +};
 diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 6a4c7b488782..80a38ad0db15 100644
+index 6a4c7b488782..6e9af1a15bf6 100644
 --- a/drivers/net/wireless/ath/ath10k/core.c
 +++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -167,6 +167,32 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+@@ -167,6 +167,33 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
  		.hw_filter_reset_required = true,
  		.fw_diag_ce_download = false,
  	},
@@ -11171,24 +10523,25 @@ index 6a4c7b488782..80a38ad0db15 100644
 +		.hw_clk = qca6174_clk,
 +		.target_cpu_freq = 176000000,
 +		.decap_align_bytes = 4,
++		.n_cipher_suites = 8,
 +		.num_peers = 10,
 +		.ast_skid_limit = 0x10,
 +		.num_wds_entries = 0x20,
-+		.uart_print_check = true,
++		.uart_pin_workaround = true,
 +	},
  	{
  		.id = QCA6174_HW_2_1_VERSION,
  		.dev_id = QCA6164_2_1_DEVICE_ID,
-@@ -1925,8 +1951,16 @@ static int ath10k_init_uart(struct ath10k *ar)
+@@ -1925,8 +1952,16 @@ static int ath10k_init_uart(struct ath10k *ar)
  		return ret;
  	}
  
 -	if (!uart_print)
-+	if (!uart_print && ar->hw_params.uart_print_check) {
++	if (!uart_print && ar->hw_params.uart_pin_workaround) {
 +		ret = ath10k_bmi_write32(ar, hi_dbg_uart_txpin,
 +					 ar->hw_params.uart_pin);
 +		if (ret) {
-+			ath10k_warn(ar, "failed to disable UART pin: %d", ret);
++			ath10k_warn(ar, "failed to set UART TX pin: %d", ret);
 +			return ret;
 +		}
 +
@@ -11197,36 +10550,605 @@ index 6a4c7b488782..80a38ad0db15 100644
  
  	ret = ath10k_bmi_write32(ar, hi_dbg_uart_txpin, ar->hw_params.uart_pin);
  	if (ret) {
+diff --git a/drivers/net/wireless/ath/ath10k/core.h b/drivers/net/wireless/ath/ath10k/core.h
+index 26ed6962e16b..491fe02658ff 100644
+--- a/drivers/net/wireless/ath/ath10k/core.h
++++ b/drivers/net/wireless/ath/ath10k/core.h
+@@ -406,6 +406,14 @@ struct ath10k_peer {
+ 
+ 	/* protected by ar->data_lock */
+ 	struct ieee80211_key_conf *keys[WMI_MAX_KEY_INDEX + 1];
++	union htt_rx_pn_t tids_last_pn[ATH10K_TXRX_NUM_EXT_TIDS];
++	bool tids_last_pn_valid[ATH10K_TXRX_NUM_EXT_TIDS];
++	union htt_rx_pn_t frag_tids_last_pn[ATH10K_TXRX_NUM_EXT_TIDS];
++	u32 frag_tids_seq[ATH10K_TXRX_NUM_EXT_TIDS];
++	struct {
++		enum htt_security_types sec_type;
++		int pn_len;
++	} rx_pn[ATH10K_HTT_TXRX_PEER_SECURITY_MAX];
+ };
+ 
+ struct ath10k_txq {
+@@ -884,6 +892,7 @@ struct ath10k_bus_params {
+ 	u32 chip_id;
+ 	enum ath10k_dev_type dev_type;
+ 	bool link_can_suspend;
++	bool hl_msdu_ids;
+ };
+ 
+ struct ath10k {
+diff --git a/drivers/net/wireless/ath/ath10k/htt.h b/drivers/net/wireless/ath/ath10k/htt.h
+index 4ddda6c8f51d..7481e418ddc0 100644
+--- a/drivers/net/wireless/ath/ath10k/htt.h
++++ b/drivers/net/wireless/ath/ath10k/htt.h
+@@ -728,6 +728,20 @@ struct htt_rx_indication_hl {
+ 	struct htt_rx_indication_mpdu_range mpdu_ranges[0];
+ } __packed;
+ 
++struct htt_hl_rx_desc {
++	__le32 info;
++	__le32 pn_31_0;
++	union {
++		struct {
++			__le16 pn_47_32;
++			__le16 pn_63_48;
++		} pn16;
++		__le32 pn_63_32;
++	} u0;
++	__le32 pn_95_64;
++	__le32 pn_127_96;
++} __packed;
++
+ static inline struct htt_rx_indication_mpdu_range *
+ 		htt_rx_ind_get_mpdu_ranges(struct htt_rx_indication *rx_ind)
+ {
+@@ -785,6 +799,21 @@ struct htt_rx_peer_unmap {
+ 	__le16 peer_id;
+ } __packed;
+ 
++enum htt_txrx_sec_cast_type {
++	HTT_TXRX_SEC_MCAST = 0,
++	HTT_TXRX_SEC_UCAST
++};
++
++enum htt_rx_pn_check_type {
++	HTT_RX_NON_PN_CHECK = 0,
++	HTT_RX_PN_CHECK
++};
++
++enum htt_rx_tkip_demic_type {
++	HTT_RX_NON_TKIP_MIC = 0,
++	HTT_RX_TKIP_MIC
++};
++
+ enum htt_security_types {
+ 	HTT_SECURITY_NONE,
+ 	HTT_SECURITY_WEP128,
+@@ -798,6 +827,9 @@ enum htt_security_types {
+ 	HTT_NUM_SECURITY_TYPES /* keep this last! */
+ };
+ 
++#define ATH10K_HTT_TXRX_PEER_SECURITY_MAX 2
++#define ATH10K_TXRX_NUM_EXT_TIDS 19
++
+ enum htt_security_flags {
+ #define HTT_SECURITY_TYPE_MASK 0x7F
+ #define HTT_SECURITY_TYPE_LSB  0
+@@ -908,6 +940,11 @@ struct htt_rx_fragment_indication {
+ 	u8 fw_msdu_rx_desc[0];
+ } __packed;
+ 
++#define ATH10K_IEEE80211_EXTIV               BIT(5)
++#define ATH10K_IEEE80211_TKIP_MICLEN         8   /* trailing MIC */
++
++#define HTT_RX_FRAG_IND_INFO0_HEADER_LEN     16
++
+ #define HTT_RX_FRAG_IND_INFO0_EXT_TID_MASK     0x1F
+ #define HTT_RX_FRAG_IND_INFO0_EXT_TID_LSB      0
+ #define HTT_RX_FRAG_IND_INFO0_FLUSH_VALID_MASK 0x20
+@@ -1949,6 +1986,9 @@ struct ath10k_htt_rx_ops {
+ 				    int idx);
+ 	void* (*htt_get_vaddr_ring)(struct ath10k_htt *htt);
+ 	void (*htt_reset_paddrs_ring)(struct ath10k_htt *htt, int idx);
++	bool (*htt_rx_proc_rx_frag_ind)(struct ath10k_htt *htt,
++					struct htt_rx_fragment_indication *rx,
++					struct sk_buff *skb);
+ };
+ 
+ static inline size_t ath10k_htt_get_rx_ring_size(struct ath10k_htt *htt)
+@@ -1988,6 +2028,16 @@ static inline void ath10k_htt_reset_paddrs_ring(struct ath10k_htt *htt, int idx)
+ 		htt->rx_ops->htt_reset_paddrs_ring(htt, idx);
+ }
+ 
++static inline bool ath10k_htt_rx_proc_rx_frag_ind(struct ath10k_htt *htt,
++						  struct htt_rx_fragment_indication *rx,
++						  struct sk_buff *skb)
++{
++	if (!htt->rx_ops->htt_rx_proc_rx_frag_ind)
++		return true;
++
++	return htt->rx_ops->htt_rx_proc_rx_frag_ind(htt, rx, skb);
++}
++
+ #define RX_HTT_HDR_STATUS_LEN 64
+ 
+ /* This structure layout is programmed via rx ring setup
+@@ -2022,8 +2072,8 @@ struct htt_rx_desc {
+ #define HTT_RX_DESC_HL_INFO_ENCRYPTED_LSB          12
+ #define HTT_RX_DESC_HL_INFO_CHAN_INFO_PRESENT_MASK 0x00002000
+ #define HTT_RX_DESC_HL_INFO_CHAN_INFO_PRESENT_LSB  13
+-#define HTT_RX_DESC_HL_INFO_MCAST_BCAST_MASK       0x00008000
+-#define HTT_RX_DESC_HL_INFO_MCAST_BCAST_LSB        15
++#define HTT_RX_DESC_HL_INFO_MCAST_BCAST_MASK       0x00010000
++#define HTT_RX_DESC_HL_INFO_MCAST_BCAST_LSB        16
+ #define HTT_RX_DESC_HL_INFO_FRAGMENT_MASK          0x00010000
+ #define HTT_RX_DESC_HL_INFO_FRAGMENT_LSB           16
+ #define HTT_RX_DESC_HL_INFO_KEY_ID_OCT_MASK        0x01fe0000
 diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
-index 9373a63b8646..8c86359354af 100644
+index 9373a63b8646..9eed1cb17fda 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_rx.c
 +++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
-@@ -2043,7 +2043,9 @@ static void ath10k_htt_rx_tx_compl_ind(struct ath10k *ar,
+@@ -1855,9 +1855,91 @@ static int ath10k_htt_rx_handle_amsdu(struct ath10k_htt *htt)
+ 	return 0;
+ }
+ 
++static void ath10k_htt_rx_mpdu_desc_pn_hl(struct htt_hl_rx_desc *rx_desc,
++					  union htt_rx_pn_t *pn,
++					  int pn_len_bits)
++{
++	switch (pn_len_bits) {
++	case 48:
++		pn->pn48 = __le32_to_cpu(rx_desc->pn_31_0) +
++			   ((u64)(__le32_to_cpu(rx_desc->u0.pn_63_32) & 0xFFFF) << 32);
++		break;
++	case 24:
++		pn->pn24 = __le32_to_cpu(rx_desc->pn_31_0);
++		break;
++	};
++}
++
++static bool ath10k_htt_rx_pn_cmp48(union htt_rx_pn_t *new_pn,
++				   union htt_rx_pn_t *old_pn)
++{
++	return ((new_pn->pn48 & 0xffffffffffffULL) <=
++		(old_pn->pn48 & 0xffffffffffffULL));
++}
++
++static bool ath10k_htt_rx_pn_check_replay_hl(struct ath10k *ar,
++					     struct ath10k_peer *peer,
++					     struct htt_rx_indication_hl *rx)
++{
++	bool last_pn_valid, pn_invalid = false;
++	enum htt_txrx_sec_cast_type sec_index;
++	enum htt_security_types sec_type;
++	union htt_rx_pn_t new_pn = {0};
++	struct htt_hl_rx_desc *rx_desc;
++	union htt_rx_pn_t *last_pn;
++	u32 rx_desc_info, tid;
++	int num_mpdu_ranges;
++
++	lockdep_assert_held(&ar->data_lock);
++
++	if (!peer)
++		return false;
++
++	if (!(rx->fw_desc.flags & FW_RX_DESC_FLAGS_FIRST_MSDU))
++		return false;
++
++	num_mpdu_ranges = MS(__le32_to_cpu(rx->hdr.info1),
++			     HTT_RX_INDICATION_INFO1_NUM_MPDU_RANGES);
++
++	rx_desc = (struct htt_hl_rx_desc *)&rx->mpdu_ranges[num_mpdu_ranges];
++	rx_desc_info = __le32_to_cpu(rx_desc->info);
++
++	if (!MS(rx_desc_info, HTT_RX_DESC_HL_INFO_ENCRYPTED))
++		return false;
++
++	tid = MS(rx->hdr.info0, HTT_RX_INDICATION_INFO0_EXT_TID);
++	last_pn_valid = peer->tids_last_pn_valid[tid];
++	last_pn = &peer->tids_last_pn[tid];
++
++	if (MS(rx_desc_info, HTT_RX_DESC_HL_INFO_MCAST_BCAST))
++		sec_index = HTT_TXRX_SEC_MCAST;
++	else
++		sec_index = HTT_TXRX_SEC_UCAST;
++
++	sec_type = peer->rx_pn[sec_index].sec_type;
++	ath10k_htt_rx_mpdu_desc_pn_hl(rx_desc, &new_pn, peer->rx_pn[sec_index].pn_len);
++
++	if (sec_type != HTT_SECURITY_AES_CCMP &&
++	    sec_type != HTT_SECURITY_TKIP &&
++	    sec_type != HTT_SECURITY_TKIP_NOMIC)
++		return false;
++
++	if (last_pn_valid)
++		pn_invalid = ath10k_htt_rx_pn_cmp48(&new_pn, last_pn);
++	else
++		peer->tids_last_pn_valid[tid] = 1;
++
++	if (!pn_invalid)
++		last_pn->pn48 = new_pn.pn48;
++
++	return pn_invalid;
++}
++
+ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 					 struct htt_rx_indication_hl *rx,
+-					 struct sk_buff *skb)
++					 struct sk_buff *skb,
++					 enum htt_rx_pn_check_type check_pn_type,
++					 enum htt_rx_tkip_demic_type tkip_mic_type)
+ {
+ 	struct ath10k *ar = htt->ar;
+ 	struct ath10k_peer *peer;
+@@ -1901,6 +1983,10 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 		goto err;
+ 	}
+ 
++	if (check_pn_type == HTT_RX_PN_CHECK &&
++	    ath10k_htt_rx_pn_check_replay_hl(ar, peer, rx))
++		goto err;
++
+ 	/* Strip off all headers before the MAC header before delivery to
+ 	 * mac80211
+ 	 */
+@@ -1908,6 +1994,7 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 		      sizeof(rx->ppdu) + sizeof(rx->prefix) +
+ 		      sizeof(rx->fw_desc) +
+ 		      sizeof(*mpdu_ranges) * num_mpdu_ranges + rx_desc_len;
++
+ 	skb_pull(skb, tot_hdr_len);
+ 
+ 	hdr = (struct ieee80211_hdr *)skb->data;
+@@ -1956,6 +2043,10 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 				   RX_FLAG_MMIC_STRIPPED;
+ 	}
+ 
++	if (tkip_mic_type == HTT_RX_TKIP_MIC)
++		rx_status->flag &= ~RX_FLAG_IV_STRIPPED &
++				   ~RX_FLAG_MMIC_STRIPPED;
++
+ 	ieee80211_rx_ni(ar->hw, skb);
+ 
+ 	/* We have delivered the skb to the upper layers (mac80211) so we
+@@ -1969,6 +2060,231 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 	return true;
+ }
+ 
++static int ath10k_htt_rx_frag_tkip_decap_nomic(struct sk_buff *skb,
++					       u16 head_len,
++					       u16 hdr_len)
++{
++	u8 *ivp, *orig_hdr;
++
++	orig_hdr = skb->data;
++	ivp = orig_hdr + hdr_len + head_len;
++
++	/* the ExtIV bit is always set to 1 for TKIP */
++	if (!(ivp[IEEE80211_WEP_IV_LEN - 1] & ATH10K_IEEE80211_EXTIV))
++		return -EINVAL;
++
++	memmove(orig_hdr + IEEE80211_TKIP_IV_LEN, orig_hdr, head_len + hdr_len);
++	skb_pull(skb, IEEE80211_TKIP_IV_LEN);
++	skb_trim(skb, skb->len - ATH10K_IEEE80211_TKIP_MICLEN);
++	return 0;
++}
++
++static int ath10k_htt_rx_frag_tkip_decap_withmic(struct sk_buff *skb,
++						 u16 head_len,
++						 u16 hdr_len)
++{
++	u8 *ivp, *orig_hdr;
++
++	orig_hdr = skb->data;
++	ivp = orig_hdr + hdr_len + head_len;
++
++	/* the ExtIV bit is always set to 1 for TKIP */
++	if (!(ivp[IEEE80211_WEP_IV_LEN - 1] & ATH10K_IEEE80211_EXTIV))
++		return -EINVAL;
++
++	memmove(orig_hdr + IEEE80211_TKIP_IV_LEN, orig_hdr, head_len + hdr_len);
++	skb_pull(skb, IEEE80211_TKIP_IV_LEN);
++	skb_trim(skb, skb->len - IEEE80211_TKIP_ICV_LEN);
++	return 0;
++}
++
++static int ath10k_htt_rx_frag_ccmp_decap(struct sk_buff *skb,
++					 u16 head_len,
++					 u16 hdr_len)
++{
++	u8 *ivp, *orig_hdr;
++
++	orig_hdr = skb->data;
++	ivp = orig_hdr + hdr_len + head_len;
++
++	/* the ExtIV bit is always set to 1 for CCMP */
++	if (!(ivp[IEEE80211_WEP_IV_LEN - 1] & ATH10K_IEEE80211_EXTIV))
++		return -EINVAL;
++
++	skb_trim(skb, skb->len - IEEE80211_CCMP_MIC_LEN);
++	memmove(orig_hdr + IEEE80211_CCMP_HDR_LEN, orig_hdr, head_len + hdr_len);
++	skb_pull(skb, IEEE80211_CCMP_HDR_LEN);
++	return 0;
++}
++
++static int ath10k_htt_rx_frag_wep_decap(struct sk_buff *skb,
++					u16 head_len,
++					u16 hdr_len)
++{
++	u8 *orig_hdr;
++
++	orig_hdr = skb->data;
++
++	memmove(orig_hdr + IEEE80211_WEP_IV_LEN,
++		orig_hdr, head_len + hdr_len);
++	skb_pull(skb, IEEE80211_WEP_IV_LEN);
++	skb_trim(skb, skb->len - IEEE80211_WEP_ICV_LEN);
++	return 0;
++}
++
++static bool ath10k_htt_rx_proc_rx_frag_ind_hl(struct ath10k_htt *htt,
++					      struct htt_rx_fragment_indication *rx,
++					      struct sk_buff *skb)
++{
++	struct ath10k *ar = htt->ar;
++	enum htt_rx_tkip_demic_type tkip_mic = HTT_RX_NON_TKIP_MIC;
++	enum htt_txrx_sec_cast_type sec_index;
++	struct htt_rx_indication_hl *rx_hl;
++	enum htt_security_types sec_type;
++	u32 tid, frag, seq, rx_desc_info;
++	union htt_rx_pn_t new_pn = {0};
++	struct htt_hl_rx_desc *rx_desc;
++	u16 peer_id, sc, hdr_space;
++	union htt_rx_pn_t *last_pn;
++	struct ieee80211_hdr *hdr;
++	int ret, num_mpdu_ranges;
++	struct ath10k_peer *peer;
++	struct htt_resp *resp;
++	size_t tot_hdr_len;
++
++	resp = (struct htt_resp *)(skb->data + HTT_RX_FRAG_IND_INFO0_HEADER_LEN);
++	skb_pull(skb, HTT_RX_FRAG_IND_INFO0_HEADER_LEN);
++	skb_trim(skb, skb->len - FCS_LEN);
++
++	peer_id = __le16_to_cpu(rx->peer_id);
++	rx_hl = (struct htt_rx_indication_hl *)(&resp->rx_ind_hl);
++
++	spin_lock_bh(&ar->data_lock);
++	peer = ath10k_peer_find_by_id(ar, peer_id);
++	if (!peer) {
++		ath10k_dbg(ar, ATH10K_DBG_HTT, "invalid peer: %u\n", peer_id);
++		goto err;
++	}
++
++	num_mpdu_ranges = MS(__le32_to_cpu(rx_hl->hdr.info1),
++			     HTT_RX_INDICATION_INFO1_NUM_MPDU_RANGES);
++
++	tot_hdr_len = sizeof(struct htt_resp_hdr) +
++		      sizeof(rx_hl->hdr) +
++		      sizeof(rx_hl->ppdu) +
++		      sizeof(rx_hl->prefix) +
++		      sizeof(rx_hl->fw_desc) +
++		      sizeof(struct htt_rx_indication_mpdu_range) * num_mpdu_ranges;
++
++	tid =  MS(rx_hl->hdr.info0, HTT_RX_INDICATION_INFO0_EXT_TID);
++	rx_desc = (struct htt_hl_rx_desc *)(skb->data + tot_hdr_len);
++	rx_desc_info = __le32_to_cpu(rx_desc->info);
++
++	if (!MS(rx_desc_info, HTT_RX_DESC_HL_INFO_ENCRYPTED)) {
++		spin_unlock_bh(&ar->data_lock);
++		return ath10k_htt_rx_proc_rx_ind_hl(htt, &resp->rx_ind_hl, skb,
++						    HTT_RX_NON_PN_CHECK,
++						    HTT_RX_NON_TKIP_MIC);
++	}
++
++	hdr = (struct ieee80211_hdr *)((u8 *)rx_desc + rx_hl->fw_desc.len);
++
++	if (ieee80211_has_retry(hdr->frame_control))
++		goto err;
++
++	hdr_space = ieee80211_hdrlen(hdr->frame_control);
++	sc = __le16_to_cpu(hdr->seq_ctrl);
++	seq = (sc & IEEE80211_SCTL_SEQ) >> 4;
++	frag = sc & IEEE80211_SCTL_FRAG;
++
++	sec_index = MS(rx_desc_info, HTT_RX_DESC_HL_INFO_MCAST_BCAST) ?
++		    HTT_TXRX_SEC_MCAST : HTT_TXRX_SEC_UCAST;
++	sec_type = peer->rx_pn[sec_index].sec_type;
++	ath10k_htt_rx_mpdu_desc_pn_hl(rx_desc, &new_pn, peer->rx_pn[sec_index].pn_len);
++
++	switch (sec_type) {
++	case HTT_SECURITY_TKIP:
++		tkip_mic = HTT_RX_TKIP_MIC;
++		ret = ath10k_htt_rx_frag_tkip_decap_withmic(skb,
++							    tot_hdr_len +
++							    rx_hl->fw_desc.len,
++							    hdr_space);
++		if (ret)
++			goto err;
++		break;
++	case HTT_SECURITY_TKIP_NOMIC:
++		ret = ath10k_htt_rx_frag_tkip_decap_nomic(skb,
++							  tot_hdr_len +
++							  rx_hl->fw_desc.len,
++							  hdr_space);
++		if (ret)
++			goto err;
++		break;
++	case HTT_SECURITY_AES_CCMP:
++		ret = ath10k_htt_rx_frag_ccmp_decap(skb,
++						    tot_hdr_len + rx_hl->fw_desc.len,
++						    hdr_space);
++		if (ret)
++			goto err;
++		break;
++	case HTT_SECURITY_WEP128:
++	case HTT_SECURITY_WEP104:
++	case HTT_SECURITY_WEP40:
++		ret = ath10k_htt_rx_frag_wep_decap(skb,
++						   tot_hdr_len + rx_hl->fw_desc.len,
++						   hdr_space);
++		if (ret)
++			goto err;
++		break;
++	default:
++		break;
++	}
++
++	resp = (struct htt_resp *)(skb->data);
++
++	if (sec_type != HTT_SECURITY_AES_CCMP &&
++	    sec_type != HTT_SECURITY_TKIP &&
++	    sec_type != HTT_SECURITY_TKIP_NOMIC) {
++		spin_unlock_bh(&ar->data_lock);
++		return ath10k_htt_rx_proc_rx_ind_hl(htt, &resp->rx_ind_hl, skb,
++						    HTT_RX_NON_PN_CHECK,
++						    HTT_RX_NON_TKIP_MIC);
++	}
++
++	last_pn = &peer->frag_tids_last_pn[tid];
++
++	if (frag == 0) {
++		if (ath10k_htt_rx_pn_check_replay_hl(ar, peer, &resp->rx_ind_hl))
++			goto err;
++
++		last_pn->pn48 = new_pn.pn48;
++		peer->frag_tids_seq[tid] = seq;
++	} else if (sec_type == HTT_SECURITY_AES_CCMP) {
++		if (seq != peer->frag_tids_seq[tid])
++			goto err;
++
++		if (new_pn.pn48 != last_pn->pn48 + 1)
++			goto err;
++
++		last_pn->pn48 = new_pn.pn48;
++		last_pn = &peer->tids_last_pn[tid];
++		last_pn->pn48 = new_pn.pn48;
++	}
++
++	spin_unlock_bh(&ar->data_lock);
++
++	return ath10k_htt_rx_proc_rx_ind_hl(htt, &resp->rx_ind_hl, skb,
++					    HTT_RX_NON_PN_CHECK, tkip_mic);
++
++err:
++	spin_unlock_bh(&ar->data_lock);
++
++	/* Tell the caller that it must free the skb since we have not
++	 * consumed it
++	 */
++	return true;
++}
++
+ static void ath10k_htt_rx_proc_rx_ind_ll(struct ath10k_htt *htt,
+ 					 struct htt_rx_indication *rx)
+ {
+@@ -2043,7 +2359,9 @@ static void ath10k_htt_rx_tx_compl_ind(struct ath10k *ar,
  		 *  Note that with only one concurrent reader and one concurrent
  		 *  writer, you don't need extra locking to use these macro.
  		 */
 -		if (!kfifo_put(&htt->txdone_fifo, tx_done)) {
-+		if (ar->hif.bus == ATH10K_BUS_SDIO) {
++		if (ar->bus_param.dev_type == ATH10K_DEV_TYPE_HL) {
 +			ath10k_txrx_tx_unref(htt, &tx_done);
 +		} else if (!kfifo_put(&htt->txdone_fifo, tx_done)) {
  			ath10k_warn(ar, "txdone fifo overrun, msdu_id %d status %d\n",
  				    tx_done.msdu_id, tx_done.status);
  			ath10k_txrx_tx_unref(htt, &tx_done);
-diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
-index f54ef2c37044..d099681da42b 100644
---- a/drivers/net/wireless/ath/ath10k/htt_tx.c
-+++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
-@@ -554,7 +554,8 @@ void ath10k_htt_tx_free(struct ath10k_htt *htt)
- 
- void ath10k_htt_htc_tx_complete(struct ath10k *ar, struct sk_buff *skb)
- {
--	dev_kfree_skb_any(skb);
-+	if (!(ar->hif.bus == ATH10K_BUS_SDIO))
-+		dev_kfree_skb_any(skb);
+@@ -2797,6 +3115,51 @@ static void ath10k_fetch_10_2_tx_stats(struct ath10k *ar, u8 *data)
+ 	rcu_read_unlock();
  }
  
- void ath10k_htt_hif_tx_complete(struct ath10k *ar, struct sk_buff *skb)
-@@ -1208,6 +1209,7 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
++static int ath10k_htt_rx_pn_len(enum htt_security_types sec_type)
++{
++	switch (sec_type) {
++	case HTT_SECURITY_TKIP:
++	case HTT_SECURITY_TKIP_NOMIC:
++	case HTT_SECURITY_AES_CCMP:
++		return 48;
++	default:
++		return 0;
++	}
++}
++
++static void ath10k_htt_rx_sec_ind_handler(struct ath10k *ar,
++					  struct htt_security_indication *ev)
++{
++	enum htt_txrx_sec_cast_type sec_index;
++	enum htt_security_types sec_type;
++	struct ath10k_peer *peer;
++
++	spin_lock_bh(&ar->data_lock);
++
++	peer = ath10k_peer_find_by_id(ar, __le16_to_cpu(ev->peer_id));
++	if (!peer) {
++		ath10k_warn(ar, "failed to find peer id %d for security indication",
++			    __le16_to_cpu(ev->peer_id));
++		goto out;
++	}
++
++	sec_type = MS(ev->flags, HTT_SECURITY_TYPE);
++
++	if (ev->flags & HTT_SECURITY_IS_UNICAST)
++		sec_index = HTT_TXRX_SEC_UCAST;
++	else
++		sec_index = HTT_TXRX_SEC_MCAST;
++
++	peer->rx_pn[sec_index].sec_type = sec_type;
++	peer->rx_pn[sec_index].pn_len = ath10k_htt_rx_pn_len(sec_type);
++
++	memset(peer->tids_last_pn_valid, 0, sizeof(peer->tids_last_pn_valid));
++	memset(peer->tids_last_pn, 0, sizeof(peer->tids_last_pn));
++
++out:
++	spin_unlock_bh(&ar->data_lock);
++}
++
+ bool ath10k_htt_t2h_msg_handler(struct ath10k *ar, struct sk_buff *skb)
+ {
+ 	struct ath10k_htt *htt = &ar->htt;
+@@ -2828,7 +3191,9 @@ bool ath10k_htt_t2h_msg_handler(struct ath10k *ar, struct sk_buff *skb)
+ 		if (ar->bus_param.dev_type == ATH10K_DEV_TYPE_HL)
+ 			return ath10k_htt_rx_proc_rx_ind_hl(htt,
+ 							    &resp->rx_ind_hl,
+-							    skb);
++							    skb,
++							    HTT_RX_PN_CHECK,
++							    HTT_RX_NON_TKIP_MIC);
+ 		else
+ 			ath10k_htt_rx_proc_rx_ind_ll(htt, &resp->rx_ind);
+ 		break;
+@@ -2890,6 +3255,7 @@ bool ath10k_htt_t2h_msg_handler(struct ath10k *ar, struct sk_buff *skb)
+ 		struct ath10k *ar = htt->ar;
+ 		struct htt_security_indication *ev = &resp->security_indication;
+ 
++		ath10k_htt_rx_sec_ind_handler(ar, ev);
+ 		ath10k_dbg(ar, ATH10K_DBG_HTT,
+ 			   "sec ind peer_id %d unicast %d type %d\n",
+ 			  __le16_to_cpu(ev->peer_id),
+@@ -2902,6 +3268,10 @@ bool ath10k_htt_t2h_msg_handler(struct ath10k *ar, struct sk_buff *skb)
+ 		ath10k_dbg_dump(ar, ATH10K_DBG_HTT_DUMP, NULL, "htt event: ",
+ 				skb->data, skb->len);
+ 		atomic_inc(&htt->num_mpdus_ready);
++
++		return ath10k_htt_rx_proc_rx_frag_ind(htt,
++						      &resp->rx_frag_ind,
++						      skb);
+ 		break;
+ 	}
+ 	case HTT_T2H_MSG_TYPE_TEST:
+@@ -3115,6 +3485,7 @@ static const struct ath10k_htt_rx_ops htt_rx_ops_64 = {
+ };
+ 
+ static const struct ath10k_htt_rx_ops htt_rx_ops_hl = {
++	.htt_rx_proc_rx_frag_ind = ath10k_htt_rx_proc_rx_frag_ind_hl,
+ };
+ 
+ void ath10k_htt_set_rx_ops(struct ath10k_htt *htt)
+diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
+index f54ef2c37044..b993fa6b2a34 100644
+--- a/drivers/net/wireless/ath/ath10k/htt_tx.c
++++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
+@@ -1208,6 +1208,7 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
  	u8 tid = ath10k_htt_tx_get_tid(msdu, is_eth);
  	u8 flags0 = 0;
  	u16 flags1 = 0;
@@ -11234,11 +11156,11 @@ index f54ef2c37044..d099681da42b 100644
  
  	data_len = msdu->len;
  
-@@ -1255,6 +1257,16 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
+@@ -1255,6 +1256,23 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
  		}
  	}
  
-+	if (ar->hif.bus == ATH10K_BUS_SDIO) {
++	if (ar->bus_param.hl_msdu_ids) {
 +		flags1 |= HTT_DATA_TX_DESC_FLAGS1_POSTPONED;
 +		res = ath10k_htt_tx_alloc_msdu_id(htt, msdu);
 +		if (res < 0) {
@@ -11248,10 +11170,17 @@ index f54ef2c37044..d099681da42b 100644
 +		msdu_id = res;
 +	}
 +
++	/* As msdu is freed by mac80211 (in ieee80211_tx_status()) and by
++	 * ath10k (in ath10k_htt_htc_tx_complete()) we have to increase
++	 * reference by one to avoid a use-after-free case and a double
++	 * free.
++	 */
++	skb_get(msdu);
++
  	skb_push(msdu, sizeof(*cmd_hdr));
  	skb_push(msdu, sizeof(*tx_desc));
  	cmd_hdr = (struct htt_cmd_hdr *)msdu->data;
-@@ -1264,7 +1276,7 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
+@@ -1264,7 +1282,7 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
  	tx_desc->flags0 = flags0;
  	tx_desc->flags1 = __cpu_to_le16(flags1);
  	tx_desc->len = __cpu_to_le16(data_len);
@@ -11261,7 +11190,7 @@ index f54ef2c37044..d099681da42b 100644
  	/* Initialize peer_id to INVALID_PEER because this is NOT
  	 * Reinjection path
 diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 70682dff865f..d863b57effdb 100644
+index 70682dff865f..62740e9c6140 100644
 --- a/drivers/net/wireless/ath/ath10k/hw.h
 +++ b/drivers/net/wireless/ath/ath10k/hw.h
 @@ -35,6 +35,7 @@ enum ath10k_bus {
@@ -11272,21 +11201,62 @@ index 70682dff865f..d863b57effdb 100644
  #define QCA99X0_2_0_DEVICE_ID   (0x0040)
  #define QCA9888_2_0_DEVICE_ID	(0x0056)
  #define QCA9984_1_0_DEVICE_ID	(0x0046)
-@@ -600,6 +601,9 @@ struct ath10k_hw_params {
- 	/* target supporting shadow register for ce write */
- 	bool shadow_reg_support;
+@@ -613,6 +614,11 @@ struct ath10k_hw_params {
  
-+	/* need to set uart pin if disable uart print */
-+	bool uart_print_check;
+ 	/* target supporting fw download via diag ce */
+ 	bool fw_diag_ce_download;
 +
- 	/* target supporting retention restore on ddr */
- 	bool rri_on_ddr;
++	/* need to set uart pin if disable uart print, workaround for a
++	 * firmware bug
++	 */
++	bool uart_pin_workaround;
+ };
  
+ struct htt_rx_desc;
+@@ -1070,6 +1076,7 @@ ath10k_rx_desc_get_l3_pad_bytes(struct ath10k_hw_params *hw,
+ #define MBOX_CPU_INT_STATUS_ENABLE_ADDRESS	0x00000819
+ #define MBOX_CPU_INT_STATUS_ENABLE_BIT_LSB	0
+ #define MBOX_CPU_INT_STATUS_ENABLE_BIT_MASK	0x000000ff
++#define MBOX_CPU_STATUS_ENABLE_ASSERT_MASK 0x00000001
+ #define MBOX_ERROR_STATUS_ENABLE_ADDRESS	0x0000081a
+ #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_LSB  1
+ #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_MASK 0x00000002
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 9f631120a9be..1ea6d2dc2f29 100644
+index 9f631120a9be..35a7ff36f821 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
-@@ -2083,8 +2083,6 @@ static void ath10k_sdio_remove(struct sdio_func *func)
+@@ -861,6 +861,8 @@ static int ath10k_sdio_mbox_proc_cpu_intr(struct ath10k *ar)
+ 
+ out:
+ 	mutex_unlock(&irq_data->mtx);
++	ath10k_err(ar, "firmware crashed!\n");
++	queue_work(ar->workqueue, &ar->restart_work);
+ 	return ret;
+ }
+ 
+@@ -1505,8 +1507,10 @@ static int ath10k_sdio_hif_enable_intrs(struct ath10k *ar)
+ 	regs->int_status_en |=
+ 		FIELD_PREP(MBOX_INT_STATUS_ENABLE_MBOX_DATA_MASK, 1);
+ 
+-	/* Set up the CPU Interrupt status Register */
+-	regs->cpu_int_status_en = 0;
++	/* Set up the CPU Interrupt Status Register, enable CPU sourced interrupt #0
++	 * #0 is used for report assertion from target
++	 */
++	regs->cpu_int_status_en = FIELD_PREP(MBOX_CPU_STATUS_ENABLE_ASSERT_MASK, 1);
+ 
+ 	/* Set up the Error Interrupt status Register */
+ 	regs->err_int_status_en =
+@@ -2055,6 +2059,8 @@ static int ath10k_sdio_probe(struct sdio_func *func,
+ 	bus_params.dev_type = ATH10K_DEV_TYPE_HL;
+ 	/* TODO: don't know yet how to get chip_id with SDIO */
+ 	bus_params.chip_id = 0;
++	bus_params.hl_msdu_ids = true;
++
+ 	ret = ath10k_core_register(ar, &bus_params);
+ 	if (ret) {
+ 		ath10k_err(ar, "failed to register driver core: %d\n", ret);
+@@ -2083,8 +2089,6 @@ static void ath10k_sdio_remove(struct sdio_func *func)
  		   "sdio removed func %d vendor 0x%x device 0x%x\n",
  		   func->num, func->vendor, func->device);
  
@@ -11296,314 +11266,19 @@ index 9f631120a9be..1ea6d2dc2f29 100644
  	ath10k_core_destroy(ar);
  }
 diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
-index f13d88906b5a..6a87bd89418c 100644
+index f13d88906b5a..c32515f7aedc 100644
 --- a/drivers/net/wireless/ath/ath10k/txrx.c
 +++ b/drivers/net/wireless/ath/ath10k/txrx.c
-@@ -91,7 +91,7 @@ int ath10k_txrx_tx_unref(struct ath10k_htt *htt,
+@@ -157,6 +157,9 @@ struct ath10k_peer *ath10k_peer_find_by_id(struct ath10k *ar, int peer_id)
+ {
+ 	struct ath10k_peer *peer;
  
- 	ath10k_htt_tx_free_msdu_id(htt, tx_done->msdu_id);
- 	ath10k_htt_tx_dec_pending(htt);
--	if (htt->num_pending_tx == 0)
-+	if (ar->dev_type != ATH10K_DEV_TYPE_HL && htt->num_pending_tx == 0)
- 		wake_up(&htt->empty_tx_wq);
- 	spin_unlock_bh(&htt->tx_lock);
++	if (peer_id >= sizeof(peer->peer_ids) * BITS_PER_BYTE)
++		return NULL;
++
+ 	lockdep_assert_held(&ar->data_lock);
  
-diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index 2bb68f3edea4..bd394cbf3ff6 100644
---- a/drivers/platform/chrome/Kconfig
-+++ b/drivers/platform/chrome/Kconfig
-@@ -84,6 +84,15 @@ config CROS_EC_ISHTP
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called cros_ec_ishtp.
- 
-+config CROS_EC_RPMSG
-+	tristate "ChromeOS Embedded Controller (rpmsg)"
-+	depends on MFD_CROS_EC && RPMSG && OF
-+	help
-+	  If you say Y here, you get support for talking to the ChromeOS EC
-+	  through rpmsg. This uses a simple byte-level protocol with a
-+	  checksum. Also since there's no addition EC-to-host interrupt, this
-+	  use a byte in message to distinguish host event from host command.
-+
- config CROS_EC_SPI
- 	tristate "ChromeOS Embedded Controller (SPI)"
- 	depends on MFD_CROS_EC && SPI
-diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
-index efdb50b91134..32e8bb50381a 100644
---- a/drivers/platform/chrome/Makefile
-+++ b/drivers/platform/chrome/Makefile
-@@ -9,6 +9,7 @@ cros_ec_ctl-objs			:= cros_ec_sysfs.o cros_ec_lightbar.o \
- obj-$(CONFIG_CROS_EC_CTL)		+= cros_ec_ctl.o
- obj-$(CONFIG_CROS_EC_I2C)		+= cros_ec_i2c.o
- obj-$(CONFIG_CROS_EC_ISHTP)		+= cros_ec_ishtp.o
-+obj-$(CONFIG_CROS_EC_RPMSG)		+= cros_ec_rpmsg.o
- obj-$(CONFIG_CROS_EC_SPI)		+= cros_ec_spi.o
- cros_ec_lpcs-objs			:= cros_ec_lpc.o cros_ec_lpc_reg.o
- cros_ec_lpcs-$(CONFIG_CROS_EC_LPC_MEC)	+= cros_ec_lpc_mec.o
-diff --git a/drivers/platform/chrome/cros_ec_rpmsg.c b/drivers/platform/chrome/cros_ec_rpmsg.c
-new file mode 100644
-index 000000000000..6a174fa79296
---- /dev/null
-+++ b/drivers/platform/chrome/cros_ec_rpmsg.c
-@@ -0,0 +1,258 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright 2018 Google LLC.
-+
-+#include <linux/completion.h>
-+#include <linux/delay.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mfd/cros_ec.h>
-+#include <linux/mfd/cros_ec_commands.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/rpmsg.h>
-+#include <linux/slab.h>
-+
-+#define EC_MSG_TIMEOUT_MS 200
-+#define HOST_COMMAND_MARK 1
-+#define HOST_EVENT_MARK 2
-+
-+/**
-+ * struct cros_ec_rpmsg_response - rpmsg message format from from EC.
-+ *
-+ * @type:	The type of message, should be either HOST_COMMAND_MARK or
-+ *		HOST_EVENT_MARK, representing that the message is a response to
-+ *		host command, or a host event.
-+ * @data:	ec_host_response for host command.
-+ */
-+struct cros_ec_rpmsg_response {
-+	u8 type;
-+	u8 data[] __aligned(4);
-+};
-+
-+/**
-+ * struct cros_ec_rpmsg - information about a EC over rpmsg.
-+ *
-+ * @rpdev:	rpmsg device we are connected to
-+ * @xfer_ack:	completion for host command transfer.
-+ * @host_event_work:	Work struct for pending host event.
-+ */
-+struct cros_ec_rpmsg {
-+	struct rpmsg_device *rpdev;
-+	struct completion xfer_ack;
-+	struct work_struct host_event_work;
-+};
-+
-+/**
-+ * cros_ec_cmd_xfer_rpmsg - Transfer a message over rpmsg and receive the reply
-+ *
-+ * @ec_dev: ChromeOS EC device
-+ * @ec_msg: Message to transfer
-+ *
-+ * This is only used for old EC proto version, and is not supported for this
-+ * driver.
-+ *
-+ * Return: number of bytes of the reply on success or negative error code.
-+ */
-+static int cros_ec_cmd_xfer_rpmsg(struct cros_ec_device *ec_dev,
-+				  struct cros_ec_command *ec_msg)
-+{
-+	return -EINVAL;
-+}
-+
-+/**
-+ * cros_ec_pkt_xfer_rpmsg - Transfer a packet over rpmsg and receive the reply
-+ *
-+ * @ec_dev: ChromeOS EC device
-+ * @ec_msg: Message to transfer
-+ *
-+ * Return: number of bytes of the reply on success or negative error code.
-+ */
-+static int cros_ec_pkt_xfer_rpmsg(struct cros_ec_device *ec_dev,
-+				  struct cros_ec_command *ec_msg)
-+{
-+	struct ec_host_response *response;
-+	struct cros_ec_rpmsg *ec_rpmsg = ec_dev->priv;
-+	struct rpmsg_device *rpdev = ec_rpmsg->rpdev;
-+	int len;
-+	u8 sum;
-+	int ret;
-+	int i;
-+	unsigned long timeout;
-+
-+	ec_msg->result = 0;
-+	len = cros_ec_prepare_tx(ec_dev, ec_msg);
-+	dev_dbg(ec_dev->dev, "prepared, len=%d\n", len);
-+
-+	reinit_completion(&ec_rpmsg->xfer_ack);
-+	ret = rpmsg_send(rpdev->ept, ec_dev->dout, len);
-+	if (ret) {
-+		dev_err(ec_dev->dev, "rpmsg send failed\n");
-+		return ret;
-+	}
-+
-+	timeout = msecs_to_jiffies(EC_MSG_TIMEOUT_MS);
-+	ret = wait_for_completion_timeout(&ec_rpmsg->xfer_ack, timeout);
-+	if (!ret) {
-+		dev_err(ec_dev->dev, "rpmsg send timeout\n");
-+		return -EIO;
-+	}
-+
-+	/* check response error code */
-+	response = (struct ec_host_response *)ec_dev->din;
-+	ec_msg->result = response->result;
-+
-+	ret = cros_ec_check_result(ec_dev, ec_msg);
-+	if (ret)
-+		goto exit;
-+
-+	if (response->data_len > ec_msg->insize) {
-+		dev_err(ec_dev->dev, "packet too long (%d bytes, expected %d)",
-+			response->data_len, ec_msg->insize);
-+		ret = -EMSGSIZE;
-+		goto exit;
-+	}
-+
-+	/* copy response packet payload and compute checksum */
-+	memcpy(ec_msg->data, ec_dev->din + sizeof(*response),
-+	       response->data_len);
-+
-+	sum = 0;
-+	for (i = 0; i < sizeof(*response) + response->data_len; i++)
-+		sum += ec_dev->din[i];
-+
-+	if (sum) {
-+		dev_err(ec_dev->dev, "bad packet checksum, calculated %x\n",
-+			sum);
-+		ret = -EBADMSG;
-+		goto exit;
-+	}
-+
-+	ret = response->data_len;
-+exit:
-+	if (ec_msg->command == EC_CMD_REBOOT_EC)
-+		msleep(EC_REBOOT_DELAY_MS);
-+
-+	return ret;
-+}
-+
-+static void
-+cros_ec_rpmsg_host_event_function(struct work_struct *host_event_work)
-+{
-+	struct cros_ec_rpmsg *ec_rpmsg = container_of(
-+		host_event_work, struct cros_ec_rpmsg, host_event_work);
-+	struct cros_ec_device *ec_dev = dev_get_drvdata(&ec_rpmsg->rpdev->dev);
-+	bool wake_event = true;
-+	int ret;
-+
-+	ret = cros_ec_get_next_event(ec_dev, &wake_event);
-+
-+	/*
-+	 * Signal only if wake host events or any interrupt if
-+	 * cros_ec_get_next_event() returned an error (default value for
-+	 * wake_event is true)
-+	 */
-+	if (wake_event && device_may_wakeup(ec_dev->dev))
-+		pm_wakeup_event(ec_dev->dev, 0);
-+
-+	if (ret > 0)
-+		blocking_notifier_call_chain(&ec_dev->event_notifier,
-+					     0, ec_dev);
-+}
-+
-+static int cros_ec_rpmsg_callback(struct rpmsg_device *rpdev, void *data,
-+				  int len, void *priv, u32 src)
-+{
-+	struct cros_ec_device *ec_dev = dev_get_drvdata(&rpdev->dev);
-+	struct cros_ec_rpmsg *ec_rpmsg = ec_dev->priv;
-+	struct cros_ec_rpmsg_response *resp;
-+
-+	if (!len) {
-+		dev_warn(ec_dev->dev, "rpmsg received empty response");
-+		return -EINVAL;
-+	}
-+
-+	resp = data;
-+	len -= offsetof(struct cros_ec_rpmsg_response, data);
-+	if (resp->type == HOST_COMMAND_MARK) {
-+		if (len > ec_dev->din_size) {
-+			dev_warn(
-+				ec_dev->dev,
-+				"received length %d > din_size %d, truncating",
-+				len, ec_dev->din_size);
-+			len = ec_dev->din_size;
-+		}
-+
-+		memcpy(ec_dev->din, resp->data, len);
-+		complete(&ec_rpmsg->xfer_ack);
-+	} else if (resp->type == HOST_EVENT_MARK) {
-+		schedule_work(&ec_rpmsg->host_event_work);
-+	} else {
-+		dev_warn(ec_dev->dev, "rpmsg received invalid type = %d",
-+			 resp->type);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int cros_ec_rpmsg_probe(struct rpmsg_device *rpdev)
-+{
-+	struct device *dev = &rpdev->dev;
-+	struct cros_ec_device *ec_dev;
-+	struct cros_ec_rpmsg *ec_rpmsg;
-+
-+	ec_dev = devm_kzalloc(dev, sizeof(*ec_dev), GFP_KERNEL);
-+	if (!ec_dev)
-+		return -ENOMEM;
-+
-+	ec_rpmsg = devm_kzalloc(dev, sizeof(*ec_rpmsg), GFP_KERNEL);
-+	if (!ec_rpmsg)
-+		return -ENOMEM;
-+
-+	ec_dev->dev = dev;
-+	ec_dev->priv = ec_rpmsg;
-+	ec_dev->cmd_xfer = cros_ec_cmd_xfer_rpmsg;
-+	ec_dev->pkt_xfer = cros_ec_pkt_xfer_rpmsg;
-+	ec_dev->phys_name = dev_name(&rpdev->dev);
-+	ec_dev->din_size = sizeof(struct ec_host_response) +
-+			   sizeof(struct ec_response_get_protocol_info);
-+	ec_dev->dout_size = sizeof(struct ec_host_request);
-+	dev_set_drvdata(dev, ec_dev);
-+
-+	ec_rpmsg->rpdev = rpdev;
-+	init_completion(&ec_rpmsg->xfer_ack);
-+	INIT_WORK(&ec_rpmsg->host_event_work,
-+		  cros_ec_rpmsg_host_event_function);
-+
-+	return cros_ec_register(ec_dev);
-+}
-+
-+static void cros_ec_rpmsg_remove(struct rpmsg_device *rpdev)
-+{
-+	struct cros_ec_device *ec_dev = dev_get_drvdata(&rpdev->dev);
-+	struct cros_ec_rpmsg *ec_rpmsg = ec_dev->priv;
-+
-+	cancel_work_sync(&ec_rpmsg->host_event_work);
-+}
-+
-+static const struct of_device_id cros_ec_rpmsg_of_match[] = {
-+	{ .compatible = "google,cros-ec-rpmsg", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, cros_ec_rpmsg_of_match);
-+
-+static struct rpmsg_driver cros_ec_driver_rpmsg = {
-+	.drv = {
-+		.name   = KBUILD_MODNAME,
-+		.of_match_table = cros_ec_rpmsg_of_match,
-+	},
-+	.probe		= cros_ec_rpmsg_probe,
-+	.remove		= cros_ec_rpmsg_remove,
-+	.callback	= cros_ec_rpmsg_callback,
-+};
-+
-+module_rpmsg_driver(cros_ec_driver_rpmsg);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("ChromeOS EC multi function device (rpmsg)");
+ 	list_for_each_entry(peer, &ar->peers, list)
 diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
 index 893940d45f0d..27079acc3e1d 100644
 --- a/drivers/pwm/pwm-mtk-disp.c
@@ -14944,5 +14619,5 @@ index 1bc0fafe5e29..d569157fe945 100644
  			   mt8183_afe_runtime_resume, NULL)
  };
 -- 
-2.21.0.392.gf8f6787159e-goog
+2.21.0.593.g511ec345e18-goog
 
