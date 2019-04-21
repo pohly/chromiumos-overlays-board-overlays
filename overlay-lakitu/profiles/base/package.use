@@ -41,7 +41,9 @@ net-firewall/ebtables static
 net-analyzer/netcat -crypt
 
 # Enable 'poweroff', 'reboot' and other similar commands that control init.
-sys-apps/systemd sysv-utils
+# Disable split-usr to install units at /usr/lib
+# Enable vanilla to have code aligned with gentoo, though it is not used
+sys-apps/systemd sysv-utils -split-usr vanilla
 
 # Disable systemd-logind session tracker
 sys-auth/pambase -systemd

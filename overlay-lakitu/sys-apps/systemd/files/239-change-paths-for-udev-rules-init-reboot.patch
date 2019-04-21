@@ -1,0 +1,44 @@
+From a6f4ba1ce464697103d1e752be7db1545ae69957 Mon Sep 17 00:00:00 2001
+From: vaibhavrustagi <vaibhavrustagi@google.com>
+Date: Wed, 24 Apr 2019 08:38:01 -0700
+Subject: [PATCH] Change paths for udev rules, init, halt, reboot, shutdown
+ telinit, poweroff
+
+---
+ meson.build | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 04331dd41a..7dac9e251c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -124,7 +124,7 @@ systemshutdowndir = join_paths(rootlibexecdir, 'system-shutdown')
+ systemsleepdir = join_paths(rootlibexecdir, 'system-sleep')
+ systemunitdir = join_paths(rootprefixdir, 'lib/systemd/system')
+ systempresetdir = join_paths(rootprefixdir, 'lib/systemd/system-preset')
+-udevlibexecdir = join_paths(rootprefixdir, 'lib/udev')
++udevlibexecdir = '/lib/udev'
+ udevhomedir = udevlibexecdir
+ udevrulesdir = join_paths(udevlibexecdir, 'rules.d')
+ udevhwdbdir = join_paths(udevlibexecdir, 'hwdb.d')
+@@ -1466,7 +1466,7 @@ executable('systemd',
+ 
+ meson.add_install_script(meson_make_symlink,
+                          join_paths(rootlibexecdir, 'systemd'),
+-                         join_paths(rootsbindir, 'init'))
++                         join_paths('/sbin', 'init'))
+ 
+ exe = executable('systemd-analyze',
+                  systemd_analyze_sources,
+@@ -1773,7 +1773,7 @@ endif
+ foreach alias : ['halt', 'poweroff', 'reboot', 'runlevel', 'shutdown', 'telinit']
+         meson.add_install_script(meson_make_symlink,
+                                  join_paths(rootbindir, 'systemctl'),
+-                                 join_paths(rootsbindir, alias))
++                                 join_paths('/sbin', alias))
+ endforeach
+ 
+ if conf.get('ENABLE_BACKLIGHT') == 1
+-- 
+2.21.0.593.g511ec345e18-goog
+

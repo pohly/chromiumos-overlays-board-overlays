@@ -3,7 +3,3 @@ sys-process/audit::portage-stable
 sys-process/shadow::portage-stable
 # Mask audit from chromiumos-overlay
 sys-process/audit::chromiumos
-
-# Needed to make sure lakitu uses
-# current systemd version - 232
->sys-apps/systemd-232

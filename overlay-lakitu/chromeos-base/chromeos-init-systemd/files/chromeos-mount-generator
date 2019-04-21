@@ -92,10 +92,15 @@ parse_kernel_args() {
 # dev: The device to use for the OEM partition.
 # fstype: The file system type of the OEM partition.
 # output_dir: The directory to output the unit to.
+# enable_dir[Optional]: The directory containing the symlink
+# to the output unit for enabling the output unit. It should
+# be an absolute path.
 gen_oem_partition_mount() {
   local -r dev="$1"
   local -r fstype="$2"
   local -r output_dir="$3"
+  local -r enable_dir="$4"
+
   echo "
 [Unit]
 Before=local-fs.target
@@ -106,6 +111,12 @@ Where=/usr/share/oem
 Type=${fstype}
 Options=ro,nodev,noexec,nosuid
 " > "${output_dir}/usr-share-oem.mount"
+
+  if [[ -n "${enable_dir}" ]]; then
+    # Creating symlink as required by systemd-239
+    ln -s "${output_dir}/usr-share-oem.mount" \
+       "${enable_dir}/usr-share-oem.mount"
+  fi
 }
 
 # Generates the path unit for the input stateful device(s).
@@ -115,9 +126,14 @@ Options=ro,nodev,noexec,nosuid
 # Args:
 # dev: Device path or path prefix for the stateful device
 # output_dir: The directory to output the unit to.
+# enable_dir[Optional]: The directory containing the symlink
+# to the output unit for enabling the output unit. It should
+# be an absolute path.
 gen_stateful_devices_path() {
   local -r dev="$1"
   local -r output_dir="$2"
+  local -r enable_dir="$3"
+
   echo "
 [Unit]
 DefaultDependencies=false
@@ -126,6 +142,12 @@ After=local-fs-pre.target
 [Path]
 PathExistsGlob=${dev}
 " > "${output_dir}/stateful-devices.path"
+
+  if [[ -n "${enable_dir}" ]]; then
+    # Creating symlink as required by systemd-239
+    ln -s "${output_dir}/stateful-devices.path" \
+       "${enable_dir}/stateful-devices.path"
+  fi
 }
 
 # Generates the service that creates the /dev/stateful symlink.
@@ -158,7 +180,8 @@ ExecStart=/usr/share/cloud/stateful-dev-sym-sorted 'stateful' '${dev}'
 configure_dev_stateful() {
   local -r dev="$1"
   local -r output_dir="$2"
-  gen_stateful_devices_path "${dev}" "${output_dir}/local-fs.target.wants"
+  gen_stateful_devices_path "${dev}" "${output_dir}" \
+      "${output_dir}/local-fs.target.wants"
   gen_dev_stateful_service "${dev}" "${output_dir}"
 }
 
@@ -199,10 +222,15 @@ stateful_mount_options() {
 # mkfs_stateful: Indicates if the file system on the stateful partition should
 #   be remade before mounting. Can be 0 or 1; 0 is false, 1 is true.
 # output_dir: The directory to output the unit to.
+# enable_dir[Optional]: The directory containing the symlink
+# to the output unit for enabling the output unit. It should
+# be an absolute path.
 gen_stateful_partition_mount() {
   local -r fstype="$1"
   local -r mkfs_stateful="$2"
   local -r output_dir="$3"
+  local -r enable_dir="$4"
+
   local depend="systemd-fsck@dev-stateful.service"
   if [[ "${mkfs_stateful}" == "1" ]]; then
     depend="stateful-partition-mkfs.service"
@@ -220,6 +248,12 @@ Where=/mnt/stateful_partition
 Type=${fstype}
 Options=$(stateful_mount_options)
 " > "${output_dir}/mnt-stateful_partition.mount"
+
+  if [[ -n "${enable_dir}" ]]; then
+    # Creating symlink as required by systemd-239
+    ln -s "${output_dir}/mnt-stateful_partition.mount" \
+       "${enable_dir}/mnt-stateful_partition.mount"
+  fi
 }
 
 # Generates a systemd mount unit for mounting a logs disk.
@@ -252,11 +286,11 @@ main() {
   parse_kernel_args "${rootdev}"
   mkdir -p "${output_root}/local-fs.target.wants"
   gen_oem_partition_mount "${rootdev}${PARTITION_NUM_OEM}" "${FS_FORMAT_OEM}" \
-    "${output_root}/local-fs.target.wants"
+    "${output_root}" "${output_root}/local-fs.target.wants"
   configure_dev_stateful "${STATEFUL_DEV}" "${output_root}"
   gen_stateful_partition_mkfs "${FS_FORMAT_STATE}" "${output_root}"
   gen_stateful_partition_mount "${FS_FORMAT_STATE}" "${MKFS_STATEFUL}" \
-    "${output_root}/local-fs.target.wants"
+    "${output_root}" "${output_root}/local-fs.target.wants"
   if [[ -n "${LOGS_DEV}" ]]; then
     gen_logs_mount "${LOGS_DEV}" "${output_root}/local-fs.target.wants"
   fi
