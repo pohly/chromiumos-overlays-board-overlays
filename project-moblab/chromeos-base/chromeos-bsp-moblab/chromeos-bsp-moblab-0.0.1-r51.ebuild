@@ -52,6 +52,7 @@ RDEPEND="${RDEPEND}
 	sys-apps/mobmonitor
 	sys-apps/mobmonitor-ui
 	sys-apps/moblab-upstart-init
+	sys-apps/moblab
 "
 
 DEPEND=""
