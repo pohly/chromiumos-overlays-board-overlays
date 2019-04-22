@@ -1,4 +1,4 @@
-From 3a10b085022cacad423ecc390119b0a255ec8250 Mon Sep 17 00:00:00 2001
+From f52acb5952a10aa5f290ded3607574cfc0659306 Mon Sep 17 00:00:00 2001
 From: Dongchun Zhu <dongchun.zhu@mediatek.com>
 Date: Tue, 26 Mar 2019 14:27:17 +0800
 Subject: [PATCH 3/4] TEST-ONLY: Bringup Giant sensor OV02A10
