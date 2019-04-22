@@ -281,8 +281,10 @@ chromeos:
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 33
+          $has-keyboard-backlight: 1
           config: *clamshell_config
         - $sku-id-val: 34
+          $has-keyboard-backlight: 1
           config: *clamshell_config
         - $sku-id-val: 35
           config: *clamshell_config
@@ -293,8 +295,10 @@ chromeos:
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 41
+          $has-keyboard-backlight: 1
           config: *clamshell_config
         - $sku-id-val: 42
+          $has-keyboard-backlight: 1
           config: *clamshell_config
         - $sku-id-val: 43
           config: *clamshell_config
