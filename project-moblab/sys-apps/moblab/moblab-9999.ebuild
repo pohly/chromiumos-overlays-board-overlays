@@ -17,5 +17,9 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="~*"
 
-RDEPEND=""
+RDEPEND="
+		dev-python/futures
+		dev-python/google-cloud-storage
+"
+
 DEPEND="${RDEPEND}"
