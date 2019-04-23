@@ -11,7 +11,7 @@ KEYWORDS="*"
 IUSE=""
 S="${WORKDIR}"
 
-RDEPEND="chromeos-base/autotest-capability-default"
+RDEPEND="chromeos-base/autotest-capability-veyron"
 DEPEND="${RDEPEND}"
 
 src_install() {
