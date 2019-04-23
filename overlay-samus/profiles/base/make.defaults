@@ -47,6 +47,9 @@ USE="${USE} direncryption"
 # by admin.
 USE="${USE} arc_transition_m_to_n"
 
+# A flag to indicate this board is or is paired with a -kernelnext board
+USE="${USE} kernel-transition"
+
 # Disable unibuild on this legacy board. This is only for existing (as of Jan 2019)
 # boards as all new boards must be unibuild enabled moving forward. Do not copy this
 # to new boards as it will be rejected. See
