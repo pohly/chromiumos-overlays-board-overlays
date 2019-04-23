@@ -1,9 +1,9 @@
-From 64067beb327c120bea08dc64b155c0e4c66c6b4f Mon Sep 17 00:00:00 2001
+From 96de18739c00bdaf0969f2f9a3496f0940abe28b Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Mon, 22 Apr 2019 08:56:31 -0700
-Subject: [PATCH 4/4] Squash HQ ToT #28 against Kukui ISP ToT #139.
+Date: Mon, 22 Apr 2019 17:47:34 -0700
+Subject: [PATCH 5/5] Squash HQ ToT #28 against Kukui ISP ToT #139.
 
-Change-Id: Ie25328674908b58893899214aee23904547521d3
+Change-Id: I921efa75a4e77fd21278cb87b7abb07373c1baa5
 ---
  .../bindings/iio/proximity/sx9311.txt         |   19 +
  README                                        |    3 +-
@@ -6795,10 +6795,10 @@ index 000000000000..408c349dd436
 +MODULE_DESCRIPTION("Driver for Semtech SX9311 proximity sensor");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 6e9af1a15bf6..91786567cebc 100644
+index 80a38ad0db15..24cbdb04764d 100644
 --- a/drivers/net/wireless/ath/ath10k/core.c
 +++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -2455,7 +2455,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
+@@ -2454,7 +2454,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
  		goto err_hif_stop;
  	}
  
@@ -6834,10 +6834,10 @@ index 5f7f1e08866f..5c342a1a2b9a 100644
  }
  
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 35a7ff36f821..1d7f00171dc8 100644
+index 1ea6d2dc2f29..88eca876c716 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
-@@ -1633,7 +1633,7 @@ static int ath10k_sdio_hif_diag_write_mem(struct ath10k *ar, u32 address,
+@@ -1629,7 +1629,7 @@ static int ath10k_sdio_hif_diag_write_mem(struct ath10k *ar, u32 address,
  	return 0;
  }
  
@@ -6846,7 +6846,7 @@ index 35a7ff36f821..1d7f00171dc8 100644
  {
  	struct ath10k_sdio *ar_sdio = ath10k_sdio_priv(ar);
  	u32 addr, val;
-@@ -1652,6 +1652,8 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
+@@ -1648,6 +1648,8 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
  			   "sdio mailbox swap service enabled\n");
  		ar_sdio->swap_mbox = true;
  	}

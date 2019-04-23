@@ -1,0 +1,236 @@
+From 153b369043fb2c4c9776f1abba38382730ccea4c Mon Sep 17 00:00:00 2001
+From: YH Lin <yueherngl@google.com>
+Date: Mon, 22 Apr 2019 17:40:26 -0700
+Subject: [PATCH 1/5] Sync kernel source from ToT.
+
+Sync kernel sournce up to 68d609348481c72f79ddb91940f4b1736b0b90a8.
+
+Change-Id: I3d1a695b566e4d89e744dd2e8001765af3656006
+---
+ .../bindings/net/qualcomm-bluetooth.txt       |  2 ++
+ .../mach-rockchip/embedded/rk3288_resume.c    | 10 +++++-----
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 11 +++++++++++
+ arch/x86/kernel/kvmclock.c                    |  6 +-----
+ drivers/bluetooth/btqca.c                     | 14 ++++++++++----
+ drivers/bluetooth/btqca.h                     |  6 ++++--
+ drivers/bluetooth/hci_qca.c                   | 19 ++++++++++++++++++-
+ 7 files changed, 51 insertions(+), 17 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt b/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt
+index 824c0e23c544..2bcea50fe88d 100644
+--- a/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt
++++ b/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt
+@@ -16,6 +16,7 @@ Optional properties for compatible string qcom,qca6174-bt:
+ 
+  - enable-gpios: gpio specifier used to enable chip
+  - clocks: clock provided to the controller (SUSCLK_32KHZ)
++ - firmware-name: specify the name of nvm firmware to load
+ 
+ Required properties for compatible string qcom,wcn3990-bt:
+ 
+@@ -39,6 +40,7 @@ serial@7570000 {
+ 
+ 		enable-gpios = <&pm8994_gpios 19 GPIO_ACTIVE_HIGH>;
+ 		clocks = <&divclk4>;
++		firmware-name = "nvm_00440302.bin";
+ 	};
+ };
+ 
+diff --git a/arch/arm/mach-rockchip/embedded/rk3288_resume.c b/arch/arm/mach-rockchip/embedded/rk3288_resume.c
+index bf187b9f0291..090dbb451429 100644
+--- a/arch/arm/mach-rockchip/embedded/rk3288_resume.c
++++ b/arch/arm/mach-rockchip/embedded/rk3288_resume.c
+@@ -58,31 +58,31 @@ static void __noreturn rk3288_resume_c(void)
+ 		asm volatile("mrc p15, 0, %0, c15, c0, 1" : "=r" (tmp));
+ 		tmp |= (1 << 12);
+ 		asm volatile("mcr p15, 0, %0, c15, c0, 1" : : "r" (tmp));
+-		asm volatile("isb");
++		isb();
+ 	}
+ 	if (IS_ENABLED(CONFIG_ARM_ERRATA_821420)) {
+ 		asm volatile("mrc p15, 0, %0, c15, c0, 2" : "=r" (tmp));
+ 		tmp |= (1 << 1);
+ 		asm volatile("mcr p15, 0, %0, c15, c0, 2" : : "r" (tmp));
+-		asm volatile("isb");
++		isb();
+ 	}
+ 	if (IS_ENABLED(CONFIG_ARM_ERRATA_825619)) {
+ 		asm volatile("mrc p15, 0, %0, c15, c0, 1" : "=r" (tmp));
+ 		tmp |= (1 << 24);
+ 		asm volatile("mcr p15, 0, %0, c15, c0, 1" : : "r" (tmp));
+-		asm volatile("isb");
++		isb();
+ 	}
+ 	if (IS_ENABLED(CONFIG_ARM_ERRATA_FOOBAR)) {
+ 		asm volatile("mrc p15, 0, %0, c15, c0, 1" : "=r" (tmp));
+ 		tmp |= (1 << 10);
+ 		asm volatile("mcr p15, 0, %0, c15, c0, 1" : : "r" (tmp));
+-		asm volatile("isb");
++		isb();
+ 	}
+ 	if (IS_ENABLED(CONFIG_ARM_ERRATA_CR711784)) {
+ 		asm volatile("mrc p15, 0, %0, c15, c0, 1" : "=r" (tmp));
+ 		tmp |= (1 << 11);
+ 		asm volatile("mcr p15, 0, %0, c15, c0, 1" : : "r" (tmp));
+-		asm volatile("isb");
++		isb();
+ 	}
+ 
+ 	if (rk3288_resume_params.ddr_resume_f)
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 77357ae4ebbe..2f55a63f0bfd 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -414,6 +414,17 @@
+ 			status = "disabled";
+ 		};
+ 
++		pwm0: pwm@1100e000 {
++			compatible = "mediatek,mt8183-disp-pwm";
++			reg = <0 0x1100e000 0 0x1000>;
++			interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_LOW>;
++			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
++			#pwm-cells = <2>;
++			clocks = <&topckgen CLK_TOP_MUX_DISP_PWM>,
++					<&infracfg CLK_INFRA_DISP_PWM>;
++			clock-names = "main", "mm";
++		};
++
+ 		i2c3: i2c@1100f000 {
+ 			compatible = "mediatek,mt8183-i2c";
+ 			reg = <0 0x1100f000 0 0x1000>,
+diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
+index 013fe3d21dbb..2ec202cb9dfd 100644
+--- a/arch/x86/kernel/kvmclock.c
++++ b/arch/x86/kernel/kvmclock.c
+@@ -117,12 +117,8 @@ static u64 kvm_sched_clock_read(void)
+ 
+ static inline void kvm_sched_clock_init(bool stable)
+ {
+-	if (!stable) {
+-		pv_time_ops.sched_clock = kvm_clock_read;
++	if (!stable)
+ 		clear_sched_clock_stable();
+-		return;
+-	}
+-
+ 	kvm_sched_clock_offset = kvm_clock_read();
+ 	pv_time_ops.sched_clock = kvm_sched_clock_read;
+ 
+diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
+index 612268574fc7..645a89313960 100644
+--- a/drivers/bluetooth/btqca.c
++++ b/drivers/bluetooth/btqca.c
+@@ -332,7 +332,8 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
+ EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
+ 
+ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+-		   enum qca_btsoc_type soc_type, u32 soc_ver)
++		   enum qca_btsoc_type soc_type, u32 soc_ver,
++		   const char *firmware_name)
+ {
+ 	struct rome_config config;
+ 	int err;
+@@ -368,9 +369,14 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+ 	if (soc_type == QCA_WCN3990)
+ 		snprintf(config.fwname, sizeof(config.fwname),
+ 			 "qca/crnv%02x.bin", rom_ver);
+-	else
+-		snprintf(config.fwname, sizeof(config.fwname),
+-			 "qca/nvm_%08x.bin", soc_ver);
++	else {
++		if (firmware_name)
++			snprintf(config.fwname, sizeof(config.fwname),
++				 "qca/%s", firmware_name);
++		else
++			snprintf(config.fwname, sizeof(config.fwname),
++				 "qca/nvm_%08x.bin", soc_ver);
++	}
+ 
+ 	err = qca_download_firmware(hdev, &config);
+ 	if (err < 0) {
+diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
+index c72c56ea7480..e1fd0b0f0b15 100644
+--- a/drivers/bluetooth/btqca.h
++++ b/drivers/bluetooth/btqca.h
+@@ -139,7 +139,8 @@ enum qca_btsoc_type {
+ 
+ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr);
+ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+-		   enum qca_btsoc_type soc_type, u32 soc_ver);
++		   enum qca_btsoc_type soc_type, u32 soc_ver,
++		   const char *firmware_name);
+ int qca_read_soc_version(struct hci_dev *hdev, u32 *soc_version);
+ int qca_set_bdaddr(struct hci_dev *hdev, const bdaddr_t *bdaddr);
+ #else
+@@ -150,7 +151,8 @@ static inline int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdad
+ }
+ 
+ static inline int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+-				 enum qca_btsoc_type soc_type, u32 soc_ver)
++				 enum qca_btsoc_type soc_type, u32 soc_ver,
++				 const char *firmware_name)
+ {
+ 	return -EOPNOTSUPP;
+ }
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 4ea995d610d2..9b8d4d7802fc 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -168,6 +168,7 @@ struct qca_serdev {
+ 	struct qca_power *bt_power;
+ 	u32 init_speed;
+ 	u32 oper_speed;
++	const char *firmware_name;
+ };
+ 
+ static int qca_power_setup(struct hci_uart *hu, bool on);
+@@ -189,6 +190,17 @@ static enum qca_btsoc_type qca_soc_type(struct hci_uart *hu)
+ 	return soc_type;
+ }
+ 
++static const char *qca_get_firmware_name(struct hci_uart *hu)
++{
++	if (hu->serdev) {
++		struct qca_serdev *qsd = serdev_device_get_drvdata(hu->serdev);
++
++		return qsd->firmware_name;
++	} else {
++		return NULL;
++	}
++}
++
+ static void __serial_clock_on(struct tty_struct *tty)
+ {
+ 	/* TODO: Some chipset requires to enable UART clock on client
+@@ -1191,6 +1203,7 @@ static int qca_setup(struct hci_uart *hu)
+ 	struct qca_data *qca = hu->priv;
+ 	unsigned int speed, qca_baudrate = QCA_BAUDRATE_115200;
+ 	enum qca_btsoc_type soc_type = qca_soc_type(hu);
++	const char *firmware_name = qca_get_firmware_name(hu);
+ 	int ret;
+ 	int soc_ver = 0;
+ 
+@@ -1241,7 +1254,8 @@ static int qca_setup(struct hci_uart *hu)
+ 
+ 	bt_dev_info(hdev, "QCA controller version 0x%08x", soc_ver);
+ 	/* Setup patch / NVM configurations */
+-	ret = qca_uart_setup(hdev, qca_baudrate, soc_type, soc_ver);
++	ret = qca_uart_setup(hdev, qca_baudrate, soc_type, soc_ver,
++			firmware_name);
+ 	if (!ret) {
+ 		set_bit(STATE_IN_BAND_SLEEP_ENABLED, &qca->flags);
+ 		qca_debugfs_init(hdev);
+@@ -1462,6 +1476,9 @@ static int qca_serdev_probe(struct serdev_device *serdev)
+ 			return PTR_ERR(qcadev->bt_en);
+ 		}
+ 
++		device_property_read_string(&serdev->dev, "firmware-name",
++					 &qcadev->firmware_name);
++
+ 		qcadev->susclk = devm_clk_get(&serdev->dev, NULL);
+ 		if (IS_ERR(qcadev->susclk)) {
+ 			dev_err(&serdev->dev, "failed to acquire clk\n");
+-- 
+2.21.0.593.g511ec345e18-goog
+

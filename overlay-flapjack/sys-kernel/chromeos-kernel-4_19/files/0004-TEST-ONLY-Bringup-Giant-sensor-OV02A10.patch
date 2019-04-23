@@ -1,13 +1,9 @@
-From f52acb5952a10aa5f290ded3607574cfc0659306 Mon Sep 17 00:00:00 2001
-From: Dongchun Zhu <dongchun.zhu@mediatek.com>
-Date: Tue, 26 Mar 2019 14:27:17 +0800
-Subject: [PATCH 3/4] TEST-ONLY: Bringup Giant sensor OV02A10
+From 772551687f7e89c45ca6fedcc06d97bf676a3412 Mon Sep 17 00:00:00 2001
+From: YH Lin <yueherngl@google.com>
+Date: Mon, 22 Apr 2019 17:46:06 -0700
+Subject: [PATCH 4/5] TEST-ONLY: Bringup Giant sensor OV02A10.
 
-1. Add sensor for Giant Proj
-2. Prepare for P1 UT
-
-Change-Id: I3109722c70147bfd3140623a472aac595010a890
-Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
+Change-Id: Id262b9a58a2df8838af6b6784224290f45167896
 ---
  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   20 +-
  .../arm64/chromiumos-arm64.flavour.config     |    2 +-
