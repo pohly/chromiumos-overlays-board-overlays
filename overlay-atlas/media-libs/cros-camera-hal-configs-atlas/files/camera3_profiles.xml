@@ -58,7 +58,7 @@
             <request.pipelineMaxDepth value="6"/>
             <request.maxNumInputStreams value="1"/>
             <request.partialResultCount value="1"/>
-            <request.availableCapabilities value="BACKWARD_COMPATIBLE,YUV_REPROCESSING"/>
+            <request.availableCapabilities value="BACKWARD_COMPATIBLE,READ_SENSOR_SETTINGS,MANUAL_SENSOR,YUV_REPROCESSING"/>
             <request.availableRequestKeys value="blackLevel.lock,
                 colorCorrection.aberrationMode,
                 colorCorrection.gains,
@@ -88,6 +88,9 @@
                 jpeg.thumbnailSize,
                 scaler.cropRegion,
                 statistics.faceDetectMode,
+                sensor.frameDuration,
+                sensor.exposureTime,
+                sensor.sensitivity,
                 lens.focalLength,
                 lens.aperture,
                 lens.focusDistance,
@@ -142,6 +145,9 @@
                 shading.mode,
                 statistics.faceDetectMode,
                 statistics.hotPixelMapMode,
+                sensor.frameDuration,
+                sensor.exposureTime,
+                sensor.sensitivity,
                 statistics.hotPixelMap,
                 statistics.faces,
                 statistics.lensShadingCorrectionMap,
