@@ -3,11 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-pid=$1
-exec_device=$(stat -L -c %D /proc/$pid/exe)
-root_device=$(stat -c %D /)
-
-if [ "${exec_device}" != "${root_device}" ]; then
-        logger --tag crash_reporter "Not collecting crash from pid=${pid}"
-        exit 1
-fi
+# Do no collect any userland crash.
+# Userland crash are reported in minidump format, which contains stack memory.
+# Since COS do not depend on userland crashes for debugging (yet), we should
+# remove it to simplify the privacy question.
+exit 1
