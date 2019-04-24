@@ -25,5 +25,13 @@ EC_FIRMWARE_EXTRA="cr50"
 # Include the wacom firmware updating tool
 INPUT_DEVICES="${INPUT_DEVICES} wacom"
 
+# For legacy reasons, Reef uses unibuild in Chrome OS builds, but not in Chromium OS
+# builds. All new boards must be unibuild-enabled moving forward. Do not copy this
+# to new boards as it will be rejected. See
+# https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/chromeos-config/README.md
+# for further details about chromeos-config, which is the required entry point for
+# unified builds.
+USE="${USE} -unibuild"
+
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS2"
