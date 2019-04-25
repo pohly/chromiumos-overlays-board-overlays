@@ -36,7 +36,7 @@ RDEPEND+="
 "
 
 # Default to the 4.14 kernel if none has been selected.
-RDEPEND_DEFAULT="sys-kernel/lakitu-kernel-4_14"
+RDEPEND_DEFAULT="sys-kernel/lakitu-kernel-4_19"
 # Here be dragons!
 RDEPEND+="
 	$(printf '!%s? ( ' "${IUSE_KERNEL_VERS[@]}")
