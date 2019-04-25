@@ -4,7 +4,4 @@
 # found in the LICENSE file.
 
 # Do no collect any userland crash.
-# Userland crash are reported in minidump format, which contains stack memory.
-# Since COS do not depend on userland crashes for debugging (yet), we should
-# remove it to simplify the privacy question.
 exit 1
