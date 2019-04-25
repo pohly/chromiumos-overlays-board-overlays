@@ -378,7 +378,7 @@ chromeos:
       skus:
         - $sku-id-val: 255
           $fw-name: "Casta"
-          config: *clamshell_config
+          config: *unprovisioned_convertible_config
     - $device-name: "casta"
       $fw-name: "Casta"
       $num-mic-locations: 1
