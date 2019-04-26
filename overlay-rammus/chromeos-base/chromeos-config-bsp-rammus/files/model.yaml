@@ -58,3 +58,9 @@ chromeos:
           config: *common_config
         - $sku-id: 0x2a63
           config: *common_config
+        - $sku-id: 0x2ae3  # shyvana-m
+          config: *common_config
+    - $device-name: "leona"
+      skus:
+        - $sku-id: 0x2863  # leona
+          config: *common_config
