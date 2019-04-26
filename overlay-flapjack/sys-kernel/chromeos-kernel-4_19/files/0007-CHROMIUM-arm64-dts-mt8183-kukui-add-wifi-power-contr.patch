@@ -1,0 +1,80 @@
+From 3325e3508626998d6191cfa98edeff9cf09e15e2 Mon Sep 17 00:00:00 2001
+From: jjian zhou <jjian.zhou@mediatek.com>
+Date: Fri, 26 Apr 2019 11:12:06 +0800
+Subject: [PATCH 7/7] CHROMIUM: arm64: dts: mt8183-kukui: add wifi power
+ controller
+
+Add regulator control gpio 119. Pull-down gpio if wifi
+driver do re-init card.
+
+BUG=b:131043339
+TEST=Boot kukui, SDIO speed mode is correct
+
+Change-Id: I325df93ae939e929618f7234f18c674cce4e4138
+Signed-off-by: jjian zhou <jjian.zhou@mediatek.com>
+---
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 27 ++++++++++++++-----
+ 1 file changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index 0bf7b3c081bf..63710e7ba952 100755
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -65,6 +65,22 @@
+ 		regulator-min-microvolt = <1800000>;
+ 		regulator-max-microvolt = <1800000>;
+ 		gpio = <&pio 178 0>;
++	};
++
++	mmc1_fixed_power: regulator@3 {
++		compatible = "regulator-fixed";
++		regulator-name = "mmc1_power";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&pio 119 0>;
++		enable-active-high;
++	};
++
++	mmc1_fixed_io: regulator@4 {
++		compatible = "regulator-fixed";
++		regulator-name = "mmc1_io";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
+ 		enable-active-high;
+ 	};
+ 
+@@ -392,8 +408,8 @@
+ 	pinctrl-names = "default", "state_uhs";
+ 	pinctrl-0 = <&mmc1_pins_default>;
+ 	pinctrl-1 = <&mmc1_pins_uhs>;
+-	vmmc-supply = <&mt6358_vmch_reg>;
+-	vqmmc-supply = <&mt6358_vmc_reg>;
++	vmmc-supply = <&mmc1_fixed_power>;
++	vqmmc-supply = <&mmc1_fixed_io>;
+ 	bus-width = <4>;
+ 	max-frequency = <200000000>;
+ 	drv-type = <2>;
+@@ -406,6 +422,8 @@
+ 	non-removable;
+ 	no-mmc;
+ 	no-sd;
++	assigned-clocks = <&topckgen CLK_TOP_MUX_MSDC30_1>;
++	assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
+ };
+ 
+ &mt6358_vdram2_reg {
+@@ -715,11 +733,6 @@
+ 			input-enable;
+ 			mediatek,pull-down-adv = <10>;
+ 		};
+-
+-		pins_wifi {
+-			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
+-			output-high;
+-		};
+ 	};
+ 
+ 	mmc1_pins_uhs: mmc1@0 {
+-- 
+2.21.0.593.g511ec345e18-goog
+

@@ -1,0 +1,38 @@
+From 9c69181e120f69f6cc6ca0e2b20bfe9ed1d902be Mon Sep 17 00:00:00 2001
+From: Wen Gong <wgong@codeaurora.org>
+Date: Fri, 26 Apr 2019 16:26:33 +0800
+Subject: [PATCH 6/7] RFC: ath10k: remove mmc_hw_reset while hif power down
+
+For sdio 3.0 chip, the clock will drop from 200M Hz to 50M Hz after load
+ath10k driver, it is because mmc_hw_reset will reset the sdio's power,
+then mmc will consider it as sdio 2.0 and drop the clock.
+
+Remove mmc_hw_reset will avoid the drop of clock.
+
+Tested with QCA6174 SDIO with firmware
+WLAN.RMH.4.4.1-00007-QCARMSWP-1.
+
+Change-Id: Ie3cfdf6aba09295c06ee84379cdb3dbf1cd12688
+Signed-off-by: Wen Gong <wgong@codeaurora.org>
+---
+ drivers/net/wireless/ath/ath10k/sdio.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
+index 88eca876c716..e41b072a1fb8 100644
+--- a/drivers/net/wireless/ath/ath10k/sdio.c
++++ b/drivers/net/wireless/ath/ath10k/sdio.c
+@@ -1443,10 +1443,6 @@ static void ath10k_sdio_hif_power_down(struct ath10k *ar)
+ 		return;
+ 	}
+ 
+-	ret = mmc_hw_reset(ar_sdio->func->card->host);
+-	if (ret)
+-		ath10k_warn(ar, "unable to reset sdio: %d\n", ret);
+-
+ 	sdio_release_host(ar_sdio->func);
+ 
+ 	ar_sdio->is_disabled = true;
+-- 
+2.21.0.593.g511ec345e18-goog
+

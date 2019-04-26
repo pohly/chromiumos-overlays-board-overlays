@@ -1,7 +1,7 @@
 From d241478b4c2f35ad25892ebdcc097f0571ac723c Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
 Date: Thu, 25 Apr 2019 17:32:16 -0700
-Subject: [PATCH 5/5] Squash HQ ToT #29 against Kukui ISP ToT #139.
+Subject: [PATCH 5/7] Squash HQ ToT #29 against Kukui ISP ToT #139.
 
 Change-Id: I94a3eea1a9c88600ee477421f47322c5ed93c23d
 ---

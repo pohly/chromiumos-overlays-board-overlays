@@ -1,7 +1,7 @@
 From 76c9bee82501f8109dc5d8d0bc051eee223cfaf5 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
 Date: Thu, 25 Apr 2019 15:52:27 -0700
-Subject: [PATCH 3/5] Squash Kukui ISP ToT #139 against MTK ToT #151.
+Subject: [PATCH 3/7] Squash Kukui ISP ToT #139 against MTK ToT #151.
 
 Change-Id: I718fdf27a04660464b699a02c91e471e137c2ed8
 ---

@@ -1,7 +1,7 @@
 From d2c6d6cf7f75a85693c36747120199f5e1489f7d Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
 Date: Thu, 25 Apr 2019 15:54:45 -0700
-Subject: [PATCH 4/5] TEST-ONLY: Bringup Giant sensor OV02A10 #39.
+Subject: [PATCH 4/7] TEST-ONLY: Bringup Giant sensor OV02A10 #39.
 
 Change-Id: I883cc337fbcc31d720f35d84083f04475bbc5901
 ---

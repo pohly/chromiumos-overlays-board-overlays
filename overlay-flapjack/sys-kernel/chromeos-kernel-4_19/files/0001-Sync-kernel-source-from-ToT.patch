@@ -1,7 +1,7 @@
 From ea4fdfda0eda71d38018b7a32bbe767a66f61984 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
 Date: Thu, 25 Apr 2019 15:47:41 -0700
-Subject: [PATCH 1/5] Sync kernel source from ToT.
+Subject: [PATCH 1/7] Sync kernel source from ToT.
 
 Change-Id: I4d2724dd056909ddb98b9052c8cd77aaa44fa536
 ---

@@ -1,7 +1,7 @@
 From 3af3d697e8d15ab17d41af1eacbb5b7b14fcbc92 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
 Date: Thu, 25 Apr 2019 15:51:00 -0700
-Subject: [PATCH 2/5] Squash MTK ToT #151.
+Subject: [PATCH 2/7] Squash MTK ToT #151.
 
 Change-Id: Ifa2c8aa48e54adf7981df8cc6e08977226eb0d3a
 ---
