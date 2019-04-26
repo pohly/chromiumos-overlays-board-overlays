@@ -1,19 +1,25 @@
-From 2435826e0f7d4fab386c4afdeb4dcbe4c0226c14 Mon Sep 17 00:00:00 2001
-From: Dongchun Zhu <dongchun.zhu@mediatek.com>
-Date: Tue, 26 Mar 2019 14:27:17 +0800
-Subject: [PATCH] TEST-ONLY: Bringup Giant sensor OV02A10
+From d2c6d6cf7f75a85693c36747120199f5e1489f7d Mon Sep 17 00:00:00 2001
+From: YH Lin <yueherngl@google.com>
+Date: Thu, 25 Apr 2019 15:54:45 -0700
+Subject: [PATCH 4/5] TEST-ONLY: Bringup Giant sensor OV02A10 #39.
 
-1. Add sensor for Giant Proj
-2. Prepare for P1 UT
-
-Change-Id: I3109722c70147bfd3140623a472aac595010a890
-Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
+Change-Id: I883cc337fbcc31d720f35d84083f04475bbc5901
 ---
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   20 +-
+ .../arm64/chromiumos-arm64.flavour.config     |    2 +-
+ .../arm64/chromiumos-mediatek.flavour.config  |    2 +-
+ drivers/media/i2c/Kconfig                     |   12 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/ov02a10.c                   | 1055 +++++++++++++++++
+ .../mtk-isp/isp_50/seninf/seninf_drv_def.h    |    2 +-
+ 7 files changed, 1082 insertions(+), 12 deletions(-)
+ mode change 100644 => 100755 arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+ create mode 100755 drivers/media/i2c/ov02a10.c
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 old mode 100644
 new mode 100755
-index b2fd77e..fc61d7d
+index b2fd77e04164..fc61d7d25af5
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -228,7 +228,7 @@
@@ -86,10 +92,10 @@ index b2fd77e..fc61d7d
  	};
  
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index b21176b..afb8ee9 100644
+index 4a054df0d6cb..065254f44892 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -1012,8 +1012,8 @@
+@@ -1013,8 +1013,8 @@ CONFIG_VIDEO_MEDIATEK_MDP3=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIDEO_MEDIATEK_VPU=y
  # CONFIG_VIDEO_MUX is not set
@@ -100,10 +106,10 @@ index b21176b..afb8ee9 100644
  # CONFIG_VIDEO_PVRUSB2 is not set
  # CONFIG_VIDEO_QCOM_CAMSS is not set
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 38192d9..3852619 100644
+index 74855922e1c7..1dec1fdc2932 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-@@ -283,8 +283,8 @@
+@@ -284,8 +284,8 @@ CONFIG_VIDEO_MEDIATEK_MDP3=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIDEO_MEDIATEK_VPU=y
  # CONFIG_VIDEO_MUX is not set
@@ -114,10 +120,10 @@ index 38192d9..3852619 100644
  # CONFIG_VIDEO_STK1160_COMMON is not set
  # CONFIG_VIDEO_TM6000 is not set
 diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 7f6e4d3..3719036 100644
+index 7f6e4d35d985..3719036912b7 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
-@@ -43,6 +43,18 @@
+@@ -43,6 +43,18 @@ config VIDEO_OV5695
  	  To compile this driver as a module, choose M here: the
  	  module will be called ov5695.
  
@@ -137,10 +143,10 @@ index 7f6e4d3..3719036 100644
  # Encoder / Decoder module configuration
  #
 diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index a94eb03..e2673e0 100644
+index a94eb03d10d4..e2673e0e73d8 100644
 --- a/drivers/media/i2c/Makefile
 +++ b/drivers/media/i2c/Makefile
-@@ -72,6 +72,7 @@
+@@ -72,6 +72,7 @@ obj-$(CONFIG_VIDEO_OV5645) += ov5645.o
  obj-$(CONFIG_VIDEO_OV5647) += ov5647.o
  obj-$(CONFIG_VIDEO_OV5670) += ov5670.o
  obj-$(CONFIG_VIDEO_OV5695) += ov5695.o
@@ -150,7 +156,7 @@ index a94eb03..e2673e0 100644
  obj-$(CONFIG_VIDEO_OV7640) += ov7640.o
 diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
 new file mode 100755
-index 0000000..e1cd303
+index 000000000000..e1cd303e8a21
 --- /dev/null
 +++ b/drivers/media/i2c/ov02a10.c
 @@ -0,0 +1,1055 @@
@@ -1210,7 +1216,7 @@ index 0000000..e1cd303
 +MODULE_LICENSE("GPL v2");
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
-index 6280ae49..49268c3 100644
+index 6280ae49a97d..49268c36a337 100644
 --- a/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
 +++ b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
 @@ -26,7 +26,7 @@
@@ -1222,3 +1228,6 @@ index 6280ae49..49268c3 100644
  #endif
  
  #define SENINF_DRV_DEBUG_DELAY 1000
+-- 
+2.21.0.593.g511ec345e18-goog
+

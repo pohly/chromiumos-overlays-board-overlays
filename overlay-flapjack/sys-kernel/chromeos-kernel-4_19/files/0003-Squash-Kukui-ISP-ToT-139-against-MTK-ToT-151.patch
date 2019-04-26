@@ -1,9 +1,9 @@
-From b87fd6bd8f84b6ffafb672e0d3f8bdf242f96380 Mon Sep 17 00:00:00 2001
+From 76c9bee82501f8109dc5d8d0bc051eee223cfaf5 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Mon, 22 Apr 2019 17:44:17 -0700
+Date: Thu, 25 Apr 2019 15:52:27 -0700
 Subject: [PATCH 3/5] Squash Kukui ISP ToT #139 against MTK ToT #151.
 
-Change-Id: Ib4b0fe633481a1baf921b548abf29bccfda8c0c5
+Change-Id: I718fdf27a04660464b699a02c91e471e137c2ed8
 ---
  .../bindings/media/mediatek,cam_smem.txt      |   32 +
  .../bindings/media/mediatek,camisp.txt        |   59 +

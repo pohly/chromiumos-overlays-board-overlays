@@ -1,11 +1,9 @@
-From 153b369043fb2c4c9776f1abba38382730ccea4c Mon Sep 17 00:00:00 2001
+From ea4fdfda0eda71d38018b7a32bbe767a66f61984 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Mon, 22 Apr 2019 17:40:26 -0700
+Date: Thu, 25 Apr 2019 15:47:41 -0700
 Subject: [PATCH 1/5] Sync kernel source from ToT.
 
-Sync kernel sournce up to 68d609348481c72f79ddb91940f4b1736b0b90a8.
-
-Change-Id: I3d1a695b566e4d89e744dd2e8001765af3656006
+Change-Id: I4d2724dd056909ddb98b9052c8cd77aaa44fa536
 ---
  .../bindings/net/qualcomm-bluetooth.txt       |  2 ++
  .../mach-rockchip/embedded/rk3288_resume.c    | 10 +++++-----

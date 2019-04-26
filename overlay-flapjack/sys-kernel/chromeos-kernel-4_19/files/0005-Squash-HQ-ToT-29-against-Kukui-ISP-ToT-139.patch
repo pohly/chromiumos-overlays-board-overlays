@@ -1,18 +1,18 @@
-From 96de18739c00bdaf0969f2f9a3496f0940abe28b Mon Sep 17 00:00:00 2001
+From d241478b4c2f35ad25892ebdcc097f0571ac723c Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Mon, 22 Apr 2019 17:47:34 -0700
-Subject: [PATCH 5/5] Squash HQ ToT #28 against Kukui ISP ToT #139.
+Date: Thu, 25 Apr 2019 17:32:16 -0700
+Subject: [PATCH 5/5] Squash HQ ToT #29 against Kukui ISP ToT #139.
 
-Change-Id: I921efa75a4e77fd21278cb87b7abb07373c1baa5
+Change-Id: I94a3eea1a9c88600ee477421f47322c5ed93c23d
 ---
  .../bindings/iio/proximity/sx9311.txt         |   19 +
  README                                        |    3 +-
  arch/arm64/boot/dts/mediatek/Makefile         |    4 +
  arch/arm64/boot/dts/mediatek/mt6358.dtsi      |    4 +-
- .../mt8183-flapjack-rev4-sku1-hwconfig2.dts   |  275 ++
- .../mt8183-flapjack-rev4-sku1-hwconfig4.dts   |  265 ++
- .../mt8183-flapjack-rev4-sku3-hwconfig1.dts   |  277 ++
- .../mt8183-flapjack-rev4-sku3-hwconfig3.dts   |  266 ++
+ .../mt8183-flapjack-rev4-sku1-hwconfig2.dts   |  276 ++
+ .../mt8183-flapjack-rev4-sku1-hwconfig4.dts   |  266 ++
+ .../mt8183-flapjack-rev4-sku3-hwconfig1.dts   |  278 ++
+ .../mt8183-flapjack-rev4-sku3-hwconfig3.dts   |  267 ++
  .../boot/dts/mediatek/mt8183-flapjack.dtsi    |  141 +
  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   87 +
  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   11 +
@@ -20,9 +20,12 @@ Change-Id: I921efa75a4e77fd21278cb87b7abb07373c1baa5
  .../arm64/chromiumos-mediatek.flavour.config  |    5 +-
  drivers/gpu/drm/bridge/Makefile               |    1 +
  drivers/gpu/drm/bridge/ite-it6505.c           | 2948 +++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   15 +
+ drivers/gpu/drm/drm_panel.c                   |   38 +-
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   14 +
  drivers/gpu/drm/mediatek/mtk_dpi.c            |   29 +
- drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  945 ++++++
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   28 +
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |   15 +
+ drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  967 +++++-
  drivers/iio/proximity/Kconfig                 |   13 +
  drivers/iio/proximity/Makefile                |    1 +
  drivers/iio/proximity/sx9311.c                | 1144 +++++++
@@ -30,9 +33,9 @@ Change-Id: I921efa75a4e77fd21278cb87b7abb07373c1baa5
  drivers/net/wireless/ath/ath10k/hif.h         |    6 +-
  drivers/net/wireless/ath/ath10k/sdio.c        |    4 +-
  drivers/thermal/mtk_thermal.c                 |  117 +-
- sound/soc/codecs/max98357a.c                  |   96 +-
+ include/drm/drm_panel.h                       |   11 +
  .../mediatek/mt8183/mt8183-da7219-max98357.c  |    2 +-
- 27 files changed, 6645 insertions(+), 37 deletions(-)
+ 30 files changed, 6678 insertions(+), 25 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/iio/proximity/sx9311.txt
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
@@ -110,10 +113,10 @@ index e95cb4c0910a..5dc7753b12d8 100644
  		};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
 new file mode 100755
-index 000000000000..c8e31c39fc06
+index 000000000000..0c02221a1040
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
-@@ -0,0 +1,275 @@
+@@ -0,0 +1,276 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -169,6 +172,7 @@ index 000000000000..c8e31c39fc06
 +		pinctrl-1 = <&panel_pins_3300mv>;
 +		pinctrl-2 = <&panel_pins_1800mv>;
 +		backlight = <&backlight_lcd0>;
++		rotation = <180>;
 +		status = "okay";
 +
 +		port {
@@ -391,10 +395,10 @@ index 000000000000..c8e31c39fc06
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
 new file mode 100755
-index 000000000000..6d95d65d7d27
+index 000000000000..01c74b918be2
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
-@@ -0,0 +1,265 @@
+@@ -0,0 +1,266 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -440,6 +444,7 @@ index 000000000000..6d95d65d7d27
 +		pinctrl-1 = <&panel_pins_3300mv>;
 +		pinctrl-2 = <&panel_pins_1800mv>;
 +		backlight = <&backlight_lcd0>;
++		rotation = <180>;
 +		status = "okay";
 +
 +		port {
@@ -662,10 +667,10 @@ index 000000000000..6d95d65d7d27
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts
 new file mode 100755
-index 000000000000..7832b76960c2
+index 000000000000..911c212864c5
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts
-@@ -0,0 +1,277 @@
+@@ -0,0 +1,278 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -723,6 +728,7 @@ index 000000000000..7832b76960c2
 +		pinctrl-1 = <&panel_pins_3300mv>;
 +		pinctrl-2 = <&panel_pins_1800mv>;
 +		backlight = <&backlight_lcd0>;
++		rotation = <180>;
 +		status = "okay";
 +
 +		port {
@@ -945,10 +951,10 @@ index 000000000000..7832b76960c2
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts
 new file mode 100755
-index 000000000000..6a62ccb488bf
+index 000000000000..41d4a7fe70e8
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts
-@@ -0,0 +1,266 @@
+@@ -0,0 +1,267 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -996,6 +1002,7 @@ index 000000000000..6a62ccb488bf
 +		pinctrl-1 = <&panel_pins_3300mv>;
 +		pinctrl-2 = <&panel_pins_1800mv>;
 +		backlight = <&backlight_lcd0>;
++		rotation = <180>;
 +		status = "okay";
 +
 +		port {
@@ -4521,8 +4528,77 @@ index 000000000000..35f0bede1ace
 +MODULE_AUTHOR("Jitao Shi <jitao.shi@mediatek.com>");
 +MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
 +MODULE_LICENSE("GPL v2");
+diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
+index c33f95e08e1b..d54ebe8f2652 100644
+--- a/drivers/gpu/drm/drm_panel.c
++++ b/drivers/gpu/drm/drm_panel.c
+@@ -101,13 +101,23 @@ EXPORT_SYMBOL(drm_panel_remove);
+  */
+ int drm_panel_attach(struct drm_panel *panel, struct drm_connector *connector)
+ {
++	int ret = 0;
++
+ 	if (panel->connector)
+ 		return -EBUSY;
+ 
+ 	panel->connector = connector;
+ 	panel->drm = connector->dev;
+ 
+-	return 0;
++	if (panel->funcs->attach) {
++		ret = panel->funcs->attach(panel);
++		if (ret < 0) {
++			panel->connector = NULL;
++			panel->drm = NULL;
++		}
++	}
++
++	return ret;
+ }
+ EXPORT_SYMBOL(drm_panel_attach);
+ 
+@@ -125,6 +135,9 @@ EXPORT_SYMBOL(drm_panel_attach);
+  */
+ int drm_panel_detach(struct drm_panel *panel)
+ {
++	if (panel->funcs->detach)
++		panel->funcs->detach(panel);
++
+ 	panel->connector = NULL;
+ 	panel->drm = NULL;
+ 
+@@ -169,6 +182,29 @@ struct drm_panel *of_drm_find_panel(const struct device_node *np)
+ 	return ERR_PTR(-EPROBE_DEFER);
+ }
+ EXPORT_SYMBOL(of_drm_find_panel);
++
++int of_drm_get_panel_orientation(const struct device_node *np, int *orientation)
++{
++	int rotation;
++
++	if (of_property_read_u32(np, "rotation", &rotation)) {
++		*orientation = DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
++		return 0;
++	}
++
++	if (rotation == 0)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_NORMAL;
++	else if (rotation == 90)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP;
++	else if (rotation == 180)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_BOTTOM_UP;
++	else if (rotation == 270)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP;
++	else
++		return -EINVAL;
++
++	return 0;
++}
+ #endif
+ 
+ MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
 diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
-index ebadcfed3a0a..c92f0e6d5387 100644
+index ebadcfed3a0a..b33fe170732b 100644
 --- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
 +++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
 @@ -32,6 +32,8 @@
@@ -4534,36 +4610,29 @@ index ebadcfed3a0a..c92f0e6d5387 100644
  #define DISP_REG_OVL_SRC_SIZE(n)		(0x0038 + 0x20 * (n))
  #define DISP_REG_OVL_OFFSET(n)			(0x003c + 0x20 * (n))
  #define DISP_REG_OVL_PITCH(n)			(0x0044 + 0x20 * (n))
-@@ -218,6 +220,7 @@ static unsigned int ovl_fmt_convert(struct mtk_disp_ovl *ovl, unsigned int fmt)
- 	}
- }
- 
-+static int ovl_rotate_180 = 1;
- static void mtk_ovl_layer_config(struct mtk_ddp_comp *comp, unsigned int idx,
- 				 struct mtk_plane_state *state)
- {
-@@ -229,6 +232,13 @@ static void mtk_ovl_layer_config(struct mtk_ddp_comp *comp, unsigned int idx,
+@@ -228,14 +230,26 @@ static void mtk_ovl_layer_config(struct mtk_ddp_comp *comp, unsigned int idx,
+ 	unsigned int fmt = pending->format;
  	unsigned int offset = (pending->y << 16) | pending->x;
  	unsigned int src_size = (pending->height << 16) | pending->width;
- 	unsigned int con;
 +	unsigned int bpp = drm_format_plane_cpp(fmt, 0);
-+
+ 	unsigned int con;
+ 
 +	DRM_DEBUG_DRIVER(
 +	"layer %d enable %d fmt 0x%x (%X %X %X %X) pitch %X addr 0x%X bpp %d\n",
 +	idx, pending->enable, fmt,
 +	pending->x, pending->y, pending->width, pending->height, pitch,
 +	pending->addr, bpp);
- 
++
  	if (!pending->enable)
  		mtk_ovl_layer_off(comp, idx);
-@@ -236,6 +246,11 @@ static void mtk_ovl_layer_config(struct mtk_ddp_comp *comp, unsigned int idx,
+ 
  	con = ovl_fmt_convert(ovl, fmt);
  	if (idx != 0)
  		con |= OVL_CON_AEN | OVL_CON_ALPHA;
-+	if (ovl_rotate_180) {
++	if (state->base.rotation & DRM_MODE_ROTATE_180) {
 +		con |= (DISP_REG_OVL_V_FLIP_EN | DISP_REG_OVL_H_FLIP_EN);
-+		addr += (pitch*pending->height -
-+			(pitch - pending->width * bpp) - 1);
++		addr += pitch * (pending->height - 1) +
++			pending->width * bpp - 1;
 +	}
  
  	writel_relaxed(con, comp->regs + DISP_REG_OVL_CON(idx));
@@ -4643,11 +4712,140 @@ index 62a9d47df948..189d04ed0f41 100644
  	{ },
  };
  
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index 903883dd194c..0c15443bde7d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -470,14 +470,41 @@ static void mtk_drm_crtc_atomic_begin(struct drm_crtc *crtc,
+ 	}
+ }
+ 
++static struct drm_connector *mtk_drm_get_connector(struct drm_crtc *crtc)
++{
++	struct drm_encoder *encoder;
++	struct drm_connector *connector;
++	struct drm_connector_list_iter conn_iter;
++
++	drm_for_each_encoder(encoder, crtc->dev) {
++		if (encoder->crtc != crtc)
++			continue;
++
++		drm_connector_list_iter_begin(crtc->dev, &conn_iter);
++		drm_for_each_connector_iter(connector, &conn_iter) {
++			if (connector->encoder == encoder)
++				return connector;
++		}
++	}
++
++	return NULL;
++}
++
+ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+ 				      struct drm_crtc_state *old_crtc_state)
+ {
+ 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+ 	struct mtk_drm_private *priv = crtc->dev->dev_private;
++	struct drm_connector *connector;
+ 	unsigned int pending_planes = 0;
++	unsigned int rotation = DRM_MODE_ROTATE_0;
+ 	int i;
+ 
++	connector = mtk_drm_get_connector(crtc);
++	if (connector && connector->display_info.panel_orientation ==
++			 DRM_MODE_PANEL_ORIENTATION_BOTTOM_UP)
++		rotation = DRM_MODE_ROTATE_180;
++
+ 	if (mtk_crtc->event)
+ 		mtk_crtc->pending_needs_vblank = true;
+ 	for (i = 0; i < mtk_crtc->layer_nr; i++) {
+@@ -488,6 +515,7 @@ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+ 		if (plane_state->pending.dirty) {
+ 			plane_state->pending.config = true;
+ 			plane_state->pending.dirty = false;
++			plane_state->base.rotation = rotation;
+ 			pending_planes |= BIT(i);
+ 		}
+ 	}
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index 5d8227c90371..661566b3535a 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -877,10 +877,25 @@ static int mtk_dsi_create_connector(struct drm_device *drm, struct mtk_dsi *dsi)
+ 			DRM_ERROR("Failed to attach panel to drm\n");
+ 			goto err_connector_cleanup;
+ 		}
++
++		/*
++		 * We don't need to put in accurate pixel heigh/width since we
++		 * don't care about any of the panel quirks which are just x86
++		 * BIOS hacks. We only care about the device tree settings which
++		 * should be filled in for the connector in drm_panel_attach.
++		 */
++		ret = drm_connector_init_panel_orientation_property(&dsi->conn,
++								    0, 0);
++		if (ret) {
++			DRM_ERROR("Failed to init panel orientation\n");
++			goto err_panel_detach;
++		}
+ 	}
+ 
+ 	return 0;
+ 
++err_panel_detach:
++	drm_panel_detach(dsi->panel);
+ err_connector_cleanup:
+ 	drm_connector_cleanup(&dsi->conn);
+ 	return ret;
 diff --git a/drivers/gpu/drm/panel/panel-boe-himax8279d.c b/drivers/gpu/drm/panel/panel-boe-himax8279d.c
-index ff5a89e38fd7..e1686064b6b5 100644
+index ff5a89e38fd7..7a0ade07a72d 100644
 --- a/drivers/gpu/drm/panel/panel-boe-himax8279d.c
 +++ b/drivers/gpu/drm/panel/panel-boe-himax8279d.c
-@@ -587,6 +587,285 @@ static const struct panel_desc boe_himax8279d8p_panel_desc = {
+@@ -61,6 +61,7 @@ struct panel_info {
+ 	struct gpio_desc *enable_gpio;
+ 	struct gpio_desc *pp33_gpio;
+ 	struct gpio_desc *pp18_gpio;
++	int orientation;
+ 
+ 	bool prepared;
+ 	bool enabled;
+@@ -146,6 +147,18 @@ static int boe_panel_unprepare(struct drm_panel *panel)
+ 	return err;
+ }
+ 
++static int boe_panel_attach(struct drm_panel *panel)
++{
++	struct panel_info *pinfo = to_panel_info(panel);
++
++	panel->connector->display_info.width_mm = pinfo->desc->width_mm;
++	panel->connector->display_info.height_mm = pinfo->desc->height_mm;
++	panel->connector->display_info.bpc = pinfo->desc->bpc;
++	panel->connector->display_info.panel_orientation = pinfo->orientation;
++
++	return 0;
++}
++
+ static int boe_panel_prepare(struct drm_panel *panel)
+ {
+ 	struct panel_info *pinfo = to_panel_info(panel);
+@@ -226,16 +239,13 @@ static int boe_panel_get_modes(struct drm_panel *panel)
+ 
+ 	drm_mode_probed_add(panel->connector, mode);
+ 
+-	panel->connector->display_info.width_mm = pinfo->desc->width_mm;
+-	panel->connector->display_info.height_mm = pinfo->desc->height_mm;
+-	panel->connector->display_info.bpc = pinfo->desc->bpc;
+-
+ 	return 1;
+ }
+ 
+ static const struct drm_panel_funcs panel_funcs = {
+ 	.disable = boe_panel_disable,
+ 	.unprepare = boe_panel_unprepare,
++	.attach = boe_panel_attach,
+ 	.prepare = boe_panel_prepare,
+ 	.enable = boe_panel_enable,
+ 	.get_modes = boe_panel_get_modes,
+@@ -587,6 +597,285 @@ static const struct panel_desc boe_himax8279d8p_panel_desc = {
  	.off_cmds = default_off_cmds,
  };
  
@@ -4933,7 +5131,7 @@ index ff5a89e38fd7..e1686064b6b5 100644
  /* 10 inch */
  static const struct panel_cmd boe_himax8279d10p_on_cmds[] = {
  	_INIT_CMD(0x00, 0xB0, 0x05),
-@@ -910,11 +1189,677 @@ static const struct panel_desc boe_himax8279d10p_panel_desc = {
+@@ -910,11 +1199,677 @@ static const struct panel_desc boe_himax8279d10p_panel_desc = {
  	.off_cmds = default_off_cmds,
  };
  
@@ -5611,6 +5809,17 @@ index ff5a89e38fd7..e1686064b6b5 100644
  	}, {
  		/* sentinel */
  	}
+@@ -958,6 +1913,10 @@ static int panel_add(struct panel_info *pinfo)
+ 	if (IS_ERR(pinfo->backlight))
+ 		return PTR_ERR(pinfo->backlight);
+ 
++	ret = of_drm_get_panel_orientation(dev->of_node, &pinfo->orientation);
++	if (ret < 0)
++		return ret;
++
+ 	drm_panel_init(&pinfo->base);
+ 	pinfo->base.funcs = &panel_funcs;
+ 	pinfo->base.dev = &pinfo->link->dev;
 diff --git a/drivers/iio/proximity/Kconfig b/drivers/iio/proximity/Kconfig
 index 388ef70c11d2..d16c1d4649ce 100644
 --- a/drivers/iio/proximity/Kconfig
@@ -7038,134 +7247,47 @@ index e4ea7f6aef20..61a18c0d271c
  	if (IS_ERR(tzdev)) {
  		ret = PTR_ERR(tzdev);
  		goto err_disable_clk_peri_therm;
-diff --git a/sound/soc/codecs/max98357a.c b/sound/soc/codecs/max98357a.c
-index 9aac1fda94c8..cfecbdaa5853 100644
---- a/sound/soc/codecs/max98357a.c
-+++ b/sound/soc/codecs/max98357a.c
-@@ -69,12 +69,54 @@ static int max98357a_daiops_trigger(struct snd_pcm_substream *substream,
- 	return 0;
- }
+diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
+index 8c738c0e6e9f..e136e3a3c996 100644
+--- a/include/drm/drm_panel.h
++++ b/include/drm/drm_panel.h
+@@ -37,6 +37,8 @@ struct display_timing;
+  * struct drm_panel_funcs - perform operations on a given panel
+  * @disable: disable panel (turn off back light, etc.)
+  * @unprepare: turn off panel
++ * @detach: detach panel->connector (clear internal state, etc.)
++ * @attach: attach panel->connector (update internal state, etc.)
+  * @prepare: turn on panel and perform set up
+  * @enable: enable panel (turn on back light, etc.)
+  * @get_modes: add modes to the connector that the panel is attached to and
+@@ -70,6 +72,8 @@ struct display_timing;
+ struct drm_panel_funcs {
+ 	int (*disable)(struct drm_panel *panel);
+ 	int (*unprepare)(struct drm_panel *panel);
++	void (*detach)(struct drm_panel *panel);
++	int (*attach)(struct drm_panel *panel);
+ 	int (*prepare)(struct drm_panel *panel);
+ 	int (*enable)(struct drm_panel *panel);
+ 	int (*get_modes)(struct drm_panel *panel);
+@@ -197,11 +201,18 @@ int drm_panel_detach(struct drm_panel *panel);
  
-+static const char * const ext_spk_text[] = {
-+	"Off", "On"
-+};
-+
-+static const struct soc_enum ext_spk_enum =
-+	SOC_ENUM_SINGLE(SND_SOC_NOPM, 0,
-+		ARRAY_SIZE(ext_spk_text), ext_spk_text);
-+
-+
-+static const struct snd_kcontrol_new ext_spk_mux =
-+	SOC_DAPM_ENUM("Ext Spk Switch Mux", ext_spk_enum);
-+
-+
-+static int max98357a_enable_spk_pa(struct snd_soc_dapm_widget *w,
-+		struct snd_kcontrol *kcontrol, int event)
+ #if defined(CONFIG_OF) && defined(CONFIG_DRM_PANEL)
+ struct drm_panel *of_drm_find_panel(const struct device_node *np);
++int of_drm_get_panel_orientation(const struct device_node *np,
++				 int *orientation);
+ #else
+ static inline struct drm_panel *of_drm_find_panel(const struct device_node *np)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
++int of_drm_get_panel_orientation(const struct device_node *np,
++				 int *orientation)
 +{
-+	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
-+	struct max98357a_priv *max98357a = snd_soc_component_get_drvdata(cmpnt);
-+
-+	if (!max98357a->sdmode)
-+		return 0;
-+
-+	switch (event) {
-+	case SND_SOC_DAPM_POST_PMU:
-+		queue_delayed_work(system_power_efficient_wq,
-+				&max98357a->enable_sdmode_work,
-+				msecs_to_jiffies(max98357a->sdmode_delay));
-+		break;
-+	case SND_SOC_DAPM_PRE_PMD:
-+		cancel_delayed_work(&max98357a->enable_sdmode_work);
-+		gpiod_set_value(max98357a->sdmode, 0);
-+		break;
-+	}
-+	return 0;
++	return -ENODEV;
 +}
-+
- static const struct snd_soc_dapm_widget max98357a_dapm_widgets[] = {
- 	SND_SOC_DAPM_OUTPUT("Speaker"),
-+	SND_SOC_DAPM_SPK("Spk PA", max98357a_enable_spk_pa),
-+	SND_SOC_DAPM_MUX("Spk PA Switch", SND_SOC_NOPM, 0, 0,
-+			&ext_spk_mux),
- };
+ #endif
  
- static const struct snd_soc_dapm_route max98357a_dapm_routes[] = {
- 	{"Speaker", NULL, "HiFi Playback"},
-+	{"Speaker", NULL, "Spk PA"},
-+	{"Spk PA", NULL, "Spk PA Switch"},
-+	{"Spk PA Switch", "On", "HiFi Playback1"},
- };
- 
- static int max98357a_component_probe(struct snd_soc_component *component)
-@@ -119,23 +161,43 @@ static const struct snd_soc_dai_ops max98357a_dai_ops = {
- 	.trigger	= max98357a_daiops_trigger,
- };
- 
--static struct snd_soc_dai_driver max98357a_dai_driver = {
--	.name = "HiFi",
--	.playback = {
--		.stream_name	= "HiFi Playback",
--		.formats	= SNDRV_PCM_FMTBIT_S16 |
--					SNDRV_PCM_FMTBIT_S24 |
--					SNDRV_PCM_FMTBIT_S32,
--		.rates		= SNDRV_PCM_RATE_8000 |
--					SNDRV_PCM_RATE_16000 |
--					SNDRV_PCM_RATE_48000 |
--					SNDRV_PCM_RATE_96000,
--		.rate_min	= 8000,
--		.rate_max	= 96000,
--		.channels_min	= 1,
--		.channels_max	= 2,
-+static struct snd_soc_dai_driver max98357a_dai_driver[] = {
-+	{
-+		.name = "HiFi",
-+		.playback = {
-+			.stream_name	= "HiFi Playback",
-+			.formats	= SNDRV_PCM_FMTBIT_S16 |
-+						SNDRV_PCM_FMTBIT_S24 |
-+						SNDRV_PCM_FMTBIT_S32,
-+			.rates		= SNDRV_PCM_RATE_8000 |
-+						SNDRV_PCM_RATE_16000 |
-+						SNDRV_PCM_RATE_48000 |
-+						SNDRV_PCM_RATE_96000,
-+			.rate_min	= 8000,
-+			.rate_max	= 96000,
-+			.channels_min	= 1,
-+			.channels_max	= 2,
-+		},
-+		.ops    = &max98357a_dai_ops,
-+	},
-+	{
-+		.name = "max98357a-hifi",
-+		.playback = {
-+			.stream_name	= "HiFi Playback1",
-+			.formats	= SNDRV_PCM_FMTBIT_S16 |
-+						SNDRV_PCM_FMTBIT_S24 |
-+						SNDRV_PCM_FMTBIT_S32,
-+			.rates		= SNDRV_PCM_RATE_8000 |
-+						SNDRV_PCM_RATE_16000 |
-+						SNDRV_PCM_RATE_48000 |
-+						SNDRV_PCM_RATE_96000,
-+			.rate_min	= 8000,
-+			.rate_max	= 96000,
-+			.channels_min	= 1,
-+			.channels_max	= 2,
-+		},
-+		.ops    = NULL,
- 	},
--	.ops    = &max98357a_dai_ops,
- };
- 
- static int max98357a_platform_probe(struct platform_device *pdev)
-@@ -161,7 +223,7 @@ static int max98357a_platform_probe(struct platform_device *pdev)
- 
- 	return devm_snd_soc_register_component(&pdev->dev,
- 			&max98357a_component_driver,
--			&max98357a_dai_driver, 1);
-+			max98357a_dai_driver, ARRAY_SIZE(max98357a_dai_driver));
- }
- 
- static int max98357a_platform_remove(struct platform_device *pdev)
+ #endif
 diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 old mode 100644
 new mode 100755
