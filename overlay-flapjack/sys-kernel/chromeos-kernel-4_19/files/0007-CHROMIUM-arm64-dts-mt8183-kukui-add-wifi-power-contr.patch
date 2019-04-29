@@ -1,37 +1,39 @@
-From 3325e3508626998d6191cfa98edeff9cf09e15e2 Mon Sep 17 00:00:00 2001
+From e29399e0c701632ceb7a356abe4ab6eba0fb45bd Mon Sep 17 00:00:00 2001
 From: jjian zhou <jjian.zhou@mediatek.com>
 Date: Fri, 26 Apr 2019 11:12:06 +0800
 Subject: [PATCH 7/7] CHROMIUM: arm64: dts: mt8183-kukui: add wifi power
  controller
 
-Add regulator control gpio 119. Pull-down gpio if wifi
-driver do re-init card.
+To comply with schematic design, remove gpio119 from
+mmc1_fixed_power and add it back as wlan_en pin in
+mmc1default.
 
 BUG=b:131043339
-TEST=Boot kukui, SDIO speed mode is correct
+TEST=Cherry-pick and update kernel with
+     https://crrev.com/c/1585667. Make sure SDIO clk
+     is running at 200MHz correctly by checking
+     /sys/kernel/debug/mmc1/ios
 
 Change-Id: I325df93ae939e929618f7234f18c674cce4e4138
 Signed-off-by: jjian zhou <jjian.zhou@mediatek.com>
+Signed-off-by: Ayo Wu <ayowu@chromium.org>
 ---
- .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 27 ++++++++++++++-----
- 1 file changed, 20 insertions(+), 7 deletions(-)
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 24 ++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 0bf7b3c081bf..63710e7ba952 100755
+index 0bf7b3c081bf..91d5f5ce1fe1 100755
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -65,6 +65,22 @@
- 		regulator-min-microvolt = <1800000>;
- 		regulator-max-microvolt = <1800000>;
- 		gpio = <&pio 178 0>;
-+	};
-+
+@@ -68,6 +68,22 @@
+ 		enable-active-high;
+ 	};
+ 
 +	mmc1_fixed_power: regulator@3 {
 +		compatible = "regulator-fixed";
 +		regulator-name = "mmc1_power";
 +		regulator-min-microvolt = <3300000>;
 +		regulator-max-microvolt = <3300000>;
-+		gpio = <&pio 119 0>;
 +		enable-active-high;
 +	};
 +
@@ -40,9 +42,12 @@ index 0bf7b3c081bf..63710e7ba952 100755
 +		regulator-name = "mmc1_io";
 +		regulator-min-microvolt = <1800000>;
 +		regulator-max-microvolt = <1800000>;
- 		enable-active-high;
- 	};
- 
++		enable-active-high;
++	};
++
+ 	reserved_memory: reserved-memory {
+ 		#address-cells = <2>;
+ 		#size-cells = <2>;
 @@ -392,8 +408,8 @@
  	pinctrl-names = "default", "state_uhs";
  	pinctrl-0 = <&mmc1_pins_default>;
@@ -63,18 +68,15 @@ index 0bf7b3c081bf..63710e7ba952 100755
  };
  
  &mt6358_vdram2_reg {
-@@ -715,11 +733,6 @@
- 			input-enable;
+@@ -716,7 +734,7 @@
  			mediatek,pull-down-adv = <10>;
  		};
--
--		pins_wifi {
--			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
--			output-high;
--		};
- 	};
  
- 	mmc1_pins_uhs: mmc1@0 {
+-		pins_wifi {
++		pins_wlan_en {
+ 			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
+ 			output-high;
+ 		};
 -- 
 2.21.0.593.g511ec345e18-goog
 

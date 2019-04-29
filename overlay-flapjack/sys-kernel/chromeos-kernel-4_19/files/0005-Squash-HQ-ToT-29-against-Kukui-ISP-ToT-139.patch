@@ -1,9 +1,9 @@
-From d241478b4c2f35ad25892ebdcc097f0571ac723c Mon Sep 17 00:00:00 2001
+From f03cbd2479b9af83133652db8fcf992bd563f7d5 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 25 Apr 2019 17:32:16 -0700
+Date: Mon, 29 Apr 2019 10:46:01 -0700
 Subject: [PATCH 5/7] Squash HQ ToT #29 against Kukui ISP ToT #139.
 
-Change-Id: I94a3eea1a9c88600ee477421f47322c5ed93c23d
+Change-Id: I7334e23d584d0c56e92093465196815562abc867
 ---
  .../bindings/iio/proximity/sx9311.txt         |   19 +
  README                                        |    3 +-
@@ -34,8 +34,9 @@ Change-Id: I94a3eea1a9c88600ee477421f47322c5ed93c23d
  drivers/net/wireless/ath/ath10k/sdio.c        |    4 +-
  drivers/thermal/mtk_thermal.c                 |  117 +-
  include/drm/drm_panel.h                       |   11 +
+ sound/soc/codecs/max98357a.c                  |   96 +-
  .../mediatek/mt8183/mt8183-da7219-max98357.c  |    2 +-
- 30 files changed, 6678 insertions(+), 25 deletions(-)
+ 31 files changed, 6757 insertions(+), 42 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/iio/proximity/sx9311.txt
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
@@ -7288,6 +7289,134 @@ index 8c738c0e6e9f..e136e3a3c996 100644
  #endif
  
  #endif
+diff --git a/sound/soc/codecs/max98357a.c b/sound/soc/codecs/max98357a.c
+index 9aac1fda94c8..cfecbdaa5853 100644
+--- a/sound/soc/codecs/max98357a.c
++++ b/sound/soc/codecs/max98357a.c
+@@ -69,12 +69,54 @@ static int max98357a_daiops_trigger(struct snd_pcm_substream *substream,
+ 	return 0;
+ }
+ 
++static const char * const ext_spk_text[] = {
++	"Off", "On"
++};
++
++static const struct soc_enum ext_spk_enum =
++	SOC_ENUM_SINGLE(SND_SOC_NOPM, 0,
++		ARRAY_SIZE(ext_spk_text), ext_spk_text);
++
++
++static const struct snd_kcontrol_new ext_spk_mux =
++	SOC_DAPM_ENUM("Ext Spk Switch Mux", ext_spk_enum);
++
++
++static int max98357a_enable_spk_pa(struct snd_soc_dapm_widget *w,
++		struct snd_kcontrol *kcontrol, int event)
++{
++	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
++	struct max98357a_priv *max98357a = snd_soc_component_get_drvdata(cmpnt);
++
++	if (!max98357a->sdmode)
++		return 0;
++
++	switch (event) {
++	case SND_SOC_DAPM_POST_PMU:
++		queue_delayed_work(system_power_efficient_wq,
++				&max98357a->enable_sdmode_work,
++				msecs_to_jiffies(max98357a->sdmode_delay));
++		break;
++	case SND_SOC_DAPM_PRE_PMD:
++		cancel_delayed_work(&max98357a->enable_sdmode_work);
++		gpiod_set_value(max98357a->sdmode, 0);
++		break;
++	}
++	return 0;
++}
++
+ static const struct snd_soc_dapm_widget max98357a_dapm_widgets[] = {
+ 	SND_SOC_DAPM_OUTPUT("Speaker"),
++	SND_SOC_DAPM_SPK("Spk PA", max98357a_enable_spk_pa),
++	SND_SOC_DAPM_MUX("Spk PA Switch", SND_SOC_NOPM, 0, 0,
++			&ext_spk_mux),
+ };
+ 
+ static const struct snd_soc_dapm_route max98357a_dapm_routes[] = {
+ 	{"Speaker", NULL, "HiFi Playback"},
++	{"Speaker", NULL, "Spk PA"},
++	{"Spk PA", NULL, "Spk PA Switch"},
++	{"Spk PA Switch", "On", "HiFi Playback1"},
+ };
+ 
+ static int max98357a_component_probe(struct snd_soc_component *component)
+@@ -119,23 +161,43 @@ static const struct snd_soc_dai_ops max98357a_dai_ops = {
+ 	.trigger	= max98357a_daiops_trigger,
+ };
+ 
+-static struct snd_soc_dai_driver max98357a_dai_driver = {
+-	.name = "HiFi",
+-	.playback = {
+-		.stream_name	= "HiFi Playback",
+-		.formats	= SNDRV_PCM_FMTBIT_S16 |
+-					SNDRV_PCM_FMTBIT_S24 |
+-					SNDRV_PCM_FMTBIT_S32,
+-		.rates		= SNDRV_PCM_RATE_8000 |
+-					SNDRV_PCM_RATE_16000 |
+-					SNDRV_PCM_RATE_48000 |
+-					SNDRV_PCM_RATE_96000,
+-		.rate_min	= 8000,
+-		.rate_max	= 96000,
+-		.channels_min	= 1,
+-		.channels_max	= 2,
++static struct snd_soc_dai_driver max98357a_dai_driver[] = {
++	{
++		.name = "HiFi",
++		.playback = {
++			.stream_name	= "HiFi Playback",
++			.formats	= SNDRV_PCM_FMTBIT_S16 |
++						SNDRV_PCM_FMTBIT_S24 |
++						SNDRV_PCM_FMTBIT_S32,
++			.rates		= SNDRV_PCM_RATE_8000 |
++						SNDRV_PCM_RATE_16000 |
++						SNDRV_PCM_RATE_48000 |
++						SNDRV_PCM_RATE_96000,
++			.rate_min	= 8000,
++			.rate_max	= 96000,
++			.channels_min	= 1,
++			.channels_max	= 2,
++		},
++		.ops    = &max98357a_dai_ops,
++	},
++	{
++		.name = "max98357a-hifi",
++		.playback = {
++			.stream_name	= "HiFi Playback1",
++			.formats	= SNDRV_PCM_FMTBIT_S16 |
++						SNDRV_PCM_FMTBIT_S24 |
++						SNDRV_PCM_FMTBIT_S32,
++			.rates		= SNDRV_PCM_RATE_8000 |
++						SNDRV_PCM_RATE_16000 |
++						SNDRV_PCM_RATE_48000 |
++						SNDRV_PCM_RATE_96000,
++			.rate_min	= 8000,
++			.rate_max	= 96000,
++			.channels_min	= 1,
++			.channels_max	= 2,
++		},
++		.ops    = NULL,
+ 	},
+-	.ops    = &max98357a_dai_ops,
+ };
+ 
+ static int max98357a_platform_probe(struct platform_device *pdev)
+@@ -161,7 +223,7 @@ static int max98357a_platform_probe(struct platform_device *pdev)
+ 
+ 	return devm_snd_soc_register_component(&pdev->dev,
+ 			&max98357a_component_driver,
+-			&max98357a_dai_driver, 1);
++			max98357a_dai_driver, ARRAY_SIZE(max98357a_dai_driver));
+ }
+ 
+ static int max98357a_platform_remove(struct platform_device *pdev)
 diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 old mode 100644
 new mode 100755
