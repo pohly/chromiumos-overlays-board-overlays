@@ -18,7 +18,6 @@ RDEPEND=""
 DEPEND="
         ${RDEPEND}
         chromeos-base/chromeos-config
-	chromeos-base/touch_updater
 "
 
 src_install() {
@@ -41,7 +40,6 @@ src_install() {
 
 	unibuild_install_audio_files
 	unibuild_install_bluetooth_files
-	unibuild_install_touch_files
 
         # Arcada use Wacom touch screen with different firmware to support
         # different panels. As a result, we need a way to identify the correct
