@@ -75,8 +75,7 @@ chromeos:
       $has-lid-accelerometer-val: True
       $has-base-accelerometer-val: True
       $has-base-gyroscope-val: True
-      # TODO:(b/128619310) Enable magnetometer when fixed
-      $has-base-magnetometer-val: False
+      $has-base-magnetometer-val: True
       $has-touchscreen-val: True
       skus:
         - $sku-id: 2
