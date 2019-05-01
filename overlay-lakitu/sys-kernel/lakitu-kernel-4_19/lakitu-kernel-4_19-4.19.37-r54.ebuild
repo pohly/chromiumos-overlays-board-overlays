@@ -1,11 +1,11 @@
-# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-CROS_WORKON_COMMIT="cc6cb1dbe391355d807800e485719bd2eb7a37b7"
-CROS_WORKON_TREE="0d4988368e277f6972843195d9323630b1bf8297"
+EAPI=6
+CROS_WORKON_COMMIT="a9dfadc8100fca5144e3524ce83411018446a700"
+CROS_WORKON_TREE="315017727f540bccdb79fc4aebc79886ca3a42f1"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
-CROS_WORKON_LOCALNAME="kernel/v4.14"
+CROS_WORKON_LOCALNAME="kernel/v4.19"
 
 CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
 
@@ -15,7 +15,7 @@ inherit cros-workon cros-kernel2 osreleased
 STRIP_MASK+=" /usr/src/${P}/build/vmlinux"
 STRIP_MASK+=" *.ko"
 
-DESCRIPTION="Chromium OS Linux Kernel 4.14"
+DESCRIPTION="Chromium OS Linux Kernel 4.19"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="*"
 IUSE="module_sign gpu"
@@ -39,6 +39,12 @@ src_configure() {
 		fi
 	fi
 	cros-kernel2_src_configure
+}
+
+# Change for EAPI=6
+src_prepare() {
+        default
+        cros-kernel2_src_prepare
 }
 
 tar_kernel_source() {
@@ -65,11 +71,11 @@ src_install() {
 
 # Change the following (commented out) number to the next prime number
 # when you change base.config.  This workaround will force the
-# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_14 ebuild and pick up the
+# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_19 ebuild and pick up the
 # configuration changes.  In absence of this workaround the config changes
 # would not be picked up unless there was a code change in kernel source tree.
 #
 # NOTE: There's nothing magic keeping this number prime but you just need to
 # make _any_ change to this file.  ...so why not keep it prime?
 #
-# The coolest prime number is: 83
+# The coolest prime number is: 2
