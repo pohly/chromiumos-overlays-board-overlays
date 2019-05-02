@@ -23,12 +23,18 @@ board_make_image_bootable() {
   fi
 }
 
-write_toolchain_path() {
+get_toolchain_path() {
   local -r cros_overlay="/mnt/host/source/src/third_party/chromiumos-overlay"
   local -r sdk_ver_file="${cros_overlay}/chromeos/binhost/host/sdk_version.conf"
   local -r ctarget="$(portageq-"${BOARD}" envvar CHOST)"
   . "${sdk_ver_file}"
   local -r toolchain_path="${TC_PATH/\%\(target\)s/${ctarget}}"
+  echo "${toolchain_path}"
+}
+
+write_toolchain_path() {
+  local toolchain_path
+  toolchain_path=$(get_toolchain_path)
   # Write toolchain path to image.
   echo "${toolchain_path}" | \
       sudo tee "${root_fs_dir}/etc/toolchain-path" > /dev/null
@@ -45,11 +51,34 @@ move_kernel_source() {
   sudo rm -rf "${root_fs_dir}/opt/google/src"
 }
 
+write_toolchain_info() {
+  # Create toolchain_info file in BUILD_DIR so that it can be exported
+  # as an artifact.
+  local artifact="${BUILD_DIR}/toolchain_info"
+
+  # File from which kernel compiler information will be copied
+  # This file is deleted after copying content to artifact
+  local toolchain_info_file="${root_fs_dir}/etc/toolchain_info"
+
+  # Append toolchain_path to toolchain_info
+  # Example for toolchain_path:
+  # toolchain_path=2019/04/x86_64-cros-linux-gnu-2019.04.30.115636.tar.xz
+  # Adding toolchain_path to toolchain_info in BUILD artifact
+  echo "toolchain_path=$(get_toolchain_path)" > "${artifact}"
+
+  # Copy kernel compiler info to BUILD artifact
+  cat "${toolchain_info_file}" >> "${artifact}"
+
+  # Remove toolchain_info from image
+  sudo rm "${toolchain_info_file}"
+}
+
 # board_finalize_base_image() gets invoked by the build scripts at the
 # end of building base image.
 board_finalize_base_image() {
   write_toolchain_path
   move_kernel_source
+  write_toolchain_info
 
   # /etc/machine-id gets installed by sys-apps/dbus and is a symlink.
   # This conflicts with systemd's machine-id generation mechanism,
