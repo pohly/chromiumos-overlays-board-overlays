@@ -34,3 +34,7 @@ USE="${USE} drm_dp_aux_chardev"
 
 # Enable keyboard backlight support
 USE="${USE} has_keyboard_backlight"
+
+# Set the keyboard as a wake source only for clamshell modes
+# and let the OS inhibit key presses while in tablet mode
+USE="${USE} keyboard_includes_side_buttons"
