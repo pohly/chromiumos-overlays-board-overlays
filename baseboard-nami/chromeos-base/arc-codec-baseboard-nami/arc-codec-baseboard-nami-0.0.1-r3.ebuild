@@ -1,1 +1,0 @@
-arc-codec-baseboard-nami-0.0.1.ebuild
