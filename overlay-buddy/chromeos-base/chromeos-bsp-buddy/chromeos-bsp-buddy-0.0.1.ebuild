@@ -1,7 +1,7 @@
 # Copyright 2015 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 
 inherit appid cros-audio-configs udev
 
@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE=""
+IUSE="buddy-cfm"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -24,7 +24,11 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{B801E98B-4AB6-4D82-B3B3-E1517DC53266}" "CHROMEBASE"
+	if use buddy-cfm; then
+		doappid "{77959015-A462-5EF5-3130-7A4883F4B9C8}" "CHROMEBASE"
+	else
+		doappid "{B801E98B-4AB6-4D82-B3B3-E1517DC53266}" "CHROMEBASE"
+	fi
 
 	# Install audio_config files
 	local audio_config_dir="${FILESDIR}/audio-config"
