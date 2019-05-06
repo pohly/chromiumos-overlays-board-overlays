@@ -19,6 +19,9 @@ USE="${USE} -cros_ec_utils"
 # Enable fwupd
 USE="${USE} fwupd"
 
+# Enable modemfwd for updating modem firmware
+USE="${USE} modemfwd"
+
 # Enable building kernel support for the EC
 USE="${USE} wilco_ec"
 
