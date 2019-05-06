@@ -5,7 +5,7 @@ EAPI=5
 
 CROS_WORKON_PROJECT="chromiumos/platform2"
 CROS_WORKON_LOCALNAME="../platform2"
-CROS_WORKON_SUBTREE=".gn camera/build camera/common camera/hal/rockchip camera/include camera/mojo common-mk"
+CROS_WORKON_SUBTREE=".gn camera/build camera/common camera/hal/rockchip camera/include camera/mojo common-mk metrics"
 CROS_WORKON_OUTOFTREE_BUILD="1"
 CROS_WORKON_INCREMENTAL_BUILD="1"
 
@@ -33,6 +33,7 @@ RDEPEND="
 	media-libs/rockchip-isp1-3a-libs-bin"
 
 DEPEND="${RDEPEND}
+	chromeos-base/metrics
 	media-libs/cros-camera-android-headers
 	media-libs/libyuv
 	sys-kernel/linux-headers
