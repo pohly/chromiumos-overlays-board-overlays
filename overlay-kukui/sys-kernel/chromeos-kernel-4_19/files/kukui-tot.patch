@@ -1,18 +1,64 @@
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-index fadf327c7cdf716..bd68195458b9bd6 100644
---- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-+++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-@@ -26,7 +26,7 @@ The MIPI TX configuration module controls the MIPI D-PHY.
- 
- Required properties:
- - compatible: "mediatek,<chip>-mipi-tx"
--  the supported chips are mt2701 and mt8173.
-+  the supported chips are mt2701 , mt8173 and mt8183.
- - reg: Physical base address and length of the controller's registers
- - clocks: PLL reference clock
- - clock-output-names: name of the output clock line to the DSI encoder
+diff --git a/Documentation/devicetree/bindings/devfreq/devfreq-cpufreq-map.txt b/Documentation/devicetree/bindings/devfreq/devfreq-cpufreq-map.txt
+new file mode 100644
+index 000000000000..982a30bcfc86
+--- /dev/null
++++ b/Documentation/devicetree/bindings/devfreq/devfreq-cpufreq-map.txt
+@@ -0,0 +1,53 @@
++Devfreq CPUfreq governor
++
++devfreq-cpufreq-map is a parent device that contains one or more child devices.
++Each child device provides CPU frequency to device frequency mapping for a
++specific device. Examples of devices that could use this are: DDR, cache and
++CCI.
++
++Parent device name shall be "devfreq-cpufreq-map".
++
++Required child device properties:
++- cpu-to-dev-map, or cpu-to-dev-map-<X>:
++			A list of tuples where each tuple consists of a
++			CPU frequency (KHz) and the corresponding device
++			frequency. CPU frequencies not listed in the table
++			will use the device frequency that corresponds to the
++			next rounded up CPU frequency.
++			Use "cpu-to-dev-map" if all CPUs in the system should
++			share same mapping.
++			Use cpu-to-dev-map-<cpuid> to describe different
++			mappings for different CPUs. The property should be
++			listed only for the first CPU if multiple CPUs are
++			synchronous.
++- target-dev:		Phandle to device that this mapping applies to.
++
++Example:
++	devfreq-cpufreq-map {
++		cpubw-cpufreq {
++			target-dev = <&cpubw>;
++			cpu-to-dev-map =
++				<  300000  1144000 >,
++				<  422400  2288000 >,
++				<  652800  3051000 >,
++				<  883200  5996000 >,
++				< 1190400  8056000 >,
++				< 1497600 10101000 >,
++				< 1728000 12145000 >,
++				< 2649600 16250000 >;
++		};
++
++		cache-cpufreq {
++			target-dev = <&cache>;
++			cpu-to-dev-map =
++				<  300000  300000 >,
++				<  422400  422400 >,
++				<  652800  499200 >,
++				<  883200  576000 >,
++				<  960000  960000 >,
++				< 1497600 1036800 >,
++				< 1574400 1574400 >,
++				< 1728000 1651200 >,
++				< 2649600 1728000 >;
++		};
++	};
 diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-index 7d72b21c9e94d4a..755b30fd6041b65 100644
+index 7d72b21c9e94..755b30fd6041 100644
 --- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
 +++ b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
 @@ -9,7 +9,7 @@ CMDQ driver uses mailbox framework for communication. Please refer to
@@ -87,7 +133,7 @@ index 7d72b21c9e94d4a..755b30fd6041b65 100644
  		...
  	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-vpu.txt b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
-index 2a5bac37f9a2268..015123250b82571 100644
+index 2a5bac37f9a2..015123250b82 100644
 --- a/Documentation/devicetree/bindings/media/mediatek-vpu.txt
 +++ b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
 @@ -4,7 +4,7 @@ Video Processor Unit is a HW video controller. It controls HW Codec including
@@ -101,7 +147,7 @@ index 2a5bac37f9a2268..015123250b82571 100644
      "tcm": tcm base
 diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt b/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
 new file mode 100644
-index 000000000000000..a19e3b39ba66164
+index 000000000000..a19e3b39ba66
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
 @@ -0,0 +1,19 @@
@@ -125,7 +171,7 @@ index 000000000000000..a19e3b39ba66164
 +			 <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
 +};
 diff --git a/Documentation/devicetree/bindings/mfd/cros-ec.txt b/Documentation/devicetree/bindings/mfd/cros-ec.txt
-index 6245c9b1a68bbc4..4860eabd0f7296c 100644
+index 6245c9b1a68b..4860eabd0f72 100644
 --- a/Documentation/devicetree/bindings/mfd/cros-ec.txt
 +++ b/Documentation/devicetree/bindings/mfd/cros-ec.txt
 @@ -3,7 +3,7 @@ ChromeOS Embedded Controller
@@ -147,9 +193,21 @@ index 6245c9b1a68bbc4..4860eabd0f7296c 100644
  Optional properties (SPI):
  - google,cros-ec-spi-pre-delay: Some implementations of the EC need a little
    time to wake up from sleep before they can receive SPI transfers at a high
+diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+index 0668c45a156d..b4d448bb60ce 100644
+--- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
++++ b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+@@ -7,6 +7,7 @@ Required properties:
+ 	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
+ 	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
+ 	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
++	      "mediatek,mt8183-efuse" or "mediatek,efuse": for MT8183
+ - reg: Should contain registers location and length
+ 
+ = Data cells =
 diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
 new file mode 100644
-index 000000000000000..3ba668bab14b229
+index 000000000000..3ba668bab14b
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
 @@ -0,0 +1,36 @@
@@ -190,7 +248,7 @@ index 000000000000000..3ba668bab14b229
 +		clock-names = "main";
 +	};
 diff --git a/Makefile b/Makefile
-index 125bed3ba01cd6e..8640fe6adb54ae9 100644
+index 47243407f6e4..820b316d5ee1 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -199,16 +257,16 @@ index 125bed3ba01cd6e..8640fe6adb54ae9 100644
  VERSION = 4
  PATCHLEVEL = 19
 diff --git a/README b/README
-index 2c927ccbd97055c..dadf580c61dfe74 100644
+index 2c927ccbd970..768caa3970ef 100644
 --- a/README
 +++ b/README
 @@ -1,3 +1,4 @@
-+MTK TOT krane
++MTK TOT
  Linux kernel
  ============
  
 diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index d9124842fdd08cf..d09409979c8447a 100644
+index d9124842fdd0..d09409979c84 100644
 --- a/arch/arm64/boot/dts/mediatek/Makefile
 +++ b/arch/arm64/boot/dts/mediatek/Makefile
 @@ -8,4 +8,6 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
@@ -219,7 +277,7 @@ index d9124842fdd08cf..d09409979c8447a 100644
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-index 50dc1e1a6881f34..d9980051f9b68e0 100644
+index 50dc1e1a6881..d9980051f9b6 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
 @@ -38,6 +38,10 @@
@@ -235,7 +293,7 @@ index 50dc1e1a6881f34..d9980051f9b68e0 100644
  	mali-supply = <&mt6358_vgpu_reg>;
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
 new file mode 100644
-index 000000000000000..4c71b09e26a3312
+index 000000000000..4c71b09e26a3
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
 @@ -0,0 +1,325 @@
@@ -565,15 +623,38 @@ index 000000000000000..4c71b09e26a3312
 +};
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-old mode 100644
-new mode 100755
-index 46b8f0c16d7b232..d490dc0899f376c
+index 46b8f0c16d7b..0fafd858b4b1 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-@@ -11,6 +11,22 @@
- 	compatible = "google,kukui-rev1", "google,kukui", "mediatek,mt8183";
+@@ -210,14 +210,44 @@
+ 		"",
+ 		"",
+ 		"";
++
++	touch_default: touchdefault {
++		pin_irq {
++			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		touch_pin_reset: pin_reset {
++			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
++			output-high;
++		};
++	};
++};
++
++&scp_pins {
++	pins_scp_uart {
++		pinmux = <PINMUX_GPIO11__FUNC_TP_URXD1_AO>,
++			 <PINMUX_GPIO12__FUNC_TP_UTXD1_AO>;
++	};
  };
  
+-/* Touch reset pin is active-high on rev1. */
+-&touchscreen {
+-	reset-gpios = <&pio 156 0>;
 +&i2c0 {
 +	status = "okay";
 +
@@ -588,39 +669,20 @@ index 46b8f0c16d7b232..d490dc0899f376c
 +
 +		reset-gpios = <&pio 156 0>;
 +	};
-+};
-+
- &pio {
- 	/* 192 lines */
- 	gpio-line-names =
-@@ -212,11 +228,18 @@
- 		"";
  };
  
--/* Touch reset pin is active-high on rev1. */
--&touchscreen {
--	reset-gpios = <&pio 156 0>;
-+&scp_pins {
-+	pins_scp_uart {
-+		pinmux = <PINMUX_GPIO11__FUNC_TP_URXD1_AO>,
-+			 <PINMUX_GPIO12__FUNC_TP_UTXD1_AO>;
-+	};
-+};
-+
+-&touch_pin_reset {
+-	/delete-property/ output-low;
+-	output-high;
 +&i2c6 {
 +	status = "disabled";
  };
- 
-+/* Touch reset pin is active-high on rev1. */
- &touch_pin_reset {
- 	/delete-property/ output-low;
- 	output-high;
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 new file mode 100644
-index 000000000000000..8aea0e1c6b2daca
+index 000000000000..d5c9807834e1
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
-@@ -0,0 +1,442 @@
+@@ -0,0 +1,455 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright (c) 2018 Google LLC
@@ -918,6 +980,19 @@ index 000000000000000..8aea0e1c6b2daca
 +			bias-disable;
 +		};
 +	};
++
++	touch_default: touchdefault {
++		pin_irq {
++			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
++			input-enable;
++			bias-pull-up;
++		};
++
++		touch_pin_reset: pin_reset {
++			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
++			output-low;
++		};
++	};
 +};
 +
 +/* rev2 panel is behind a SSD 2858 bridge. */
@@ -1064,7 +1139,7 @@ index 000000000000000..8aea0e1c6b2daca
 +	};
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 960bad7954d73f4..8a45746b701eb8d 100644
+index f8e1c7f9f603..3fa93d9d5410 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -14,6 +14,17 @@
@@ -1358,20 +1433,25 @@ index 960bad7954d73f4..8a45746b701eb8d 100644
  	spi_pins_0: spi0@0 {
  		pins_spi{
  			pinmux = <PINMUX_GPIO85__FUNC_SPI0_MI>,
-@@ -446,12 +639,72 @@
- 			output-low;
+@@ -434,24 +627,71 @@
  		};
  	};
-+
+ 
+-	touch_default: touchdefault {
+-		pin_irq {
+-			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
 +	ts3a227e_pins: ts3a227e_pins {
 +		pins1 {
 +			pinmux = <PINMUX_GPIO157__FUNC_GPIO157>;
-+			input-enable;
+ 			input-enable;
 +			bias-enable;
-+			bias-pull-up;
-+		};
+ 			bias-pull-up;
+ 		};
 +	};
-+
+ 
+-		touch_pin_reset: pin_reset {
+-			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
+-			output-low;
 +	uart0_pin: uart0default {
 +		pins_rx {
 +			pinmux = <PINMUX_GPIO95__FUNC_URXD0>;
@@ -1399,10 +1479,10 @@ index 960bad7954d73f4..8a45746b701eb8d 100644
 +		pins_cts {
 +			pinmux = <PINMUX_GPIO46__FUNC_UCTS1>;
 +			input-enable;
-+		};
-+	};
-+};
-+
+ 		};
+ 	};
+ };
+ 
 +&pwm0 {
 +	status = "okay";
 +	pinctrl-names = "default";
@@ -1418,8 +1498,8 @@ index 960bad7954d73f4..8a45746b701eb8d 100644
 +		compatible = "google,cros-ec-rpmsg";
 +		mtk,rpmsg-name = "cros-ec-rpmsg";
 +	};
- };
- 
++};
++
  &scpsys {
  	mfg-supply = <&mt6358_vgpu_reg>;
  };
@@ -1431,24 +1511,7 @@ index 960bad7954d73f4..8a45746b701eb8d 100644
  &spi0 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&spi_pins_0>;
-@@ -473,12 +726,12 @@
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&spi_pins_1>;
- 	mediatek,pad-select = <0>;
--	status = "disabled";
-+	status = "okay";
- 
--	spidev1: spi@0 {
--		compatible = "linux,spidev";
-+	spi@0 {
-+		compatible = "winbond,w25q64dw", "jedec,spi-nor";
- 		reg = <0>;
--		spi-max-frequency = <1000000>;
-+		spi-max-frequency = <25000000>;
- 	};
- };
- 
-@@ -546,7 +799,8 @@
+@@ -546,7 +786,8 @@
  };
  
  &ssusb {
@@ -1458,19 +1521,19 @@ index 960bad7954d73f4..8a45746b701eb8d 100644
  	vusb33-supply = <&mt6358_vusb_reg>;
  	status = "okay";
  };
-@@ -561,7 +815,24 @@
+@@ -561,9 +802,27 @@
  };
  
  &uart0 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart0_pin>;
-+	status = "okay";
-+};
-+
+ 	status = "okay";
+ };
+ 
 +&uart1 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart1_pin>;
- 	status = "okay";
++	status = "okay";
 +
 +	bluetooth: qca6174-bt {
 +		pinctrl-names = "default";
@@ -1479,15 +1542,18 @@ index 960bad7954d73f4..8a45746b701eb8d 100644
 +		compatible = "qcom,qca6174-bt";
 +		enable-gpios = <&pio 120 0>;
 +		clocks = <&clk32k>;
++		firmware-name = "nvm_00440302_i2s.bin";
 +	};
- };
- 
++};
++
  #include <arm/cros-ec-keyboard.dtsi>
+ #include <arm/cros-ec-sbs.dtsi>
+ 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
+index f6b395f0695b..e4b9d58c66c6 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -6,11 +6,14 @@
+@@ -6,12 +6,14 @@
   */
  
  #include <dt-bindings/clock/mt8183-clk.h>
@@ -1497,12 +1563,12 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  #include <dt-bindings/memory/mt8183-larb-port.h>
  #include <dt-bindings/phy/phy.h>
  #include <dt-bindings/power/mt8183-power.h>
-+#include <dt-bindings/reset-controller/mt8183-resets.h>
+ #include <dt-bindings/reset-controller/mt8183-resets.h>
 +#include <dt-bindings/thermal/thermal.h>
  #include "mt8183-pinfunc.h"
  
  / {
-@@ -39,6 +42,220 @@
+@@ -40,6 +42,243 @@
  		i2c11 = &i2c11;
  	};
  
@@ -1720,10 +1786,33 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
 +		operating-points-v2 = <&cluster2_opp>;
 +	};
 +
++	devfreq-cpufreq-map {
++		cci-cpufreq {
++			target-dev = <&cci>;
++			cpu-to-dev-map =
++				< 793000  273000000 >,
++				< 910000  403000000 >,
++				< 1014000  463000000 >,
++				< 1131000  546000000 >,
++				< 1248000  624000000 >,
++				< 1326000  689000000 >,
++				< 1417000  767000000 >,
++				< 1508000  871000000 >,
++				< 1586000  923000000 >,
++				< 1625000  962000000 >,
++				< 1677000  1027000000 >,
++				< 1716000  1092000000 >,
++				< 1781000  1144000000 >,
++				< 1846000  1196000000 >,
++				< 1924000  1196000000 >,
++				< 1989000  1196000000 >;
++		};
++	};
++
  	cpus {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -80,6 +297,13 @@
+@@ -81,6 +320,13 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x000>;
  			enable-method = "psci";
@@ -1737,7 +1826,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		cpu1: cpu@1 {
-@@ -87,6 +311,13 @@
+@@ -88,6 +334,13 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x001>;
  			enable-method = "psci";
@@ -1751,7 +1840,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		cpu2: cpu@2 {
-@@ -94,6 +325,13 @@
+@@ -95,6 +348,13 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x002>;
  			enable-method = "psci";
@@ -1765,7 +1854,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		cpu3: cpu@3 {
-@@ -101,6 +339,13 @@
+@@ -102,6 +362,13 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x003>;
  			enable-method = "psci";
@@ -1779,7 +1868,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		cpu4: cpu@100 {
-@@ -108,6 +353,13 @@
+@@ -109,6 +376,13 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x100>;
  			enable-method = "psci";
@@ -1793,7 +1882,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		cpu5: cpu@101 {
-@@ -115,6 +367,13 @@
+@@ -116,6 +390,13 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x101>;
  			enable-method = "psci";
@@ -1807,7 +1896,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		cpu6: cpu@102 {
-@@ -122,6 +381,13 @@
+@@ -123,6 +404,13 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x102>;
  			enable-method = "psci";
@@ -1821,7 +1910,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		cpu7: cpu@103 {
-@@ -129,6 +395,13 @@
+@@ -130,6 +418,13 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x103>;
  			enable-method = "psci";
@@ -1835,7 +1924,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  	};
  
-@@ -156,6 +429,24 @@
+@@ -157,6 +452,24 @@
  		clock-output-names = "clk26m";
  	};
  
@@ -1860,11 +1949,11 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  	timer {
  		compatible = "arm,armv8-timer";
  		interrupt-parent = <&gic>;
-@@ -171,6 +462,15 @@
+@@ -172,6 +485,15 @@
  		compatible = "simple-bus";
  		ranges;
  
-+		soc_data: soc_data@8000000 {
++		soc_data: soc_data@08000000 {
 +			compatible = "mediatek,mt8183-efuse",
 +				     "mediatek,efuse";
 +			reg = <0 0x08000000 0 0x0010>;
@@ -1876,40 +1965,19 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		gic: interrupt-controller@c000000 {
  			compatible = "arm,gic-v3";
  			#interrupt-cells = <4>;
-@@ -218,6 +518,7 @@
- 			compatible = "mediatek,mt8183-infracfg", "syscon";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
-+			#reset-cells = <1>;
- 		};
- 
- 		pio: pinctrl@10005000 {
-@@ -300,6 +601,12 @@
- 			smi_comm = <&smi_common>;
- 		};
- 
-+		watchdog: watchdog@10007000 {
-+			compatible = "mediatek,mt8183-wdt",
-+				     "mediatek,mt6589-wdt";
-+			reg = <0 0x10007000 0 0x100>;
-+		};
-+
- 		apmixedsys: syscon@1000c000 {
- 			compatible = "mediatek,mt8183-apmixedsys", "syscon";
- 			reg = <0 0x1000c000 0 0x1000>;
-@@ -325,6 +632,60 @@
+@@ -333,6 +655,60 @@
  			#iommu-cells = <1>;
  		};
  
 +		emi@10219000 {
 +			compatible = "mediatek,mt8183-emi";
 +			reg = <0 0x10219000 0 0x1000>, /* CEN EMI */
-+			      <0 0x10226000 0 0x1000>, /* EMI MPU */
-+			      <0 0x1022d000 0 0x1000>, /* CHA EMI */
++				  <0 0x10226000 0 0x1000>, /* EMI MPU */
++				  <0 0x1022d000 0 0x1000>, /* CHA EMI */
 +			      <0 0x10235000 0 0x1000>; /* CHB EMI */
 +			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>, /* MPU */
-+				     <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>, /* CGM */
-+				     <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
++						 <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>, /* CGM */
++						 <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
 +		};
 +
 +		gce: gce@10238000 {
@@ -1917,8 +1985,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
 +			reg = <0 0x10238000 0 0x4000>;
 +			interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_LOW>;
 +			#mbox-cells = <3>;
-+			#gce-event-cells = <1>;
-+			#gce-subsys-cells = <2>;
++			#subsys-cells = <3>;
 +			clocks = <&infracfg CLK_INFRA_GCE>;
 +			clock-names = "gce";
 +		};
@@ -1947,7 +2014,8 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
 +		};
 +
 +		auxadc: auxadc@11001000 {
-+			compatible = "mediatek,mt8183-auxadc", "mediatek,mt8173-auxadc";
++			compatible = "mediatek,mt8183-auxadc",
++				     "mediatek,mt8173-auxadc";
 +			reg = <0 0x11001000 0 0x1000>;
 +			clocks = <&infracfg CLK_INFRA_AUXADC>;
 +			clock-names = "main";
@@ -1958,7 +2026,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		uart0: serial@11002000 {
  			compatible = "mediatek,mt8183-uart",
  				     "mediatek,mt6577-uart";
-@@ -414,6 +775,122 @@
+@@ -422,6 +798,111 @@
  			status = "disabled";
  		};
  
@@ -2067,21 +2135,10 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
 +			};
 +		};
 +
-+		pwm0: pwm@1100e000 {
-+			compatible = "mediatek,mt8183-disp-pwm";
-+			reg = <0 0x1100e000 0 0x1000>;
-+			interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
-+			#pwm-cells = <2>;
-+			clocks = <&topckgen CLK_TOP_MUX_DISP_PWM>,
-+					<&infracfg CLK_INFRA_DISP_PWM>;
-+			clock-names = "main", "mm";
-+		};
-+
- 		i2c3: i2c@1100f000 {
- 			compatible = "mediatek,mt8183-i2c";
- 			reg = <0 0x1100f000 0 0x1000>,
-@@ -635,10 +1112,100 @@
+ 		pwm0: pwm@1100e000 {
+ 			compatible = "mediatek,mt8183-disp-pwm";
+ 			reg = <0 0x1100e000 0 0x1000>;
+@@ -654,10 +1135,100 @@
  			};
  		};
  
@@ -2183,7 +2240,7 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		};
  
  		mmc0: mmc@11230000 {
-@@ -665,6 +1232,26 @@
+@@ -684,6 +1255,27 @@
  			status = "disabled";
  		};
  
@@ -2198,7 +2255,8 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
 +		};
 +
 +		efuse: efuse@11f10000 {
-+			compatible = "mediatek,efuse";
++			compatible = "mediatek,mt8183-efuse",
++				     "mediatek,efuse";
 +			reg = <0 0x11f10000 0 0x1000>;
 +			#address-cells = <1>;
 +			#size-cells = <1>;
@@ -2210,13 +2268,12 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  		u3phy: usb-phy@11f40000 {
  			compatible = "mediatek,generic-tphy-v2";
  			#address-cells = <2>;
-@@ -954,6 +1541,28 @@
+@@ -973,6 +1565,27 @@
  			clocks = <&mmsys CLK_MM_DISP_DITHER0>;
  		};
  
 +		dsi0: dsi@14014000 {
-+			compatible = "mediatek,mt8183-dsi",
-+				"mediatek,mt8183-dsi";
++			compatible = "mediatek,mt8183-dsi";
 +			reg = <0 0x14014000 0 0x1000>;
 +			interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_LOW>;
 +			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
@@ -2240,18 +2297,27 @@ index 77357ae4ebbe7d2..eaf3be4b35689ae 100644
  			compatible = "mediatek,mt8183-smi-larb";
  			reg = <0 0x14017000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 14dbbc992e29c5b..86ef390d6160538 100644
+index ba62ba46ee2f..f5444d8611c4 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -124,6 +124,7 @@ CONFIG_COMMON_CLK_RK808=y
+@@ -125,7 +125,7 @@ CONFIG_COMMON_CLK_RK808=y
  CONFIG_COMMON_CLK_XGENE=y
  CONFIG_CPUFREQ_DT=y
  CONFIG_CPUFREQ_DT_PLATDEV=y
+-# CONFIG_CROS_EC_RPMSG is not set
 +CONFIG_CROS_EC_RPMSG=m
  # CONFIG_CRYPTO_DEV_CAVIUM_ZIP is not set
  # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
  # CONFIG_CRYPTO_DEV_QCE is not set
-@@ -204,7 +205,7 @@ CONFIG_EFI_STUB=y
+@@ -134,6 +134,7 @@ CONFIG_CRYPTO_DEV_ROCKCHIP=y
+ CONFIG_CRYPTO_DEV_VIRTIO=m
+ CONFIG_CRYPTO_ENGINE=m
+ # CONFIG_DEBUG_EFI is not set
++# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
+ CONFIG_DEVPORT=y
+ # CONFIG_DGNC is not set
+ # CONFIG_DL2K is not set
+@@ -206,7 +207,7 @@ CONFIG_EFI_STUB=y
  # CONFIG_EFI_VARS is not set
  CONFIG_EINT_MTK=y
  # CONFIG_EMAC_ROCKCHIP is not set
@@ -2260,7 +2326,7 @@ index 14dbbc992e29c5b..86ef390d6160538 100644
  # CONFIG_ENIC is not set
  # CONFIG_EPIC100 is not set
  # CONFIG_ET131X is not set
-@@ -389,13 +390,17 @@ CONFIG_MSM_GCC_8916=y
+@@ -391,13 +392,17 @@ CONFIG_MSM_GCC_8916=y
  # CONFIG_MTD_INTEL_VR_NOR is not set
  CONFIG_MTD_MT81xx_NOR=y
  # CONFIG_MTD_PMC551 is not set
@@ -2280,7 +2346,7 @@ index 14dbbc992e29c5b..86ef390d6160538 100644
  CONFIG_MTK_SCPSYS=y
  CONFIG_MTK_SMI=y
  CONFIG_MTK_THERMAL=y
-@@ -668,6 +673,7 @@ CONFIG_ROCKCHIP_THERMAL=y
+@@ -670,6 +675,7 @@ CONFIG_ROCKCHIP_THERMAL=y
  CONFIG_ROCKCHIP_TIMER=y
  CONFIG_RPMSG=y
  CONFIG_RPMSG_CHAR=y
@@ -2288,7 +2354,7 @@ index 14dbbc992e29c5b..86ef390d6160538 100644
  CONFIG_RPMSG_QCOM_GLINK_NATIVE=y
  CONFIG_RPMSG_QCOM_GLINK_SMEM=y
  CONFIG_RPMSG_QCOM_SMD=y
-@@ -920,22 +926,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
+@@ -922,22 +928,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
  # CONFIG_TYPHOON is not set
  CONFIG_UCS2_STRING=y
  # CONFIG_USB_AMD5536UDC is not set
@@ -2326,7 +2392,7 @@ index 14dbbc992e29c5b..86ef390d6160538 100644
  CONFIG_VGA_ARB=y
  CONFIG_VGA_ARB_MAX_GPUS=16
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 30e9317390a8ade..738fb0b1db0f771 100644
+index 30e9317390a8..d8b96efb0ea5 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 @@ -24,6 +24,7 @@ CONFIG_ATH10K_TRACING=y
@@ -2337,13 +2403,14 @@ index 30e9317390a8ade..738fb0b1db0f771 100644
  # CONFIG_BT_HCIUART_3WIRE is not set
  # CONFIG_BT_HCIUART_BCM is not set
  # CONFIG_BT_HCIUART_LL is not set
-@@ -57,12 +58,16 @@ CONFIG_COMMON_CLK_MT8183_VDECSYS=y
+@@ -57,12 +58,17 @@ CONFIG_COMMON_CLK_MT8183_VDECSYS=y
  CONFIG_COMMON_CLK_MT8183_VENCSYS=y
  CONFIG_COMMON_CLK_XGENE=y
  # CONFIG_CPUFREQ_DT is not set
 +CONFIG_CROS_EC_RPMSG=m
 +CONFIG_CRYPTO_DEV_VIRTIO=m
 +CONFIG_CRYPTO_ENGINE=m
++CONFIG_DEVFREQ_GOV_CPUFREQ_MAP=y
  CONFIG_DRM_ANALOGIX_ANX78XX=y
  CONFIG_DRM_GEM_CMA_HELPER=y
  CONFIG_DRM_MEDIATEK=y
@@ -2354,7 +2421,7 @@ index 30e9317390a8ade..738fb0b1db0f771 100644
  # CONFIG_DRM_PANEL_ILITEK_ILI9881C is not set
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  # CONFIG_DRM_PANEL_JDI_LT070ME05000 is not set
-@@ -75,14 +80,16 @@ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
+@@ -75,14 +81,16 @@ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  # CONFIG_DRM_PANEL_SHARP_LQ101R1SX01 is not set
  # CONFIG_DRM_PANEL_SHARP_LS043T1LE01 is not set
  # CONFIG_DRM_TI_SN65DSI86 is not set
@@ -2372,7 +2439,7 @@ index 30e9317390a8ade..738fb0b1db0f771 100644
  CONFIG_I2C_HID=y
  CONFIG_I2C_MT65XX=y
  # CONFIG_I2C_RK3X is not set
-@@ -114,13 +121,17 @@ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
+@@ -114,13 +122,17 @@ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
  # CONFIG_MMC_DW is not set
  CONFIG_MMC_MTK=y
  CONFIG_MTD_MT81xx_NOR=y
@@ -2392,7 +2459,7 @@ index 30e9317390a8ade..738fb0b1db0f771 100644
  CONFIG_MTK_SCPSYS=y
  CONFIG_MTK_SMI=y
  CONFIG_MTK_THERMAL=y
-@@ -152,13 +163,17 @@ CONFIG_REGULATOR_MT6358=y
+@@ -152,13 +164,17 @@ CONFIG_REGULATOR_MT6358=y
  # CONFIG_REGULATOR_TPS51632 is not set
  # CONFIG_REGULATOR_TPS62360 is not set
  # CONFIG_REGULATOR_TPS6586X is not set
@@ -2411,7 +2478,7 @@ index 30e9317390a8ade..738fb0b1db0f771 100644
  # CONFIG_SENSORS_LM90 is not set
  # CONFIG_SENSORS_NTC_THERMISTOR is not set
  CONFIG_SENSORS_TMP401=y
-@@ -194,15 +209,27 @@ CONFIG_SPI_MT65XX=y
+@@ -194,15 +210,27 @@ CONFIG_SPI_MT65XX=y
  # CONFIG_SPMI is not set
  CONFIG_STAGING_MEDIA=y
  CONFIG_TCG_CR50_I2C=y
@@ -2442,7 +2509,7 @@ index 30e9317390a8ade..738fb0b1db0f771 100644
  CONFIG_V4L2_MEM2MEM_DEV=y
  CONFIG_VIDEOBUF2_CORE=y
  CONFIG_VIDEOBUF2_DMA_CONTIG=y
-@@ -212,4 +239,11 @@ CONFIG_VIDEO_MEDIATEK_MDP=y
+@@ -212,4 +240,11 @@ CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIDEO_MEDIATEK_VPU=y
  # CONFIG_VIDEO_V4L2_SUBDEV_API is not set
@@ -2455,18 +2522,18 @@ index 30e9317390a8ade..738fb0b1db0f771 100644
 +# CONFIG_VIRTIO_NET is not set
 +# CONFIG_VIRTIO_WL is not set
 diff --git a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-index d80920df41f9204..df8dee5a9ad2561 100644
+index ccb3654bff32..5a3620e9aacc 100644
 --- a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-@@ -43,6 +43,7 @@ CONFIG_COMMON_CLK_QCOM=y
- # CONFIG_COMMON_CLK_XGENE is not set
- CONFIG_CPUFREQ_DT=y
- CONFIG_CPUFREQ_DT_PLATDEV=y
-+# CONFIG_CROS_EC_RPMSG is not set
- # CONFIG_CRYPTO_DEV_QCE is not set
+@@ -48,6 +48,7 @@ CONFIG_CPUFREQ_DT_PLATDEV=y
  # CONFIG_CRYPTO_DEV_QCOM_RNG is not set
  CONFIG_CRYPTO_DEV_VIRTIO=m
-@@ -278,7 +279,13 @@ CONFIG_SPMI_MSM_PMIC_ARB=y
+ CONFIG_CRYPTO_ENGINE=m
++# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
+ # CONFIG_DRM_ANALOGIX_ANX78XX is not set
+ CONFIG_DRM_MIPI_DSI=y
+ CONFIG_DRM_MSM=y
+@@ -279,7 +280,13 @@ CONFIG_SPMI_MSM_PMIC_ARB=y
  CONFIG_THERMAL_GOV_FAIR_SHARE=y
  CONFIG_THERMAL_WRITABLE_TRIPS=y
  # CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
@@ -2481,10 +2548,18 @@ index d80920df41f9204..df8dee5a9ad2561 100644
  CONFIG_VIDEOBUF2_MEMOPS=m
  CONFIG_VIDEOBUF2_V4L2=m
 diff --git a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-index 80931110c50af19..74542fedbd29b74 100644
+index 3413a7f71836..6ecf194a86b2 100644
 --- a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-@@ -546,10 +546,16 @@ CONFIG_THERMAL_WRITABLE_TRIPS=y
+@@ -71,6 +71,7 @@ CONFIG_CPUFREQ_DT_PLATDEV=y
+ # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
+ CONFIG_CRYPTO_DEV_ROCKCHIP=y
+ CONFIG_DEVFREQ_EVENT_ROCKCHIP_DFI=y
++# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
+ CONFIG_DEVPORT=y
+ # CONFIG_DGNC is not set
+ # CONFIG_DL2K is not set
+@@ -547,10 +548,16 @@ CONFIG_THERMAL_WRITABLE_TRIPS=y
  # CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
  # CONFIG_TYPHOON is not set
  # CONFIG_USB_AMD5536UDC is not set
@@ -2502,7 +2577,7 @@ index 80931110c50af19..74542fedbd29b74 100644
  CONFIG_USB_OHCI_HCD_PCI=y
  CONFIG_USB_PCI=y
 diff --git a/chromeos/config/arm64/common.config b/chromeos/config/arm64/common.config
-index e31977035cfe4a4..7073cb8566dc952 100644
+index b79beed5c220..c5a721c79f04 100644
 --- a/chromeos/config/arm64/common.config
 +++ b/chromeos/config/arm64/common.config
 @@ -161,7 +161,7 @@ CONFIG_CHARGER_CROS_USBPD=y
@@ -2515,11 +2590,19 @@ index e31977035cfe4a4..7073cb8566dc952 100644
  # CONFIG_CLK_QORIQ is not set
  # CONFIG_CLOCK_THERMAL is not set
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index f709e2c858c7a1e..60a7d60bc6edcd2 100644
+index cfc356bdcb7a..e795e22f1965 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
-@@ -869,15 +869,21 @@ CONFIG_TIMER_PROBE=y
- # CONFIG_TOUCHSCREEN_WDT87XX_I2C is not set
+@@ -257,6 +257,7 @@ CONFIG_DEBUG_ALIGN_RODATA=y
+ CONFIG_DEBUG_LL_INCLUDE="mach/debug-macro.S"
+ # CONFIG_DEBUG_USER is not set
+ # CONFIG_DEPRECATED_PARAM_STRUCT is not set
++# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
+ # CONFIG_DEVFREQ_GOV_PASSIVE is not set
+ CONFIG_DEVFREQ_GOV_PERFORMANCE=y
+ CONFIG_DEVFREQ_GOV_POWERSAVE=y
+@@ -874,15 +875,21 @@ CONFIG_TIMER_PROBE=y
+ # CONFIG_TYPEC is not set
  # CONFIG_UACCESS_WITH_MEMCPY is not set
  CONFIG_UNCOMPRESS_INCLUDE="debug/uncompress.h"
 +CONFIG_USB_CONFIGFS=m
@@ -2541,7 +2624,7 @@ index f709e2c858c7a1e..60a7d60bc6edcd2 100644
  # CONFIG_USB_STORAGE_REALTEK is not set
  CONFIG_USE_OF=y
 diff --git a/chromeos/config/base.config b/chromeos/config/base.config
-index f7109fbb39de115..b222ecdf7f55719 100644
+index 206da405db3f..4d9ad0ff5488 100644
 --- a/chromeos/config/base.config
 +++ b/chromeos/config/base.config
 @@ -3008,8 +3008,6 @@ CONFIG_USB_ARCH_HAS_HCD=y
@@ -2573,7 +2656,7 @@ index f7109fbb39de115..b222ecdf7f55719 100644
  # CONFIG_USB_GADGET_DEBUG is not set
  # CONFIG_USB_GADGET_DEBUG_FILES is not set
  # CONFIG_USB_GADGET_DEBUG_FS is not set
-@@ -3074,7 +3069,6 @@ CONFIG_USB_HIDDEV=y
+@@ -3074,7 +3069,6 @@ CONFIG_USB_IPHETH=m
  # CONFIG_USB_LEDS_TRIGGER_USBPORT is not set
  # CONFIG_USB_LED_TRIG is not set
  # CONFIG_USB_LEGOTOWER is not set
@@ -2582,7 +2665,7 @@ index f7109fbb39de115..b222ecdf7f55719 100644
  # CONFIG_USB_M66592 is not set
  # CONFIG_USB_MAX3421_HCD is not set
 diff --git a/chromeos/config/x86_64/common.config b/chromeos/config/x86_64/common.config
-index de448d408582cb6..89cc91210bc5c99 100644
+index 6197cbb7d7ad..78e4a4aad09d 100644
 --- a/chromeos/config/x86_64/common.config
 +++ b/chromeos/config/x86_64/common.config
 @@ -235,7 +235,7 @@ CONFIG_CHROMEOS=y
@@ -2594,7 +2677,7 @@ index de448d408582cb6..89cc91210bc5c99 100644
  CONFIG_CLKBLD_I8253=y
  CONFIG_CLKEVT_I8253=y
  CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE=y
-@@ -1270,6 +1270,10 @@ CONFIG_UEFI_CPER_X86=y
+@@ -1278,6 +1278,10 @@ CONFIG_UEFI_CPER_X86=y
  # CONFIG_UNWINDER_GUESS is not set
  CONFIG_UNWINDER_ORC=y
  # CONFIG_USB_AMD5536UDC is not set
@@ -2605,7 +2688,7 @@ index de448d408582cb6..89cc91210bc5c99 100644
  # CONFIG_USB_DWC2 is not set
  CONFIG_USB_DWC3=m
  CONFIG_USB_DWC3_GADGET=y
-@@ -1279,8 +1283,10 @@ CONFIG_USB_DWC3_PCI=m
+@@ -1287,8 +1291,10 @@ CONFIG_USB_DWC3_PCI=m
  # CONFIG_USB_EG20T is not set
  # CONFIG_USB_EHCI_HCD_PLATFORM is not set
  CONFIG_USB_EHCI_PCI=y
@@ -2616,21 +2699,8 @@ index de448d408582cb6..89cc91210bc5c99 100644
  # CONFIG_USB_NET2280 is not set
  CONFIG_USB_OHCI_HCD=y
  CONFIG_USB_OHCI_HCD_PCI=y
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 4ea995d610d2577..a80c3bc90904279 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -523,6 +523,8 @@ static int qca_open(struct hci_uart *hu)
- 		qcadev = serdev_device_get_drvdata(hu->serdev);
- 		if (qcadev->btsoc_type != QCA_WCN3990) {
- 			gpiod_set_value_cansleep(qcadev->bt_en, 1);
-+			/* Controller needs time to bootup. */
-+			msleep(150);
- 		} else {
- 			hu->init_speed = qcadev->init_speed;
- 			hu->oper_speed = qcadev->oper_speed;
 diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index 3dc1b9f15ea2f2f..5df0e476e94d807 100644
+index 3dc1b9f15ea2..5df0e476e94d 100644
 --- a/drivers/clk/mediatek/Makefile
 +++ b/drivers/clk/mediatek/Makefile
 @@ -44,3 +44,5 @@ obj-$(CONFIG_COMMON_CLK_MT8183_MFGCFG) += clk-mt8183-mfgcfg.o
@@ -2639,48 +2709,9 @@ index 3dc1b9f15ea2f2f..5df0e476e94d807 100644
  obj-$(CONFIG_COMMON_CLK_MT8183_VENCSYS) += clk-mt8183-venc.o
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkdbg.o clkdbg-mt8183.o
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkchk.o clkchk-mt8183.o
-diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index 68f157b31b28999..d1458b4314630ce 100644
---- a/drivers/clk/mediatek/clk-mt8183.c
-+++ b/drivers/clk/mediatek/clk-mt8183.c
-@@ -1204,13 +1204,21 @@ static int clk_mt8183_infra_probe(struct platform_device *pdev)
- {
- 	struct clk_onecell_data *clk_data;
- 	struct device_node *node = pdev->dev.of_node;
-+	int r;
- 
- 	clk_data = mtk_alloc_clk_data(CLK_INFRA_NR_CLK);
- 
- 	mtk_clk_register_gates(node, infra_clks, ARRAY_SIZE(infra_clks),
- 		clk_data);
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	if (r)
-+		pr_err("%s(): could not register clock provider: %d\n",
-+			__func__, r);
-+
-+	mtk_register_reset_controller_set_clr(node, 4, 0x120);
-+
-+	return r;
- }
- 
- static int clk_mt8183_mcu_probe(struct platform_device *pdev)
-diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
-index 37ae944548e9b69..8f6282ec40006a6 100644
---- a/drivers/clk/mediatek/clk-mtk.h
-+++ b/drivers/clk/mediatek/clk-mtk.h
-@@ -236,4 +236,7 @@ struct clk *mtk_clk_register_ref2usb_tx(const char *name,
- void mtk_register_reset_controller(struct device_node *np,
- 			unsigned int num_regs, int regofs);
- 
-+void mtk_register_reset_controller_set_clr(struct device_node *np,
-+			unsigned int num_regs, int regofs);
-+
- #endif /* __DRV_CLK_MTK_H */
 diff --git a/drivers/clk/mediatek/clkchk-mt8183.c b/drivers/clk/mediatek/clkchk-mt8183.c
 new file mode 100644
-index 000000000000000..99813e053fcad23
+index 000000000000..99813e053fca
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk-mt8183.c
 @@ -0,0 +1,409 @@
@@ -3095,7 +3126,7 @@ index 000000000000000..99813e053fcad23
 +subsys_initcall(clkchk_platform_init);
 diff --git a/drivers/clk/mediatek/clkchk.c b/drivers/clk/mediatek/clkchk.c
 new file mode 100644
-index 000000000000000..d50110a0d53837e
+index 000000000000..d50110a0d538
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk.c
 @@ -0,0 +1,188 @@
@@ -3289,7 +3320,7 @@ index 000000000000000..d50110a0d53837e
 +}
 diff --git a/drivers/clk/mediatek/clkchk.h b/drivers/clk/mediatek/clkchk.h
 new file mode 100644
-index 000000000000000..d99e1acb6477f6a
+index 000000000000..d99e1acb6477
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk.h
 @@ -0,0 +1,18 @@
@@ -3313,7 +3344,7 @@ index 000000000000000..d99e1acb6477f6a
 +int clkchk_init(struct clkchk_cfg_t *cfg);
 diff --git a/drivers/clk/mediatek/clkdbg-mt8183.c b/drivers/clk/mediatek/clkdbg-mt8183.c
 new file mode 100644
-index 000000000000000..89060ec19e88a30
+index 000000000000..89060ec19e88
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg-mt8183.c
 @@ -0,0 +1,857 @@
@@ -4176,7 +4207,7 @@ index 000000000000000..89060ec19e88a30
 +device_initcall(clkdbg_mt8183_init);
 diff --git a/drivers/clk/mediatek/clkdbg.c b/drivers/clk/mediatek/clkdbg.c
 new file mode 100644
-index 000000000000000..8c9f679681605c7
+index 000000000000..8c9f67968160
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg.c
 @@ -0,0 +1,2242 @@
@@ -6424,7 +6455,7 @@ index 000000000000000..8c9f679681605c7
 +module_init(clkdbg_debug_init);
 diff --git a/drivers/clk/mediatek/clkdbg.h b/drivers/clk/mediatek/clkdbg.h
 new file mode 100644
-index 000000000000000..b9cddf3445ffcf0
+index 000000000000..b9cddf3445ff
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg.h
 @@ -0,0 +1,83 @@
@@ -6511,113 +6542,775 @@ index 000000000000000..b9cddf3445ffcf0
 +
 +void print_regs(void);
 +void print_fmeter_all(void);
-diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
-index d3551d5efef241e..e6dff4db74300cb 100644
---- a/drivers/clk/mediatek/reset.c
-+++ b/drivers/clk/mediatek/reset.c
-@@ -27,6 +27,23 @@ struct mtk_reset {
- 	struct reset_controller_dev rcdev;
- };
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index e178f1473136..6794e6093a47 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -73,6 +73,14 @@ config DEVFREQ_GOV_PASSIVE
+ 	  through sysfs entries. The passive governor recommends that
+ 	  devfreq device uses the OPP table to get the frequency/voltage.
  
-+static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
-+			      unsigned long id)
-+{
-+	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
++config DEVFREQ_GOV_CPUFREQ_MAP
++	tristate "CPUfreq Map"
++	depends on CPU_FREQ
++	help
++	  Chooses frequency based on the online CPUs' current frequency and a
++	  CPU frequency to device frequency mapping table(s). This governor
++	  can be useful for controlling devices such as DDR, cache, CCI, etc.
 +
-+	return regmap_write(data->regmap, data->regofs + ((id / 32) << 4), 1);
+ comment "DEVFREQ Drivers"
+ 
+ config ARM_EXYNOS_BUS_DEVFREQ
+diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
+index 71e7ac084db6..85d48f5744a0 100644
+--- a/drivers/devfreq/Makefile
++++ b/drivers/devfreq/Makefile
+@@ -6,6 +6,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PERFORMANCE)	+= governor_performance.o
+ obj-$(CONFIG_DEVFREQ_GOV_POWERSAVE)	+= governor_powersave.o
+ obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+= governor_userspace.o
+ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
++obj-$(CONFIG_DEVFREQ_GOV_CPUFREQ_MAP)	+= governor_cpufreq_map.o
+ 
+ # DEVFREQ Drivers
+ obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
+diff --git a/drivers/devfreq/governor_cpufreq_map.c b/drivers/devfreq/governor_cpufreq_map.c
+new file mode 100644
+index 000000000000..084a3ffb8f54
+--- /dev/null
++++ b/drivers/devfreq/governor_cpufreq_map.c
+@@ -0,0 +1,583 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2014-2015, 2018, The Linux Foundation. All rights reserved.
++ */
++
++#define pr_fmt(fmt) "dev-cpufreq-map: " fmt
++
++#include <linux/devfreq.h>
++#include <linux/cpu.h>
++#include <linux/cpufreq.h>
++#include <linux/cpumask.h>
++#include <linux/slab.h>
++#include <linux/platform_device.h>
++#include <linux/of.h>
++#include <linux/module.h>
++#include "governor.h"
++
++struct cpu_state {
++	unsigned int freq;
++	unsigned int min_freq;
++	unsigned int max_freq;
++	unsigned int first_cpu;
++};
++static struct cpu_state *state[NR_CPUS];
++static int cpufreq_cnt;
++
++struct freq_map {
++	unsigned int cpu_khz;
++	unsigned int target_freq;
++};
++
++struct devfreq_node {
++	struct devfreq *df;
++	void *orig_data;
++	struct device *dev;
++	struct device_node *of_node;
++	struct list_head list;
++	struct freq_map **map;
++	struct freq_map *common_map;
++};
++static LIST_HEAD(devfreq_list);
++static DEFINE_MUTEX(state_lock);
++static DEFINE_MUTEX(cpufreq_reg_lock);
++
++static void update_all_devfreqs(void)
++{
++	struct devfreq_node *node;
++
++	list_for_each_entry(node, &devfreq_list, list) {
++		struct devfreq *df = node->df;
++
++		if (!node->df)
++			continue;
++		mutex_lock(&df->lock);
++		update_devfreq(df);
++		mutex_unlock(&df->lock);
++
++	}
 +}
 +
-+static int mtk_reset_deassert_set_clr(struct reset_controller_dev *rcdev,
-+				unsigned long id)
++static struct devfreq_node *find_devfreq_node(struct device *dev)
 +{
-+	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
++	struct devfreq_node *node;
 +
-+	return regmap_write(data->regmap,
-+		data->regofs + ((id / 32) << 4) + 0x4, 1);
++	list_for_each_entry(node, &devfreq_list, list)
++		if (node->dev == dev || node->of_node == dev->of_node)
++			return node;
++
++	return NULL;
 +}
 +
- static int mtk_reset_assert(struct reset_controller_dev *rcdev,
- 			      unsigned long id)
- {
-@@ -57,14 +74,33 @@ static int mtk_reset(struct reset_controller_dev *rcdev,
- 	return mtk_reset_deassert(rcdev, id);
- }
- 
-+static int mtk_reset_set_clr(struct reset_controller_dev *rcdev,
-+			      unsigned long id)
++/* ==================== cpufreq part ==================== */
++static struct cpu_state *add_policy(struct cpufreq_policy *policy)
 +{
-+	int ret;
++	struct cpu_state *new_state;
++	unsigned int cpu, first_cpu;
 +
-+	ret = mtk_reset_assert_set_clr(rcdev, id);
++	new_state = kzalloc(sizeof(struct cpu_state), GFP_KERNEL);
++	if (!new_state)
++		return NULL;
++
++	first_cpu = cpumask_first(policy->related_cpus);
++	new_state->first_cpu = first_cpu;
++	new_state->freq = policy->cur;
++	new_state->min_freq = policy->cpuinfo.min_freq;
++	new_state->max_freq = policy->cpuinfo.max_freq;
++
++	for_each_cpu(cpu, policy->related_cpus)
++		state[cpu] = new_state;
++
++	return new_state;
++}
++
++static int cpufreq_trans_notifier(struct notifier_block *nb,
++		unsigned long event, void *data)
++{
++	struct cpufreq_freqs *freq = data;
++	struct cpu_state *s;
++	struct cpufreq_policy *policy = NULL;
++
++	if (event != CPUFREQ_POSTCHANGE)
++		return 0;
++
++	mutex_lock(&state_lock);
++
++	s = state[freq->cpu];
++	if (!s) {
++		policy = cpufreq_cpu_get(freq->cpu);
++		if (policy) {
++			s = add_policy(policy);
++			cpufreq_cpu_put(policy);
++		}
++	}
++	if (!s)
++		goto out;
++
++	if (s->freq != freq->new || policy) {
++		s->freq = freq->new;
++		update_all_devfreqs();
++	}
++
++out:
++	mutex_unlock(&state_lock);
++	return 0;
++}
++
++static struct notifier_block cpufreq_trans_nb = {
++	.notifier_call = cpufreq_trans_notifier
++};
++
++static int register_cpufreq(void)
++{
++	int ret = 0;
++	unsigned int cpu;
++	struct cpufreq_policy *policy;
++
++	mutex_lock(&cpufreq_reg_lock);
++
++	if (cpufreq_cnt)
++		goto cnt_not_zero;
++
++	get_online_cpus();
++	ret = cpufreq_register_notifier(&cpufreq_trans_nb,
++				CPUFREQ_TRANSITION_NOTIFIER);
++	if (ret)
++		goto out;
++
++	for_each_online_cpu(cpu) {
++		policy = cpufreq_cpu_get(cpu);
++		if (policy) {
++			add_policy(policy);
++			cpufreq_cpu_put(policy);
++		}
++	}
++out:
++	put_online_cpus();
++cnt_not_zero:
++	if (!ret)
++		cpufreq_cnt++;
++	mutex_unlock(&cpufreq_reg_lock);
++	return ret;
++}
++
++static int unregister_cpufreq(void)
++{
++	int ret = 0;
++	int cpu;
++
++	mutex_lock(&cpufreq_reg_lock);
++
++	if (cpufreq_cnt > 1)
++		goto out;
++
++	cpufreq_unregister_notifier(&cpufreq_trans_nb,
++				CPUFREQ_TRANSITION_NOTIFIER);
++
++	for (cpu = ARRAY_SIZE(state) - 1; cpu >= 0; cpu--) {
++		if (!state[cpu])
++			continue;
++		if (state[cpu]->first_cpu == cpu)
++			kfree(state[cpu]);
++		state[cpu] = NULL;
++	}
++
++out:
++	cpufreq_cnt--;
++	mutex_unlock(&cpufreq_reg_lock);
++	return ret;
++}
++
++/* ==================== devfreq part ==================== */
++
++static unsigned int interpolate_freq(struct devfreq *df, unsigned int cpu)
++{
++	unsigned long *freq_table = df->profile->freq_table;
++	unsigned int cpu_min = state[cpu]->min_freq;
++	unsigned int cpu_max = state[cpu]->max_freq;
++	unsigned int cpu_freq = state[cpu]->freq;
++	unsigned int dev_min, dev_max, cpu_percent;
++
++	if (freq_table) {
++		dev_min = freq_table[0];
++		dev_max = freq_table[df->profile->max_state - 1];
++	} else {
++		if (df->max_freq <= df->min_freq)
++			return 0;
++		dev_min = df->min_freq;
++		dev_max = df->max_freq;
++	}
++
++	cpu_percent = ((cpu_freq - cpu_min) * 100) / (cpu_max - cpu_min);
++	return dev_min + mult_frac(dev_max - dev_min, cpu_percent, 100);
++}
++
++static unsigned int cpu_to_dev_freq(struct devfreq *df, unsigned int cpu)
++{
++	struct freq_map *map = NULL;
++	unsigned int cpu_khz = 0, freq;
++	struct devfreq_node *n = df->data;
++
++	if (!state[cpu] || state[cpu]->first_cpu != cpu) {
++		freq = 0;
++		goto out;
++	}
++
++	if (n->common_map)
++		map = n->common_map;
++	else if (n->map)
++		map = n->map[cpu];
++
++	cpu_khz = state[cpu]->freq;
++
++	if (!map) {
++		freq = interpolate_freq(df, cpu);
++		goto out;
++	}
++
++	while (map->cpu_khz && map->cpu_khz < cpu_khz)
++		map++;
++	if (!map->cpu_khz)
++		map--;
++	freq = map->target_freq;
++
++out:
++	dev_dbg(df->dev.parent, "CPU%u: %d -> dev: %u\n", cpu, cpu_khz, freq);
++	return freq;
++}
++
++static int devfreq_cpufreq_get_freq(struct devfreq *df,
++					unsigned long *freq)
++{
++	unsigned int cpu, tgt_freq = 0;
++	struct devfreq_node *node;
++
++	node = df->data;
++	if (!node) {
++		pr_err("Unable to find devfreq node!\n");
++		return -ENODEV;
++	}
++
++	for_each_possible_cpu(cpu)
++		tgt_freq = max(tgt_freq, cpu_to_dev_freq(df, cpu));
++
++	*freq = tgt_freq;
++	return 0;
++}
++
++static unsigned int show_table(char *buf, unsigned int len,
++				struct freq_map *map)
++{
++	unsigned int cnt = 0;
++
++	cnt += snprintf(buf + cnt, len - cnt, "CPU freq\tDevice freq\n");
++
++	while (map->cpu_khz && cnt < len) {
++		cnt += snprintf(buf + cnt, len - cnt, "%8u\t%11u\n",
++				map->cpu_khz, map->target_freq);
++		map++;
++	}
++	if (cnt < len)
++		cnt += snprintf(buf + cnt, len - cnt, "\n");
++
++	return cnt;
++}
++
++static ssize_t freq_map_show(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct devfreq *df = to_devfreq(dev);
++	struct devfreq_node *n = df->data;
++	struct freq_map *map;
++	unsigned int cnt = 0, cpu;
++
++	mutex_lock(&state_lock);
++	if (n->common_map) {
++		map = n->common_map;
++		cnt += snprintf(buf + cnt, PAGE_SIZE - cnt,
++				"Common table for all CPUs:\n");
++		cnt += show_table(buf + cnt, PAGE_SIZE - cnt, map);
++	} else if (n->map) {
++		for_each_possible_cpu(cpu) {
++			map = n->map[cpu];
++			if (!map)
++				continue;
++			cnt += snprintf(buf + cnt, PAGE_SIZE - cnt,
++					"CPU %u:\n", cpu);
++			if (cnt >= PAGE_SIZE)
++				break;
++			cnt += show_table(buf + cnt, PAGE_SIZE - cnt, map);
++			if (cnt >= PAGE_SIZE)
++				break;
++		}
++	} else {
++		cnt += snprintf(buf + cnt, PAGE_SIZE - cnt,
++				"Device freq interpolated based on CPU freq\n");
++	}
++	mutex_unlock(&state_lock);
++
++	return cnt;
++}
++
++static DEVICE_ATTR_RO(freq_map);
++static struct attribute *dev_attr[] = {
++	&dev_attr_freq_map.attr,
++	NULL,
++};
++
++static struct attribute_group dev_attr_group = {
++	.name = "cpufreq-map",
++	.attrs = dev_attr,
++};
++
++static int devfreq_cpufreq_gov_start(struct devfreq *devfreq)
++{
++	int ret = 0;
++	struct devfreq_node *node;
++	bool alloc = false;
++
++	ret = register_cpufreq();
 +	if (ret)
 +		return ret;
 +
-+	return mtk_reset_deassert_set_clr(rcdev, id);
++	ret = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
++	if (ret) {
++		unregister_cpufreq();
++		return ret;
++	}
++
++	mutex_lock(&state_lock);
++
++	node = find_devfreq_node(devfreq->dev.parent);
++	if (node == NULL) {
++		node = kzalloc(sizeof(struct devfreq_node), GFP_KERNEL);
++		if (!node) {
++			ret = -ENOMEM;
++			goto alloc_fail;
++		}
++		alloc = true;
++		node->dev = devfreq->dev.parent;
++		list_add_tail(&node->list, &devfreq_list);
++	}
++	node->df = devfreq;
++	node->orig_data = devfreq->data;
++	devfreq->data = node;
++
++	mutex_lock(&devfreq->lock);
++	ret = update_devfreq(devfreq);
++	mutex_unlock(&devfreq->lock);
++	if (ret) {
++		pr_err("Freq update failed!\n");
++		goto update_fail;
++	}
++
++	mutex_unlock(&state_lock);
++	return 0;
++
++update_fail:
++	devfreq->data = node->orig_data;
++	if (alloc) {
++		list_del(&node->list);
++		kfree(node);
++	}
++alloc_fail:
++	mutex_unlock(&state_lock);
++	sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
++	unregister_cpufreq();
++	return ret;
 +}
 +
- static const struct reset_control_ops mtk_reset_ops = {
- 	.assert = mtk_reset_assert,
- 	.deassert = mtk_reset_deassert,
- 	.reset = mtk_reset,
- };
- 
--void mtk_register_reset_controller(struct device_node *np,
--			unsigned int num_regs, int regofs)
-+static const struct reset_control_ops mtk_reset_ops_set_clr = {
-+	.assert = mtk_reset_assert_set_clr,
-+	.deassert = mtk_reset_deassert_set_clr,
-+	.reset = mtk_reset_set_clr,
++static void devfreq_cpufreq_gov_stop(struct devfreq *devfreq)
++{
++	struct devfreq_node *node = devfreq->data;
++
++	mutex_lock(&state_lock);
++	devfreq->data = node->orig_data;
++	if (node->map || node->common_map) {
++		node->df = NULL;
++	} else {
++		list_del(&node->list);
++		kfree(node);
++	}
++	mutex_unlock(&state_lock);
++
++	sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
++	unregister_cpufreq();
++}
++
++static int devfreq_cpufreq_ev_handler(struct devfreq *devfreq,
++					unsigned int event, void *data)
++{
++	int ret;
++
++	switch (event) {
++	case DEVFREQ_GOV_START:
++
++		ret = devfreq_cpufreq_gov_start(devfreq);
++		if (ret) {
++			pr_err("Governor start failed!\n");
++			return ret;
++		}
++		pr_debug("Enabled CPUfreq-map governor\n");
++		break;
++
++	case DEVFREQ_GOV_STOP:
++
++		devfreq_cpufreq_gov_stop(devfreq);
++		pr_debug("Disabled dev CPUfreq-map governor\n");
++		break;
++	}
++
++	return 0;
++}
++
++static struct devfreq_governor devfreq_cpufreq = {
++	.name = "cpufreq-map",
++	.get_target_freq = devfreq_cpufreq_get_freq,
++	.event_handler = devfreq_cpufreq_ev_handler,
 +};
 +
-+void mtk_register_reset_controller_common(struct device_node *np,
-+			unsigned int num_regs, int regofs,
-+			const struct reset_control_ops *reset_ops)
++#define NUM_COLS	2
++static struct freq_map *read_tbl(struct device_node *of_node, char *prop_name)
++{
++	int len, nf, i, j;
++	u32 data;
++	struct freq_map *tbl;
++
++	if (!of_find_property(of_node, prop_name, &len))
++		return NULL;
++	len /= sizeof(data);
++
++	if (len % NUM_COLS || len == 0)
++		return NULL;
++	nf = len / NUM_COLS;
++
++	tbl = kzalloc((nf + 1) * sizeof(*tbl), GFP_KERNEL);
++	if (!tbl)
++		return NULL;
++
++	for (i = 0, j = 0; i < nf; i++, j += 2) {
++		of_property_read_u32_index(of_node, prop_name, j, &data);
++		tbl[i].cpu_khz = data;
++
++		of_property_read_u32_index(of_node, prop_name, j + 1, &data);
++		tbl[i].target_freq = data;
++	}
++	tbl[i].cpu_khz = 0;
++
++	return tbl;
++}
++
++#define PROP_TARGET "target-dev"
++#define PROP_TABLE "cpu-to-dev-map"
++static int add_table_from_of(struct device_node *of_node)
++{
++	struct device_node *target_of_node;
++	struct devfreq_node *node;
++	struct freq_map *common_tbl;
++	struct freq_map **tbl_list = NULL;
++	static char prop_name[] = PROP_TABLE "-999999";
++	int cpu, ret, cnt = 0, prop_sz = ARRAY_SIZE(prop_name);
++
++	target_of_node = of_parse_phandle(of_node, PROP_TARGET, 0);
++	if (!target_of_node)
++		return -EINVAL;
++
++	node = kzalloc(sizeof(struct devfreq_node), GFP_KERNEL);
++	if (!node)
++		return -ENOMEM;
++
++	common_tbl = read_tbl(of_node, PROP_TABLE);
++	if (!common_tbl) {
++		tbl_list = kzalloc(sizeof(*tbl_list) * NR_CPUS, GFP_KERNEL);
++		if (!tbl_list) {
++			ret = -ENOMEM;
++			goto err_list;
++		}
++
++		for_each_possible_cpu(cpu) {
++			ret = snprintf(prop_name, prop_sz, "%s-%d",
++					PROP_TABLE, cpu);
++			if (ret >= prop_sz) {
++				pr_warn("More CPUs than I can handle!\n");
++				pr_warn("Skipping rest of the tables!\n");
++				break;
++			}
++			tbl_list[cpu] = read_tbl(of_node, prop_name);
++			if (tbl_list[cpu])
++				cnt++;
++		}
++	}
++	if (!common_tbl && !cnt) {
++		ret = -EINVAL;
++		goto err_tbl;
++	}
++
++	mutex_lock(&state_lock);
++	node->of_node = target_of_node;
++	node->map = tbl_list;
++	node->common_map = common_tbl;
++	list_add_tail(&node->list, &devfreq_list);
++	mutex_unlock(&state_lock);
++
++	return 0;
++err_tbl:
++	kfree(tbl_list);
++err_list:
++	kfree(node);
++	return ret;
++}
++
++static int __init devfreq_cpufreq_init(void)
++{
++	int ret;
++	struct device_node *of_par, *of_child;
++
++	of_par = of_find_node_by_name(NULL, "devfreq-cpufreq-map");
++	if (of_par) {
++		for_each_child_of_node(of_par, of_child) {
++			ret = add_table_from_of(of_child);
++			if (ret)
++				pr_err("Parsing %s failed!\n", of_child->name);
++			else
++				pr_debug("Parsed %s.\n", of_child->name);
++		}
++		of_node_put(of_par);
++	} else {
++		pr_info("No tables parsed from DT.\n");
++	}
++
++	ret = devfreq_add_governor(&devfreq_cpufreq);
++	if (ret) {
++		pr_err("cpufreq-map governor add failed!\n");
++		return ret;
++	}
++
++	return 0;
++}
++subsys_initcall(devfreq_cpufreq_init);
++
++static void __exit devfreq_cpufreq_exit(void)
++{
++	int ret, cpu;
++	struct devfreq_node *node, *tmp;
++
++	ret = devfreq_remove_governor(&devfreq_cpufreq);
++	if (ret)
++		pr_err("cpufreq-map governor remove failed!\n");
++
++	mutex_lock(&state_lock);
++	list_for_each_entry_safe(node, tmp, &devfreq_list, list) {
++		kfree(node->common_map);
++		for_each_possible_cpu(cpu)
++			kfree(node->map[cpu]);
++		kfree(node->map);
++		list_del(&node->list);
++		kfree(node);
++	}
++	mutex_unlock(&state_lock);
++}
++module_exit(devfreq_cpufreq_exit);
++
++MODULE_DESCRIPTION("devfreq gov that sets dev freq based on current CPU freq");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/devfreq/mt8183-cci-devfreq.c b/drivers/devfreq/mt8183-cci-devfreq.c
+index ea475f762883..b4b04f3ad3fe 100644
+--- a/drivers/devfreq/mt8183-cci-devfreq.c
++++ b/drivers/devfreq/mt8183-cci-devfreq.c
+@@ -15,101 +15,7 @@
+ struct cci_devfreq {
+ 	struct devfreq		*devfreq;
+ 	struct regulator	*proc_reg;
+-	unsigned long           proc_reg_uV;
+ 	struct clk		*cci_clk;
+-	struct notifier_block	nb;
+-};
+-
+-static int cci_devfreq_regulator_notifier(struct notifier_block *nb,
+-					  unsigned long val, void *data)
+-{
+-	struct cci_devfreq *cci_df =
+-		container_of(nb, struct cci_devfreq, nb);
+-
+-	/* deal with reduce frequency */
+-	if (val & REGULATOR_EVENT_PRE_VOLTAGE_CHANGE) {
+-		struct pre_voltage_change_data *pvc_data = data;
+-
+-		if (pvc_data->min_uV < pvc_data->old_uV) {
+-			cci_df->proc_reg_uV =
+-				(unsigned long)(pvc_data->min_uV);
+-			mutex_lock(&cci_df->devfreq->lock);
+-			update_devfreq(cci_df->devfreq);
+-			mutex_unlock(&cci_df->devfreq->lock);
+-		}
+-	}
+-
+-	if ((val & REGULATOR_EVENT_ABORT_VOLTAGE_CHANGE) &&
+-	    ((unsigned long)data > cci_df->proc_reg_uV)) {
+-		cci_df->proc_reg_uV = (unsigned long)data;
+-		mutex_lock(&cci_df->devfreq->lock);
+-		update_devfreq(cci_df->devfreq);
+-		mutex_unlock(&cci_df->devfreq->lock);
+-	}
+-
+-	/* deal with increase frequency */
+-	if ((val & REGULATOR_EVENT_VOLTAGE_CHANGE) &&
+-	    (cci_df->proc_reg_uV < (unsigned long)data)) {
+-		cci_df->proc_reg_uV = (unsigned long)data;
+-		mutex_lock(&cci_df->devfreq->lock);
+-		update_devfreq(cci_df->devfreq);
+-		mutex_unlock(&cci_df->devfreq->lock);
+-	}
+-
+-	return 0;
+-}
+-
+-static int mtk_cci_governor_get_target(struct devfreq *devfreq,
+-				       unsigned long *freq)
+-{
+-	struct cci_devfreq *cci_df;
+-	struct dev_pm_opp *opp;
+-
+-	cci_df = dev_get_drvdata(devfreq->dev.parent);
+-
+-	/* find available frequency */
+-	opp = dev_pm_opp_find_max_freq_by_volt(devfreq->dev.parent,
+-						 cci_df->proc_reg_uV);
+-	*freq = dev_pm_opp_get_freq(opp);
+-
+-	return 0;
+-}
+-
+-static int mtk_cci_governor_event_handler(struct devfreq *devfreq,
+-					  unsigned int event, void *data)
+-{
+-	struct cci_devfreq *cci_df;
+-	struct notifier_block *nb;
+-
+-	cci_df = dev_get_drvdata(devfreq->dev.parent);
+-	nb = &cci_df->nb;
+-
+-	switch (event) {
+-	case DEVFREQ_GOV_START:
+-	case DEVFREQ_GOV_RESUME:
+-		nb->notifier_call = cci_devfreq_regulator_notifier;
+-		regulator_register_notifier(cci_df->proc_reg,
+-					    nb);
+-		break;
+-
+-	case DEVFREQ_GOV_STOP:
+-	case DEVFREQ_GOV_SUSPEND:
+-		regulator_unregister_notifier(cci_df->proc_reg,
+-					    nb);
+-
+-		break;
+-
+-	default:
+-		break;
+-	}
+-
+-	return 0;
+-}
+-
+-static struct devfreq_governor mtk_cci_devfreq_governor = {
+-	.name = "mtk_cci_vmon",
+-	.get_target_freq = mtk_cci_governor_get_target,
+-	.event_handler = mtk_cci_governor_event_handler,
+ };
+ 
+ static int mtk_cci_devfreq_target(struct device *dev, unsigned long *freq,
+@@ -169,7 +75,7 @@ static int mtk_cci_devfreq_probe(struct platform_device *pdev)
+ 
+ 	cci_df->devfreq = devm_devfreq_add_device(cci_dev,
+ 						       &cci_devfreq_profile,
+-						       "mtk_cci_vmon",
++						       "cpufreq-map",
+ 						       NULL);
+ 	if (IS_ERR(cci_df->devfreq)) {
+ 		ret = PTR_ERR(cci_df->devfreq);
+@@ -203,30 +109,12 @@ static struct platform_driver cci_devfreq_driver = {
+ 
+ static int __init mtk_cci_devfreq_init(void)
  {
- 	struct mtk_reset *data;
- 	int ret;
-@@ -85,7 +121,7 @@ void mtk_register_reset_controller(struct device_node *np,
- 	data->regofs = regofs;
- 	data->rcdev.owner = THIS_MODULE;
- 	data->rcdev.nr_resets = num_regs * 32;
--	data->rcdev.ops = &mtk_reset_ops;
-+	data->rcdev.ops = reset_ops;
- 	data->rcdev.of_node = np;
- 
- 	ret = reset_controller_register(&data->rcdev);
-@@ -95,3 +131,18 @@ void mtk_register_reset_controller(struct device_node *np,
- 		return;
- 	}
+-	int ret;
+-
+-	ret = devfreq_add_governor(&mtk_cci_devfreq_governor);
+-	if (ret) {
+-		pr_err("%s: failed to add governor: %d\n", __func__, ret);
+-		return ret;
+-	}
+-
+-	ret = platform_driver_register(&cci_devfreq_driver);
+-	if (ret)
+-		devfreq_remove_governor(&mtk_cci_devfreq_governor);
+-
+-	return ret;
++	return platform_driver_register(&cci_devfreq_driver);
  }
-+
-+void mtk_register_reset_controller(struct device_node *np,
-+			unsigned int num_regs, int regofs)
-+{
-+	mtk_register_reset_controller_common(np, num_regs, regofs,
-+		&mtk_reset_ops);
-+}
-+
-+void mtk_register_reset_controller_set_clr(struct device_node *np,
-+			unsigned int num_regs, int regofs)
-+{
-+	mtk_register_reset_controller_common(np, num_regs, regofs,
-+		&mtk_reset_ops_set_clr);
-+}
-+
-diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
-index 82ae49c64221166..8067a4be831151d 100644
---- a/drivers/gpu/drm/mediatek/Makefile
-+++ b/drivers/gpu/drm/mediatek/Makefile
-@@ -12,6 +12,8 @@ mediatek-drm-y := mtk_disp_color.o \
- 		  mtk_drm_plane.o \
- 		  mtk_dsi.o \
- 		  mtk_mipi_tx.o \
-+		  mtk_mt8173_mipi_tx.o \
-+		  mtk_mt8183_mipi_tx.o \
- 		  mtk_dpi.o
+ module_init(mtk_cci_devfreq_init)
  
- obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
+ static void __exit mtk_cci_devfreq_exit(void)
+ {
+-	int ret;
+-
+-	ret = devfreq_remove_governor(&mtk_cci_devfreq_governor);
+-	if (ret)
+-		pr_err("%s: failed to remove governor: %d\n", __func__, ret);
+-
+ 	platform_driver_unregister(&cci_devfreq_driver);
+ }
+ module_exit(mtk_cci_devfreq_exit)
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 28d5766ecb74703..faea76259457996 100644
+index 28d5766ecb74..faea76259457 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
 +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
 @@ -703,8 +703,8 @@ static struct platform_driver * const mtk_drm_drivers[] = {
@@ -6631,7 +7324,7 @@ index 28d5766ecb74703..faea76259457996 100644
  
  static int __init mtk_drm_init(void)
 diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 27b507eb4a997d5..5d8227c90371c00 100644
+index 0156cab6a042..5d8227c90371 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
 @@ -21,10 +21,12 @@
@@ -6647,27 +7340,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  #include <video/mipi_display.h>
  #include <video/videomode.h>
  
-@@ -78,6 +80,7 @@
- #define DSI_VBP_NL		0x24
- #define DSI_VFP_NL		0x28
- #define DSI_VACT_NL		0x2C
-+#define DSI_SIZE_CON		0x38
- #define DSI_HSA_WC		0x50
- #define DSI_HBP_WC		0x54
- #define DSI_HFP_WC		0x58
-@@ -131,7 +134,10 @@
- #define VM_CMD_EN			BIT(0)
- #define TS_VFP_EN			BIT(5)
- 
--#define DSI_CMDQ0		0x180
-+#define DSI_SHADOW_DEBUG	0x190U
-+#define FORCE_COMMIT		BIT(0)
-+#define BYPASS_SHADOW		BIT(1)
-+
- #define CONFIG				(0xff << 0)
- #define SHORT_PACKET			0
- #define LONG_PACKET			2
-@@ -146,6 +152,8 @@
+@@ -150,6 +152,8 @@
  #define T_HS_EXIT	7
  #define T_HS_ZERO	10
  
@@ -6676,7 +7349,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  #define NS_TO_CYCLE(n, c)    ((n) / (c) + (((n) % (c)) ? 1 : 0))
  
  #define MTK_DSI_HOST_IS_READ(type) \
-@@ -154,8 +162,33 @@
+@@ -158,6 +162,25 @@
  	(type == MIPI_DSI_GENERIC_READ_REQUEST_2_PARAM) || \
  	(type == MIPI_DSI_DCS_READ))
  
@@ -6701,16 +7374,8 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
 +
  struct phy;
  
-+struct mtk_dsi_driver_data {
-+	const u32 reg_cmdq_off;
-+	bool has_shadow_ctl;
-+	bool has_size_ctl;
-+};
-+
- struct mtk_dsi {
- 	struct mtk_ddp_comp ddp_comp;
- 	struct device *dev;
-@@ -165,6 +198,8 @@ struct mtk_dsi {
+ struct mtk_dsi_driver_data {
+@@ -175,6 +198,8 @@ struct mtk_dsi {
  	struct drm_panel *panel;
  	struct drm_bridge *bridge;
  	struct phy *phy;
@@ -6719,7 +7384,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  
  	void __iomem *regs;
  
-@@ -172,16 +207,18 @@ struct mtk_dsi {
+@@ -182,12 +207,13 @@ struct mtk_dsi {
  	struct clk *digital_clk;
  	struct clk *hs_clk;
  
@@ -6734,12 +7399,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  	int refcount;
  	bool enabled;
  	u32 irq_data;
- 	wait_queue_head_t irq_wait_queue;
-+	struct mtk_dsi_driver_data *driver_data;
- };
- 
- static inline struct mtk_dsi *encoder_to_dsi(struct drm_encoder *e)
-@@ -206,21 +243,48 @@ static void mtk_dsi_mask(struct mtk_dsi *dsi, u32 offset, u32 mask, u32 data)
+@@ -217,21 +243,48 @@ static void mtk_dsi_mask(struct mtk_dsi *dsi, u32 offset, u32 mask, u32 data)
  	writel((temp & ~mask) | (data & mask), dsi->regs + offset);
  }
  
@@ -6749,9 +7409,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
 -	u32 timcon0, timcon1, timcon2, timcon3;
  	u32 ui, cycle_time;
 +	struct mtk_phy_timing *timing = &dsi->phy_timing;
- 
--	ui = 1000 / dsi->data_rate + 0x01;
--	cycle_time = 8000 / dsi->data_rate + 0x01;
++
 +	ui = 1000000000U / dsi->data_rate + 1U;
 +	cycle_time = 8000000000U / dsi->data_rate + 1U;
 +
@@ -6759,10 +7417,19 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
 +	timing->da_hs_prepare = NS_TO_CYCLE((0x40 + 0x5 * ui), cycle_time);
 +	timing->da_hs_zero = NS_TO_CYCLE((0xc8 + 0x0a * ui), cycle_time);
 +	timing->da_hs_trail = NS_TO_CYCLE(((0x4 * ui) + 0x50), cycle_time);
-+
+ 
+-	ui = 1000 / dsi->data_rate + 0x01;
+-	cycle_time = 8000 / dsi->data_rate + 0x01;
 +	if (timing->da_hs_zero > timing->da_hs_prepare)
 +		timing->da_hs_zero -= timing->da_hs_prepare;
-+
+ 
+-	timcon0 = T_LPX | T_HS_PREP << 8 | T_HS_ZERO << 16 | T_HS_TRAIL << 24;
+-	timcon1 = 4 * T_LPX | (3 * T_LPX / 2) << 8 | 5 * T_LPX << 16 |
+-		  T_HS_EXIT << 24;
+-	timcon2 = ((NS_TO_CYCLE(0x64, cycle_time) + 0xa) << 24) |
+-		  (NS_TO_CYCLE(0x150, cycle_time) << 16);
+-	timcon3 = NS_TO_CYCLE(0x40, cycle_time) | (2 * T_LPX) << 16 |
+-		  NS_TO_CYCLE(80 + 52 * ui, cycle_time) << 8;
 +	timing->ta_go = 4U * timing->lpx;
 +	timing->ta_sure = 3U * timing->lpx / 2U;
 +	timing->ta_get = 5U * timing->lpx;
@@ -6780,14 +7447,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
 +{
 +	u32 timcon0, timcon1, timcon2, timcon3;
 +	struct mtk_phy_timing *timing = &dsi->phy_timing;
- 
--	timcon0 = T_LPX | T_HS_PREP << 8 | T_HS_ZERO << 16 | T_HS_TRAIL << 24;
--	timcon1 = 4 * T_LPX | (3 * T_LPX / 2) << 8 | 5 * T_LPX << 16 |
--		  T_HS_EXIT << 24;
--	timcon2 = ((NS_TO_CYCLE(0x64, cycle_time) + 0xa) << 24) |
--		  (NS_TO_CYCLE(0x150, cycle_time) << 16);
--	timcon3 = NS_TO_CYCLE(0x40, cycle_time) | (2 * T_LPX) << 16 |
--		  NS_TO_CYCLE(80 + 52 * ui, cycle_time) << 8;
++
 +	timcon0 = timing->lpx | timing->da_hs_prepare << 8 |
 +		  timing->da_hs_zero << 16 | timing->da_hs_trail << 24;
 +	timcon1 = timing->ta_go | timing->ta_sure << 8 |
@@ -6799,7 +7459,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  
  	writel(timcon0, dsi->regs + DSI_PHY_TIMECON0);
  	writel(timcon1, dsi->regs + DSI_PHY_TIMECON1);
-@@ -238,6 +302,16 @@ static void mtk_dsi_disable(struct mtk_dsi *dsi)
+@@ -249,6 +302,16 @@ static void mtk_dsi_disable(struct mtk_dsi *dsi)
  	mtk_dsi_mask(dsi, DSI_CON_CTRL, DSI_EN, 0);
  }
  
@@ -6816,17 +7476,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  static void mtk_dsi_reset_engine(struct mtk_dsi *dsi)
  {
  	mtk_dsi_mask(dsi, DSI_CON_CTRL, DSI_RESET, DSI_RESET);
-@@ -421,6 +495,9 @@ static void mtk_dsi_config_vdo_timing(struct mtk_dsi *dsi)
- 	writel(vm->vfront_porch, dsi->regs + DSI_VFP_NL);
- 	writel(vm->vactive, dsi->regs + DSI_VACT_NL);
- 
-+	if (dsi->driver_data->has_size_ctl)
-+		writel(vm->vactive << 16 | vm->hactive, dsi->regs + DSI_SIZE_CON);
-+
- 	horizontal_sync_active_byte = (vm->hsync_len * dsi_tmp_buf_bpp - 10);
- 
- 	if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO_SYNC_PULSE)
-@@ -530,8 +607,9 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
+@@ -544,8 +607,9 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
  {
  	struct device *dev = dsi->dev;
  	int ret;
@@ -6837,7 +7487,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  
  	if (++dsi->refcount != 1)
  		return 0;
-@@ -556,17 +634,22 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
+@@ -570,17 +634,22 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
  	 * mipi_ratio = (htotal_time + overhead_time) / htotal_time
  	 * data_rate = pixel_clock * bit_per_pixel * mipi_ratio / num_lanes;
  	 */
@@ -6851,14 +7501,14 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
 -	overhead_bits = overhead_cycles * dsi->lanes * 8;
 -	total_bits = htotal_bits + overhead_bits;
 +	dsi->data_rate = dsi->vm.pixelclock * bit_per_pixel / dsi->lanes;
- 
--	dsi->data_rate = DIV_ROUND_UP_ULL(pixel_clock * total_bits,
++
 +	mtk_dsi_phy_timing_calc(dsi);
 +
 +	overhead_cycles = 2 * timing->lpx + timing->da_hs_prepare +
 +			  timing->da_hs_zero + timing->da_hs_trail +
 +			  timing->da_hs_exit + 1;
-+
+ 
+-	dsi->data_rate = DIV_ROUND_UP_ULL(pixel_clock * total_bits,
 +	overhead_bits = overhead_cycles * 8U;
 +	total_bits = (u64)htotal_bits + (u64)overhead_bits;
 +
@@ -6866,19 +7516,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  					  htotal * dsi->lanes);
  
  	ret = clk_set_rate(dsi->hs_clk, dsi->data_rate);
-@@ -590,6 +673,11 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
- 	}
- 
- 	mtk_dsi_enable(dsi);
-+
-+	if (dsi->driver_data->has_shadow_ctl)
-+		writel(FORCE_COMMIT | BYPASS_SHADOW,
-+		       dsi->regs + DSI_SHADOW_DEBUG);
-+
- 	mtk_dsi_reset_engine(dsi);
- 	mtk_dsi_phy_timconfig(dsi);
- 
-@@ -696,7 +784,6 @@ static void mtk_output_dsi_disable(struct mtk_dsi *dsi)
+@@ -715,7 +784,6 @@ static void mtk_output_dsi_disable(struct mtk_dsi *dsi)
  		}
  	}
  
@@ -6886,7 +7524,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  	mtk_dsi_poweroff(dsi);
  
  	dsi->enabled = false;
-@@ -831,6 +918,8 @@ static int mtk_dsi_create_conn_enc(struct drm_device *drm, struct mtk_dsi *dsi)
+@@ -850,6 +918,8 @@ static int mtk_dsi_create_conn_enc(struct drm_device *drm, struct mtk_dsi *dsi)
  			goto err_encoder_cleanup;
  	}
  
@@ -6895,7 +7533,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  	return 0;
  
  err_encoder_cleanup:
-@@ -857,6 +946,7 @@ static void mtk_dsi_ddp_stop(struct mtk_ddp_comp *comp)
+@@ -876,6 +946,7 @@ static void mtk_dsi_ddp_stop(struct mtk_ddp_comp *comp)
  {
  	struct mtk_dsi *dsi = container_of(comp, struct mtk_dsi, ddp_comp);
  
@@ -6903,84 +7541,7 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  	mtk_dsi_poweroff(dsi);
  }
  
-@@ -934,6 +1024,7 @@ static void mtk_dsi_cmdq(struct mtk_dsi *dsi, const struct mipi_dsi_msg *msg)
- 	const char *tx_buf = msg->tx_buf;
- 	u8 config, cmdq_size, cmdq_off, type = msg->type;
- 	u32 reg_val, cmdq_mask, i;
-+	u32 reg_cmdq_off = dsi->driver_data->reg_cmdq_off;
- 
- 	if (MTK_DSI_HOST_IS_READ(type))
- 		config = BTA;
-@@ -953,9 +1044,11 @@ static void mtk_dsi_cmdq(struct mtk_dsi *dsi, const struct mipi_dsi_msg *msg)
- 	}
- 
- 	for (i = 0; i < msg->tx_len; i++)
--		writeb(tx_buf[i], dsi->regs + DSI_CMDQ0 + cmdq_off + i);
-+		mtk_dsi_mask(dsi, (reg_cmdq_off + cmdq_off + i) & (~0x3U),
-+			     (0xffUL << (((i + cmdq_off) & 3U) * 8U)),
-+			     tx_buf[i] << (((i + cmdq_off) & 3U) * 8U));
- 
--	mtk_dsi_mask(dsi, DSI_CMDQ0, cmdq_mask, reg_val);
-+	mtk_dsi_mask(dsi, reg_cmdq_off, cmdq_mask, reg_val);
- 	mtk_dsi_mask(dsi, DSI_CMDQ_SIZE, CMDQ_SIZE, cmdq_size);
- }
- 
-@@ -1045,12 +1138,6 @@ static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
- 		return ret;
- 	}
- 
--	ret = mipi_dsi_host_register(&dsi->host);
--	if (ret < 0) {
--		dev_err(dev, "failed to register DSI host: %d\n", ret);
--		goto err_ddp_comp_unregister;
--	}
--
- 	ret = mtk_dsi_create_conn_enc(drm, dsi);
- 	if (ret) {
- 		DRM_ERROR("Encoder create failed with %d\n", ret);
-@@ -1060,8 +1147,6 @@ static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
- 	return 0;
- 
- err_unregister:
--	mipi_dsi_host_unregister(&dsi->host);
--err_ddp_comp_unregister:
- 	mtk_ddp_comp_unregister(drm, &dsi->ddp_comp);
- 	return ret;
- }
-@@ -1082,14 +1167,40 @@ static const struct component_ops mtk_dsi_component_ops = {
- 	.unbind = mtk_dsi_unbind,
- };
- 
-+static const struct mtk_dsi_driver_data mt8173_dsi_driver_data = {
-+	.reg_cmdq_off = 0x200,
-+};
-+
-+static const struct mtk_dsi_driver_data mt2701_dsi_driver_data = {
-+	.reg_cmdq_off = 0x180,
-+};
-+
-+static const struct mtk_dsi_driver_data mt8183_dsi_driver_data = {
-+	.reg_cmdq_off = 0x200,
-+	.has_shadow_ctl = true,
-+	.has_size_ctl = true,
-+};
-+
-+static const struct of_device_id mtk_dsi_of_match[] = {
-+	{ .compatible = "mediatek,mt2701-dsi",
-+	  .data = &mt2701_dsi_driver_data },
-+	{ .compatible = "mediatek,mt8173-dsi",
-+	  .data = &mt8173_dsi_driver_data },
-+	{ .compatible = "mediatek,mt8183-dsi",
-+	  .data = &mt8183_dsi_driver_data },
-+	{ },
-+};
-+
- static int mtk_dsi_probe(struct platform_device *pdev)
- {
- 	struct mtk_dsi *dsi;
- 	struct device *dev = &pdev->dev;
-+	const struct of_device_id *of_id;
- 	struct resource *regs;
+@@ -1129,6 +1200,7 @@ static int mtk_dsi_probe(struct platform_device *pdev)
  	int irq_num;
  	int comp_id;
  	int ret;
@@ -6988,66 +7549,10 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  
  	dsi = devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
  	if (!dsi)
-@@ -1097,31 +1208,40 @@ static int mtk_dsi_probe(struct platform_device *pdev)
- 
- 	dsi->host.ops = &mtk_dsi_ops;
- 	dsi->host.dev = dev;
-+	dsi->dev = dev;
-+	ret = mipi_dsi_host_register(&dsi->host);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to register DSI host: %d\n", ret);
-+		return ret;
-+	}
- 
- 	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0,
- 					  &dsi->panel, &dsi->bridge);
- 	if (ret)
--		return ret;
-+		goto err_unregister_host;
-+
-+	of_id = of_match_device(mtk_dsi_of_match, &pdev->dev);
-+	dsi->driver_data = (struct mtk_dsi_driver_data *)of_id->data;
- 
- 	dsi->engine_clk = devm_clk_get(dev, "engine");
- 	if (IS_ERR(dsi->engine_clk)) {
- 		ret = PTR_ERR(dsi->engine_clk);
- 		dev_err(dev, "Failed to get engine clock: %d\n", ret);
--		return ret;
-+		goto err_unregister_host;
+@@ -1187,6 +1259,22 @@ static int mtk_dsi_probe(struct platform_device *pdev)
+ 		goto err_unregister_host;
  	}
  
- 	dsi->digital_clk = devm_clk_get(dev, "digital");
- 	if (IS_ERR(dsi->digital_clk)) {
- 		ret = PTR_ERR(dsi->digital_clk);
- 		dev_err(dev, "Failed to get digital clock: %d\n", ret);
--		return ret;
-+		goto err_unregister_host;
- 	}
- 
- 	dsi->hs_clk = devm_clk_get(dev, "hs");
- 	if (IS_ERR(dsi->hs_clk)) {
- 		ret = PTR_ERR(dsi->hs_clk);
- 		dev_err(dev, "Failed to get hs clock: %d\n", ret);
--		return ret;
-+		goto err_unregister_host;
- 	}
- 
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-@@ -1129,33 +1249,51 @@ static int mtk_dsi_probe(struct platform_device *pdev)
- 	if (IS_ERR(dsi->regs)) {
- 		ret = PTR_ERR(dsi->regs);
- 		dev_err(dev, "Failed to ioremap memory: %d\n", ret);
--		return ret;
-+		goto err_unregister_host;
- 	}
- 
- 	dsi->phy = devm_phy_get(dev, "dphy");
- 	if (IS_ERR(dsi->phy)) {
- 		ret = PTR_ERR(dsi->phy);
- 		dev_err(dev, "Failed to get MIPI-DPHY: %d\n", ret);
-+		goto err_unregister_host;
-+	}
-+
 +	regmap = syscon_regmap_lookup_by_phandle(dev->of_node,
 +											 "mediatek,syscon-dsi");
 +	ret = of_property_read_u32_index(dev->of_node, "mediatek,syscon-dsi", 1,
@@ -7059,65 +7564,15 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
 +	if (ret) {
 +		ret = PTR_ERR(regmap);
 +		dev_err(dev, "Failed to get system configuration registers: %d\n", ret);
- 		return ret;
- 	}
- 
++		return ret;
++	}
++
 +	dsi->mmsys_sw_rst_b = regmap;
 +
  	comp_id = mtk_ddp_comp_get_id(dev->of_node, MTK_DSI);
  	if (comp_id < 0) {
  		dev_err(dev, "Failed to identify by alias: %d\n", comp_id);
--		return comp_id;
-+		ret = comp_id;
-+		goto err_unregister_host;
- 	}
- 
- 	ret = mtk_ddp_comp_init(dev, dev->of_node, &dsi->ddp_comp, comp_id,
- 				&mtk_dsi_funcs);
- 	if (ret) {
- 		dev_err(dev, "Failed to initialize component: %d\n", ret);
--		return ret;
-+		goto err_unregister_host;
- 	}
- 
- 	irq_num = platform_get_irq(pdev, 0);
- 	if (irq_num < 0) {
--		dev_err(&pdev->dev, "failed to request dsi irq resource\n");
--		return -EPROBE_DEFER;
-+		dev_err(&pdev->dev, "failed to get dsi irq_num: %d\n", irq_num);
-+		ret = irq_num;
-+		goto err_unregister_host;
- 	}
- 
- 	irq_set_status_flags(irq_num, IRQ_TYPE_LEVEL_LOW);
-@@ -1163,14 +1301,24 @@ static int mtk_dsi_probe(struct platform_device *pdev)
- 			       IRQF_TRIGGER_LOW, dev_name(&pdev->dev), dsi);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to request mediatek dsi irq\n");
--		return -EPROBE_DEFER;
-+		goto err_unregister_host;
- 	}
- 
- 	init_waitqueue_head(&dsi->irq_wait_queue);
- 
- 	platform_set_drvdata(pdev, dsi);
- 
--	return component_add(&pdev->dev, &mtk_dsi_component_ops);
-+	ret = component_add(&pdev->dev, &mtk_dsi_component_ops);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to add component: %d\n", ret);
-+		goto err_unregister_host;
-+	}
-+
-+	return 0;
-+
-+err_unregister_host:
-+	mipi_dsi_host_unregister(&dsi->host);
-+	return ret;
- }
- 
- static int mtk_dsi_remove(struct platform_device *pdev)
-@@ -1178,17 +1326,13 @@ static int mtk_dsi_remove(struct platform_device *pdev)
+@@ -1238,6 +1326,8 @@ static int mtk_dsi_remove(struct platform_device *pdev)
  	struct mtk_dsi *dsi = platform_get_drvdata(pdev);
  
  	mtk_output_dsi_disable(dsi);
@@ -7126,980 +7581,21 @@ index 27b507eb4a997d5..5d8227c90371c00 100644
  	component_del(&pdev->dev, &mtk_dsi_component_ops);
  
  	return 0;
- }
- 
--static const struct of_device_id mtk_dsi_of_match[] = {
--	{ .compatible = "mediatek,mt2701-dsi" },
--	{ .compatible = "mediatek,mt8173-dsi" },
--	{ },
--};
--
- struct platform_driver mtk_dsi_driver = {
- 	.probe = mtk_dsi_probe,
- 	.remove = mtk_dsi_remove,
 diff --git a/drivers/gpu/drm/mediatek/mtk_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
-index 90e913108950de7..73d19dfb38365de 100644
+index 6acef158ac2a..73d19dfb3836 100644
 --- a/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
 +++ b/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
-@@ -11,292 +11,45 @@
-  * GNU General Public License for more details.
-  */
- 
--#include <linux/clk.h>
--#include <linux/clk-provider.h>
--#include <linux/delay.h>
--#include <linux/io.h>
--#include <linux/module.h>
--#include <linux/of_device.h>
--#include <linux/platform_device.h>
--#include <linux/phy/phy.h>
--
--#define MIPITX_DSI_CON		0x00
--#define RG_DSI_LDOCORE_EN		BIT(0)
--#define RG_DSI_CKG_LDOOUT_EN		BIT(1)
--#define RG_DSI_BCLK_SEL			(3 << 2)
--#define RG_DSI_LD_IDX_SEL		(7 << 4)
--#define RG_DSI_PHYCLK_SEL		(2 << 8)
--#define RG_DSI_DSICLK_FREQ_SEL		BIT(10)
--#define RG_DSI_LPTX_CLMP_EN		BIT(11)
--
--#define MIPITX_DSI_CLOCK_LANE	0x04
--#define MIPITX_DSI_DATA_LANE0	0x08
--#define MIPITX_DSI_DATA_LANE1	0x0c
--#define MIPITX_DSI_DATA_LANE2	0x10
--#define MIPITX_DSI_DATA_LANE3	0x14
--#define RG_DSI_LNTx_LDOOUT_EN		BIT(0)
--#define RG_DSI_LNTx_CKLANE_EN		BIT(1)
--#define RG_DSI_LNTx_LPTX_IPLUS1		BIT(2)
--#define RG_DSI_LNTx_LPTX_IPLUS2		BIT(3)
--#define RG_DSI_LNTx_LPTX_IMINUS		BIT(4)
--#define RG_DSI_LNTx_LPCD_IPLUS		BIT(5)
--#define RG_DSI_LNTx_LPCD_IMINUS		BIT(6)
--#define RG_DSI_LNTx_RT_CODE		(0xf << 8)
--
--#define MIPITX_DSI_TOP_CON	0x40
--#define RG_DSI_LNT_INTR_EN		BIT(0)
--#define RG_DSI_LNT_HS_BIAS_EN		BIT(1)
--#define RG_DSI_LNT_IMP_CAL_EN		BIT(2)
--#define RG_DSI_LNT_TESTMODE_EN		BIT(3)
--#define RG_DSI_LNT_IMP_CAL_CODE		(0xf << 4)
--#define RG_DSI_LNT_AIO_SEL		(7 << 8)
--#define RG_DSI_PAD_TIE_LOW_EN		BIT(11)
--#define RG_DSI_DEBUG_INPUT_EN		BIT(12)
--#define RG_DSI_PRESERVE			(7 << 13)
--
--#define MIPITX_DSI_BG_CON	0x44
--#define RG_DSI_BG_CORE_EN		BIT(0)
--#define RG_DSI_BG_CKEN			BIT(1)
--#define RG_DSI_BG_DIV			(0x3 << 2)
--#define RG_DSI_BG_FAST_CHARGE		BIT(4)
--#define RG_DSI_VOUT_MSK			(0x3ffff << 5)
--#define RG_DSI_V12_SEL			(7 << 5)
--#define RG_DSI_V10_SEL			(7 << 8)
--#define RG_DSI_V072_SEL			(7 << 11)
--#define RG_DSI_V04_SEL			(7 << 14)
--#define RG_DSI_V032_SEL			(7 << 17)
--#define RG_DSI_V02_SEL			(7 << 20)
--#define RG_DSI_BG_R1_TRIM		(0xf << 24)
--#define RG_DSI_BG_R2_TRIM		(0xf << 28)
--
--#define MIPITX_DSI_PLL_CON0	0x50
--#define RG_DSI_MPPLL_PLL_EN		BIT(0)
--#define RG_DSI_MPPLL_DIV_MSK		(0x1ff << 1)
--#define RG_DSI_MPPLL_PREDIV		(3 << 1)
--#define RG_DSI_MPPLL_TXDIV0		(3 << 3)
--#define RG_DSI_MPPLL_TXDIV1		(3 << 5)
--#define RG_DSI_MPPLL_POSDIV		(7 << 7)
--#define RG_DSI_MPPLL_MONVC_EN		BIT(10)
--#define RG_DSI_MPPLL_MONREF_EN		BIT(11)
--#define RG_DSI_MPPLL_VOD_EN		BIT(12)
--
--#define MIPITX_DSI_PLL_CON1	0x54
--#define RG_DSI_MPPLL_SDM_FRA_EN		BIT(0)
--#define RG_DSI_MPPLL_SDM_SSC_PH_INIT	BIT(1)
--#define RG_DSI_MPPLL_SDM_SSC_EN		BIT(2)
--#define RG_DSI_MPPLL_SDM_SSC_PRD	(0xffff << 16)
--
--#define MIPITX_DSI_PLL_CON2	0x58
--
--#define MIPITX_DSI_PLL_TOP	0x64
--#define RG_DSI_MPPLL_PRESERVE		(0xff << 8)
--
--#define MIPITX_DSI_PLL_PWR	0x68
--#define RG_DSI_MPPLL_SDM_PWR_ON		BIT(0)
--#define RG_DSI_MPPLL_SDM_ISO_EN		BIT(1)
--#define RG_DSI_MPPLL_SDM_PWR_ACK	BIT(8)
--
--#define MIPITX_DSI_SW_CTRL	0x80
--#define SW_CTRL_EN			BIT(0)
--
--#define MIPITX_DSI_SW_CTRL_CON0	0x84
--#define SW_LNTC_LPTX_PRE_OE		BIT(0)
--#define SW_LNTC_LPTX_OE			BIT(1)
--#define SW_LNTC_LPTX_P			BIT(2)
--#define SW_LNTC_LPTX_N			BIT(3)
--#define SW_LNTC_HSTX_PRE_OE		BIT(4)
--#define SW_LNTC_HSTX_OE			BIT(5)
--#define SW_LNTC_HSTX_ZEROCLK		BIT(6)
--#define SW_LNT0_LPTX_PRE_OE		BIT(7)
--#define SW_LNT0_LPTX_OE			BIT(8)
--#define SW_LNT0_LPTX_P			BIT(9)
--#define SW_LNT0_LPTX_N			BIT(10)
--#define SW_LNT0_HSTX_PRE_OE		BIT(11)
--#define SW_LNT0_HSTX_OE			BIT(12)
--#define SW_LNT0_LPRX_EN			BIT(13)
--#define SW_LNT1_LPTX_PRE_OE		BIT(14)
--#define SW_LNT1_LPTX_OE			BIT(15)
--#define SW_LNT1_LPTX_P			BIT(16)
--#define SW_LNT1_LPTX_N			BIT(17)
--#define SW_LNT1_HSTX_PRE_OE		BIT(18)
--#define SW_LNT1_HSTX_OE			BIT(19)
--#define SW_LNT2_LPTX_PRE_OE		BIT(20)
--#define SW_LNT2_LPTX_OE			BIT(21)
--#define SW_LNT2_LPTX_P			BIT(22)
--#define SW_LNT2_LPTX_N			BIT(23)
--#define SW_LNT2_HSTX_PRE_OE		BIT(24)
--#define SW_LNT2_HSTX_OE			BIT(25)
--
--struct mtk_mipitx_data {
--	const u32 mppll_preserve;
--};
--
--struct mtk_mipi_tx {
--	struct device *dev;
--	void __iomem *regs;
--	u32 data_rate;
--	const struct mtk_mipitx_data *driver_data;
--	struct clk_hw pll_hw;
--	struct clk *pll;
--};
-+#include "mtk_mipi_tx.h"
- 
--static inline struct mtk_mipi_tx *mtk_mipi_tx_from_clk_hw(struct clk_hw *hw)
-+inline struct mtk_mipi_tx *mtk_mipi_tx_from_clk_hw(struct clk_hw *hw)
+@@ -45,7 +45,7 @@ void mtk_mipi_tx_update_bits(struct mtk_mipi_tx *mipi_tx, u32 offset,
+ long mtk_mipi_tx_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+ 				unsigned long *prate)
  {
- 	return container_of(hw, struct mtk_mipi_tx, pll_hw);
- }
- 
--static void mtk_mipi_tx_clear_bits(struct mtk_mipi_tx *mipi_tx, u32 offset,
--				   u32 bits)
-+void mtk_mipi_tx_clear_bits(struct mtk_mipi_tx *mipi_tx, u32 offset,
-+			    u32 bits)
- {
- 	u32 temp = readl(mipi_tx->regs + offset);
- 
- 	writel(temp & ~bits, mipi_tx->regs + offset);
- }
- 
--static void mtk_mipi_tx_set_bits(struct mtk_mipi_tx *mipi_tx, u32 offset,
--				 u32 bits)
-+void mtk_mipi_tx_set_bits(struct mtk_mipi_tx *mipi_tx, u32 offset,
-+			  u32 bits)
- {
- 	u32 temp = readl(mipi_tx->regs + offset);
- 
- 	writel(temp | bits, mipi_tx->regs + offset);
- }
- 
--static void mtk_mipi_tx_update_bits(struct mtk_mipi_tx *mipi_tx, u32 offset,
--				    u32 mask, u32 data)
-+void mtk_mipi_tx_update_bits(struct mtk_mipi_tx *mipi_tx, u32 offset,
-+			     u32 mask, u32 data)
- {
- 	u32 temp = readl(mipi_tx->regs + offset);
- 
- 	writel((temp & ~mask) | (data & mask), mipi_tx->regs + offset);
- }
- 
--static int mtk_mipi_tx_pll_prepare(struct clk_hw *hw)
-+long mtk_mipi_tx_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-+				unsigned long *prate)
- {
--	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
--	u8 txdiv, txdiv0, txdiv1;
--	u64 pcw;
--
--	dev_dbg(mipi_tx->dev, "prepare: %u Hz\n", mipi_tx->data_rate);
--
--	if (mipi_tx->data_rate >= 500000000) {
--		txdiv = 1;
--		txdiv0 = 0;
--		txdiv1 = 0;
--	} else if (mipi_tx->data_rate >= 250000000) {
--		txdiv = 2;
--		txdiv0 = 1;
--		txdiv1 = 0;
--	} else if (mipi_tx->data_rate >= 125000000) {
--		txdiv = 4;
--		txdiv0 = 2;
--		txdiv1 = 0;
--	} else if (mipi_tx->data_rate > 62000000) {
--		txdiv = 8;
--		txdiv0 = 2;
--		txdiv1 = 1;
--	} else if (mipi_tx->data_rate >= 50000000) {
--		txdiv = 16;
--		txdiv0 = 2;
--		txdiv1 = 2;
--	} else {
--		return -EINVAL;
--	}
--
--	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_BG_CON,
--				RG_DSI_VOUT_MSK |
--				RG_DSI_BG_CKEN | RG_DSI_BG_CORE_EN,
--				(4 << 20) | (4 << 17) | (4 << 14) |
--				(4 << 11) | (4 << 8) | (4 << 5) |
--				RG_DSI_BG_CKEN | RG_DSI_BG_CORE_EN);
--
--	usleep_range(30, 100);
--
--	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_TOP_CON,
--				RG_DSI_LNT_IMP_CAL_CODE | RG_DSI_LNT_HS_BIAS_EN,
--				(8 << 4) | RG_DSI_LNT_HS_BIAS_EN);
--
--	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_CON,
--			     RG_DSI_CKG_LDOOUT_EN | RG_DSI_LDOCORE_EN);
--
--	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_PWR,
--				RG_DSI_MPPLL_SDM_PWR_ON |
--				RG_DSI_MPPLL_SDM_ISO_EN,
--				RG_DSI_MPPLL_SDM_PWR_ON);
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
--			       RG_DSI_MPPLL_PLL_EN);
--
--	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
--				RG_DSI_MPPLL_TXDIV0 | RG_DSI_MPPLL_TXDIV1 |
--				RG_DSI_MPPLL_PREDIV,
--				(txdiv0 << 3) | (txdiv1 << 5));
--
--	/*
--	 * PLL PCW config
--	 * PCW bit 24~30 = integer part of pcw
--	 * PCW bit 0~23 = fractional part of pcw
--	 * pcw = data_Rate*4*txdiv/(Ref_clk*2);
--	 * Post DIV =4, so need data_Rate*4
--	 * Ref_clk is 26MHz
--	 */
--	pcw = div_u64(((u64)mipi_tx->data_rate * 2 * txdiv) << 24,
--		      26000000);
--	writel(pcw, mipi_tx->regs + MIPITX_DSI_PLL_CON2);
--
--	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_PLL_CON1,
--			     RG_DSI_MPPLL_SDM_FRA_EN);
--
--	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_PLL_CON0, RG_DSI_MPPLL_PLL_EN);
--
--	usleep_range(20, 100);
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON1,
--			       RG_DSI_MPPLL_SDM_SSC_EN);
--
--	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_TOP,
--				RG_DSI_MPPLL_PRESERVE,
--				mipi_tx->driver_data->mppll_preserve);
--
--	return 0;
+-	return clamp_val(rate, 50000000, 1250000000);
 +	return clamp_val(rate, 50000000, 1600000000);
  }
  
--static void mtk_mipi_tx_pll_unprepare(struct clk_hw *hw)
--{
--	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
--
--	dev_dbg(mipi_tx->dev, "unprepare\n");
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
--			       RG_DSI_MPPLL_PLL_EN);
--
--	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_TOP,
--				RG_DSI_MPPLL_PRESERVE, 0);
--
--	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_PWR,
--				RG_DSI_MPPLL_SDM_ISO_EN |
--				RG_DSI_MPPLL_SDM_PWR_ON,
--				RG_DSI_MPPLL_SDM_ISO_EN);
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_TOP_CON,
--			       RG_DSI_LNT_HS_BIAS_EN);
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_CON,
--			       RG_DSI_CKG_LDOOUT_EN | RG_DSI_LDOCORE_EN);
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_BG_CON,
--			       RG_DSI_BG_CKEN | RG_DSI_BG_CORE_EN);
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
--			       RG_DSI_MPPLL_DIV_MSK);
--}
--
--static long mtk_mipi_tx_pll_round_rate(struct clk_hw *hw, unsigned long rate,
--				       unsigned long *prate)
--{
--	return clamp_val(rate, 50000000, 1250000000);
--}
--
--static int mtk_mipi_tx_pll_set_rate(struct clk_hw *hw, unsigned long rate,
--				    unsigned long parent_rate)
-+int mtk_mipi_tx_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-+			     unsigned long parent_rate)
- {
- 	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
- 
-@@ -307,37 +60,14 @@ static int mtk_mipi_tx_pll_set_rate(struct clk_hw *hw, unsigned long rate,
- 	return 0;
- }
- 
--static unsigned long mtk_mipi_tx_pll_recalc_rate(struct clk_hw *hw,
--						 unsigned long parent_rate)
-+unsigned long mtk_mipi_tx_pll_recalc_rate(struct clk_hw *hw,
-+					  unsigned long parent_rate)
- {
- 	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
- 
- 	return mipi_tx->data_rate;
- }
- 
--static const struct clk_ops mtk_mipi_tx_pll_ops = {
--	.prepare = mtk_mipi_tx_pll_prepare,
--	.unprepare = mtk_mipi_tx_pll_unprepare,
--	.round_rate = mtk_mipi_tx_pll_round_rate,
--	.set_rate = mtk_mipi_tx_pll_set_rate,
--	.recalc_rate = mtk_mipi_tx_pll_recalc_rate,
--};
--
--static int mtk_mipi_tx_power_on_signal(struct phy *phy)
--{
--	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
--	u32 reg;
--
--	for (reg = MIPITX_DSI_CLOCK_LANE;
--	     reg <= MIPITX_DSI_DATA_LANE3; reg += 4)
--		mtk_mipi_tx_set_bits(mipi_tx, reg, RG_DSI_LNTx_LDOOUT_EN);
--
--	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_TOP_CON,
--			       RG_DSI_PAD_TIE_LOW_EN);
--
--	return 0;
--}
--
- static int mtk_mipi_tx_power_on(struct phy *phy)
- {
- 	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
-@@ -349,30 +79,16 @@ static int mtk_mipi_tx_power_on(struct phy *phy)
- 		return ret;
- 
- 	/* Enable DSI Lane LDO outputs, disable pad tie low */
--	mtk_mipi_tx_power_on_signal(phy);
--
-+	mipi_tx->driver_data->mipi_tx_enable_signal(phy);
- 	return 0;
- }
- 
--static void mtk_mipi_tx_power_off_signal(struct phy *phy)
--{
--	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
--	u32 reg;
--
--	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_TOP_CON,
--			     RG_DSI_PAD_TIE_LOW_EN);
--
--	for (reg = MIPITX_DSI_CLOCK_LANE;
--	     reg <= MIPITX_DSI_DATA_LANE3; reg += 4)
--		mtk_mipi_tx_clear_bits(mipi_tx, reg, RG_DSI_LNTx_LDOOUT_EN);
--}
--
- static int mtk_mipi_tx_power_off(struct phy *phy)
- {
- 	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
- 
- 	/* Enable pad tie low, disable DSI Lane LDO outputs */
--	mtk_mipi_tx_power_off_signal(phy);
-+	mipi_tx->driver_data->mipi_tx_disable_signal(phy);
- 
- 	/* Disable PLL and power down core */
- 	clk_disable_unprepare(mipi_tx->pll);
-@@ -391,10 +107,8 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mipi_tx *mipi_tx;
- 	struct resource *mem;
--	struct clk *ref_clk;
- 	const char *ref_clk_name;
- 	struct clk_init_data clk_init = {
--		.ops = &mtk_mipi_tx_pll_ops,
- 		.num_parents = 1,
- 		.parent_names = (const char * const *)&ref_clk_name,
- 		.flags = CLK_SET_RATE_GATE,
-@@ -408,6 +122,7 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	mipi_tx->driver_data = of_device_get_match_data(dev);
-+
- 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	mipi_tx->regs = devm_ioremap_resource(dev, mem);
- 	if (IS_ERR(mipi_tx->regs)) {
-@@ -416,13 +131,14 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ref_clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(ref_clk)) {
--		ret = PTR_ERR(ref_clk);
-+	mipi_tx->ref_clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(mipi_tx->ref_clk)) {
-+		ret = PTR_ERR(mipi_tx->ref_clk);
- 		dev_err(dev, "Failed to get reference clock: %d\n", ret);
- 		return ret;
- 	}
--	ref_clk_name = __clk_get_name(ref_clk);
-+
-+	ref_clk_name = __clk_get_name(mipi_tx->ref_clk);
- 
- 	ret = of_property_read_string(dev->of_node, "clock-output-names",
- 				      &clk_init.name);
-@@ -431,6 +147,8 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	clk_init.ops = mipi_tx->driver_data->mipi_tx_clk_ops;
-+
- 	mipi_tx->pll_hw.init = &clk_init;
- 	mipi_tx->pll = devm_clk_register(dev, &mipi_tx->pll_hw);
- 	if (IS_ERR(mipi_tx->pll)) {
-@@ -465,20 +183,14 @@ static int mtk_mipi_tx_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct mtk_mipitx_data mt2701_mipitx_data = {
--	.mppll_preserve = (3 << 8)
--};
--
--static const struct mtk_mipitx_data mt8173_mipitx_data = {
--	.mppll_preserve = (0 << 8)
--};
--
- static const struct of_device_id mtk_mipi_tx_match[] = {
- 	{ .compatible = "mediatek,mt2701-mipi-tx",
- 	  .data = &mt2701_mipitx_data },
- 	{ .compatible = "mediatek,mt8173-mipi-tx",
- 	  .data = &mt8173_mipitx_data },
--	{},
-+	{ .compatible = "mediatek,mt8183-mipi-tx",
-+	  .data = &mt8183_mipitx_data },
-+	{ },
- };
- 
- struct platform_driver mtk_mipi_tx_driver = {
-diff --git a/drivers/gpu/drm/mediatek/mtk_mipi_tx.h b/drivers/gpu/drm/mediatek/mtk_mipi_tx.h
-new file mode 100644
-index 000000000000000..af83023e81cf570
---- /dev/null
-+++ b/drivers/gpu/drm/mediatek/mtk_mipi_tx.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2019 MediaTek Inc.
-+ * Author: Jitao Shi <jitao.shi@mediatek.com>
-+ */
-+
-+#ifndef _MTK_MIPI_TX_H
-+#define _MTK_MIPI_TX_H
-+
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/delay.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/phy/phy.h>
-+
-+struct mtk_mipitx_data {
-+	const u32 mppll_preserve;
-+	const struct clk_ops *mipi_tx_clk_ops;
-+	void (*mipi_tx_enable_signal)(struct phy *phy);
-+	void (*mipi_tx_disable_signal)(struct phy *phy);
-+};
-+
-+struct mtk_mipi_tx {
-+	struct device *dev;
-+	void __iomem *regs;
-+	u32 data_rate;
-+	struct clk *ref_clk;
-+	const struct mtk_mipitx_data *driver_data;
-+	struct clk_hw pll_hw;
-+	struct clk *pll;
-+};
-+
-+struct mtk_mipi_tx *mtk_mipi_tx_from_clk_hw(struct clk_hw *hw);
-+void mtk_mipi_tx_clear_bits(struct mtk_mipi_tx *mipi_tx, u32 offset, u32 bits);
-+void mtk_mipi_tx_set_bits(struct mtk_mipi_tx *mipi_tx, u32 offset, u32 bits);
-+void mtk_mipi_tx_update_bits(struct mtk_mipi_tx *mipi_tx, u32 offset, u32 mask,
-+			     u32 data);
-+long mtk_mipi_tx_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-+				unsigned long *prate);
-+int mtk_mipi_tx_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-+			     unsigned long parent_rate);
-+unsigned long mtk_mipi_tx_pll_recalc_rate(struct clk_hw *hw,
-+					  unsigned long parent_rate);
-+
-+extern const struct mtk_mipitx_data mt2701_mipitx_data;
-+extern const struct mtk_mipitx_data mt8173_mipitx_data;
-+extern const struct mtk_mipitx_data mt8183_mipitx_data;
-+
-+#endif
-diff --git a/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c
-new file mode 100644
-index 000000000000000..943650cfed46030
---- /dev/null
-+++ b/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c
-@@ -0,0 +1,283 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2019 MediaTek Inc.
-+ * Author: jitao.shi <jitao.shi@mediatek.com>
-+ */
-+
-+#include "mtk_mipi_tx.h"
-+
-+#define MIPITX_DSI_CON		0x00
-+#define RG_DSI_LDOCORE_EN		BIT(0)
-+#define RG_DSI_CKG_LDOOUT_EN		BIT(1)
-+#define RG_DSI_BCLK_SEL			(3 << 2)
-+#define RG_DSI_LD_IDX_SEL		(7 << 4)
-+#define RG_DSI_PHYCLK_SEL		(2 << 8)
-+#define RG_DSI_DSICLK_FREQ_SEL		BIT(10)
-+#define RG_DSI_LPTX_CLMP_EN		BIT(11)
-+
-+#define MIPITX_DSI_CLOCK_LANE	0x04
-+#define MIPITX_DSI_DATA_LANE0	0x08
-+#define MIPITX_DSI_DATA_LANE1	0x0c
-+#define MIPITX_DSI_DATA_LANE2	0x10
-+#define MIPITX_DSI_DATA_LANE3	0x14
-+#define RG_DSI_LNTx_LDOOUT_EN		BIT(0)
-+#define RG_DSI_LNTx_CKLANE_EN		BIT(1)
-+#define RG_DSI_LNTx_LPTX_IPLUS1		BIT(2)
-+#define RG_DSI_LNTx_LPTX_IPLUS2		BIT(3)
-+#define RG_DSI_LNTx_LPTX_IMINUS		BIT(4)
-+#define RG_DSI_LNTx_LPCD_IPLUS		BIT(5)
-+#define RG_DSI_LNTx_LPCD_IMINUS		BIT(6)
-+#define RG_DSI_LNTx_RT_CODE		(0xf << 8)
-+
-+#define MIPITX_DSI_TOP_CON	0x40
-+#define RG_DSI_LNT_INTR_EN		BIT(0)
-+#define RG_DSI_LNT_HS_BIAS_EN		BIT(1)
-+#define RG_DSI_LNT_IMP_CAL_EN		BIT(2)
-+#define RG_DSI_LNT_TESTMODE_EN		BIT(3)
-+#define RG_DSI_LNT_IMP_CAL_CODE		(0xf << 4)
-+#define RG_DSI_LNT_AIO_SEL		(7 << 8)
-+#define RG_DSI_PAD_TIE_LOW_EN		BIT(11)
-+#define RG_DSI_DEBUG_INPUT_EN		BIT(12)
-+#define RG_DSI_PRESERVE			(7 << 13)
-+
-+#define MIPITX_DSI_BG_CON	0x44
-+#define RG_DSI_BG_CORE_EN		BIT(0)
-+#define RG_DSI_BG_CKEN			BIT(1)
-+#define RG_DSI_BG_DIV			(0x3 << 2)
-+#define RG_DSI_BG_FAST_CHARGE		BIT(4)
-+#define RG_DSI_VOUT_MSK			(0x3ffff << 5)
-+#define RG_DSI_V12_SEL			(7 << 5)
-+#define RG_DSI_V10_SEL			(7 << 8)
-+#define RG_DSI_V072_SEL			(7 << 11)
-+#define RG_DSI_V04_SEL			(7 << 14)
-+#define RG_DSI_V032_SEL			(7 << 17)
-+#define RG_DSI_V02_SEL			(7 << 20)
-+#define RG_DSI_BG_R1_TRIM		(0xf << 24)
-+#define RG_DSI_BG_R2_TRIM		(0xf << 28)
-+
-+#define MIPITX_DSI_PLL_CON0	0x50
-+#define RG_DSI_MPPLL_PLL_EN		BIT(0)
-+#define RG_DSI_MPPLL_DIV_MSK		(0x1ff << 1)
-+#define RG_DSI_MPPLL_PREDIV		(3 << 1)
-+#define RG_DSI_MPPLL_TXDIV0		(3 << 3)
-+#define RG_DSI_MPPLL_TXDIV1		(3 << 5)
-+#define RG_DSI_MPPLL_POSDIV		(7 << 7)
-+#define RG_DSI_MPPLL_MONVC_EN		BIT(10)
-+#define RG_DSI_MPPLL_MONREF_EN		BIT(11)
-+#define RG_DSI_MPPLL_VOD_EN		BIT(12)
-+
-+#define MIPITX_DSI_PLL_CON1	0x54
-+#define RG_DSI_MPPLL_SDM_FRA_EN		BIT(0)
-+#define RG_DSI_MPPLL_SDM_SSC_PH_INIT	BIT(1)
-+#define RG_DSI_MPPLL_SDM_SSC_EN		BIT(2)
-+#define RG_DSI_MPPLL_SDM_SSC_PRD	(0xffff << 16)
-+
-+#define MIPITX_DSI_PLL_CON2	0x58
-+
-+#define MIPITX_DSI_PLL_TOP	0x64
-+#define RG_DSI_MPPLL_PRESERVE		(0xff << 8)
-+
-+#define MIPITX_DSI_PLL_PWR	0x68
-+#define RG_DSI_MPPLL_SDM_PWR_ON		BIT(0)
-+#define RG_DSI_MPPLL_SDM_ISO_EN		BIT(1)
-+#define RG_DSI_MPPLL_SDM_PWR_ACK	BIT(8)
-+
-+#define MIPITX_DSI_SW_CTRL	0x80
-+#define SW_CTRL_EN			BIT(0)
-+
-+#define MIPITX_DSI_SW_CTRL_CON0	0x84
-+#define SW_LNTC_LPTX_PRE_OE		BIT(0)
-+#define SW_LNTC_LPTX_OE			BIT(1)
-+#define SW_LNTC_LPTX_P			BIT(2)
-+#define SW_LNTC_LPTX_N			BIT(3)
-+#define SW_LNTC_HSTX_PRE_OE		BIT(4)
-+#define SW_LNTC_HSTX_OE			BIT(5)
-+#define SW_LNTC_HSTX_ZEROCLK		BIT(6)
-+#define SW_LNT0_LPTX_PRE_OE		BIT(7)
-+#define SW_LNT0_LPTX_OE			BIT(8)
-+#define SW_LNT0_LPTX_P			BIT(9)
-+#define SW_LNT0_LPTX_N			BIT(10)
-+#define SW_LNT0_HSTX_PRE_OE		BIT(11)
-+#define SW_LNT0_HSTX_OE			BIT(12)
-+#define SW_LNT0_LPRX_EN			BIT(13)
-+#define SW_LNT1_LPTX_PRE_OE		BIT(14)
-+#define SW_LNT1_LPTX_OE			BIT(15)
-+#define SW_LNT1_LPTX_P			BIT(16)
-+#define SW_LNT1_LPTX_N			BIT(17)
-+#define SW_LNT1_HSTX_PRE_OE		BIT(18)
-+#define SW_LNT1_HSTX_OE			BIT(19)
-+#define SW_LNT2_LPTX_PRE_OE		BIT(20)
-+#define SW_LNT2_LPTX_OE			BIT(21)
-+#define SW_LNT2_LPTX_P			BIT(22)
-+#define SW_LNT2_LPTX_N			BIT(23)
-+#define SW_LNT2_HSTX_PRE_OE		BIT(24)
-+#define SW_LNT2_HSTX_OE			BIT(25)
-+
-+static int mtk_mipi_tx_pll_prepare(struct clk_hw *hw)
-+{
-+	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
-+	u8 txdiv, txdiv0, txdiv1;
-+	u64 pcw;
-+
-+	dev_dbg(mipi_tx->dev, "prepare: %u Hz\n", mipi_tx->data_rate);
-+
-+	if (mipi_tx->data_rate >= 500000000) {
-+		txdiv = 1;
-+		txdiv0 = 0;
-+		txdiv1 = 0;
-+	} else if (mipi_tx->data_rate >= 250000000) {
-+		txdiv = 2;
-+		txdiv0 = 1;
-+		txdiv1 = 0;
-+	} else if (mipi_tx->data_rate >= 125000000) {
-+		txdiv = 4;
-+		txdiv0 = 2;
-+		txdiv1 = 0;
-+	} else if (mipi_tx->data_rate > 62000000) {
-+		txdiv = 8;
-+		txdiv0 = 2;
-+		txdiv1 = 1;
-+	} else if (mipi_tx->data_rate >= 50000000) {
-+		txdiv = 16;
-+		txdiv0 = 2;
-+		txdiv1 = 2;
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_BG_CON,
-+				RG_DSI_VOUT_MSK |
-+				RG_DSI_BG_CKEN | RG_DSI_BG_CORE_EN,
-+				(4 << 20) | (4 << 17) | (4 << 14) |
-+				(4 << 11) | (4 << 8) | (4 << 5) |
-+				RG_DSI_BG_CKEN | RG_DSI_BG_CORE_EN);
-+
-+	usleep_range(30, 100);
-+
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_TOP_CON,
-+				RG_DSI_LNT_IMP_CAL_CODE | RG_DSI_LNT_HS_BIAS_EN,
-+				(8 << 4) | RG_DSI_LNT_HS_BIAS_EN);
-+
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_CON,
-+			     RG_DSI_CKG_LDOOUT_EN | RG_DSI_LDOCORE_EN);
-+
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_PWR,
-+				RG_DSI_MPPLL_SDM_PWR_ON |
-+				RG_DSI_MPPLL_SDM_ISO_EN,
-+				RG_DSI_MPPLL_SDM_PWR_ON);
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
-+			       RG_DSI_MPPLL_PLL_EN);
-+
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
-+				RG_DSI_MPPLL_TXDIV0 | RG_DSI_MPPLL_TXDIV1 |
-+				RG_DSI_MPPLL_PREDIV,
-+				(txdiv0 << 3) | (txdiv1 << 5));
-+
-+	/*
-+	 * PLL PCW config
-+	 * PCW bit 24~30 = integer part of pcw
-+	 * PCW bit 0~23 = fractional part of pcw
-+	 * pcw = data_Rate*4*txdiv/(Ref_clk*2);
-+	 * Post DIV =4, so need data_Rate*4
-+	 * Ref_clk is 26MHz
-+	 */
-+	pcw = div_u64(((u64)mipi_tx->data_rate * 2 * txdiv) << 24,
-+		      26000000);
-+	writel(pcw, mipi_tx->regs + MIPITX_DSI_PLL_CON2);
-+
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_PLL_CON1,
-+			     RG_DSI_MPPLL_SDM_FRA_EN);
-+
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_PLL_CON0, RG_DSI_MPPLL_PLL_EN);
-+
-+	usleep_range(20, 100);
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON1,
-+			       RG_DSI_MPPLL_SDM_SSC_EN);
-+
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_TOP,
-+				RG_DSI_MPPLL_PRESERVE,
-+				mipi_tx->driver_data->mppll_preserve);
-+
-+	return 0;
-+}
-+
-+static void mtk_mipi_tx_pll_unprepare(struct clk_hw *hw)
-+{
-+	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
-+
-+	dev_dbg(mipi_tx->dev, "unprepare\n");
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
-+			       RG_DSI_MPPLL_PLL_EN);
-+
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_TOP,
-+				RG_DSI_MPPLL_PRESERVE, 0);
-+
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_DSI_PLL_PWR,
-+				RG_DSI_MPPLL_SDM_ISO_EN |
-+				RG_DSI_MPPLL_SDM_PWR_ON,
-+				RG_DSI_MPPLL_SDM_ISO_EN);
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_TOP_CON,
-+			       RG_DSI_LNT_HS_BIAS_EN);
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_CON,
-+			       RG_DSI_CKG_LDOOUT_EN | RG_DSI_LDOCORE_EN);
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_BG_CON,
-+			       RG_DSI_BG_CKEN | RG_DSI_BG_CORE_EN);
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_PLL_CON0,
-+			       RG_DSI_MPPLL_DIV_MSK);
-+}
-+
-+static const struct clk_ops mtk_mipi_tx_pll_ops = {
-+	.prepare = mtk_mipi_tx_pll_prepare,
-+	.unprepare = mtk_mipi_tx_pll_unprepare,
-+	.round_rate = mtk_mipi_tx_pll_round_rate,
-+	.set_rate = mtk_mipi_tx_pll_set_rate,
-+	.recalc_rate = mtk_mipi_tx_pll_recalc_rate,
-+};
-+
-+static void mtk_mipi_tx_power_on_signal(struct phy *phy)
-+{
-+	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
-+	u32 reg;
-+
-+	for (reg = MIPITX_DSI_CLOCK_LANE;
-+	     reg <= MIPITX_DSI_DATA_LANE3; reg += 4)
-+		mtk_mipi_tx_set_bits(mipi_tx, reg, RG_DSI_LNTx_LDOOUT_EN);
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_DSI_TOP_CON,
-+			       RG_DSI_PAD_TIE_LOW_EN);
-+}
-+
-+static void mtk_mipi_tx_power_off_signal(struct phy *phy)
-+{
-+	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
-+	u32 reg;
-+
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_DSI_TOP_CON,
-+			     RG_DSI_PAD_TIE_LOW_EN);
-+
-+	for (reg = MIPITX_DSI_CLOCK_LANE;
-+	     reg <= MIPITX_DSI_DATA_LANE3; reg += 4)
-+		mtk_mipi_tx_clear_bits(mipi_tx, reg, RG_DSI_LNTx_LDOOUT_EN);
-+}
-+
-+const struct mtk_mipitx_data mt2701_mipitx_data = {
-+	.mppll_preserve = (3 << 8),
-+	.mipi_tx_clk_ops = &mtk_mipi_tx_pll_ops,
-+	.mipi_tx_enable_signal = mtk_mipi_tx_power_on_signal,
-+	.mipi_tx_disable_signal = mtk_mipi_tx_power_off_signal,
-+};
-+
-+const struct mtk_mipitx_data mt8173_mipitx_data = {
-+	.mppll_preserve = (0 << 8),
-+	.mipi_tx_clk_ops = &mtk_mipi_tx_pll_ops,
-+	.mipi_tx_enable_signal = mtk_mipi_tx_power_on_signal,
-+	.mipi_tx_disable_signal = mtk_mipi_tx_power_off_signal,
-+};
-+
-diff --git a/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c
-new file mode 100644
-index 000000000000000..a1399568b8d5a63
---- /dev/null
-+++ b/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c
-@@ -0,0 +1,154 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2019 MediaTek Inc.
-+ * Author: jitao.shi <jitao.shi@mediatek.com>
-+ */
-+
-+#include "mtk_mipi_tx.h"
-+
-+#define MIPITX_LANE_CON		0x000c
-+#define RG_DSI_CPHY_T1DRV_EN		BIT(0)
-+#define RG_DSI_ANA_CK_SEL		BIT(1)
-+#define RG_DSI_PHY_CK_SEL		BIT(2)
-+#define RG_DSI_CPHY_EN			BIT(3)
-+#define RG_DSI_PHYCK_INV_EN		BIT(4)
-+#define RG_DSI_PWR04_EN			BIT(5)
-+#define RG_DSI_BG_LPF_EN		BIT(6)
-+#define RG_DSI_BG_CORE_EN		BIT(7)
-+#define RG_DSI_PAD_TIEL_SEL		BIT(8)
-+
-+#define MIPITX_PLL_PWR	0x0028
-+#define MIPITX_PLL_CON0	0x002c
-+#define MIPITX_PLL_CON1	0x0030
-+#define MIPITX_PLL_CON2	0x0034
-+#define MIPITX_PLL_CON3	0x0038
-+#define MIPITX_PLL_CON4	0x003c
-+#define RG_DSI_PLL_IBIAS		(3 << 10)
-+
-+#define MIPITX_D2_SW_CTL_EN	0x0144
-+#define MIPITX_D0_SW_CTL_EN	0x0244
-+#define MIPITX_CK_CKMODE_EN	0x0328
-+#define DSI_CK_CKMODE_EN		BIT(0)
-+#define MIPITX_CK_SW_CTL_EN	0x0344
-+#define MIPITX_D1_SW_CTL_EN	0x0444
-+#define MIPITX_D3_SW_CTL_EN	0x0544
-+#define DSI_SW_CTL_EN			BIT(0)
-+#define AD_DSI_PLL_SDM_PWR_ON		BIT(0)
-+#define AD_DSI_PLL_SDM_ISO_EN		BIT(1)
-+
-+#define RG_DSI_PLL_EN			BIT(4)
-+#define RG_DSI_PLL_POSDIV		(0x7 << 8)
-+
-+static int mtk_mipi_tx_pll_prepare(struct clk_hw *hw)
-+{
-+	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
-+	unsigned int txdiv, txdiv0;
-+	u64 pcw;
-+	int ret;
-+
-+	dev_dbg(mipi_tx->dev, "prepare: %u bps\n", mipi_tx->data_rate);
-+
-+	if (mipi_tx->data_rate >= 2000000000) {
-+		txdiv = 1;
-+		txdiv0 = 0;
-+	} else if (mipi_tx->data_rate >= 1000000000) {
-+		txdiv = 2;
-+		txdiv0 = 1;
-+	} else if (mipi_tx->data_rate >= 500000000) {
-+		txdiv = 4;
-+		txdiv0 = 2;
-+	} else if (mipi_tx->data_rate > 250000000) {
-+		txdiv = 8;
-+		txdiv0 = 3;
-+	} else if (mipi_tx->data_rate >= 125000000) {
-+		txdiv = 16;
-+		txdiv0 = 4;
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	ret = clk_prepare_enable(mipi_tx->ref_clk);
-+	if (ret < 0) {
-+		dev_err(mipi_tx->dev,
-+			"can't prepare and enable mipi_tx ref_clk %d\n", ret);
-+		return ret;
-+	}
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_PLL_CON4, RG_DSI_PLL_IBIAS);
-+
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_PLL_PWR, AD_DSI_PLL_SDM_PWR_ON);
-+	usleep_range(30, 100);
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_PLL_PWR, AD_DSI_PLL_SDM_ISO_EN);
-+	pcw = div_u64(((u64)mipi_tx->data_rate * txdiv) << 24, 26000000);
-+	writel(pcw, mipi_tx->regs + MIPITX_PLL_CON0);
-+	mtk_mipi_tx_update_bits(mipi_tx, MIPITX_PLL_CON1, RG_DSI_PLL_POSDIV,
-+				txdiv0 << 8);
-+	usleep_range(1000, 2000);
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_PLL_CON1, RG_DSI_PLL_EN);
-+
-+	return 0;
-+}
-+
-+static void mtk_mipi_tx_pll_unprepare(struct clk_hw *hw)
-+{
-+	struct mtk_mipi_tx *mipi_tx = mtk_mipi_tx_from_clk_hw(hw);
-+
-+	dev_dbg(mipi_tx->dev, "unprepare\n");
-+
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_PLL_CON1, RG_DSI_PLL_EN);
-+
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_PLL_PWR, AD_DSI_PLL_SDM_ISO_EN);
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_PLL_PWR, AD_DSI_PLL_SDM_PWR_ON);
-+	clk_disable_unprepare(mipi_tx->ref_clk);
-+}
-+
-+static const struct clk_ops mtk_mipi_tx_pll_ops = {
-+	.prepare = mtk_mipi_tx_pll_prepare,
-+	.unprepare = mtk_mipi_tx_pll_unprepare,
-+	.round_rate = mtk_mipi_tx_pll_round_rate,
-+	.set_rate = mtk_mipi_tx_pll_set_rate,
-+	.recalc_rate = mtk_mipi_tx_pll_recalc_rate,
-+};
-+
-+static void mtk_mipi_tx_power_on_signal(struct phy *phy)
-+{
-+	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
-+
-+	/* BG_LPF_EN / BG_CORE_EN */
-+	writel(RG_DSI_PAD_TIEL_SEL | RG_DSI_BG_CORE_EN,
-+	       mipi_tx->regs + MIPITX_LANE_CON);
-+	usleep_range(30, 100);
-+	writel(RG_DSI_BG_CORE_EN | RG_DSI_BG_LPF_EN,
-+	       mipi_tx->regs + MIPITX_LANE_CON);
-+
-+	/* Switch OFF each Lane */
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_D0_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_D1_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_D2_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_D3_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_clear_bits(mipi_tx, MIPITX_CK_SW_CTL_EN, DSI_SW_CTL_EN);
-+
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_CK_CKMODE_EN, DSI_CK_CKMODE_EN);
-+}
-+
-+static void mtk_mipi_tx_power_off_signal(struct phy *phy)
-+{
-+	struct mtk_mipi_tx *mipi_tx = phy_get_drvdata(phy);
-+
-+	/* Switch ON each Lane */
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_D0_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_D1_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_D2_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_D3_SW_CTL_EN, DSI_SW_CTL_EN);
-+	mtk_mipi_tx_set_bits(mipi_tx, MIPITX_CK_SW_CTL_EN, DSI_SW_CTL_EN);
-+
-+	writel(RG_DSI_PAD_TIEL_SEL | RG_DSI_BG_CORE_EN,
-+	       mipi_tx->regs + MIPITX_LANE_CON);
-+	writel(RG_DSI_PAD_TIEL_SEL, mipi_tx->regs + MIPITX_LANE_CON);
-+}
-+
-+const struct mtk_mipitx_data mt8183_mipitx_data = {
-+	.mipi_tx_clk_ops = &mtk_mipi_tx_pll_ops,
-+	.mipi_tx_enable_signal = mtk_mipi_tx_power_on_signal,
-+	.mipi_tx_disable_signal = mtk_mipi_tx_power_off_signal,
-+};
+ int mtk_mipi_tx_pll_set_rate(struct clk_hw *hw, unsigned long rate,
 diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 4aae4a7d9f7138c..146b88647dfa758 100644
+index 4aae4a7d9f71..146b88647dfa 100644
 --- a/drivers/gpu/drm/panel/Kconfig
 +++ b/drivers/gpu/drm/panel/Kconfig
 @@ -197,4 +197,13 @@ config DRM_PANEL_SITRONIX_ST7789V
@@ -8117,7 +7613,7 @@ index 4aae4a7d9f7138c..146b88647dfa758 100644
 +
  endmenu
 diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index 7285539d8015475..8515ba9623811f4 100644
+index 7285539d8015..8515ba962381 100644
 --- a/drivers/gpu/drm/panel/Makefile
 +++ b/drivers/gpu/drm/panel/Makefile
 @@ -20,3 +20,4 @@ obj-$(CONFIG_DRM_PANEL_SEIKO_43WVF1G) += panel-seiko-43wvf1g.o
@@ -8127,7 +7623,7 @@ index 7285539d8015475..8515ba9623811f4 100644
 +obj-$(CONFIG_DRM_PANEL_BOE_TV101WUM) += panel-boe-tv101wum.o
 diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum.c b/drivers/gpu/drm/panel/panel-boe-tv101wum.c
 new file mode 100644
-index 000000000000000..031efb9362f9623
+index 000000000000..031efb9362f9
 --- /dev/null
 +++ b/drivers/gpu/drm/panel/panel-boe-tv101wum.c
 @@ -0,0 +1,708 @@
@@ -8840,7 +8336,7 @@ index 000000000000000..031efb9362f9623
 +MODULE_DESCRIPTION("BOE tv101wum FT8201-based wuxga (1200x1920) video mode panel driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/panel/panel-innolux-p079zca.c b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
-index 88c7d035ace66c5..3fbc90218c5eb4e 100644
+index 88c7d035ace6..3fbc90218c5e 100644
 --- a/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 +++ b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 @@ -56,7 +56,7 @@ struct innolux_panel {
@@ -9057,7 +8553,7 @@ index 88c7d035ace66c5..3fbc90218c5eb4e 100644
  
  	innolux->backlight = devm_of_find_backlight(dev);
 diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 841c005d8ebb2f7..31dc4c5e37e1c9f 100644
+index 841c005d8ebb..31dc4c5e37e1 100644
 --- a/drivers/mailbox/Kconfig
 +++ b/drivers/mailbox/Kconfig
 @@ -205,4 +205,22 @@ config MTK_CMDQ_MBOX
@@ -9084,7 +8580,7 @@ index 841c005d8ebb2f7..31dc4c5e37e1c9f 100644
 +	  You must enter the id.
  endif
 diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-index c818b5d011aef28..b356e36d8f2acdb 100644
+index c818b5d011ae..b356e36d8f2a 100644
 --- a/drivers/mailbox/Makefile
 +++ b/drivers/mailbox/Makefile
 @@ -44,3 +44,4 @@ obj-$(CONFIG_TEGRA_HSP_MBOX)	+= tegra-hsp.o
@@ -9094,7 +8590,7 @@ index c818b5d011aef28..b356e36d8f2acdb 100644
 +obj-$(CONFIG_MTK_CMDQ_DEBUG)	+= mtk-cmdq-debug.o
 diff --git a/drivers/mailbox/mtk-cmdq-debug.c b/drivers/mailbox/mtk-cmdq-debug.c
 new file mode 100644
-index 000000000000000..61985342d5644e9
+index 000000000000..61985342d564
 --- /dev/null
 +++ b/drivers/mailbox/mtk-cmdq-debug.c
 @@ -0,0 +1,582 @@
@@ -9682,7 +9178,7 @@ index 000000000000000..61985342d5644e9
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/mailbox/mtk-cmdq-debug.h b/drivers/mailbox/mtk-cmdq-debug.h
 new file mode 100644
-index 000000000000000..5392b00c93949e1
+index 000000000000..5392b00c9394
 --- /dev/null
 +++ b/drivers/mailbox/mtk-cmdq-debug.h
 @@ -0,0 +1,21 @@
@@ -9708,7 +9204,7 @@ index 000000000000000..5392b00c93949e1
 +
 +#endif /* MTK_CMDQ_DEBUG_H */
 diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index aec46d5d3506181..2c53ece47abd759 100644
+index aec46d5d3506..2c53ece47abd 100644
 --- a/drivers/mailbox/mtk-cmdq-mailbox.c
 +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
 @@ -15,9 +15,11 @@
@@ -9920,7 +9416,7 @@ index aec46d5d3506181..2c53ece47abd759 100644
  };
  
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index f8d35e3ac1dccce..01cab05e7b81869 100644
+index f8d35e3ac1dc..01cab05e7b81 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
 @@ -49,25 +49,63 @@
@@ -10586,7 +10082,7 @@ index f8d35e3ac1dccce..01cab05e7b81869 100644
  };
  
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.h b/drivers/media/platform/mtk-vpu/mtk_vpu.h
-index aec0268be3d0108..ca09de70cedaeb9 100644
+index aec0268be3d0..ca09de70ceda 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.h
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.h
 @@ -100,6 +100,10 @@ enum rst_id {
@@ -10627,7 +10123,7 @@ index aec0268be3d0108..ca09de70cedaeb9 100644
 +
  #endif /* _MTK_VPU_H */
 diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
-index 63389f075f1dcab..4a291dabf2ccb59 100644
+index 63389f075f1d..4a291dabf2cc 100644
 --- a/drivers/memory/Kconfig
 +++ b/drivers/memory/Kconfig
 @@ -129,6 +129,15 @@ config JZ4780_NEMC
@@ -10647,23 +10143,23 @@ index 63389f075f1dcab..4a291dabf2ccb59 100644
  	bool
  	depends on ARCH_MEDIATEK || COMPILE_TEST
 diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
-index a01ab3e22f94db6..dbd49ba94cab5ce 100644
+index a01ab3e22f94..82e3d862c24d 100644
 --- a/drivers/memory/Makefile
 +++ b/drivers/memory/Makefile
 @@ -17,6 +17,7 @@ obj-$(CONFIG_FSL_CORENET_CF)	+= fsl-corenet-cf.o
  obj-$(CONFIG_FSL_IFC)		+= fsl_ifc.o
  obj-$(CONFIG_MVEBU_DEVBUS)	+= mvebu-devbus.o
  obj-$(CONFIG_JZ4780_NEMC)	+= jz4780-nemc.o
-+obj-$(CONFIG_MTK_EMI_MBW)	+= mtk-emi.o
+++obj-$(CONFIG_MTK_EMI_MBW)	+= mtk-emi.o
  obj-$(CONFIG_MTK_SMI)		+= mtk-smi.o
  obj-$(CONFIG_DA8XX_DDRCTL)	+= da8xx-ddrctl.o
  
 diff --git a/drivers/memory/mtk-emi.c b/drivers/memory/mtk-emi.c
 new file mode 100644
-index 000000000000000..cb6a988c4d7093a
+index 000000000000..5d00c05a8717
 --- /dev/null
 +++ b/drivers/memory/mtk-emi.c
-@@ -0,0 +1,405 @@
+@@ -0,0 +1,412 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2015-2016 MediaTek Inc.
@@ -10740,7 +10236,7 @@ index 000000000000000..cb6a988c4d7093a
 + */
 +static struct device *emi_dev;
 +
-+static unsigned long long emi_get_max_bw_in_last_array(struct device *dev,
++unsigned long long emi_get_max_bw_in_last_array(struct device *dev,
 +	unsigned long long arr[], unsigned int size)
 +{
 +	unsigned int i = 0;
@@ -10767,7 +10263,7 @@ index 000000000000000..cb6a988c4d7093a
 +}
 +EXPORT_SYMBOL(mtk_emi_get_max_bw);
 +
-+static void emi_update_bw_array(struct device *dev, unsigned int val)
++void emi_update_bw_array(struct device *dev, unsigned int val)
 +{
 +	struct mtk_emi *emi = dev_get_drvdata(emi_dev);
 +
@@ -10783,7 +10279,7 @@ index 000000000000000..cb6a988c4d7093a
 +static void emi_dump_bw_array(struct device *dev)
 +{
 +	int i = 0;
-+	int unit = 10;
++	const int unit = 10;
 +	struct mtk_emi *emi = dev_get_drvdata(emi_dev);
 +
 +	while (i < emi->emi_bw_max_idx) {
@@ -10852,6 +10348,9 @@ index 000000000000000..cb6a988c4d7093a
 +	}
 +}
 +
++/*****************************************************************************
++ *  APIs
++ *****************************************************************************/
 +static void mtk_emi_mon_start(struct device *dev)
 +{
 +	emi_counter_enable(dev, 0);
@@ -10892,6 +10391,7 @@ index 000000000000000..cb6a988c4d7093a
 +		"gpu_max_bw:%llu(0x%x) EMI_BWVL_4TH:0x%x, cpu:%llu(0x%x)\n",
 +		var, var, bw_gpu, bw_cpu, bw_cpu);
 +}
++
 +DEVICE_ATTR(bw,  0440, emi_show_max_bw, NULL);
 +
 +static ssize_t emi_dump_bw(struct device *dev, struct device_attribute *attr,
@@ -10910,6 +10410,7 @@ index 000000000000000..cb6a988c4d7093a
 +	return scnprintf(buf, PAGE_SIZE,
 +		"\temi_max_bw:%llu(0x%x)\n", var, var);
 +}
++
 +DEVICE_ATTR(dump_bw,  0440, emi_dump_bw, NULL);
 +
 +static int emi_bw_ms = 1;
@@ -11027,6 +10528,7 @@ index 000000000000000..cb6a988c4d7093a
 +	return 0;
 +}
 +
++
 +#ifdef CONFIG_OF
 +static const struct of_device_id emi_of_ids[] = {
 +	{.compatible = "mediatek,mt8183-emi",},
@@ -11046,6 +10548,7 @@ index 000000000000000..cb6a988c4d7093a
 +#endif
 +	},
 +};
++
 +
 +static int __init emi_bw_init(void)
 +{
@@ -11070,7 +10573,7 @@ index 000000000000000..cb6a988c4d7093a
 +module_exit(emi_bw_exit);
 +
 diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index fef424efd65d2f7..41eb0510e080d44 100644
+index fef424efd65d..41eb0510e080 100644
 --- a/drivers/mfd/cros_ec_dev.c
 +++ b/drivers/mfd/cros_ec_dev.c
 @@ -667,6 +667,16 @@ static int ec_device_probe(struct platform_device *pdev)
@@ -11091,7 +10594,7 @@ index fef424efd65d2f7..41eb0510e080d44 100644
  	 * Add the class device
  	 * Link to the character device for creating the /dev entry
 diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-index ce8398e6f2c0e49..c8f3fe701ea7bbf 100644
+index ce8398e6f2c0..c8f3fe701ea7 100644
 --- a/drivers/mmc/host/Makefile
 +++ b/drivers/mmc/host/Makefile
 @@ -23,7 +23,7 @@ obj-$(CONFIG_MMC_SDHCI_F_SDH30)	+= sdhci_f_sdh30.o
@@ -11104,7 +10607,7 @@ index ce8398e6f2c0e49..c8f3fe701ea7bbf 100644
  obj-$(CONFIG_MMC_OMAP_HS)	+= omap_hsmmc.o
  obj-$(CONFIG_MMC_ATMELMCI)	+= atmel-mci.o
 diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 0de3749c9311c4d..8aaa5d405987155 100644
+index 0de3749c9311..8aaa5d405987 100644
 --- a/drivers/mmc/host/mtk-sd.c
 +++ b/drivers/mmc/host/mtk-sd.c
 @@ -39,6 +39,8 @@
@@ -11128,7 +10631,7 @@ index 0de3749c9311c4d..8aaa5d405987155 100644
  	pm_runtime_disable(host->dev);
 diff --git a/drivers/mmc/host/mtk-sdio-proc.c b/drivers/mmc/host/mtk-sdio-proc.c
 new file mode 100644
-index 000000000000000..6f4c3cd96d42977
+index 000000000000..6f4c3cd96d42
 --- /dev/null
 +++ b/drivers/mmc/host/mtk-sdio-proc.c
 @@ -0,0 +1,342 @@
@@ -11476,7 +10979,7 @@ index 000000000000000..6f4c3cd96d42977
 +}
 diff --git a/drivers/mmc/host/mtk-sdio-proc.h b/drivers/mmc/host/mtk-sdio-proc.h
 new file mode 100644
-index 000000000000000..33659ba69be321a
+index 000000000000..33659ba69be3
 --- /dev/null
 +++ b/drivers/mmc/host/mtk-sdio-proc.h
 @@ -0,0 +1,48 @@
@@ -11529,173 +11032,255 @@ index 000000000000000..33659ba69be321a
 +	burn
 +};
 diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 6a4c7b48878271d..80a38ad0db15a34 100644
+index 2d0bfd986bfc..e4144a41f763 100644
 --- a/drivers/net/wireless/ath/ath10k/core.c
 +++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -167,6 +167,32 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
- 	},
-+	{
-+		.id = QCA6174_HW_3_2_VERSION,
-+		.dev_id = QCA6174_3_2_DEVICE_ID,
-+		.bus = ATH10K_BUS_SDIO,
-+		.name = "qca6174 hw3.2 sdio",
-+		.patch_load_addr = QCA6174_HW_3_0_PATCH_LOAD_ADDR,
-+		.uart_pin = 19,
-+		.otp_exe_param = 0,
-+		.channel_counters_freq_hz = 88000,
-+		.max_probe_resp_desc_thres = 0,
-+		.cal_data_len = 0,
-+		.fw = {
-+			.dir = QCA6174_HW_3_0_FW_DIR,
-+			.board = QCA6174_HW_3_0_BOARD_DATA_FILE,
-+			.board_size = QCA6174_BOARD_DATA_SZ,
-+			.board_ext_size = QCA6174_BOARD_EXT_DATA_SZ,
-+		},
-+		.hw_ops = &qca6174_ops,
-+		.hw_clk = qca6174_clk,
-+		.target_cpu_freq = 176000000,
-+		.decap_align_bytes = 4,
-+		.num_peers = 10,
-+		.ast_skid_limit = 0x10,
-+		.num_wds_entries = 0x20,
-+		.uart_print_check = true,
-+	},
- 	{
- 		.id = QCA6174_HW_2_1_VERSION,
- 		.dev_id = QCA6164_2_1_DEVICE_ID,
-@@ -1925,8 +1951,16 @@ static int ath10k_init_uart(struct ath10k *ar)
- 		return ret;
- 	}
- 
--	if (!uart_print)
-+	if (!uart_print && ar->hw_params.uart_print_check) {
-+		ret = ath10k_bmi_write32(ar, hi_dbg_uart_txpin,
-+					 ar->hw_params.uart_pin);
-+		if (ret) {
-+			ath10k_warn(ar, "failed to disable UART pin: %d", ret);
-+			return ret;
-+		}
-+
- 		return 0;
-+	}
- 
- 	ret = ath10k_bmi_write32(ar, hi_dbg_uart_txpin, ar->hw_params.uart_pin);
- 	if (ret) {
-diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
-index 9373a63b8646125..8c86359354afd35 100644
---- a/drivers/net/wireless/ath/ath10k/htt_rx.c
-+++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
-@@ -2043,7 +2043,9 @@ static void ath10k_htt_rx_tx_compl_ind(struct ath10k *ar,
- 		 *  Note that with only one concurrent reader and one concurrent
- 		 *  writer, you don't need extra locking to use these macro.
- 		 */
--		if (!kfifo_put(&htt->txdone_fifo, tx_done)) {
-+		if (ar->hif.bus == ATH10K_BUS_SDIO) {
-+			ath10k_txrx_tx_unref(htt, &tx_done);
-+		} else if (!kfifo_put(&htt->txdone_fifo, tx_done)) {
- 			ath10k_warn(ar, "txdone fifo overrun, msdu_id %d status %d\n",
- 				    tx_done.msdu_id, tx_done.status);
- 			ath10k_txrx_tx_unref(htt, &tx_done);
-diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
-index f54ef2c3704410e..d099681da42b621 100644
---- a/drivers/net/wireless/ath/ath10k/htt_tx.c
-+++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
-@@ -554,7 +554,8 @@ void ath10k_htt_tx_free(struct ath10k_htt *htt)
- 
- void ath10k_htt_htc_tx_complete(struct ath10k *ar, struct sk_buff *skb)
- {
--	dev_kfree_skb_any(skb);
-+	if (!(ar->hif.bus == ATH10K_BUS_SDIO))
-+		dev_kfree_skb_any(skb);
+@@ -678,7 +678,7 @@ static void ath10k_send_suspend_complete(struct ath10k *ar)
+ 	complete(&ar->target_suspend);
  }
  
- void ath10k_htt_hif_tx_complete(struct ath10k *ar, struct sk_buff *skb)
-@@ -1208,6 +1209,7 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
- 	u8 tid = ath10k_htt_tx_get_tid(msdu, is_eth);
- 	u8 flags0 = 0;
- 	u16 flags1 = 0;
-+	u16 msdu_id = 0;
+-static void ath10k_init_sdio(struct ath10k *ar)
++static void ath10k_init_sdio(struct ath10k *ar, enum ath10k_firmware_mode mode)
+ {
+ 	u32 param = 0;
  
- 	data_len = msdu->len;
+@@ -695,7 +695,12 @@ static void ath10k_init_sdio(struct ath10k *ar)
+ 	 * not big enough for mac80211 / native wifi frames. disable it
+ 	 */
+ 	param &= ~HI_ACS_FLAGS_ALT_DATA_CREDIT_SIZE;
+-	param |= HI_ACS_FLAGS_SDIO_SWAP_MAILBOX_SET;
++
++	if (mode == ATH10K_FIRMWARE_MODE_UTF)
++		param &= ~HI_ACS_FLAGS_SDIO_SWAP_MAILBOX_SET;
++	else
++		param |= HI_ACS_FLAGS_SDIO_SWAP_MAILBOX_SET;
++
+ 	ath10k_bmi_write32(ar, hi_acs_flags, param);
  
-@@ -1255,6 +1257,16 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
- 		}
+ 	/* Explicitly set fwlog prints to zero as target may turn it on
+@@ -2394,7 +2399,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
+ 			goto err;
+ 
+ 		if (ar->hif.bus == ATH10K_BUS_SDIO)
+-			ath10k_init_sdio(ar);
++			ath10k_init_sdio(ar, mode);
  	}
  
-+	if (ar->hif.bus == ATH10K_BUS_SDIO) {
-+		flags1 |= HTT_DATA_TX_DESC_FLAGS1_POSTPONED;
-+		res = ath10k_htt_tx_alloc_msdu_id(htt, msdu);
-+		if (res < 0) {
-+			ath10k_err(ar, "msdu_id allocation failed %d\n", res);
-+			goto out;
-+		}
-+		msdu_id = res;
-+	}
-+
- 	skb_push(msdu, sizeof(*cmd_hdr));
- 	skb_push(msdu, sizeof(*tx_desc));
- 	cmd_hdr = (struct htt_cmd_hdr *)msdu->data;
-@@ -1264,7 +1276,7 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
- 	tx_desc->flags0 = flags0;
- 	tx_desc->flags1 = __cpu_to_le16(flags1);
- 	tx_desc->len = __cpu_to_le16(data_len);
--	tx_desc->id = 0;
-+	tx_desc->id = __cpu_to_le16(msdu_id);
- 	tx_desc->frags_paddr = 0; /* always zero */
- 	/* Initialize peer_id to INVALID_PEER because this is NOT
- 	 * Reinjection path
+ 	ar->htc.htc_ops.target_send_suspend_complete =
 diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 70682dff865f8c2..d863b57effdbea7 100644
+index 5c256d41cc82..62740e9c6140 100644
 --- a/drivers/net/wireless/ath/ath10k/hw.h
 +++ b/drivers/net/wireless/ath/ath10k/hw.h
-@@ -35,6 +35,7 @@ enum ath10k_bus {
- #define QCA988X_2_0_DEVICE_ID   (0x003c)
- #define QCA6164_2_1_DEVICE_ID   (0x0041)
- #define QCA6174_2_1_DEVICE_ID   (0x003e)
-+#define QCA6174_3_2_DEVICE_ID   (0x0042)
- #define QCA99X0_2_0_DEVICE_ID   (0x0040)
- #define QCA9888_2_0_DEVICE_ID	(0x0056)
- #define QCA9984_1_0_DEVICE_ID	(0x0046)
-@@ -600,6 +601,9 @@ struct ath10k_hw_params {
- 	/* target supporting shadow register for ce write */
- 	bool shadow_reg_support;
- 
-+	/* need to set uart pin if disable uart print */
-+	bool uart_print_check;
-+
- 	/* target supporting retention restore on ddr */
- 	bool rri_on_ddr;
- 
+@@ -1076,6 +1076,7 @@ ath10k_rx_desc_get_l3_pad_bytes(struct ath10k_hw_params *hw,
+ #define MBOX_CPU_INT_STATUS_ENABLE_ADDRESS	0x00000819
+ #define MBOX_CPU_INT_STATUS_ENABLE_BIT_LSB	0
+ #define MBOX_CPU_INT_STATUS_ENABLE_BIT_MASK	0x000000ff
++#define MBOX_CPU_STATUS_ENABLE_ASSERT_MASK 0x00000001
+ #define MBOX_ERROR_STATUS_ENABLE_ADDRESS	0x0000081a
+ #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_LSB  1
+ #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_MASK 0x00000002
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 9f631120a9be02a..1ea6d2dc2f290e2 100644
+index 0eb162fab87d..628129ba9161 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
-@@ -2083,8 +2083,6 @@ static void ath10k_sdio_remove(struct sdio_func *func)
- 		   "sdio removed func %d vendor 0x%x device 0x%x\n",
- 		   func->num, func->vendor, func->device);
+@@ -861,6 +861,11 @@ static int ath10k_sdio_mbox_proc_cpu_intr(struct ath10k *ar)
  
--	(void)ath10k_sdio_hif_disable_intrs(ar);
--	cancel_work_sync(&ar_sdio->wr_async_work);
- 	ath10k_core_unregister(ar);
- 	ath10k_core_destroy(ar);
+ out:
+ 	mutex_unlock(&irq_data->mtx);
++
++	if (cpu_int_status & MBOX_CPU_STATUS_ENABLE_ASSERT_MASK) {
++		ath10k_err(ar, "firmware crashed!\n");
++		queue_work(ar->workqueue, &ar->restart_work);
++	}
+ 	return ret;
  }
+ 
+@@ -1443,10 +1448,6 @@ static void ath10k_sdio_hif_power_down(struct ath10k *ar)
+ 		return;
+ 	}
+ 
+-	ret = mmc_hw_reset(ar_sdio->func->card->host);
+-	if (ret)
+-		ath10k_warn(ar, "unable to reset sdio: %d\n", ret);
+-
+ 	sdio_release_host(ar_sdio->func);
+ 
+ 	ar_sdio->is_disabled = true;
+@@ -1505,8 +1506,10 @@ static int ath10k_sdio_hif_enable_intrs(struct ath10k *ar)
+ 	regs->int_status_en |=
+ 		FIELD_PREP(MBOX_INT_STATUS_ENABLE_MBOX_DATA_MASK, 1);
+ 
+-	/* Set up the CPU Interrupt status Register */
+-	regs->cpu_int_status_en = 0;
++	/* Set up the CPU Interrupt Status Register, enable CPU sourced interrupt #0
++	 * #0 is used for report assertion from target
++	 */
++	regs->cpu_int_status_en = FIELD_PREP(MBOX_CPU_STATUS_ENABLE_ASSERT_MASK, 1);
+ 
+ 	/* Set up the Error Interrupt status Register */
+ 	regs->err_int_status_en =
+@@ -1647,7 +1650,12 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
+ 		ath10k_dbg(ar, ATH10K_DBG_SDIO,
+ 			   "sdio mailbox swap service enabled\n");
+ 		ar_sdio->swap_mbox = true;
++	} else {
++		ath10k_dbg(ar, ATH10K_DBG_SDIO,
++			"sdio mailbox swap service disabled\n");
++		ar_sdio->swap_mbox = false;
+ 	}
++
+ 	return 0;
+ }
+ 
 diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
-index f13d88906b5a723..6a87bd89418cb38 100644
+index f13d88906b5a..c194a0baaedf 100644
 --- a/drivers/net/wireless/ath/ath10k/txrx.c
 +++ b/drivers/net/wireless/ath/ath10k/txrx.c
-@@ -91,7 +91,7 @@ int ath10k_txrx_tx_unref(struct ath10k_htt *htt,
+@@ -157,6 +157,9 @@ struct ath10k_peer *ath10k_peer_find_by_id(struct ath10k *ar, int peer_id)
+ {
+ 	struct ath10k_peer *peer;
  
- 	ath10k_htt_tx_free_msdu_id(htt, tx_done->msdu_id);
- 	ath10k_htt_tx_dec_pending(htt);
--	if (htt->num_pending_tx == 0)
-+	if (ar->dev_type != ATH10K_DEV_TYPE_HL && htt->num_pending_tx == 0)
- 		wake_up(&htt->empty_tx_wq);
- 	spin_unlock_bh(&htt->tx_lock);
++	if (peer_id >= BITS_PER_TYPE(peer->peer_ids))
++		return NULL;
++
+ 	lockdep_assert_held(&ar->data_lock);
  
+ 	list_for_each_entry(peer, &ar->peers, list)
+diff --git a/drivers/pinctrl/mediatek/mtk-eint.c b/drivers/pinctrl/mediatek/mtk-eint.c
+index a613e546717a..564cfaee129d 100644
+--- a/drivers/pinctrl/mediatek/mtk-eint.c
++++ b/drivers/pinctrl/mediatek/mtk-eint.c
+@@ -113,6 +113,8 @@ static void mtk_eint_mask(struct irq_data *d)
+ 	void __iomem *reg = mtk_eint_get_offset(eint, d->hwirq,
+ 						eint->regs->mask_set);
+ 
++	eint->cur_mask[d->hwirq >> 5] &= ~mask;
++
+ 	writel(mask, reg);
+ }
+ 
+@@ -123,6 +125,8 @@ static void mtk_eint_unmask(struct irq_data *d)
+ 	void __iomem *reg = mtk_eint_get_offset(eint, d->hwirq,
+ 						eint->regs->mask_clr);
+ 
++	eint->cur_mask[d->hwirq >> 5] |= mask;
++
+ 	writel(mask, reg);
+ 
+ 	if (eint->dual_edge[d->hwirq])
+@@ -217,19 +221,6 @@ static void mtk_eint_chip_write_mask(const struct mtk_eint *eint,
+ 	}
+ }
+ 
+-static void mtk_eint_chip_read_mask(const struct mtk_eint *eint,
+-				    void __iomem *base, u32 *buf)
+-{
+-	int port;
+-	void __iomem *reg;
+-
+-	for (port = 0; port < eint->hw->ports; port++) {
+-		reg = base + eint->regs->mask + (port << 2);
+-		buf[port] = ~readl_relaxed(reg);
+-		/* Mask is 0 when irq is enabled, and 1 when disabled. */
+-	}
+-}
+-
+ static int mtk_eint_irq_request_resources(struct irq_data *d)
+ {
+ 	struct mtk_eint *eint = irq_data_get_irq_chip_data(d);
+@@ -318,7 +309,7 @@ static void mtk_eint_irq_handler(struct irq_desc *desc)
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct mtk_eint *eint = irq_desc_get_handler_data(desc);
+ 	unsigned int status, eint_num;
+-	int offset, index, virq;
++	int offset, mask_offset, index, virq;
+ 	void __iomem *reg =  mtk_eint_get_offset(eint, 0, eint->regs->stat);
+ 	int dual_edge, start_level, curr_level;
+ 
+@@ -328,10 +319,24 @@ static void mtk_eint_irq_handler(struct irq_desc *desc)
+ 		status = readl(reg);
+ 		while (status) {
+ 			offset = __ffs(status);
++			mask_offset = eint_num >> 5;
+ 			index = eint_num + offset;
+ 			virq = irq_find_mapping(eint->domain, index);
+ 			status &= ~BIT(offset);
+ 
++			/*
++			 * If we get an interrupt on pin that was only required
++			 * for wake (but no real interrupt requested), mask the
++			 * interrupt (as would mtk_eint_resume do anyway later
++			 * in the resume sequence).
++			 */
++			if (eint->wake_mask[mask_offset] & BIT(offset) &&
++			    !(eint->cur_mask[mask_offset] & BIT(offset))) {
++				writel_relaxed(BIT(offset), reg -
++					eint->regs->stat +
++					eint->regs->mask_set);
++			}
++
+ 			dual_edge = eint->dual_edge[index];
+ 			if (dual_edge) {
+ 				/*
+@@ -370,7 +375,6 @@ static void mtk_eint_irq_handler(struct irq_desc *desc)
+ 
+ int mtk_eint_do_suspend(struct mtk_eint *eint)
+ {
+-	mtk_eint_chip_read_mask(eint, eint->base, eint->cur_mask);
+ 	mtk_eint_chip_write_mask(eint, eint->base, eint->wake_mask);
+ 
+ 	return 0;
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8183.c b/drivers/pinctrl/mediatek/pinctrl-mt8183.c
+index 2c7409ed16fa..ce93e55b79a4 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mt8183.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mt8183.c
+@@ -583,6 +583,7 @@ static struct platform_driver mt8183_pinctrl_driver = {
+ 	.driver = {
+ 		.name = "mt8183-pinctrl",
+ 		.of_match_table = mt8183_pinctrl_of_match,
++		.pm = &mtk_eint_pm_ops,
+ 	},
+ 	.probe = mt8183_pinctrl_probe,
+ };
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
+index 33064d216af6..e295801c7edf 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
+@@ -723,3 +723,22 @@ int mtk_pinconf_adv_drive_get(struct mtk_pinctrl *hw,
+ 
+ 	return 0;
+ }
++
++static int mtk_eint_suspend(struct device *device)
++{
++	struct mtk_pinctrl *pctl = dev_get_drvdata(device);
++
++	return mtk_eint_do_suspend(pctl->eint);
++}
++
++static int mtk_eint_resume(struct device *device)
++{
++	struct mtk_pinctrl *pctl = dev_get_drvdata(device);
++
++	return mtk_eint_do_resume(pctl->eint);
++}
++
++const struct dev_pm_ops mtk_eint_pm_ops = {
++	.suspend_noirq = mtk_eint_suspend,
++	.resume_noirq = mtk_eint_resume,
++};
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.h b/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.h
+index 37fec1c8eb0e..fde5f3399ad1 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.h
++++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.h
+@@ -296,4 +296,5 @@ int mtk_pinconf_adv_drive_set(struct mtk_pinctrl *hw,
+ int mtk_pinconf_adv_drive_get(struct mtk_pinctrl *hw,
+ 			      const struct mtk_pin_desc *desc, u32 *val);
+ 
++extern const struct dev_pm_ops mtk_eint_pm_ops;
+ #endif /* __PINCTRL_MTK_COMMON_V2_H */
 diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index 893940d45f0d085..27079acc3e1d9ec 100644
+index 893940d45f0d..14ef981164d3 100644
 --- a/drivers/pwm/pwm-mtk-disp.c
 +++ b/drivers/pwm/pwm-mtk-disp.c
 @@ -106,13 +106,13 @@ static int mtk_disp_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
@@ -11715,8 +11300,17 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  		return err;
  	}
  
-@@ -132,8 +132,8 @@ static int mtk_disp_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -130,10 +130,17 @@ static int mtk_disp_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+ 		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
+ 					 mdp->data->commit_mask,
  					 0x0);
++	} else {
++		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
++					 mdp->data->bls_debug_mask,
++					 mdp->data->bls_debug_mask);
++		mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
++					 mdp->data->con0_sel,
++					 mdp->data->con0_sel);
  	}
  
 -	clk_disable(mdp->clk_mm);
@@ -11726,7 +11320,7 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  
  	return 0;
  }
-@@ -143,13 +143,13 @@ static int mtk_disp_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+@@ -143,13 +150,13 @@ static int mtk_disp_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
  	struct mtk_disp_pwm *mdp = to_mtk_disp_pwm(chip);
  	int err;
  
@@ -11743,7 +11337,7 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  		return err;
  	}
  
-@@ -166,8 +166,8 @@ static void mtk_disp_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
+@@ -166,8 +173,8 @@ static void mtk_disp_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
  	mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
  				 0x0);
  
@@ -11754,7 +11348,7 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  }
  
  static const struct pwm_ops mtk_disp_pwm_ops = {
-@@ -202,14 +202,6 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
+@@ -202,14 +209,6 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
  	if (IS_ERR(mdp->clk_mm))
  		return PTR_ERR(mdp->clk_mm);
  
@@ -11769,7 +11363,7 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  	mdp->chip.dev = &pdev->dev;
  	mdp->chip.ops = &mtk_disp_pwm_ops;
  	mdp->chip.base = -1;
-@@ -218,7 +210,7 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
+@@ -218,7 +217,7 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
  	ret = pwmchip_add(&mdp->chip);
  	if (ret < 0) {
  		dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
@@ -11778,7 +11372,7 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  	}
  
  	platform_set_drvdata(pdev, mdp);
-@@ -237,24 +229,13 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
+@@ -237,24 +236,13 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
  	}
  
  	return 0;
@@ -11804,7 +11398,7 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  }
  
  static const struct mtk_pwm_data mt2701_pwm_data = {
-@@ -277,10 +258,21 @@ static const struct mtk_pwm_data mt8173_pwm_data = {
+@@ -277,10 +265,21 @@ static const struct mtk_pwm_data mt8173_pwm_data = {
  	.commit_mask = 0x1,
  };
  
@@ -11827,7 +11421,7 @@ index 893940d45f0d085..27079acc3e1d9ec 100644
  };
  MODULE_DEVICE_TABLE(of, mtk_disp_pwm_of_match);
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index f0abd2608044738..01182936f4fa8f7 100644
+index f0abd2608044..01182936f4fa 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -22,6 +22,16 @@ config IMX_REMOTEPROC
@@ -11848,7 +11442,7 @@ index f0abd2608044738..01182936f4fa8f7 100644
  	tristate "OMAP remoteproc support"
  	depends on ARCH_OMAP4 || SOC_OMAP5
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index ce5d061e92be525..16b3e5e7a81c8ef 100644
+index ce5d061e92be..16b3e5e7a81c 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
 @@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_sysfs.o
@@ -11861,7 +11455,7 @@ index ce5d061e92be525..16b3e5e7a81c8ef 100644
  obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
 diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
 new file mode 100644
-index 000000000000000..19a907810271251
+index 000000000000..19a907810271
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_common.h
 @@ -0,0 +1,77 @@
@@ -11944,7 +11538,7 @@ index 000000000000000..19a907810271251
 +#endif
 diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
 new file mode 100644
-index 000000000000000..4d24e8bd7aab19d
+index 000000000000..4d24e8bd7aab
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_scp.c
 @@ -0,0 +1,654 @@
@@ -12604,7 +12198,7 @@ index 000000000000000..4d24e8bd7aab19d
 +MODULE_DESCRIPTION("MediaTek SCP control driver");
 diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
 new file mode 100644
-index 000000000000000..10b0cbda7aee38b
+index 000000000000..10b0cbda7aee
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_scp_ipi.c
 @@ -0,0 +1,163 @@
@@ -12772,7 +12366,7 @@ index 000000000000000..10b0cbda7aee38b
 +MODULE_LICENSE("GPL v2");
 +MODULE_DESCRIPTION("MediaTek scp IPI interface");
 diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index d0322b41eca54c8..85e3cc075cb4732 100644
+index d0322b41eca5..85e3cc075cb4 100644
 --- a/drivers/rpmsg/Kconfig
 +++ b/drivers/rpmsg/Kconfig
 @@ -15,6 +15,15 @@ config RPMSG_CHAR
@@ -12792,7 +12386,7 @@ index d0322b41eca54c8..85e3cc075cb4732 100644
  	tristate
  	select RPMSG
 diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
-index 9aa859502d27520..ae92a7fb08f6234 100644
+index 9aa859502d27..ae92a7fb08f6 100644
 --- a/drivers/rpmsg/Makefile
 +++ b/drivers/rpmsg/Makefile
 @@ -1,6 +1,7 @@
@@ -12805,7 +12399,7 @@ index 9aa859502d27520..ae92a7fb08f6234 100644
  obj-$(CONFIG_RPMSG_QCOM_GLINK_SMEM) += qcom_glink_smem.o
 diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
 new file mode 100644
-index 000000000000000..e5e988941ea67e7
+index 000000000000..e5e988941ea6
 --- /dev/null
 +++ b/drivers/rpmsg/mtk_rpmsg.c
 @@ -0,0 +1,396 @@
@@ -13206,7 +12800,7 @@ index 000000000000000..e5e988941ea67e7
 +MODULE_LICENSE("GPL v2");
 +MODULE_DESCRIPTION("MediaTek scp rpmsg driver");
 diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index ff9fef5a032b3d8..317ec441ad6092c 100644
+index ff9fef5a032b..317ec441ad60 100644
 --- a/drivers/soc/mediatek/mtk-cmdq-helper.c
 +++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
 @@ -9,17 +9,109 @@
@@ -13497,7 +13091,7 @@ index ff9fef5a032b3d8..317ec441ad6092c 100644
  	return err;
  }
 diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index c3f933d10295eba..2c7593702954378 100644
+index c3f933d10295..2c7593702954 100644
 --- a/drivers/tty/serial/8250/8250_mtk.c
 +++ b/drivers/tty/serial/8250/8250_mtk.c
 @@ -1,11 +1,23 @@
@@ -14149,7 +13743,7 @@ index c3f933d10295eba..2c7593702954378 100644
  static const struct dev_pm_ops mtk8250_pm_ops = {
  	SET_SYSTEM_SLEEP_PM_OPS(mtk8250_suspend, mtk8250_resume)
 diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
-index 48d10a61e271c9c..542b67a6b5a659d 100644
+index 48d10a61e271..542b67a6b5a6 100644
 --- a/drivers/usb/mtu3/mtu3_core.c
 +++ b/drivers/usb/mtu3/mtu3_core.c
 @@ -94,6 +94,7 @@ static int mtu3_device_enable(struct mtu3 *mtu)
@@ -14209,7 +13803,7 @@ index 48d10a61e271c9c..542b67a6b5a659d 100644
  	dev_info(mtu->dev, "IP version 0x%x(%s IP)\n", mtu->hw_version,
  		mtu->is_u3_ip ? "U3" : "U2");
 diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
-index ac60e9c8564e222..7660d107e5bcc42 100644
+index ac60e9c8564e..7660d107e5bc 100644
 --- a/drivers/usb/mtu3/mtu3_dr.c
 +++ b/drivers/usb/mtu3/mtu3_dr.c
 @@ -401,7 +401,7 @@ void ssusb_set_force_mode(struct ssusb_mtk *ssusb,
@@ -14223,7 +13817,7 @@ index ac60e9c8564e222..7660d107e5bcc42 100644
  		value &= ~(SSUSB_U2_PORT_FORCE_IDDIG | SSUSB_U2_PORT_RG_IDDIG);
 diff --git a/include/dt-bindings/gce/mt8183-gce.h b/include/dt-bindings/gce/mt8183-gce.h
 new file mode 100644
-index 000000000000000..aeb95154fac28d8
+index 000000000000..aeb95154fac2
 --- /dev/null
 +++ b/include/dt-bindings/gce/mt8183-gce.h
 @@ -0,0 +1,177 @@
@@ -14404,103 +13998,8 @@ index 000000000000000..aeb95154fac28d8
 +#define CMDQ_EVENT_IPU_CORE1_DONE3					388
 +
 +#endif
-diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset-controller/mt8183-resets.h
-new file mode 100644
-index 000000000000000..f0d92af29f3fa7a
---- /dev/null
-+++ b/include/dt-bindings/reset-controller/mt8183-resets.h
-@@ -0,0 +1,89 @@
-+/*
-+ * Copyright (c) 2017 MediaTek Inc.
-+ * Author: Yong Liang, MediaTek
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ */
-+
-+#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8183
-+#define _DT_BINDINGS_RESET_CONTROLLER_MT8183
-+
-+/* INFRACFG AO resets */
-+#define MT8183_INFRACFG_AO_THERM_SW_RST				0
-+#define MT8183_INFRACFG_AO_USB_TOP_SW_RST			1
-+#define MT8183_INFRACFG_AO_MM_IOMMU_SW_RST			3
-+#define MT8183_INFRACFG_AO_MSDC3_SW_RST				4
-+#define MT8183_INFRACFG_AO_MSDC2_SW_RST				5
-+#define MT8183_INFRACFG_AO_MSDC1_SW_RST				6
-+#define MT8183_INFRACFG_AO_MSDC0_SW_RST				7
-+#define MT8183_INFRACFG_AO_APDMA_SW_RST				9
-+#define MT8183_INFRACFG_AO_MIMP_D_SW_RST			10
-+#define MT8183_INFRACFG_AO_BTIF_SW_RST				12
-+#define MT8183_INFRACFG_AO_DISP_PWM_SW_RST			14
-+#define MT8183_INFRACFG_AO_AUXADC_SW_RST			15
-+
-+#define MT8183_INFRACFG_AO_IRTX_SW_RST				32
-+#define MT8183_INFRACFG_AO_SPI0_SW_RST				33
-+#define MT8183_INFRACFG_AO_I2C0_SW_RST				34
-+#define MT8183_INFRACFG_AO_I2C1_SW_RST				35
-+#define MT8183_INFRACFG_AO_I2C2_SW_RST				36
-+#define MT8183_INFRACFG_AO_I2C3_SW_RST				37
-+#define MT8183_INFRACFG_AO_UART0_SW_RST				38
-+#define MT8183_INFRACFG_AO_UART1_SW_RST				39
-+#define MT8183_INFRACFG_AO_UART2_SW_RST				40
-+#define MT8183_INFRACFG_AO_PWM_SW_RST				41
-+#define MT8183_INFRACFG_AO_SPI1_SW_RST				42
-+#define MT8183_INFRACFG_AO_I2C4_SW_RST				43
-+#define MT8183_INFRACFG_AO_DVFSP_SW_RST				44
-+#define MT8183_INFRACFG_AO_SPI2_SW_RST				45
-+#define MT8183_INFRACFG_AO_SPI3_SW_RST				46
-+#define MT8183_INFRACFG_AO_UFSHCI_SW_RST			47
-+
-+#define MT8183_INFRACFG_AO_PMIC_WRAP_SW_RST			64
-+#define MT8183_INFRACFG_AO_SPM_SW_RST				65
-+#define MT8183_INFRACFG_AO_USBSIF_SW_RST			66
-+#define MT8183_INFRACFG_AO_KP_SW_RST				68
-+#define MT8183_INFRACFG_AO_APXGPT_SW_RST			69
-+#define MT8183_INFRACFG_AO_CLDMA_AO_SW_RST			70
-+#define MT8183_INFRACFG_AO_UNIPRO_UFS_SW_RST			71
-+#define MT8183_INFRACFG_AO_DX_CC_SW_RST				72
-+#define MT8183_INFRACFG_AO_UFSPHY_SW_RST			73
-+
-+#define MT8183_INFRACFG_AO_DX_CC_SEC_SW_RST			96
-+#define MT8183_INFRACFG_AO_GCE_SW_RST				97
-+#define MT8183_INFRACFG_AO_CLDMA_SW_RST				98
-+#define MT8183_INFRACFG_AO_TRNG_SW_RST				99
-+#define MT8183_INFRACFG_AO_AP_MD_CCIF_1_SW_RST			103
-+#define MT8183_INFRACFG_AO_AP_MD_CCIF_SW_RST			104
-+#define MT8183_INFRACFG_AO_I2C1_IMM_SW_RST			105
-+#define MT8183_INFRACFG_AO_I2C1_ARB_SW_RST			106
-+#define MT8183_INFRACFG_AO_I2C2_IMM_SW_RST			107
-+#define MT8183_INFRACFG_AO_I2C2_ARB_SW_RST			108
-+#define MT8183_INFRACFG_AO_I2C5_SW_RST				109
-+#define MT8183_INFRACFG_AO_I2C5_IMM_SW_RST			110
-+#define MT8183_INFRACFG_AO_I2C5_ARB_SW_RST			111
-+#define MT8183_INFRACFG_AO_SPI4_SW_RST				112
-+#define MT8183_INFRACFG_AO_SPI5_SW_RST				113
-+#define MT8183_INFRACFG_AO_INFRA2MFGAXI_CBIP_CLAS_SW_RST	114
-+#define MT8183_INFRACFG_AO_MFGAXI2INFRA_M0_CBIP_GLAS_OUT_SW_RST	115
-+#define MT8183_INFRACFG_AO_MFGAXI2INFRA_M1_CBIP_GLAS_OUT_SW_RST	116
-+#define MT8183_INFRACFG_AO_UFS_AES_SW_RST			117
-+#define MT8183_INFRACFG_AO_CCU_I2C_IRQ_SW_RST			118
-+#define MT8183_INFRACFG_AO_CCU_I2C_DMA_SW_RST			119
-+#define MT8183_INFRACFG_AO_I2C6_SW_RST				120
-+#define MT8183_INFRACFG_AO_CCU_GALS_SW_RST			121
-+#define MT8183_INFRACFG_AO_IPU_GALS_SW_RST			122
-+#define MT8183_INFRACFG_AO_CONN2AP_GALS_SW_RST			123
-+#define MT8183_INFRACFG_AO_AP_MD_CCIF2_SW_RST			124
-+#define MT8183_INFRACFG_AO_AP_MD_CCIF3_SW_RST			125
-+#define MT8183_INFRACFG_AO_I2C7_SW_RST				126
-+#define MT8183_INFRACFG_AO_I2C8_SW_RST				127
-+
-+#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8183 */
 diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
-index ccb73422c2fa22d..1dfd5ed5c8c5284 100644
+index ccb73422c2fa..1dfd5ed5c8c5 100644
 --- a/include/linux/mailbox/mtk-cmdq-mailbox.h
 +++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
 @@ -19,6 +19,10 @@
@@ -14523,7 +14022,7 @@ index ccb73422c2fa22d..1dfd5ed5c8c5284 100644
  	CMDQ_CODE_WFE = 0x20,
  	CMDQ_CODE_EOC = 0x40,
 diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-index 00443e4ed9b73ab..f84e71c586e232d 100644
+index 00443e4ed9b7..f84e71c586e2 100644
 --- a/include/linux/mfd/cros_ec.h
 +++ b/include/linux/mfd/cros_ec.h
 @@ -28,6 +28,7 @@
@@ -14535,7 +14034,7 @@ index 00443e4ed9b73ab..f84e71c586e232d 100644
  /*
   * The EC is unresponsive for a time after a reboot command.  Add a
 diff --git a/include/linux/mfd/cros_ec_commands.h b/include/linux/mfd/cros_ec_commands.h
-index 41cb61a17fb811e..ff095219165ad44 100644
+index 41cb61a17fb8..ff095219165a 100644
 --- a/include/linux/mfd/cros_ec_commands.h
 +++ b/include/linux/mfd/cros_ec_commands.h
 @@ -1299,6 +1299,16 @@ enum ec_feature_code {
@@ -14557,7 +14056,7 @@ index 41cb61a17fb811e..ff095219165ad44 100644
  };
 diff --git a/include/linux/platform_data/mtk_scp.h b/include/linux/platform_data/mtk_scp.h
 new file mode 100644
-index 000000000000000..b9c970b19bcc1aa
+index 000000000000..b9c970b19bcc
 --- /dev/null
 +++ b/include/linux/platform_data/mtk_scp.h
 @@ -0,0 +1,163 @@
@@ -14726,7 +14225,7 @@ index 000000000000000..b9c970b19bcc1aa
 +#endif /* _MTK_SCP_H */
 diff --git a/include/linux/rpmsg/mtk_rpmsg.h b/include/linux/rpmsg/mtk_rpmsg.h
 new file mode 100644
-index 000000000000000..90f848696161f40
+index 000000000000..90f848696161
 --- /dev/null
 +++ b/include/linux/rpmsg/mtk_rpmsg.h
 @@ -0,0 +1,30 @@
@@ -14761,7 +14260,7 @@ index 000000000000000..90f848696161f40
 +
 +#endif
 diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
-index 54ade13a9b15730..15884354af20a19 100644
+index 54ade13a9b15..15884354af20 100644
 --- a/include/linux/soc/mediatek/mtk-cmdq.h
 +++ b/include/linux/soc/mediatek/mtk-cmdq.h
 @@ -13,11 +13,14 @@
@@ -14879,7 +14378,7 @@ index 54ade13a9b15730..15884354af20a19 100644
  #endif	/* __MTK_CMDQ_H__ */
 diff --git a/include/soc/mediatek/emi.h b/include/soc/mediatek/emi.h
 new file mode 100644
-index 000000000000000..83bdaeb6840b839
+index 000000000000..83bdaeb6840b
 --- /dev/null
 +++ b/include/soc/mediatek/emi.h
 @@ -0,0 +1,116 @@
@@ -15000,7 +14499,7 @@ index 000000000000000..83bdaeb6840b839
 +
 +#endif
 diff --git a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
-index 1bc0fafe5e2902a..d569157fe945741 100644
+index 1bc0fafe5e29..d569157fe945 100644
 --- a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 @@ -955,6 +955,20 @@ static irqreturn_t mt8183_afe_irq_handler(int irq_id, void *dev)
