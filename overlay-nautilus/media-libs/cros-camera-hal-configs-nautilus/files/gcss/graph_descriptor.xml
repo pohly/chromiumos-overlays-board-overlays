@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Copyright (c) 2017 Intel Corporation
+<!-- Copyright (c) 2019 Intel Corporation
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -28,69 +28,21 @@
 
         <node name="imgu" type="hw" stream_id="1" pg_id="0" subsystem="imgu">
             <!-- ports -->
-            <port name="input" id="0" direction="0">
-                <options attribute="format">
-                    <option value="NV12">
-                        <!-- settings applied when switching to NV12!-->
-                        <apply>
-                            <imgu>
-                                <non_scaled_output format="NV12"/>
-                            </imgu>
-                        </apply>
-                    </option>
-                </options>
-            </port>
-            <port name="preview" id="1" direction="1">
-                <options attribute="format">
-                    <option value="NV12">
-                        <!-- settings applied when switching to NV12!-->
-                        <apply>
-                            <imgu>
-                                <non_scaled_output format="NV12"/>
-                            </imgu>
-                        </apply>
-                    </option>
-                </options>
-            </port>
-            <port name="video" id="2" direction="1">
-                <options attribute="format">
-                    <option value="NV12">
-                        <!-- settings applied when switching to NV12!-->
-                        <apply>
-                            <imgu>
-                                <non_scaled_output format="NV12"/>
-                            </imgu>
-                        </apply>
-                    </option>
-                </options>
-            </port>
-            <port name="still" id="3" direction="1">
-                <options attribute="format">
-                    <option value="NV12">
-                        <!-- settings applied when switching to NV12!-->
-                        <apply>
-                            <imgu>
-                                <non_scaled_output format="NV12"/>
-                            </imgu>
-                        </apply>
-                    </option>
-                </options>
-            </port>
+            <port name="input" id="0" direction="0"/>
+            <port name="vf" id="1" direction="1"/>
+            <port name="main" id="2" direction="1"/>
             <!-- ports end -->
         </node>
-        <sink name="preview"/>
-        <sink name="video"/>
-        <sink name="still"/>
+        <sink name="vf"/>
+        <sink name="main"/>
         <sink name="raw"/>
     </nodes>
     <graphs>
         <graph id="1" name="Full graph">
             <connection source="sensor:port_0" sink="csi_be:input"/>
             <connection source="csi_be:output" sink="imgu:input"/>
-            <connection source="imgu:preview" sink="preview"/>
-            <connection source="imgu:video" sink="video"/>
-            <connection source="imgu:still" sink="still"/>
-            <connection source="imgu:raw" sink="raw"/>
+            <connection source="imgu:main" sink="main"/>
+            <connection source="imgu:vf" sink="vf"/>
         </graph>
     </graphs>
 </graph_descriptor>
