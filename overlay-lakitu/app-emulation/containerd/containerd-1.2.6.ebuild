@@ -4,7 +4,8 @@
 EAPI=6
 EGO_PN="github.com/containerd/${PN}"
 
-inherit toolchain-funcs
+# lakitu: inherits eutils and systemd to install the containerd.service.
+inherit eutils toolchain-funcs systemd
 
 if [[ ${PV} == *9999 ]]; then
 	inherit golang-vcs
@@ -26,10 +27,27 @@ IUSE="apparmor +btrfs +cri hardened +seccomp"
 
 DEPEND="btrfs? ( sys-fs/btrfs-progs )
 	seccomp? ( sys-libs/libseccomp )"
+
+# lakitu: RDEPEND on sys-apps/systemd because of the dependency on
+# containerd.service.
 RDEPEND=">=app-emulation/runc-1.0.0_rc6
-	seccomp? ( sys-libs/libseccomp )"
+	seccomp? ( sys-libs/libseccomp )
+	sys-apps/systemd"
 
 S=${WORKDIR}/${P}/src/${EGO_PN}
+
+PATCHES=(
+	# lakitu: uses Go cross compiler in the builder (i.e. ${GO}) rather than
+	# the default go compiler in the builders (i.e. go).
+	"${FILESDIR}"/1.2.5-use-GO-cross-compiler.patch
+	# lakitu: patches upstream containerd.service because lakitu installs
+	# containerd at /usr/bin/containerd, different than upstream's default at
+	# /usr/local/bin/containerd
+	"${FILESDIR}"/1.2.2-correct-execstart-path.patch
+	# lakitu: cherrypick of an upstream patch to set LimitNOFILE to 1048576:
+	# https://github.com/containerd/containerd/pull/3202
+	"${FILESDIR}"/1.2.5-set-nofile-to-1048576.patch
+)
 
 RESTRICT="test"
 
@@ -46,11 +64,21 @@ src_prepare() {
 src_compile() {
 	local options=( $(usex btrfs "" "no_btrfs") $(usex cri "" "no_cri") $(usex seccomp "seccomp" "") $(usex apparmor "apparmor" "") )
 	export GOPATH="${WORKDIR}/${P}" # ${PWD}/vendor
+	# lakitu: create environment variable ${GO} to point to the Go cross
+	# compiler.
+	GO=$(tc-getGO)
+	export GO
 	LDFLAGS=$(usex hardened '-extldflags -fno-PIC' '') BUILDTAGS="${options[@]}" emake
 }
 
 src_install() {
-	newinitd "${FILESDIR}"/${PN}.initd ${PN}
+	# lakitu: we use systemd service to start containerd.
+	# newinitd "${FILESDIR}"/${PN}.initd ${PN}
 	keepdir /var/lib/containerd
 	dobin bin/*
+
+	# lakitu: runs containerd as an individual service. This prevents
+	# docker from supervising containerd.
+	systemd_dounit containerd.service
+	systemd_enable_service multi-user.target containerd.service
 }
