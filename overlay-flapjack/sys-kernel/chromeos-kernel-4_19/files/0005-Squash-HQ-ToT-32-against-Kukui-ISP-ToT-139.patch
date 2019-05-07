@@ -1,9 +1,9 @@
-From f03cbd2479b9af83133652db8fcf992bd563f7d5 Mon Sep 17 00:00:00 2001
+From 6afd27ec5a2081786eb229c295c68da660fbf850 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Mon, 29 Apr 2019 10:46:01 -0700
-Subject: [PATCH 5/7] Squash HQ ToT #29 against Kukui ISP ToT #139.
+Date: Thu, 9 May 2019 11:23:26 -0700
+Subject: [PATCH 5/7] Squash HQ ToT #32 against Kukui ISP ToT #139.
 
-Change-Id: I7334e23d584d0c56e92093465196815562abc867
+Change-Id: I84b2f504ab68147563a2207bb6621e47249a3c30
 ---
  .../bindings/iio/proximity/sx9311.txt         |   19 +
  README                                        |    3 +-
@@ -13,7 +13,7 @@ Change-Id: I7334e23d584d0c56e92093465196815562abc867
  .../mt8183-flapjack-rev4-sku1-hwconfig4.dts   |  266 ++
  .../mt8183-flapjack-rev4-sku3-hwconfig1.dts   |  278 ++
  .../mt8183-flapjack-rev4-sku3-hwconfig3.dts   |  267 ++
- .../boot/dts/mediatek/mt8183-flapjack.dtsi    |  141 +
+ .../boot/dts/mediatek/mt8183-flapjack.dtsi    |  140 +
  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   87 +
  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   11 +
  .../arm64/chromiumos-arm64.flavour.config     |    2 +-
@@ -22,10 +22,10 @@ Change-Id: I7334e23d584d0c56e92093465196815562abc867
  drivers/gpu/drm/bridge/ite-it6505.c           | 2948 +++++++++++++++++
  drivers/gpu/drm/drm_panel.c                   |   38 +-
  drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   14 +
- drivers/gpu/drm/mediatek/mtk_dpi.c            |   29 +
+ drivers/gpu/drm/mediatek/mtk_dpi.c            |   32 +-
  drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   28 +
  drivers/gpu/drm/mediatek/mtk_dsi.c            |   15 +
- drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  967 +++++-
+ drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  954 +++++-
  drivers/iio/proximity/Kconfig                 |   13 +
  drivers/iio/proximity/Makefile                |    1 +
  drivers/iio/proximity/sx9311.c                | 1144 +++++++
@@ -36,7 +36,7 @@ Change-Id: I7334e23d584d0c56e92093465196815562abc867
  include/drm/drm_panel.h                       |   11 +
  sound/soc/codecs/max98357a.c                  |   96 +-
  .../mediatek/mt8183/mt8183-da7219-max98357.c  |    2 +-
- 31 files changed, 6757 insertions(+), 42 deletions(-)
+ 31 files changed, 6745 insertions(+), 43 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/iio/proximity/sx9311.txt
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
@@ -1225,10 +1225,10 @@ index 000000000000..41d4a7fe70e8
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi
 new file mode 100644
-index 000000000000..4ccd2c91db5c
+index 000000000000..7bcc6d8e5b62
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,140 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -1365,13 +1365,12 @@ index 000000000000..4ccd2c91db5c
 +		pins_eint {
 +			pinmux = <PINMUX_GPIO5__FUNC_GPIO5>;
 +			input-enable;
-+			bias-pull-up;
 +		};
 +	};
 +};
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index fc61d7d25af5..0bf7b3c081bf 100755
+index fc61d7d25af5..0bf7b3c081bf 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -59,6 +59,15 @@
@@ -4639,7 +4638,7 @@ index ebadcfed3a0a..b33fe170732b 100644
  	writel_relaxed(con, comp->regs + DISP_REG_OVL_CON(idx));
  	writel_relaxed(pitch, comp->regs + DISP_REG_OVL_PITCH(idx));
 diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 62a9d47df948..189d04ed0f41 100644
+index 62a9d47df948..de54667b0744 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
 @@ -117,6 +117,7 @@ struct mtk_dpi_conf {
@@ -4665,7 +4664,17 @@ index 62a9d47df948..189d04ed0f41 100644
  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
  					enum mtk_dpi_out_color_format format)
  {
-@@ -509,6 +518,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+@@ -444,7 +453,8 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+ 	pll_rate = clk_get_rate(dpi->tvd_clk);
+ 
+ 	vm.pixelclock = pll_rate / factor;
+-	clk_set_rate(dpi->pixel_clk, vm.pixelclock);
++	clk_set_rate(dpi->pixel_clk,
++		     vm.pixelclock * (dpi->conf->dual_edge ? 2 : 1));
+ 	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
+ 
+ 	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
+@@ -509,6 +519,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
  	mtk_dpi_config_color_format(dpi, dpi->color_format);
  	mtk_dpi_config_2n_h_fre(dpi);
  	mtk_dpi_config_disable_edge(dpi);
@@ -4673,7 +4682,7 @@ index 62a9d47df948..189d04ed0f41 100644
  	mtk_dpi_sw_reset(dpi, false);
  
  	return 0;
-@@ -671,6 +681,16 @@ static unsigned int mt2701_calculate_factor(int clock)
+@@ -671,6 +682,16 @@ static unsigned int mt2701_calculate_factor(int clock)
  		return 2;
  }
  
@@ -4690,7 +4699,7 @@ index 62a9d47df948..189d04ed0f41 100644
  static const struct mtk_dpi_conf mt8173_conf = {
  	.cal_factor = mt8173_calculate_factor,
  	.reg_h_fre_con = 0xe0,
-@@ -682,6 +702,12 @@ static const struct mtk_dpi_conf mt2701_conf = {
+@@ -682,6 +703,12 @@ static const struct mtk_dpi_conf mt2701_conf = {
  	.edge_sel_en = true,
  };
  
@@ -4703,7 +4712,7 @@ index 62a9d47df948..189d04ed0f41 100644
  static int mtk_dpi_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -777,6 +803,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
+@@ -777,6 +804,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
  	{ .compatible = "mediatek,mt8173-dpi",
  	  .data = &mt8173_conf,
  	},
@@ -4798,7 +4807,7 @@ index 5d8227c90371..661566b3535a 100644
  	drm_connector_cleanup(&dsi->conn);
  	return ret;
 diff --git a/drivers/gpu/drm/panel/panel-boe-himax8279d.c b/drivers/gpu/drm/panel/panel-boe-himax8279d.c
-index ff5a89e38fd7..7a0ade07a72d 100644
+index ff5a89e38fd7..b854455c9d88 100644
 --- a/drivers/gpu/drm/panel/panel-boe-himax8279d.c
 +++ b/drivers/gpu/drm/panel/panel-boe-himax8279d.c
 @@ -61,6 +61,7 @@ struct panel_info {
@@ -5132,7 +5141,7 @@ index ff5a89e38fd7..7a0ade07a72d 100644
  /* 10 inch */
  static const struct panel_cmd boe_himax8279d10p_on_cmds[] = {
  	_INIT_CMD(0x00, 0xB0, 0x05),
-@@ -910,11 +1199,677 @@ static const struct panel_desc boe_himax8279d10p_panel_desc = {
+@@ -910,11 +1199,664 @@ static const struct panel_desc boe_himax8279d10p_panel_desc = {
  	.off_cmds = default_off_cmds,
  };
  
@@ -5496,19 +5505,6 @@ index ff5a89e38fd7..7a0ade07a72d 100644
 +};
 +
 +/* inx,ota7290d10p */
-+static const struct drm_display_mode inx_ota7290d10p_display_mode = {
-+	.clock = 159420,
-+	.hdisplay = 1200,
-+	.hsync_start = 1200 + 80,
-+	.hsync_end = 1200 + 80 + 60,
-+	.htotal = 1200 + 80 + 60 + 1,
-+	.vdisplay = 1920,
-+	.vsync_start = 1920 + 35,
-+	.vsync_end = 1920 + 35 + 25,
-+	.vtotal = 1920 + 35 + 25 + 1,
-+	.vrefresh = 60,
-+};
-+
 +static const struct panel_cmd inx_ota7290d10p_on_cmds[] = {
 +	_INIT_CMD(0x00, 0xB0, 0x5A),
 +	_INIT_CMD(0x00, 0xB1, 0x00),
@@ -5777,7 +5773,7 @@ index ff5a89e38fd7..7a0ade07a72d 100644
 +};
 +
 +static const struct panel_desc inx_ota7290d10p_panel_desc = {
-+	.display_mode = &inx_ota7290d10p_display_mode,
++	.display_mode = &default_display_mode,
 +	.bpc = 8,
 +	.width_mm = 107,
 +	.height_mm = 172,
@@ -5810,7 +5806,7 @@ index ff5a89e38fd7..7a0ade07a72d 100644
  	}, {
  		/* sentinel */
  	}
-@@ -958,6 +1913,10 @@ static int panel_add(struct panel_info *pinfo)
+@@ -958,6 +1900,10 @@ static int panel_add(struct panel_info *pinfo)
  	if (IS_ERR(pinfo->backlight))
  		return PTR_ERR(pinfo->backlight);
  
@@ -7433,5 +7429,5 @@ index 1e7e8aed8707..c25ed84e2117
  	{
  		.name = "da7219.5-001a",
 -- 
-2.21.0.593.g511ec345e18-goog
+2.21.0.1020.gf2820cf01a-goog
 

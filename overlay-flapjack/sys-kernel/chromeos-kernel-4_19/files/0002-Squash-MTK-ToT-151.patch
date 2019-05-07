@@ -1,9 +1,9 @@
-From 3af3d697e8d15ab17d41af1eacbb5b7b14fcbc92 Mon Sep 17 00:00:00 2001
+From 1272f1c6486fdd9ea0a530db20d1b2327a44c26c Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 25 Apr 2019 15:51:00 -0700
+Date: Thu, 9 May 2019 11:18:51 -0700
 Subject: [PATCH 2/7] Squash MTK ToT #151.
 
-Change-Id: Ifa2c8aa48e54adf7981df8cc6e08977226eb0d3a
+Change-Id: Icef8a6fc06f24ff1b00af0e76819454990da8883
 ---
  .../display/mediatek/mediatek,dsi.txt         |   2 +-
  .../devicetree/bindings/mailbox/mtk-gce.txt   |  37 +-
@@ -5745,5 +5745,5 @@ index 1bc0fafe5e29..d569157fe945 100644
  			   mt8183_afe_runtime_resume, NULL)
  };
 -- 
-2.21.0.593.g511ec345e18-goog
+2.21.0.1020.gf2820cf01a-goog
 

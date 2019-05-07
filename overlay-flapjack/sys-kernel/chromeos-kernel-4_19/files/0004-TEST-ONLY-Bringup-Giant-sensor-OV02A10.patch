@@ -1,9 +1,13 @@
-From d2c6d6cf7f75a85693c36747120199f5e1489f7d Mon Sep 17 00:00:00 2001
-From: YH Lin <yueherngl@google.com>
-Date: Thu, 25 Apr 2019 15:54:45 -0700
-Subject: [PATCH 4/7] TEST-ONLY: Bringup Giant sensor OV02A10 #39.
+From 9e8f15e4951e6204582db864c06bb50daeff1272 Mon Sep 17 00:00:00 2001
+From: Dongchun Zhu <dongchun.zhu@mediatek.com>
+Date: Tue, 26 Mar 2019 14:27:17 +0800
+Subject: [PATCH 4/7] TEST-ONLY: Bringup Giant sensor OV02A10
 
-Change-Id: I883cc337fbcc31d720f35d84083f04475bbc5901
+1. Add ov02a10 driver
+2. Update board device tree for HW change
+
+Change-Id: I3109722c70147bfd3140623a472aac595010a890
+Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
 ---
  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   20 +-
  .../arm64/chromiumos-arm64.flavour.config     |    2 +-
@@ -11,15 +15,11 @@ Change-Id: I883cc337fbcc31d720f35d84083f04475bbc5901
  drivers/media/i2c/Kconfig                     |   12 +
  drivers/media/i2c/Makefile                    |    1 +
  drivers/media/i2c/ov02a10.c                   | 1055 +++++++++++++++++
- .../mtk-isp/isp_50/seninf/seninf_drv_def.h    |    2 +-
- 7 files changed, 1082 insertions(+), 12 deletions(-)
- mode change 100644 => 100755 arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
- create mode 100755 drivers/media/i2c/ov02a10.c
+ 6 files changed, 1081 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/media/i2c/ov02a10.c
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-old mode 100644
-new mode 100755
-index b2fd77e04164..fc61d7d25af5
+index b2fd77e04164..fc61d7d25af5 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -228,7 +228,7 @@
@@ -155,7 +155,7 @@ index a94eb03d10d4..e2673e0e73d8 100644
  obj-$(CONFIG_VIDEO_OV7251) += ov7251.o
  obj-$(CONFIG_VIDEO_OV7640) += ov7640.o
 diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
-new file mode 100755
+new file mode 100644
 index 000000000000..e1cd303e8a21
 --- /dev/null
 +++ b/drivers/media/i2c/ov02a10.c
@@ -1215,19 +1215,6 @@ index 000000000000..e1cd303e8a21
 +MODULE_DESCRIPTION("OmniVision ov02a10 sensor driver");
 +MODULE_LICENSE("GPL v2");
 +
-diff --git a/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
-index 6280ae49a97d..49268c36a337 100644
---- a/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
-+++ b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
-@@ -26,7 +26,7 @@
- #else
- #define SENINF_TIMESTAMP_STEP     0x67
- #define SENINF_SETTLE_DELAY       0x15
--#define SENINF_HS_TRAIL_PARAMETER 0x8
-+#define SENINF_HS_TRAIL_PARAMETER 0x20
- #endif
- 
- #define SENINF_DRV_DEBUG_DELAY 1000
 -- 
-2.21.0.593.g511ec345e18-goog
+2.21.0.1020.gf2820cf01a-goog
 

@@ -1,9 +1,9 @@
-From ea4fdfda0eda71d38018b7a32bbe767a66f61984 Mon Sep 17 00:00:00 2001
+From d1b88f158f322059f1a81e9b4e16aeb30400109a Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 25 Apr 2019 15:47:41 -0700
+Date: Thu, 9 May 2019 11:17:01 -0700
 Subject: [PATCH 1/7] Sync kernel source from ToT.
 
-Change-Id: I4d2724dd056909ddb98b9052c8cd77aaa44fa536
+Change-Id: I545a9f56ac1f03308165713ee1f071ed816bfcfc
 ---
  .../bindings/net/qualcomm-bluetooth.txt       |  2 ++
  .../mach-rockchip/embedded/rk3288_resume.c    | 10 +++++-----
@@ -230,5 +230,5 @@ index 4ea995d610d2..9b8d4d7802fc 100644
  		if (IS_ERR(qcadev->susclk)) {
  			dev_err(&serdev->dev, "failed to acquire clk\n");
 -- 
-2.21.0.593.g511ec345e18-goog
+2.21.0.1020.gf2820cf01a-goog
 

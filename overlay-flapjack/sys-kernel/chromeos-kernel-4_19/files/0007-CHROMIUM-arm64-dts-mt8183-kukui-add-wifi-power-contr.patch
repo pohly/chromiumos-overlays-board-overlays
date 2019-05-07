@@ -1,4 +1,4 @@
-From e29399e0c701632ceb7a356abe4ab6eba0fb45bd Mon Sep 17 00:00:00 2001
+From a887a1577f6ca6003141a75084f5d6c2c8019200 Mon Sep 17 00:00:00 2001
 From: jjian zhou <jjian.zhou@mediatek.com>
 Date: Fri, 26 Apr 2019 11:12:06 +0800
 Subject: [PATCH 7/7] CHROMIUM: arm64: dts: mt8183-kukui: add wifi power
@@ -6,7 +6,8 @@ Subject: [PATCH 7/7] CHROMIUM: arm64: dts: mt8183-kukui: add wifi power
 
 To comply with schematic design, remove gpio119 from
 mmc1_fixed_power and add it back as wlan_en pin in
-mmc1default.
+mmc1default. msdcpll is only for mmc module. Assign
+msdcpll to mmc1 clk for avoiding unexpected changes.
 
 BUG=b:131043339
 TEST=Cherry-pick and update kernel with
@@ -18,14 +19,14 @@ Change-Id: I325df93ae939e929618f7234f18c674cce4e4138
 Signed-off-by: jjian zhou <jjian.zhou@mediatek.com>
 Signed-off-by: Ayo Wu <ayowu@chromium.org>
 ---
- .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 24 ++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 22 ++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 0bf7b3c081bf..91d5f5ce1fe1 100755
+index 0bf7b3c081bf..21f30d0e00b5 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -68,6 +68,22 @@
+@@ -68,6 +68,20 @@
  		enable-active-high;
  	};
  
@@ -34,7 +35,6 @@ index 0bf7b3c081bf..91d5f5ce1fe1 100755
 +		regulator-name = "mmc1_power";
 +		regulator-min-microvolt = <3300000>;
 +		regulator-max-microvolt = <3300000>;
-+		enable-active-high;
 +	};
 +
 +	mmc1_fixed_io: regulator@4 {
@@ -42,13 +42,12 @@ index 0bf7b3c081bf..91d5f5ce1fe1 100755
 +		regulator-name = "mmc1_io";
 +		regulator-min-microvolt = <1800000>;
 +		regulator-max-microvolt = <1800000>;
-+		enable-active-high;
 +	};
 +
  	reserved_memory: reserved-memory {
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -392,8 +408,8 @@
+@@ -392,8 +406,8 @@
  	pinctrl-names = "default", "state_uhs";
  	pinctrl-0 = <&mmc1_pins_default>;
  	pinctrl-1 = <&mmc1_pins_uhs>;
@@ -59,7 +58,7 @@ index 0bf7b3c081bf..91d5f5ce1fe1 100755
  	bus-width = <4>;
  	max-frequency = <200000000>;
  	drv-type = <2>;
-@@ -406,6 +422,8 @@
+@@ -406,6 +420,8 @@
  	non-removable;
  	no-mmc;
  	no-sd;
@@ -68,7 +67,7 @@ index 0bf7b3c081bf..91d5f5ce1fe1 100755
  };
  
  &mt6358_vdram2_reg {
-@@ -716,7 +734,7 @@
+@@ -716,7 +732,7 @@
  			mediatek,pull-down-adv = <10>;
  		};
  
@@ -78,5 +77,5 @@ index 0bf7b3c081bf..91d5f5ce1fe1 100755
  			output-high;
  		};
 -- 
-2.21.0.593.g511ec345e18-goog
+2.21.0.1020.gf2820cf01a-goog
 

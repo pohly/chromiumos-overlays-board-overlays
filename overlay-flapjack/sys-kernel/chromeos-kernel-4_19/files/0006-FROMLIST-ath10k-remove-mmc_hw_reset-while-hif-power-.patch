@@ -1,4 +1,4 @@
-From b1ad1c0c0bc42827617c0d81594964fed25ed234 Mon Sep 17 00:00:00 2001
+From 6a85f7dec3af91687c4254e0dad7e1a0acdf316e Mon Sep 17 00:00:00 2001
 From: Wen Gong <wgong@codeaurora.org>
 Date: Fri, 26 Apr 2019 16:26:33 +0800
 Subject: [PATCH 6/7] FROMLIST: ath10k: remove mmc_hw_reset while hif power
@@ -17,11 +17,12 @@ Signed-off-by: Wen Gong <wgong@codeaurora.org>
 
 (am from https://patchwork.kernel.org/patch/10920563/)
 
-BUG=b:121980879
+BUG=b:131043339
 TEST=Connect and ping success
 
 Change-Id: Ie3cfdf6aba09295c06ee84379cdb3dbf1cd12688
 Signed-off-by: Wen Gong <wgong@codeaurora.org>
+Signed-off-by: Claire Chang <tientzu@chromium.org>
 ---
  drivers/net/wireless/ath/ath10k/sdio.c | 4 ----
  1 file changed, 4 deletions(-)
@@ -42,5 +43,5 @@ index 88eca876c716..e41b072a1fb8 100644
  
  	ar_sdio->is_disabled = true;
 -- 
-2.21.0.593.g511ec345e18-goog
+2.21.0.1020.gf2820cf01a-goog
 
