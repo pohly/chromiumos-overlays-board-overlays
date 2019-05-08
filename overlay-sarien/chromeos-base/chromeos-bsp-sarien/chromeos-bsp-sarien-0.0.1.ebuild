@@ -16,9 +16,8 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND=""
 DEPEND="
-        ${RDEPEND}
-        chromeos-base/chromeos-config
-	chromeos-base/touch_updater
+	${RDEPEND}
+	chromeos-base/chromeos-config
 "
 
 src_install() {
@@ -35,11 +34,11 @@ src_install() {
 	unibuild_install_audio_files
 	unibuild_install_bluetooth_files
 
-        # Arcada use Wacom touch screen with different firmware to support
-        # different panels. As a result, we need a way to identify the correct
-        # firmware to update. The solution is to probe VID_PID from
-        # eDP panel's EDID as a identifier then transfer to Wacom HWID which
-        # used to search file names of firmware blobs.
-        exeinto "/opt/google/touch/scripts"
-        doexe "${FILESDIR}"/arcada/get_board_specific_wacom_hwid.sh
+	# Arcada use Wacom touch screen with different firmware to support
+	# different panels. As a result, we need a way to identify the correct
+	# firmware to update. The solution is to probe VID_PID from
+	# eDP panel's EDID as a identifier then transfer to Wacom HWID which
+	# used to search file names of firmware blobs.
+	exeinto "/opt/google/touch/scripts"
+	doexe "${FILESDIR}"/arcada/get_board_specific_wacom_hwid.sh
 }
