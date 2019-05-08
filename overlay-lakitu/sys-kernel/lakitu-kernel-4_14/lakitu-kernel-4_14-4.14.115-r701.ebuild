@@ -51,6 +51,18 @@ tar_kernel_source() {
 	popd
 }
 
+write_toolchain_info() {
+	# Write the compiler info used for kernel compilation
+	# in toolchain_info
+	local toolchain_info_dir=etc
+	# Example for toolchain_info content:
+	# CC=x86_64-cros-linux-gnu-gcc
+	# CXX=x86_64-cros-linux-gnu-g++
+	# The file will be deleted after copying data to BUILD_DIR artifact
+	echo "CC=${CC}" > "${D}/${toolchain_info_dir}/toolchain_info"
+	echo "CXX=${CXX}" >> "${D}/${toolchain_info_dir}/toolchain_info"
+}
+
 src_install() {
 	cros-kernel2_src_install
 
@@ -61,6 +73,8 @@ src_install() {
 	# Install kernel source tarball so it can be exported as an
 	# artifact later.
 	tar_kernel_source
+	# Install kernel compiler information
+	write_toolchain_info
 }
 
 # Change the following (commented out) number to the next prime number
