@@ -63,3 +63,5 @@ USE="${USE} -video_cards_i965 video_cards_iHD"
 AFDO_PROFILE_SOURCE='broadwell'
 
 USE="${USE} ime_addons"
+
+BOARD_COMPILER_FLAGS="-march=skylake"
