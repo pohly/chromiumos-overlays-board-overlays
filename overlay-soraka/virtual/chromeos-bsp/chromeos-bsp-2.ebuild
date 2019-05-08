@@ -4,7 +4,7 @@
 EAPI=4
 
 DESCRIPTION="Chrome OS BSP virtual package"
-HOMEPAGE="http://src.chromium.org"
+HOMEPAGE="http://dev.chromium.org/chromium-os"
 
 LICENSE="BSD-Google"
 SLOT="0"
