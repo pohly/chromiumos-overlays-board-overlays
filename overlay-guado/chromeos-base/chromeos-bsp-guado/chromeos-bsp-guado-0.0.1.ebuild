@@ -11,7 +11,7 @@ or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
-IUSE="guado-cfm"
+IUSE="guado-cfm guado-kernelnext"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
@@ -26,6 +26,8 @@ DEPEND="${RDEPEND}"
 src_install() {
 	if use guado-cfm; then
 		doappid "{5A5EE14C-32AC-D8D9-ACEA-C6A74DE79B63}" "CHROMEBOX"
+	elif use guado-kernelnext; then
+		doappid "{E88B19B8-72A2-11E9-B81D-D3F361E21ABF}" "CHROMEBOX"
 	else
 		doappid "{8AA6D9AC-6EBC-4288-A615-171F56F66B4E}" "CHROMEBOX"
 	fi
