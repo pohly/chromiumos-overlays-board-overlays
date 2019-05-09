@@ -42,7 +42,7 @@ common_config: &common_config
     $cras: "common"
     $ucm: "common" # Default
     $ucm-source-suffix: ""
-  power:
+  power: &power_common
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
     set-wifi-transmit-power-for-tablet-mode: "1"
@@ -67,8 +67,16 @@ chromeos:
         - $sku-id: 0x2a63
           config: *common_config
         - $sku-id: 0x2ae3  # shyvana-m
-          config: *common_config
+          config:
+            <<: *common_config
+            power:
+              << : *power_common
+              $internal-backlight-no-als-battery-brightness: "62.5"
     - $device-name: "leona"
       skus:
         - $sku-id: 0x2863  # leona
-          config: *common_config
+          config:
+            <<: *common_config
+            power:
+              << : *power_common
+              $internal-backlight-no-als-battery-brightness: "62.5"
