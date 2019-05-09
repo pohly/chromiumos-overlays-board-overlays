@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-CROS_WORKON_COMMIT="ee83e89d4aa0ad9e09366f8d54d5aa458a1f9638"
-CROS_WORKON_TREE="4d90a44bf4d9ff170e898f64369aab7b9fbc56f3"
+CROS_WORKON_COMMIT="c6d7dd64d37fd8df78d5f9d058686ac0d5116474"
+CROS_WORKON_TREE="93fbd5ea357c92f39b9fe8a20ce8b0905fdb590a"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/v4.14"
 
@@ -51,6 +51,18 @@ tar_kernel_source() {
 	popd
 }
 
+write_toolchain_info() {
+	# Write the compiler info used for kernel compilation
+	# in toolchain_info
+	local toolchain_info_dir=etc
+	# Example for toolchain_info content:
+	# CC=x86_64-cros-linux-gnu-gcc
+	# CXX=x86_64-cros-linux-gnu-g++
+	# The file will be deleted after copying data to BUILD_DIR artifact
+	echo "CC=${CC}" > "${D}/${toolchain_info_dir}/toolchain_info"
+	echo "CXX=${CXX}" >> "${D}/${toolchain_info_dir}/toolchain_info"
+}
+
 src_install() {
 	cros-kernel2_src_install
 
@@ -61,6 +73,8 @@ src_install() {
 	# Install kernel source tarball so it can be exported as an
 	# artifact later.
 	tar_kernel_source
+	# Install kernel compiler information
+	write_toolchain_info
 }
 
 # Change the following (commented out) number to the next prime number
