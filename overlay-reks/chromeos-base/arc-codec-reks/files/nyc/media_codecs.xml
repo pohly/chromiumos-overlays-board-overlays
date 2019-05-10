@@ -86,7 +86,7 @@ Only the three quirks included above are recognized at this point:
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="3557760" />
+            <Limit name="blocks-per-second" min="1" max="1542240" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -95,7 +95,16 @@ Only the three quirks included above are recognized at this point:
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="5402700" />
+            <Limit name="blocks-per-second" min="1" max="1591200" />
+            <Limit name="bitrate" range="1-62500000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="ARC.vp9.decode" type="video/x-vnd.on2.vp9" >
+            <Limit name="size" min="16x16" max="4096x4096" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" min="1" max="259200" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -104,7 +113,7 @@ Only the three quirks included above are recognized at this point:
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="3557760" />
+            <Limit name="blocks-per-second" min="1" max="1542240" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -114,7 +123,17 @@ Only the three quirks included above are recognized at this point:
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="5402700" />
+            <Limit name="blocks-per-second" min="1" max="1591200" />
+            <Limit name="bitrate" range="1-62500000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+            <Feature name="secure-playback" required="true" />
+        </MediaCodec>
+        <MediaCodec name="ARC.vp9.decode.secure" type="video/x-vnd.on2.vp9" >
+            <Limit name="size" min="16x16" max="4096x4096" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" min="1" max="259200" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
