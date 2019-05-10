@@ -17,10 +17,10 @@
 <MediaCodecs>
     <Decoders>
         <MediaCodec name="c2.vda.avc.decoder" type="video/avc" update="true">
-            <Limit name="measured-frame-rate-320x240" range="2032-4572" />
-            <Limit name="measured-frame-rate-720x480" range="1034-2326" />
-            <Limit name="measured-frame-rate-1280x720" range="440-990" />
-            <Limit name="measured-frame-rate-1920x1080" range="191-430" />
+            <Limit name="measured-frame-rate-320x240" range="2055-4520" />
+            <Limit name="measured-frame-rate-720x480" range="1046-2300" />
+            <Limit name="measured-frame-rate-1280x720" range="445-978" />
+            <Limit name="measured-frame-rate-1920x1080" range="194-426" />
         </MediaCodec>
     </Decoders>
 </MediaCodecs>
