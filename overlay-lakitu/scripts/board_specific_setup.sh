@@ -76,6 +76,7 @@ write_toolchain_info() {
 # board_finalize_base_image() gets invoked by the build scripts at the
 # end of building base image.
 board_finalize_base_image() {
+  local -r script_root="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
   write_toolchain_path
   move_kernel_source
   write_toolchain_info
@@ -89,4 +90,10 @@ board_finalize_base_image() {
   info "Deleting legacy EFI bootloaders"
   sudo rm -f "${root_fs_dir}"/boot/efi/boot/boot{x64,ia32}.efi
   info "Successfully deleted legacy EFI bootloaders"
+
+  info "Populating dbx"
+  sudo mkdir -p "${esp_fs_dir}"/efi/Google/GSetup/dbx
+  sudo cp "${script_root}"/dbx/* "${esp_fs_dir}"/efi/Google/GSetup/dbx
+  sudo chmod -R 755 "${esp_fs_dir}"/efi/Google/GSetup/dbx
+  info "Successfully populated dbx"
 }
