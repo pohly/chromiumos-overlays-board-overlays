@@ -14,8 +14,5 @@ USE="${USE} -vulkan"
 
 USE="${USE} kvm_host"
 
-# Workaround for crbug.com/909793
-USE="${USE} workaround_crbug_909793"
-
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="cros-pd"
