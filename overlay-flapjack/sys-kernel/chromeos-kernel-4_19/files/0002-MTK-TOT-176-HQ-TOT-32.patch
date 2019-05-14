@@ -1,41 +1,52 @@
-From 95c473864b21571fd52df8f877ab003a07212147 Mon Sep 17 00:00:00 2001
+From c4eca19f03597835fb30f4b1c23fb333ae6cce9f Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 18 Apr 2019 12:19:47 -0700
-Subject: [PATCH 2/2] MTK TOT #150 - HQ TOT #25
+Date: Tue, 14 May 2019 15:24:42 -0700
+Subject: [PATCH 2/3] MTK TOT #176 - HQ TOT #32
 
-Change-Id: Ic292e5385f23f6e3a256396e5b674b8ce928732f
+Change-Id: I0475fb7862f56d748a43775559db9601be171b5d
 ---
  .../bindings/iio/proximity/sx9311.txt         |   19 +
  README                                        |    1 +
- arch/arm64/boot/dts/mediatek/Makefile         |    2 +
+ arch/arm64/boot/dts/mediatek/Makefile         |    4 +
  arch/arm64/boot/dts/mediatek/mt6358.dtsi      |    4 +-
- .../mt8183-flapjack-rev3-sku1-hwconfig1.dts   |  260 ++
- .../mt8183-flapjack-rev3-sku3-hwconfig0.dts   |  261 ++
- .../boot/dts/mediatek/mt8183-flapjack.dtsi    |  141 +
+ .../mt8183-flapjack-rev4-sku1-hwconfig2.dts   |  276 ++
+ .../mt8183-flapjack-rev4-sku1-hwconfig4.dts   |  266 ++
+ .../mt8183-flapjack-rev4-sku3-hwconfig1.dts   |  278 ++
+ .../mt8183-flapjack-rev4-sku3-hwconfig3.dts   |  267 ++
+ .../boot/dts/mediatek/mt8183-flapjack.dtsi    |  140 +
  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   87 +
  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   11 +
  .../arm64/chromiumos-arm64.flavour.config     |    2 +-
- .../arm64/chromiumos-mediatek.flavour.config  |    4 +-
+ .../arm64/chromiumos-mediatek.flavour.config  |    5 +-
  drivers/gpu/drm/bridge/Makefile               |    1 +
  drivers/gpu/drm/bridge/ite-it6505.c           | 2948 +++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_dpi.c            |   29 +
- drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  349 ++
+ drivers/gpu/drm/drm_panel.c                   |   38 +-
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   14 +
+ drivers/gpu/drm/mediatek/mtk_dpi.c            |   32 +-
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   28 +
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |   15 +
+ drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  954 +++++-
  drivers/iio/proximity/Kconfig                 |   13 +
  drivers/iio/proximity/Makefile                |    1 +
  drivers/iio/proximity/sx9311.c                | 1144 +++++++
  drivers/net/wireless/ath/ath10k/core.c        |    2 +-
  drivers/net/wireless/ath/ath10k/hif.h         |    6 +-
- drivers/net/wireless/ath/ath10k/sdio.c        |    4 +-
+ drivers/net/wireless/ath/ath10k/sdio.c        |    5 +-
  drivers/thermal/mtk_thermal.c                 |  117 +-
+ include/drm/drm_panel.h                       |   11 +
  sound/soc/codecs/max98357a.c                  |   96 +-
  .../mediatek/mt8183/mt8183-da7219-max98357.c  |    2 +-
- 24 files changed, 5469 insertions(+), 35 deletions(-)
+ 31 files changed, 6744 insertions(+), 43 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/iio/proximity/sx9311.txt
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku1-hwconfig1.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku3-hwconfig0.dts
+ create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
+ create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
+ create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts
+ create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts
  create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi
- create mode 100644 drivers/gpu/drm/bridge/ite-it6505.c
+ create mode 100755 drivers/gpu/drm/bridge/ite-it6505.c
  create mode 100644 drivers/iio/proximity/sx9311.c
+ mode change 100644 => 100755 drivers/thermal/mtk_thermal.c
+ mode change 100644 => 100755 sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 
 diff --git a/Documentation/devicetree/bindings/iio/proximity/sx9311.txt b/Documentation/devicetree/bindings/iio/proximity/sx9311.txt
 new file mode 100644
@@ -72,22 +83,23 @@ index 768caa3970ef..185abb9dd570 100644
  Linux kernel
  ============
 diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index 3a55c454b65d..285e05e7c0a6 100644
+index d09409979c84..95c7896b6d19 100644
 --- a/arch/arm64/boot/dts/mediatek/Makefile
 +++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -10,3 +10,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-evb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-evb.dtb
+@@ -11,3 +11,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-evb.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev3-sku1-hwconfig1.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev3-sku3-hwconfig0.dtb
-\ No newline at end of file
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev4-sku1-hwconfig2.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev4-sku1-hwconfig4.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev4-sku3-hwconfig1.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-flapjack-rev4-sku3-hwconfig3.dtb
 diff --git a/arch/arm64/boot/dts/mediatek/mt6358.dtsi b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
-index e95cb4c0910a..5dc7753b12d8 100644
+index a7e655c42a54..f31345ef16b3 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6358.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
-@@ -309,8 +309,8 @@
- 			};
+@@ -349,8 +349,8 @@
+ 
  			mt6358_vsim2_reg: ldo_vsim2 {
  				regulator-name = "vsim2";
 -				regulator-min-microvolt = <1700000>;
@@ -97,12 +109,12 @@ index e95cb4c0910a..5dc7753b12d8 100644
  				regulator-enable-ramp-delay = <540>;
  			};
  		};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku1-hwconfig1.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku1-hwconfig1.dts
-new file mode 100644
-index 000000000000..aca1cad658c3
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
+new file mode 100755
+index 000000000000..0c02221a1040
 --- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku1-hwconfig1.dts
-@@ -0,0 +1,260 @@
++++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
+@@ -0,0 +1,276 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -122,18 +134,33 @@ index 000000000000..aca1cad658c3
 +#include "mt8183-flapjack.dtsi"
 +
 +/ {
-+	model = "MediaTek Flapjack Rev 3 board Sku 1 BOE Himax8279D8P";
-+	compatible = "google,flapjack-rev3-sku1-hwconfig1",
-+		     "google,flapjack-rev0-sku0-hwconfig1",
-+		     "google,flapjack-rev3-sku1",
-+		     "google,flapjack-rev3", "google,flapjack",
-+		     "google,kukui", "mediatek,mt8183";
++	model = "MediaTek Flapjack Rev 4 board Sku 1 BOE TV080WUM NG0";
++
++	/* SKU_ID: 0x20001 BOE_TV080WUM_NG0 for REV >=3 */
++	compatible =	"google,flapjack-rev3-sku131073",
++			"google,flapjack-rev4-sku131073",
++			"google,flapjack-sku131073",
++
++			/* SKU_ID: 0x1 for Rev 2 */
++			"google,flapjack-rev2-sku1",
++
++			/* SKU_ID: 0x50001 Panel Unknown */
++			"google,flapjack-rev2-sku327681",
++			"google,flapjack-rev3-sku327681",
++			"google,flapjack-rev4-sku327681",
++			"google,flapjack-sku327681",
++
++			"google,flapjack-rev2",
++			"google,flapjack-rev3",
++			"google,flapjack-rev4",
++			"google,flapjack",
++			"google,kukui", "mediatek,mt8183";
 +};
 +
 +&dsi0 {
 +	/delete-node/ panel@0;
 +	panel: panel@0 {
-+		compatible = "boe,himax8279d8p";
++		compatible = "boe,tv080wum_ng0";
 +		reg = <0>;
 +		enable-gpios = <&pio 45 0>;
 +		pp33-gpios = <&pio 35 0>;
@@ -143,6 +170,7 @@ index 000000000000..aca1cad658c3
 +		pinctrl-1 = <&panel_pins_3300mv>;
 +		pinctrl-2 = <&panel_pins_1800mv>;
 +		backlight = <&backlight_lcd0>;
++		rotation = <180>;
 +		status = "okay";
 +
 +		port {
@@ -363,12 +391,284 @@ index 000000000000..aca1cad658c3
 +	/* EINT pins are used for other purpose on rev2. */
 +	/delete-node/ pins_eint;
 +};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku3-hwconfig0.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku3-hwconfig0.dts
-new file mode 100644
-index 000000000000..705552c8a12f
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
+new file mode 100755
+index 000000000000..01c74b918be2
 --- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev3-sku3-hwconfig0.dts
-@@ -0,0 +1,261 @@
++++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
+@@ -0,0 +1,266 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * version 2 as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ *
++ */
++
++/dts-v1/;
++#include "mt8183-flapjack.dtsi"
++
++/ {
++	model = "MediaTek Flapjack Rev 4 board Sku 1 AUO NT51021D8P";
++
++	/* SKU_ID: 0x40001 AUO_NT51021D8P for REV >=3 */
++	compatible =	"google,flapjack-rev3-sku262145",
++			"google,flapjack-rev4-sku262145",
++			"google,flapjack-sku262145",
++
++			"google,flapjack-rev3",
++			"google,flapjack-rev4",
++			"google,flapjack",
++			"google,kukui", "mediatek,mt8183";
++};
++
++&dsi0 {
++	/delete-node/ panel@0;
++	panel: panel@0 {
++		compatible = "auo,nt51021d8p";
++		reg = <0>;
++		enable-gpios = <&pio 45 0>;
++		pp33-gpios = <&pio 35 0>;
++		pp18-gpios = <&pio 36 0>;
++		pinctrl-names = "default", "state_3300mv", "state_1800mv";
++		pinctrl-0 = <&panel_pins_default>;
++		pinctrl-1 = <&panel_pins_3300mv>;
++		pinctrl-2 = <&panel_pins_1800mv>;
++		backlight = <&backlight_lcd0>;
++		rotation = <180>;
++		status = "okay";
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++	};
++};
++
++
++&it6505dptx{
++	ovdd-supply = <&mt6358_vsim2_reg>;
++};
++
++&pio {
++	/* 192 lines */
++	gpio-line-names =
++		"SPI_AP_EC_CS_L",
++		"SPI_AP_EC_MOSI",
++		"SPI_AP_EC_CLK",
++		"I2S3_DO",
++		"USB_PD_INT_ODL",
++		"",
++		"",
++		"",
++		"",
++		"IT6505_HPD_L",
++		"I2S3_TDM_D3",
++		"SOC_I2C6_1V8_SCL",
++		"SOC_I2C6_1V8_SDA",
++		"DPI_D0",
++		"DPI_D1",
++		"DPI_D2",
++		"DPI_D3",
++		"DPI_D4",
++		"DPI_D5",
++		"DPI_D6",
++		"DPI_D7",
++		"DPI_D8",
++		"DPI_D9",
++		"DPI_D10",
++		"DPI_D11",
++		"DPI_HSYNC",
++		"DPI_VSYNC",
++		"DPI_DE",
++		"DPI_CK",
++		"AP_MSDC1_CLK",
++		"AP_MSDC1_DAT3",
++		"AP_MSDC1_CMD",
++		"AP_MSDC1_DAT0",
++		"AP_MSDC1_DAT2",
++		"AP_MSDC1_DAT1",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"OTG_EN",
++		"DRVBUS",
++		"DISP_PWM",
++		"DSI_TE",
++		"LCM_RST_1V8",
++		"AP_CTS_WIFI_RTS",
++		"AP_RTS_WIFI_CTS",
++		"SOC_I2C5_1V8_SCL",
++		"SOC_I2C5_1V8_SDA",
++		"SOC_I2C3_1V8_SCL",
++		"SOC_I2C3_1V8_SDA",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"SOC_I2C1_1V8_SDA",
++		"SOC_I2C0_1V8_SDA",
++		"SOC_I2C0_1V8_SCL",
++		"SOC_I2C1_1V8_SCL",
++		"AP_SPI_H1_MISO",
++		"AP_SPI_H1_CS_L",
++		"AP_SPI_H1_MOSI",
++		"AP_SPI_H1_CLK",
++		"I2S5_BCK",
++		"I2S5_LRCK",
++		"I2S5_DO",
++		"BOOTBLOCK_EN_L",
++		"MT8183_KPCOL0",
++		"SPI_AP_EC_MISO",
++		"UART_DBG_TX_AP_RX",
++		"UART_AP_TX_DBG_RX",
++		"I2S2_MCK",
++		"I2S2_BCK",
++		"CLK_5M_WCAM",
++		"CLK_2M_UCAM",
++		"I2S2_LRCK",
++		"I2S2_DI",
++		"SOC_I2C2_1V8_SCL",
++		"SOC_I2C2_1V8_SDA",
++		"SOC_I2C4_1V8_SCL",
++		"SOC_I2C4_1V8_SDA",
++		"",
++		"SCL8",
++		"SDA8",
++		"FCAM_PWDN_L",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		/*
++		 * AP_FLASH_WP_L is crossystem ABI. Rev1 schematics
++		 * call it BIOS_FLASH_WP_R_L.
++		 */
++		"AP_FLASH_WP_L",
++		"EC_AP_INT_ODL",
++		"IT6505_INT_ODL",
++		"H1_INT_OD_L",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"AP_SPI_FLASH_MISO",
++		"AP_SPI_FLASH_CS_L",
++		"AP_SPI_FLASH_MOSI",
++		"AP_SPI_FLASH_CLK",
++		"DA7219_IRQ",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"";
++};
++
++&scp_pins {
++	/* EINT pins are used for other purpose on rev2. */
++	/delete-node/ pins_eint;
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts
+new file mode 100755
+index 000000000000..911c212864c5
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts
+@@ -0,0 +1,278 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -390,18 +690,33 @@ index 000000000000..705552c8a12f
 +#include "mt8183-flapjack.dtsi"
 +
 +/ {
-+	model = "MediaTek Flapjack Rev 3 board Sku 3 BOE Himax8279D10P";
-+	compatible = "google,flapjack-rev3-sku3-hwconfig0",
-+		     "google,flapjack-rev0-sku0-hwconfig0",
-+		     "google,flapjack-rev3-sku3",
-+		     "google,flapjack-rev3", "google,flapjack",
-+		     "google,kukui", "mediatek,mt8183";
++	model = "MediaTek Flapjack Rev 4 board Sku 3 BOE TV101WUM NG0";
++
++	/* SKU_ID: 0x10003 BOE_TV101WUM_NG0 for REV >=3 */
++	compatible =	"google,flapjack-rev3-sku65539",
++			"google,flapjack-rev4-sku65539",
++			"google,flapjack-sku65539",
++
++			/* SKU_ID: 0x3 for Rev 2 */
++			"google,flapjack-rev2-sku3",
++
++			/* SKU_ID: 0x50003 Panel Unknown */
++			"google,flapjack-rev2-sku327683",
++			"google,flapjack-rev3-sku327683",
++			"google,flapjack-rev4-sku327683",
++			"google,flapjack-sku327683",
++
++			"google,flapjack-rev2",
++			"google,flapjack-rev3",
++			"google,flapjack-rev4",
++			"google,flapjack",
++			"google,kukui", "mediatek,mt8183";
 +};
 +
 +&dsi0 {
 +	/delete-node/ panel@0;
 +	panel: panel@0 {
-+		compatible = "boe,himax8279d10p";
++		compatible = "boe,tv101wum_ng0";
 +		reg = <0>;
 +		enable-gpios = <&pio 45 0>;
 +		pp33-gpios = <&pio 35 0>;
@@ -411,6 +726,281 @@ index 000000000000..705552c8a12f
 +		pinctrl-1 = <&panel_pins_3300mv>;
 +		pinctrl-2 = <&panel_pins_1800mv>;
 +		backlight = <&backlight_lcd0>;
++		rotation = <180>;
++		status = "okay";
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++	};
++};
++
++
++&it6505dptx{
++	ovdd-supply = <&mt6358_vsim2_reg>;
++};
++
++&pio {
++	/* 192 lines */
++	gpio-line-names =
++		"SPI_AP_EC_CS_L",
++		"SPI_AP_EC_MOSI",
++		"SPI_AP_EC_CLK",
++		"I2S3_DO",
++		"USB_PD_INT_ODL",
++		"",
++		"",
++		"",
++		"",
++		"IT6505_HPD_L",
++		"I2S3_TDM_D3",
++		"SOC_I2C6_1V8_SCL",
++		"SOC_I2C6_1V8_SDA",
++		"DPI_D0",
++		"DPI_D1",
++		"DPI_D2",
++		"DPI_D3",
++		"DPI_D4",
++		"DPI_D5",
++		"DPI_D6",
++		"DPI_D7",
++		"DPI_D8",
++		"DPI_D9",
++		"DPI_D10",
++		"DPI_D11",
++		"DPI_HSYNC",
++		"DPI_VSYNC",
++		"DPI_DE",
++		"DPI_CK",
++		"AP_MSDC1_CLK",
++		"AP_MSDC1_DAT3",
++		"AP_MSDC1_CMD",
++		"AP_MSDC1_DAT0",
++		"AP_MSDC1_DAT2",
++		"AP_MSDC1_DAT1",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"OTG_EN",
++		"DRVBUS",
++		"DISP_PWM",
++		"DSI_TE",
++		"LCM_RST_1V8",
++		"AP_CTS_WIFI_RTS",
++		"AP_RTS_WIFI_CTS",
++		"SOC_I2C5_1V8_SCL",
++		"SOC_I2C5_1V8_SDA",
++		"SOC_I2C3_1V8_SCL",
++		"SOC_I2C3_1V8_SDA",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"SOC_I2C1_1V8_SDA",
++		"SOC_I2C0_1V8_SDA",
++		"SOC_I2C0_1V8_SCL",
++		"SOC_I2C1_1V8_SCL",
++		"AP_SPI_H1_MISO",
++		"AP_SPI_H1_CS_L",
++		"AP_SPI_H1_MOSI",
++		"AP_SPI_H1_CLK",
++		"I2S5_BCK",
++		"I2S5_LRCK",
++		"I2S5_DO",
++		"BOOTBLOCK_EN_L",
++		"MT8183_KPCOL0",
++		"SPI_AP_EC_MISO",
++		"UART_DBG_TX_AP_RX",
++		"UART_AP_TX_DBG_RX",
++		"I2S2_MCK",
++		"I2S2_BCK",
++		"CLK_5M_WCAM",
++		"CLK_2M_UCAM",
++		"I2S2_LRCK",
++		"I2S2_DI",
++		"SOC_I2C2_1V8_SCL",
++		"SOC_I2C2_1V8_SDA",
++		"SOC_I2C4_1V8_SCL",
++		"SOC_I2C4_1V8_SDA",
++		"",
++		"SCL8",
++		"SDA8",
++		"FCAM_PWDN_L",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"I2S_PMIC",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		/*
++		 * AP_FLASH_WP_L is crossystem ABI. Rev1 schematics
++		 * call it BIOS_FLASH_WP_R_L.
++		 */
++		"AP_FLASH_WP_L",
++		"EC_AP_INT_ODL",
++		"IT6505_INT_ODL",
++		"H1_INT_OD_L",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"AP_SPI_FLASH_MISO",
++		"AP_SPI_FLASH_CS_L",
++		"AP_SPI_FLASH_MOSI",
++		"AP_SPI_FLASH_CLK",
++		"DA7219_IRQ",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"",
++		"";
++};
++
++&scp_pins {
++	/* EINT pins are used for other purpose on rev2. */
++	/delete-node/ pins_eint;
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts
+new file mode 100755
+index 000000000000..41d4a7fe70e8
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts
+@@ -0,0 +1,267 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
++ *
++ * Device Tree Source for the Google flapjack board
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * version 2 as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ *
++ */
++
++/dts-v1/;
++#include "mt8183-flapjack.dtsi"
++
++/ {
++	model = "MediaTek Flapjack Rev 3 board Sku 3 INX OTA7290D10P";
++	/* SKU_ID: 0x30003 INX OTA7290D10 for REV >=3 */
++	compatible =	"google,flapjack-rev3-sku196611",
++			"google,flapjack-rev4-sku196611",
++			"google,flapjack-sku196611",
++
++
++			"google,flapjack-rev3",
++			"google,flapjack-rev4",
++			"google,flapjack",
++			"google,kukui", "mediatek,mt8183";
++};
++
++&dsi0 {
++	/delete-node/ panel@0;
++	panel: panel@0 {
++		compatible = "inx,ota7290d10p";
++		reg = <0>;
++		enable-gpios = <&pio 45 0>;
++		pp33-gpios = <&pio 35 0>;
++		pp18-gpios = <&pio 36 0>;
++		pinctrl-names = "default", "state_3300mv", "state_1800mv";
++		pinctrl-0 = <&panel_pins_default>;
++		pinctrl-1 = <&panel_pins_3300mv>;
++		pinctrl-2 = <&panel_pins_1800mv>;
++		backlight = <&backlight_lcd0>;
++		rotation = <180>;
 +		status = "okay";
 +
 +		port {
@@ -632,10 +1222,10 @@ index 000000000000..705552c8a12f
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi
 new file mode 100644
-index 000000000000..4ccd2c91db5c
+index 000000000000..7bcc6d8e5b62
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,140 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -772,13 +1362,12 @@ index 000000000000..4ccd2c91db5c
 +		pins_eint {
 +			pinmux = <PINMUX_GPIO5__FUNC_GPIO5>;
 +			input-enable;
-+			bias-pull-up;
 +		};
 +	};
 +};
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 467bc98f551e..dc16f4b419f9 100644
+index 3fa93d9d5410..b1bec9e85b82 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -59,6 +59,15 @@
@@ -815,7 +1404,7 @@ index 467bc98f551e..dc16f4b419f9 100644
  &dsi0 {
  	status = "okay";
  	#address-cells = <1>;
-@@ -221,6 +241,29 @@
+@@ -209,6 +229,29 @@
  	pinctrl-0 = <&i2c3_pins>;
  	status = "okay";
  	clock-frequency = <100000>;
@@ -845,7 +1434,7 @@ index 467bc98f551e..dc16f4b419f9 100644
  };
  
  &i2c4 {
-@@ -352,6 +395,28 @@
+@@ -340,6 +383,28 @@
  		};
  	};
  
@@ -874,7 +1463,7 @@ index 467bc98f551e..dc16f4b419f9 100644
  	ec_ap_int_odl: ec_ap_int_odl {
  		pins1 {
  			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
-@@ -437,6 +502,22 @@
+@@ -425,6 +490,22 @@
  		};
  	};
  
@@ -897,7 +1486,7 @@ index 467bc98f551e..dc16f4b419f9 100644
  	mmc0_pins_default: mmc0default {
  		pins_cmd_dat {
  			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
-@@ -768,6 +849,12 @@
+@@ -743,6 +824,12 @@
  			#address-cells = <1>;
  			#size-cells = <0>;
  		};
@@ -911,10 +1500,10 @@ index 467bc98f551e..dc16f4b419f9 100644
  };
  
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 3c8c6fd1a26e..2232a85d05b9 100644
+index 947c67da5c8e..7720afe8f143 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -1556,6 +1556,17 @@
+@@ -1618,6 +1618,17 @@
  			phy-names = "dphy";
  		};
  
@@ -933,10 +1522,10 @@ index 3c8c6fd1a26e..2232a85d05b9 100644
  			compatible = "mediatek,mt8183-disp-mutex";
  			reg = <0 0x14016000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index c415e9a2f7c8..9af8a1c41a65 100644
+index 07a62cdd6b5a..1a6621b24189 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -868,7 +868,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
+@@ -870,7 +870,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5514=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5676=y
  CONFIG_SND_SOC_MT8183=y
@@ -946,18 +1535,19 @@ index c415e9a2f7c8..9af8a1c41a65 100644
  # CONFIG_SND_SOC_QCOM is not set
  # CONFIG_SND_SOC_RK3288_HDMI_ANALOG is not set
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 580f6fa0ddba..ee2be55d200b 100644
+index d8b96efb0ea5..ab20d75c4553 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-@@ -68,6 +68,7 @@ CONFIG_DRM_MEDIATEK_HDMI=y
+@@ -67,7 +67,7 @@ CONFIG_DRM_GEM_CMA_HELPER=y
+ CONFIG_DRM_MEDIATEK=y
+ CONFIG_DRM_MEDIATEK_HDMI=y
  CONFIG_DRM_MIPI_DSI=y
+-# CONFIG_DRM_PANEL_BOE_HIMAX8279D is not set
++CONFIG_DRM_PANEL_BOE_HIMAX8279D=y
+ CONFIG_DRM_PANEL_BOE_TV101WUM=y
  # CONFIG_DRM_PANEL_ILITEK_ILI9881C is not set
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
-+CONFIG_DRM_PANEL_BOE_HIMAX8279D=y
- # CONFIG_DRM_PANEL_JDI_LT070ME05000 is not set
- # CONFIG_DRM_PANEL_ORISETECH_OTM8009A is not set
- # CONFIG_DRM_PANEL_PANASONIC_VVX10F034N00 is not set
-@@ -193,7 +194,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
+@@ -196,7 +196,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5514=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5676=y
  CONFIG_SND_SOC_MT8183=y
@@ -966,7 +1556,7 @@ index 580f6fa0ddba..ee2be55d200b 100644
  CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=y
  CONFIG_SND_SOC_RL6231=y
  CONFIG_SND_SOC_RT5514=y
-@@ -245,3 +246,4 @@ CONFIG_VIRTIO=y
+@@ -248,3 +248,4 @@ CONFIG_VIRTIO=y
  # CONFIG_VIRTIO_MMIO is not set
  # CONFIG_VIRTIO_NET is not set
  # CONFIG_VIRTIO_WL is not set
@@ -982,7 +1572,7 @@ index 4934fcf5a6f8..a83507bf6300 100644
 +obj-y += ite-it6505.o
  obj-y += synopsys/
 diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-new file mode 100644
+new file mode 100755
 index 000000000000..35f0bede1ace
 --- /dev/null
 +++ b/drivers/gpu/drm/bridge/ite-it6505.c
@@ -3935,8 +4525,117 @@ index 000000000000..35f0bede1ace
 +MODULE_AUTHOR("Jitao Shi <jitao.shi@mediatek.com>");
 +MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
 +MODULE_LICENSE("GPL v2");
+diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
+index c33f95e08e1b..d54ebe8f2652 100644
+--- a/drivers/gpu/drm/drm_panel.c
++++ b/drivers/gpu/drm/drm_panel.c
+@@ -101,13 +101,23 @@ EXPORT_SYMBOL(drm_panel_remove);
+  */
+ int drm_panel_attach(struct drm_panel *panel, struct drm_connector *connector)
+ {
++	int ret = 0;
++
+ 	if (panel->connector)
+ 		return -EBUSY;
+ 
+ 	panel->connector = connector;
+ 	panel->drm = connector->dev;
+ 
+-	return 0;
++	if (panel->funcs->attach) {
++		ret = panel->funcs->attach(panel);
++		if (ret < 0) {
++			panel->connector = NULL;
++			panel->drm = NULL;
++		}
++	}
++
++	return ret;
+ }
+ EXPORT_SYMBOL(drm_panel_attach);
+ 
+@@ -125,6 +135,9 @@ EXPORT_SYMBOL(drm_panel_attach);
+  */
+ int drm_panel_detach(struct drm_panel *panel)
+ {
++	if (panel->funcs->detach)
++		panel->funcs->detach(panel);
++
+ 	panel->connector = NULL;
+ 	panel->drm = NULL;
+ 
+@@ -169,6 +182,29 @@ struct drm_panel *of_drm_find_panel(const struct device_node *np)
+ 	return ERR_PTR(-EPROBE_DEFER);
+ }
+ EXPORT_SYMBOL(of_drm_find_panel);
++
++int of_drm_get_panel_orientation(const struct device_node *np, int *orientation)
++{
++	int rotation;
++
++	if (of_property_read_u32(np, "rotation", &rotation)) {
++		*orientation = DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
++		return 0;
++	}
++
++	if (rotation == 0)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_NORMAL;
++	else if (rotation == 90)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP;
++	else if (rotation == 180)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_BOTTOM_UP;
++	else if (rotation == 270)
++		*orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP;
++	else
++		return -EINVAL;
++
++	return 0;
++}
+ #endif
+ 
+ MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+index ebadcfed3a0a..b33fe170732b 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+@@ -32,6 +32,8 @@
+ #define DISP_REG_OVL_ROI_BGCLR			0x0028
+ #define DISP_REG_OVL_SRC_CON			0x002c
+ #define DISP_REG_OVL_CON(n)			(0x0030 + 0x20 * (n))
++#define DISP_REG_OVL_V_FLIP_EN			BIT(9)
++#define DISP_REG_OVL_H_FLIP_EN			BIT(10)
+ #define DISP_REG_OVL_SRC_SIZE(n)		(0x0038 + 0x20 * (n))
+ #define DISP_REG_OVL_OFFSET(n)			(0x003c + 0x20 * (n))
+ #define DISP_REG_OVL_PITCH(n)			(0x0044 + 0x20 * (n))
+@@ -228,14 +230,26 @@ static void mtk_ovl_layer_config(struct mtk_ddp_comp *comp, unsigned int idx,
+ 	unsigned int fmt = pending->format;
+ 	unsigned int offset = (pending->y << 16) | pending->x;
+ 	unsigned int src_size = (pending->height << 16) | pending->width;
++	unsigned int bpp = drm_format_plane_cpp(fmt, 0);
+ 	unsigned int con;
+ 
++	DRM_DEBUG_DRIVER(
++	"layer %d enable %d fmt 0x%x (%X %X %X %X) pitch %X addr 0x%X bpp %d\n",
++	idx, pending->enable, fmt,
++	pending->x, pending->y, pending->width, pending->height, pitch,
++	pending->addr, bpp);
++
+ 	if (!pending->enable)
+ 		mtk_ovl_layer_off(comp, idx);
+ 
+ 	con = ovl_fmt_convert(ovl, fmt);
+ 	if (idx != 0)
+ 		con |= OVL_CON_AEN | OVL_CON_ALPHA;
++	if (state->base.rotation & DRM_MODE_ROTATE_180) {
++		con |= (DISP_REG_OVL_V_FLIP_EN | DISP_REG_OVL_H_FLIP_EN);
++		addr += pitch * (pending->height - 1) +
++			pending->width * bpp - 1;
++	}
+ 
+ 	writel_relaxed(con, comp->regs + DISP_REG_OVL_CON(idx));
+ 	writel_relaxed(pitch, comp->regs + DISP_REG_OVL_PITCH(idx));
 diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 62a9d47df948..189d04ed0f41 100644
+index 62a9d47df948..de54667b0744 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
 @@ -117,6 +117,7 @@ struct mtk_dpi_conf {
@@ -3962,7 +4661,17 @@ index 62a9d47df948..189d04ed0f41 100644
  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
  					enum mtk_dpi_out_color_format format)
  {
-@@ -509,6 +518,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+@@ -444,7 +453,8 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+ 	pll_rate = clk_get_rate(dpi->tvd_clk);
+ 
+ 	vm.pixelclock = pll_rate / factor;
+-	clk_set_rate(dpi->pixel_clk, vm.pixelclock);
++	clk_set_rate(dpi->pixel_clk,
++		     vm.pixelclock * (dpi->conf->dual_edge ? 2 : 1));
+ 	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
+ 
+ 	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
+@@ -509,6 +519,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
  	mtk_dpi_config_color_format(dpi, dpi->color_format);
  	mtk_dpi_config_2n_h_fre(dpi);
  	mtk_dpi_config_disable_edge(dpi);
@@ -3970,7 +4679,7 @@ index 62a9d47df948..189d04ed0f41 100644
  	mtk_dpi_sw_reset(dpi, false);
  
  	return 0;
-@@ -671,6 +681,16 @@ static unsigned int mt2701_calculate_factor(int clock)
+@@ -671,6 +682,16 @@ static unsigned int mt2701_calculate_factor(int clock)
  		return 2;
  }
  
@@ -3987,7 +4696,7 @@ index 62a9d47df948..189d04ed0f41 100644
  static const struct mtk_dpi_conf mt8173_conf = {
  	.cal_factor = mt8173_calculate_factor,
  	.reg_h_fre_con = 0xe0,
-@@ -682,6 +702,12 @@ static const struct mtk_dpi_conf mt2701_conf = {
+@@ -682,6 +703,12 @@ static const struct mtk_dpi_conf mt2701_conf = {
  	.edge_sel_en = true,
  };
  
@@ -4000,7 +4709,7 @@ index 62a9d47df948..189d04ed0f41 100644
  static int mtk_dpi_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -777,6 +803,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
+@@ -777,6 +804,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
  	{ .compatible = "mediatek,mt8173-dpi",
  	  .data = &mt8173_conf,
  	},
@@ -4010,14 +4719,742 @@ index 62a9d47df948..189d04ed0f41 100644
  	{ },
  };
  
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index 903883dd194c..0c15443bde7d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -470,14 +470,41 @@ static void mtk_drm_crtc_atomic_begin(struct drm_crtc *crtc,
+ 	}
+ }
+ 
++static struct drm_connector *mtk_drm_get_connector(struct drm_crtc *crtc)
++{
++	struct drm_encoder *encoder;
++	struct drm_connector *connector;
++	struct drm_connector_list_iter conn_iter;
++
++	drm_for_each_encoder(encoder, crtc->dev) {
++		if (encoder->crtc != crtc)
++			continue;
++
++		drm_connector_list_iter_begin(crtc->dev, &conn_iter);
++		drm_for_each_connector_iter(connector, &conn_iter) {
++			if (connector->encoder == encoder)
++				return connector;
++		}
++	}
++
++	return NULL;
++}
++
+ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+ 				      struct drm_crtc_state *old_crtc_state)
+ {
+ 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+ 	struct mtk_drm_private *priv = crtc->dev->dev_private;
++	struct drm_connector *connector;
+ 	unsigned int pending_planes = 0;
++	unsigned int rotation = DRM_MODE_ROTATE_0;
+ 	int i;
+ 
++	connector = mtk_drm_get_connector(crtc);
++	if (connector && connector->display_info.panel_orientation ==
++			 DRM_MODE_PANEL_ORIENTATION_BOTTOM_UP)
++		rotation = DRM_MODE_ROTATE_180;
++
+ 	if (mtk_crtc->event)
+ 		mtk_crtc->pending_needs_vblank = true;
+ 	for (i = 0; i < mtk_crtc->layer_nr; i++) {
+@@ -488,6 +515,7 @@ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+ 		if (plane_state->pending.dirty) {
+ 			plane_state->pending.config = true;
+ 			plane_state->pending.dirty = false;
++			plane_state->base.rotation = rotation;
+ 			pending_planes |= BIT(i);
+ 		}
+ 	}
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index 5d8227c90371..661566b3535a 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -877,10 +877,25 @@ static int mtk_dsi_create_connector(struct drm_device *drm, struct mtk_dsi *dsi)
+ 			DRM_ERROR("Failed to attach panel to drm\n");
+ 			goto err_connector_cleanup;
+ 		}
++
++		/*
++		 * We don't need to put in accurate pixel heigh/width since we
++		 * don't care about any of the panel quirks which are just x86
++		 * BIOS hacks. We only care about the device tree settings which
++		 * should be filled in for the connector in drm_panel_attach.
++		 */
++		ret = drm_connector_init_panel_orientation_property(&dsi->conn,
++								    0, 0);
++		if (ret) {
++			DRM_ERROR("Failed to init panel orientation\n");
++			goto err_panel_detach;
++		}
+ 	}
+ 
+ 	return 0;
+ 
++err_panel_detach:
++	drm_panel_detach(dsi->panel);
+ err_connector_cleanup:
+ 	drm_connector_cleanup(&dsi->conn);
+ 	return ret;
 diff --git a/drivers/gpu/drm/panel/panel-boe-himax8279d.c b/drivers/gpu/drm/panel/panel-boe-himax8279d.c
-index ff5a89e38fd7..8aecaae59a76 100644
+index ff5a89e38fd7..b854455c9d88 100644
 --- a/drivers/gpu/drm/panel/panel-boe-himax8279d.c
 +++ b/drivers/gpu/drm/panel/panel-boe-himax8279d.c
-@@ -910,11 +910,360 @@ static const struct panel_desc boe_himax8279d10p_panel_desc = {
+@@ -61,6 +61,7 @@ struct panel_info {
+ 	struct gpio_desc *enable_gpio;
+ 	struct gpio_desc *pp33_gpio;
+ 	struct gpio_desc *pp18_gpio;
++	int orientation;
+ 
+ 	bool prepared;
+ 	bool enabled;
+@@ -146,6 +147,18 @@ static int boe_panel_unprepare(struct drm_panel *panel)
+ 	return err;
+ }
+ 
++static int boe_panel_attach(struct drm_panel *panel)
++{
++	struct panel_info *pinfo = to_panel_info(panel);
++
++	panel->connector->display_info.width_mm = pinfo->desc->width_mm;
++	panel->connector->display_info.height_mm = pinfo->desc->height_mm;
++	panel->connector->display_info.bpc = pinfo->desc->bpc;
++	panel->connector->display_info.panel_orientation = pinfo->orientation;
++
++	return 0;
++}
++
+ static int boe_panel_prepare(struct drm_panel *panel)
+ {
+ 	struct panel_info *pinfo = to_panel_info(panel);
+@@ -226,16 +239,13 @@ static int boe_panel_get_modes(struct drm_panel *panel)
+ 
+ 	drm_mode_probed_add(panel->connector, mode);
+ 
+-	panel->connector->display_info.width_mm = pinfo->desc->width_mm;
+-	panel->connector->display_info.height_mm = pinfo->desc->height_mm;
+-	panel->connector->display_info.bpc = pinfo->desc->bpc;
+-
+ 	return 1;
+ }
+ 
+ static const struct drm_panel_funcs panel_funcs = {
+ 	.disable = boe_panel_disable,
+ 	.unprepare = boe_panel_unprepare,
++	.attach = boe_panel_attach,
+ 	.prepare = boe_panel_prepare,
+ 	.enable = boe_panel_enable,
+ 	.get_modes = boe_panel_get_modes,
+@@ -587,6 +597,285 @@ static const struct panel_desc boe_himax8279d8p_panel_desc = {
  	.off_cmds = default_off_cmds,
  };
  
++/* 8 inch Positive scanning*/
++static const struct panel_cmd boe_tv080wumng0_on_cmds[] = {
++	_INIT_CMD(0x22, 0x10),
++	_INIT_CMD(0x00, 0xB0, 0x05),
++	_INIT_CMD(0x00, 0xB3, 0x52),
++	_INIT_CMD(0x00, 0xB0, 0x01),
++	_INIT_CMD(0x00, 0xC8, 0x00),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCC, 0x26),
++	_INIT_CMD(0x00, 0xCD, 0x26),
++	_INIT_CMD(0x00, 0xDC, 0x00),
++	_INIT_CMD(0x00, 0xDD, 0x00),
++	_INIT_CMD(0x00, 0xE0, 0x26),
++	_INIT_CMD(0x00, 0xE1, 0x26),
++	_INIT_CMD(0x00, 0xB0, 0x03),
++	_INIT_CMD(0x00, 0xC3, 0x2A),
++	_INIT_CMD(0x00, 0xE7, 0x2A),
++	_INIT_CMD(0x00, 0xC5, 0x2A),
++	_INIT_CMD(0x00, 0xDE, 0x2A),
++	_INIT_CMD(0x00, 0xB0, 0x00),
++	_INIT_CMD(0x00, 0xB6, 0x03),
++	_INIT_CMD(0x00, 0xBA, 0x8B),
++	_INIT_CMD(0x00, 0xBF, 0x15),
++	_INIT_CMD(0x00, 0xC0, 0x18),
++	_INIT_CMD(0x00, 0xC2, 0x14),
++	_INIT_CMD(0x00, 0xC3, 0x02),
++	_INIT_CMD(0x00, 0xC4, 0x14),
++	_INIT_CMD(0x00, 0xC5, 0x02),
++	_INIT_CMD(0x00, 0xB0, 0x06),
++	_INIT_CMD(0x00, 0xC0, 0xA5),
++	_INIT_CMD(0x00, 0xD5, 0x20),
++	_INIT_CMD(0x00, 0xC0, 0x00),
++	_INIT_CMD(0x00, 0xB0, 0x02),
++	_INIT_CMD(0x00, 0xC0, 0x00),
++	_INIT_CMD(0x00, 0xC1, 0x02),
++	_INIT_CMD(0x00, 0xC2, 0x06),
++	_INIT_CMD(0x00, 0xC3, 0x16),
++	_INIT_CMD(0x00, 0xC4, 0x0E),
++	_INIT_CMD(0x00, 0xC5, 0x18),
++	_INIT_CMD(0x00, 0xC6, 0x26),
++	_INIT_CMD(0x00, 0xC7, 0x32),
++	_INIT_CMD(0x00, 0xC8, 0x3F),
++	_INIT_CMD(0x00, 0xC9, 0x3F),
++	_INIT_CMD(0x00, 0xCA, 0x3F),
++	_INIT_CMD(0x00, 0xCB, 0x3F),
++	_INIT_CMD(0x00, 0xCC, 0x3D),
++	_INIT_CMD(0x00, 0xCD, 0x2F),
++	_INIT_CMD(0x00, 0xCE, 0x2F),
++	_INIT_CMD(0x00, 0xCF, 0x2F),
++	_INIT_CMD(0x00, 0xD0, 0x07),
++	_INIT_CMD(0x00, 0xD2, 0x00),
++	_INIT_CMD(0x00, 0xD3, 0x02),
++	_INIT_CMD(0x00, 0xD4, 0x06),
++	_INIT_CMD(0x00, 0xD5, 0x12),
++	_INIT_CMD(0x00, 0xD6, 0x0A),
++	_INIT_CMD(0x00, 0xD7, 0x14),
++	_INIT_CMD(0x00, 0xD8, 0x22),
++	_INIT_CMD(0x00, 0xD9, 0x2E),
++	_INIT_CMD(0x00, 0xDA, 0x3D),
++	_INIT_CMD(0x00, 0xDB, 0x3F),
++	_INIT_CMD(0x00, 0xDC, 0x3F),
++	_INIT_CMD(0x00, 0xDD, 0x3F),
++	_INIT_CMD(0x00, 0xDE, 0x3D),
++	_INIT_CMD(0x00, 0xDF, 0x2F),
++	_INIT_CMD(0x00, 0xE0, 0x2F),
++	_INIT_CMD(0x00, 0xE1, 0x2F),
++	_INIT_CMD(0x00, 0xE2, 0x07),
++	_INIT_CMD(0x00, 0xB0, 0x07),
++	_INIT_CMD(0x00, 0xB1, 0x18),
++	_INIT_CMD(0x00, 0xB2, 0x19),
++	_INIT_CMD(0x00, 0xB3, 0x2E),
++	_INIT_CMD(0x00, 0xB4, 0x52),
++	_INIT_CMD(0x00, 0xB5, 0x72),
++	_INIT_CMD(0x00, 0xB6, 0x8C),
++	_INIT_CMD(0x00, 0xB7, 0xBD),
++	_INIT_CMD(0x00, 0xB8, 0xEB),
++	_INIT_CMD(0x00, 0xB9, 0x47),
++	_INIT_CMD(0x00, 0xBA, 0x96),
++	_INIT_CMD(0x00, 0xBB, 0x1E),
++	_INIT_CMD(0x00, 0xBC, 0x90),
++	_INIT_CMD(0x00, 0xBD, 0x93),
++	_INIT_CMD(0x00, 0xBE, 0xFA),
++	_INIT_CMD(0x00, 0xBF, 0x56),
++	_INIT_CMD(0x00, 0xC0, 0x8C),
++	_INIT_CMD(0x00, 0xC1, 0xB7),
++	_INIT_CMD(0x00, 0xC2, 0xCC),
++	_INIT_CMD(0x00, 0xC3, 0xDF),
++	_INIT_CMD(0x00, 0xC4, 0xE8),
++	_INIT_CMD(0x00, 0xC5, 0xF0),
++	_INIT_CMD(0x00, 0xC6, 0xF8),
++	_INIT_CMD(0x00, 0xC7, 0xFA),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x5A),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x08),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x15),
++	_INIT_CMD(0x00, 0xB3, 0x2D),
++	_INIT_CMD(0x00, 0xB4, 0x51),
++	_INIT_CMD(0x00, 0xB5, 0x72),
++	_INIT_CMD(0x00, 0xB6, 0x8D),
++	_INIT_CMD(0x00, 0xB7, 0xBE),
++	_INIT_CMD(0x00, 0xB8, 0xED),
++	_INIT_CMD(0x00, 0xB9, 0x4A),
++	_INIT_CMD(0x00, 0xBA, 0x9A),
++	_INIT_CMD(0x00, 0xBB, 0x23),
++	_INIT_CMD(0x00, 0xBC, 0x95),
++	_INIT_CMD(0x00, 0xBD, 0x98),
++	_INIT_CMD(0x00, 0xBE, 0xFF),
++	_INIT_CMD(0x00, 0xBF, 0x59),
++	_INIT_CMD(0x00, 0xC0, 0x8E),
++	_INIT_CMD(0x00, 0xC1, 0xB9),
++	_INIT_CMD(0x00, 0xC2, 0xCD),
++	_INIT_CMD(0x00, 0xC3, 0xDF),
++	_INIT_CMD(0x00, 0xC4, 0xE8),
++	_INIT_CMD(0x00, 0xC5, 0xF0),
++	_INIT_CMD(0x00, 0xC6, 0xF8),
++	_INIT_CMD(0x00, 0xC7, 0xFA),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x5A),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x09),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x2C),
++	_INIT_CMD(0x00, 0xB3, 0x36),
++	_INIT_CMD(0x00, 0xB4, 0x53),
++	_INIT_CMD(0x00, 0xB5, 0x73),
++	_INIT_CMD(0x00, 0xB6, 0x8E),
++	_INIT_CMD(0x00, 0xB7, 0xC0),
++	_INIT_CMD(0x00, 0xB8, 0xEF),
++	_INIT_CMD(0x00, 0xB9, 0x4C),
++	_INIT_CMD(0x00, 0xBA, 0x9D),
++	_INIT_CMD(0x00, 0xBB, 0x25),
++	_INIT_CMD(0x00, 0xBC, 0x96),
++	_INIT_CMD(0x00, 0xBD, 0x9A),
++	_INIT_CMD(0x00, 0xBE, 0x01),
++	_INIT_CMD(0x00, 0xBF, 0x59),
++	_INIT_CMD(0x00, 0xC0, 0x8E),
++	_INIT_CMD(0x00, 0xC1, 0xB9),
++	_INIT_CMD(0x00, 0xC2, 0xCD),
++	_INIT_CMD(0x00, 0xC3, 0xDF),
++	_INIT_CMD(0x00, 0xC4, 0xE8),
++	_INIT_CMD(0x00, 0xC5, 0xF0),
++	_INIT_CMD(0x00, 0xC6, 0xF8),
++	_INIT_CMD(0x00, 0xC7, 0xFA),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x5A),
++	_INIT_CMD(0x00, 0xCC, 0xBF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x0A),
++	_INIT_CMD(0x00, 0xB1, 0x18),
++	_INIT_CMD(0x00, 0xB2, 0x19),
++	_INIT_CMD(0x00, 0xB3, 0x2E),
++	_INIT_CMD(0x00, 0xB4, 0x52),
++	_INIT_CMD(0x00, 0xB5, 0x72),
++	_INIT_CMD(0x00, 0xB6, 0x8C),
++	_INIT_CMD(0x00, 0xB7, 0xBD),
++	_INIT_CMD(0x00, 0xB8, 0xEB),
++	_INIT_CMD(0x00, 0xB9, 0x47),
++	_INIT_CMD(0x00, 0xBA, 0x96),
++	_INIT_CMD(0x00, 0xBB, 0x1E),
++	_INIT_CMD(0x00, 0xBC, 0x90),
++	_INIT_CMD(0x00, 0xBD, 0x93),
++	_INIT_CMD(0x00, 0xBE, 0xFA),
++	_INIT_CMD(0x00, 0xBF, 0x56),
++	_INIT_CMD(0x00, 0xC0, 0x8C),
++	_INIT_CMD(0x00, 0xC1, 0xB7),
++	_INIT_CMD(0x00, 0xC2, 0xCC),
++	_INIT_CMD(0x00, 0xC3, 0xDF),
++	_INIT_CMD(0x00, 0xC4, 0xE8),
++	_INIT_CMD(0x00, 0xC5, 0xF0),
++	_INIT_CMD(0x00, 0xC6, 0xF8),
++	_INIT_CMD(0x00, 0xC7, 0xFA),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x5A),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x0B),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x15),
++	_INIT_CMD(0x00, 0xB3, 0x2D),
++	_INIT_CMD(0x00, 0xB4, 0x51),
++	_INIT_CMD(0x00, 0xB5, 0x72),
++	_INIT_CMD(0x00, 0xB6, 0x8D),
++	_INIT_CMD(0x00, 0xB7, 0xBE),
++	_INIT_CMD(0x00, 0xB8, 0xED),
++	_INIT_CMD(0x00, 0xB9, 0x4A),
++	_INIT_CMD(0x00, 0xBA, 0x9A),
++	_INIT_CMD(0x00, 0xBB, 0x23),
++	_INIT_CMD(0x00, 0xBC, 0x95),
++	_INIT_CMD(0x00, 0xBD, 0x98),
++	_INIT_CMD(0x00, 0xBE, 0xFF),
++	_INIT_CMD(0x00, 0xBF, 0x59),
++	_INIT_CMD(0x00, 0xC0, 0x8E),
++	_INIT_CMD(0x00, 0xC1, 0xB9),
++	_INIT_CMD(0x00, 0xC2, 0xCD),
++	_INIT_CMD(0x00, 0xC3, 0xDF),
++	_INIT_CMD(0x00, 0xC4, 0xE8),
++	_INIT_CMD(0x00, 0xC5, 0xF0),
++	_INIT_CMD(0x00, 0xC6, 0xF8),
++	_INIT_CMD(0x00, 0xC7, 0xFA),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x5A),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x0C),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x2C),
++	_INIT_CMD(0x00, 0xB3, 0x36),
++	_INIT_CMD(0x00, 0xB4, 0x53),
++	_INIT_CMD(0x00, 0xB5, 0x73),
++	_INIT_CMD(0x00, 0xB6, 0x8E),
++	_INIT_CMD(0x00, 0xB7, 0xC0),
++	_INIT_CMD(0x00, 0xB8, 0xEF),
++	_INIT_CMD(0x00, 0xB9, 0x4C),
++	_INIT_CMD(0x00, 0xBA, 0x9D),
++	_INIT_CMD(0x00, 0xBB, 0x25),
++	_INIT_CMD(0x00, 0xBC, 0x96),
++	_INIT_CMD(0x00, 0xBD, 0x9A),
++	_INIT_CMD(0x00, 0xBE, 0x01),
++	_INIT_CMD(0x00, 0xBF, 0x59),
++	_INIT_CMD(0x00, 0xC0, 0x8E),
++	_INIT_CMD(0x00, 0xC1, 0xB9),
++	_INIT_CMD(0x00, 0xC2, 0xCD),
++	_INIT_CMD(0x00, 0xC3, 0xDF),
++	_INIT_CMD(0x00, 0xC4, 0xE8),
++	_INIT_CMD(0x00, 0xC5, 0xF0),
++	_INIT_CMD(0x00, 0xC6, 0xF8),
++	_INIT_CMD(0x00, 0xC7, 0xFA),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x5A),
++	_INIT_CMD(0x00, 0xCC, 0xBF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x04),
++	_INIT_CMD(0x00, 0xB5, 0x02),
++	_INIT_CMD(0x00, 0xB6, 0x01),
++	_INIT_CMD(0x64, 0x11),
++	_INIT_CMD(0x32, 0x29),
++	{},
++};
++
++static const struct panel_desc boe_tv080wumng0_panel_desc = {
++	.display_mode = &default_display_mode,
++	.bpc = 8,
++	.width_mm = 107,
++	.height_mm = 172,
++	.delay_t1 = 5000,
++	.reset_delay_t2 = 14000,
++	.reset_delay_t3 = 1000,
++	.reset_delay_t4 = 1000,
++	.reset_delay_t5 = 5000,
++	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++			MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_LPM,
++	.format = MIPI_DSI_FMT_RGB888,
++	.lanes = 4,
++	.on_cmds = boe_tv080wumng0_on_cmds,
++	.off_cmds = default_off_cmds,
++};
++
+ /* 10 inch */
+ static const struct panel_cmd boe_himax8279d10p_on_cmds[] = {
+ 	_INIT_CMD(0x00, 0xB0, 0x05),
+@@ -910,11 +1199,664 @@ static const struct panel_desc boe_himax8279d10p_panel_desc = {
+ 	.off_cmds = default_off_cmds,
+ };
+ 
++/* 10 inch Positive scanning*/
++static const struct panel_cmd boe_tv101wumng0_on_cmds[] = {
++	_INIT_CMD(0x00, 0xB0, 0x05),
++	_INIT_CMD(0x00, 0xB1, 0xE5),
++	_INIT_CMD(0x00, 0xB3, 0x52),
++	_INIT_CMD(0x00, 0xB0, 0x00),
++	_INIT_CMD(0x00, 0xB3, 0x88),
++	_INIT_CMD(0x00, 0xB0, 0x04),
++	_INIT_CMD(0x00, 0xB8, 0x00),
++	_INIT_CMD(0x00, 0xB0, 0x00),
++	_INIT_CMD(0x00, 0xB6, 0x03),
++	_INIT_CMD(0x00, 0xBA, 0x8B),
++	_INIT_CMD(0x00, 0xBF, 0x1A),
++	_INIT_CMD(0x00, 0xC0, 0x0F),
++	_INIT_CMD(0x00, 0xC2, 0x0C),
++	_INIT_CMD(0x00, 0xC3, 0x02),
++	_INIT_CMD(0x00, 0xC4, 0x0C),
++	_INIT_CMD(0x00, 0xC5, 0x02),
++	_INIT_CMD(0x00, 0xB0, 0x01),
++	_INIT_CMD(0x00, 0xE0, 0x26),
++	_INIT_CMD(0x00, 0xE1, 0x26),
++	_INIT_CMD(0x00, 0xDC, 0x00),
++	_INIT_CMD(0x00, 0xDD, 0x00),
++	_INIT_CMD(0x00, 0xCC, 0x26),
++	_INIT_CMD(0x00, 0xCD, 0x26),
++	_INIT_CMD(0x00, 0xC8, 0x00),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xD2, 0x03),
++	_INIT_CMD(0x00, 0xD3, 0x03),
++	_INIT_CMD(0x00, 0xE6, 0x04),
++	_INIT_CMD(0x00, 0xE7, 0x04),
++	_INIT_CMD(0x00, 0xC4, 0x09),
++	_INIT_CMD(0x00, 0xC5, 0x09),
++	_INIT_CMD(0x00, 0xD8, 0x0A),
++	_INIT_CMD(0x00, 0xD9, 0x0A),
++	_INIT_CMD(0x00, 0xC2, 0x0B),
++	_INIT_CMD(0x00, 0xC3, 0x0B),
++	_INIT_CMD(0x00, 0xD6, 0x0C),
++	_INIT_CMD(0x00, 0xD7, 0x0C),
++	_INIT_CMD(0x00, 0xC0, 0x05),
++	_INIT_CMD(0x00, 0xC1, 0x05),
++	_INIT_CMD(0x00, 0xD4, 0x06),
++	_INIT_CMD(0x00, 0xD5, 0x06),
++	_INIT_CMD(0x00, 0xCA, 0x07),
++	_INIT_CMD(0x00, 0xCB, 0x07),
++	_INIT_CMD(0x00, 0xDE, 0x08),
++	_INIT_CMD(0x00, 0xDF, 0x08),
++	_INIT_CMD(0x00, 0xB0, 0x02),
++	_INIT_CMD(0x00, 0xC0, 0x00),
++	_INIT_CMD(0x00, 0xC1, 0x07),
++	_INIT_CMD(0x00, 0xC2, 0x0D),
++	_INIT_CMD(0x00, 0xC3, 0x18),
++	_INIT_CMD(0x00, 0xC4, 0x27),
++	_INIT_CMD(0x00, 0xC5, 0x28),
++	_INIT_CMD(0x00, 0xC6, 0x30),
++	_INIT_CMD(0x00, 0xC7, 0x2E),
++	_INIT_CMD(0x00, 0xC8, 0x2F),
++	_INIT_CMD(0x00, 0xC9, 0x1A),
++	_INIT_CMD(0x00, 0xCA, 0x20),
++	_INIT_CMD(0x00, 0xCB, 0x29),
++	_INIT_CMD(0x00, 0xCC, 0x26),
++	_INIT_CMD(0x00, 0xCD, 0x32),
++	_INIT_CMD(0x00, 0xCE, 0x33),
++	_INIT_CMD(0x00, 0xCF, 0x31),
++	_INIT_CMD(0x00, 0xD0, 0x06),
++	_INIT_CMD(0x00, 0xD2, 0x00),
++	_INIT_CMD(0x00, 0xD3, 0x07),
++	_INIT_CMD(0x00, 0xD4, 0x12),
++	_INIT_CMD(0x00, 0xD5, 0x26),
++	_INIT_CMD(0x00, 0xD6, 0x3D),
++	_INIT_CMD(0x00, 0xD7, 0x3F),
++	_INIT_CMD(0x00, 0xD8, 0x3F),
++	_INIT_CMD(0x00, 0xD9, 0x3F),
++	_INIT_CMD(0x00, 0xDA, 0x3F),
++	_INIT_CMD(0x00, 0xDB, 0x3F),
++	_INIT_CMD(0x00, 0xDC, 0x3F),
++	_INIT_CMD(0x00, 0xDD, 0x3F),
++	_INIT_CMD(0x00, 0xDE, 0x3F),
++	_INIT_CMD(0x00, 0xDF, 0x3A),
++	_INIT_CMD(0x00, 0xE0, 0x37),
++	_INIT_CMD(0x00, 0xE1, 0x35),
++	_INIT_CMD(0x00, 0xE2, 0x07),
++	_INIT_CMD(0x00, 0xB0, 0x03),
++	_INIT_CMD(0x00, 0xC8, 0x0B),
++	_INIT_CMD(0x00, 0xC9, 0x07),
++	_INIT_CMD(0x00, 0xC3, 0x00),
++	_INIT_CMD(0x00, 0xE7, 0x00),
++	_INIT_CMD(0x00, 0xC5, 0x2A),
++	_INIT_CMD(0x00, 0xDE, 0x2A),
++	_INIT_CMD(0x00, 0xCA, 0x43),
++	_INIT_CMD(0x00, 0xC9, 0x07),
++	_INIT_CMD(0x00, 0xE4, 0xC0),
++	_INIT_CMD(0x00, 0xE5, 0x0D),
++	_INIT_CMD(0x00, 0xCB, 0x00),
++	_INIT_CMD(0x00, 0xB0, 0x06),
++	_INIT_CMD(0x00, 0xB8, 0xA5),
++	_INIT_CMD(0x00, 0xC0, 0xA5),
++	_INIT_CMD(0x00, 0xC7, 0x0F),
++	_INIT_CMD(0x00, 0xD5, 0x32),
++	_INIT_CMD(0x00, 0xB8, 0x00),
++	_INIT_CMD(0x00, 0xC0, 0x00),
++	_INIT_CMD(0x00, 0xBC, 0x00),
++	_INIT_CMD(0x00, 0xB0, 0x07),
++	_INIT_CMD(0x00, 0xB1, 0x00),
++	_INIT_CMD(0x00, 0xB2, 0x07),
++	_INIT_CMD(0x00, 0xB3, 0x18),
++	_INIT_CMD(0x00, 0xB4, 0x31),
++	_INIT_CMD(0x00, 0xB5, 0x47),
++	_INIT_CMD(0x00, 0xB6, 0x56),
++	_INIT_CMD(0x00, 0xB7, 0x70),
++	_INIT_CMD(0x00, 0xB8, 0x98),
++	_INIT_CMD(0x00, 0xB9, 0xDB),
++	_INIT_CMD(0x00, 0xBA, 0x2A),
++	_INIT_CMD(0x00, 0xBB, 0xAE),
++	_INIT_CMD(0x00, 0xBC, 0x39),
++	_INIT_CMD(0x00, 0xBD, 0x3D),
++	_INIT_CMD(0x00, 0xBE, 0xC6),
++	_INIT_CMD(0x00, 0xBF, 0x2A),
++	_INIT_CMD(0x00, 0xC0, 0x59),
++	_INIT_CMD(0x00, 0xC1, 0x91),
++	_INIT_CMD(0x00, 0xC2, 0xA1),
++	_INIT_CMD(0x00, 0xC3, 0xB1),
++	_INIT_CMD(0x00, 0xC4, 0xBA),
++	_INIT_CMD(0x00, 0xC5, 0xC5),
++	_INIT_CMD(0x00, 0xC6, 0xD4),
++	_INIT_CMD(0x00, 0xC7, 0xDC),
++	_INIT_CMD(0x00, 0xC8, 0xE0),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x16),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x08),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x07),
++	_INIT_CMD(0x00, 0xB3, 0x19),
++	_INIT_CMD(0x00, 0xB4, 0x32),
++	_INIT_CMD(0x00, 0xB5, 0x48),
++	_INIT_CMD(0x00, 0xB6, 0x58),
++	_INIT_CMD(0x00, 0xB7, 0x74),
++	_INIT_CMD(0x00, 0xB8, 0x9D),
++	_INIT_CMD(0x00, 0xB9, 0xE2),
++	_INIT_CMD(0x00, 0xBA, 0x34),
++	_INIT_CMD(0x00, 0xBB, 0xBB),
++	_INIT_CMD(0x00, 0xBC, 0x4A),
++	_INIT_CMD(0x00, 0xBD, 0x4F),
++	_INIT_CMD(0x00, 0xBE, 0xD5),
++	_INIT_CMD(0x00, 0xBF, 0x3C),
++	_INIT_CMD(0x00, 0xC0, 0x70),
++	_INIT_CMD(0x00, 0xC1, 0x9F),
++	_INIT_CMD(0x00, 0xC2, 0xAF),
++	_INIT_CMD(0x00, 0xC3, 0xC2),
++	_INIT_CMD(0x00, 0xC4, 0xD2),
++	_INIT_CMD(0x00, 0xC5, 0xE1),
++	_INIT_CMD(0x00, 0xC6, 0xF0),
++	_INIT_CMD(0x00, 0xC7, 0xF9),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x16),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x09),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x05),
++	_INIT_CMD(0x00, 0xB3, 0x18),
++	_INIT_CMD(0x00, 0xB4, 0x31),
++	_INIT_CMD(0x00, 0xB5, 0x47),
++	_INIT_CMD(0x00, 0xB6, 0x57),
++	_INIT_CMD(0x00, 0xB7, 0x72),
++	_INIT_CMD(0x00, 0xB8, 0x9B),
++	_INIT_CMD(0x00, 0xB9, 0xE0),
++	_INIT_CMD(0x00, 0xBA, 0x32),
++	_INIT_CMD(0x00, 0xBB, 0xB8),
++	_INIT_CMD(0x00, 0xBC, 0x46),
++	_INIT_CMD(0x00, 0xBD, 0x4A),
++	_INIT_CMD(0x00, 0xBE, 0xD0),
++	_INIT_CMD(0x00, 0xBF, 0x35),
++	_INIT_CMD(0x00, 0xC0, 0x65),
++	_INIT_CMD(0x00, 0xC1, 0x97),
++	_INIT_CMD(0x00, 0xC2, 0xA7),
++	_INIT_CMD(0x00, 0xC3, 0xB7),
++	_INIT_CMD(0x00, 0xC4, 0xC0),
++	_INIT_CMD(0x00, 0xC5, 0xCF),
++	_INIT_CMD(0x00, 0xC6, 0xDC),
++	_INIT_CMD(0x00, 0xC7, 0xE4),
++	_INIT_CMD(0x00, 0xC8, 0xE8),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x16),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x0A),
++	_INIT_CMD(0x00, 0xB1, 0x00),
++	_INIT_CMD(0x00, 0xB2, 0x07),
++	_INIT_CMD(0x00, 0xB3, 0x18),
++	_INIT_CMD(0x00, 0xB4, 0x31),
++	_INIT_CMD(0x00, 0xB5, 0x47),
++	_INIT_CMD(0x00, 0xB6, 0x56),
++	_INIT_CMD(0x00, 0xB7, 0x70),
++	_INIT_CMD(0x00, 0xB8, 0x98),
++	_INIT_CMD(0x00, 0xB9, 0xDB),
++	_INIT_CMD(0x00, 0xBA, 0x2A),
++	_INIT_CMD(0x00, 0xBB, 0xAE),
++	_INIT_CMD(0x00, 0xBC, 0x39),
++	_INIT_CMD(0x00, 0xBD, 0x3D),
++	_INIT_CMD(0x00, 0xBE, 0xC6),
++	_INIT_CMD(0x00, 0xBF, 0x2A),
++	_INIT_CMD(0x00, 0xC0, 0x59),
++	_INIT_CMD(0x00, 0xC1, 0x91),
++	_INIT_CMD(0x00, 0xC2, 0xA1),
++	_INIT_CMD(0x00, 0xC3, 0xB1),
++	_INIT_CMD(0x00, 0xC4, 0xBA),
++	_INIT_CMD(0x00, 0xC5, 0xC5),
++	_INIT_CMD(0x00, 0xC6, 0xD4),
++	_INIT_CMD(0x00, 0xC7, 0xDC),
++	_INIT_CMD(0x00, 0xC8, 0xE0),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x16),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x0B),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x07),
++	_INIT_CMD(0x00, 0xB3, 0x19),
++	_INIT_CMD(0x00, 0xB4, 0x32),
++	_INIT_CMD(0x00, 0xB5, 0x48),
++	_INIT_CMD(0x00, 0xB6, 0x58),
++	_INIT_CMD(0x00, 0xB7, 0x74),
++	_INIT_CMD(0x00, 0xB8, 0x9D),
++	_INIT_CMD(0x00, 0xB9, 0xE2),
++	_INIT_CMD(0x00, 0xBA, 0x34),
++	_INIT_CMD(0x00, 0xBB, 0xBB),
++	_INIT_CMD(0x00, 0xBC, 0x4A),
++	_INIT_CMD(0x00, 0xBD, 0x4F),
++	_INIT_CMD(0x00, 0xBE, 0xD5),
++	_INIT_CMD(0x00, 0xBF, 0x3C),
++	_INIT_CMD(0x00, 0xC0, 0x70),
++	_INIT_CMD(0x00, 0xC1, 0x9F),
++	_INIT_CMD(0x00, 0xC2, 0xAF),
++	_INIT_CMD(0x00, 0xC3, 0xC2),
++	_INIT_CMD(0x00, 0xC4, 0xD2),
++	_INIT_CMD(0x00, 0xC5, 0xE1),
++	_INIT_CMD(0x00, 0xC6, 0xF0),
++	_INIT_CMD(0x00, 0xC7, 0xF9),
++	_INIT_CMD(0x00, 0xC8, 0xFC),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x16),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x0C),
++	_INIT_CMD(0x00, 0xB1, 0x04),
++	_INIT_CMD(0x00, 0xB2, 0x05),
++	_INIT_CMD(0x00, 0xB3, 0x18),
++	_INIT_CMD(0x00, 0xB4, 0x31),
++	_INIT_CMD(0x00, 0xB5, 0x47),
++	_INIT_CMD(0x00, 0xB6, 0x57),
++	_INIT_CMD(0x00, 0xB7, 0x72),
++	_INIT_CMD(0x00, 0xB8, 0x9B),
++	_INIT_CMD(0x00, 0xB9, 0xE0),
++	_INIT_CMD(0x00, 0xBA, 0x32),
++	_INIT_CMD(0x00, 0xBB, 0xB8),
++	_INIT_CMD(0x00, 0xBC, 0x46),
++	_INIT_CMD(0x00, 0xBD, 0x4A),
++	_INIT_CMD(0x00, 0xBE, 0xD0),
++	_INIT_CMD(0x00, 0xBF, 0x35),
++	_INIT_CMD(0x00, 0xC0, 0x65),
++	_INIT_CMD(0x00, 0xC1, 0x97),
++	_INIT_CMD(0x00, 0xC2, 0xA7),
++	_INIT_CMD(0x00, 0xC3, 0xB7),
++	_INIT_CMD(0x00, 0xC4, 0xC0),
++	_INIT_CMD(0x00, 0xC5, 0xCF),
++	_INIT_CMD(0x00, 0xC6, 0xDC),
++	_INIT_CMD(0x00, 0xC7, 0xE4),
++	_INIT_CMD(0x00, 0xC8, 0xE8),
++	_INIT_CMD(0x00, 0xC9, 0x00),
++	_INIT_CMD(0x00, 0xCA, 0x00),
++	_INIT_CMD(0x00, 0xCB, 0x16),
++	_INIT_CMD(0x00, 0xCC, 0xAF),
++	_INIT_CMD(0x00, 0xCD, 0xFF),
++	_INIT_CMD(0x00, 0xCE, 0xFF),
++	_INIT_CMD(0x00, 0xB0, 0x00),
++	_INIT_CMD(0x00, 0xB3, 0x08),
++	_INIT_CMD(0x00, 0xB0, 0x04),
++	_INIT_CMD(0x64, 0xB8, 0x68),
++	{},
++};
++
++static const struct panel_desc boe_tv101wumng0_panel_desc = {
++	.display_mode = &default_display_mode,
++	.bpc = 8,
++	.width_mm = 135,
++	.height_mm = 216,
++	.delay_t1 = 5000,
++	.reset_delay_t2 = 14000,
++	.reset_delay_t3 = 1000,
++	.reset_delay_t4 = 1000,
++	.reset_delay_t5 = 5000,
++	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++			MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_LPM,
++	.format = MIPI_DSI_FMT_RGB888,
++	.lanes = 4,
++	.on_cmds = boe_tv101wumng0_on_cmds,
++	.off_cmds = default_off_cmds,
++};
++
 +/* auo,nt51021d8p */
 +static const struct drm_display_mode auo_nt51021d8p_display_mode = {
 +	.clock = 159420,
@@ -4065,19 +5502,6 @@ index ff5a89e38fd7..8aecaae59a76 100644
 +};
 +
 +/* inx,ota7290d10p */
-+static const struct drm_display_mode inx_ota7290d10p_display_mode = {
-+	.clock = 159420,
-+	.hdisplay = 1200,
-+	.hsync_start = 1200 + 80,
-+	.hsync_end = 1200 + 80 + 60,
-+	.htotal = 1200 + 80 + 60 + 1,
-+	.vdisplay = 1920,
-+	.vsync_start = 1920 + 35,
-+	.vsync_end = 1920 + 35 + 25,
-+	.vtotal = 1920 + 35 + 25 + 1,
-+	.vrefresh = 60,
-+};
-+
 +static const struct panel_cmd inx_ota7290d10p_on_cmds[] = {
 +	_INIT_CMD(0x00, 0xB0, 0x5A),
 +	_INIT_CMD(0x00, 0xB1, 0x00),
@@ -4346,7 +5770,7 @@ index ff5a89e38fd7..8aecaae59a76 100644
 +};
 +
 +static const struct panel_desc inx_ota7290d10p_panel_desc = {
-+	.display_mode = &inx_ota7290d10p_display_mode,
++	.display_mode = &default_display_mode,
 +	.bpc = 8,
 +	.width_mm = 107,
 +	.height_mm = 172,
@@ -4372,9 +5796,24 @@ index ff5a89e38fd7..8aecaae59a76 100644
 +	    .data = &auo_nt51021d8p_panel_desc
 +	}, { .compatible = "inx,ota7290d10p",
 +	    .data = &inx_ota7290d10p_panel_desc
++	}, { .compatible = "boe,tv080wum_ng0",
++	  .data = &boe_tv080wumng0_panel_desc
++	}, { .compatible = "boe,tv101wum_ng0",
++	  .data = &boe_tv101wumng0_panel_desc
  	}, {
  		/* sentinel */
  	}
+@@ -958,6 +1900,10 @@ static int panel_add(struct panel_info *pinfo)
+ 	if (IS_ERR(pinfo->backlight))
+ 		return PTR_ERR(pinfo->backlight);
+ 
++	ret = of_drm_get_panel_orientation(dev->of_node, &pinfo->orientation);
++	if (ret < 0)
++		return ret;
++
+ 	drm_panel_init(&pinfo->base);
+ 	pinfo->base.funcs = &panel_funcs;
+ 	pinfo->base.dev = &pinfo->link->dev;
 diff --git a/drivers/iio/proximity/Kconfig b/drivers/iio/proximity/Kconfig
 index 388ef70c11d2..d16c1d4649ce 100644
 --- a/drivers/iio/proximity/Kconfig
@@ -5559,10 +6998,10 @@ index 000000000000..408c349dd436
 +MODULE_DESCRIPTION("Driver for Semtech SX9311 proximity sensor");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 80a38ad0db15..24cbdb04764d 100644
+index e4144a41f763..c75e6e76bb0d 100644
 --- a/drivers/net/wireless/ath/ath10k/core.c
 +++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -2454,7 +2454,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
+@@ -2460,7 +2460,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
  		goto err_hif_stop;
  	}
  
@@ -5598,10 +7037,10 @@ index 5f7f1e08866f..5c342a1a2b9a 100644
  }
  
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 1ea6d2dc2f29..88eca876c716 100644
+index 2707151535ec..dec2ede7818a 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
-@@ -1629,7 +1629,7 @@ static int ath10k_sdio_hif_diag_write_mem(struct ath10k *ar, u32 address,
+@@ -1632,7 +1632,7 @@ static int ath10k_sdio_hif_diag_write_mem(struct ath10k *ar, u32 address,
  	return 0;
  }
  
@@ -5610,17 +7049,20 @@ index 1ea6d2dc2f29..88eca876c716 100644
  {
  	struct ath10k_sdio *ar_sdio = ath10k_sdio_priv(ar);
  	u32 addr, val;
-@@ -1648,6 +1648,8 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
- 			   "sdio mailbox swap service enabled\n");
- 		ar_sdio->swap_mbox = true;
+@@ -1655,7 +1655,8 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
+ 			   "sdio mailbox swap service disabled\n");
+ 		ar_sdio->swap_mbox = false;
  	}
+-
 +        if(mode == ATH10K_FIRMWARE_MODE_UTF)
 +                ar_sdio->swap_mbox = false;
  	return 0;
  }
  
 diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index e4ea7f6aef20..61a18c0d271c 100644
+old mode 100644
+new mode 100755
+index e4ea7f6aef20..61a18c0d271c
 --- a/drivers/thermal/mtk_thermal.c
 +++ b/drivers/thermal/mtk_thermal.c
 @@ -219,6 +219,9 @@ enum {
@@ -5800,6 +7242,47 @@ index e4ea7f6aef20..61a18c0d271c 100644
  	if (IS_ERR(tzdev)) {
  		ret = PTR_ERR(tzdev);
  		goto err_disable_clk_peri_therm;
+diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
+index 8c738c0e6e9f..e136e3a3c996 100644
+--- a/include/drm/drm_panel.h
++++ b/include/drm/drm_panel.h
+@@ -37,6 +37,8 @@ struct display_timing;
+  * struct drm_panel_funcs - perform operations on a given panel
+  * @disable: disable panel (turn off back light, etc.)
+  * @unprepare: turn off panel
++ * @detach: detach panel->connector (clear internal state, etc.)
++ * @attach: attach panel->connector (update internal state, etc.)
+  * @prepare: turn on panel and perform set up
+  * @enable: enable panel (turn on back light, etc.)
+  * @get_modes: add modes to the connector that the panel is attached to and
+@@ -70,6 +72,8 @@ struct display_timing;
+ struct drm_panel_funcs {
+ 	int (*disable)(struct drm_panel *panel);
+ 	int (*unprepare)(struct drm_panel *panel);
++	void (*detach)(struct drm_panel *panel);
++	int (*attach)(struct drm_panel *panel);
+ 	int (*prepare)(struct drm_panel *panel);
+ 	int (*enable)(struct drm_panel *panel);
+ 	int (*get_modes)(struct drm_panel *panel);
+@@ -197,11 +201,18 @@ int drm_panel_detach(struct drm_panel *panel);
+ 
+ #if defined(CONFIG_OF) && defined(CONFIG_DRM_PANEL)
+ struct drm_panel *of_drm_find_panel(const struct device_node *np);
++int of_drm_get_panel_orientation(const struct device_node *np,
++				 int *orientation);
+ #else
+ static inline struct drm_panel *of_drm_find_panel(const struct device_node *np)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
++int of_drm_get_panel_orientation(const struct device_node *np,
++				 int *orientation)
++{
++	return -ENODEV;
++}
+ #endif
+ 
+ #endif
 diff --git a/sound/soc/codecs/max98357a.c b/sound/soc/codecs/max98357a.c
 index 9aac1fda94c8..cfecbdaa5853 100644
 --- a/sound/soc/codecs/max98357a.c
@@ -5929,7 +7412,9 @@ index 9aac1fda94c8..cfecbdaa5853 100644
  
  static int max98357a_platform_remove(struct platform_device *pdev)
 diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-index 1e7e8aed8707..c25ed84e2117 100644
+old mode 100644
+new mode 100755
+index 1e7e8aed8707..c25ed84e2117
 --- a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 @@ -34,7 +34,7 @@ static struct snd_soc_dai_link_component
@@ -5942,5 +7427,5 @@ index 1e7e8aed8707..c25ed84e2117 100644
  	{
  		.name = "da7219.5-001a",
 -- 
-2.21.0.392.gf8f6787159e-goog
+2.21.0.1020.gf2820cf01a-goog
 

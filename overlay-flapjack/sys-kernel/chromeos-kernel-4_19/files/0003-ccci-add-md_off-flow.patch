@@ -1,0 +1,278 @@
+From 1d3184a80925780b27f67c1266c72c6e1287de8e Mon Sep 17 00:00:00 2001
+From: "yanjie.jiang" <yanjie.jiang@mediatek.com>
+Date: Tue, 16 Apr 2019 16:48:00 +0800
+Subject: [PATCH 3/3] ccci: add md_off flow
+
+Add release MD source flow on chromeos-4.19
+
+Change-Id: Ia4d4f647adf97b3a960b9352609c3789ca49fb42
+Signed-off-by: yanjie.jiang@mediatek.corp-partner.google.com
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   4 +
+ drivers/misc/Kconfig                          |   0
+ drivers/misc/Makefile                         |   0
+ drivers/soc/mediatek/Kconfig                  |   2 +
+ drivers/soc/mediatek/Makefile                 |   1 +
+ drivers/soc/mediatek/mtk-ccci/Kconfig         |   6 +
+ drivers/soc/mediatek/mtk-ccci/Makefile        |  15 +++
+ drivers/soc/mediatek/mtk-ccci/md_off/Makefile |  25 +++++
+ .../mediatek/mtk-ccci/md_off/md_off-mt8183.c  | 105 ++++++++++++++++++
+ .../mediatek/mtk-ccci/md_off/md_off-mt8183.h  |  14 +++
+ 10 files changed, 172 insertions(+)
+ mode change 100644 => 100755 arch/arm64/boot/dts/mediatek/mt8183.dtsi
+ mode change 100644 => 100755 drivers/misc/Kconfig
+ mode change 100644 => 100755 drivers/misc/Makefile
+ mode change 100644 => 100755 drivers/soc/mediatek/Kconfig
+ mode change 100644 => 100755 drivers/soc/mediatek/Makefile
+ create mode 100755 drivers/soc/mediatek/mtk-ccci/Kconfig
+ create mode 100755 drivers/soc/mediatek/mtk-ccci/Makefile
+ create mode 100755 drivers/soc/mediatek/mtk-ccci/md_off/Makefile
+ create mode 100755 drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.c
+ create mode 100755 drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.h
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+old mode 100644
+new mode 100755
+index 7720afe8f143..89bf4fe6ece6
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -746,6 +746,10 @@
+ 			status = "disabled";
+ 		};
+ 
++		ccci_md_off@0 {
++			compatible = "mediatek,mt8183-ccci_md_off";
++		};
++
+ 		i2c6: i2c@11005000 {
+ 			compatible = "mediatek,mt8183-i2c";
+ 			reg = <0 0x11005000 0 0x1000>,
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+old mode 100644
+new mode 100755
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+old mode 100644
+new mode 100755
+diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+old mode 100644
+new mode 100755
+index 17bd7590464f..43f9a28e7443
+--- a/drivers/soc/mediatek/Kconfig
++++ b/drivers/soc/mediatek/Kconfig
+@@ -43,4 +43,6 @@ config MTK_SCPSYS
+ 	  Say yes here to add support for the MediaTek SCPSYS power domain
+ 	  driver.
+ 
++source "drivers/soc/mediatek/mtk-ccci/Kconfig"
++
+ endmenu
+diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
+old mode 100644
+new mode 100755
+index b9dbad6b12f9..b8e52c3d30e4
+--- a/drivers/soc/mediatek/Makefile
++++ b/drivers/soc/mediatek/Makefile
+@@ -2,3 +2,4 @@ obj-$(CONFIG_MTK_CMDQ) += mtk-cmdq-helper.o
+ obj-$(CONFIG_MTK_INFRACFG) += mtk-infracfg.o mtk-scpsys-ext.o
+ obj-$(CONFIG_MTK_PMIC_WRAP) += mtk-pmic-wrap.o
+ obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
++obj-y				+= mtk-ccci/
+diff --git a/drivers/soc/mediatek/mtk-ccci/Kconfig b/drivers/soc/mediatek/mtk-ccci/Kconfig
+new file mode 100755
+index 000000000000..4309fb392a7e
+--- /dev/null
++++ b/drivers/soc/mediatek/mtk-ccci/Kconfig
+@@ -0,0 +1,6 @@
++menuconfig MTK_CCCI_DEVICES
++	bool "CCCI Devices"
++	default y
++	help
++	  Say Y here to enable CCCI basic support.
++	  If you say N, all CCCI related code (including dummy API) will be disable.
+\ No newline at end of file
+diff --git a/drivers/soc/mediatek/mtk-ccci/Makefile b/drivers/soc/mediatek/mtk-ccci/Makefile
+new file mode 100755
+index 000000000000..e4c7d8287949
+--- /dev/null
++++ b/drivers/soc/mediatek/mtk-ccci/Makefile
+@@ -0,0 +1,15 @@
++#
++# Copyright (C) 2015 MediaTek Inc.
++#
++# This program is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License version 2 as
++# published by the Free Software Foundation.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++# GNU General Public License for more details.
++#
++
++obj-y += md_off/
++
+diff --git a/drivers/soc/mediatek/mtk-ccci/md_off/Makefile b/drivers/soc/mediatek/mtk-ccci/md_off/Makefile
+new file mode 100755
+index 000000000000..1e1e3ce39b4e
+--- /dev/null
++++ b/drivers/soc/mediatek/mtk-ccci/md_off/Makefile
+@@ -0,0 +1,25 @@
++#
++# Copyright (C) 2015 MediaTek Inc.
++#
++# This program is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License version 2 as
++# published by the Free Software Foundation.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++# GNU General Public License for more details.
++#
++
++obj-y += md_off-mt8183.o
++
++#ifeq ($(CONFIG_MTK_CCCI), y)
++
++# always build-in parts
++#obj-y := ccci_md_off.o
++#ccflags-y += -I$(srctree)/
++#ccflags-y += -I$(srctree)/drivers\misc\mtk-ccci/md_off/
++
++#ccci_md_off-$(CONFIG_MTK_CCCI_MT8183) := md_off-mt8183.o
++
++#endif
+diff --git a/drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.c b/drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.c
+new file mode 100755
+index 000000000000..6cf1880c7a76
+--- /dev/null
++++ b/drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.c
+@@ -0,0 +1,105 @@
++/*
++ * Copyright (C) 2015 MediaTek Inc.
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++
++#include "md_off-mt8183.h"
++
++#define INFRA_AO_MD_SRCCLKENA		(0x0F0C)
++#define REG_MD_CLK_SETTING		(0x0000)
++
++#define STA_POWER_DOWN  0
++#define STA_POWER_ON    1
++static void internal_md1_power_down(void)
++{
++	struct device_node *node;
++	void __iomem *infra_ao_base, *ap_top_ck_gen;
++	unsigned int reg_value;
++
++	node = of_find_compatible_node(NULL, NULL, "mediatek,mt8183-infracfg");
++	infra_ao_base = of_iomap(node, 0);
++	node = of_find_compatible_node(NULL, NULL, "mediatek,mt8183-topckgen");
++	ap_top_ck_gen = of_iomap(node, 0);
++	/* 0. power on md */
++	//spm_mtcmos_ctrl_md1(STA_POWER_DOWN);
++
++	/* 1. md clock setting: gating */
++	reg_value = readl(ap_top_ck_gen);
++	reg_value |= ((1<<8)|(1<<9));
++	writel(reg_value, ap_top_ck_gen);
++
++	/* 2. mixedsys topsm init, for release srcclkena in kernel */
++	reg_value = readl(infra_ao_base + INFRA_AO_MD_SRCCLKENA);
++	reg_value &= ~0xFF;
++	writel(reg_value, (infra_ao_base + INFRA_AO_MD_SRCCLKENA));
++
++	pr_notice("[ccci-off]src clk ena = 0x%X\n",
++		readl(infra_ao_base + INFRA_AO_MD_SRCCLKENA));
++}
++
++void md_power_down(void)
++{
++	//unsigned int val;
++
++	//val = get_devinfo_with_index(4);
++	//if ((val & (0x1 << 0)) == 0)
++		internal_md1_power_down();
++	//else
++	//	pr_debug("[ccci-off]md1 effused,no need power off\n");
++}
++
++static int ccci_off_probe(struct platform_device *pdev)
++{
++	md_power_down();
++
++	return 0;
++}
++
++static int ccci_off_remove(struct platform_device *pdev)
++{
++	return 0;
++}
++
++static const struct of_device_id ccci_off_of_ids[] = {
++	{.compatible = "mediatek,mt8183-ccci_md_off",},
++	{}
++};
++
++static struct platform_driver ccci_off_dev_drv = {
++	.probe = ccci_off_probe,
++	.remove = ccci_off_remove,
++	.driver = {
++		   .name = "ccci_md_off",
++		   .owner = THIS_MODULE,
++		   .of_match_table = ccci_off_of_ids,
++		   },
++};
++
++static int __init ccci_md_off_init(void)
++{
++	int ret;
++
++	ret = platform_driver_register(&ccci_off_dev_drv);
++	if (ret)
++		pr_debug("[ccci-md-off] platform driver registered failed(%d)\n", ret);
++	else
++		pr_debug("[ccci-md-off]platform driver registered OK\n");
++
++	return 0;
++}
++
++module_init(ccci_md_off_init);
+diff --git a/drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.h b/drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.h
+new file mode 100755
+index 000000000000..b94f93f4558f
+--- /dev/null
++++ b/drivers/soc/mediatek/mtk-ccci/md_off/md_off-mt8183.h
+@@ -0,0 +1,14 @@
++/*
++ * Copyright (C) 2015 MediaTek Inc.
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ */
++
++
+-- 
+2.21.0.1020.gf2820cf01a-goog
+
