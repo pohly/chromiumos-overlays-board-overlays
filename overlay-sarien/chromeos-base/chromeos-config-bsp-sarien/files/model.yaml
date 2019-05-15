@@ -23,20 +23,21 @@ common_config: &common_config
       # should override the generic source by setting
       #  $ucm_src_root: "{{$device-name}}"
       $cras_root: "/etc/cras"
-      $ucm_src_root: "common"
+      $ucm_src_root: "{{$device-name}}"
       $ucm_root: "/usr/share/alsa/ucm"
       $card: "HDA\ Intel\ PCH"
       cras-config-dir: "{{$device-name}}"
+      ucm-suffix: "{{$device-name}}"
       $alsa_module_src_root: "common"
       $modprobe_root: "/etc/modprobe.d"
       $fw_patch_root: "/lib/firmware"
       files:
         # ALSA UCM configuration file
         - source: "{{$ucm_src_root}}/audio/ucm-config/{{$card}}/{{$card}}.conf"
-          destination: "{{$ucm_root}}/{{$card}}/{{$card}}.conf"
+          destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/{{$card}}.{{ucm-suffix}}.conf"
         # ALSA UCM SectionUseCase configuration (defined in UCM conf file)
         - source: "{{$ucm_src_root}}/audio/ucm-config/{{$card}}/HiFi.conf"
-          destination: "{{$ucm_root}}/{{$card}}/HiFi.conf"
+          destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/HiFi.conf"
         # ALSA module conf file
         - source: "{{$alsa_module_src_root}}/audio/alsa-module-config/alsa-sarien.conf"
           destination: "{{$modprobe_root}}/alsa-sarien.conf"
