@@ -22,5 +22,12 @@
             <Limit name="measured-frame-rate-1280x720" range="445-978" />
             <Limit name="measured-frame-rate-1920x1080" range="194-426" />
         </MediaCodec>
+        <MediaCodec name="c2.vda.vp9.decoder" type="video/x-vnd.on2.vp9" update="true">
+            <Limit name="measured-frame-rate-320x180" range="221-485" />
+            <Limit name="measured-frame-rate-640x360" range="155-340" />
+            <Limit name="measured-frame-rate-1280x720" range="67-146" />
+            <Limit name="measured-frame-rate-1920x1080" range="38-83" />
+            <Limit name="measured-frame-rate-3840x2160" range="11-23" />
+        </MediaCodec>
     </Decoders>
 </MediaCodecs>
