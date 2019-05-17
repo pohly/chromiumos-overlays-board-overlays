@@ -10,6 +10,7 @@ common_config: &common_config
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
     has-charge-controller: "1"
+    internal-backlight-no-als-battery-brightness: "55"
   hardware-properties:
     is-lid-convertible: "{{$is-lid-convertible-val}}"
     has-lid-accelerometer: "{{$has-lid-accelerometer-val}}"
