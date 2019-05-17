@@ -75,8 +75,15 @@ board_finalize_base_image() {
   sudo rm "${root_fs_dir}"/etc/machine-id
   sudo touch "${root_fs_dir}"/etc/machine-id
 
+  info "Copying shim to bootx64.efi"
+  sudo cp \
+    "${root_fs_dir}"/boot/efi/boot/shimx64.efi \
+    "${root_fs_dir}"/boot/efi/boot/bootx64.efi
+  info "Successfully copied shim to bootx64.efi"
+
   info "Deleting legacy EFI bootloaders"
-  sudo rm -f "${root_fs_dir}"/boot/efi/boot/boot{x64,ia32}.efi
+  # Don't delete bootx64.efi here, since the shim is now there
+  sudo rm -f "${root_fs_dir}"/boot/efi/boot/bootia32.efi
   info "Successfully deleted legacy EFI bootloaders"
 
   info "Populating dbx"
