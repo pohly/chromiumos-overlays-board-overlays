@@ -170,85 +170,8 @@ index 000000000000..a19e3b39ba66
 +			 <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>, /* CGM */
 +			 <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
 +};
-diff --git a/Documentation/devicetree/bindings/mfd/cros-ec.txt b/Documentation/devicetree/bindings/mfd/cros-ec.txt
-index 6245c9b1a68b..4860eabd0f72 100644
---- a/Documentation/devicetree/bindings/mfd/cros-ec.txt
-+++ b/Documentation/devicetree/bindings/mfd/cros-ec.txt
-@@ -3,7 +3,7 @@ ChromeOS Embedded Controller
- Google's ChromeOS EC is a Cortex-M device which talks to the AP and
- implements various function such as keyboard and battery charging.
- 
--The EC can be connect through various means (I2C, SPI, LPC) and the
-+The EC can be connect through various means (I2C, SPI, LPC, RPMSG) and the
- compatible string used depends on the interface. Each connection method has
- its own driver which connects to the top level interface-agnostic EC driver.
- Other Linux driver (such as cros-ec-keyb for the matrix keyboard) connect to
-@@ -17,6 +17,9 @@ Required properties (SPI):
- - compatible: "google,cros-ec-spi"
- - reg: SPI chip select
- 
-+Required properties (RPMSG):
-+- compatible: "google,cros-ec-rpmsg"
-+
- Optional properties (SPI):
- - google,cros-ec-spi-pre-delay: Some implementations of the EC need a little
-   time to wake up from sleep before they can receive SPI transfers at a high
-diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-index 0668c45a156d..b4d448bb60ce 100644
---- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-+++ b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-@@ -7,6 +7,7 @@ Required properties:
- 	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
- 	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
- 	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
-+	      "mediatek,mt8183-efuse" or "mediatek,efuse": for MT8183
- - reg: Should contain registers location and length
- 
- = Data cells =
-diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
-new file mode 100644
-index 000000000000..3ba668bab14b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
-@@ -0,0 +1,36 @@
-+Mediatek SCP Bindings
-+----------------------------------------
-+
-+This binding provides support for ARM Cortex M4 Co-processor found on some
-+Mediatek SoCs.
-+
-+Required properties:
-+- compatible		Should be "mediatek,mt8183-scp"
-+- reg			Should contain the address ranges for the two memory
-+			regions, SRAM and CFG.
-+- reg-names		Contains the corresponding names for the two memory
-+			regions. These should be named "sram" & "cfg".
-+- clocks		Clock for co-processor (See: ../clock/clock-bindings.txt)
-+- clock-names		Contains the corresponding name for the clock. This
-+			should be named "main".
-+
-+Subnodes
-+--------
-+
-+Subnodes of the SCP represent rpmsg devices. The names of the devices are not
-+important. The properties of these nodes are defined by the individual bindings
-+for the rpmsg devices - but must contain the following property:
-+
-+- mtk,rpmsg-name	Contains the name for the rpmsg device. Used to match
-+			the subnode to rpmsg device announced by SCP.
-+
-+Example:
-+
-+	scp: scp@10500000 {
-+		compatible = "mediatek,mt8183-scp";
-+		reg = <0 0x10500000 0 0x80000>,
-+		      <0 0x105c0000 0 0x5000>;
-+		reg-names = "sram", "cfg";
-+		clocks = <&infracfg CLK_INFRA_SCPSYS>;
-+		clock-names = "main";
-+	};
 diff --git a/Makefile b/Makefile
-index 47243407f6e4..820b316d5ee1 100644
+index b6bd1fc7a7cb..339bdf27cbed 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -276,21 +199,6 @@ index d9124842fdd0..d09409979c84 100644
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-index 50dc1e1a6881..d9980051f9b6 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-@@ -38,6 +38,10 @@
- 	};
- };
- 
-+&auxadc {
-+	status = "okay";
-+};
-+
- &gpu {
- 	supply-names = "mali","mali_sram";
- 	mali-supply = <&mt6358_vgpu_reg>;
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
 new file mode 100644
 index 000000000000..4c71b09e26a3
@@ -623,7 +531,7 @@ index 000000000000..4c71b09e26a3
 +};
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-index 46b8f0c16d7b..0fafd858b4b1 100644
+index 46b8f0c16d7b..0f78005f705c 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 @@ -210,14 +210,44 @@
@@ -645,16 +553,6 @@ index 46b8f0c16d7b..0fafd858b4b1 100644
 +	};
 +};
 +
-+&scp_pins {
-+	pins_scp_uart {
-+		pinmux = <PINMUX_GPIO11__FUNC_TP_URXD1_AO>,
-+			 <PINMUX_GPIO12__FUNC_TP_UTXD1_AO>;
-+	};
- };
- 
--/* Touch reset pin is active-high on rev1. */
--&touchscreen {
--	reset-gpios = <&pio 156 0>;
 +&i2c0 {
 +	status = "okay";
 +
@@ -671,11 +569,21 @@ index 46b8f0c16d7b..0fafd858b4b1 100644
 +	};
  };
  
+-/* Touch reset pin is active-high on rev1. */
+-&touchscreen {
+-	reset-gpios = <&pio 156 0>;
++&i2c6 {
++	status = "disabled";
+ };
+ 
 -&touch_pin_reset {
 -	/delete-property/ output-low;
 -	output-high;
-+&i2c6 {
-+	status = "disabled";
++&scp_pins {
++	pins_scp_uart {
++		pinmux = <PINMUX_GPIO11__FUNC_TP_URXD1_AO>,
++			 <PINMUX_GPIO12__FUNC_TP_UTXD1_AO>;
++	};
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 new file mode 100644
@@ -1139,28 +1047,29 @@ index 000000000000..d5c9807834e1
 +	};
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index f8e1c7f9f603..3fa93d9d5410 100644
+index 4b5602c9d3a7..abdaf18ad4f5 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -14,6 +14,17 @@
- 		serial0 = &uart0;
- 	};
+@@ -16,14 +16,12 @@
  
-+	backlight_lcd0: backlight_lcd0 {
-+		compatible = "pwm-backlight";
+ 	backlight_lcd0: backlight_lcd0 {
+ 		compatible = "pwm-backlight";
+-		pwms = <&pwm0 0 26000>;
 +		pwms = <&pwm0 0 500000>;
-+		power-supply = <&bl_pp5000>;
-+		enable-gpios = <&pio 176 0>;
+ 		power-supply = <&bl_pp5000>;
+ 		enable-gpios = <&pio 176 0>;
+-		brightness-levels = <
+-			0 64 128 192 256 320 384 448
+-			512 576 640 704 768 832 896 960
+-			1023>;
+-		default-brightness-level = <9>;
 +		brightness-levels = <0 1023>;
 +		num-interpolated-steps = <1023>;
 +		default-brightness-level = <576>;
-+		status = "okay";
-+	};
-+
- 	memory@40000000 {
- 		device_type = "memory";
- 		reg = <0 0x40000000 0 0x80000000>;
-@@ -23,6 +34,31 @@
+ 		status = "okay";
+ 	};
+ 
+@@ -36,6 +34,13 @@
  		stdout-path = "serial0:115200n8";
  	};
  
@@ -1171,28 +1080,31 @@ index f8e1c7f9f603..3fa93d9d5410 100644
 +		clock-output-names = "clk32k";
 +	};
 +
-+	lcd_pp3300: regulator@1 {
+ 	lcd_pp3300: regulator@1 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "lcd_pp3300";
+@@ -54,6 +59,20 @@
+ 		regulator-boot-on;
+ 	};
+ 
++	mmc1_fixed_power: regulator@3 {
 +		compatible = "regulator-fixed";
-+		regulator-name = "lcd_pp3300";
++		regulator-name = "mmc1_power";
 +		regulator-min-microvolt = <3300000>;
 +		regulator-max-microvolt = <3300000>;
-+		regulator-always-on;
-+		regulator-boot-on;
 +	};
 +
-+	bl_pp5000: regulator@2 {
++	mmc1_fixed_io: regulator@4 {
 +		compatible = "regulator-fixed";
-+		regulator-name = "bl_pp5000";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		regulator-boot-on;
++		regulator-name = "mmc1_io";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
 +	};
 +
  	reserved_memory: reserved-memory {
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -37,6 +73,94 @@
+@@ -68,6 +87,29 @@
  			alloc-ranges = <0 0x40000000 0 0x60000000>;
  		};
  	};
@@ -1219,75 +1131,10 @@ index f8e1c7f9f603..3fa93d9d5410 100644
 +&afe {
 +	i2s3-share = "I2S2";
 +	i2s0-share = "I2S5";
-+};
-+
-+&cci {
-+	proc-supply = <&mt6358_vproc12_reg>;
-+};
-+
-+&cpu0 {
-+	proc-supply = <&mt6358_vproc12_reg>;
-+};
-+
-+&cpu1 {
-+	proc-supply = <&mt6358_vproc12_reg>;
-+};
-+
-+&cpu2 {
-+	proc-supply = <&mt6358_vproc12_reg>;
-+};
-+
-+&cpu3 {
-+	proc-supply = <&mt6358_vproc12_reg>;
-+};
-+
-+&cpu4 {
-+	proc-supply = <&mt6358_vproc11_reg>;
-+};
-+
-+&cpu5 {
-+	proc-supply = <&mt6358_vproc11_reg>;
-+};
-+
-+&cpu6 {
-+	proc-supply = <&mt6358_vproc11_reg>;
-+};
-+
-+&cpu7 {
-+	proc-supply = <&mt6358_vproc11_reg>;
-+};
-+
-+&dsi0 {
-+	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	panel: panel@0 {
-+		compatible = "innolux,p079zca";
-+		reg = <0>;
-+		enable-gpios = <&pio 45 0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&panel_pins_default>;
-+		power-supply = <&lcd_pp3300>;
-+		backlight = <&backlight_lcd0>;
-+		status = "okay";
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&dsi_out>;
-+			};
-+		};
-+	};
-+
-+	ports {
-+		port {
-+			dsi_out: endpoint {
-+				remote-endpoint = <&panel_in>;
-+			};
-+		};
-+	};
  };
  
- &gpu {
-@@ -64,18 +188,6 @@
+ &cci {
+@@ -160,18 +202,6 @@
  	clock-frequency = <400000>;
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -1306,7 +1153,7 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  };
  
  &i2c1 {
-@@ -111,6 +223,17 @@
+@@ -207,6 +237,17 @@
  	pinctrl-0 = <&i2c5_pins>;
  	status = "okay";
  	clock-frequency = <100000>;
@@ -1324,18 +1171,26 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  };
  
  &i2c6 {
-@@ -127,6 +250,10 @@
- 	clock-frequency = <100000>;
+@@ -253,8 +294,8 @@
+ 	pinctrl-names = "default", "state_uhs";
+ 	pinctrl-0 = <&mmc1_pins_default>;
+ 	pinctrl-1 = <&mmc1_pins_uhs>;
+-	vmmc-supply = <&mt6358_vmch_reg>;
+-	vqmmc-supply = <&mt6358_vmc_reg>;
++	vmmc-supply = <&mmc1_fixed_power>;
++	vqmmc-supply = <&mmc1_fixed_io>;
+ 	bus-width = <4>;
+ 	max-frequency = <200000000>;
+ 	drv-type = <2>;
+@@ -267,13 +308,54 @@
+ 	non-removable;
+ 	no-mmc;
+ 	no-sd;
++	assigned-clocks = <&topckgen CLK_TOP_MUX_MSDC30_1>;
++	assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
  };
  
-+&mipi_tx0 {
-+	status = "okay";
-+};
-+
- &mmc0 {
- 	status = "okay";
- 	pinctrl-names = "default", "state_uhs";
-@@ -173,7 +300,46 @@
+ &mt6358_vdram2_reg {
  	regulator-always-on;
  };
  
@@ -1382,7 +1237,12 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  	ec_ap_int_odl: ec_ap_int_odl {
  		pins1 {
  			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
-@@ -344,11 +510,6 @@
+@@ -440,15 +522,10 @@
+ 			mediatek,pull-down-adv = <10>;
+ 		};
+ 
+-		pins_wifi {
++		pins_wlan_en {
  			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
  			output-high;
  		};
@@ -1394,29 +1254,10 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  	};
  
  	mmc1_pins_uhs: mmc1@0 {
-@@ -371,6 +532,38 @@
+@@ -490,6 +567,19 @@
  		};
  	};
  
-+	panel_pins_default: panel_pins_default {
-+		panel_reset {
-+			pinmux = <PINMUX_GPIO45__FUNC_GPIO45>;
-+			output-low;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	pwm0_pin_default: pwm0_pin_default {
-+		pins1 {
-+			pinmux = <PINMUX_GPIO176__FUNC_GPIO176>;
-+			output-high;
-+			bias-pull-up;
-+		};
-+		pins2 {
-+			pinmux = <PINMUX_GPIO43__FUNC_DISP_PWM>;
-+		};
-+	};
-+
 +	scp_pins: scp {
 +		pins_eint {
 +			pinmux = <PINMUX_GPIO5__FUNC_TP_GPIO5_AO>,
@@ -1433,7 +1274,7 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  	spi_pins_0: spi0@0 {
  		pins_spi{
  			pinmux = <PINMUX_GPIO85__FUNC_SPI0_MI>,
-@@ -434,24 +627,71 @@
+@@ -553,16 +643,42 @@
  		};
  	};
  
@@ -1482,13 +1323,10 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  		};
  	};
  };
+@@ -573,6 +689,17 @@
+ 	pinctrl-0 = <&pwm0_pin_default>;
+ };
  
-+&pwm0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pwm0_pin_default>;
-+};
-+
 +&scp {
 +	status = "okay";
 +	pinctrl-names = "default";
@@ -1503,15 +1341,7 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  &scpsys {
  	mfg-supply = <&mt6358_vgpu_reg>;
  };
- 
-+&soc_data {
-+	status = "okay";
-+};
-+
- &spi0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&spi_pins_0>;
-@@ -546,7 +786,8 @@
+@@ -675,7 +802,8 @@
  };
  
  &ssusb {
@@ -1521,19 +1351,19 @@ index f8e1c7f9f603..3fa93d9d5410 100644
  	vusb33-supply = <&mt6358_vusb_reg>;
  	status = "okay";
  };
-@@ -561,9 +802,27 @@
+@@ -690,7 +818,25 @@
  };
  
  &uart0 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart0_pin>;
- 	status = "okay";
- };
- 
++	status = "okay";
++};
++
 +&uart1 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart1_pin>;
-+	status = "okay";
+ 	status = "okay";
 +
 +	bluetooth: qca6174-bt {
 +		pinctrl-names = "default";
@@ -1544,16 +1374,14 @@ index f8e1c7f9f603..3fa93d9d5410 100644
 +		clocks = <&clk32k>;
 +		firmware-name = "nvm_00440302_i2s.bin";
 +	};
-+};
-+
- #include <arm/cros-ec-keyboard.dtsi>
- #include <arm/cros-ec-sbs.dtsi>
+ };
  
+ #include <arm/cros-ec-keyboard.dtsi>
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index f6b395f0695b..e4b9d58c66c6 100644
+index 97d186834163..947c67da5c8e 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -6,12 +6,14 @@
+@@ -6,6 +6,7 @@
   */
  
  #include <dt-bindings/clock/mt8183-clk.h>
@@ -1561,231 +1389,10 @@ index f6b395f0695b..e4b9d58c66c6 100644
  #include <dt-bindings/interrupt-controller/arm-gic.h>
  #include <dt-bindings/interrupt-controller/irq.h>
  #include <dt-bindings/memory/mt8183-larb-port.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/power/mt8183-power.h>
- #include <dt-bindings/reset-controller/mt8183-resets.h>
-+#include <dt-bindings/thermal/thermal.h>
- #include "mt8183-pinfunc.h"
- 
- / {
-@@ -40,6 +42,243 @@
- 		i2c11 = &i2c11;
+@@ -254,6 +255,29 @@
+ 		operating-points-v2 = <&cci_opp>;
  	};
  
-+	cluster0_opp: opp_table1 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+		opp00 {
-+			opp-hz = /bits/ 64 <793000000>;
-+			opp-microvolt = <650000>;
-+		};
-+		opp01 {
-+			opp-hz = /bits/ 64 <910000000>;
-+			opp-microvolt = <675000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <1014000000>;
-+			opp-microvolt = <700000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1131000000>;
-+			opp-microvolt = <725000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1248000000>;
-+			opp-microvolt = <750000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <1326000000>;
-+			opp-microvolt = <775000>;
-+		};
-+		opp06 {
-+			opp-hz = /bits/ 64 <1417000000>;
-+			opp-microvolt = <800000>;
-+		};
-+		opp07 {
-+			opp-hz = /bits/ 64 <1508000000>;
-+			opp-microvolt = <825000>;
-+		};
-+		opp08 {
-+			opp-hz = /bits/ 64 <1586000000>;
-+			opp-microvolt = <850000>;
-+		};
-+		opp09 {
-+			opp-hz = /bits/ 64 <1625000000>;
-+			opp-microvolt = <862500>;
-+		};
-+		opp10 {
-+			opp-hz = /bits/ 64 <1677000000>;
-+			opp-microvolt = <881250>;
-+		};
-+		opp11 {
-+			opp-hz = /bits/ 64 <1716000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp12 {
-+			opp-hz = /bits/ 64 <1781000000>;
-+			opp-microvolt = <925000>;
-+		};
-+		opp13 {
-+			opp-hz = /bits/ 64 <1846000000>;
-+			opp-microvolt = <950000>;
-+		};
-+		opp14 {
-+			opp-hz = /bits/ 64 <1924000000>;
-+			opp-microvolt = <975000>;
-+		};
-+		opp15 {
-+			opp-hz = /bits/ 64 <1989000000>;
-+			opp-microvolt = <1000000>;
-+		};	};
-+
-+	cluster1_opp: opp_table2 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+		opp00 {
-+			opp-hz = /bits/ 64 <793000000>;
-+			opp-microvolt = <650000>;
-+		};
-+		opp01 {
-+			opp-hz = /bits/ 64 <910000000>;
-+			opp-microvolt = <675000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <1014000000>;
-+			opp-microvolt = <700000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1131000000>;
-+			opp-microvolt = <725000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1248000000>;
-+			opp-microvolt = <750000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <1326000000>;
-+			opp-microvolt = <775000>;
-+		};
-+		opp06 {
-+			opp-hz = /bits/ 64 <1417000000>;
-+			opp-microvolt = <800000>;
-+		};
-+		opp07 {
-+			opp-hz = /bits/ 64 <1508000000>;
-+			opp-microvolt = <825000>;
-+		};
-+		opp08 {
-+			opp-hz = /bits/ 64 <1586000000>;
-+			opp-microvolt = <850000>;
-+		};
-+		opp09 {
-+			opp-hz = /bits/ 64 <1625000000>;
-+			opp-microvolt = <862500>;
-+		};
-+		opp10 {
-+			opp-hz = /bits/ 64 <1677000000>;
-+			opp-microvolt = <881250>;
-+		};
-+		opp11 {
-+			opp-hz = /bits/ 64 <1716000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp12 {
-+			opp-hz = /bits/ 64 <1781000000>;
-+			opp-microvolt = <925000>;
-+		};
-+		opp13 {
-+			opp-hz = /bits/ 64 <1846000000>;
-+			opp-microvolt = <950000>;
-+		};
-+		opp14 {
-+			opp-hz = /bits/ 64 <1924000000>;
-+			opp-microvolt = <975000>;
-+		};
-+		opp15 {
-+			opp-hz = /bits/ 64 <1989000000>;
-+			opp-microvolt = <1000000>;
-+		};
-+	};
-+
-+	cluster2_opp: opp_table3 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+		opp00 {
-+			opp-hz = /bits/ 64 <273000000>;
-+			opp-microvolt = <650000>;
-+		};
-+		opp01 {
-+			opp-hz = /bits/ 64 <338000000>;
-+			opp-microvolt = <675000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <403000000>;
-+			opp-microvolt = <700000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <463000000>;
-+			opp-microvolt = <725000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <546000000>;
-+			opp-microvolt = <750000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <624000000>;
-+			opp-microvolt = <775000>;
-+		};
-+		opp06 {
-+			opp-hz = /bits/ 64 <689000000>;
-+			opp-microvolt = <800000>;
-+		};
-+		opp07 {
-+			opp-hz = /bits/ 64 <767000000>;
-+			opp-microvolt = <825000>;
-+		};
-+		opp08 {
-+			opp-hz = /bits/ 64 <845000000>;
-+			opp-microvolt = <850000>;
-+		};
-+		opp09 {
-+			opp-hz = /bits/ 64 <871000000>;
-+			opp-microvolt = <862500>;
-+		};
-+		opp10 {
-+			opp-hz = /bits/ 64 <923000000>;
-+			opp-microvolt = <881250>;
-+		};
-+		opp11 {
-+			opp-hz = /bits/ 64 <962000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp12 {
-+			opp-hz = /bits/ 64 <1027000000>;
-+			opp-microvolt = <925000>;
-+		};
-+		opp13 {
-+			opp-hz = /bits/ 64 <1092000000>;
-+			opp-microvolt = <950000>;
-+		};
-+		opp14 {
-+			opp-hz = /bits/ 64 <1144000000>;
-+			opp-microvolt = <975000>;
-+		};
-+		opp15 {
-+			opp-hz = /bits/ 64 <1196000000>;
-+			opp-microvolt = <1000000>;
-+		};
-+	};
-+
-+
-+	cci: cci {
-+		compatible = "mediatek,mt8183-cci";
-+		clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
-+		clock-names = "cci_clock";
-+		operating-points-v2 = <&cluster2_opp>;
-+	};
-+
 +	devfreq-cpufreq-map {
 +		cci-cpufreq {
 +			target-dev = <&cci>;
@@ -1812,119 +1419,71 @@ index f6b395f0695b..e4b9d58c66c6 100644
  	cpus {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -81,6 +320,13 @@
+@@ -295,6 +319,7 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x000>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <741>;
-+			dynamic-power-coefficient = <84>;
-+			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu1: cpu@1 {
-@@ -88,6 +334,13 @@
+ 			dynamic-power-coefficient = <84>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
+@@ -308,6 +333,7 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x001>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <741>;
-+			dynamic-power-coefficient = <84>;
-+			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -95,6 +348,13 @@
+ 			dynamic-power-coefficient = <84>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
+@@ -321,6 +347,7 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x002>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <741>;
-+			dynamic-power-coefficient = <84>;
-+			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -102,6 +362,13 @@
+ 			dynamic-power-coefficient = <84>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
+@@ -334,6 +361,7 @@
  			compatible = "arm,cortex-a53";
  			reg = <0x003>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <741>;
-+			dynamic-power-coefficient = <84>;
-+			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster0_opp>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu4: cpu@100 {
-@@ -109,6 +376,13 @@
+ 			dynamic-power-coefficient = <84>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP0_SEL>,
+@@ -347,6 +375,7 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x100>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <211>;
-+			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster1_opp>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu5: cpu@101 {
-@@ -116,6 +390,13 @@
+ 			dynamic-power-coefficient = <211>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
+@@ -360,6 +389,7 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x101>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <211>;
-+			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster1_opp>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu6: cpu@102 {
-@@ -123,6 +404,13 @@
+ 			dynamic-power-coefficient = <211>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
+@@ -373,6 +403,7 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x102>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <211>;
-+			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster1_opp>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu7: cpu@103 {
-@@ -130,6 +418,13 @@
+ 			dynamic-power-coefficient = <211>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
+@@ -386,6 +417,7 @@
  			compatible = "arm,cortex-a73";
  			reg = <0x103>;
  			enable-method = "psci";
 +			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <211>;
-+			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
-+				<&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-+			clock-names = "cpu", "intermediate";
-+			operating-points-v2 = <&cluster1_opp>;
-+			#cooling-cells = <2>;
- 		};
- 	};
- 
-@@ -157,6 +452,24 @@
+ 			dynamic-power-coefficient = <211>;
+ 			#cooling-cells = <2>;
+ 			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
+@@ -419,6 +451,24 @@
  		clock-output-names = "clk26m";
  	};
  
@@ -1941,7 +1500,7 @@ index f6b395f0695b..e4b9d58c66c6 100644
 +		};
 +		scp_mem_reserved: scp_mem_region {
 +			compatible = "shared-dma-pool";
-+			reg = <0 0x50000000 0 0x2300000>;
++			reg = <0 0x50000000 0 0x2900000>;
 +			no-map;
 +		};
 +	};
@@ -1949,23 +1508,22 @@ index f6b395f0695b..e4b9d58c66c6 100644
  	timer {
  		compatible = "arm,armv8-timer";
  		interrupt-parent = <&gic>;
-@@ -172,6 +485,15 @@
- 		compatible = "simple-bus";
- 		ranges;
+@@ -595,6 +645,14 @@
+ 			clock-names = "spi", "wrap";
+ 		};
  
-+		soc_data: soc_data@08000000 {
-+			compatible = "mediatek,mt8183-efuse",
-+				     "mediatek,efuse";
-+			reg = <0 0x08000000 0 0x0010>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			status = "disabled";
++		systimer@10017000 {
++			compatible = "mediatek,mt8183-timer",
++				     "mediatek,mt6765-timer";
++			reg = <0 0x10017000 0 0x1000>;
++			interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&topckgen CLK_TOP_CLK13M>;
 +		};
 +
- 		gic: interrupt-controller@c000000 {
- 			compatible = "arm,gic-v3";
- 			#interrupt-cells = <4>;
-@@ -333,6 +655,60 @@
+ 		iommu: iommu@10205000 {
+ 			compatible = "mediatek,mt8183-m4u";
+ 			reg = <0 0x10205000 0 0x1000>;
+@@ -604,6 +662,50 @@
  			#iommu-cells = <1>;
  		};
  
@@ -2013,132 +1571,10 @@ index f6b395f0695b..e4b9d58c66c6 100644
 +			status = "disabled";
 +		};
 +
-+		auxadc: auxadc@11001000 {
-+			compatible = "mediatek,mt8183-auxadc",
-+				     "mediatek,mt8173-auxadc";
-+			reg = <0 0x11001000 0 0x1000>;
-+			clocks = <&infracfg CLK_INFRA_AUXADC>;
-+			clock-names = "main";
-+			#io-channel-cells = <1>;
-+			status = "disabled";
-+		};
-+
- 		uart0: serial@11002000 {
- 			compatible = "mediatek,mt8183-uart",
- 				     "mediatek,mt6577-uart";
-@@ -422,6 +798,111 @@
- 			status = "disabled";
- 		};
- 
-+		thermal: thermal@1100b000 {
-+			#thermal-sensor-cells = <1>;
-+			compatible = "mediatek,mt8183-thermal";
-+			reg = <0 0x1100b000 0 0x1000>;
-+			interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&infracfg CLK_INFRA_THERM>,
-+				<&infracfg CLK_INFRA_AUXADC>;
-+			clock-names = "therm", "auxadc";
-+			resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
-+			mediatek,auxadc = <&auxadc>;
-+			mediatek,apmixedsys = <&apmixedsys>;
-+			mediatek,hw-reset-temp = <117000>;
-+			nvmem-cells = <&thermal_calibration>;
-+			nvmem-cell-names = "calibration-data";
-+		};
-+
-+		thermal-zones {
-+			cpu_thermal: cpu_thermal {
-+				polling-delay-passive = <100>; /* milliseconds */
-+				polling-delay = <500>; /* milliseconds */
-+
-+				thermal-sensors = <&thermal 0>;
-+				sustainable-power = <1500>; /* milliwatts */
-+
-+				trips {
-+					threshold: trip-point@0 {
-+						temperature = <68000>;
-+						hysteresis = <2000>;
-+						type = "passive";
-+					};
-+
-+					target: trip-point@1 {
-+						temperature = <85000>;
-+						hysteresis = <2000>;
-+						type = "passive";
-+					};
-+
-+					cpu_crit: cpu-crit {
-+						temperature = <115000>;
-+						hysteresis = <2000>;
-+						type = "critical";
-+					};
-+				};
-+
-+				cooling-maps {
-+					map0 {
-+						trip = <&target>;
-+						cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+								 contribution = <3072>;
-+					};
-+					map1 {
-+						trip = <&target>;
-+						cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								 <&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								 <&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+								 contribution = <1024>;
-+					};
-+					map2 {
-+						trip = <&target>;
-+						cooling-device = <&gpu THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+						contribution = <2048>;
-+					};
-+				};
-+			};
-+
-+			tzts1: tzts1 {
-+				polling-delay-passive = <1000>; /* milliseconds */
-+				polling-delay = <1000>; /* milliseconds */
-+
-+				thermal-sensors = <&thermal 1>;
-+			};
-+
-+			tzts2: tzts2{
-+				polling-delay-passive = <1000>; /* milliseconds */
-+				polling-delay = <1000>; /* milliseconds */
-+
-+				thermal-sensors = <&thermal 2>;
-+			};
-+
-+			tzts3: tzts3{
-+				polling-delay-passive = <1000>; /* milliseconds */
-+				polling-delay = <1000>; /* milliseconds */
-+
-+				thermal-sensors = <&thermal 3>;
-+			};
-+
-+			tzts4: tzts4{
-+				polling-delay-passive = <1000>; /* milliseconds */
-+				polling-delay = <1000>; /* milliseconds */
-+
-+				thermal-sensors = <&thermal 4>;
-+			};
-+
-+			tzts5: tzts5{
-+				polling-delay-passive = <1000>; /* milliseconds */
-+				polling-delay = <1000>; /* milliseconds */
-+
-+				thermal-sensors = <&thermal 5>;
-+			};
-+		};
-+
- 		pwm0: pwm@1100e000 {
- 			compatible = "mediatek,mt8183-disp-pwm";
- 			reg = <0 0x1100e000 0 0x1000>;
-@@ -654,10 +1135,100 @@
+ 		auxadc: auxadc@11001000 {
+ 			compatible = "mediatek,mt8183-auxadc",
+ 				     "mediatek,mt8173-auxadc";
+@@ -1072,10 +1174,100 @@
  			};
  		};
  
@@ -2240,52 +1676,10 @@ index f6b395f0695b..e4b9d58c66c6 100644
  		};
  
  		mmc0: mmc@11230000 {
-@@ -684,6 +1255,27 @@
- 			status = "disabled";
+@@ -1426,6 +1618,13 @@
+ 			phy-names = "dphy";
  		};
  
-+		mipi_tx0: mipi-dphy@11e50000 {
-+			compatible = "mediatek,mt8183-mipi-tx";
-+			reg = <0 0x11e50000 0 0x1000>;
-+			clocks = <&apmixedsys CLK_APMIXED_MIPID0_26M>;
-+			clock-names = "ref_clk";
-+			#clock-cells = <0>;
-+			#phy-cells = <0>;
-+			clock-output-names = "mipi_tx0_pll";
-+		};
-+
-+		efuse: efuse@11f10000 {
-+			compatible = "mediatek,mt8183-efuse",
-+				     "mediatek,efuse";
-+			reg = <0 0x11f10000 0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			thermal_calibration: calib@180 {
-+				reg = <0x180 0xc>;
-+			};
-+		};
-+
- 		u3phy: usb-phy@11f40000 {
- 			compatible = "mediatek,generic-tphy-v2";
- 			#address-cells = <2>;
-@@ -973,6 +1565,27 @@
- 			clocks = <&mmsys CLK_MM_DISP_DITHER0>;
- 		};
- 
-+		dsi0: dsi@14014000 {
-+			compatible = "mediatek,mt8183-dsi";
-+			reg = <0 0x14014000 0 0x1000>;
-+			interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_LOW>;
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
-+			mediatek,syscon-dsi = <&mmsys 0x140>;
-+			clocks = <&mmsys CLK_MM_DSI0_MM>,
-+				<&mmsys CLK_MM_DSI0_IF>,
-+				<&mipi_tx0>;
-+			clock-names = "engine", "digital", "hs";
-+			phys = <&mipi_tx0>;
-+			phy-names = "dphy";
-+		};
-+
 +		mutex: mutex@14016000 {
 +			compatible = "mediatek,mt8183-disp-mutex";
 +			reg = <0 0x14016000 0 0x1000>;
@@ -2297,10 +1691,10 @@ index f6b395f0695b..e4b9d58c66c6 100644
  			compatible = "mediatek,mt8183-smi-larb";
  			reg = <0 0x14017000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index ba62ba46ee2f..f5444d8611c4 100644
+index 98d07e8cba80..07a62cdd6b5a 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -125,7 +125,7 @@ CONFIG_COMMON_CLK_RK808=y
+@@ -124,7 +124,7 @@ CONFIG_COMMON_CLK_RK808=y
  CONFIG_COMMON_CLK_XGENE=y
  CONFIG_CPUFREQ_DT=y
  CONFIG_CPUFREQ_DT_PLATDEV=y
@@ -2309,7 +1703,7 @@ index ba62ba46ee2f..f5444d8611c4 100644
  # CONFIG_CRYPTO_DEV_CAVIUM_ZIP is not set
  # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
  # CONFIG_CRYPTO_DEV_QCE is not set
-@@ -134,6 +134,7 @@ CONFIG_CRYPTO_DEV_ROCKCHIP=y
+@@ -133,6 +133,7 @@ CONFIG_CRYPTO_DEV_ROCKCHIP=y
  CONFIG_CRYPTO_DEV_VIRTIO=m
  CONFIG_CRYPTO_ENGINE=m
  # CONFIG_DEBUG_EFI is not set
@@ -2317,7 +1711,7 @@ index ba62ba46ee2f..f5444d8611c4 100644
  CONFIG_DEVPORT=y
  # CONFIG_DGNC is not set
  # CONFIG_DL2K is not set
-@@ -206,7 +207,7 @@ CONFIG_EFI_STUB=y
+@@ -205,7 +206,7 @@ CONFIG_EFI_STUB=y
  # CONFIG_EFI_VARS is not set
  CONFIG_EINT_MTK=y
  # CONFIG_EMAC_ROCKCHIP is not set
@@ -2326,7 +1720,7 @@ index ba62ba46ee2f..f5444d8611c4 100644
  # CONFIG_ENIC is not set
  # CONFIG_EPIC100 is not set
  # CONFIG_ET131X is not set
-@@ -391,13 +392,17 @@ CONFIG_MSM_GCC_8916=y
+@@ -390,13 +391,17 @@ CONFIG_MSM_GCC_8916=y
  # CONFIG_MTD_INTEL_VR_NOR is not set
  CONFIG_MTD_MT81xx_NOR=y
  # CONFIG_MTD_PMC551 is not set
@@ -2346,7 +1740,7 @@ index ba62ba46ee2f..f5444d8611c4 100644
  CONFIG_MTK_SCPSYS=y
  CONFIG_MTK_SMI=y
  CONFIG_MTK_THERMAL=y
-@@ -670,6 +675,7 @@ CONFIG_ROCKCHIP_THERMAL=y
+@@ -669,6 +674,7 @@ CONFIG_ROCKCHIP_THERMAL=y
  CONFIG_ROCKCHIP_TIMER=y
  CONFIG_RPMSG=y
  CONFIG_RPMSG_CHAR=y
@@ -2354,7 +1748,7 @@ index ba62ba46ee2f..f5444d8611c4 100644
  CONFIG_RPMSG_QCOM_GLINK_NATIVE=y
  CONFIG_RPMSG_QCOM_GLINK_SMEM=y
  CONFIG_RPMSG_QCOM_SMD=y
-@@ -922,22 +928,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
+@@ -921,22 +927,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
  # CONFIG_TYPHOON is not set
  CONFIG_UCS2_STRING=y
  # CONFIG_USB_AMD5536UDC is not set
@@ -2548,10 +1942,10 @@ index ccb3654bff32..5a3620e9aacc 100644
  CONFIG_VIDEOBUF2_MEMOPS=m
  CONFIG_VIDEOBUF2_V4L2=m
 diff --git a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-index 3413a7f71836..6ecf194a86b2 100644
+index 80931110c50a..75bf228c564f 100644
 --- a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-@@ -71,6 +71,7 @@ CONFIG_CPUFREQ_DT_PLATDEV=y
+@@ -70,6 +70,7 @@ CONFIG_CPUFREQ_DT_PLATDEV=y
  # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
  CONFIG_CRYPTO_DEV_ROCKCHIP=y
  CONFIG_DEVFREQ_EVENT_ROCKCHIP_DFI=y
@@ -2559,7 +1953,7 @@ index 3413a7f71836..6ecf194a86b2 100644
  CONFIG_DEVPORT=y
  # CONFIG_DGNC is not set
  # CONFIG_DL2K is not set
-@@ -547,10 +548,16 @@ CONFIG_THERMAL_WRITABLE_TRIPS=y
+@@ -546,10 +547,16 @@ CONFIG_THERMAL_WRITABLE_TRIPS=y
  # CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
  # CONFIG_TYPHOON is not set
  # CONFIG_USB_AMD5536UDC is not set
@@ -2590,7 +1984,7 @@ index b79beed5c220..c5a721c79f04 100644
  # CONFIG_CLK_QORIQ is not set
  # CONFIG_CLOCK_THERMAL is not set
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index cfc356bdcb7a..e795e22f1965 100644
+index 3a244762b87b..0140315ea4cd 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
 @@ -257,6 +257,7 @@ CONFIG_DEBUG_ALIGN_RODATA=y
@@ -2709,6 +2103,145 @@ index 3dc1b9f15ea2..5df0e476e94d 100644
  obj-$(CONFIG_COMMON_CLK_MT8183_VENCSYS) += clk-mt8183-venc.o
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkdbg.o clkdbg-mt8183.o
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkchk.o clkchk-mt8183.o
+diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
+index f37dd2396ce7..b35a3c742062 100644
+--- a/drivers/clk/mediatek/clk-mt8183.c
++++ b/drivers/clk/mediatek/clk-mt8183.c
+@@ -25,9 +25,11 @@ static const struct mtk_fixed_clk top_fixed_clks[] = {
+ 	FIXED_CLK(CLK_TOP_UNIVP_192M, "univpll_192m", "univpll", 192000000),
+ };
+ 
++static const struct mtk_fixed_factor top_early_divs[] = {
++	FACTOR(CLK_TOP_CLK13M, "clk13m", "clk26m", 1, 2),
++};
++
+ static const struct mtk_fixed_factor top_divs[] = {
+-	FACTOR(CLK_TOP_CLK13M, "clk13m", "clk26m", 1,
+-		2),
+ 	FACTOR(CLK_TOP_F26M_CK_D2, "csw_f26m_ck_d2", "clk26m", 1,
+ 		2),
+ 	FACTOR(CLK_TOP_SYSPLL_CK, "syspll_ck", "mainpll", 1,
+@@ -395,14 +397,6 @@ static const char * const atb_parents[] = {
+ 	"syspll_d5"
+ };
+ 
+-static const char * const sspm_parents[] = {
+-	"clk26m",
+-	"univpll_d2_d4",
+-	"syspll_d2_d2",
+-	"univpll_d2_d2",
+-	"syspll_d3"
+-};
+-
+ static const char * const dpi0_parents[] = {
+ 	"clk26m",
+ 	"tvdpll_d2",
+@@ -606,9 +600,6 @@ static const struct mtk_mux top_muxes[] = {
+ 	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_ATB, "atb_sel",
+ 		atb_parents, 0xa0,
+ 		0xa4, 0xa8, 0, 2, 7, 0x004, 24),
+-	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_SSPM, "sspm_sel",
+-		sspm_parents, 0xa0,
+-		0xa4, 0xa8, 8, 3, 15, 0x004, 25),
+ 	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_DPI0, "dpi0_sel",
+ 		dpi0_parents, 0xa0,
+ 		0xa4, 0xa8, 16, 4, 23, 0x004, 26),
+@@ -947,12 +938,8 @@ static const struct mtk_gate infra_clks[] = {
+ 		"fufs_sel", 13),
+ 	GATE_INFRA2(CLK_INFRA_MD32_BCLK, "infra_md32_bclk",
+ 		"axi_sel", 14),
+-	GATE_INFRA2(CLK_INFRA_SSPM, "infra_sspm",
+-		"sspm_sel", 15),
+ 	GATE_INFRA2(CLK_INFRA_UNIPRO_MBIST, "infra_unipro_mbist",
+ 		"axi_sel", 16),
+-	GATE_INFRA2(CLK_INFRA_SSPM_BUS_HCLK, "infra_sspm_bus_hclk",
+-		"axi_sel", 17),
+ 	GATE_INFRA2(CLK_INFRA_I2C5, "infra_i2c5",
+ 		"i2c_sel", 18),
+ 	GATE_INFRA2(CLK_INFRA_I2C5_ARBITER, "infra_i2c5_arbiter",
+@@ -986,10 +973,6 @@ static const struct mtk_gate infra_clks[] = {
+ 		"msdc50_0_sel", 1),
+ 	GATE_INFRA3(CLK_INFRA_MSDC2_SELF, "infra_msdc2_self",
+ 		"msdc50_0_sel", 2),
+-	GATE_INFRA3(CLK_INFRA_SSPM_26M_SELF, "infra_sspm_26m_self",
+-		"f_f26m_ck", 3),
+-	GATE_INFRA3(CLK_INFRA_SSPM_32K_SELF, "infra_sspm_32k_self",
+-		"f_f26m_ck", 4),
+ 	GATE_INFRA3(CLK_INFRA_UFS_AXI, "infra_ufs_axi",
+ 		"axi_sel", 5),
+ 	GATE_INFRA3(CLK_INFRA_I2C6, "infra_i2c6",
+@@ -1167,37 +1150,62 @@ static int clk_mt8183_apmixed_probe(struct platform_device *pdev)
+ 	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+ }
+ 
++static struct clk_onecell_data *top_clk_data;
++
++static void clk_mt8183_top_init_early(struct device_node *node)
++{
++	int i;
++
++	if (!top_clk_data) {
++		top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
++
++		for (i = 0; i < CLK_TOP_NR_CLK; i++)
++			top_clk_data->clks[i] = ERR_PTR(-EPROBE_DEFER);
++	}
++
++	mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs),
++			top_clk_data);
++
++	of_clk_add_provider(node, of_clk_src_onecell_get, top_clk_data);
++}
++
++CLK_OF_DECLARE_DRIVER(mt8183_topckgen, "mediatek,mt8183-topckgen",
++			clk_mt8183_top_init_early);
++
+ static int clk_mt8183_top_probe(struct platform_device *pdev)
+ {
+ 	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	void __iomem *base;
+-	struct clk_onecell_data *clk_data;
+ 	struct device_node *node = pdev->dev.of_node;
+ 
+ 	base = devm_ioremap_resource(&pdev->dev, res);
+ 	if (IS_ERR(base))
+ 		return PTR_ERR(base);
+ 
+-	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
++	if (!top_clk_data)
++		top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
+ 
+ 	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
+-		clk_data);
++		top_clk_data);
+ 
+-	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
++	mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs),
++		top_clk_data);
++
++	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
+ 
+ 	mtk_clk_register_muxes(top_muxes, ARRAY_SIZE(top_muxes),
+-		node, &mt8183_clk_lock, clk_data);
++		node, &mt8183_clk_lock, top_clk_data);
+ 
+ 	mtk_clk_register_composites(top_aud_muxes, ARRAY_SIZE(top_aud_muxes),
+-		base, &mt8183_clk_lock, clk_data);
++		base, &mt8183_clk_lock, top_clk_data);
+ 
+ 	mtk_clk_register_composites(top_aud_divs, ARRAY_SIZE(top_aud_divs),
+-		base, &mt8183_clk_lock, clk_data);
++		base, &mt8183_clk_lock, top_clk_data);
+ 
+ 	mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks),
+-		clk_data);
++		top_clk_data);
+ 
+-	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	return of_clk_add_provider(node, of_clk_src_onecell_get, top_clk_data);
+ }
+ 
+ static int clk_mt8183_infra_probe(struct platform_device *pdev)
 diff --git a/drivers/clk/mediatek/clkchk-mt8183.c b/drivers/clk/mediatek/clkchk-mt8183.c
 new file mode 100644
 index 000000000000..99813e053fca
@@ -10572,27 +10105,6 @@ index 000000000000..5d00c05a8717
 +postcore_initcall(emi_bw_init);
 +module_exit(emi_bw_exit);
 +
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index fef424efd65d..41eb0510e080 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -667,6 +667,16 @@ static int ec_device_probe(struct platform_device *pdev)
- 		ec_platform->ec_name = CROS_EC_DEV_ISH_NAME;
- 	}
- 
-+	/* Check whether this is actually a SCP rather than an EC. */
-+	if (cros_ec_check_features(ec, EC_FEATURE_SCP)) {
-+		dev_info(dev, "CrOS SCP MCU detected.\n");
-+		/*
-+		 * Help userspace differentiating ECs from SCP,
-+		 * regardless of the probing order.
-+		 */
-+		ec_platform->ec_name = CROS_EC_DEV_SCP_NAME;
-+	}
-+
- 	/*
- 	 * Add the class device
- 	 * Link to the character device for creating the /dev entry
 diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
 index ce8398e6f2c0..c8f3fe701ea7 100644
 --- a/drivers/mmc/host/Makefile
@@ -11031,42 +10543,35 @@ index 000000000000..33659ba69be3
 +	hqa_write,
 +	burn
 +};
-diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 2d0bfd986bfc..e4144a41f763 100644
---- a/drivers/net/wireless/ath/ath10k/core.c
-+++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -678,7 +678,7 @@ static void ath10k_send_suspend_complete(struct ath10k *ar)
- 	complete(&ar->target_suspend);
- }
+diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
+index 9eed1cb17fda..3e3be1e5bbaf 100644
+--- a/drivers/net/wireless/ath/ath10k/htt_rx.c
++++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
+@@ -1952,6 +1952,7 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 	int num_mpdu_ranges;
+ 	size_t tot_hdr_len;
+ 	struct ieee80211_channel *ch;
++	bool pn_invalid;
  
--static void ath10k_init_sdio(struct ath10k *ar)
-+static void ath10k_init_sdio(struct ath10k *ar, enum ath10k_firmware_mode mode)
- {
- 	u32 param = 0;
+ 	peer_id = __le16_to_cpu(rx->hdr.peer_id);
  
-@@ -695,7 +695,12 @@ static void ath10k_init_sdio(struct ath10k *ar)
- 	 * not big enough for mac80211 / native wifi frames. disable it
- 	 */
- 	param &= ~HI_ACS_FLAGS_ALT_DATA_CREDIT_SIZE;
--	param |= HI_ACS_FLAGS_SDIO_SWAP_MAILBOX_SET;
-+
-+	if (mode == ATH10K_FIRMWARE_MODE_UTF)
-+		param &= ~HI_ACS_FLAGS_SDIO_SWAP_MAILBOX_SET;
-+	else
-+		param |= HI_ACS_FLAGS_SDIO_SWAP_MAILBOX_SET;
-+
- 	ath10k_bmi_write32(ar, hi_acs_flags, param);
- 
- 	/* Explicitly set fwlog prints to zero as target may turn it on
-@@ -2394,7 +2399,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
- 			goto err;
- 
- 		if (ar->hif.bus == ATH10K_BUS_SDIO)
--			ath10k_init_sdio(ar);
-+			ath10k_init_sdio(ar, mode);
+@@ -1983,9 +1984,13 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 		goto err;
  	}
  
- 	ar->htc.htc_ops.target_send_suspend_complete =
+-	if (check_pn_type == HTT_RX_PN_CHECK &&
+-	    ath10k_htt_rx_pn_check_replay_hl(ar, peer, rx))
+-		goto err;
++	if (check_pn_type == HTT_RX_PN_CHECK) {
++		spin_lock_bh(&ar->data_lock);
++		pn_invalid = ath10k_htt_rx_pn_check_replay_hl(ar, peer, rx);
++		spin_unlock_bh(&ar->data_lock);
++		if (pn_invalid)
++			goto err;
++	}
+ 
+ 	/* Strip off all headers before the MAC header before delivery to
+ 	 * mac80211
 diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
 index 5c256d41cc82..62740e9c6140 100644
 --- a/drivers/net/wireless/ath/ath10k/hw.h
@@ -11080,7 +10585,7 @@ index 5c256d41cc82..62740e9c6140 100644
  #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_LSB  1
  #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_MASK 0x00000002
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 0eb162fab87d..628129ba9161 100644
+index 47059255a2b3..2707151535ec 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
 @@ -861,6 +861,11 @@ static int ath10k_sdio_mbox_proc_cpu_intr(struct ath10k *ar)
@@ -11119,33 +10624,6 @@ index 0eb162fab87d..628129ba9161 100644
  
  	/* Set up the Error Interrupt status Register */
  	regs->err_int_status_en =
-@@ -1647,7 +1650,12 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
- 		ath10k_dbg(ar, ATH10K_DBG_SDIO,
- 			   "sdio mailbox swap service enabled\n");
- 		ar_sdio->swap_mbox = true;
-+	} else {
-+		ath10k_dbg(ar, ATH10K_DBG_SDIO,
-+			"sdio mailbox swap service disabled\n");
-+		ar_sdio->swap_mbox = false;
- 	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
-index f13d88906b5a..c194a0baaedf 100644
---- a/drivers/net/wireless/ath/ath10k/txrx.c
-+++ b/drivers/net/wireless/ath/ath10k/txrx.c
-@@ -157,6 +157,9 @@ struct ath10k_peer *ath10k_peer_find_by_id(struct ath10k *ar, int peer_id)
- {
- 	struct ath10k_peer *peer;
- 
-+	if (peer_id >= BITS_PER_TYPE(peer->peer_ids))
-+		return NULL;
-+
- 	lockdep_assert_held(&ar->data_lock);
- 
- 	list_for_each_entry(peer, &ar->peers, list)
 diff --git a/drivers/pinctrl/mediatek/mtk-eint.c b/drivers/pinctrl/mediatek/mtk-eint.c
 index a613e546717a..564cfaee129d 100644
 --- a/drivers/pinctrl/mediatek/mtk-eint.c
@@ -11280,7 +10758,7 @@ index 37fec1c8eb0e..fde5f3399ad1 100644
 +extern const struct dev_pm_ops mtk_eint_pm_ops;
  #endif /* __PINCTRL_MTK_COMMON_V2_H */
 diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index 893940d45f0d..14ef981164d3 100644
+index 15803c71fe80..14ef981164d3 100644
 --- a/drivers/pwm/pwm-mtk-disp.c
 +++ b/drivers/pwm/pwm-mtk-disp.c
 @@ -106,13 +106,13 @@ static int mtk_disp_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
@@ -11398,1407 +10876,6 @@ index 893940d45f0d..14ef981164d3 100644
  }
  
  static const struct mtk_pwm_data mt2701_pwm_data = {
-@@ -277,10 +265,21 @@ static const struct mtk_pwm_data mt8173_pwm_data = {
- 	.commit_mask = 0x1,
- };
- 
-+static const struct mtk_pwm_data mt8183_pwm_data = {
-+	.enable_mask = BIT(0),
-+	.con0 = 0x18,
-+	.con0_sel = 0x0,
-+	.con1 = 0x1c,
-+	.has_commit = false,
-+	.bls_debug = 0x80,
-+	.bls_debug_mask = 0x3,
-+};
-+
- static const struct of_device_id mtk_disp_pwm_of_match[] = {
- 	{ .compatible = "mediatek,mt2701-disp-pwm", .data = &mt2701_pwm_data},
- 	{ .compatible = "mediatek,mt6595-disp-pwm", .data = &mt8173_pwm_data},
- 	{ .compatible = "mediatek,mt8173-disp-pwm", .data = &mt8173_pwm_data},
-+	{ .compatible = "mediatek,mt8183-disp-pwm", .data = &mt8183_pwm_data},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, mtk_disp_pwm_of_match);
-diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index f0abd2608044..01182936f4fa 100644
---- a/drivers/remoteproc/Kconfig
-+++ b/drivers/remoteproc/Kconfig
-@@ -22,6 +22,16 @@ config IMX_REMOTEPROC
- 
- 	  It's safe to say N here.
- 
-+config MTK_SCP
-+	tristate "Mediatek SCP support"
-+	depends on ARCH_MEDIATEK
-+	select RPMSG_MTK_SCP
-+	help
-+	  Say y here to support Mediatek's System Companion Processor (SCP) via
-+	  the remote processor framework.
-+
-+	  It's safe to say N here.
-+
- config OMAP_REMOTEPROC
- 	tristate "OMAP remoteproc support"
- 	depends on ARCH_OMAP4 || SOC_OMAP5
-diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index ce5d061e92be..16b3e5e7a81c 100644
---- a/drivers/remoteproc/Makefile
-+++ b/drivers/remoteproc/Makefile
-@@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_sysfs.o
- remoteproc-y				+= remoteproc_virtio.o
- remoteproc-y				+= remoteproc_elf_loader.o
- obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
-+obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
- obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
- obj-$(CONFIG_WKUP_M3_RPROC)		+= wkup_m3_rproc.o
- obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-new file mode 100644
-index 000000000000..19a907810271
---- /dev/null
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -0,0 +1,77 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018 MediaTek Inc.
-+ */
-+
-+#ifndef __RPROC_MTK_COMMON_H
-+#define __RPROC_MTK_COMMON_H
-+
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/platform_device.h>
-+#include <linux/remoteproc.h>
-+
-+#define MT8183_SW_RSTN			0x0
-+#define MT8183_SW_RSTN_BIT		BIT(0)
-+#define MT8183_SCP_TO_HOST		0x1C
-+#define MT8183_SCP_IPC_INT_BIT		BIT(0)
-+#define MT8183_SCP_WDT_INT_BIT		BIT(8)
-+#define MT8183_HOST_TO_SCP		0x28
-+#define MT8183_HOST_IPC_INT_BIT		BIT(0)
-+#define MT8183_SCP_SRAM_PDN		0x402C
-+
-+#define SCP_FW_VER_LEN		32
-+
-+struct scp_run {
-+	u32 signaled;
-+	s8 fw_ver[SCP_FW_VER_LEN];
-+	u32 dec_capability;
-+	u32 enc_capability;
-+	wait_queue_head_t wq;
-+};
-+
-+struct scp_ipi_desc {
-+	scp_ipi_handler_t handler;
-+	void *priv;
-+};
-+
-+struct mtk_scp {
-+	struct device *dev;
-+	struct rproc *rproc;
-+	struct clk *clk;
-+	void __iomem *reg_base;
-+	void __iomem *sram_base;
-+	size_t sram_size;
-+
-+	struct share_obj *recv_buf;
-+	struct share_obj *send_buf;
-+	struct scp_run run;
-+	struct mutex lock; /* for protecting mtk_scp data structure */
-+	struct scp_ipi_desc ipi_desc[SCP_IPI_MAX];
-+	bool ipi_id_ack[SCP_IPI_MAX];
-+	wait_queue_head_t ack_wq;
-+
-+	void __iomem *cpu_addr;
-+	phys_addr_t phys_addr;
-+	size_t dram_size;
-+
-+	struct rproc_subdev *rpmsg_subdev;
-+};
-+
-+/**
-+ * struct share_obj - SRAM buffer shared with
-+ *		      AP and SCP
-+ *
-+ * @id:		IPI id
-+ * @len:	share buffer length
-+ * @share_buf:	share buffer data
-+ */
-+struct share_obj {
-+	s32 id;
-+	u32 len;
-+	u8 share_buf[288];
-+};
-+
-+void scp_memcpy_aligned(void *dst, const void *src, unsigned int len);
-+
-+#endif
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-new file mode 100644
-index 000000000000..4d24e8bd7aab
---- /dev/null
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -0,0 +1,654 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) 2018 MediaTek Inc.
-+
-+#include <asm/barrier.h>
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_data/mtk_scp.h>
-+#include <linux/platform_device.h>
-+#include <linux/remoteproc.h>
-+#include <linux/rpmsg/mtk_rpmsg.h>
-+
-+#include "mtk_common.h"
-+#include "remoteproc_internal.h"
-+
-+#define MAX_CODE_SIZE 0x500000
-+#define SCP_FW_END 0x7C000
-+
-+struct platform_device *scp_get_pdev(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *scp_node;
-+	struct platform_device *scp_pdev;
-+
-+	scp_node = of_parse_phandle(dev->of_node, "mediatek,scp", 0);
-+	if (!scp_node) {
-+		dev_err(dev, "can't get SCP node\n");
-+		return NULL;
-+	}
-+
-+	scp_pdev = of_find_device_by_node(scp_node);
-+	if (WARN_ON(!scp_pdev)) {
-+		dev_err(dev, "SCP pdev failed\n");
-+		of_node_put(scp_node);
-+		return NULL;
-+	}
-+
-+	return scp_pdev;
-+}
-+EXPORT_SYMBOL_GPL(scp_get_pdev);
-+
-+static void scp_wdt_handler(struct mtk_scp *scp)
-+{
-+	rproc_report_crash(scp->rproc, RPROC_WATCHDOG);
-+}
-+
-+static void scp_init_ipi_handler(void *data, unsigned int len, void *priv)
-+{
-+	struct mtk_scp *scp = (struct mtk_scp *)priv;
-+	struct scp_run *run = (struct scp_run *)data;
-+
-+	scp->run.signaled = run->signaled;
-+	strncpy(scp->run.fw_ver, run->fw_ver, SCP_FW_VER_LEN);
-+	scp->run.dec_capability = run->dec_capability;
-+	scp->run.enc_capability = run->enc_capability;
-+	wake_up_interruptible(&scp->run.wq);
-+}
-+
-+static void scp_ipi_handler(struct mtk_scp *scp)
-+{
-+	struct share_obj *rcv_obj = scp->recv_buf;
-+	struct scp_ipi_desc *ipi_desc = scp->ipi_desc;
-+	u8 tmp_data[288];
-+
-+	if (rcv_obj->id >= SCP_IPI_MAX || !ipi_desc[rcv_obj->id].handler) {
-+		dev_err(scp->dev, "No such ipi id = %d\n", rcv_obj->id);
-+		return;
-+	}
-+
-+	memcpy_fromio(tmp_data, &rcv_obj->share_buf, rcv_obj->len);
-+	ipi_desc[rcv_obj->id].handler(tmp_data,
-+				      rcv_obj->len,
-+				      ipi_desc[rcv_obj->id].priv);
-+	scp->ipi_id_ack[rcv_obj->id] = true;
-+	wake_up(&scp->ack_wq);
-+}
-+
-+static int scp_ipi_init(struct mtk_scp *scp)
-+{
-+	size_t send_offset = SCP_FW_END - sizeof(struct share_obj);
-+	size_t recv_offset = send_offset - sizeof(struct share_obj);
-+
-+	/* Disable SCP to host interrupt */
-+	writel(MT8183_SCP_IPC_INT_BIT, scp->reg_base + MT8183_SCP_TO_HOST);
-+
-+	/* shared buffer initialization */
-+	scp->recv_buf = (__force struct share_obj *)(scp->sram_base +
-+						recv_offset);
-+	scp->send_buf = (__force struct share_obj *)(scp->sram_base +
-+						send_offset);
-+	memset_io(scp->recv_buf, 0, sizeof(scp->recv_buf));
-+	memset_io(scp->send_buf, 0, sizeof(scp->send_buf));
-+
-+	return 0;
-+}
-+
-+static void scp_reset_assert(const struct mtk_scp *scp)
-+{
-+	u32 val;
-+
-+	val = readl(scp->reg_base + MT8183_SW_RSTN);
-+	val &= ~MT8183_SW_RSTN_BIT;
-+	writel(val, scp->reg_base + MT8183_SW_RSTN);
-+}
-+
-+static void scp_reset_deassert(const struct mtk_scp *scp)
-+{
-+	u32 val;
-+
-+	val = readl(scp->reg_base + MT8183_SW_RSTN);
-+	val |= MT8183_SW_RSTN_BIT;
-+	writel(val, scp->reg_base + MT8183_SW_RSTN);
-+}
-+
-+static irqreturn_t scp_irq_handler(int irq, void *priv)
-+{
-+	struct mtk_scp *scp = priv;
-+	u32 scp_to_host;
-+	int ret;
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if(ret) {
-+		dev_err(scp->dev, "failed to enable clocks\n");
-+		return IRQ_NONE;
-+	}
-+
-+	scp_to_host = readl(scp->reg_base + MT8183_SCP_TO_HOST);
-+	if (scp_to_host & MT8183_SCP_IPC_INT_BIT) {
-+		scp_ipi_handler(scp);
-+	} else {
-+		dev_err(scp->dev, "SCP watchdog timeout! 0x%x", scp_to_host);
-+		scp_wdt_handler(scp);
-+	}
-+
-+	/*
-+	 * Ensure that all writes to SRAM are committed before another
-+	 * interrupt.
-+	 */
-+	mb();
-+	/* SCP won't send another interrupt until we set SCP_TO_HOST to 0. */
-+	writel(MT8183_SCP_IPC_INT_BIT | MT8183_SCP_WDT_INT_BIT,
-+	       scp->reg_base + MT8183_SCP_TO_HOST);
-+	clk_disable_unprepare(scp->clk);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int scp_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
-+{
-+	struct device *dev = &rproc->dev;
-+	struct elf32_hdr *ehdr;
-+	struct elf32_phdr *phdr;
-+	int i, ret = 0;
-+	const u8 *elf_data = fw->data;
-+
-+	ehdr = (struct elf32_hdr *)elf_data;
-+	phdr = (struct elf32_phdr *)(elf_data + ehdr->e_phoff);
-+
-+	/* go through the available ELF segments */
-+	for (i = 0; i < ehdr->e_phnum; i++, phdr++) {
-+		u32 da = phdr->p_paddr;
-+		u32 memsz = phdr->p_memsz;
-+		u32 filesz = phdr->p_filesz;
-+		u32 offset = phdr->p_offset;
-+		void __iomem *ptr;
-+
-+		if (phdr->p_type != PT_LOAD)
-+			continue;
-+
-+		dev_dbg(dev, "phdr: type %d da 0x%x memsz 0x%x filesz 0x%x\n",
-+			phdr->p_type, da, memsz, filesz);
-+
-+		if (filesz > memsz) {
-+			dev_err(dev, "bad phdr filesz 0x%x memsz 0x%x\n",
-+				filesz, memsz);
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		if (offset + filesz > fw->size) {
-+			dev_err(dev, "truncated fw: need 0x%x avail 0x%zx\n",
-+				offset + filesz, fw->size);
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		/* grab the kernel address for this device address */
-+		ptr = rproc_da_to_va(rproc, da, memsz);
-+		if (!ptr) {
-+			dev_err(dev, "bad phdr da 0x%x mem 0x%x\n", da, memsz);
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		/* put the segment where the remote processor expects it */
-+		if (phdr->p_filesz)
-+			scp_memcpy_aligned(ptr, elf_data + phdr->p_offset,
-+					   filesz);
-+	}
-+
-+	return ret;
-+}
-+
-+static int scp_load(struct rproc *rproc, const struct firmware *fw)
-+{
-+	const struct mtk_scp *scp = rproc->priv;
-+	struct device *dev = scp->dev;
-+	int ret;
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clocks\n");
-+		return ret;
-+	}
-+
-+	/* Hold SCP in reset while loading FW. */
-+	scp_reset_assert(scp);
-+
-+	/* Turn on the power of SCP's SRAM before using it. */
-+	writel(0x0, scp->reg_base + MT8183_SCP_SRAM_PDN);
-+	ret = scp_elf_load_segments(rproc, fw);
-+	clk_disable_unprepare(scp->clk);
-+
-+	return ret;
-+}
-+
-+static int scp_start(struct rproc *rproc)
-+{
-+	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
-+	struct device *dev = scp->dev;
-+	struct scp_run *run;
-+	int ret;
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clocks\n");
-+		return ret;
-+	}
-+
-+	run = &scp->run;
-+	run->signaled = false;
-+
-+	scp_reset_deassert(scp);
-+
-+	ret = wait_event_interruptible_timeout(
-+					run->wq,
-+					run->signaled,
-+					msecs_to_jiffies(2000));
-+
-+	if (ret == 0) {
-+		dev_err(dev, "wait SCP initialization timeout!\n");
-+		ret = -ETIME;
-+		goto stop;
-+	}
-+	if (ret == -ERESTARTSYS) {
-+		dev_err(dev, "wait SCP interrupted by a signal!\n");
-+		goto stop;
-+	}
-+	clk_disable_unprepare(scp->clk);
-+	dev_info(dev, "SCP is ready. FW version %s\n", run->fw_ver);
-+
-+	return 0;
-+
-+stop:
-+	scp_reset_assert(scp);
-+	clk_disable_unprepare(scp->clk);
-+	return ret;
-+}
-+
-+static void *scp_da_to_va(struct rproc *rproc, u64 da, int len)
-+{
-+	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
-+	int offset;
-+
-+	if (da < scp->sram_size) {
-+		offset = da;
-+		if (offset >= 0 && ((offset + len) < scp->sram_size))
-+			return (__force void *)(scp->sram_base + offset);
-+	} else if (da >= scp->sram_size &&
-+		   da < (scp->sram_size + MAX_CODE_SIZE)) {
-+		offset = da;
-+		if (offset >= 0 && (offset + len) < MAX_CODE_SIZE)
-+			return scp->cpu_addr + offset;
-+	} else {
-+		offset = da - scp->phys_addr;
-+		if (offset >= 0 &&
-+		    (offset + len) < (scp->dram_size - MAX_CODE_SIZE))
-+			return scp->cpu_addr + offset;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int scp_stop(struct rproc *rproc)
-+{
-+	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
-+	int ret;
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if (ret) {
-+		dev_err(scp->dev, "failed to enable clocks\n");
-+		return ret;
-+	}
-+
-+	scp_reset_assert(scp);
-+	clk_disable_unprepare(scp->clk);
-+
-+	return 0;
-+}
-+
-+static const struct rproc_ops scp_ops = {
-+	.start		= scp_start,
-+	.stop		= scp_stop,
-+	.load		= scp_load,
-+	.da_to_va	= scp_da_to_va,
-+};
-+
-+unsigned int scp_get_vdec_hw_capa(struct platform_device *pdev)
-+{
-+	struct mtk_scp *scp = platform_get_drvdata(pdev);
-+
-+	return scp->run.dec_capability;
-+}
-+EXPORT_SYMBOL_GPL(scp_get_vdec_hw_capa);
-+
-+unsigned int scp_get_venc_hw_capa(struct platform_device *pdev)
-+{
-+	struct mtk_scp *scp = platform_get_drvdata(pdev);
-+
-+	return scp->run.enc_capability;
-+}
-+EXPORT_SYMBOL_GPL(scp_get_venc_hw_capa);
-+
-+void *scp_mapping_dm_addr(struct platform_device *pdev, u32 mem_addr)
-+{
-+	struct mtk_scp *scp = platform_get_drvdata(pdev);
-+	void *ptr;
-+
-+	ptr = scp_da_to_va(scp->rproc, mem_addr, 0);
-+	if (!ptr)
-+		return ERR_PTR(-EINVAL);
-+
-+	return ptr;
-+}
-+EXPORT_SYMBOL_GPL(scp_mapping_dm_addr);
-+
-+#if SCP_RESERVED_MEM
-+phys_addr_t scp_mem_base_phys;
-+phys_addr_t scp_mem_base_virt;
-+phys_addr_t scp_mem_size;
-+
-+static struct scp_reserve_mblock scp_reserve_mblock[] = {
-+	{
-+		.num = SCP_ISP_MEM_ID,
-+		.start_phys = 0x0,
-+		.start_virt = 0x0,
-+		.size = 0x1400000,  /*20MB*/
-+	},
-+};
-+
-+static int scp_reserve_mem_init(struct mtk_scp *scp)
-+{
-+	enum scp_reserve_mem_id_t id;
-+	phys_addr_t accumlate_memory_size = 0;
-+
-+	scp_mem_base_phys = (phys_addr_t) (scp->phys_addr + MAX_CODE_SIZE);
-+	scp_mem_size = (phys_addr_t) (scp->dram_size - MAX_CODE_SIZE);
-+
-+	dev_info(scp->dev,
-+		 "phys:0x%llx - 0x%llx (0x%llx)\n",
-+		 scp_mem_base_phys,
-+		 scp_mem_base_phys + scp_mem_size,
-+		 scp_mem_size);
-+	accumlate_memory_size = 0;
-+	for (id = 0; id < SCP_NUMS_MEM_ID; id++) {
-+		scp_reserve_mblock[id].start_phys =
-+			scp_mem_base_phys + accumlate_memory_size;
-+		accumlate_memory_size += scp_reserve_mblock[id].size;
-+		dev_info(scp->dev,
-+			 "[reserve_mem:%d]: phys:0x%llx - 0x%llx (0x%llx)\n",
-+			 id, scp_reserve_mblock[id].start_phys,
-+			 scp_reserve_mblock[id].start_phys +
-+				 scp_reserve_mblock[id].size,
-+			 scp_reserve_mblock[id].size);
-+	}
-+	return 0;
-+}
-+
-+static int scp_reserve_memory_ioremap(struct mtk_scp *scp)
-+{
-+	enum scp_reserve_mem_id_t id;
-+	phys_addr_t accumlate_memory_size = 0;
-+
-+	scp_mem_base_virt = (phys_addr_t)(size_t)ioremap_wc(scp_mem_base_phys,
-+							    scp_mem_size);
-+
-+	dev_info(scp->dev,
-+		 "virt:0x%llx - 0x%llx (0x%llx)\n",
-+		(phys_addr_t)scp_mem_base_virt,
-+		(phys_addr_t)scp_mem_base_virt + (phys_addr_t)scp_mem_size,
-+		scp_mem_size);
-+	for (id = 0; id < SCP_NUMS_MEM_ID; id++) {
-+		scp_reserve_mblock[id].start_virt =
-+			scp_mem_base_virt + accumlate_memory_size;
-+		accumlate_memory_size += scp_reserve_mblock[id].size;
-+	}
-+	/* the reserved memory should be larger then expected memory
-+	 * or scp_reserve_mblock does not match dts
-+	 */
-+	WARN_ON(accumlate_memory_size > scp_mem_size);
-+#ifdef DEBUG
-+	for (id = 0; id < NUMS_MEM_ID; id++) {
-+		dev_info(scp->dev,
-+			 "[mem_reserve-%d] phys:0x%llx,virt:0x%llx,size:0x%llx\n",
-+			 id,
-+			 scp_get_reserve_mem_phys(id),
-+			 scp_get_reserve_mem_virt(id),
-+			 scp_get_reserve_mem_size(id));
-+	}
-+#endif
-+	return 0;
-+}
-+phys_addr_t scp_get_reserve_mem_phys(enum scp_reserve_mem_id_t id)
-+{
-+	if (id >= SCP_NUMS_MEM_ID) {
-+		pr_err("[SCP] no reserve memory for %d", id);
-+		return 0;
-+	} else
-+		return scp_reserve_mblock[id].start_phys;
-+}
-+EXPORT_SYMBOL_GPL(scp_get_reserve_mem_phys);
-+
-+phys_addr_t scp_get_reserve_mem_virt(enum scp_reserve_mem_id_t id)
-+{
-+	if (id >= SCP_NUMS_MEM_ID) {
-+		pr_err("[SCP] no reserve memory for %d", id);
-+		return 0;
-+	} else
-+		return scp_reserve_mblock[id].start_virt;
-+}
-+EXPORT_SYMBOL_GPL(scp_get_reserve_mem_virt);
-+
-+phys_addr_t scp_get_reserve_mem_size(enum scp_reserve_mem_id_t id)
-+{
-+	if (id >= SCP_NUMS_MEM_ID) {
-+		pr_err("[SCP] no reserve memory for %d", id);
-+		return 0;
-+	} else
-+		return scp_reserve_mblock[id].size;
-+}
-+EXPORT_SYMBOL_GPL(scp_get_reserve_mem_size);
-+#endif
-+
-+static int scp_map_memory_region(struct mtk_scp *scp)
-+{
-+	struct device_node *node;
-+	struct resource r;
-+	int ret;
-+
-+	node = of_parse_phandle(scp->dev->of_node, "memory-region", 0);
-+	if (!node) {
-+		dev_err(scp->dev, "no memory-region specified\n");
-+		return -EINVAL;
-+	}
-+
-+	ret = of_address_to_resource(node, 0, &r);
-+	if (ret)
-+		return ret;
-+
-+	scp->phys_addr = r.start;
-+	scp->dram_size = resource_size(&r);
-+	scp->cpu_addr =
-+		devm_ioremap_wc(scp->dev, scp->phys_addr, scp->dram_size);
-+
-+	if (!scp->cpu_addr) {
-+		dev_err(scp->dev, "unable to map memory region: %pa+%zx\n",
-+			&r.start, scp->dram_size);
-+		return -EBUSY;
-+	}
-+
-+#if SCP_RESERVED_MEM
-+	scp_reserve_mem_init(scp);
-+	scp_reserve_memory_ioremap(scp);
-+#endif
-+	return 0;
-+}
-+
-+static struct mtk_rpmsg_info mtk_scp_rpmsg_info = {
-+	.send_ipi = scp_ipi_send,
-+	.register_ipi = scp_ipi_register,
-+	.unregister_ipi = scp_ipi_unregister,
-+	.ns_ipi_id = SCP_IPI_NS_SERVICE,
-+};
-+
-+static void scp_add_rpmsg_subdev(struct mtk_scp *scp)
-+{
-+	scp->rpmsg_subdev =
-+		mtk_rpmsg_create_rproc_subdev(to_platform_device(scp->dev),
-+					      &mtk_scp_rpmsg_info);
-+	if (scp->rpmsg_subdev)
-+		rproc_add_subdev(scp->rproc, scp->rpmsg_subdev);
-+}
-+
-+static void scp_remove_rpmsg_subdev(struct mtk_scp *scp)
-+{
-+	if (scp->rpmsg_subdev) {
-+		rproc_remove_subdev(scp->rproc, scp->rpmsg_subdev);
-+		mtk_rpmsg_destroy_rproc_subdev(scp->rpmsg_subdev);
-+		scp->rpmsg_subdev = NULL;
-+	}
-+}
-+
-+static int scp_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct mtk_scp *scp;
-+	struct rproc *rproc;
-+	struct resource *res;
-+	char *fw_name = "scp.img";
-+	int ret;
-+
-+	rproc = rproc_alloc(dev,
-+			    np->name,
-+			    &scp_ops,
-+			    fw_name,
-+			    sizeof(*scp));
-+	if (!rproc) {
-+		dev_err(dev, "unable to allocate remoteproc\n");
-+		return -ENOMEM;
-+	}
-+
-+	scp = (struct mtk_scp *)rproc->priv;
-+	scp->rproc = rproc;
-+	scp->dev = dev;
-+	platform_set_drvdata(pdev, scp);
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
-+	scp->sram_base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR((__force void *)scp->sram_base)) {
-+		dev_err(dev, "Failed to parse and map sram memory\n");
-+		ret = PTR_ERR((__force void *)scp->sram_base);
-+		goto free_rproc;
-+	}
-+	scp->sram_size = resource_size(res);
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-+	scp->reg_base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR((__force void *)scp->reg_base)) {
-+		dev_err(dev, "Failed to parse and map cfg memory\n");
-+		ret = PTR_ERR((__force void *)scp->reg_base);
-+		goto free_rproc;
-+	}
-+
-+	ret = scp_map_memory_region(scp);
-+	if (ret)
-+		goto free_rproc;
-+
-+	scp->clk = devm_clk_get(dev, "main");
-+	if (IS_ERR(scp->clk)) {
-+		dev_err(dev, "Failed to get clock\n");
-+		ret = PTR_ERR(scp->clk);
-+		goto free_rproc;
-+	}
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clocks\n");
-+		goto free_rproc;
-+	}
-+
-+	ret = scp_ipi_init(scp);
-+	clk_disable_unprepare(scp->clk);
-+	if (ret) {
-+		dev_err(dev, "Failed to init ipi\n");
-+		goto free_rproc;
-+	}
-+
-+	/* register SCP initialization IPI */
-+	ret = scp_ipi_register(pdev,
-+			       SCP_IPI_INIT,
-+			       scp_init_ipi_handler,
-+			       scp);
-+	if (ret) {
-+		dev_err(dev, "Failed to register IPI_SCP_INIT\n");
-+		goto free_rproc;
-+	}
-+
-+	mutex_init(&scp->lock);
-+
-+	init_waitqueue_head(&scp->run.wq);
-+	init_waitqueue_head(&scp->ack_wq);
-+
-+	scp_add_rpmsg_subdev(scp);
-+
-+	ret = devm_request_threaded_irq(dev, platform_get_irq(pdev, 0), NULL,
-+					scp_irq_handler, IRQF_ONESHOT,
-+					pdev->name, scp);
-+
-+	if (ret) {
-+		dev_err(dev, "failed to request irq\n");
-+		goto remove_subdev;
-+	}
-+
-+	ret = rproc_add(rproc);
-+	if (ret)
-+		goto remove_subdev;
-+
-+	return 0;
-+
-+remove_subdev:
-+	scp_remove_rpmsg_subdev(scp);
-+	mutex_destroy(&scp->lock);
-+free_rproc:
-+	rproc_free(rproc);
-+
-+	return ret;
-+}
-+
-+static int scp_remove(struct platform_device *pdev)
-+{
-+	struct mtk_scp *scp = platform_get_drvdata(pdev);
-+
-+	scp_remove_rpmsg_subdev(scp);
-+	rproc_del(scp->rproc);
-+	rproc_free(scp->rproc);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id mtk_scp_of_match[] = {
-+	{ .compatible = "mediatek,mt8183-scp"},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mtk_scp_of_match);
-+
-+static struct platform_driver mtk_scp_driver = {
-+	.probe = scp_probe,
-+	.remove = scp_remove,
-+	.driver = {
-+		.name = "mtk-scp",
-+		.of_match_table = of_match_ptr(mtk_scp_of_match),
-+	},
-+};
-+
-+module_platform_driver(mtk_scp_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("MediaTek SCP control driver");
-diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-new file mode 100644
-index 000000000000..10b0cbda7aee
---- /dev/null
-+++ b/drivers/remoteproc/mtk_scp_ipi.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) 2018 MediaTek Inc.
-+
-+#include <asm/barrier.h>
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/platform_data/mtk_scp.h>
-+#include <linux/platform_device.h>
-+
-+#include "mtk_common.h"
-+
-+int scp_ipi_register(struct platform_device *pdev,
-+		     enum scp_ipi_id id,
-+		     scp_ipi_handler_t handler,
-+		     void *priv)
-+{
-+	struct mtk_scp *scp = platform_get_drvdata(pdev);
-+	struct scp_ipi_desc *ipi_desc;
-+
-+	if (!scp) {
-+		dev_err(&pdev->dev, "scp device is not ready\n");
-+		return -EPROBE_DEFER;
-+	}
-+
-+	if (WARN_ON(id < 0) || WARN_ON(id >= SCP_IPI_MAX) ||
-+	    WARN_ON(handler == NULL))
-+		return -EINVAL;
-+
-+	ipi_desc = scp->ipi_desc;
-+	ipi_desc[id].handler = handler;
-+	ipi_desc[id].priv = priv;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(scp_ipi_register);
-+
-+void scp_ipi_unregister(struct platform_device *pdev, enum scp_ipi_id id)
-+{
-+	struct mtk_scp *scp = platform_get_drvdata(pdev);
-+	struct scp_ipi_desc *ipi_desc;
-+
-+	if (!scp)
-+		return;
-+
-+	if (WARN_ON(id < 0) || WARN_ON(id >= SCP_IPI_MAX))
-+		return;
-+
-+	ipi_desc = scp->ipi_desc;
-+	ipi_desc[id].handler = NULL;
-+	ipi_desc[id].priv = NULL;
-+}
-+EXPORT_SYMBOL_GPL(scp_ipi_unregister);
-+
-+/*
-+ * Copy src to dst, where dst is in SCP SRAM region.
-+ * Since AP access of SCP SRAM don't support byte write, this always write a
-+ * full word at a time, and may cause some extra bytes to be written at the
-+ * beginning & ending of dst.
-+ */
-+void scp_memcpy_aligned(void *dst, const void *src, unsigned int len)
-+{
-+	void *ptr;
-+	u32 val;
-+	unsigned int i = 0;
-+
-+	if (!IS_ALIGNED((unsigned long)dst, 4)) {
-+		ptr = (void *)ALIGN_DOWN((unsigned long)dst, 4);
-+		i = 4 - (dst - ptr);
-+		val = readl_relaxed(ptr);
-+		memcpy((u8 *)&val + (4 - i), src, i);
-+		writel_relaxed(val, ptr);
-+	}
-+
-+	while (i + 4 <= len) {
-+		val = *((u32 *)(src + i));
-+		writel_relaxed(val, dst + i);
-+		i += 4;
-+	}
-+	if (i < len) {
-+		val = readl_relaxed(dst + i);
-+		memcpy(&val, src + i, len - i);
-+		writel_relaxed(val, dst + i);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(scp_memcpy_aligned);
-+
-+int scp_ipi_send(struct platform_device *pdev,
-+		 enum scp_ipi_id id,
-+		 void *buf,
-+		 unsigned int len,
-+		 unsigned int wait)
-+{
-+	struct mtk_scp *scp = platform_get_drvdata(pdev);
-+	struct share_obj *send_obj = scp->send_buf;
-+	unsigned long timeout;
-+	int ret;
-+
-+	if (WARN_ON(id <= SCP_IPI_INIT) || WARN_ON(id >= SCP_IPI_MAX) ||
-+	    WARN_ON(id == SCP_IPI_NS_SERVICE) ||
-+	    WARN_ON(len > sizeof(send_obj->share_buf)) || WARN_ON(!buf))
-+		return -EINVAL;
-+
-+	mutex_lock(&scp->lock);
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if (ret) {
-+		dev_err(scp->dev, "failed to enable clock\n");
-+		return ret;
-+	}
-+
-+	 /* Wait until SCP receives the last command */
-+	timeout = jiffies + msecs_to_jiffies(2000);
-+	do {
-+		if (time_after(jiffies, timeout)) {
-+			dev_err(scp->dev, "%s: IPI timeout!\n", __func__);
-+			ret = -EIO;
-+			mutex_unlock(&scp->lock);
-+			goto clock_disable;
-+		}
-+	} while (readl(scp->reg_base + MT8183_HOST_TO_SCP));
-+
-+	scp_memcpy_aligned(send_obj->share_buf, buf, len);
-+
-+	send_obj->len = len;
-+	send_obj->id = id;
-+
-+	scp->ipi_id_ack[id] = false;
-+	/*
-+	 * Ensure that all writes to SRAM are committed before sending the
-+	 * interrupt to SCP.
-+	 */
-+	mb();
-+	/* send the command to SCP */
-+	writel(MT8183_HOST_IPC_INT_BIT, scp->reg_base + MT8183_HOST_TO_SCP);
-+
-+	mutex_unlock(&scp->lock);
-+
-+	if (wait) {
-+		/* wait for SCP's ACK */
-+		timeout = msecs_to_jiffies(wait);
-+		ret = wait_event_timeout(scp->ack_wq,
-+					 scp->ipi_id_ack[id],
-+					 timeout);
-+		scp->ipi_id_ack[id] = false;
-+		if (WARN(!ret,
-+			 "scp ipi %d ack time out !", id))
-+			ret = -EIO;
-+		else
-+			ret = 0;
-+	}
-+
-+clock_disable:
-+	clk_disable_unprepare(scp->clk);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(scp_ipi_send);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("MediaTek scp IPI interface");
-diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index d0322b41eca5..85e3cc075cb4 100644
---- a/drivers/rpmsg/Kconfig
-+++ b/drivers/rpmsg/Kconfig
-@@ -15,6 +15,15 @@ config RPMSG_CHAR
- 	  in /dev. They make it possible for user-space programs to send and
- 	  receive rpmsg packets.
- 
-+config RPMSG_MTK_SCP
-+	tristate "MediaTek SCP"
-+	depends on MTK_SCP
-+	select RPMSG
-+	help
-+	  Say y here to enable support providing communication channels to
-+	  remote processors in MediaTek platforms.
-+	  This use IPI and IPC to communicate with remote processors.
-+
- config RPMSG_QCOM_GLINK_NATIVE
- 	tristate
- 	select RPMSG
-diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
-index 9aa859502d27..ae92a7fb08f6 100644
---- a/drivers/rpmsg/Makefile
-+++ b/drivers/rpmsg/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_RPMSG)		+= rpmsg_core.o
- obj-$(CONFIG_RPMSG_CHAR)	+= rpmsg_char.o
-+obj-$(CONFIG_RPMSG_MTK_SCP)	+= mtk_rpmsg.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_RPM) += qcom_glink_rpm.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_NATIVE) += qcom_glink_native.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_SMEM) += qcom_glink_smem.o
-diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
-new file mode 100644
-index 000000000000..e5e988941ea6
---- /dev/null
-+++ b/drivers/rpmsg/mtk_rpmsg.c
-@@ -0,0 +1,396 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright 2018 Google LLC.
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/remoteproc.h>
-+#include <linux/rpmsg/mtk_rpmsg.h>
-+#include <linux/workqueue.h>
-+
-+#include "rpmsg_internal.h"
-+
-+struct mtk_rpmsg_rproc_subdev {
-+	struct platform_device *pdev;
-+	struct mtk_rpmsg_info *info;
-+	struct rpmsg_endpoint *ns_ept;
-+	struct rproc_subdev subdev;
-+
-+	struct work_struct register_work;
-+	struct list_head channels;
-+	struct mutex channels_lock;
-+};
-+
-+#define to_mtk_subdev(d) container_of(d, struct mtk_rpmsg_rproc_subdev, subdev)
-+
-+struct mtk_rpmsg_channel_info {
-+	struct rpmsg_channel_info info;
-+	bool registered;
-+	struct list_head list;
-+};
-+
-+/**
-+ * struct rpmsg_ns_msg - dynamic name service announcement message
-+ * @name: name of remote service that is published
-+ * @addr: address of remote service that is published
-+ *
-+ * This message is sent across to publish a new service. When we receive these
-+ * messages, an appropriate rpmsg channel (i.e device) is created. In turn, the
-+ * ->probe() handler of the appropriate rpmsg driver will be invoked
-+ *  (if/as-soon-as one is registered).
-+ */
-+struct rpmsg_ns_msg {
-+	char name[RPMSG_NAME_SIZE];
-+	u32 addr;
-+} __packed;
-+
-+struct mtk_rpmsg_device {
-+	struct rpmsg_device rpdev;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+};
-+
-+struct mtk_rpmsg_endpoint {
-+	struct rpmsg_endpoint ept;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+};
-+
-+#define to_mtk_rpmsg_device(r) container_of(r, struct mtk_rpmsg_device, rpdev)
-+#define to_mtk_rpmsg_endpoint(r) container_of(r, struct mtk_rpmsg_endpoint, ept)
-+
-+static const struct rpmsg_endpoint_ops mtk_rpmsg_endpoint_ops;
-+
-+static void __ept_release(struct kref *kref)
-+{
-+	struct rpmsg_endpoint *ept = container_of(kref, struct rpmsg_endpoint,
-+						  refcount);
-+	kfree(to_mtk_rpmsg_endpoint(ept));
-+}
-+
-+static void mtk_rpmsg_ipi_handler(void *data, unsigned int len, void *priv)
-+{
-+	struct mtk_rpmsg_endpoint *mept = priv;
-+	struct rpmsg_endpoint *ept = &mept->ept;
-+	int ret;
-+
-+	ret = (*ept->cb)(ept->rpdev, data, len, ept->priv, ept->addr);
-+	if (ret)
-+		dev_warn(&ept->rpdev->dev, "rpmsg handler return error = %d",
-+			 ret);
-+}
-+
-+static struct rpmsg_endpoint *
-+__rpmsg_create_ept(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+		   struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
-+		   u32 id)
-+{
-+	struct mtk_rpmsg_endpoint *mept;
-+	struct rpmsg_endpoint *ept;
-+	struct platform_device *pdev = mtk_subdev->pdev;
-+	int ret;
-+
-+	mept = kzalloc(sizeof(*mept), GFP_KERNEL);
-+	if (!mept)
-+		return NULL;
-+	mept->mtk_subdev = mtk_subdev;
-+
-+	ept = &mept->ept;
-+	kref_init(&ept->refcount);
-+
-+	ept->rpdev = rpdev;
-+	ept->cb = cb;
-+	ept->priv = priv;
-+	ept->ops = &mtk_rpmsg_endpoint_ops;
-+	ept->addr = id;
-+
-+	ret = mtk_subdev->info->register_ipi(pdev, id, mtk_rpmsg_ipi_handler,
-+					     mept);
-+	if (ret) {
-+		dev_err(&pdev->dev, "IPI register failed, id = %d", id);
-+		kref_put(&ept->refcount, __ept_release);
-+		return NULL;
-+	}
-+
-+	return ept;
-+}
-+
-+static struct rpmsg_endpoint *
-+mtk_rpmsg_create_ept(struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
-+		     struct rpmsg_channel_info chinfo)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_device(rpdev)->mtk_subdev;
-+
-+	return __rpmsg_create_ept(mtk_subdev, rpdev, cb, priv, chinfo.src);
-+}
-+
-+static void mtk_rpmsg_destroy_ept(struct rpmsg_endpoint *ept)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	mtk_subdev->info->unregister_ipi(mtk_subdev->pdev, ept->addr);
-+	kref_put(&ept->refcount, __ept_release);
-+}
-+
-+static int mtk_rpmsg_send(struct rpmsg_endpoint *ept, void *data, int len)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	return mtk_subdev->info->send_ipi(mtk_subdev->pdev, ept->addr, data,
-+					  len, 0);
-+}
-+
-+static int mtk_rpmsg_trysend(struct rpmsg_endpoint *ept, void *data, int len)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	/*
-+	 * TODO: This currently is same as mtk_rpmsg_send, and wait until SCP
-+	 * received the last command.
-+	 */
-+	return mtk_subdev->info->send_ipi(mtk_subdev->pdev, ept->addr, data,
-+					  len, 0);
-+}
-+
-+static const struct rpmsg_endpoint_ops mtk_rpmsg_endpoint_ops = {
-+	.destroy_ept = mtk_rpmsg_destroy_ept,
-+	.send = mtk_rpmsg_send,
-+	.trysend = mtk_rpmsg_trysend,
-+};
-+
-+static void mtk_rpmsg_release_device(struct device *dev)
-+{
-+	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
-+	struct mtk_rpmsg_device *mdev = to_mtk_rpmsg_device(rpdev);
-+
-+	kfree(mdev);
-+}
-+
-+static const struct rpmsg_device_ops mtk_rpmsg_device_ops = {
-+	.create_ept = mtk_rpmsg_create_ept,
-+};
-+
-+static struct device_node *
-+mtk_rpmsg_match_device_subnode(struct device_node *node, const char *channel)
-+{
-+	struct device_node *child;
-+	const char *name;
-+	int ret;
-+
-+	for_each_available_child_of_node(node, child) {
-+		ret = of_property_read_string(child, "mtk,rpmsg-name", &name);
-+		if (ret)
-+			continue;
-+
-+		if (strcmp(name, channel) == 0)
-+			return child;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int mtk_rpmsg_register_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+				     struct rpmsg_channel_info *info)
-+{
-+	struct rpmsg_device *rpdev;
-+	struct mtk_rpmsg_device *mdev;
-+	struct platform_device *pdev = mtk_subdev->pdev;
-+	int ret;
-+
-+	mdev = kzalloc(sizeof(*mdev), GFP_KERNEL);
-+	if (!mdev)
-+		return -ENOMEM;
-+
-+	mdev->mtk_subdev = mtk_subdev;
-+
-+	rpdev = &mdev->rpdev;
-+	rpdev->ops = &mtk_rpmsg_device_ops;
-+	rpdev->src = info->src;
-+	rpdev->dst = info->dst;
-+	strncpy(rpdev->id.name, info->name, RPMSG_NAME_SIZE);
-+
-+	rpdev->dev.of_node =
-+		mtk_rpmsg_match_device_subnode(pdev->dev.of_node, info->name);
-+	rpdev->dev.parent = &pdev->dev;
-+	rpdev->dev.release = mtk_rpmsg_release_device;
-+
-+	ret = rpmsg_register_device(rpdev);
-+	if (ret) {
-+		kfree(mdev);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void mtk_register_device_work_function(struct work_struct *register_work)
-+{
-+	struct mtk_rpmsg_rproc_subdev *subdev = container_of(
-+		register_work, struct mtk_rpmsg_rproc_subdev, register_work);
-+	struct platform_device *pdev = subdev->pdev;
-+	struct mtk_rpmsg_channel_info *info;
-+	int ret;
-+
-+	mutex_lock(&subdev->channels_lock);
-+	list_for_each_entry(info, &subdev->channels, list) {
-+		if (info->registered)
-+			continue;
-+
-+		ret = mtk_rpmsg_register_device(subdev, &info->info);
-+		if (ret) {
-+			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
-+			continue;
-+		}
-+
-+		info->registered = true;
-+	}
-+	mutex_unlock(&subdev->channels_lock);
-+}
-+
-+static int mtk_rpmsg_create_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+				   char *name, u32 addr)
-+{
-+	struct mtk_rpmsg_channel_info *info;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	strncpy(info->info.name, name, RPMSG_NAME_SIZE);
-+	info->info.src = addr;
-+	info->info.dst = RPMSG_ADDR_ANY;
-+	mutex_lock(&mtk_subdev->channels_lock);
-+	list_add(&info->list, &mtk_subdev->channels);
-+	mutex_unlock(&mtk_subdev->channels_lock);
-+
-+	schedule_work(&mtk_subdev->register_work);
-+	return 0;
-+}
-+
-+static int mtk_rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
-+			   void *priv, u32 src)
-+{
-+	struct rpmsg_ns_msg *msg = data;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = priv;
-+	struct device *dev = &mtk_subdev->pdev->dev;
-+
-+	int ret;
-+
-+	if (len != sizeof(*msg)) {
-+		dev_err(dev, "malformed ns msg (%d)\n", len);
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * the name service ept does _not_ belong to a real rpmsg channel,
-+	 * and is handled by the rpmsg bus itself.
-+	 * for sanity reasons, make sure a valid rpdev has _not_ sneaked
-+	 * in somehow.
-+	 */
-+	if (rpdev) {
-+		dev_err(dev, "anomaly: ns ept has an rpdev handle\n");
-+		return -EINVAL;
-+	}
-+
-+	/* don't trust the remote processor for null terminating the name */
-+	msg->name[RPMSG_NAME_SIZE - 1] = '\0';
-+
-+	dev_info(dev, "creating channel %s addr 0x%x\n", msg->name, msg->addr);
-+
-+	ret = mtk_rpmsg_create_device(mtk_subdev, msg->name, msg->addr);
-+	if (ret) {
-+		dev_err(dev, "create rpmsg device failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+int mtk_rpmsg_prepare(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	/* a dedicated endpoint handles the name service msgs */
-+	if (mtk_subdev->info->ns_ipi_id >= 0) {
-+		mtk_subdev->ns_ept =
-+			__rpmsg_create_ept(mtk_subdev, NULL, mtk_rpmsg_ns_cb,
-+					   mtk_subdev,
-+					   mtk_subdev->info->ns_ipi_id);
-+		if (!mtk_subdev->ns_ept) {
-+			dev_err(&mtk_subdev->pdev->dev,
-+				"failed to create name service endpoint\n");
-+			return -ENOMEM;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+void mtk_rpmsg_stop(struct rproc_subdev *subdev, bool crashed)
-+{
-+	struct mtk_rpmsg_channel_info *info, *next;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+	struct device *dev = &mtk_subdev->pdev->dev;
-+
-+	if (mtk_subdev->ns_ept)
-+		mtk_rpmsg_destroy_ept(mtk_subdev->ns_ept);
-+	cancel_work_sync(&mtk_subdev->register_work);
-+
-+	mutex_lock(&mtk_subdev->channels_lock);
-+	list_for_each_entry(info, &mtk_subdev->channels, list) {
-+		if (!info->registered)
-+			continue;
-+		if (rpmsg_unregister_device(dev, &info->info)) {
-+			dev_warn(
-+				dev,
-+				"rpmsg_unregister_device failed for %s.%d.%d\n",
-+				info->info.name, info->info.src,
-+				info->info.dst);
-+		}
-+	}
-+
-+	list_for_each_entry_safe(info, next,
-+				 &mtk_subdev->channels, list) {
-+		list_del(&info->list);
-+		kfree(info);
-+	}
-+	mutex_unlock(&mtk_subdev->channels_lock);
-+}
-+
-+struct rproc_subdev *
-+mtk_rpmsg_create_rproc_subdev(struct platform_device *pdev,
-+			      struct mtk_rpmsg_info *info)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+
-+	mtk_subdev = kzalloc(sizeof(*mtk_subdev), GFP_KERNEL);
-+	if (!mtk_subdev)
-+		return NULL;
-+
-+	mtk_subdev->pdev = pdev;
-+	mtk_subdev->subdev.prepare = mtk_rpmsg_prepare;
-+	mtk_subdev->subdev.stop = mtk_rpmsg_stop;
-+	mtk_subdev->info = info;
-+	INIT_LIST_HEAD(&mtk_subdev->channels);
-+	INIT_WORK(&mtk_subdev->register_work,
-+		  mtk_register_device_work_function);
-+	mutex_init(&mtk_subdev->channels_lock);
-+
-+	return &mtk_subdev->subdev;
-+}
-+EXPORT_SYMBOL_GPL(mtk_rpmsg_create_rproc_subdev);
-+
-+void mtk_rpmsg_destroy_rproc_subdev(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	kfree(mtk_subdev);
-+}
-+EXPORT_SYMBOL_GPL(mtk_rpmsg_destroy_rproc_subdev);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("MediaTek scp rpmsg driver");
 diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
 index ff9fef5a032b..317ec441ad60 100644
 --- a/drivers/soc/mediatek/mtk-cmdq-helper.c
@@ -13091,7 +11168,7 @@ index ff9fef5a032b..317ec441ad60 100644
  	return err;
  }
 diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index c3f933d10295..2c7593702954 100644
+index c3f933d10295..0ea22a6c9dd9 100644
 --- a/drivers/tty/serial/8250/8250_mtk.c
 +++ b/drivers/tty/serial/8250/8250_mtk.c
 @@ -1,11 +1,23 @@
@@ -13449,8 +11526,8 @@ index c3f933d10295..2c7593702954 100644
  {
  	if (!state)
 -		pm_runtime_get_sync(port->dev);
-+		if (pm_runtime_get_sync(port->dev))
-+			mtk8250_runtime_resume(port->dev);
++		if (!mtk8250_runtime_resume(port->dev))
++			pm_runtime_get_sync(port->dev);
  
  	serial8250_do_pm(port, state, old);
  
@@ -14021,244 +12098,6 @@ index ccb73422c2fa..1dfd5ed5c8c5 100644
  	CMDQ_CODE_JUMP = 0x10,
  	CMDQ_CODE_WFE = 0x20,
  	CMDQ_CODE_EOC = 0x40,
-diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-index 00443e4ed9b7..f84e71c586e2 100644
---- a/include/linux/mfd/cros_ec.h
-+++ b/include/linux/mfd/cros_ec.h
-@@ -28,6 +28,7 @@
- #define CROS_EC_DEV_FP_NAME "cros_fp"
- #define CROS_EC_DEV_TP_NAME "cros_tp"
- #define CROS_EC_DEV_ISH_NAME "cros_ish"
-+#define CROS_EC_DEV_SCP_NAME "cros_scp"
- 
- /*
-  * The EC is unresponsive for a time after a reboot command.  Add a
-diff --git a/include/linux/mfd/cros_ec_commands.h b/include/linux/mfd/cros_ec_commands.h
-index 41cb61a17fb8..ff095219165a 100644
---- a/include/linux/mfd/cros_ec_commands.h
-+++ b/include/linux/mfd/cros_ec_commands.h
-@@ -1299,6 +1299,16 @@ enum ec_feature_code {
- 	EC_FEATURE_CEC = 35,
- 	/* EC supports tight sensor timestamping. */
- 	EC_FEATURE_MOTION_SENSE_TIGHT_TIMESTAMPS = 36,
-+	/*
-+	 * EC supports tablet mode detection aligned to Chrome and allows
-+	 * setting of threshold by host command using
-+	 * MOTIONSENSE_CMD_TABLET_MODE_LID_ANGLE.
-+	 */
-+	EC_FEATURE_REFINED_TABLET_MODE_HYSTERESIS = 37,
-+	/* EC supports audio codec. */
-+	EC_FEATURE_AUDIO_CODEC = 38,
-+	/* The MCU is a System Companion Processor (SCP). */
-+	EC_FEATURE_SCP = 39,
- 	/* The MCU is an Integrated Sensor Hub */
- 	EC_FEATURE_ISH = 40,
- };
-diff --git a/include/linux/platform_data/mtk_scp.h b/include/linux/platform_data/mtk_scp.h
-new file mode 100644
-index 000000000000..b9c970b19bcc
---- /dev/null
-+++ b/include/linux/platform_data/mtk_scp.h
-@@ -0,0 +1,163 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018 MediaTek Inc.
-+ */
-+
-+#ifndef _MTK_SCP_H
-+#define _MTK_SCP_H
-+
-+#include <linux/platform_device.h>
-+
-+typedef void (*scp_ipi_handler_t) (void *data,
-+				   unsigned int len,
-+				   void *priv);
-+
-+/**
-+ * enum ipi_id - the id of inter-processor interrupt
-+ *
-+ * @SCP_IPI_INIT:	 The interrupt from scp is to notfiy kernel
-+ *			 SCP initialization completed.
-+ *			 IPI_SCP_INIT is sent from SCP when firmware is
-+ *			 loaded. AP doesn't need to send IPI_SCP_INIT
-+ *			 command to SCP.
-+ *			 For other IPI below, AP should send the request
-+ *			 to SCP to trigger the interrupt.
-+ * @SCP_IPI_MAX:	 The maximum IPI number
-+ */
-+
-+enum scp_ipi_id {
-+	SCP_IPI_INIT = 0,
-+	SCP_IPI_VDEC_H264,
-+	SCP_IPI_VDEC_VP8,
-+	SCP_IPI_VDEC_VP9,
-+	SCP_IPI_VENC_H264,
-+	SCP_IPI_VENC_VP8,
-+	SCP_IPI_MDP_INIT,
-+	SCP_IPI_MDP_DEINIT,
-+	SCP_IPI_MDP_FRAME,
-+	SCP_IPI_DIP,
-+	SCP_IPI_ISP_CMD,
-+	SCP_IPI_ISP_FRAME,
-+	SCP_IPI_FD_CMD,
-+	SCP_IPI_CROS_HOST_CMD,
-+	SCP_IPI_NS_SERVICE = 0xFF,
-+	SCP_IPI_MAX = 0x100,
-+};
-+
-+
-+/**
-+ * scp_ipi_register - register an ipi function
-+ *
-+ * @pdev:	SCP platform device
-+ * @id:		IPI ID
-+ * @handler:	IPI handler
-+ * @priv:	private data for IPI handler
-+ *
-+ * Register an ipi function to receive ipi interrupt from SCP.
-+ *
-+ * Return: Return 0 if ipi registers successfully, otherwise it is failed.
-+ */
-+int scp_ipi_register(struct platform_device *pdev,
-+		     enum scp_ipi_id id,
-+		     scp_ipi_handler_t handler,
-+		     void *priv);
-+
-+/**
-+ * scp_ipi_unregister - unregister an ipi function
-+ *
-+ * @pdev:	SCP platform device
-+ * @id:		IPI ID
-+ *
-+ * Unregister an ipi function to receive ipi interrupt from SCP.
-+ */
-+void scp_ipi_unregister(struct platform_device *pdev, enum scp_ipi_id id);
-+
-+/**
-+ * scp_ipi_send - send data from AP to scp.
-+ *
-+ * @pdev:	SCP platform device
-+ * @id:		IPI ID
-+ * @buf:	the data buffer
-+ * @len:	the data buffer length
-+ * @wait:	1: need ack
-+ *
-+ * This function is thread-safe. When this function returns,
-+ * SCP has received the data and starts the processing.
-+ * When the processing completes, IPI handler registered
-+ * by scp_ipi_register will be called in interrupt context.
-+ *
-+ * Return: Return 0 if sending data successfully, otherwise it is failed.
-+ **/
-+int scp_ipi_send(struct platform_device *pdev,
-+		 enum scp_ipi_id id,
-+		 void *buf,
-+		 unsigned int len,
-+		 unsigned int wait);
-+
-+/**
-+ * scp_get_pdev - get SCP's platform device
-+ *
-+ * @pdev:	the platform device of the module requesting SCP platform
-+ *		device for using SCP API.
-+ *
-+ * Return: Return NULL if it is failed.
-+ * otherwise it is SCP's platform device
-+ **/
-+struct platform_device *scp_get_pdev(struct platform_device *pdev);
-+
-+/**
-+ * scp_get_vdec_hw_capa - get video decoder hardware capability
-+ *
-+ * @pdev:	SCP platform device
-+ *
-+ * Return: video decoder hardware capability
-+ **/
-+unsigned int scp_get_vdec_hw_capa(struct platform_device *pdev);
-+
-+/**
-+ * scp_get_venc_hw_capa - get video encoder hardware capability
-+ *
-+ * @pdev:	SCP platform device
-+ *
-+ * Return: video encoder hardware capability
-+ **/
-+unsigned int scp_get_venc_hw_capa(struct platform_device *pdev);
-+
-+/**
-+ * scp_mapping_dm_addr - Mapping SRAM/DRAM to kernel virtual address
-+ *
-+ * @pdev:	SCP platform device
-+ * @mem_addr:	SCP views memory address
-+ *
-+ * Mapping the SCP's SRAM address /
-+ * DMEM (Data Extended Memory) memory address /
-+ * Working buffer memory address to
-+ * kernel virtual address.
-+ *
-+ * Return: Return ERR_PTR(-EINVAL) if mapping failed,
-+ * otherwise the mapped kernel virtual address
-+ **/
-+void *scp_mapping_dm_addr(struct platform_device *pdev,
-+			  u32 mem_addr);
-+
-+#define SCP_RESERVED_MEM	(1)
-+#if SCP_RESERVED_MEM
-+/* scp reserve memory ID definition*/
-+enum scp_reserve_mem_id_t {
-+	SCP_ISP_MEM_ID,
-+	SCP_NUMS_MEM_ID,
-+};
-+
-+struct scp_reserve_mblock {
-+	enum scp_reserve_mem_id_t num;
-+	u64 start_phys;
-+	u64 start_virt;
-+	u64 size;
-+};
-+
-+extern phys_addr_t scp_get_reserve_mem_phys(enum scp_reserve_mem_id_t id);
-+extern phys_addr_t scp_get_reserve_mem_virt(enum scp_reserve_mem_id_t id);
-+extern phys_addr_t scp_get_reserve_mem_size(enum scp_reserve_mem_id_t id);
-+#endif
-+
-+#endif /* _MTK_SCP_H */
-diff --git a/include/linux/rpmsg/mtk_rpmsg.h b/include/linux/rpmsg/mtk_rpmsg.h
-new file mode 100644
-index 000000000000..90f848696161
---- /dev/null
-+++ b/include/linux/rpmsg/mtk_rpmsg.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2018 Google LLC.
-+ */
-+
-+#ifndef __LINUX_RPMSG_MTK_RPMSG_H
-+#define __LINUX_RPMSG_MTK_RPMSG_H
-+
-+#include <linux/device.h>
-+#include <linux/remoteproc.h>
-+
-+typedef void (*ipi_handler_t)(void *data, unsigned int len, void *priv);
-+
-+/* TODO: Document */
-+struct mtk_rpmsg_info {
-+	int (*register_ipi)(struct platform_device *pdev, u32 id,
-+			    ipi_handler_t handler, void *priv);
-+	void (*unregister_ipi)(struct platform_device *pdev, u32 id);
-+	int (*send_ipi)(struct platform_device *pdev, u32 id,
-+			void *buf, unsigned int len, unsigned int wait);
-+	int ns_ipi_id;
-+};
-+
-+struct rproc_subdev *
-+mtk_rpmsg_create_rproc_subdev(struct platform_device *pdev,
-+			      struct mtk_rpmsg_info *info);
-+
-+void mtk_rpmsg_destroy_rproc_subdev(struct rproc_subdev *subdev);
-+
-+#endif
 diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
 index 54ade13a9b15..15884354af20 100644
 --- a/include/linux/soc/mediatek/mtk-cmdq.h
