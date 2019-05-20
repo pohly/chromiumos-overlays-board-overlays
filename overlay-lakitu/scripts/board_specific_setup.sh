@@ -31,18 +31,12 @@ board_make_image_bootable() {
   fi
 }
 
-get_toolchain_path() {
+write_toolchain_path() {
   local -r cros_overlay="/mnt/host/source/src/third_party/chromiumos-overlay"
   local -r sdk_ver_file="${cros_overlay}/chromeos/binhost/host/sdk_version.conf"
   local -r ctarget="$(get_ctarget_from_board "${BOARD}")"
   . "${sdk_ver_file}"
   local -r toolchain_path="${TC_PATH/\%\(target\)s/${ctarget}}"
-  echo "${toolchain_path}"
-}
-
-write_toolchain_path() {
-  local toolchain_path
-  toolchain_path=$(get_toolchain_path)
   # Write toolchain path to image.
   echo "${toolchain_path}" | \
       sudo tee "${root_fs_dir}/etc/toolchain-path" > /dev/null
@@ -61,26 +55,20 @@ move_kernel_source() {
   sudo rm -rf "${root_fs_dir}/opt/google/src"
 }
 
-write_toolchain_info() {
-  # Create toolchain_info file in BUILD_DIR so that it can be exported
+write_toolchain_env() {
+  # Create toolchain_env file in BUILD_DIR so that it can be exported
   # as an artifact.
-  local artifact="${BUILD_DIR}/toolchain_info"
+  local artifact="${BUILD_DIR}/toolchain_env"
 
   # File from which kernel compiler information will be copied
   # This file is deleted after copying content to artifact
-  local toolchain_info_file="${root_fs_dir}/etc/toolchain_info"
-
-  # Append toolchain_path to toolchain_info
-  # Example for toolchain_path:
-  # toolchain_path=2019/04/x86_64-cros-linux-gnu-2019.04.30.115636.tar.xz
-  # Adding toolchain_path to toolchain_info in BUILD artifact
-  echo "toolchain_path=$(get_toolchain_path)" > "${artifact}"
+  local toolchain_env_file="${root_fs_dir}/etc/toolchain_env"
 
   # Copy kernel compiler info to BUILD artifact
-  cat "${toolchain_info_file}" >> "${artifact}"
+  cp "${toolchain_env_file}" "${artifact}"
 
-  # Remove toolchain_info from image
-  sudo rm "${toolchain_info_file}"
+  # Remove toolchain_env from image
+  sudo rm "${toolchain_env_file}"
 }
 
 # board_finalize_base_image() gets invoked by the build scripts at the
@@ -89,7 +77,7 @@ board_finalize_base_image() {
   local -r script_root="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
   write_toolchain_path
   move_kernel_source
-  write_toolchain_info
+  write_toolchain_env
 
   # /etc/machine-id gets installed by sys-apps/dbus and is a symlink.
   # This conflicts with systemd's machine-id generation mechanism,

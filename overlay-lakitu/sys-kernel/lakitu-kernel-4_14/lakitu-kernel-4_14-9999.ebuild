@@ -49,16 +49,16 @@ tar_kernel_source() {
 	popd
 }
 
-write_toolchain_info() {
+write_toolchain_env() {
 	# Write the compiler info used for kernel compilation
-	# in toolchain_info
-	local toolchain_info_dir=etc
-	# Example for toolchain_info content:
+	# in toolchain_env
+	local toolchain_env_dir=etc
+	# Example for toolchain_env content:
 	# CC=x86_64-cros-linux-gnu-gcc
 	# CXX=x86_64-cros-linux-gnu-g++
 	# The file will be deleted after copying data to BUILD_DIR artifact
-	echo "CC=${CC}" > "${D}/${toolchain_info_dir}/toolchain_info"
-	echo "CXX=${CXX}" >> "${D}/${toolchain_info_dir}/toolchain_info"
+	echo "CC=${CC}" > "${D}/${toolchain_env_dir}/toolchain_env"
+	echo "CXX=${CXX}" >> "${D}/${toolchain_env_dir}/toolchain_env"
 }
 
 src_install() {
@@ -72,7 +72,7 @@ src_install() {
 	# artifact later.
 	tar_kernel_source
 	# Install kernel compiler information
-	write_toolchain_info
+	write_toolchain_env
 }
 
 # Change the following (commented out) number to the next prime number
