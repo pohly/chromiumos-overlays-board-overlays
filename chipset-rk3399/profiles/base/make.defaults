@@ -13,7 +13,7 @@ BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57.cortex-a53 -mfpu=cryp
 USE=""
 
 USE="${USE} big_little"
-USE="${USE} device_tree"
+USE="${USE} device_tree -dt_compression"
 USE="${USE} drm_atomic"
 USE="${USE} hardfp"
 USE="${USE} kernel-4_4"

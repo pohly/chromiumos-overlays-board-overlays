@@ -17,7 +17,7 @@ VIDEO_CARDS="exynos"
 # EC board name is pit
 EC_FIRMWARE="pit"
 
-USE="${USE} cros_ec device_tree exynos gpu_sandbox_start_early"
+USE="${USE} cros_ec device_tree -dt_compression exynos gpu_sandbox_start_early"
 USE="${USE} hardfp kernel-3_8 neon -opengl opengles watchdog wireless34"
 
 # Allow consumer kiosk.

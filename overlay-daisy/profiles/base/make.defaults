@@ -13,7 +13,7 @@ USE=""
 # Turn on the video cards this board uses.
 VIDEO_CARDS="exynos"
 
-USE="${USE} als cros_ec device_tree exynos gpu_sandbox_start_early"
+USE="${USE} als cros_ec device_tree -dt_compression exynos gpu_sandbox_start_early"
 USE="${USE} hardfp kernel-3_8 neon -opengl opengles watchdog wireless34"
 # Set default build to snow, USE="-snow" to build daisy.
 USE="${USE} snow"

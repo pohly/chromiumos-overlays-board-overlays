@@ -14,7 +14,7 @@ USE=""
 # Enable VM Containers
 USE="${USE} vm-containers"
 
-USE="${USE} device_tree"
+USE="${USE} device_tree -dt_compression"
 USE="${USE} hardfp"
 USE="${USE} neon"
 
