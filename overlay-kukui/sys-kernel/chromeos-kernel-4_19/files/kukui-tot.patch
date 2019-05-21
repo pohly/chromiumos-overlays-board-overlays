@@ -57,6 +57,75 @@ index 000000000000..982a30bcfc86
 +				< 2649600 1728000 >;
 +		};
 +	};
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
+index 5467470c7b8a..bc8e30c20c64 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
+@@ -59,8 +59,6 @@ Required properties (DMA function blocks):
+ 	"mediatek,<chip>-disp-rdma"
+ 	"mediatek,<chip>-disp-wdma"
+   the supported chips are mt2701 and mt8173.
+-- larb: Should contain a phandle pointing to the local arbiter device as defined
+-  in Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
+ - iommus: Should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+   for details.
+@@ -87,7 +85,6 @@ ovl0: ovl@1400c000 {
+ 	power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 	clocks = <&mmsys CLK_MM_DISP_OVL0>;
+ 	iommus = <&iommu M4U_PORT_DISP_OVL0>;
+-	mediatek,larb = <&larb0>;
+ };
+ 
+ ovl1: ovl@1400d000 {
+@@ -97,7 +94,6 @@ ovl1: ovl@1400d000 {
+ 	power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 	clocks = <&mmsys CLK_MM_DISP_OVL1>;
+ 	iommus = <&iommu M4U_PORT_DISP_OVL1>;
+-	mediatek,larb = <&larb4>;
+ };
+ 
+ rdma0: rdma@1400e000 {
+@@ -107,7 +103,6 @@ rdma0: rdma@1400e000 {
+ 	power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 	clocks = <&mmsys CLK_MM_DISP_RDMA0>;
+ 	iommus = <&iommu M4U_PORT_DISP_RDMA0>;
+-	mediatek,larb = <&larb0>;
+ };
+ 
+ rdma1: rdma@1400f000 {
+@@ -117,7 +112,6 @@ rdma1: rdma@1400f000 {
+ 	power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 	clocks = <&mmsys CLK_MM_DISP_RDMA1>;
+ 	iommus = <&iommu M4U_PORT_DISP_RDMA1>;
+-	mediatek,larb = <&larb4>;
+ };
+ 
+ rdma2: rdma@14010000 {
+@@ -127,7 +121,6 @@ rdma2: rdma@14010000 {
+ 	power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 	clocks = <&mmsys CLK_MM_DISP_RDMA2>;
+ 	iommus = <&iommu M4U_PORT_DISP_RDMA2>;
+-	mediatek,larb = <&larb4>;
+ };
+ 
+ wdma0: wdma@14011000 {
+@@ -137,7 +130,6 @@ wdma0: wdma@14011000 {
+ 	power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 	clocks = <&mmsys CLK_MM_DISP_WDMA0>;
+ 	iommus = <&iommu M4U_PORT_DISP_WDMA0>;
+-	mediatek,larb = <&larb0>;
+ };
+ 
+ wdma1: wdma@14012000 {
+@@ -147,7 +139,6 @@ wdma1: wdma@14012000 {
+ 	power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 	clocks = <&mmsys CLK_MM_DISP_WDMA1>;
+ 	iommus = <&iommu M4U_PORT_DISP_WDMA1>;
+-	mediatek,larb = <&larb4>;
+ };
+ 
+ color0: color@14013000 {
 diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
 index 7d72b21c9e94..755b30fd6041 100644
 --- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
@@ -132,6 +201,109 @@ index 7d72b21c9e94..755b30fd6041 100644
 +				      <&gce CMDQ_EVENT_MDP_RSZ0_SOF>;
  		...
  	};
+diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+index 3813947b4d4f..c9f89132830c 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+@@ -14,9 +14,6 @@ Required properties:
+ - clock-names: must contain "jpgdec-smi" and "jpgdec".
+ - power-domains: a phandle to the power domain, see
+   Documentation/devicetree/bindings/power/power_domain.txt for details.
+-- mediatek,larb: must contain the local arbiters in the current Socs, see
+-  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
+-  for details.
+ - iommus: should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+   for details.
+@@ -31,7 +28,6 @@ Example:
+ 		clock-names = "jpgdec-smi",
+ 			      "jpgdec";
+ 		power-domains = <&scpsys MT2701_POWER_DOMAIN_ISP>;
+-		mediatek,larb = <&larb2>;
+ 		iommus = <&iommu MT2701_M4U_PORT_JPGDEC_WDMA>,
+ 			 <&iommu MT2701_M4U_PORT_JPGDEC_BSDMA>;
+ 	};
+diff --git a/Documentation/devicetree/bindings/media/mediatek-mdp.txt b/Documentation/devicetree/bindings/media/mediatek-mdp.txt
+index 0d03e3ae2be2..df69c5a06250 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-mdp.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-mdp.txt
+@@ -27,9 +27,6 @@ Required properties (DMA function blocks, child node):
+ - iommus: should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+   for details.
+-- mediatek,larb: must contain the local arbiters in the current Socs, see
+-  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
+-  for details.
+ 
+ Example:
+ 	mdp_rdma0: rdma@14001000 {
+@@ -40,7 +37,6 @@ Example:
+ 			 <&mmsys CLK_MM_MUTEX_32K>;
+ 		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 		iommus = <&iommu M4U_PORT_MDP_RDMA0>;
+-		mediatek,larb = <&larb0>;
+ 		mediatek,vpu = <&vpu>;
+ 	};
+ 
+@@ -51,7 +47,6 @@ Example:
+ 			 <&mmsys CLK_MM_MUTEX_32K>;
+ 		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 		iommus = <&iommu M4U_PORT_MDP_RDMA1>;
+-		mediatek,larb = <&larb4>;
+ 	};
+ 
+ 	mdp_rsz0: rsz@14003000 {
+@@ -81,7 +76,6 @@ Example:
+ 		clocks = <&mmsys CLK_MM_MDP_WDMA>;
+ 		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 		iommus = <&iommu M4U_PORT_MDP_WDMA>;
+-		mediatek,larb = <&larb0>;
+ 	};
+ 
+ 	mdp_wrot0: wrot@14007000 {
+@@ -90,7 +84,6 @@ Example:
+ 		clocks = <&mmsys CLK_MM_MDP_WROT0>;
+ 		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 		iommus = <&iommu M4U_PORT_MDP_WROT0>;
+-		mediatek,larb = <&larb0>;
+ 	};
+ 
+ 	mdp_wrot1: wrot@14008000 {
+@@ -99,5 +92,4 @@ Example:
+ 		clocks = <&mmsys CLK_MM_MDP_WROT1>;
+ 		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 		iommus = <&iommu M4U_PORT_MDP_WROT1>;
+-		mediatek,larb = <&larb4>;
+ 	};
+diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+index b6b5dde6abd8..5c9ee6af3cfa 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+@@ -9,7 +9,6 @@ Required properties:
+ - reg : Physical base address of the video codec registers and length of
+   memory mapped region.
+ - interrupts : interrupt number to the cpu.
+-- mediatek,larb : must contain the local arbiters in the current Socs.
+ - clocks : list of clock specifiers, corresponding to entries in
+   the clock-names property.
+ - clock-names: encoder must contain "venc_sel_src", "venc_sel",,
+@@ -39,7 +38,6 @@ vcodec_dec: vcodec@16000000 {
+           <0 0x16027800 0 0x800>,   /*VP8_VL*/
+           <0 0x16028400 0 0x400>;   /*VP9_VD*/
+     interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_LOW>;
+-    mediatek,larb = <&larb1>;
+     iommus = <&iommu M4U_PORT_HW_VDEC_MC_EXT>,
+              <&iommu M4U_PORT_HW_VDEC_PP_EXT>,
+              <&iommu M4U_PORT_HW_VDEC_AVC_MV_EXT>,
+@@ -83,8 +81,6 @@ vcodec_dec: vcodec@16000000 {
+           <0 0x19002000 0 0x1000>;    /*VENC_LT_SYS*/
+     interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>,
+ 		 <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
+-    mediatek,larb = <&larb3>,
+-		    <&larb5>;
+     iommus = <&iommu M4U_PORT_VENC_RCPU>,
+              <&iommu M4U_PORT_VENC_REC>,
+              <&iommu M4U_PORT_VENC_BSDMA>,
 diff --git a/Documentation/devicetree/bindings/media/mediatek-vpu.txt b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
 index 2a5bac37f9a2..015123250b82 100644
 --- a/Documentation/devicetree/bindings/media/mediatek-vpu.txt
@@ -188,17 +360,175 @@ index 2c927ccbd970..768caa3970ef 100644
  Linux kernel
  ============
  
+diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
+index 180377e56ef4..938fa31456f3 100644
+--- a/arch/arm/boot/dts/mt2701.dtsi
++++ b/arch/arm/boot/dts/mt2701.dtsi
+@@ -563,7 +563,6 @@
+ 		clock-names = "jpgdec-smi",
+ 			      "jpgdec";
+ 		power-domains = <&scpsys MT2701_POWER_DOMAIN_ISP>;
+-		mediatek,larb = <&larb2>;
+ 		iommus = <&iommu MT2701_M4U_PORT_JPGDEC_WDMA>,
+ 			 <&iommu MT2701_M4U_PORT_JPGDEC_BSDMA>;
+ 	};
 diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index d9124842fdd0..d09409979c84 100644
+index 3a55c454b65d..d09409979c84 100644
 --- a/arch/arm64/boot/dts/mediatek/Makefile
 +++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -8,4 +8,6 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+@@ -8,5 +8,6 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-evb.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-evb.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+index bbc282aae412..57a31f3c5963 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+@@ -895,7 +895,6 @@
+ 				 <&mmsys CLK_MM_MUTEX_32K>;
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
+-			mediatek,larb = <&larb0>;
+ 			mediatek,vpu = <&vpu>;
+ 		};
+ 
+@@ -906,7 +905,6 @@
+ 				 <&mmsys CLK_MM_MUTEX_32K>;
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			iommus = <&iommu M4U_PORT_MDP_RDMA1>;
+-			mediatek,larb = <&larb4>;
+ 		};
+ 
+ 		mdp_rsz0: rsz@14003000 {
+@@ -936,7 +934,6 @@
+ 			clocks = <&mmsys CLK_MM_MDP_WDMA>;
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			iommus = <&iommu M4U_PORT_MDP_WDMA>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		mdp_wrot0: wrot@14007000 {
+@@ -945,7 +942,6 @@
+ 			clocks = <&mmsys CLK_MM_MDP_WROT0>;
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			iommus = <&iommu M4U_PORT_MDP_WROT0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		mdp_wrot1: wrot@14008000 {
+@@ -954,7 +950,6 @@
+ 			clocks = <&mmsys CLK_MM_MDP_WROT1>;
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			iommus = <&iommu M4U_PORT_MDP_WROT1>;
+-			mediatek,larb = <&larb4>;
+ 		};
+ 
+ 		ovl0: ovl@1400c000 {
+@@ -964,7 +959,6 @@
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			clocks = <&mmsys CLK_MM_DISP_OVL0>;
+ 			iommus = <&iommu M4U_PORT_DISP_OVL0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		ovl1: ovl@1400d000 {
+@@ -974,7 +968,6 @@
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			clocks = <&mmsys CLK_MM_DISP_OVL1>;
+ 			iommus = <&iommu M4U_PORT_DISP_OVL1>;
+-			mediatek,larb = <&larb4>;
+ 		};
+ 
+ 		rdma0: rdma@1400e000 {
+@@ -984,7 +977,6 @@
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
+ 			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		rdma1: rdma@1400f000 {
+@@ -994,7 +986,6 @@
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
+ 			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
+-			mediatek,larb = <&larb4>;
+ 		};
+ 
+ 		rdma2: rdma@14010000 {
+@@ -1004,7 +995,6 @@
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			clocks = <&mmsys CLK_MM_DISP_RDMA2>;
+ 			iommus = <&iommu M4U_PORT_DISP_RDMA2>;
+-			mediatek,larb = <&larb4>;
+ 		};
+ 
+ 		wdma0: wdma@14011000 {
+@@ -1014,7 +1004,6 @@
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			clocks = <&mmsys CLK_MM_DISP_WDMA0>;
+ 			iommus = <&iommu M4U_PORT_DISP_WDMA0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		wdma1: wdma@14012000 {
+@@ -1024,7 +1013,6 @@
+ 			power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+ 			clocks = <&mmsys CLK_MM_DISP_WDMA1>;
+ 			iommus = <&iommu M4U_PORT_DISP_WDMA1>;
+-			mediatek,larb = <&larb4>;
+ 		};
+ 
+ 		color0: color@14013000 {
+@@ -1268,7 +1256,6 @@
+ 			      <0 0x16027800 0 0x800>,	/* VDEC_HWB */
+ 			      <0 0x16028400 0 0x400>;	/* VDEC_HWG */
+ 			interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_LOW>;
+-			mediatek,larb = <&larb1>;
+ 			iommus = <&iommu M4U_PORT_HW_VDEC_MC_EXT>,
+ 				 <&iommu M4U_PORT_HW_VDEC_PP_EXT>,
+ 				 <&iommu M4U_PORT_HW_VDEC_AVC_MV_EXT>,
+@@ -1338,8 +1325,6 @@
+ 			      <0 0x19002000 0 0x1000>;	/* VENC_LT_SYS */
+ 			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>,
+ 				     <GIC_SPI 202 IRQ_TYPE_LEVEL_LOW>;
+-			mediatek,larb = <&larb3>,
+-					<&larb5>;
+ 			iommus = <&iommu M4U_PORT_VENC_RCPU>,
+ 				 <&iommu M4U_PORT_VENC_REC>,
+ 				 <&iommu M4U_PORT_VENC_BSDMA>,
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+index e6c7d13dd8f1..a2f014eefd12 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+@@ -27,6 +27,24 @@
+ 		stdout-path = "serial0:921600n8";
+ 	};
+ 
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++		reserve-memory-vpu_share {
++			compatible = "mediatek,reserve-memory-vpu_share";
++			no-map;
++			size = <0 0x01400000>; /*20 MB share mem size */
++			alignment = <0 0x1000000>;
++			alloc-ranges = <0 0x50000000 0 0x10000000>;
++		};
++		scp_mem_reserved: scp_mem_region {
++			compatible = "shared-dma-pool";
++			reg = <0 0x50000000 0 0x2900000>;
++			no-map;
++		};
++	};
++
+ 	usb_p0_vbus: regulator@0 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vbus";
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
 new file mode 100644
 index 000000000000..4c71b09e26a3
@@ -531,448 +861,113 @@ index 000000000000..4c71b09e26a3
 +};
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-index 46b8f0c16d7b..0f78005f705c 100644
+index 9c4e74deae7d..0f78005f705c 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-@@ -210,14 +210,44 @@
- 		"",
- 		"",
- 		"";
-+
-+	touch_default: touchdefault {
-+		pin_irq {
-+			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		touch_pin_reset: pin_reset {
-+			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
-+			output-high;
-+		};
-+	};
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	touchscreen: touchscreen@10 {
-+		compatible = "elan,ekth3500";
-+		reg = <0x10>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <155 IRQ_TYPE_LEVEL_LOW>;
-+		int-gpio = <&pio 155 0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&touch_default>;
-+
-+		reset-gpios = <&pio 156 0>;
-+	};
+@@ -240,3 +240,14 @@
+ 		reset-gpios = <&pio 156 0>;
+ 	};
  };
- 
--/* Touch reset pin is active-high on rev1. */
--&touchscreen {
--	reset-gpios = <&pio 156 0>;
++
 +&i2c6 {
 +	status = "disabled";
- };
- 
--&touch_pin_reset {
--	/delete-property/ output-low;
--	output-high;
++};
++
 +&scp_pins {
 +	pins_scp_uart {
 +		pinmux = <PINMUX_GPIO11__FUNC_TP_URXD1_AO>,
 +			 <PINMUX_GPIO12__FUNC_TP_UTXD1_AO>;
 +	};
- };
++};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
-new file mode 100644
-index 000000000000..d5c9807834e1
---- /dev/null
+index a06280b00eb2..7ac53e3bbfff 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
-@@ -0,0 +1,455 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (c) 2018 Google LLC
-+ */
-+
-+/dts-v1/;
+@@ -4,6 +4,7 @@
+  */
+ 
+ /dts-v1/;
 +#include <dt-bindings/gpio/gpio.h>
-+#include "mt8183-kukui.dtsi"
+ #include "mt8183-kukui.dtsi"
+ 
+ / {
+@@ -24,6 +25,72 @@
+ 			wakeup-source;
+ 		};
+ 	};
 +
-+/ {
-+	model = "MediaTek kukui rev2 board";
-+	compatible = "google,kukui-rev2", "google,kukui", "mediatek,mt8183";
-+};
-+
-+&pio {
-+	/* 192 lines */
-+	gpio-line-names =
-+		"SPI_AP_EC_CS_L",
-+		"SPI_AP_EC_MOSI",
-+		"SPI_AP_EC_CLK",
-+		"I2S3_DO",
-+		"USB_PD_INT_ODL",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"IT6505_HPD_L",
-+		"I2S3_TDM_D3",
-+		"SOC_I2C6_1V8_SCL",
-+		"SOC_I2C6_1V8_SDA",
-+		"DPI_D0",
-+		"DPI_D1",
-+		"DPI_D2",
-+		"DPI_D3",
-+		"DPI_D4",
-+		"DPI_D5",
-+		"DPI_D6",
-+		"DPI_D7",
-+		"DPI_D8",
-+		"DPI_D9",
-+		"DPI_D10",
-+		"DPI_D11",
-+		"DPI_HSYNC",
-+		"DPI_VSYNC",
-+		"DPI_DE",
-+		"DPI_CK",
-+		"AP_MSDC1_CLK",
-+		"AP_MSDC1_DAT3",
-+		"AP_MSDC1_CMD",
-+		"AP_MSDC1_DAT0",
-+		"AP_MSDC1_DAT2",
-+		"AP_MSDC1_DAT1",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"OTG_EN",
-+		"DRVBUS",
-+		"DISP_PWM",
-+		"DSI_TE",
-+		"LCM_RST_1V8",
-+		"AP_CTS_WIFI_RTS",
-+		"AP_RTS_WIFI_CTS",
-+		"SOC_I2C5_1V8_SCL",
-+		"SOC_I2C5_1V8_SDA",
-+		"SOC_I2C3_1V8_SCL",
-+		"SOC_I2C3_1V8_SDA",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"SOC_I2C1_1V8_SDA",
-+		"SOC_I2C0_1V8_SDA",
-+		"SOC_I2C0_1V8_SCL",
-+		"SOC_I2C1_1V8_SCL",
-+		"AP_SPI_H1_MISO",
-+		"AP_SPI_H1_CS_L",
-+		"AP_SPI_H1_MOSI",
-+		"AP_SPI_H1_CLK",
-+		"I2S5_BCK",
-+		"I2S5_LRCK",
-+		"I2S5_DO",
-+		"BOOTBLOCK_EN_L",
-+		"MT8183_KPCOL0",
-+		"SPI_AP_EC_MISO",
-+		"UART_DBG_TX_AP_RX",
-+		"UART_AP_TX_DBG_RX",
-+		"I2S2_MCK",
-+		"I2S2_BCK",
-+		"CLK_5M_WCAM",
-+		"CLK_2M_UCAM",
-+		"I2S2_LRCK",
-+		"I2S2_DI",
-+		"SOC_I2C2_1V8_SCL",
-+		"SOC_I2C2_1V8_SDA",
-+		"SOC_I2C4_1V8_SCL",
-+		"SOC_I2C4_1V8_SDA",
-+		"",
-+		"SCL8",
-+		"SDA8",
-+		"FCAM_PWDN_L",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		/*
-+		 * AP_FLASH_WP_L is crossystem ABI. Rev1 schematics
-+		 * call it BIOS_FLASH_WP_R_L.
-+		 */
-+		"AP_FLASH_WP_L",
-+		"EC_AP_INT_ODL",
-+		"IT6505_INT_ODL",
-+		"H1_INT_OD_L",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"AP_SPI_FLASH_MISO",
-+		"AP_SPI_FLASH_CS_L",
-+		"AP_SPI_FLASH_MOSI",
-+		"AP_SPI_FLASH_CLK",
-+		"DA7219_IRQ",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"";
-+};
-+
-+&scp_pins {
-+	/* EINT pins are used for other purpose on rev2. */
-+	/delete-node/ pins_eint;
-+};
-+
-+/* rev2 has a pen controller with eject detection GPIO. */
-+/ {
-+	gpio-keys {
-+		compatible = "gpio-keys";
++	pp1200_mipibrdg: pp1200-mipibrdg {
++		compatible = "regulator-fixed";
++		regulator-name = "pp1200_mipibrdg";
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&pen_eject>;
++		pinctrl-0 = <&pp1200_mipibrdg_en>;
 +
-+		pen-insert {
-+			label = "Pen Insert";
-+			/* Insert = low, eject = high */
-+			gpios = <&pio 6 GPIO_ACTIVE_LOW>;
-+			linux,code = <SW_PEN_INSERTED>;
-+			linux,input-type = <EV_SW>;
-+			wakeup-source;
-+		};
++		enable-active-high;
++
++		gpio = <&pio 54 GPIO_ACTIVE_HIGH>;
 +	};
-+};
 +
-+&i2c0 {
-+	digitizer: digitizer@9 {
-+		compatible = "wacom,w9013", "hid-over-i2c";
-+		reg = <0x9>;
++	pp1800_lcd: pp1800-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "pp1800_lcd";
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&pen_default>;
++		pinctrl-0 = <&pp1800_lcm_en>;
 +
-+		interrupt-parent = <&pio>;
-+		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
++		enable-active-high;
 +
-+		hid-descr-addr = <0x1>;
++		gpio = <&pio 36 GPIO_ACTIVE_HIGH>;
 +	};
 +
-+	touchscreen: touchscreen@10 {
-+		compatible = "elan,ekth3500";
-+		reg = <0x10>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <155 IRQ_TYPE_LEVEL_LOW>;
-+		int-gpio = <&pio 155 0>;
++	pp3300_lcd: pp3300-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "pp3300_lcd";
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&touch_default>;
++		pinctrl-0 = <&pp3300_lcm_en>;
 +
-+		reset-gpios = <&pio 156 1>;
-+	};
-+};
++		enable-active-high;
 +
-+&pio {
-+	pen_default: pendefault {
-+		pen_int_odl {
-+			pinmux = <PINMUX_GPIO5__FUNC_GPIO5>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		pen_reset_odl {
-+			pinmux = <PINMUX_GPIO53__FUNC_GPIO53>;
-+
-+			/*
-+			 * The pen driver doesn't currently support  driving
-+			 * this reset line.  By specifying output-high here
-+			 * we're relying on the fact that this pin has a default
-+			 * pulldown at boot (which makes sure the pen was in
-+			 * reset if it was powered) and then we set it high here
-+			 * to take it out of reset.  Better would be if the pen
-+			 * driver could control this and we could remove
-+			 * "output-high" here.
-+			 */
-+			output-high;
-+		};
++		gpio = <&pio 35 GPIO_ACTIVE_HIGH>;
 +	};
 +
-+	pen_eject: peneject {
-+		pen_eject {
-+			pinmux = <PINMUX_GPIO6__FUNC_GPIO6>;
-+			input-enable;
-+			/* External pull-up. */
-+			bias-disable;
-+		};
++	ppvarn_lcd: ppvarn-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "ppvarn_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&ppvarn_lcd_en>;
++
++		enable-active-high;
++
++		gpio = <&pio 66 GPIO_ACTIVE_HIGH>;
 +	};
 +
-+	touch_default: touchdefault {
-+		pin_irq {
-+			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
-+			input-enable;
-+			bias-pull-up;
-+		};
++	ppvarp_lcd: ppvarp-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "ppvarp_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&ppvarp_lcd_en>;
 +
-+		touch_pin_reset: pin_reset {
-+			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
-+			output-low;
-+		};
++		enable-active-high;
++
++		gpio = <&pio 166 GPIO_ACTIVE_HIGH>;
 +	};
-+};
-+
-+/* rev2 panel is behind a SSD 2858 bridge. */
-+/ {
-+        ppvarn_lcd: ppvarn-lcd {
-+                compatible = "regulator-fixed";
-+                regulator-name = "ppvarn_lcd";
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&ppvarn_lcd_en>;
-+
-+                enable-active-high;
-+
-+                gpio = <&pio 66 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        ppvarp_lcd: ppvarp-lcd {
-+                compatible = "regulator-fixed";
-+                regulator-name = "ppvarp_lcd";
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&ppvarp_lcd_en>;
-+
-+                enable-active-high;
-+
-+                gpio = <&pio 166 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        pp1800_lcd: pp1800-lcd {
-+                compatible = "regulator-fixed";
-+                regulator-name = "pp1800_lcd";
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&pp1800_lcm_en>;
-+
-+                enable-active-high;
-+
-+                gpio = <&pio 36 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        pp3300_lcd: pp3300-lcd {
-+                compatible = "regulator-fixed";
-+                regulator-name = "pp3300_lcd";
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&pp3300_lcm_en>;
-+
-+                enable-active-high;
-+
-+                gpio = <&pio 35 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        pp1200_mipibrdg: pp1200-mipibrdg {
-+                compatible = "regulator-fixed";
-+                regulator-name = "pp1200_mipibrdg";
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&pp1200_mipibrdg_en>;
-+
-+                enable-active-high;
-+
-+                gpio = <&pio 54 GPIO_ACTIVE_HIGH>;
-+        };
 +
 +	vddio_mipibrdg: vddio-mipibrdg {
-+                compatible = "regulator-fixed";
-+                regulator-name = "vddio_mipibrdg";
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&vddio_mipibrdg_en>;
++		compatible = "regulator-fixed";
++		regulator-name = "vddio_mipibrdg";
++		pinctrl-names = "default";
++		pinctrl-0 = <&vddio_mipibrdg_en>;
 +
-+                enable-active-high;
++		enable-active-high;
 +
-+                gpio = <&pio 37 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+};
-+
++		gpio = <&pio 37 GPIO_ACTIVE_HIGH>;
++	};
+ };
+ 
+ &i2c0 {
+@@ -52,6 +119,36 @@
+ 	};
+ };
+ 
 +&panel {
 +	compatible = "innolux,p097pfg_ssd2858";
 +	reg = <0>;
@@ -1003,17 +998,16 @@ index 000000000000..d5c9807834e1
 +	};
 +};
 +
-+&pio {
-+	ppvarp_lcd_en: ppvarp-lcd-en {
+ &pio {
+ 	/* 192 lines */
+ 	gpio-line-names =
+@@ -285,6 +382,41 @@
+ 		};
+ 	};
+ 
++	pp1200_mipibrdg_en: pp1200-mipibrdg-en {
 +		pins1 {
-+			pinmux = <PINMUX_GPIO66__FUNC_GPIO66>;
-+			output-low;
-+		};
-+	};
-+
-+	ppvarn_lcd_en: ppvarn-lcd-en {
-+		pins1 {
-+			pinmux = <PINMUX_GPIO166__FUNC_GPIO166>;
++			pinmux = <PINMUX_GPIO54__FUNC_GPIO54>;
 +			output-low;
 +		};
 +	};
@@ -1032,12 +1026,27 @@ index 000000000000..d5c9807834e1
 +		};
 +	};
 +
-+	pp1200_mipibrdg_en: pp1200-mipibrdg-en {
++	ppvarp_lcd_en: ppvarp-lcd-en {
 +		pins1 {
-+			pinmux = <PINMUX_GPIO54__FUNC_GPIO54>;
++			pinmux = <PINMUX_GPIO66__FUNC_GPIO66>;
 +			output-low;
 +		};
 +	};
++
++	ppvarn_lcd_en: ppvarn-lcd-en {
++		pins1 {
++			pinmux = <PINMUX_GPIO166__FUNC_GPIO166>;
++			output-low;
++		};
++	};
++
+ 	touch_default: touchdefault {
+ 		pin_irq {
+ 			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
+@@ -297,4 +429,16 @@
+ 			output-low;
+ 		};
+ 	};
 +
 +	vddio_mipibrdg_en: vddio_mipibrdg_en {
 +		pins1 {
@@ -1046,44 +1055,16 @@ index 000000000000..d5c9807834e1
 +		};
 +	};
 +};
++
++&scp_pins {
++	/* EINT pins are used for other purpose on rev2. */
++	/delete-node/ pins_eint;
+ };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 4b5602c9d3a7..abdaf18ad4f5 100644
+index 8092e69d94a3..b68a22ee274f 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -16,14 +16,12 @@
- 
- 	backlight_lcd0: backlight_lcd0 {
- 		compatible = "pwm-backlight";
--		pwms = <&pwm0 0 26000>;
-+		pwms = <&pwm0 0 500000>;
- 		power-supply = <&bl_pp5000>;
- 		enable-gpios = <&pio 176 0>;
--		brightness-levels = <
--			0 64 128 192 256 320 384 448
--			512 576 640 704 768 832 896 960
--			1023>;
--		default-brightness-level = <9>;
-+		brightness-levels = <0 1023>;
-+		num-interpolated-steps = <1023>;
-+		default-brightness-level = <576>;
- 		status = "okay";
- 	};
- 
-@@ -36,6 +34,13 @@
- 		stdout-path = "serial0:115200n8";
- 	};
- 
-+	clk32k: oscillator@1 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		clock-output-names = "clk32k";
-+	};
-+
- 	lcd_pp3300: regulator@1 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "lcd_pp3300";
-@@ -54,6 +59,20 @@
+@@ -59,6 +59,20 @@
  		regulator-boot-on;
  	};
  
@@ -1104,9 +1085,24 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  	reserved_memory: reserved-memory {
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -68,6 +87,29 @@
+@@ -72,7 +86,44 @@
+ 			alignment = <0 0x10000>;
  			alloc-ranges = <0 0x40000000 0 0x60000000>;
  		};
++
++		reserve-memory-vpu_share {
++			compatible = "mediatek,reserve-memory-vpu_share";
++			no-map;
++			size = <0 0x01400000>; /*20 MB share mem size */
++			alignment = <0 0x1000000>;
++			alloc-ranges = <0 0x50000000 0 0x10000000>;
++		};
++
++		scp_mem_reserved: scp_mem_region {
++			compatible = "shared-dma-pool";
++			reg = <0 0x50000000 0 0x2900000>;
++			no-map;
++		};
  	};
 +
 +	max98357a: max98357a {
@@ -1134,26 +1130,7 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  };
  
  &cci {
-@@ -160,18 +202,6 @@
- 	clock-frequency = <400000>;
- 	#address-cells = <1>;
- 	#size-cells = <0>;
--
--	touchscreen: touchscreen@10 {
--		compatible = "elan,ekth3500";
--		reg = <0x10>;
--		interrupt-parent = <&pio>;
--		interrupts = <155 IRQ_TYPE_LEVEL_LOW>;
--		int-gpio = <&pio 155 0>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&touch_default>;
--
--		reset-gpios = <&pio 156 1>;
--	};
- };
- 
- &i2c1 {
-@@ -207,6 +237,17 @@
+@@ -200,6 +251,17 @@
  	pinctrl-0 = <&i2c5_pins>;
  	status = "okay";
  	clock-frequency = <100000>;
@@ -1171,7 +1148,7 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  };
  
  &i2c6 {
-@@ -253,8 +294,8 @@
+@@ -246,8 +308,8 @@
  	pinctrl-names = "default", "state_uhs";
  	pinctrl-0 = <&mmc1_pins_default>;
  	pinctrl-1 = <&mmc1_pins_uhs>;
@@ -1182,7 +1159,7 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  	bus-width = <4>;
  	max-frequency = <200000000>;
  	drv-type = <2>;
-@@ -267,13 +308,54 @@
+@@ -260,13 +322,47 @@
  	non-removable;
  	no-mmc;
  	no-sd;
@@ -1227,17 +1204,10 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
 +		};
 +	};
 +
-+	bt_pins: bt_pins {
-+		pins_bt_en {
-+			pinmux = <PINMUX_GPIO120__FUNC_GPIO120>;
-+			output-low;
-+		};
-+	};
-+
- 	ec_ap_int_odl: ec_ap_int_odl {
- 		pins1 {
- 			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
-@@ -440,15 +522,10 @@
+ 	bt_pins: bt_pins {
+ 		pins_bt_en {
+ 			pinmux = <PINMUX_GPIO120__FUNC_GPIO120>;
+@@ -440,7 +536,7 @@
  			mediatek,pull-down-adv = <10>;
  		};
  
@@ -1246,15 +1216,7 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
  			output-high;
  		};
--
--		pins_bt {
--			pinmux = <PINMUX_GPIO120__FUNC_GPIO120>;
--			output-high;
--		};
- 	};
- 
- 	mmc1_pins_uhs: mmc1@0 {
-@@ -490,6 +567,19 @@
+@@ -485,6 +581,19 @@
  		};
  	};
  
@@ -1274,25 +1236,20 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  	spi_pins_0: spi0@0 {
  		pins_spi{
  			pinmux = <PINMUX_GPIO85__FUNC_SPI0_MI>,
-@@ -553,16 +643,42 @@
+@@ -547,6 +656,45 @@
+ 			bias-disable;
  		};
  	};
- 
--	touch_default: touchdefault {
--		pin_irq {
--			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
++
 +	ts3a227e_pins: ts3a227e_pins {
 +		pins1 {
 +			pinmux = <PINMUX_GPIO157__FUNC_GPIO157>;
- 			input-enable;
++			input-enable;
 +			bias-enable;
- 			bias-pull-up;
- 		};
++			bias-pull-up;
++		};
 +	};
- 
--		touch_pin_reset: pin_reset {
--			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
--			output-low;
++
 +	uart0_pin: uart0default {
 +		pins_rx {
 +			pinmux = <PINMUX_GPIO95__FUNC_URXD0>;
@@ -1320,10 +1277,12 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
 +		pins_cts {
 +			pinmux = <PINMUX_GPIO46__FUNC_UCTS1>;
 +			input-enable;
- 		};
- 	};
++		};
++	};
  };
-@@ -573,6 +689,17 @@
+ 
+ &pwm0 {
+@@ -555,6 +703,17 @@
  	pinctrl-0 = <&pwm0_pin_default>;
  };
  
@@ -1341,7 +1300,7 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  &scpsys {
  	mfg-supply = <&mt6358_vgpu_reg>;
  };
-@@ -675,7 +802,8 @@
+@@ -657,7 +816,8 @@
  };
  
  &ssusb {
@@ -1351,7 +1310,7 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
  	vusb33-supply = <&mt6358_vusb_reg>;
  	status = "okay";
  };
-@@ -690,7 +818,25 @@
+@@ -672,6 +832,14 @@
  };
  
  &uart0 {
@@ -1364,21 +1323,10 @@ index 4b5602c9d3a7..abdaf18ad4f5 100644
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart1_pin>;
  	status = "okay";
-+
-+	bluetooth: qca6174-bt {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&bt_pins>;
-+		status = "okay";
-+		compatible = "qcom,qca6174-bt";
-+		enable-gpios = <&pio 120 0>;
-+		clocks = <&clk32k>;
-+		firmware-name = "nvm_00440302_i2s.bin";
-+	};
- };
  
- #include <arm/cros-ec-keyboard.dtsi>
+ 	bluetooth: qca6174-bt {
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 97d186834163..947c67da5c8e 100644
+index 97d186834163..eb5536d0f170 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 @@ -6,6 +6,7 @@
@@ -1483,32 +1431,7 @@ index 97d186834163..947c67da5c8e 100644
  			dynamic-power-coefficient = <211>;
  			#cooling-cells = <2>;
  			clocks = <&mcucfg CLK_MCU_MP2_SEL>,
-@@ -419,6 +451,24 @@
- 		clock-output-names = "clk26m";
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+		reserve-memory-vpu_share {
-+			compatible = "mediatek,reserve-memory-vpu_share";
-+			no-map;
-+			size = <0 0x01400000>; /*20 MB share mem size */
-+			alignment = <0 0x1000000>;
-+			alloc-ranges = <0 0x50000000 0 0x10000000>;
-+		};
-+		scp_mem_reserved: scp_mem_region {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x50000000 0 0x2900000>;
-+			no-map;
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupt-parent = <&gic>;
-@@ -595,6 +645,14 @@
+@@ -595,6 +627,14 @@
  			clock-names = "spi", "wrap";
  		};
  
@@ -1523,7 +1446,7 @@ index 97d186834163..947c67da5c8e 100644
  		iommu: iommu@10205000 {
  			compatible = "mediatek,mt8183-m4u";
  			reg = <0 0x10205000 0 0x1000>;
-@@ -604,6 +662,50 @@
+@@ -604,6 +644,50 @@
  			#iommu-cells = <1>;
  		};
  
@@ -1574,7 +1497,7 @@ index 97d186834163..947c67da5c8e 100644
  		auxadc: auxadc@11001000 {
  			compatible = "mediatek,mt8183-auxadc",
  				     "mediatek,mt8173-auxadc";
-@@ -1072,10 +1174,100 @@
+@@ -1072,10 +1156,100 @@
  			};
  		};
  
@@ -1676,7 +1599,47 @@ index 97d186834163..947c67da5c8e 100644
  		};
  
  		mmc0: mmc@11230000 {
-@@ -1426,6 +1618,13 @@
+@@ -1326,7 +1500,6 @@
+ 			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
+ 			clocks = <&mmsys CLK_MM_DISP_OVL0>;
+ 			iommus = <&iommu M4U_PORT_DISP_OVL0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		ovl0_2l: ovl@14009000 {
+@@ -1336,7 +1509,6 @@
+ 			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
+ 			clocks = <&mmsys CLK_MM_DISP_OVL0_2L>;
+ 			iommus = <&iommu M4U_PORT_DISP_2L_OVL0_LARB0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		ovl1_2l: ovl@1400a000 {
+@@ -1346,7 +1518,6 @@
+ 			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
+ 			clocks = <&mmsys CLK_MM_DISP_OVL1_2L>;
+ 			iommus = <&iommu M4U_PORT_DISP_2L_OVL1_LARB0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		rdma0: rdma@1400b000 {
+@@ -1356,7 +1527,6 @@
+ 			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
+ 			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
+ 			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		rdma1: rdma@1400c000 {
+@@ -1366,7 +1536,6 @@
+ 			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
+ 			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
+ 			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
+-			mediatek,larb = <&larb0>;
+ 		};
+ 
+ 		color0: color@1400e000 {
+@@ -1426,6 +1595,13 @@
  			phy-names = "dphy";
  		};
  
@@ -1691,408 +1654,239 @@ index 97d186834163..947c67da5c8e 100644
  			compatible = "mediatek,mt8183-smi-larb";
  			reg = <0 0x14017000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 98d07e8cba80..07a62cdd6b5a 100644
+index bff15713ae7c..e3b626359fe9 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -124,7 +124,7 @@ CONFIG_COMMON_CLK_RK808=y
- CONFIG_COMMON_CLK_XGENE=y
+@@ -34,11 +34,13 @@ CONFIG_COMMON_CLK_PALMAS=y
+ CONFIG_COMMON_CLK_QCOM=y
+ CONFIG_COMMON_CLK_RK808=y
  CONFIG_CPUFREQ_DT=y
- CONFIG_CPUFREQ_DT_PLATDEV=y
--# CONFIG_CROS_EC_RPMSG is not set
 +CONFIG_CROS_EC_RPMSG=m
- # CONFIG_CRYPTO_DEV_CAVIUM_ZIP is not set
- # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
- # CONFIG_CRYPTO_DEV_QCE is not set
-@@ -133,6 +133,7 @@ CONFIG_CRYPTO_DEV_ROCKCHIP=y
- CONFIG_CRYPTO_DEV_VIRTIO=m
- CONFIG_CRYPTO_ENGINE=m
- # CONFIG_DEBUG_EFI is not set
-+# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
- CONFIG_DEVPORT=y
- # CONFIG_DGNC is not set
- # CONFIG_DL2K is not set
-@@ -205,7 +206,7 @@ CONFIG_EFI_STUB=y
- # CONFIG_EFI_VARS is not set
- CONFIG_EINT_MTK=y
- # CONFIG_EMAC_ROCKCHIP is not set
--# CONFIG_ENERGY_MODEL is not set
-+CONFIG_ENERGY_MODEL=y
- # CONFIG_ENIC is not set
- # CONFIG_EPIC100 is not set
- # CONFIG_ET131X is not set
-@@ -390,13 +391,17 @@ CONFIG_MSM_GCC_8916=y
- # CONFIG_MTD_INTEL_VR_NOR is not set
- CONFIG_MTD_MT81xx_NOR=y
- # CONFIG_MTD_PMC551 is not set
--# CONFIG_MTK_CMDQ is not set
--# CONFIG_MTK_CMDQ_MBOX is not set
-+CONFIG_MTK_CMDQ=y
-+CONFIG_MTK_CMDQ_DEBUG=y
-+CONFIG_MTK_CMDQ_DEBUG_SOC=8183
-+CONFIG_MTK_CMDQ_MBOX=y
- CONFIG_MTK_EFUSE=y
-+CONFIG_MTK_EMI_MBW=y
- # CONFIG_MTK_HSDMA is not set
- CONFIG_MTK_INFRACFG=y
- CONFIG_MTK_IOMMU=y
- CONFIG_MTK_PMIC_WRAP=y
-+CONFIG_MTK_SCP=m
- CONFIG_MTK_SCPSYS=y
- CONFIG_MTK_SMI=y
- CONFIG_MTK_THERMAL=y
-@@ -669,6 +674,7 @@ CONFIG_ROCKCHIP_THERMAL=y
- CONFIG_ROCKCHIP_TIMER=y
- CONFIG_RPMSG=y
- CONFIG_RPMSG_CHAR=y
-+CONFIG_RPMSG_MTK_SCP=m
- CONFIG_RPMSG_QCOM_GLINK_NATIVE=y
- CONFIG_RPMSG_QCOM_GLINK_SMEM=y
- CONFIG_RPMSG_QCOM_SMD=y
-@@ -921,22 +927,33 @@ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
- # CONFIG_TYPHOON is not set
- CONFIG_UCS2_STRING=y
- # CONFIG_USB_AMD5536UDC is not set
-+CONFIG_USB_CONFIGFS=y
-+CONFIG_USB_CONFIGFS_ACM=y
-+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
-+CONFIG_USB_CONFIGFS_SERIAL=y
- CONFIG_USB_DWC3_HAPS=y
- CONFIG_USB_DWC3_QCOM=y
- # CONFIG_USB_EG20T is not set
- CONFIG_USB_EHCI_PCI=y
-+CONFIG_USB_F_ACM=y
-+CONFIG_USB_F_FS=y
-+CONFIG_USB_F_MASS_STORAGE=y
-+CONFIG_USB_F_SERIAL=y
- # CONFIG_USB_GOKU is not set
-+CONFIG_USB_LIBCOMPOSITE=y
- CONFIG_USB_MTU3=y
--# CONFIG_USB_MTU3_DEBUG is not set
--# CONFIG_USB_MTU3_DUAL_ROLE is not set
-+CONFIG_USB_MTU3_DEBUG=y
-+CONFIG_USB_MTU3_DUAL_ROLE=y
- # CONFIG_USB_MTU3_GADGET is not set
--CONFIG_USB_MTU3_HOST=y
-+# CONFIG_USB_MTU3_HOST is not set
- # CONFIG_USB_NET2280 is not set
- CONFIG_USB_OHCI_HCD_PCI=y
- CONFIG_USB_PCI=y
- # CONFIG_USB_UHCI_HCD is not set
-+CONFIG_USB_U_SERIAL=y
- CONFIG_USB_XHCI_MTK=y
- CONFIG_USB_XHCI_PCI=y
-+# CONFIG_U_SERIAL_CONSOLE is not set
- CONFIG_V4L2_MEM2MEM_DEV=y
- CONFIG_VGA_ARB=y
- CONFIG_VGA_ARB_MAX_GPUS=16
-diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 30e9317390a8..d8b96efb0ea5 100644
---- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-+++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-@@ -24,6 +24,7 @@ CONFIG_ATH10K_TRACING=y
- # CONFIG_ATH10K_USB is not set
- CONFIG_ATH_COMMON=m
- # CONFIG_BACKLIGHT_GPIO is not set
-+CONFIG_BLK_MQ_VIRTIO=y
- # CONFIG_BT_HCIUART_3WIRE is not set
- # CONFIG_BT_HCIUART_BCM is not set
- # CONFIG_BT_HCIUART_LL is not set
-@@ -57,12 +58,17 @@ CONFIG_COMMON_CLK_MT8183_VDECSYS=y
- CONFIG_COMMON_CLK_MT8183_VENCSYS=y
- CONFIG_COMMON_CLK_XGENE=y
- # CONFIG_CPUFREQ_DT is not set
-+CONFIG_CROS_EC_RPMSG=m
-+CONFIG_CRYPTO_DEV_VIRTIO=m
-+CONFIG_CRYPTO_ENGINE=m
-+CONFIG_DEVFREQ_GOV_CPUFREQ_MAP=y
+ CONFIG_CRYPTO_DEV_ROCKCHIP=y
  CONFIG_DRM_ANALOGIX_ANX78XX=y
- CONFIG_DRM_GEM_CMA_HELPER=y
  CONFIG_DRM_MEDIATEK=y
  CONFIG_DRM_MEDIATEK_HDMI=y
- CONFIG_DRM_MIPI_DSI=y
- # CONFIG_DRM_PANEL_BOE_HIMAX8279D is not set
+ # CONFIG_DRM_MSM_HDMI_HDCP is not set
 +CONFIG_DRM_PANEL_BOE_TV101WUM=y
- # CONFIG_DRM_PANEL_ILITEK_ILI9881C is not set
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
- # CONFIG_DRM_PANEL_JDI_LT070ME05000 is not set
-@@ -75,14 +81,16 @@ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
- # CONFIG_DRM_PANEL_SHARP_LQ101R1SX01 is not set
- # CONFIG_DRM_PANEL_SHARP_LS043T1LE01 is not set
- # CONFIG_DRM_TI_SN65DSI86 is not set
-+# CONFIG_DRM_VIRTIO_GPU is not set
- # CONFIG_DW_WATCHDOG is not set
- # CONFIG_EDAC is not set
- # CONFIG_EFI is not set
- CONFIG_EINT_MTK=y
--# CONFIG_ENERGY_MODEL is not set
+ CONFIG_DRM_TI_SN65DSI86=y
+ CONFIG_DRM_VIRTIO_GPU=y
+@@ -48,6 +50,7 @@ CONFIG_EDAC=y
+ # CONFIG_EDAC_LEGACY_SYSFS is not set
+ CONFIG_EDAC_QCOM=y
+ # CONFIG_EFIVAR_FS is not set
 +CONFIG_ENERGY_MODEL=y
- # CONFIG_FAILOVER is not set
- # CONFIG_HWSPINLOCK is not set
- CONFIG_HW_RANDOM_MTK=y
-+# CONFIG_HW_RANDOM_VIRTIO is not set
- CONFIG_I2C_HID=y
- CONFIG_I2C_MT65XX=y
- # CONFIG_I2C_RK3X is not set
-@@ -114,13 +122,17 @@ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
- # CONFIG_MMC_DW is not set
- CONFIG_MMC_MTK=y
+ CONFIG_EXTCON_PALMAS=y
+ CONFIG_GPIO_PALMAS=y
+ CONFIG_HWSPINLOCK=y
+@@ -71,9 +74,14 @@ CONFIG_MMC_MTK=y
+ CONFIG_MMC_SDHCI_MSM=y
+ CONFIG_MSM_GCC_8916=y
  CONFIG_MTD_MT81xx_NOR=y
--# CONFIG_MTK_CMDQ is not set
--# CONFIG_MTK_CMDQ_MBOX is not set
 +CONFIG_MTK_CMDQ=y
 +CONFIG_MTK_CMDQ_DEBUG=y
 +CONFIG_MTK_CMDQ_DEBUG_SOC=8183
-+CONFIG_MTK_CMDQ_MBOX=y
  CONFIG_MTK_EFUSE=y
 +CONFIG_MTK_EMI_MBW=y
- # CONFIG_MTK_HSDMA is not set
- CONFIG_MTK_INFRACFG=y
  CONFIG_MTK_IOMMU=y
  CONFIG_MTK_PMIC_WRAP=y
 +CONFIG_MTK_SCP=m
- CONFIG_MTK_SCPSYS=y
- CONFIG_MTK_SMI=y
- CONFIG_MTK_THERMAL=y
-@@ -152,13 +164,17 @@ CONFIG_REGULATOR_MT6358=y
- # CONFIG_REGULATOR_TPS51632 is not set
- # CONFIG_REGULATOR_TPS62360 is not set
- # CONFIG_REGULATOR_TPS6586X is not set
--# CONFIG_REMOTEPROC is not set
-+CONFIG_REMOTEPROC=y
- # CONFIG_RMNET is not set
-+CONFIG_RPMSG=m
-+# CONFIG_RPMSG_CHAR is not set
-+CONFIG_RPMSG_MTK_SCP=m
- # CONFIG_RTC_DRV_AS3722 is not set
- CONFIG_RTC_DRV_MT6397=y
- # CONFIG_RTC_DRV_MT7622 is not set
- # CONFIG_RTC_DRV_TPS6586X is not set
- # CONFIG_SCSI_UFSHCD is not set
-+# CONFIG_SCSI_VIRTIO is not set
- # CONFIG_SENSORS_LM90 is not set
- # CONFIG_SENSORS_NTC_THERMISTOR is not set
- CONFIG_SENSORS_TMP401=y
-@@ -194,15 +210,27 @@ CONFIG_SPI_MT65XX=y
- # CONFIG_SPMI is not set
- CONFIG_STAGING_MEDIA=y
- CONFIG_TCG_CR50_I2C=y
-+# CONFIG_TCG_VIRTIO_VTPM is not set
- # CONFIG_THERMAL_GOV_FAIR_SHARE is not set
- # CONFIG_THERMAL_WRITABLE_TRIPS is not set
+ CONFIG_MWIFIEX_PCIE=m
+ CONFIG_PCI=y
+ CONFIG_PCIEASPM_POWERSAVE=y
+@@ -179,8 +187,12 @@ CONFIG_SPI_QCOM_QSPI=y
+ CONFIG_SPI_ROCKCHIP=y
+ CONFIG_SPMI=y
  CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
 +CONFIG_USB_CONFIGFS=y
 +CONFIG_USB_CONFIGFS_ACM=y
 +CONFIG_USB_CONFIGFS_MASS_STORAGE=y
 +CONFIG_USB_CONFIGFS_SERIAL=y
-+CONFIG_USB_F_ACM=y
-+CONFIG_USB_F_FS=y
-+CONFIG_USB_F_MASS_STORAGE=y
-+CONFIG_USB_F_SERIAL=y
-+CONFIG_USB_LIBCOMPOSITE=y
  CONFIG_USB_MTU3=y
--# CONFIG_USB_MTU3_DEBUG is not set
--# CONFIG_USB_MTU3_DUAL_ROLE is not set
-+CONFIG_USB_MTU3_DEBUG=y
-+CONFIG_USB_MTU3_DUAL_ROLE=y
- # CONFIG_USB_MTU3_GADGET is not set
 -CONFIG_USB_MTU3_HOST=y
-+# CONFIG_USB_MTU3_HOST is not set
-+CONFIG_USB_U_SERIAL=y
- CONFIG_USB_XHCI_MTK=y
-+# CONFIG_U_SERIAL_CONSOLE is not set
- CONFIG_V4L2_MEM2MEM_DEV=y
- CONFIG_VIDEOBUF2_CORE=y
- CONFIG_VIDEOBUF2_DMA_CONTIG=y
-@@ -212,4 +240,11 @@ CONFIG_VIDEO_MEDIATEK_MDP=y
++CONFIG_USB_MTU3_DEBUG=y
+ CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
- CONFIG_VIDEO_MEDIATEK_VPU=y
- # CONFIG_VIDEO_V4L2_SUBDEV_API is not set
-+CONFIG_VIRTIO=y
-+# CONFIG_VIRTIO_BALLOON is not set
-+# CONFIG_VIRTIO_BLK is not set
-+# CONFIG_VIRTIO_CONSOLE is not set
-+# CONFIG_VIRTIO_INPUT is not set
- # CONFIG_VIRTIO_MMIO is not set
-+# CONFIG_VIRTIO_NET is not set
-+# CONFIG_VIRTIO_WL is not set
+ CONFIG_VIRTIO_BLK=y
+diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
+index be993f3fc1e7..790366f58110 100644
+--- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
++++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
+@@ -24,12 +24,16 @@ CONFIG_COMMON_CLK_MT8183_MFGCFG=y
+ CONFIG_COMMON_CLK_MT8183_MMSYS=y
+ CONFIG_COMMON_CLK_MT8183_VDECSYS=y
+ CONFIG_COMMON_CLK_MT8183_VENCSYS=y
++CONFIG_CROS_EC_RPMSG=m
++CONFIG_DEVFREQ_GOV_CPUFREQ_MAP=y
+ CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
+ CONFIG_DRM_ANALOGIX_ANX78XX=y
+ CONFIG_DRM_MEDIATEK=y
+ CONFIG_DRM_MEDIATEK_HDMI=y
++CONFIG_DRM_PANEL_BOE_TV101WUM=y
+ CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
+ # CONFIG_EFI is not set
++CONFIG_ENERGY_MODEL=y
+ CONFIG_EXTCON=y
+ CONFIG_I2C_HID=y
+ CONFIG_I2C_MT65XX=y
+@@ -42,9 +46,14 @@ CONFIG_MEDIA_CONTROLLER=y
+ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
+ CONFIG_MMC_MTK=y
+ CONFIG_MTD_MT81xx_NOR=y
++CONFIG_MTK_CMDQ=y
++CONFIG_MTK_CMDQ_DEBUG=y
++CONFIG_MTK_CMDQ_DEBUG_SOC=8183
+ CONFIG_MTK_EFUSE=y
++CONFIG_MTK_EMI_MBW=y
+ CONFIG_MTK_IOMMU=y
+ CONFIG_MTK_PMIC_WRAP=y
++CONFIG_MTK_SCP=m
+ CONFIG_PHY_MTK_TPHY=y
+ # CONFIG_PINCTRL_MT2712 is not set
+ # CONFIG_PINCTRL_MT6397 is not set
+@@ -55,6 +64,7 @@ CONFIG_PWM_MTK_DISP=y
+ CONFIG_RAS=y
+ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_MT6358=y
++CONFIG_REMOTEPROC=y
+ CONFIG_RTC_DRV_MT6397=y
+ CONFIG_SCSI=y
+ CONFIG_SENSORS_TMP401=y
+@@ -72,7 +82,11 @@ CONFIG_STAGING_MEDIA=y
+ CONFIG_TCG_CR50_I2C=y
+ CONFIG_TMPFS=y
+ CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
++CONFIG_USB_CONFIGFS=y
++CONFIG_USB_CONFIGFS_ACM=y
++CONFIG_USB_CONFIGFS_MASS_STORAGE=y
++CONFIG_USB_CONFIGFS_SERIAL=y
+ CONFIG_USB_MTU3=y
+-CONFIG_USB_MTU3_HOST=y
++CONFIG_USB_MTU3_DEBUG=y
+ CONFIG_VIDEO_MEDIATEK_MDP=y
+ CONFIG_VIDEO_MEDIATEK_VCODEC=y
 diff --git a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-index ccb3654bff32..5a3620e9aacc 100644
+index 7c9bc509f553..0e8a0d72a7e6 100644
 --- a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-@@ -48,6 +48,7 @@ CONFIG_CPUFREQ_DT_PLATDEV=y
- # CONFIG_CRYPTO_DEV_QCOM_RNG is not set
- CONFIG_CRYPTO_DEV_VIRTIO=m
- CONFIG_CRYPTO_ENGINE=m
-+# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
- # CONFIG_DRM_ANALOGIX_ANX78XX is not set
- CONFIG_DRM_MIPI_DSI=y
- CONFIG_DRM_MSM=y
-@@ -279,7 +280,13 @@ CONFIG_SPMI_MSM_PMIC_ARB=y
+@@ -20,6 +20,7 @@ CONFIG_BT_HCIUART_QCA=y
+ # CONFIG_CAVIUM_ERRATUM_23154 is not set
+ CONFIG_COMMON_CLK_QCOM=y
+ # CONFIG_COMMON_CLK_XGENE is not set
++CONFIG_CONFIGFS_FS=y
+ CONFIG_CPUFREQ_DT=y
+ # CONFIG_DRM_MSM_HDMI_HDCP is not set
+ CONFIG_DRM_TI_SN65DSI86=y
+@@ -37,6 +38,7 @@ CONFIG_I2C_QCOM_GENI=y
+ CONFIG_INTERCONNECT=y
+ CONFIG_INTERCONNECT_QCOM=y
+ CONFIG_INTERCONNECT_QCOM_SDM845=y
++CONFIG_MAILBOX=y
+ CONFIG_MEMORY=y
+ CONFIG_MFD_SPMI_PMIC=y
+ CONFIG_MMC_SDHCI_MSM=y
+@@ -97,3 +99,4 @@ CONFIG_SPI_QCOM_QSPI=y
+ CONFIG_SPMI=y
  CONFIG_THERMAL_GOV_FAIR_SHARE=y
  CONFIG_THERMAL_WRITABLE_TRIPS=y
- # CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
 +CONFIG_USB_CONFIGFS=m
-+# CONFIG_USB_CONFIGFS_ACM is not set
-+# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
-+# CONFIG_USB_CONFIGFS_SERIAL is not set
- CONFIG_USB_DWC3_QCOM=y
-+CONFIG_USB_F_FS=m
-+CONFIG_USB_LIBCOMPOSITE=m
- CONFIG_VIDEOBUF2_CORE=m
- CONFIG_VIDEOBUF2_MEMOPS=m
- CONFIG_VIDEOBUF2_V4L2=m
 diff --git a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-index 80931110c50a..75bf228c564f 100644
+index bc7d6b860213..75c78ef63b6a 100644
 --- a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-@@ -70,6 +70,7 @@ CONFIG_CPUFREQ_DT_PLATDEV=y
- # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
+@@ -14,6 +14,7 @@ CONFIG_BT_HCIUART_H4=y
+ # CONFIG_CAVIUM_ERRATUM_23154 is not set
+ CONFIG_COMMON_CLK_RK808=y
+ # CONFIG_COMMON_CLK_XGENE is not set
++CONFIG_CONFIGFS_FS=y
+ CONFIG_CPUFREQ_DT=y
  CONFIG_CRYPTO_DEV_ROCKCHIP=y
- CONFIG_DEVFREQ_EVENT_ROCKCHIP_DFI=y
-+# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
- CONFIG_DEVPORT=y
- # CONFIG_DGNC is not set
- # CONFIG_DL2K is not set
-@@ -546,10 +547,16 @@ CONFIG_THERMAL_WRITABLE_TRIPS=y
- # CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
- # CONFIG_TYPHOON is not set
- # CONFIG_USB_AMD5536UDC is not set
+ CONFIG_DRM_ROCKCHIP=y
+@@ -21,6 +22,7 @@ CONFIG_DW_WATCHDOG=y
+ # CONFIG_EFI is not set
+ CONFIG_I2C_HID=y
+ CONFIG_I2C_RK3X=y
++CONFIG_MAILBOX=y
+ CONFIG_MEMORY=y
+ CONFIG_MFD_RK808=y
+ CONFIG_MMC_DW=y
+@@ -63,3 +65,4 @@ CONFIG_SPI_ROCKCHIP=y
+ CONFIG_THERMAL_GOV_FAIR_SHARE=y
+ CONFIG_THERMAL_WRITABLE_TRIPS=y
+ CONFIG_TMPFS=y
 +CONFIG_USB_CONFIGFS=m
-+# CONFIG_USB_CONFIGFS_ACM is not set
-+# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
-+# CONFIG_USB_CONFIGFS_SERIAL is not set
- CONFIG_USB_DWC3_HAPS=y
- # CONFIG_USB_EG20T is not set
- CONFIG_USB_EHCI_PCI=y
-+CONFIG_USB_F_FS=m
- # CONFIG_USB_GOKU is not set
-+CONFIG_USB_LIBCOMPOSITE=m
- # CONFIG_USB_NET2280 is not set
- CONFIG_USB_OHCI_HCD_PCI=y
- CONFIG_USB_PCI=y
 diff --git a/chromeos/config/arm64/common.config b/chromeos/config/arm64/common.config
-index b79beed5c220..c5a721c79f04 100644
+index 117871a87b13..6106957fa941 100644
 --- a/chromeos/config/arm64/common.config
 +++ b/chromeos/config/arm64/common.config
-@@ -161,7 +161,7 @@ CONFIG_CHARGER_CROS_USBPD=y
- CONFIG_CHARGER_GPIO=y
- # CONFIG_CHARGER_MANAGER is not set
- # CONFIG_CHARGER_TPS65090 is not set
--CONFIG_CLANG_VERSION=90000
-+CONFIG_CLANG_VERSION=80000
- # CONFIG_CLK_HSDK is not set
- # CONFIG_CLK_QORIQ is not set
- # CONFIG_CLOCK_THERMAL is not set
+@@ -61,7 +61,6 @@ CONFIG_IIO_SYSFS_TRIGGER=y
+ # CONFIG_KEYBOARD_ATKBD is not set
+ CONFIG_MAC80211_DEBUGFS=y
+ CONFIG_MAC80211_LEDS=y
+-CONFIG_MAILBOX=y
+ CONFIG_MFD_AS3722=y
+ CONFIG_MFD_MT6397=y
+ CONFIG_MFD_TPS65090=y
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index 3a244762b87b..0140315ea4cd 100644
+index 0b9b33e468f8..4cb9f123b18b 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
-@@ -257,6 +257,7 @@ CONFIG_DEBUG_ALIGN_RODATA=y
- CONFIG_DEBUG_LL_INCLUDE="mach/debug-macro.S"
- # CONFIG_DEBUG_USER is not set
- # CONFIG_DEPRECATED_PARAM_STRUCT is not set
-+# CONFIG_DEVFREQ_GOV_CPUFREQ_MAP is not set
- # CONFIG_DEVFREQ_GOV_PASSIVE is not set
- CONFIG_DEVFREQ_GOV_PERFORMANCE=y
- CONFIG_DEVFREQ_GOV_POWERSAVE=y
-@@ -874,15 +875,21 @@ CONFIG_TIMER_PROBE=y
- # CONFIG_TYPEC is not set
- # CONFIG_UACCESS_WITH_MEMCPY is not set
- CONFIG_UNCOMPRESS_INCLUDE="debug/uncompress.h"
+@@ -27,6 +27,7 @@ CONFIG_CGROUP_SCHED=y
+ CONFIG_CHARGER_BQ24735=y
+ CONFIG_CHARGER_GPIO=y
+ CONFIG_COMMON_CLK_RK808=y
++CONFIG_CONFIGFS_FS=y
+ CONFIG_CPUFREQ_DT=y
+ CONFIG_CPU_BOOST=y
+ CONFIG_CPU_FREQ=y
+@@ -128,6 +129,7 @@ CONFIG_TCG_TIS_I2C_INFINEON=y
+ CONFIG_THERMAL=y
+ CONFIG_THERMAL_GOV_USER_SPACE=y
+ CONFIG_TMPFS=y
 +CONFIG_USB_CONFIGFS=m
-+# CONFIG_USB_CONFIGFS_ACM is not set
-+# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
-+# CONFIG_USB_CONFIGFS_SERIAL is not set
  CONFIG_USB_DWC2=y
- # CONFIG_USB_DWC2_DEBUG is not set
- CONFIG_USB_DWC2_HOST=y
- # CONFIG_USB_DWC2_TRACK_MISSED_SOFS is not set
- # CONFIG_USB_DWC3 is not set
  CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_F_FS=m
  CONFIG_USB_GADGET=m
- # CONFIG_USB_GADGET_XILINX is not set
- # CONFIG_USB_HCD_BCMA is not set
-+CONFIG_USB_LIBCOMPOSITE=m
- # CONFIG_USB_SNP_UDC_PLAT is not set
- # CONFIG_USB_STORAGE_REALTEK is not set
- CONFIG_USE_OF=y
 diff --git a/chromeos/config/base.config b/chromeos/config/base.config
-index 206da405db3f..4d9ad0ff5488 100644
+index e8ddf6fcc3b8..fe6867a290eb 100644
 --- a/chromeos/config/base.config
 +++ b/chromeos/config/base.config
-@@ -3008,8 +3008,6 @@ CONFIG_USB_ARCH_HAS_HCD=y
- # CONFIG_USB_CHAOSKEY is not set
- # CONFIG_USB_CHIPIDEA is not set
- CONFIG_USB_COMMON=y
+@@ -41,7 +41,6 @@ CONFIG_CGROUP_DEVICE=y
+ CONFIG_CGROUP_FREEZER=y
+ CONFIG_CLS_U32_MARK=y
+ # CONFIG_COMPAT_BRK is not set
+-CONFIG_CONFIGFS_FS=y
+ CONFIG_CONNECTOR=y
+ CONFIG_CPUSETS=y
+ CONFIG_CPU_FREQ_GOV_USERSPACE=y
+@@ -407,7 +406,6 @@ CONFIG_UID_SYS_STATS=y
+ CONFIG_UNIX=y
+ CONFIG_USB_ACM=y
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
 -CONFIG_USB_CONFIGFS=m
--# CONFIG_USB_CONFIGFS_ACM is not set
- # CONFIG_USB_CONFIGFS_ECM is not set
- # CONFIG_USB_CONFIGFS_ECM_SUBSET is not set
- # CONFIG_USB_CONFIGFS_EEM is not set
-@@ -3023,11 +3021,9 @@ CONFIG_USB_CONFIGFS_F_FS=y
- # CONFIG_USB_CONFIGFS_F_UAC1_LEGACY is not set
- # CONFIG_USB_CONFIGFS_F_UAC2 is not set
- # CONFIG_USB_CONFIGFS_F_UVC is not set
--# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
- # CONFIG_USB_CONFIGFS_NCM is not set
- # CONFIG_USB_CONFIGFS_OBEX is not set
- # CONFIG_USB_CONFIGFS_RNDIS is not set
--# CONFIG_USB_CONFIGFS_SERIAL is not set
+ CONFIG_USB_CONFIGFS_F_FS=y
  CONFIG_USB_CONFIGFS_UEVENT=y
- # CONFIG_USB_CYPRESS_CY7C63 is not set
- # CONFIG_USB_CYTHERM is not set
-@@ -3044,7 +3040,6 @@ CONFIG_USB_EZUSB_FX2=m
- # CONFIG_USB_FOTG210_HCD is not set
- # CONFIG_USB_FOTG210_UDC is not set
- # CONFIG_USB_FTDI_ELAN is not set
--CONFIG_USB_F_FS=m
- # CONFIG_USB_GADGET_DEBUG is not set
- # CONFIG_USB_GADGET_DEBUG_FILES is not set
- # CONFIG_USB_GADGET_DEBUG_FS is not set
-@@ -3074,7 +3069,6 @@ CONFIG_USB_IPHETH=m
- # CONFIG_USB_LEDS_TRIGGER_USBPORT is not set
- # CONFIG_USB_LED_TRIG is not set
- # CONFIG_USB_LEGOTOWER is not set
--CONFIG_USB_LIBCOMPOSITE=m
- # CONFIG_USB_LINK_LAYER_TEST is not set
- # CONFIG_USB_M66592 is not set
- # CONFIG_USB_MAX3421_HCD is not set
+ # CONFIG_USB_DEFAULT_PERSIST is not set
 diff --git a/chromeos/config/x86_64/common.config b/chromeos/config/x86_64/common.config
-index 6197cbb7d7ad..78e4a4aad09d 100644
+index af9abc651466..bab8c9968b9a 100644
 --- a/chromeos/config/x86_64/common.config
 +++ b/chromeos/config/x86_64/common.config
-@@ -235,7 +235,7 @@ CONFIG_CHROMEOS=y
+@@ -30,6 +30,7 @@ CONFIG_CHARGER_CROS_USBPD=y
  CONFIG_CHROMEOS_LAPTOP=y
  CONFIG_CHROMEOS_PSTORE=y
  CONFIG_CHROMEOS_TBMC=y
--CONFIG_CLANG_VERSION=90000
-+CONFIG_CLANG_VERSION=80000
- CONFIG_CLKBLD_I8253=y
- CONFIG_CLKEVT_I8253=y
- CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE=y
-@@ -1278,6 +1278,10 @@ CONFIG_UEFI_CPER_X86=y
- # CONFIG_UNWINDER_GUESS is not set
- CONFIG_UNWINDER_ORC=y
- # CONFIG_USB_AMD5536UDC is not set
++CONFIG_CONFIGFS_FS=y
+ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
+ CONFIG_CROS_EC_I2C=y
+ CONFIG_CROS_EC_LPC=y
+@@ -138,6 +139,7 @@ CONFIG_TYPEC=m
+ CONFIG_TYPEC_UCSI=m
+ CONFIG_UCSI_ACPI=m
+ # CONFIG_UNUSED_SYMBOLS is not set
 +CONFIG_USB_CONFIGFS=m
-+# CONFIG_USB_CONFIGFS_ACM is not set
-+# CONFIG_USB_CONFIGFS_MASS_STORAGE is not set
-+# CONFIG_USB_CONFIGFS_SERIAL is not set
- # CONFIG_USB_DWC2 is not set
  CONFIG_USB_DWC3=m
  CONFIG_USB_DWC3_GADGET=y
-@@ -1287,8 +1291,10 @@ CONFIG_USB_DWC3_PCI=m
- # CONFIG_USB_EG20T is not set
- # CONFIG_USB_EHCI_HCD_PLATFORM is not set
- CONFIG_USB_EHCI_PCI=y
-+CONFIG_USB_F_FS=m
- CONFIG_USB_GADGET=m
- # CONFIG_USB_GOKU is not set
-+CONFIG_USB_LIBCOMPOSITE=m
- # CONFIG_USB_NET2280 is not set
- CONFIG_USB_OHCI_HCD=y
- CONFIG_USB_OHCI_HCD_PCI=y
+ CONFIG_USB_EHCI_ROOT_HUB_TT=y
 diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
 index 3dc1b9f15ea2..5df0e476e94d 100644
 --- a/drivers/clk/mediatek/Makefile
@@ -6842,6 +6636,112 @@ index ea475f762883..b4b04f3ad3fe 100644
  	platform_driver_unregister(&cci_devfreq_driver);
  }
  module_exit(mtk_cci_devfreq_exit)
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index 903883dd194c..654fc9a8e78c 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -18,7 +18,6 @@
+ #include <drm/drm_plane_helper.h>
+ #include <linux/clk.h>
+ #include <linux/pm_runtime.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_drm_drv.h"
+ #include "mtk_drm_crtc.h"
+@@ -400,20 +399,12 @@ static void mtk_drm_crtc_atomic_enable(struct drm_crtc *crtc,
+ 				       struct drm_crtc_state *old_state)
+ {
+ 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+-	struct mtk_ddp_comp *comp = mtk_crtc->ddp_comp[0];
+ 	int ret;
+ 
+ 	DRM_DEBUG_DRIVER("%s %d\n", __func__, crtc->base.id);
+ 
+-	ret = mtk_smi_larb_get(comp->larb_dev);
+-	if (ret) {
+-		DRM_ERROR("Failed to get larb: %d\n", ret);
+-		return;
+-	}
+-
+ 	ret = mtk_crtc_ddp_hw_init(mtk_crtc);
+ 	if (ret) {
+-		mtk_smi_larb_put(comp->larb_dev);
+ 		return;
+ 	}
+ 
+@@ -425,7 +416,6 @@ static void mtk_drm_crtc_atomic_disable(struct drm_crtc *crtc,
+ 					struct drm_crtc_state *old_state)
+ {
+ 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+-	struct mtk_ddp_comp *comp = mtk_crtc->ddp_comp[0];
+ 	int i;
+ 
+ 	DRM_DEBUG_DRIVER("%s %d\n", __func__, crtc->base.id);
+@@ -448,7 +438,6 @@ static void mtk_drm_crtc_atomic_disable(struct drm_crtc *crtc,
+ 
+ 	drm_crtc_vblank_off(crtc);
+ 	mtk_crtc_ddp_hw_fini(mtk_crtc);
+-	mtk_smi_larb_put(comp->larb_dev);
+ 
+ 	mtk_crtc->enabled = false;
+ }
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+index bb55d1dc8746..6a66373df6e9 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+@@ -351,8 +351,6 @@ int mtk_ddp_comp_init(struct device *dev, struct device_node *node,
+ 		      const struct mtk_ddp_comp_funcs *funcs)
+ {
+ 	enum mtk_ddp_comp_type type;
+-	struct device_node *larb_node;
+-	struct platform_device *larb_pdev;
+ 
+ 	if (comp_id < 0 || comp_id >= DDP_COMPONENT_ID_MAX)
+ 		return -EINVAL;
+@@ -382,31 +380,6 @@ int mtk_ddp_comp_init(struct device *dev, struct device_node *node,
+ 	if (IS_ERR(comp->clk))
+ 		return PTR_ERR(comp->clk);
+ 
+-	/* Only DMA capable components need the LARB property */
+-	comp->larb_dev = NULL;
+-	if (type != MTK_DISP_OVL &&
+-	    type != MTK_DISP_OVL_2L &&
+-	    type != MTK_DISP_RDMA &&
+-	    type != MTK_DISP_WDMA)
+-		return 0;
+-
+-	larb_node = of_parse_phandle(node, "mediatek,larb", 0);
+-	if (!larb_node) {
+-		dev_err(dev,
+-			"Missing mediadek,larb phandle in %pOF node\n", node);
+-		return -EINVAL;
+-	}
+-
+-	larb_pdev = of_find_device_by_node(larb_node);
+-	if (!larb_pdev) {
+-		dev_warn(dev, "Waiting for larb device %pOF\n", larb_node);
+-		of_node_put(larb_node);
+-		return -EPROBE_DEFER;
+-	}
+-	of_node_put(larb_node);
+-
+-	comp->larb_dev = &larb_pdev->dev;
+-
+ 	return 0;
+ }
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+index 6bf46d1f39b4..9e7969bc755f 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+@@ -101,7 +101,6 @@ struct mtk_ddp_comp {
+ 	struct clk *clk;
+ 	void __iomem *regs;
+ 	int irq;
+-	struct device *larb_dev;
+ 	enum mtk_ddp_comp_id id;
+ 	const struct mtk_ddp_comp_funcs *funcs;
+ };
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
 index 28d5766ecb74..faea76259457 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
@@ -8085,6 +7985,182 @@ index 88c7d035ace6..3fbc90218c5e 100644
  	}
  
  	innolux->backlight = devm_of_find_backlight(dev);
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 803084c86124..43e420cdab6e 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -262,6 +262,7 @@ static void mtk_iommu_config(struct mtk_iommu_data *data,
+ 	struct mtk_smi_larb_iommu    *larb_mmu;
+ 	unsigned int                 larbid, portid;
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
++	struct device_link *link;
+ 	int i;
+ 
+ 	for (i = 0; i < fwspec->num_ids; ++i) {
+@@ -272,10 +273,20 @@ static void mtk_iommu_config(struct mtk_iommu_data *data,
+ 		dev_dbg(dev, "%s iommu port: %d\n",
+ 			enable ? "enable" : "disable", portid);
+ 
+-		if (enable)
++		if (enable) {
+ 			larb_mmu->mmu |= MTK_SMI_MMU_EN(portid);
+-		else
++			/* Link the consumer with the larb device(supplier) */
++			link = device_link_add(dev, larb_mmu->dev,
++					       DL_FLAG_PM_RUNTIME |
++					       DL_FLAG_AUTOREMOVE_CONSUMER);
++			if (!link) {
++				dev_err(dev, "Unable to link %s\n",
++					dev_name(larb_mmu->dev));
++				return;
++			}
++		} else {
+ 			larb_mmu->mmu &= ~MTK_SMI_MMU_EN(portid);
++		}
+ 	}
+ }
+ 
+@@ -662,7 +673,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 			id = i;
+ 
+ 		plarbdev = of_find_device_by_node(larbnode);
+-		if (!plarbdev)
++		if (!plarbdev || !plarbdev->dev.driver)
+ 			return -EPROBE_DEFER;
+ 		data->smi_imu.larb_imu[id].dev = &plarbdev->dev;
+ 
+@@ -696,7 +707,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 	return component_master_add_with_match(dev, &mtk_iommu_com_ops, match);
+ }
+ 
+-static int mtk_iommu_remove(struct platform_device *pdev)
++static void mtk_iommu_shutdown(struct platform_device *pdev)
+ {
+ 	struct mtk_iommu_data *data = platform_get_drvdata(pdev);
+ 
+@@ -709,12 +720,6 @@ static int mtk_iommu_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(data->bclk);
+ 	devm_free_irq(&pdev->dev, data->irq, data);
+ 	component_master_del(&pdev->dev, &mtk_iommu_com_ops);
+-	return 0;
+-}
+-
+-static void mtk_iommu_shutdown(struct platform_device *pdev)
+-{
+-	mtk_iommu_remove(pdev);
+ }
+ 
+ static int __maybe_unused mtk_iommu_suspend(struct device *dev)
+@@ -797,7 +802,6 @@ static const struct of_device_id mtk_iommu_of_ids[] = {
+ 
+ static struct platform_driver mtk_iommu_driver = {
+ 	.probe	= mtk_iommu_probe,
+-	.remove	= mtk_iommu_remove,
+ 	.shutdown = mtk_iommu_shutdown,
+ 	.driver	= {
+ 		.name = "mtk-iommu",
+@@ -805,16 +809,4 @@ static struct platform_driver mtk_iommu_driver = {
+ 		.pm = &mtk_iommu_pm_ops,
+ 	}
+ };
+-
+-static int __init mtk_iommu_init(void)
+-{
+-	int ret;
+-
+-	ret = platform_driver_register(&mtk_iommu_driver);
+-	if (ret != 0)
+-		pr_err("Failed to register MTK IOMMU driver\n");
+-
+-	return ret;
+-}
+-
+-subsys_initcall(mtk_iommu_init)
++builtin_platform_driver(mtk_iommu_driver);
+diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+index d70bdf64ab71..832ea99f7a16 100644
+--- a/drivers/iommu/mtk_iommu_v1.c
++++ b/drivers/iommu/mtk_iommu_v1.c
+@@ -201,6 +201,7 @@ static void mtk_iommu_config(struct mtk_iommu_data *data,
+ 	struct mtk_smi_larb_iommu    *larb_mmu;
+ 	unsigned int                 larbid, portid;
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
++	struct device_link *link;
+ 	int i;
+ 
+ 	for (i = 0; i < fwspec->num_ids; ++i) {
+@@ -211,10 +212,19 @@ static void mtk_iommu_config(struct mtk_iommu_data *data,
+ 		dev_dbg(dev, "%s iommu port: %d\n",
+ 			enable ? "enable" : "disable", portid);
+ 
+-		if (enable)
++		if (enable) {
+ 			larb_mmu->mmu |= MTK_SMI_MMU_EN(portid);
+-		else
++			link = device_link_add(dev, larb_mmu->dev,
++					       DL_FLAG_PM_RUNTIME |
++					       DL_FLAG_AUTOREMOVE_CONSUMER);
++			if (!link) {
++				dev_err(dev, "Unable to link %s\n",
++					dev_name(larb_mmu->dev));
++				return;
++			}
++		} else {
+ 			larb_mmu->mmu &= ~MTK_SMI_MMU_EN(portid);
++		}
+ 	}
+ }
+ 
+@@ -601,7 +611,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 			plarbdev = of_platform_device_create(
+ 						larb_spec.np, NULL,
+ 						platform_bus_type.dev_root);
+-			if (!plarbdev) {
++			if (!plarbdev || !plarbdev->dev.driver) {
+ 				of_node_put(larb_spec.np);
+ 				return -EPROBE_DEFER;
+ 			}
+@@ -636,7 +646,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 	return component_master_add_with_match(dev, &mtk_iommu_com_ops, match);
+ }
+ 
+-static int mtk_iommu_remove(struct platform_device *pdev)
++static void mtk_iommu_shutdown(struct platform_device *pdev)
+ {
+ 	struct mtk_iommu_data *data = platform_get_drvdata(pdev);
+ 
+@@ -649,12 +659,6 @@ static int mtk_iommu_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(data->bclk);
+ 	devm_free_irq(&pdev->dev, data->irq, data);
+ 	component_master_del(&pdev->dev, &mtk_iommu_com_ops);
+-	return 0;
+-}
+-
+-static void mtk_iommu_shutdown(struct platform_device *pdev)
+-{
+-	mtk_iommu_remove(pdev);
+ }
+ 
+ static int __maybe_unused mtk_iommu_suspend(struct device *dev)
+@@ -693,7 +697,6 @@ static const struct dev_pm_ops mtk_iommu_pm_ops = {
+ 
+ static struct platform_driver mtk_iommu_driver = {
+ 	.probe	= mtk_iommu_probe,
+-	.remove	= mtk_iommu_remove,
+ 	.shutdown = mtk_iommu_shutdown,
+ 	.driver	= {
+ 		.name = "mtk-iommu-v1",
+@@ -701,9 +704,4 @@ static struct platform_driver mtk_iommu_driver = {
+ 		.pm = &mtk_iommu_pm_ops,
+ 	}
+ };
+-
+-static int __init m4u_init(void)
+-{
+-	return platform_driver_register(&mtk_iommu_driver);
+-}
+-subsys_initcall(m4u_init);
++builtin_platform_driver(mtk_iommu_driver);
 diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
 index 841c005d8ebb..31dc4c5e37e1 100644
 --- a/drivers/mailbox/Kconfig
@@ -8948,6 +9024,359 @@ index aec46d5d3506..2c53ece47abd 100644
  	{}
  };
  
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+index f761e4d8bf2a..2f375386e376 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+@@ -29,7 +29,6 @@
+ #include <media/v4l2-ioctl.h>
+ #include <media/videobuf2-core.h>
+ #include <media/videobuf2-dma-contig.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_jpeg_hw.h"
+ #include "mtk_jpeg_core.h"
+@@ -901,11 +900,6 @@ static int mtk_jpeg_queue_init(void *priv, struct vb2_queue *src_vq,
+ 
+ static void mtk_jpeg_clk_on(struct mtk_jpeg_dev *jpeg)
+ {
+-	int ret;
+-
+-	ret = mtk_smi_larb_get(jpeg->larb);
+-	if (ret)
+-		dev_err(jpeg->dev, "mtk_smi_larb_get larbvdec fail %d\n", ret);
+ 	clk_prepare_enable(jpeg->clk_jdec_smi);
+ 	clk_prepare_enable(jpeg->clk_jdec);
+ }
+@@ -914,7 +908,6 @@ static void mtk_jpeg_clk_off(struct mtk_jpeg_dev *jpeg)
+ {
+ 	clk_disable_unprepare(jpeg->clk_jdec);
+ 	clk_disable_unprepare(jpeg->clk_jdec_smi);
+-	mtk_smi_larb_put(jpeg->larb);
+ }
+ 
+ static irqreturn_t mtk_jpeg_dec_irq(int irq, void *priv)
+@@ -1059,21 +1052,6 @@ static const struct v4l2_file_operations mtk_jpeg_fops = {
+ 
+ static int mtk_jpeg_clk_init(struct mtk_jpeg_dev *jpeg)
+ {
+-	struct device_node *node;
+-	struct platform_device *pdev;
+-
+-	node = of_parse_phandle(jpeg->dev->of_node, "mediatek,larb", 0);
+-	if (!node)
+-		return -EINVAL;
+-	pdev = of_find_device_by_node(node);
+-	if (WARN_ON(!pdev)) {
+-		of_node_put(node);
+-		return -EINVAL;
+-	}
+-	of_node_put(node);
+-
+-	jpeg->larb = &pdev->dev;
+-
+ 	jpeg->clk_jdec = devm_clk_get(jpeg->dev, "jpgdec");
+ 	if (IS_ERR(jpeg->clk_jdec))
+ 		return PTR_ERR(jpeg->clk_jdec);
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
+index 1a6cdfd4ea70..e35fb79b4c74 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
+@@ -55,7 +55,6 @@ enum mtk_jpeg_ctx_state {
+  * @dec_reg_base:	JPEG registers mapping
+  * @clk_jdec:		JPEG hw working clock
+  * @clk_jdec_smi:	JPEG SMI bus clock
+- * @larb:		SMI device
+  */
+ struct mtk_jpeg_dev {
+ 	struct mutex		lock;
+@@ -69,7 +68,6 @@ struct mtk_jpeg_dev {
+ 	void __iomem		*dec_reg_base;
+ 	struct clk		*clk_jdec;
+ 	struct clk		*clk_jdec_smi;
+-	struct device		*larb;
+ };
+ 
+ /**
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
+index 03aba03a24c8..4f7cbc4577de 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
+@@ -17,7 +17,6 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_mdp_comp.h"
+ 
+@@ -66,14 +65,6 @@ void mtk_mdp_comp_clock_on(struct device *dev, struct mtk_mdp_comp *comp)
+ {
+ 	int i, err;
+ 
+-	if (comp->larb_dev) {
+-		err = mtk_smi_larb_get(comp->larb_dev);
+-		if (err)
+-			dev_err(dev,
+-				"failed to get larb, err %d. type:%d id:%d\n",
+-				err, comp->type, comp->id);
+-	}
+-
+ 	for (i = 0; i < ARRAY_SIZE(comp->clk); i++) {
+ 		if (IS_ERR(comp->clk[i]))
+ 			continue;
+@@ -94,16 +85,11 @@ void mtk_mdp_comp_clock_off(struct device *dev, struct mtk_mdp_comp *comp)
+ 			continue;
+ 		clk_disable_unprepare(comp->clk[i]);
+ 	}
+-
+-	if (comp->larb_dev)
+-		mtk_smi_larb_put(comp->larb_dev);
+ }
+ 
+ int mtk_mdp_comp_init(struct device *dev, struct device_node *node,
+ 		      struct mtk_mdp_comp *comp, enum mtk_mdp_comp_id comp_id)
+ {
+-	struct device_node *larb_node;
+-	struct platform_device *larb_pdev;
+ 	int i;
+ 
+ 	if (comp_id < 0 || comp_id >= MTK_MDP_COMP_ID_MAX) {
+@@ -124,30 +110,6 @@ int mtk_mdp_comp_init(struct device *dev, struct device_node *node,
+ 			break;
+ 	}
+ 
+-	/* Only DMA capable components need the LARB property */
+-	comp->larb_dev = NULL;
+-	if (comp->type != MTK_MDP_RDMA &&
+-	    comp->type != MTK_MDP_WDMA &&
+-	    comp->type != MTK_MDP_WROT)
+-		return 0;
+-
+-	larb_node = of_parse_phandle(node, "mediatek,larb", 0);
+-	if (!larb_node) {
+-		dev_err(dev,
+-			"Missing mediadek,larb phandle in %pOF node\n", node);
+-		return -EINVAL;
+-	}
+-
+-	larb_pdev = of_find_device_by_node(larb_node);
+-	if (!larb_pdev) {
+-		dev_warn(dev, "Waiting for larb device %pOF\n", larb_node);
+-		of_node_put(larb_node);
+-		return -EPROBE_DEFER;
+-	}
+-	of_node_put(larb_node);
+-
+-	comp->larb_dev = &larb_pdev->dev;
+-
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h
+index 63b3983ef1a4..602d577f5dc2 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h
+@@ -47,7 +47,6 @@ enum mtk_mdp_comp_id {
+  * @dev_node:	component device node
+  * @clk:	clocks required for component
+  * @regs:	Mapped address of component registers.
+- * @larb_dev:	SMI device required for component
+  * @type:	component type
+  * @id:		component ID
+  */
+@@ -55,7 +54,6 @@ struct mtk_mdp_comp {
+ 	struct device_node	*dev_node;
+ 	struct clk		*clk[2];
+ 	void __iomem		*regs;
+-	struct device		*larb_dev;
+ 	enum mtk_mdp_comp_type	type;
+ 	enum mtk_mdp_comp_id	id;
+ };
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+index bbb24fb95b95..adb098d761a7 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+@@ -25,7 +25,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/workqueue.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_mdp_core.h"
+ #include "mtk_mdp_m2m.h"
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index 7884465afcd2..f5177901ba6e 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -16,7 +16,6 @@
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_vcodec_dec_pm.h"
+ #include "mtk_vcodec_util.h"
+@@ -24,7 +23,6 @@
+ 
+ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
+ {
+-	struct device_node *node;
+ 	struct platform_device *pdev;
+ 	struct mtk_vcodec_pm *pm;
+ 	struct mtk_vcodec_clk *dec_clk;
+@@ -35,18 +33,7 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
+ 	pm = &mtkdev->pm;
+ 	pm->mtkdev = mtkdev;
+ 	dec_clk = &pm->vdec_clk;
+-	node = of_parse_phandle(pdev->dev.of_node, "mediatek,larb", 0);
+-	if (!node) {
+-		mtk_v4l2_err("of_parse_phandle mediatek,larb fail!");
+-		return -1;
+-	}
+ 
+-	pdev = of_find_device_by_node(node);
+-	if (WARN_ON(!pdev)) {
+-		of_node_put(node);
+-		return -1;
+-	}
+-	pm->larbvdec = &pdev->dev;
+ 	pdev = mtkdev->plat_dev;
+ 	pm->dev = &pdev->dev;
+ 
+@@ -122,11 +109,6 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+ 		}
+ 	}
+ 
+-	ret = mtk_smi_larb_get(pm->larbvdec);
+-	if (ret) {
+-		mtk_v4l2_err("mtk_smi_larb_get larbvdec fail %d", ret);
+-		goto error;
+-	}
+ 	return;
+ 
+ error:
+@@ -139,7 +121,6 @@ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
+ 	struct mtk_vcodec_clk *dec_clk = &pm->vdec_clk;
+ 	int i = 0;
+ 
+-	mtk_smi_larb_put(pm->larbvdec);
+ 	for (i = dec_clk->clk_num - 1; i >= 0; i--)
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+ }
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index e7e2a108def9..9bb532349136 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -196,11 +196,8 @@ struct mtk_vcodec_clk {
+  */
+ struct mtk_vcodec_pm {
+ 	struct mtk_vcodec_clk	vdec_clk;
+-	struct device	*larbvdec;
+ 
+ 	struct mtk_vcodec_clk	venc_clk;
+-	struct device	*larbvenc;
+-	struct device	*larbvenclt;
+ 	struct device	*dev;
+ 	struct mtk_vcodec_dev	*mtkdev;
+ };
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index 50351adafc47..80d1c4ef8247 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -16,7 +16,6 @@
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-mem2mem.h>
+ #include <media/videobuf2-dma-contig.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_vcodec_drv.h"
+ #include "mtk_vcodec_enc.h"
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+index 39375b8ea27c..c3a1871d4739 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+@@ -16,7 +16,6 @@
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_vcodec_enc_pm.h"
+ #include "mtk_vcodec_util.h"
+@@ -25,7 +24,6 @@
+ 
+ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
+ {
+-	struct device_node *node;
+ 	struct platform_device *pdev;
+ 	struct mtk_vcodec_pm *pm;
+ 	struct mtk_vcodec_clk *enc_clk;
+@@ -41,33 +39,6 @@ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
+ 	dev = &pdev->dev;
+ 	enc_clk = &pm->venc_clk;
+ 
+-	node = of_parse_phandle(dev->of_node, "mediatek,larb", 0);
+-	if (!node) {
+-		mtk_v4l2_err("no mediatek,larb found");
+-		return -ENODEV;
+-	}
+-	pdev = of_find_device_by_node(node);
+-	of_node_put(node);
+-	if (!pdev) {
+-		mtk_v4l2_err("no mediatek,larb device found");
+-		return -ENODEV;
+-	}
+-	pm->larbvenc = &pdev->dev;
+-
+-	node = of_parse_phandle(dev->of_node, "mediatek,larb", 1);
+-	if (!node) {
+-		mtk_v4l2_err("no mediatek,larb found");
+-		return -ENODEV;
+-	}
+-
+-	pdev = of_find_device_by_node(node);
+-	of_node_put(node);
+-	if (!pdev) {
+-		mtk_v4l2_err("no mediatek,larb device found");
+-		return -ENODEV;
+-	}
+-
+-	pm->larbvenclt = &pdev->dev;
+ 	pdev = mtkdev->plat_dev;
+ 	pm->dev = &pdev->dev;
+ 
+@@ -123,21 +94,8 @@ void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
+ 		}
+ 	}
+ 
+-	ret = mtk_smi_larb_get(pm->larbvenc);
+-	if (ret) {
+-		mtk_v4l2_err("mtk_smi_larb_get larb3 fail %d", ret);
+-		goto larbvencerr;
+-	}
+-	ret = mtk_smi_larb_get(pm->larbvenclt);
+-	if (ret) {
+-		mtk_v4l2_err("mtk_smi_larb_get larb4 fail %d", ret);
+-		goto larbvenclterr;
+-	}
+ 	return;
+ 
+-larbvenclterr:
+-	mtk_smi_larb_put(pm->larbvenc);
+-larbvencerr:
+ clkerr:
+ 	for (i -= 1; i >= 0; i--)
+ 		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
+@@ -148,8 +106,6 @@ void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm)
+ 	struct mtk_vcodec_clk *enc_clk = &pm->venc_clk;
+ 	int i = 0;
+ 
+-	mtk_smi_larb_put(pm->larbvenc);
+-	mtk_smi_larb_put(pm->larbvenclt);
+ 	for (i = enc_clk->clk_num - 1; i >= 0; i--)
+ 		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
+ }
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
 index f8d35e3ac1dc..01cab05e7b81 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
@@ -10105,6 +10534,78 @@ index 000000000000..5d00c05a8717
 +postcore_initcall(emi_bw_init);
 +module_exit(emi_bw_exit);
 +
+diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+index 96883411cd29..a1dc34ba7332 100644
+--- a/drivers/memory/mtk-smi.c
++++ b/drivers/memory/mtk-smi.c
+@@ -123,20 +123,6 @@ static void mtk_smi_clk_disable(const struct mtk_smi *smi)
+ 	clk_disable_unprepare(smi->clk_apb);
+ }
+ 
+-int mtk_smi_larb_get(struct device *larbdev)
+-{
+-	int ret = pm_runtime_get_sync(larbdev);
+-
+-	return (ret < 0) ? ret : 0;
+-}
+-EXPORT_SYMBOL_GPL(mtk_smi_larb_get);
+-
+-void mtk_smi_larb_put(struct device *larbdev)
+-{
+-	pm_runtime_put_sync(larbdev);
+-}
+-EXPORT_SYMBOL_GPL(mtk_smi_larb_put);
+-
+ static int
+ mtk_smi_larb_bind(struct device *dev, struct device *master, void *data)
+ {
+@@ -271,6 +257,7 @@ static int mtk_smi_larb_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *smi_node;
+ 	struct platform_device *smi_pdev;
++	struct device_link *link;
+ 
+ 	larb = devm_kzalloc(dev, sizeof(*larb), GFP_KERNEL);
+ 	if (!larb)
+@@ -310,6 +297,12 @@ static int mtk_smi_larb_probe(struct platform_device *pdev)
+ 		if (!platform_get_drvdata(smi_pdev))
+ 			return -EPROBE_DEFER;
+ 		larb->smi_common_dev = &smi_pdev->dev;
++		link = device_link_add(dev, larb->smi_common_dev,
++				       DL_FLAG_PM_RUNTIME);
++		if (!link) {
++			dev_err(dev, "Unable to link smi-common dev\n");
++			return -ENODEV;
++		}
+ 	} else {
+ 		dev_err(dev, "Failed to get the smi_common device\n");
+ 		return -EINVAL;
+@@ -333,17 +326,9 @@ static int __maybe_unused mtk_smi_larb_resume(struct device *dev)
+ 	const struct mtk_smi_larb_gen *larb_gen = larb->larb_gen;
+ 	int ret;
+ 
+-	/* Power on smi-common. */
+-	ret = pm_runtime_get_sync(larb->smi_common_dev);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to pm get for smi-common(%d).\n", ret);
+-		return ret;
+-	}
+-
+ 	ret = mtk_smi_clk_enable(&larb->smi);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to enable clock(%d).\n", ret);
+-		pm_runtime_put_sync(larb->smi_common_dev);
+ 		return ret;
+ 	}
+ 
+@@ -358,7 +343,6 @@ static int __maybe_unused mtk_smi_larb_suspend(struct device *dev)
+ 	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
+ 
+ 	mtk_smi_clk_disable(&larb->smi);
+-	pm_runtime_put_sync(larb->smi_common_dev);
+ 	return 0;
+ }
+ 
 diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
 index ce8398e6f2c0..c8f3fe701ea7 100644
 --- a/drivers/mmc/host/Makefile
@@ -12337,8 +12838,39 @@ index 000000000000..83bdaeb6840b
 +unsigned long long emi_get_max_bw(void);
 +
 +#endif
+diff --git a/include/soc/mediatek/smi.h b/include/soc/mediatek/smi.h
+index 7a8d87051ee8..609397d69602 100644
+--- a/include/soc/mediatek/smi.h
++++ b/include/soc/mediatek/smi.h
+@@ -24,26 +24,6 @@ struct mtk_smi_iommu {
+ 	struct mtk_smi_larb_iommu larb_imu[MTK_LARB_NR_MAX];
+ };
+ 
+-/*
+- * mtk_smi_larb_get: Enable the power domain and clocks for this local arbiter.
+- *                   It also initialize some basic setting(like iommu).
+- * mtk_smi_larb_put: Disable the power domain and clocks for this local arbiter.
+- * Both should be called in non-atomic context.
+- *
+- * Returns 0 if successful, negative on failure.
+- */
+-int mtk_smi_larb_get(struct device *larbdev);
+-void mtk_smi_larb_put(struct device *larbdev);
+-
+-#else
+-
+-static inline int mtk_smi_larb_get(struct device *larbdev)
+-{
+-	return 0;
+-}
+-
+-static inline void mtk_smi_larb_put(struct device *larbdev) { }
+-
+ #endif
+ 
+ #endif
 diff --git a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
-index 1bc0fafe5e29..d569157fe945 100644
+index 1bc0fafe5e29..be034ef54bfb 100644
 --- a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 @@ -955,6 +955,20 @@ static irqreturn_t mt8183_afe_irq_handler(int irq_id, void *dev)
@@ -12362,7 +12894,24 @@ index 1bc0fafe5e29..d569157fe945 100644
  static int mt8183_afe_runtime_suspend(struct device *dev)
  {
  	struct mtk_base_afe *afe = dev_get_drvdata(dev);
-@@ -1232,6 +1246,8 @@ static const struct of_device_id mt8183_afe_pcm_dt_match[] = {
+@@ -1110,7 +1124,6 @@ static int mt8183_afe_pcm_dev_probe(struct platform_device *pdev)
+ 
+ 	/* enable clock for regcache get default value from hw */
+ 	afe_priv->pm_runtime_bypass_reg_ctl = true;
+-	pm_runtime_get_sync(&pdev->dev);
+ 
+ 	ret = regmap_reinit_cache(afe->regmap, &mt8183_afe_regmap_config);
+ 	if (ret) {
+@@ -1217,8 +1230,6 @@ static int mt8183_afe_pcm_dev_probe(struct platform_device *pdev)
+ 
+ static int mt8183_afe_pcm_dev_remove(struct platform_device *pdev)
+ {
+-	pm_runtime_put_sync(&pdev->dev);
+-
+ 	pm_runtime_disable(&pdev->dev);
+ 	if (!pm_runtime_status_suspended(&pdev->dev))
+ 		mt8183_afe_runtime_suspend(&pdev->dev);
+@@ -1232,6 +1243,8 @@ static const struct of_device_id mt8183_afe_pcm_dt_match[] = {
  MODULE_DEVICE_TABLE(of, mt8183_afe_pcm_dt_match);
  
  static const struct dev_pm_ops mt8183_afe_pm_ops = {
