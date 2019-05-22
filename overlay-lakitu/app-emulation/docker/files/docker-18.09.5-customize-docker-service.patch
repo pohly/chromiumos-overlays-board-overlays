@@ -1,17 +1,17 @@
-From 76851fefc346d3ffd6a3212c7c25d3a7a3db9a38 Mon Sep 17 00:00:00 2001
+From ea60e61f06632ca98c4f392a96335d50ce283e33 Mon Sep 17 00:00:00 2001
 From: Xuewei Zhang <xueweiz@google.com>
-Date: Wed, 22 May 2019 11:58:33 -0700
+Date: Wed, 22 May 2019 14:18:04 -0700
 Subject: [PATCH] Customize docker.service for COS
 
 ---
- .../contrib/init/systemd/docker.service       | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ .../contrib/init/systemd/docker.service       | 20 +++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
 diff --git a/components/engine/contrib/init/systemd/docker.service b/components/engine/contrib/init/systemd/docker.service
-index 517463172b..c12c719d36 100644
+index 517463172b..4821142cac 100644
 --- a/components/engine/contrib/init/systemd/docker.service
 +++ b/components/engine/contrib/init/systemd/docker.service
-@@ -1,17 +1,21 @@
+@@ -1,17 +1,22 @@
  [Unit]
  Description=Docker Application Container Engine
  Documentation=https://docs.docker.com
@@ -33,10 +33,11 @@ index 517463172b..c12c719d36 100644
 +ExecStart=/usr/bin/dockerd --registry-mirror=https://mirror.gcr.io --host=fd:// --containerd=/var/run/containerd/containerd.sock $DOCKER_OPTS
  ExecReload=/bin/kill -s HUP $MAINPID
 +ExecStopPost=/bin/echo "docker daemon exited"
++OOMScoreAdjust=-999
  LimitNOFILE=1048576
  # Having non-zero Limit*s causes performance problems due to accounting overhead
  # in the kernel. We recommend using cgroups to do container-local accounting.
-@@ -19,16 +23,15 @@ LimitNPROC=infinity
+@@ -19,16 +24,15 @@ LimitNPROC=infinity
  LimitCORE=infinity
  # Uncomment TasksMax if your systemd version supports it.
  # Only systemd 226 and above support this version.
