@@ -40,15 +40,14 @@ PATCHES=(
 	# lakitu: uses Go cross compiler in the builder (i.e. ${GO}) rather than
 	# the default go compiler in the builders (i.e. go).
 	"${FILESDIR}"/1.2.5-use-GO-cross-compiler.patch
-	# lakitu: patches upstream containerd.service because lakitu installs
-	# containerd at /usr/bin/containerd, different than upstream's default at
-	# /usr/local/bin/containerd
-	"${FILESDIR}"/1.2.2-correct-execstart-path.patch
 	# lakitu: cherrypick of an upstream patch to set LimitNOFILE to 1048576:
 	# https://github.com/containerd/containerd/pull/3202
 	"${FILESDIR}"/1.2.5-set-nofile-to-1048576.patch
-	# lakitu: always restart containerd
-	"${FILESDIR}"/1.2.6-add-containerd-restart.patch
+	# lakitu: three changes in containerd.service:
+	# 1. always restart containerd
+	# 2. set containerd path to /usr/bin/containerd
+	# 3. set OOM score to -999
+	"${FILESDIR}"/1.2.6-customize-containerd-service.patch
 )
 
 RESTRICT="test"

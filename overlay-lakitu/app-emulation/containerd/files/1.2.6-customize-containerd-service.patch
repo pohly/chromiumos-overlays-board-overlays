@@ -1,0 +1,38 @@
+From b3b9ba29805787869e1a5cbed09bc41a6c550962 Mon Sep 17 00:00:00 2001
+From: Xuewei Zhang <xueweiz@google.com>
+Date: Wed, 22 May 2019 14:23:13 -0700
+Subject: [PATCH] Customize containerd.service for COS
+
+---
+ containerd.service | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/containerd.service b/containerd.service
+index 1ae7fe86..6a3071ad 100644
+--- a/containerd.service
++++ b/containerd.service
+@@ -5,10 +5,11 @@ After=network.target
+ 
+ [Service]
+ ExecStartPre=-/sbin/modprobe overlay
+-ExecStart=/usr/local/bin/containerd
++ExecStart=/usr/bin/containerd
+ 
+ Delegate=yes
+ KillMode=process
++OOMScoreAdjust=-999
+ # Having non-zero Limit*s causes performance problems due to accounting overhead
+ # in the kernel. We recommend using cgroups to do container-local accounting.
+ LimitNPROC=infinity
+@@ -18,5 +19,8 @@ LimitNOFILE=infinity
+ # Only systemd 226 and above support this version.
+ TasksMax=infinity
+ 
++Restart=always
++RestartSec=10
++
+ [Install]
+ WantedBy=multi-user.target
+-- 
+2.21.0.1020.gf2820cf01a-goog
+
