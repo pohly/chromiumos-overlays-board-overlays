@@ -1,28 +1,28 @@
-From c4eca19f03597835fb30f4b1c23fb333ae6cce9f Mon Sep 17 00:00:00 2001
+From a99b143b9f30bf0bc08dc310f2a1a3babe93af87 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Tue, 14 May 2019 15:24:42 -0700
-Subject: [PATCH 2/3] MTK TOT #176 - HQ TOT #32
+Date: Wed, 22 May 2019 10:19:45 -0700
+Subject: [PATCH 2/3] MTK TOT #184 - HQ TOT #37 Squash
 
-Change-Id: I0475fb7862f56d748a43775559db9601be171b5d
+Change-Id: I9289075961440355463e9f5219eaf1d19c0ce086
 ---
  .../bindings/iio/proximity/sx9311.txt         |   19 +
  README                                        |    1 +
  arch/arm64/boot/dts/mediatek/Makefile         |    4 +
  arch/arm64/boot/dts/mediatek/mt6358.dtsi      |    4 +-
- .../mt8183-flapjack-rev4-sku1-hwconfig2.dts   |  276 ++
- .../mt8183-flapjack-rev4-sku1-hwconfig4.dts   |  266 ++
- .../mt8183-flapjack-rev4-sku3-hwconfig1.dts   |  278 ++
- .../mt8183-flapjack-rev4-sku3-hwconfig3.dts   |  267 ++
+ .../mt8183-flapjack-rev4-sku1-hwconfig2.dts   |  278 ++
+ .../mt8183-flapjack-rev4-sku1-hwconfig4.dts   |  267 ++
+ .../mt8183-flapjack-rev4-sku3-hwconfig1.dts   |  280 ++
+ .../mt8183-flapjack-rev4-sku3-hwconfig3.dts   |  268 ++
  .../boot/dts/mediatek/mt8183-flapjack.dtsi    |  140 +
- .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   87 +
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  111 +
  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   11 +
- .../arm64/chromiumos-arm64.flavour.config     |    2 +-
- .../arm64/chromiumos-mediatek.flavour.config  |    5 +-
+ .../arm64/chromiumos-arm64.flavour.config     |    1 +
+ .../arm64/chromiumos-mediatek.flavour.config  |   15 +
  drivers/gpu/drm/bridge/Makefile               |    1 +
  drivers/gpu/drm/bridge/ite-it6505.c           | 2948 +++++++++++++++++
  drivers/gpu/drm/drm_panel.c                   |   38 +-
  drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   14 +
- drivers/gpu/drm/mediatek/mtk_dpi.c            |   32 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c            |   69 +-
  drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   28 +
  drivers/gpu/drm/mediatek/mtk_dsi.c            |   15 +
  drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  954 +++++-
@@ -36,7 +36,7 @@ Change-Id: I0475fb7862f56d748a43775559db9601be171b5d
  include/drm/drm_panel.h                       |   11 +
  sound/soc/codecs/max98357a.c                  |   96 +-
  .../mediatek/mt8183/mt8183-da7219-max98357.c  |    2 +-
- 31 files changed, 6744 insertions(+), 43 deletions(-)
+ 31 files changed, 6822 insertions(+), 41 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/iio/proximity/sx9311.txt
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
@@ -111,10 +111,10 @@ index a7e655c42a54..f31345ef16b3 100644
  		};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
 new file mode 100755
-index 000000000000..0c02221a1040
+index 000000000000..baec567d4975
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
-@@ -0,0 +1,276 @@
+@@ -0,0 +1,278 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -139,6 +139,7 @@ index 000000000000..0c02221a1040
 +	/* SKU_ID: 0x20001 BOE_TV080WUM_NG0 for REV >=3 */
 +	compatible =	"google,flapjack-rev3-sku131073",
 +			"google,flapjack-rev4-sku131073",
++			"google,flapjack-rev5-sku131073",
 +			"google,flapjack-sku131073",
 +
 +			/* SKU_ID: 0x1 for Rev 2 */
@@ -148,6 +149,7 @@ index 000000000000..0c02221a1040
 +			"google,flapjack-rev2-sku327681",
 +			"google,flapjack-rev3-sku327681",
 +			"google,flapjack-rev4-sku327681",
++			"google,flapjack-rev5-sku327681",
 +			"google,flapjack-sku327681",
 +
 +			"google,flapjack-rev2",
@@ -393,10 +395,10 @@ index 000000000000..0c02221a1040
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
 new file mode 100755
-index 000000000000..01c74b918be2
+index 000000000000..f341993d584a
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
-@@ -0,0 +1,266 @@
+@@ -0,0 +1,267 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -421,6 +423,7 @@ index 000000000000..01c74b918be2
 +	/* SKU_ID: 0x40001 AUO_NT51021D8P for REV >=3 */
 +	compatible =	"google,flapjack-rev3-sku262145",
 +			"google,flapjack-rev4-sku262145",
++			"google,flapjack-rev5-sku262145",
 +			"google,flapjack-sku262145",
 +
 +			"google,flapjack-rev3",
@@ -665,10 +668,10 @@ index 000000000000..01c74b918be2
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts
 new file mode 100755
-index 000000000000..911c212864c5
+index 000000000000..7d4e3c4e3b60
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig1.dts
-@@ -0,0 +1,278 @@
+@@ -0,0 +1,280 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -695,6 +698,7 @@ index 000000000000..911c212864c5
 +	/* SKU_ID: 0x10003 BOE_TV101WUM_NG0 for REV >=3 */
 +	compatible =	"google,flapjack-rev3-sku65539",
 +			"google,flapjack-rev4-sku65539",
++			"google,flapjack-rev5-sku65539",
 +			"google,flapjack-sku65539",
 +
 +			/* SKU_ID: 0x3 for Rev 2 */
@@ -704,6 +708,7 @@ index 000000000000..911c212864c5
 +			"google,flapjack-rev2-sku327683",
 +			"google,flapjack-rev3-sku327683",
 +			"google,flapjack-rev4-sku327683",
++			"google,flapjack-rev5-sku327683",
 +			"google,flapjack-sku327683",
 +
 +			"google,flapjack-rev2",
@@ -949,10 +954,10 @@ index 000000000000..911c212864c5
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts
 new file mode 100755
-index 000000000000..41d4a7fe70e8
+index 000000000000..2a77a3f521b4
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku3-hwconfig3.dts
-@@ -0,0 +1,267 @@
+@@ -0,0 +1,268 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright 2019 Google LLC
@@ -978,6 +983,7 @@ index 000000000000..41d4a7fe70e8
 +	/* SKU_ID: 0x30003 INX OTA7290D10 for REV >=3 */
 +	compatible =	"google,flapjack-rev3-sku196611",
 +			"google,flapjack-rev4-sku196611",
++			"google,flapjack-rev5-sku196611",
 +			"google,flapjack-sku196611",
 +
 +
@@ -1367,11 +1373,11 @@ index 000000000000..7bcc6d8e5b62
 +};
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 3fa93d9d5410..b1bec9e85b82 100644
+index b68a22ee274f..ca493e116abc 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -59,6 +59,15 @@
- 		regulator-boot-on;
+@@ -73,6 +73,15 @@
+ 		regulator-max-microvolt = <1800000>;
  	};
  
 +	it6505_pp18_reg: regulator@0 {
@@ -1386,13 +1392,14 @@ index 3fa93d9d5410..b1bec9e85b82 100644
  	reserved_memory: reserved-memory {
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -134,6 +143,17 @@
+@@ -162,6 +171,18 @@
  	proc-supply = <&mt6358_vproc11_reg>;
  };
  
 +&dpi0 {
-+	pinctrl-names = "default";
++	pinctrl-names = "default", "dpimode";
 +	pinctrl-0 = <&dpi_pin_default>;
++	pinctrl-1 = <&dpi_pin_func>;
 +	status = "okay";
 +	port {
 +		dpi_out: endpoint {
@@ -1404,7 +1411,7 @@ index 3fa93d9d5410..b1bec9e85b82 100644
  &dsi0 {
  	status = "okay";
  	#address-cells = <1>;
-@@ -209,6 +229,29 @@
+@@ -237,6 +258,29 @@
  	pinctrl-0 = <&i2c3_pins>;
  	status = "okay";
  	clock-frequency = <100000>;
@@ -1434,11 +1441,34 @@ index 3fa93d9d5410..b1bec9e85b82 100644
  };
  
  &i2c4 {
-@@ -340,6 +383,28 @@
+@@ -370,6 +414,51 @@
  		};
  	};
  
 +	dpi_pin_default: dpi_pin_default{
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO13__FUNC_GPIO13>,
++				<PINMUX_GPIO14__FUNC_GPIO14>,
++				<PINMUX_GPIO15__FUNC_GPIO15>,
++				<PINMUX_GPIO16__FUNC_GPIO16>,
++				<PINMUX_GPIO17__FUNC_GPIO17>,
++				<PINMUX_GPIO18__FUNC_GPIO18>,
++				<PINMUX_GPIO19__FUNC_GPIO19>,
++				<PINMUX_GPIO20__FUNC_GPIO20>,
++				<PINMUX_GPIO21__FUNC_GPIO21>,
++				<PINMUX_GPIO22__FUNC_GPIO22>,
++				<PINMUX_GPIO23__FUNC_GPIO23>,
++				<PINMUX_GPIO24__FUNC_GPIO24>,
++				<PINMUX_GPIO25__FUNC_GPIO25>,
++				<PINMUX_GPIO26__FUNC_GPIO26>,
++				<PINMUX_GPIO27__FUNC_GPIO27>,
++				<PINMUX_GPIO28__FUNC_GPIO28>;
++				drive-strength = <MTK_DRIVE_6mA>;
++				output-low;
++		};
++	};
++
++	dpi_pin_func: dpi_pin_func {
 +		pins_cmd_dat {
 +			pinmux = <PINMUX_GPIO13__FUNC_DBPI_D0>,
 +				<PINMUX_GPIO14__FUNC_DBPI_D1>,
@@ -1463,7 +1493,7 @@ index 3fa93d9d5410..b1bec9e85b82 100644
  	ec_ap_int_odl: ec_ap_int_odl {
  		pins1 {
  			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
-@@ -425,6 +490,22 @@
+@@ -455,6 +544,22 @@
  		};
  	};
  
@@ -1486,7 +1516,7 @@ index 3fa93d9d5410..b1bec9e85b82 100644
  	mmc0_pins_default: mmc0default {
  		pins_cmd_dat {
  			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
-@@ -743,6 +824,12 @@
+@@ -773,6 +878,12 @@
  			#address-cells = <1>;
  			#size-cells = <0>;
  		};
@@ -1500,10 +1530,10 @@ index 3fa93d9d5410..b1bec9e85b82 100644
  };
  
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 947c67da5c8e..7720afe8f143 100644
+index ad3bc5a7ec34..99c4bbc1463f 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -1618,6 +1618,17 @@
+@@ -1572,6 +1572,17 @@
  			phy-names = "dphy";
  		};
  
@@ -1522,44 +1552,53 @@ index 947c67da5c8e..7720afe8f143 100644
  			compatible = "mediatek,mt8183-disp-mutex";
  			reg = <0 0x14016000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 07a62cdd6b5a..1a6621b24189 100644
+index e3b626359fe9..3115728f8f68 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -870,7 +870,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
+@@ -175,6 +175,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5514=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5676=y
  CONFIG_SND_SOC_MT8183=y
--# CONFIG_SND_SOC_MT8183_DA7219_MAX98357A is not set
 +CONFIG_SND_SOC_MT8183_DA7219_MAX98357A=y
  CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=y
- # CONFIG_SND_SOC_QCOM is not set
- # CONFIG_SND_SOC_RK3288_HDMI_ANALOG is not set
+ CONFIG_SND_SOC_RK3399_GRU_SOUND=y
+ CONFIG_SND_SOC_ROCKCHIP=y
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index d8b96efb0ea5..ab20d75c4553 100644
+index 1fd98858ba2f..4e5b59f406c5 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-@@ -67,7 +67,7 @@ CONFIG_DRM_GEM_CMA_HELPER=y
+@@ -30,6 +30,9 @@ CONFIG_DRM_ANALOGIX_ANX78XX=y
  CONFIG_DRM_MEDIATEK=y
  CONFIG_DRM_MEDIATEK_HDMI=y
- CONFIG_DRM_MIPI_DSI=y
--# CONFIG_DRM_PANEL_BOE_HIMAX8279D is not set
-+CONFIG_DRM_PANEL_BOE_HIMAX8279D=y
  CONFIG_DRM_PANEL_BOE_TV101WUM=y
- # CONFIG_DRM_PANEL_ILITEK_ILI9881C is not set
++CONFIG_DRM_MIPI_DSI=y
++CONFIG_DRM_PANEL_BOE_HIMAX8279D=y
++# CONFIG_DRM_PANEL_ILITEK_ILI9881C is not set
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
-@@ -196,7 +196,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
+ # CONFIG_EFI is not set
+ CONFIG_ENERGY_MODEL=y
+@@ -74,6 +77,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5514=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5676=y
  CONFIG_SND_SOC_MT8183=y
--# CONFIG_SND_SOC_MT8183_DA7219_MAX98357A is not set
 +CONFIG_SND_SOC_MT8183_DA7219_MAX98357A=y
  CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=y
- CONFIG_SND_SOC_RL6231=y
- CONFIG_SND_SOC_RT5514=y
-@@ -248,3 +248,4 @@ CONFIG_VIRTIO=y
- # CONFIG_VIRTIO_MMIO is not set
- # CONFIG_VIRTIO_NET is not set
- # CONFIG_VIRTIO_WL is not set
+ CONFIG_SPI_GPIO=y
+ CONFIG_SPI_MT65XX=y
+@@ -89,3 +93,14 @@ CONFIG_USB_MTU3=y
+ CONFIG_USB_MTU3_DEBUG=y
+ CONFIG_VIDEO_MEDIATEK_MDP=y
+ CONFIG_VIDEO_MEDIATEK_VCODEC=y
++CONFIG_VIDEO_MEDIATEK_VPU=y
++# CONFIG_VIDEO_V4L2_SUBDEV_API is not set
++CONFIG_VIRTIO=y
++# CONFIG_VIRTIO_BALLOON is not set
++# CONFIG_VIRTIO_BLK is not set
++# CONFIG_VIRTIO_CONSOLE is not set
++# CONFIG_VIRTIO_INPUT is not set
++# CONFIG_VIRTIO_MMIO is not set
++# CONFIG_VIRTIO_NET is not set
++# CONFIG_VIRTIO_WL is not set
 +CONFIG_SX9311=y
 diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
 index 4934fcf5a6f8..a83507bf6300 100644
@@ -4635,25 +4674,51 @@ index ebadcfed3a0a..b33fe170732b 100644
  	writel_relaxed(con, comp->regs + DISP_REG_OVL_CON(idx));
  	writel_relaxed(pitch, comp->regs + DISP_REG_OVL_PITCH(idx));
 diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 62a9d47df948..de54667b0744 100644
+index 62a9d47df948..e03815fa9e64 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -117,6 +117,7 @@ struct mtk_dpi_conf {
+@@ -17,10 +17,12 @@
+ #include <drm/drm_of.h>
+ #include <linux/kernel.h>
+ #include <linux/component.h>
+-#include <linux/platform_device.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/of_gpio.h>
+ #include <linux/of_graph.h>
++#include <linux/pinctrl/consumer.h>
++#include <linux/platform_device.h>
+ #include <linux/interrupt.h>
+ #include <linux/types.h>
+ #include <linux/clk.h>
+@@ -79,6 +81,9 @@ struct mtk_dpi {
+ 	enum mtk_dpi_out_yc_map yc_map;
+ 	enum mtk_dpi_out_bit_num bit_num;
+ 	enum mtk_dpi_out_channel_swap channel_swap;
++	struct pinctrl *pinctrl;
++	struct pinctrl_state *pins_default;
++	struct pinctrl_state *pins_dpi;
+ 	int refcount;
+ };
+ 
+@@ -117,6 +122,8 @@ struct mtk_dpi_conf {
  	unsigned int (*cal_factor)(int clock);
  	u32 reg_h_fre_con;
  	bool edge_sel_en;
 +	bool dual_edge;
++	bool dpi_pin_ctrl;
  };
  
  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 mask)
-@@ -353,6 +354,14 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
+@@ -353,6 +360,15 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0, EDGE_SEL_EN);
  }
  
 +static void mtk_dpi_config_dual_edge(struct mtk_dpi *dpi)
 +{
 +	if (dpi->conf->dual_edge) {
-+		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE, DDR_EN | DDR_4PHASE);
++		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE,
++			     DDR_EN | DDR_4PHASE);
 +		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, EDGE_SEL, EDGE_SEL);
 +	}
 +}
@@ -4661,7 +4726,27 @@ index 62a9d47df948..de54667b0744 100644
  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
  					enum mtk_dpi_out_color_format format)
  {
-@@ -444,7 +453,8 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+@@ -384,6 +400,9 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
+ 	if (--dpi->refcount != 0)
+ 		return;
+ 
++	if (dpi->conf->dpi_pin_ctrl)
++		pinctrl_select_state(dpi->pinctrl, dpi->pins_default);
++
+ 	mtk_dpi_disable(dpi);
+ 	clk_disable_unprepare(dpi->pixel_clk);
+ 	clk_disable_unprepare(dpi->engine_clk);
+@@ -408,6 +427,9 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+ 		goto err_pixel;
+ 	}
+ 
++	if (dpi->conf->dpi_pin_ctrl)
++		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
++
+ 	mtk_dpi_enable(dpi);
+ 	return 0;
+ 
+@@ -444,7 +466,8 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
  	pll_rate = clk_get_rate(dpi->tvd_clk);
  
  	vm.pixelclock = pll_rate / factor;
@@ -4671,7 +4756,7 @@ index 62a9d47df948..de54667b0744 100644
  	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
  
  	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
-@@ -509,6 +519,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+@@ -509,6 +532,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
  	mtk_dpi_config_color_format(dpi, dpi->color_format);
  	mtk_dpi_config_2n_h_fre(dpi);
  	mtk_dpi_config_disable_edge(dpi);
@@ -4679,7 +4764,7 @@ index 62a9d47df948..de54667b0744 100644
  	mtk_dpi_sw_reset(dpi, false);
  
  	return 0;
-@@ -671,6 +682,16 @@ static unsigned int mt2701_calculate_factor(int clock)
+@@ -671,6 +695,16 @@ static unsigned int mt2701_calculate_factor(int clock)
  		return 2;
  }
  
@@ -4696,7 +4781,7 @@ index 62a9d47df948..de54667b0744 100644
  static const struct mtk_dpi_conf mt8173_conf = {
  	.cal_factor = mt8173_calculate_factor,
  	.reg_h_fre_con = 0xe0,
-@@ -682,6 +703,12 @@ static const struct mtk_dpi_conf mt2701_conf = {
+@@ -682,6 +716,13 @@ static const struct mtk_dpi_conf mt2701_conf = {
  	.edge_sel_en = true,
  };
  
@@ -4704,12 +4789,41 @@ index 62a9d47df948..de54667b0744 100644
 +	.cal_factor = mt8183_calculate_factor,
 +	.reg_h_fre_con = 0xe0,
 +	.dual_edge = true,
++	.dpi_pin_ctrl = true,
 +};
 +
  static int mtk_dpi_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -777,6 +804,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
+@@ -697,6 +738,27 @@ static int mtk_dpi_probe(struct platform_device *pdev)
+ 	dpi->dev = dev;
+ 	dpi->conf = (struct mtk_dpi_conf *)of_device_get_match_data(dev);
+ 
++	if (dpi->conf->dpi_pin_ctrl) {
++		dpi->pinctrl = devm_pinctrl_get(&pdev->dev);
++		if (IS_ERR(dpi->pinctrl)) {
++			dev_err(&pdev->dev, "Cannot find pinctrl!\n");
++			return PTR_ERR(dpi->pinctrl);
++		}
++
++		dpi->pins_default = pinctrl_lookup_state(dpi->pinctrl,
++							 "default");
++		if (IS_ERR(dpi->pins_default)) {
++			dev_err(&pdev->dev, "Cannot find pinctrl default!\n");
++			return PTR_ERR(dpi->pins_default);
++		}
++
++		dpi->pins_dpi = pinctrl_lookup_state(dpi->pinctrl, "dpimode");
++		if (IS_ERR(dpi->pins_dpi)) {
++			dev_err(&pdev->dev, "Cannot find pinctrl dpimode!\n");
++			return PTR_ERR(dpi->pins_dpi);
++		}
++	}
++
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	dpi->regs = devm_ioremap_resource(dev, mem);
+ 	if (IS_ERR(dpi->regs)) {
+@@ -777,6 +839,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
  	{ .compatible = "mediatek,mt8173-dpi",
  	  .data = &mt8173_conf,
  	},
@@ -4720,10 +4834,10 @@ index 62a9d47df948..de54667b0744 100644
  };
  
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-index 903883dd194c..0c15443bde7d 100644
+index 654fc9a8e78c..d9f5f75a51c4 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
 +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-@@ -470,14 +470,41 @@ static void mtk_drm_crtc_atomic_begin(struct drm_crtc *crtc,
+@@ -459,14 +459,41 @@ static void mtk_drm_crtc_atomic_begin(struct drm_crtc *crtc,
  	}
  }
  
@@ -4765,7 +4879,7 @@ index 903883dd194c..0c15443bde7d 100644
  	if (mtk_crtc->event)
  		mtk_crtc->pending_needs_vblank = true;
  	for (i = 0; i < mtk_crtc->layer_nr; i++) {
-@@ -488,6 +515,7 @@ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+@@ -477,6 +504,7 @@ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
  		if (plane_state->pending.dirty) {
  			plane_state->pending.config = true;
  			plane_state->pending.dirty = false;
