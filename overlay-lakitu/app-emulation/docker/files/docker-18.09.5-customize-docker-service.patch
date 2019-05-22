@@ -1,23 +1,25 @@
-From 92260341f65355f4e05a9ed458f51dd67060cf0f Mon Sep 17 00:00:00 2001
-From: Ke Wu <mikewu@google.com>
-Date: Wed, 20 Mar 2019 16:32:14 -0700
+From 76851fefc346d3ffd6a3212c7c25d3a7a3db9a38 Mon Sep 17 00:00:00 2001
+From: Xuewei Zhang <xueweiz@google.com>
+Date: Wed, 22 May 2019 11:58:33 -0700
 Subject: [PATCH] Customize docker.service for COS
 
 ---
- .../engine/contrib/init/systemd/docker.service    | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ .../contrib/init/systemd/docker.service       | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/components/engine/contrib/init/systemd/docker.service b/components/engine/contrib/init/systemd/docker.service
-index 5174631..7e1a886 100644
+index 517463172b..c12c719d36 100644
 --- a/components/engine/contrib/init/systemd/docker.service
 +++ b/components/engine/contrib/init/systemd/docker.service
 @@ -1,17 +1,21 @@
  [Unit]
  Description=Docker Application Container Engine
  Documentation=https://docs.docker.com
-+BindsTo=containerd.service
- After=network-online.target docker.socket firewalld.service
- Wants=network-online.target
+-After=network-online.target docker.socket firewalld.service
+-Wants=network-online.target
++PartOf=containerd.service
++After=network-online.target docker.socket firewalld.service containerd.service
++Wants=network-online.target containerd.service
  Requires=docker.socket
  
  [Service]
@@ -56,5 +58,5 @@ index 5174631..7e1a886 100644
  [Install]
  WantedBy=multi-user.target
 -- 
-2.21.0.225.g810b269d1ac-goog
+2.21.0.1020.gf2820cf01a-goog
 
