@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-CROS_WORKON_COMMIT="1c434c8dc0c6e6102558c2d124f08914b8eea4a1"
-CROS_WORKON_TREE="39c6d3534d92d395b312f197b750f0466392a342"
+CROS_WORKON_COMMIT="699502768f494ccddd80dc7e32f34d92db945d19"
+CROS_WORKON_TREE="2f03aaaef728e2424766c48e564862704c9ff685"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/v4.19"
 
@@ -57,16 +57,16 @@ tar_kernel_source() {
 	popd
 }
 
-write_toolchain_info() {
+write_toolchain_env() {
 	# Write the compiler info used for kernel compilation
-	# in toolchain_info
-	local toolchain_info_dir=etc
-	# Example for toolchain_info content:
+	# in toolchain_env
+	local toolchain_env_dir=etc
+	# Example for toolchain_env content:
 	# CC=x86_64-cros-linux-gnu-clang
 	# CXX=x86_64-cros-linux-gnu-clang++
 	# The file will be deleted after copying data to BUILD_DIR artifact
-	echo "CC=${CC}" > "${D}/${toolchain_info_dir}/toolchain_info"
-	echo "CXX=${CXX}" >> "${D}/${toolchain_info_dir}/toolchain_info"
+	echo "CC=${CC}" > "${D}/${toolchain_env_dir}/toolchain_env"
+	echo "CXX=${CXX}" >> "${D}/${toolchain_env_dir}/toolchain_env"
 }
 
 src_install() {
@@ -80,7 +80,7 @@ src_install() {
 	# artifact later.
 	tar_kernel_source
 	# Install kernel compiler information
-	write_toolchain_info
+	write_toolchain_env
 }
 
 # Change the following (commented out) number to the next prime number
