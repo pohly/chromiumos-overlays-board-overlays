@@ -33,3 +33,6 @@ TTY_CONSOLE="ttyS0"
 
 # Allow Chrome to use Tablet mode
 USE="${USE} touchview"
+
+# Enable NVMe utility
+USE="${USE} nvme"
