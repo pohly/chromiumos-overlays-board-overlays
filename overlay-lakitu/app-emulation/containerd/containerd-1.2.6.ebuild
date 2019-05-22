@@ -47,6 +47,8 @@ PATCHES=(
 	# lakitu: cherrypick of an upstream patch to set LimitNOFILE to 1048576:
 	# https://github.com/containerd/containerd/pull/3202
 	"${FILESDIR}"/1.2.5-set-nofile-to-1048576.patch
+	# lakitu: always restart containerd
+	"${FILESDIR}"/1.2.6-add-containerd-restart.patch
 )
 
 RESTRICT="test"
