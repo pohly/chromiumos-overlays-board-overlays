@@ -60,7 +60,11 @@ write_toolchain_env() {
   local toolchain_env_file="${root_fs_dir}/etc/toolchain_env"
 
   # Copy kernel compiler info to BUILD artifact
-  cp "${toolchain_env_file}" "${artifact}"
+  if [[ -f "${toolchain_env_file}" ]]; then
+    cp "${toolchain_env_file}" "${artifact}"
+  else
+    touch "${artifact}"
+  fi
 
   # Remove toolchain_env from image
   sudo rm "${toolchain_env_file}"
