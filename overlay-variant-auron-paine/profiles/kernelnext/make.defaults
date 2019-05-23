@@ -1,0 +1,21 @@
+# Copyright 2017 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+# Mark this build as a variant, to delineate from a generic base build.
+USE="${USE} variant_build"
+
+# Allow consumer kiosk.
+# NOTE: Deprecating feature. New board should NOT have it.
+USE="${USE} allow_consumer_kiosk"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Move the kernel to 4.14
+USE="${USE} -kernel-3_14 kernel-4_14"
+
+USE="${USE} kernelnext"
