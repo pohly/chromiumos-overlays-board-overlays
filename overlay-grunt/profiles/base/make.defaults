@@ -21,3 +21,6 @@ USE="${USE} unibuild"
 
 # Ability to run guest VMs.
 USE="${USE} kvm_host -crosvm-wl-dmabuf crosvm-gpu"
+
+# Enable background blur.
+USE="${USE} background_blur"
