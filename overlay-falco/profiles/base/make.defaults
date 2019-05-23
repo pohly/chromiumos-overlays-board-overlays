@@ -28,3 +28,6 @@ USE="${USE} tpm_slb9655"
 USE="${USE} -unibuild"
 
 AFDO_PROFILE_SOURCE='broadwell'
+
+# Enable background blur.
+USE="${USE} background_blur"
