@@ -27,3 +27,6 @@ INPUT_DEVICES="${INPUT_DEVICES} wacom"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS2"
+
+# Enable background blur.
+USE="${USE} background_blur"
