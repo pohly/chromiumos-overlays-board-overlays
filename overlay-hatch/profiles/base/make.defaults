@@ -24,3 +24,6 @@ USE="${USE} biod"
 # Include the goodix firmware updating tool
 INPUT_DEVICES="goodix"
 
+
+# Enable background blur.
+USE="${USE} background_blur"
