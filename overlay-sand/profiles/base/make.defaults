@@ -19,3 +19,6 @@ USE="${USE} -unibuild"
 
 # All firmwares to build from the EC code base
 EC_FIRMWARE="sand"
+
+# Enable background blur.
+USE="${USE} background_blur"
