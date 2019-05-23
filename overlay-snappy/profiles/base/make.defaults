@@ -35,3 +35,6 @@ INPUT_DEVICES="${INPUT_DEVICES} weida"
 #TTY_CONSOLE="ttyS2"
 
 AFDO_PROFILE_SOURCE='airmont'
+
+# Enable background blur.
+USE="${USE} background_blur"
