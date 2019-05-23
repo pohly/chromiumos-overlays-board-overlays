@@ -28,3 +28,6 @@ USE="${USE} -unibuild"
 EC_FIRMWARE="pyro"
 
 INPUT_DEVICES="${INPUT_DEVICES} wacom"
+
+# Enable background blur.
+USE="${USE} background_blur"
