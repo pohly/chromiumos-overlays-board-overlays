@@ -39,3 +39,6 @@ USE="${USE} direncryption"
 USE="${USE} -unibuild"
 
 AFDO_PROFILE_SOURCE='airmont'
+
+# Enable background blur.
+USE="${USE} background_blur"
