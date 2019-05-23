@@ -57,3 +57,6 @@ USE="${USE} has-kernelnext"
 # for further details about chromeos-config, which is the required entry point for
 # unified builds.
 USE="${USE} -unibuild"
+
+# Enable background blur.
+USE="${USE} background_blur"
