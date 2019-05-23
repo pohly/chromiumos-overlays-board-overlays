@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit appid
+inherit appid cros-audio-configs
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -20,6 +20,7 @@ RDEPEND="
 	chromeos-base/jabra-vold
 	media-libs/go2001-fw
 	media-libs/go2001-rules
+	!<media-sound/adhd-0.0.1-r1687
 "
 DEPEND="${RDEPEND}"
 
@@ -31,6 +32,10 @@ src_install() {
 	else
 		doappid "{8AA6D9AC-6EBC-4288-A615-171F56F66B4E}" "CHROMEBOX"
 	fi
+
+	# Install ucm-config files
+	local audio_config_dir="${FILESDIR}/audio-config"
+	install_audio_configs guado "${audio_config_dir}"
 
 	# Install Bluetooth ID override.
 	insinto "/etc/bluetooth"
