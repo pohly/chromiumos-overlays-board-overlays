@@ -30,3 +30,6 @@ PD_FIRMWARE="chell_pd"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
+
+# Enable background blur.
+USE="${USE} background_blur"
