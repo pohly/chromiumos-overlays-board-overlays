@@ -33,3 +33,6 @@ USE="${USE} -unibuild"
 # Comment these lines to disable the serial port.
 # TTY_CONSOLE="ttyS0"
 # USE="pcserial"
+
+# Enable background blur.
+USE="${USE} background_blur"
