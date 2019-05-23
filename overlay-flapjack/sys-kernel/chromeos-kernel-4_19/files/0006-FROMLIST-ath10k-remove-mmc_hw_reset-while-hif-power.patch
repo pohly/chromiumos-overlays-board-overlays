@@ -1,0 +1,28 @@
+From dec1a665e063cf4bf1bd29a0a11e7aae3f8d41c7 Mon Sep 17 00:00:00 2001
+From: YH Lin <yueherngl@google.com>
+Date: Wed, 22 May 2019 08:44:10 -0700
+Subject: [PATCH 6/8] FROMLIST: ath10k: remove mmc_hw_reset while hif power
+
+Change-Id: I1a0d99ca9a941401c003e9faeee066b6ebff850f
+---
+ drivers/net/wireless/ath/ath10k/sdio.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
+index 938685a6d594b..1bf4c82068f28 100644
+--- a/drivers/net/wireless/ath/ath10k/sdio.c
++++ b/drivers/net/wireless/ath/ath10k/sdio.c
+@@ -1443,10 +1443,6 @@ static void ath10k_sdio_hif_power_down(struct ath10k *ar)
+ 		return;
+ 	}
+ 
+-	ret = mmc_hw_reset(ar_sdio->func->card->host);
+-	if (ret)
+-		ath10k_warn(ar, "unable to reset sdio: %d\n", ret);
+-
+ 	sdio_release_host(ar_sdio->func);
+ 
+ 	ar_sdio->is_disabled = true;
+-- 
+2.22.0.rc1.257.g3120a18244-goog
+

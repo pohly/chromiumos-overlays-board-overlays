@@ -1,0 +1,63 @@
+From 3168b6192bdaf0eb4e2d13fee8be5719d379ba5b Mon Sep 17 00:00:00 2001
+From: Shunli Wang <shunli.wang@mediatek.com>
+Date: Mon, 20 May 2019 16:24:20 +0800
+Subject: [PATCH 8/8] FROMGIT: ASoC: Mediatek: MT8183: enable IIR filter
+
+IIR fileter can remove DC offset. It must be enabled when
+dmic or amic connected to pmic is used.
+
+Signed-off-by: Shunli Wang <shunli.wang@mediatek.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit 326b18176353d26df54dbc8b4b75ed4332898f61
+ git://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next)
+
+BUG=b:123616335
+TEST=build and boot to shell
+
+Change-Id: Ib3f3fa3f52c1afa6b6c8649acbae462e54b86a35
+Signed-off-by: Tzung-Bi Shih <tzungbi@chromium.org>
+Reviewed-on: https://chromium-review.googlesource.com/1565759
+Commit-Ready: Nicolas Boichat <drinkcat@chromium.org>
+Tested-by: Nicolas Boichat <drinkcat@chromium.org>
+Legacy-Commit-Queue: Commit Bot <commit-bot@chromium.org>
+Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
+Reviewed-by: Sean Paul <seanpaul@chromium.org>
+---
+ sound/soc/mediatek/mt8183/mt8183-dai-adda.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/sound/soc/mediatek/mt8183/mt8183-dai-adda.c b/sound/soc/mediatek/mt8183/mt8183-dai-adda.c
+index 017d7d1d9148a..2b758a18c2ea5 100644
+--- a/sound/soc/mediatek/mt8183/mt8183-dai-adda.c
++++ b/sound/soc/mediatek/mt8183/mt8183-dai-adda.c
+@@ -176,9 +176,6 @@ static int mtk_adda_ul_event(struct snd_soc_dapm_widget *w,
+ 	case SND_SOC_DAPM_POST_PMD:
+ 		/* should delayed 1/fs(smallest is 8k) = 125us before afe off */
+ 		usleep_range(125, 135);
+-
+-		/* reset dmic */
+-		afe_priv->mtkaif_dmic = 0;
+ 		break;
+ 	default:
+ 		break;
+@@ -426,6 +423,17 @@ static int mtk_dai_adda_hw_params(struct snd_pcm_substream *substream,
+ 
+ 		ul_src_con0 |= (voice_mode << 17) & (0x7 << 17);
+ 
++		/* enable iir */
++		ul_src_con0 |= (1 << UL_IIR_ON_TMP_CTL_SFT) &
++			       UL_IIR_ON_TMP_CTL_MASK_SFT;
++
++		/* 35Hz @ 48k */
++		regmap_write(afe->regmap, AFE_ADDA_IIR_COEF_02_01, 0x00000000);
++		regmap_write(afe->regmap, AFE_ADDA_IIR_COEF_04_03, 0x00003FB8);
++		regmap_write(afe->regmap, AFE_ADDA_IIR_COEF_06_05, 0x3FB80000);
++		regmap_write(afe->regmap, AFE_ADDA_IIR_COEF_08_07, 0x3FB80000);
++		regmap_write(afe->regmap, AFE_ADDA_IIR_COEF_10_09, 0x0000C048);
++
+ 		regmap_write(afe->regmap, AFE_ADDA_UL_SRC_CON0, ul_src_con0);
+ 
+ 		/* mtkaif_rxif_data_mode = 0, amic */
+-- 
+2.22.0.rc1.257.g3120a18244-goog
+

@@ -1,9 +1,9 @@
-From e35ad06af622e59485f43465a4c99436962cf989 Mon Sep 17 00:00:00 2001
+From be78081333836e42a1a3e792d03cf52ee133eda5 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 9 May 2019 11:20:14 -0700
-Subject: [PATCH 3/7] Squash Kukui ISP ToT #139 against MTK ToT #151.
+Date: Wed, 22 May 2019 08:01:05 -0700
+Subject: [PATCH 3/8] Squash Kukui ISP ToT #139 against MTK ToT #151.
 
-Change-Id: I53a528641be3f4dd1eb8770322331dc2b4960d34
+Change-Id: I71a327bac59c5a5580c307b753e075f790a58342
 ---
  .../bindings/media/mediatek,cam_smem.txt      |   32 +
  .../bindings/media/mediatek,camisp.txt        |   59 +
@@ -292,7 +292,7 @@ Change-Id: I53a528641be3f4dd1eb8770322331dc2b4960d34
 
 diff --git a/Documentation/devicetree/bindings/media/mediatek,cam_smem.txt b/Documentation/devicetree/bindings/media/mediatek,cam_smem.txt
 new file mode 100644
-index 000000000000..d34006a3c69d
+index 0000000000000..d34006a3c69d9
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek,cam_smem.txt
 @@ -0,0 +1,32 @@
@@ -330,7 +330,7 @@ index 000000000000..d34006a3c69d
 +	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek,camisp.txt b/Documentation/devicetree/bindings/media/mediatek,camisp.txt
 new file mode 100644
-index 000000000000..dbc7d08a94b8
+index 0000000000000..dbc7d08a94b86
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek,camisp.txt
 @@ -0,0 +1,59 @@
@@ -395,7 +395,7 @@ index 000000000000..dbc7d08a94b8
 +	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-dip.txt b/Documentation/devicetree/bindings/media/mediatek-dip.txt
 new file mode 100644
-index 000000000000..e1b62d69935c
+index 0000000000000..e1b62d69935c0
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek-dip.txt
 @@ -0,0 +1,32 @@
@@ -433,7 +433,7 @@ index 000000000000..e1b62d69935c
 +	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-fd.txt b/Documentation/devicetree/bindings/media/mediatek-fd.txt
 new file mode 100755
-index 000000000000..8d1829ca3227
+index 0000000000000..8d1829ca32270
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek-fd.txt
 @@ -0,0 +1,30 @@
@@ -469,7 +469,7 @@ index 000000000000..8d1829ca3227
 +	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-isp.txt b/Documentation/devicetree/bindings/media/mediatek-isp.txt
 new file mode 100644
-index 000000000000..91cd5e7ee8ad
+index 0000000000000..91cd5e7ee8adb
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek-isp.txt
 @@ -0,0 +1,73 @@
@@ -548,7 +548,7 @@ index 000000000000..91cd5e7ee8ad
 +	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-seninf.txt b/Documentation/devicetree/bindings/media/mediatek-seninf.txt
 new file mode 100644
-index 000000000000..e8dd4cb47dd7
+index 0000000000000..e8dd4cb47dd77
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek-seninf.txt
 @@ -0,0 +1,54 @@
@@ -609,7 +609,7 @@ index 000000000000..e8dd4cb47dd7
 \ No newline at end of file
 diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt b/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
 new file mode 100644
-index 000000000000..a19e3b39ba66
+index 0000000000000..a19e3b39ba661
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
 @@ -0,0 +1,19 @@
@@ -634,7 +634,7 @@ index 000000000000..a19e3b39ba66
 +};
 diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
 new file mode 100644
-index 000000000000..3ba668bab14b
+index 0000000000000..3ba668bab14b2
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
 @@ -0,0 +1,36 @@
@@ -676,7 +676,7 @@ index 000000000000..3ba668bab14b
 +	};
 diff --git a/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam_smem.txt b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam_smem.txt
 new file mode 100644
-index 000000000000..05c1bf185925
+index 0000000000000..05c1bf1859254
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam_smem.txt
 @@ -0,0 +1,44 @@
@@ -725,7 +725,7 @@ index 000000000000..05c1bf185925
 +		};
 +	};
 diff --git a/README b/README
-index 768caa3970ef..977bc3b04f5a 100644
+index 768caa3970ef9..977bc3b04f5a3 100644
 --- a/README
 +++ b/README
 @@ -1,4 +1,5 @@
@@ -743,7 +743,7 @@ index 768caa3970ef..977bc3b04f5a 100644
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 new file mode 100644
-index 000000000000..e0304b04ea37
+index 0000000000000..e0304b04ea370
 --- /dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 @@ -0,0 +1,444 @@
@@ -1192,7 +1192,7 @@ index 000000000000..e0304b04ea37
 +	};
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 467bc98f551e..b2fd77e04164 100644
+index 467bc98f551ea..b2fd77e04164c 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -213,7 +213,35 @@
@@ -1343,7 +1343,7 @@ index 467bc98f551e..b2fd77e04164 100644
  		pins_cmd_dat {
  			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index eaf3be4b3568..f3ab0cf7afca 100644
+index eaf3be4b35689..f3ab0cf7afcad 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 @@ -442,9 +442,30 @@
@@ -1772,7 +1772,7 @@ index eaf3be4b3568..f3ab0cf7afca 100644
  	};
  };
 diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
-index 9998d224c51a..fa0bd42d1a52 100644
+index 9998d224c51a0..fa0bd42d1a52d 100644
 --- a/arch/arm64/mm/dma-mapping.c
 +++ b/arch/arm64/mm/dma-mapping.c
 @@ -37,6 +37,9 @@ static int swiotlb __ro_after_init;
@@ -1795,7 +1795,7 @@ index 9998d224c51a..fa0bd42d1a52 100644
  
  static void __iommu_sync_sg_for_device(struct device *dev,
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 86ef390d6160..4a054df0d6cb 100644
+index 86ef390d61605..4a054df0d6cb1 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 @@ -132,6 +132,7 @@ CONFIG_CROS_EC_RPMSG=m
@@ -1942,7 +1942,7 @@ index 86ef390d6160..4a054df0d6cb 100644
  # CONFIG_VIRTIO_BALLOON is not set
  CONFIG_VIRTIO_BLK=y
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index cf176ec20448..74855922e1c7 100644
+index cf176ec20448d..74855922e1c74 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 @@ -61,6 +61,7 @@ CONFIG_COMMON_CLK_XGENE=y
@@ -2080,7 +2080,7 @@ index cf176ec20448..74855922e1c7 100644
  # CONFIG_VIRTIO_BALLOON is not set
  # CONFIG_VIRTIO_BLK is not set
 diff --git a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-index df8dee5a9ad2..4eef80d63014 100644
+index df8dee5a9ad25..4eef80d63014e 100644
 --- a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 @@ -77,6 +77,7 @@ CONFIG_DRM_TI_SN65DSI86=y
@@ -2114,7 +2114,7 @@ index df8dee5a9ad2..4eef80d63014 100644
  CONFIG_VIRTIO=y
  # CONFIG_VIRTIO_BALLOON is not set
 diff --git a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-index 74542fedbd29..43d65f15f7a9 100644
+index 74542fedbd29b..43d65f15f7a90 100644
 --- a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 @@ -90,6 +90,7 @@ CONFIG_DRM_ROCKCHIP=y
@@ -2150,7 +2150,7 @@ index 74542fedbd29..43d65f15f7a9 100644
  # CONFIG_VIRTIO_MMIO is not set
  # CONFIG_VIRTIO_PCI is not set
 diff --git a/chromeos/config/arm64/common.config b/chromeos/config/arm64/common.config
-index 7073cb8566dc..e31977035cfe 100644
+index 7073cb8566dc9..e31977035cfe4 100644
 --- a/chromeos/config/arm64/common.config
 +++ b/chromeos/config/arm64/common.config
 @@ -161,7 +161,7 @@ CONFIG_CHARGER_CROS_USBPD=y
@@ -2163,7 +2163,7 @@ index 7073cb8566dc..e31977035cfe 100644
  # CONFIG_CLK_QORIQ is not set
  # CONFIG_CLOCK_THERMAL is not set
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index d7ddad0f26b4..fb97c7f686c2 100644
+index d7ddad0f26b48..fb97c7f686c20 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
 @@ -333,6 +333,7 @@ CONFIG_DW_APB_TIMER_OF=y
@@ -2203,7 +2203,7 @@ index d7ddad0f26b4..fb97c7f686c2 100644
  # CONFIG_VIDEO_MEM2MEM_DEINTERLACE is not set
  # CONFIG_VIDEO_ROCKCHIP_RGA is not set
 diff --git a/chromeos/config/base.config b/chromeos/config/base.config
-index f9fcd8e0e4ea..d78bb62f5549 100644
+index f9fcd8e0e4eac..d78bb62f5549b 100644
 --- a/chromeos/config/base.config
 +++ b/chromeos/config/base.config
 @@ -669,7 +669,6 @@ CONFIG_DST_CACHE=y
@@ -2242,7 +2242,7 @@ index f9fcd8e0e4ea..d78bb62f5549 100644
  # CONFIG_VIDEO_CPIA2 is not set
  CONFIG_VIDEO_DEV=y
 diff --git a/chromeos/config/x86_64/common.config b/chromeos/config/x86_64/common.config
-index 89cc91210bc5..e0df649342f4 100644
+index 89cc91210bc5c..e0df649342f4d 100644
 --- a/chromeos/config/x86_64/common.config
 +++ b/chromeos/config/x86_64/common.config
 @@ -350,6 +350,7 @@ CONFIG_DUMMY_CONSOLE_COLUMNS=80
@@ -2280,7 +2280,7 @@ index 89cc91210bc5..e0df649342f4 100644
  # CONFIG_VIDEO_TW68 is not set
 diff --git a/drivers/clk/mediatek/clkchk-mt8183.c b/drivers/clk/mediatek/clkchk-mt8183.c
 new file mode 100644
-index 000000000000..99813e053fca
+index 0000000000000..99813e053fcad
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk-mt8183.c
 @@ -0,0 +1,409 @@
@@ -2695,7 +2695,7 @@ index 000000000000..99813e053fca
 +subsys_initcall(clkchk_platform_init);
 diff --git a/drivers/clk/mediatek/clkchk.c b/drivers/clk/mediatek/clkchk.c
 new file mode 100644
-index 000000000000..d50110a0d538
+index 0000000000000..d50110a0d5383
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk.c
 @@ -0,0 +1,188 @@
@@ -2889,7 +2889,7 @@ index 000000000000..d50110a0d538
 +}
 diff --git a/drivers/clk/mediatek/clkchk.h b/drivers/clk/mediatek/clkchk.h
 new file mode 100644
-index 000000000000..d99e1acb6477
+index 0000000000000..d99e1acb6477f
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkchk.h
 @@ -0,0 +1,18 @@
@@ -2913,7 +2913,7 @@ index 000000000000..d99e1acb6477
 +int clkchk_init(struct clkchk_cfg_t *cfg);
 diff --git a/drivers/clk/mediatek/clkdbg-mt8183.c b/drivers/clk/mediatek/clkdbg-mt8183.c
 new file mode 100644
-index 000000000000..89060ec19e88
+index 0000000000000..89060ec19e88a
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg-mt8183.c
 @@ -0,0 +1,857 @@
@@ -3776,7 +3776,7 @@ index 000000000000..89060ec19e88
 +device_initcall(clkdbg_mt8183_init);
 diff --git a/drivers/clk/mediatek/clkdbg.c b/drivers/clk/mediatek/clkdbg.c
 new file mode 100644
-index 000000000000..8c9f67968160
+index 0000000000000..8c9f679681605
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg.c
 @@ -0,0 +1,2242 @@
@@ -6024,7 +6024,7 @@ index 000000000000..8c9f67968160
 +module_init(clkdbg_debug_init);
 diff --git a/drivers/clk/mediatek/clkdbg.h b/drivers/clk/mediatek/clkdbg.h
 new file mode 100644
-index 000000000000..b9cddf3445ff
+index 0000000000000..b9cddf3445ffc
 --- /dev/null
 +++ b/drivers/clk/mediatek/clkdbg.h
 @@ -0,0 +1,83 @@
@@ -6113,7 +6113,7 @@ index 000000000000..b9cddf3445ff
 +void print_fmeter_all(void);
 diff --git a/drivers/gpu/drm/mediatek/mtk_mipi_tx.h b/drivers/gpu/drm/mediatek/mtk_mipi_tx.h
 new file mode 100644
-index 000000000000..af83023e81cf
+index 0000000000000..af83023e81cf5
 --- /dev/null
 +++ b/drivers/gpu/drm/mediatek/mtk_mipi_tx.h
 @@ -0,0 +1,52 @@
@@ -6171,7 +6171,7 @@ index 000000000000..af83023e81cf
 +#endif
 diff --git a/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c
 new file mode 100644
-index 000000000000..943650cfed46
+index 0000000000000..943650cfed460
 --- /dev/null
 +++ b/drivers/gpu/drm/mediatek/mtk_mt8173_mipi_tx.c
 @@ -0,0 +1,283 @@
@@ -6460,7 +6460,7 @@ index 000000000000..943650cfed46
 +
 diff --git a/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c
 new file mode 100644
-index 000000000000..a1399568b8d5
+index 0000000000000..a1399568b8d5a
 --- /dev/null
 +++ b/drivers/gpu/drm/mediatek/mtk_mt8183_mipi_tx.c
 @@ -0,0 +1,154 @@
@@ -6620,7 +6620,7 @@ index 000000000000..a1399568b8d5
 +};
 diff --git a/drivers/mailbox/mtk-cmdq-debug.c b/drivers/mailbox/mtk-cmdq-debug.c
 new file mode 100644
-index 000000000000..61985342d564
+index 0000000000000..61985342d5644
 --- /dev/null
 +++ b/drivers/mailbox/mtk-cmdq-debug.c
 @@ -0,0 +1,582 @@
@@ -7208,7 +7208,7 @@ index 000000000000..61985342d564
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/mailbox/mtk-cmdq-debug.h b/drivers/mailbox/mtk-cmdq-debug.h
 new file mode 100644
-index 000000000000..5392b00c9394
+index 0000000000000..5392b00c93949
 --- /dev/null
 +++ b/drivers/mailbox/mtk-cmdq-debug.h
 @@ -0,0 +1,21 @@
@@ -7234,7 +7234,7 @@ index 000000000000..5392b00c9394
 +
 +#endif /* MTK_CMDQ_DEBUG_H */
 diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 9cf9b49e3ace..b754aca45a23 100644
+index 9cf9b49e3ace7..b754aca45a23a 100644
 --- a/drivers/media/common/videobuf2/videobuf2-core.c
 +++ b/drivers/media/common/videobuf2/videobuf2-core.c
 @@ -1726,6 +1726,14 @@ static void __vb2_dqbuf(struct vb2_buffer *vb)
@@ -7253,7 +7253,7 @@ index 9cf9b49e3ace..b754aca45a23 100644
  		call_void_vb_qop(vb, buf_cleanup, vb);
  
 diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index aff0ab7bf83d..101e14b31459 100644
+index aff0ab7bf83d5..101e14b31459a 100644
 --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
 @@ -62,6 +62,29 @@ static unsigned long vb2_dc_get_contiguous_size(struct sg_table *sgt)
@@ -7350,7 +7350,7 @@ index aff0ab7bf83d..101e14b31459 100644
  {
  	struct vb2_dc_buf *buf = buf_priv;
 diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index aa4f0b45e505..2f3b3ca5bde6 100644
+index aa4f0b45e5058..2f3b3ca5bde66 100644
 --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
 +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
 @@ -721,6 +721,7 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
@@ -7362,7 +7362,7 @@ index aa4f0b45e505..2f3b3ca5bde6 100644
  		break;
  	default:
 diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 63c9ac2c6a5f..7f6e4d35d985 100644
+index 63c9ac2c6a5ff..7f6e4d35d9851 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
 @@ -17,6 +17,32 @@ config VIDEO_IR_I2C
@@ -7399,7 +7399,7 @@ index 63c9ac2c6a5f..7f6e4d35d985 100644
  # Encoder / Decoder module configuration
  #
 diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-index 385c1886a947..2d35d920e737 100644
+index 385c1886a9470..2d35d920e737f 100644
 --- a/drivers/media/i2c/ov2685.c
 +++ b/drivers/media/i2c/ov2685.c
 @@ -35,7 +35,7 @@
@@ -7651,7 +7651,7 @@ index 385c1886a947..2d35d920e737 100644
  
  err_clean_entity:
 diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
-index 9a80decd93d3..1b63d26cb563 100644
+index 9a80decd93d3c..1b63d26cb5637 100644
 --- a/drivers/media/i2c/ov5695.c
 +++ b/drivers/media/i2c/ov5695.c
 @@ -709,6 +709,8 @@ static int ov5695_write_reg(struct i2c_client *client, u16 reg,
@@ -7774,7 +7774,7 @@ index 9a80decd93d3..1b63d26cb563 100644
  
  err_clean_entity:
 diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index b8ec88612df7..f42082990c2e 100644
+index b8ec88612df70..f42082990c2e0 100644
 --- a/drivers/media/media-device.c
 +++ b/drivers/media/media-device.c
 @@ -502,6 +502,7 @@ static long media_device_enum_links32(struct media_device *mdev,
@@ -7803,7 +7803,7 @@ index b8ec88612df7..f42082990c2e 100644
  
  #define MEDIA_IOC_ENUM_LINKS32		_IOWR('|', 0x02, struct media_links_enum32)
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 0dfb22114c49..919129eef895 100644
+index 0dfb22114c496..919129eef8951 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
 @@ -32,6 +32,8 @@ source "drivers/media/platform/davinci/Kconfig"
@@ -7841,7 +7841,7 @@ index 0dfb22114c49..919129eef895 100644
  	tristate "Mediatek Video Codec driver"
  	depends on MTK_IOMMU || COMPILE_TEST
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 41322ab65802..bb29deb0d1f2 100644
+index 41322ab658027..bb29deb0d1f2f 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
 @@ -70,6 +70,8 @@ obj-$(CONFIG_VIDEO_ROCKCHIP_RGA)	+= rockchip/rga/
@@ -7863,7 +7863,7 @@ index 41322ab65802..bb29deb0d1f2 100644
  
 diff --git a/drivers/media/platform/mtk-isp/Kconfig b/drivers/media/platform/mtk-isp/Kconfig
 new file mode 100644
-index 000000000000..56ac26204b9e
+index 0000000000000..56ac26204b9e1
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/Kconfig
 @@ -0,0 +1,109 @@
@@ -7978,7 +7978,7 @@ index 000000000000..56ac26204b9e
 +	    module will be called mtk_seninf.
 diff --git a/drivers/media/platform/mtk-isp/Makefile b/drivers/media/platform/mtk-isp/Makefile
 new file mode 100644
-index 000000000000..111e241231c3
+index 0000000000000..111e241231c31
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/Makefile
 @@ -0,0 +1,16 @@
@@ -8000,7 +8000,7 @@ index 000000000000..111e241231c3
 +obj-$(CONFIG_VIDEO_MEDIATEK_ISP_FD_SUPPORT) += fd/
 diff --git a/drivers/media/platform/mtk-isp/common/Makefile b/drivers/media/platform/mtk-isp/common/Makefile
 new file mode 100644
-index 000000000000..ce715fb08bff
+index 0000000000000..ce715fb08bff4
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/Makefile
 @@ -0,0 +1,32 @@
@@ -8038,7 +8038,7 @@ index 000000000000..ce715fb08bff
 +
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-ctrl.c b/drivers/media/platform/mtk-isp/common/mtk_isp-ctrl.c
 new file mode 100644
-index 000000000000..a6822e00064a
+index 0000000000000..a6822e00064a2
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-ctrl.c
 @@ -0,0 +1,318 @@
@@ -8362,7 +8362,7 @@ index 000000000000..a6822e00064a
 +EXPORT_SYMBOL_GPL(mtk_isp_ctrl_init);
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-ctrl.h b/drivers/media/platform/mtk-isp/common/mtk_isp-ctrl.h
 new file mode 100644
-index 000000000000..dade294d6a3b
+index 0000000000000..dade294d6a3b0
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-ctrl.h
 @@ -0,0 +1,42 @@
@@ -8410,7 +8410,7 @@ index 000000000000..dade294d6a3b
 +#endif /*__MTK_ISP_CTRL_H__*/
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-ctx.h b/drivers/media/platform/mtk-isp/common/mtk_isp-ctx.h
 new file mode 100644
-index 000000000000..3a5820a3fcf1
+index 0000000000000..3a5820a3fcf1c
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-ctx.h
 @@ -0,0 +1,341 @@
@@ -8757,7 +8757,7 @@ index 000000000000..3a5820a3fcf1
 +#endif /*__MTK_ISP_CTX_H__*/
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-dev-ctx-core.c b/drivers/media/platform/mtk-isp/common/mtk_isp-dev-ctx-core.c
 new file mode 100644
-index 000000000000..5c0b5ae4ffea
+index 0000000000000..5c0b5ae4ffeaf
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-dev-ctx-core.c
 @@ -0,0 +1,1045 @@
@@ -9808,7 +9808,7 @@ index 000000000000..5c0b5ae4ffea
 +EXPORT_SYMBOL_GPL(mtk_isp_ctx_release);
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-dev.c b/drivers/media/platform/mtk-isp/common/mtk_isp-dev.c
 new file mode 100644
-index 000000000000..3f407f29f104
+index 0000000000000..3f407f29f104d
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-dev.c
 @@ -0,0 +1,372 @@
@@ -10186,7 +10186,7 @@ index 000000000000..3f407f29f104
 +
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-dev.h b/drivers/media/platform/mtk-isp/common/mtk_isp-dev.h
 new file mode 100644
-index 000000000000..b20a6f8dc33f
+index 0000000000000..b20a6f8dc33f5
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-dev.h
 @@ -0,0 +1,194 @@
@@ -10386,7 +10386,7 @@ index 000000000000..b20a6f8dc33f
 +#endif /* __MTK_ISP_DEV_H__ */
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-smem-drv.c b/drivers/media/platform/mtk-isp/common/mtk_isp-smem-drv.c
 new file mode 100644
-index 000000000000..236bdfae2365
+index 0000000000000..236bdfae23651
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-smem-drv.c
 @@ -0,0 +1,805 @@
@@ -11197,7 +11197,7 @@ index 000000000000..236bdfae2365
 +MODULE_DESCRIPTION("Mediatek ISP V4L2 shared memory driver");
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-smem.h b/drivers/media/platform/mtk-isp/common/mtk_isp-smem.h
 new file mode 100644
-index 000000000000..5527d7345647
+index 0000000000000..5527d73456476
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-smem.h
 @@ -0,0 +1,24 @@
@@ -11227,7 +11227,7 @@ index 000000000000..5527d7345647
 +
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-v4l2.c b/drivers/media/platform/mtk-isp/common/mtk_isp-v4l2.c
 new file mode 100644
-index 000000000000..736b3732c5a8
+index 0000000000000..736b3732c5a8a
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-v4l2.c
 @@ -0,0 +1,1632 @@
@@ -12865,7 +12865,7 @@ index 000000000000..736b3732c5a8
 +
 diff --git a/drivers/media/platform/mtk-isp/common/mtk_isp-v4l2.h b/drivers/media/platform/mtk-isp/common/mtk_isp-v4l2.h
 new file mode 100644
-index 000000000000..1e253effced3
+index 0000000000000..1e253effced35
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/common/mtk_isp-v4l2.h
 @@ -0,0 +1,49 @@
@@ -12920,7 +12920,7 @@ index 000000000000..1e253effced3
 +#endif /* __MTK_ISP_DEV_V4L2_H__ */
 diff --git a/drivers/media/platform/mtk-isp/fd/Makefile b/drivers/media/platform/mtk-isp/fd/Makefile
 new file mode 100644
-index 000000000000..0001fdfd4b6c
+index 0000000000000..0001fdfd4b6cb
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/Makefile
 @@ -0,0 +1,38 @@
@@ -12964,7 +12964,7 @@ index 000000000000..0001fdfd4b6c
 +$(info "FD: makefile end")
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-core.h b/drivers/media/platform/mtk-isp/fd/mtk_fd-core.h
 new file mode 100644
-index 000000000000..2aab4ab53826
+index 0000000000000..2aab4ab53826f
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-core.h
 @@ -0,0 +1,157 @@
@@ -13127,7 +13127,7 @@ index 000000000000..2aab4ab53826
 +#endif/*__MTK_FD_CORE_H__*/
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-ctx.h b/drivers/media/platform/mtk-isp/fd/mtk_fd-ctx.h
 new file mode 100644
-index 000000000000..d78a3afe12e4
+index 0000000000000..d78a3afe12e49
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-ctx.h
 @@ -0,0 +1,299 @@
@@ -13432,7 +13432,7 @@ index 000000000000..d78a3afe12e4
 +#endif /*__MTK_FD_CTX_H__*/
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-dev-ctx-core.c b/drivers/media/platform/mtk-isp/fd/mtk_fd-dev-ctx-core.c
 new file mode 100644
-index 000000000000..731443691fd6
+index 0000000000000..731443691fd60
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-dev-ctx-core.c
 @@ -0,0 +1,912 @@
@@ -14350,7 +14350,7 @@ index 000000000000..731443691fd6
 +EXPORT_SYMBOL_GPL(mtk_fd_ctx_trigger_job);
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-dev.c b/drivers/media/platform/mtk-isp/fd/mtk_fd-dev.c
 new file mode 100644
-index 000000000000..7e3acf7e4bac
+index 0000000000000..7e3acf7e4bac2
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-dev.c
 @@ -0,0 +1,355 @@
@@ -14711,7 +14711,7 @@ index 000000000000..7e3acf7e4bac
 +
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-dev.h b/drivers/media/platform/mtk-isp/fd/mtk_fd-dev.h
 new file mode 100644
-index 000000000000..d2b7d77fc7ec
+index 0000000000000..d2b7d77fc7ecc
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-dev.h
 @@ -0,0 +1,198 @@
@@ -14915,7 +14915,7 @@ index 000000000000..d2b7d77fc7ec
 +#endif /* __MTK_FD_DEV_H__ */
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-smem-drv.c b/drivers/media/platform/mtk-isp/fd/mtk_fd-smem-drv.c
 new file mode 100644
-index 000000000000..99a852debc46
+index 0000000000000..99a852debc467
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-smem-drv.c
 @@ -0,0 +1,452 @@
@@ -15373,7 +15373,7 @@ index 000000000000..99a852debc46
 +MODULE_DESCRIPTION("Mediatek FD shared memory driver");
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-smem.h b/drivers/media/platform/mtk-isp/fd/mtk_fd-smem.h
 new file mode 100644
-index 000000000000..a19fc376a761
+index 0000000000000..a19fc376a7618
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-smem.h
 @@ -0,0 +1,25 @@
@@ -15404,7 +15404,7 @@ index 000000000000..a19fc376a761
 +#endif /*__MTK_FD_SMEM_H__*/
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2-util.c b/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2-util.c
 new file mode 100644
-index 000000000000..ab85aea422ff
+index 0000000000000..ab85aea422ffe
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2-util.c
 @@ -0,0 +1,1046 @@
@@ -16456,7 +16456,7 @@ index 000000000000..ab85aea422ff
 +EXPORT_SYMBOL_GPL(mtk_fd_v4l2_buffer_done);
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2.c b/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2.c
 new file mode 100644
-index 000000000000..bd447b7b3f4c
+index 0000000000000..bd447b7b3f4c9
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2.c
 @@ -0,0 +1,114 @@
@@ -16576,7 +16576,7 @@ index 000000000000..bd447b7b3f4c
 +EXPORT_SYMBOL_GPL(mtk_fd_ctx_fd_init);
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2.h b/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2.h
 new file mode 100644
-index 000000000000..0702abc0edd0
+index 0000000000000..0702abc0edd02
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd-v4l2.h
 @@ -0,0 +1,36 @@
@@ -16618,7 +16618,7 @@ index 000000000000..0702abc0edd0
 +#endif /*__MTK_FD_V4L2__*/
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd.c b/drivers/media/platform/mtk-isp/fd/mtk_fd.c
 new file mode 100644
-index 000000000000..c8e097a8dc9a
+index 0000000000000..c8e097a8dc9ae
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd.c
 @@ -0,0 +1,754 @@
@@ -17378,7 +17378,7 @@ index 000000000000..c8e097a8dc9a
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd.h b/drivers/media/platform/mtk-isp/fd/mtk_fd.h
 new file mode 100644
-index 000000000000..6cae44064a32
+index 0000000000000..6cae44064a326
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/fd/mtk_fd.h
 @@ -0,0 +1,127 @@
@@ -17511,7 +17511,7 @@ index 000000000000..6cae44064a32
 +#endif/*__MTK_FD_H__*/
 diff --git a/drivers/media/platform/mtk-isp/isp_50/Makefile b/drivers/media/platform/mtk-isp/isp_50/Makefile
 new file mode 100644
-index 000000000000..3211fb095f35
+index 0000000000000..3211fb095f35b
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/Makefile
 @@ -0,0 +1,26 @@
@@ -17543,7 +17543,7 @@ index 000000000000..3211fb095f35
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/Makefile b/drivers/media/platform/mtk-isp/isp_50/cam/Makefile
 new file mode 100644
-index 000000000000..8ddc34baf386
+index 0000000000000..8ddc34baf3864
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/Makefile
 @@ -0,0 +1,19 @@
@@ -17568,7 +17568,7 @@ index 000000000000..8ddc34baf386
 +obj-$(CONFIG_VIDEO_MEDIATEK_ISP_PASS1_SUPPORT) += mtk-cam-isp.o
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctrl.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctrl.c
 new file mode 100644
-index 000000000000..455216ad9cc4
+index 0000000000000..455216ad9cc4b
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctrl.c
 @@ -0,0 +1,133 @@
@@ -17707,7 +17707,7 @@ index 000000000000..455216ad9cc4
 +}
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctrl.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctrl.h
 new file mode 100644
-index 000000000000..74a6538c81ac
+index 0000000000000..74a6538c81aca
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctrl.h
 @@ -0,0 +1,32 @@
@@ -17745,7 +17745,7 @@ index 000000000000..74a6538c81ac
 +#endif /* __MTK_CAM_CTRL_H__ */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctx.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctx.h
 new file mode 100644
-index 000000000000..5f3b807c595d
+index 0000000000000..5f3b807c595d8
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-ctx.h
 @@ -0,0 +1,116 @@
@@ -17867,7 +17867,7 @@ index 000000000000..5f3b807c595d
 +#endif /*__MTK_CAM_CTX_H__*/
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev-ctx-core.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev-ctx-core.c
 new file mode 100644
-index 000000000000..c17b294c64f9
+index 0000000000000..c17b294c64f92
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev-ctx-core.c
 @@ -0,0 +1,302 @@
@@ -18175,7 +18175,7 @@ index 000000000000..c17b294c64f9
 +}
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev.c
 new file mode 100644
-index 000000000000..35e77ee4ec47
+index 0000000000000..35e77ee4ec478
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev.c
 @@ -0,0 +1,525 @@
@@ -18706,7 +18706,7 @@ index 000000000000..35e77ee4ec47
 +}
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev.h
 new file mode 100644
-index 000000000000..57c02616c9c0
+index 0000000000000..57c02616c9c0f
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-dev.h
 @@ -0,0 +1,166 @@
@@ -18878,7 +18878,7 @@ index 000000000000..57c02616c9c0
 +#endif /* __MTK_CAM_DEV_H__ */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-regs.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-regs.h
 new file mode 100644
-index 000000000000..90736a14d996
+index 0000000000000..90736a14d996c
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-regs.h
 @@ -0,0 +1,147 @@
@@ -19031,7 +19031,7 @@ index 000000000000..90736a14d996
 +#endif	/* _CAM_REGS_H */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-scp.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-scp.c
 new file mode 100644
-index 000000000000..be5fd365f16f
+index 0000000000000..be5fd365f16f4
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-scp.c
 @@ -0,0 +1,488 @@
@@ -19525,7 +19525,7 @@ index 000000000000..be5fd365f16f
 +}
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-scp.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-scp.h
 new file mode 100644
-index 000000000000..abc34e785cd3
+index 0000000000000..abc34e785cd39
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-scp.h
 @@ -0,0 +1,215 @@
@@ -19746,7 +19746,7 @@ index 000000000000..abc34e785cd3
 +#endif /* _MTK_ISP_SCP_H */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-smem-drv.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-smem-drv.c
 new file mode 100644
-index 000000000000..9a92080a1451
+index 0000000000000..9a92080a14512
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-smem-drv.c
 @@ -0,0 +1,398 @@
@@ -20150,7 +20150,7 @@ index 000000000000..9a92080a1451
 +MODULE_DESCRIPTION("Mediatek CAM shared memory driver");
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-smem.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-smem.h
 new file mode 100644
-index 000000000000..719ec0255679
+index 0000000000000..719ec02556791
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-smem.h
 @@ -0,0 +1,25 @@
@@ -20181,7 +20181,7 @@ index 000000000000..719ec0255679
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-v4l2-util.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-v4l2-util.c
 new file mode 100644
-index 000000000000..97e88219a112
+index 0000000000000..97e88219a1123
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-v4l2-util.c
 @@ -0,0 +1,1184 @@
@@ -21371,7 +21371,7 @@ index 000000000000..97e88219a112
 +}
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-v4l2-util.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-v4l2-util.h
 new file mode 100644
-index 000000000000..73b36916da08
+index 0000000000000..73b36916da08c
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam-v4l2-util.h
 @@ -0,0 +1,43 @@
@@ -21420,7 +21420,7 @@ index 000000000000..73b36916da08
 +#endif /* __MTK_CAM_DEV_V4L2_H__ */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.c
 new file mode 100644
-index 000000000000..935cf7e1ec15
+index 0000000000000..935cf7e1ec157
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.c
 @@ -0,0 +1,1098 @@
@@ -22524,7 +22524,7 @@ index 000000000000..935cf7e1ec15
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.h b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.h
 new file mode 100644
-index 000000000000..6d1305826a5a
+index 0000000000000..6d1305826a5a2
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.h
 @@ -0,0 +1,288 @@
@@ -22818,7 +22818,7 @@ index 000000000000..6d1305826a5a
 +#endif /*__CAMERA_ISP_H*/
 diff --git a/drivers/media/platform/mtk-isp/isp_50/camSV/Makefile b/drivers/media/platform/mtk-isp/isp_50/camSV/Makefile
 new file mode 100644
-index 000000000000..59b8a89496dd
+index 0000000000000..59b8a89496dd8
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/camSV/Makefile
 @@ -0,0 +1,15 @@
@@ -22839,7 +22839,7 @@ index 000000000000..59b8a89496dd
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/camSV/camerasv_isp.c b/drivers/media/platform/mtk-isp/isp_50/camSV/camerasv_isp.c
 new file mode 100644
-index 000000000000..9020f725d3be
+index 0000000000000..9020f725d3bee
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/camSV/camerasv_isp.c
 @@ -0,0 +1,6613 @@
@@ -29458,7 +29458,7 @@ index 000000000000..9020f725d3be
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/media/platform/mtk-isp/isp_50/camSV/inc/cam_regs.h b/drivers/media/platform/mtk-isp/isp_50/camSV/inc/cam_regs.h
 new file mode 100644
-index 000000000000..676dde1d8920
+index 0000000000000..676dde1d8920a
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/camSV/inc/cam_regs.h
 @@ -0,0 +1,149 @@
@@ -29613,7 +29613,7 @@ index 000000000000..676dde1d8920
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/camSV/inc/camerasv_isp.h b/drivers/media/platform/mtk-isp/isp_50/camSV/inc/camerasv_isp.h
 new file mode 100644
-index 000000000000..ac67284ca920
+index 0000000000000..ac67284ca920f
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/camSV/inc/camerasv_isp.h
 @@ -0,0 +1,1256 @@
@@ -30875,7 +30875,7 @@ index 000000000000..ac67284ca920
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/Makefile b/drivers/media/platform/mtk-isp/isp_50/dip/Makefile
 new file mode 100644
-index 000000000000..9a08c62f1434
+index 0000000000000..9a08c62f14341
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/Makefile
 @@ -0,0 +1,35 @@
@@ -30916,7 +30916,7 @@ index 000000000000..9a08c62f1434
 +obj-y += mtk_dip_util.o
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-core.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-core.h
 new file mode 100644
-index 000000000000..f80acf49ed5b
+index 0000000000000..f80acf49ed5bd
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-core.h
 @@ -0,0 +1,190 @@
@@ -31112,7 +31112,7 @@ index 000000000000..f80acf49ed5b
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctrl.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctrl.c
 new file mode 100644
-index 000000000000..9b6be120d911
+index 0000000000000..9b6be120d9116
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctrl.c
 @@ -0,0 +1,172 @@
@@ -31290,7 +31290,7 @@ index 000000000000..9b6be120d911
 +EXPORT_SYMBOL_GPL(mtk_dip_ctrl_init);
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctrl.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctrl.h
 new file mode 100644
-index 000000000000..1095d4733aa2
+index 0000000000000..1095d4733aa2e
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctrl.h
 @@ -0,0 +1,42 @@
@@ -31338,7 +31338,7 @@ index 000000000000..1095d4733aa2
 +#endif /*__MTK_DIP_CTRL_H__*/
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctx.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctx.h
 new file mode 100644
-index 000000000000..2dd014e86dc1
+index 0000000000000..2dd014e86dc1c
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-ctx.h
 @@ -0,0 +1,319 @@
@@ -31663,7 +31663,7 @@ index 000000000000..2dd014e86dc1
 +#endif /*__MTK_DIP_CTX_H__*/
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev-ctx-core.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev-ctx-core.c
 new file mode 100644
-index 000000000000..46a638ab2ca5
+index 0000000000000..46a638ab2ca5c
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev-ctx-core.c
 @@ -0,0 +1,1643 @@
@@ -33312,7 +33312,7 @@ index 000000000000..46a638ab2ca5
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.c
 new file mode 100644
-index 000000000000..b7db1199f033
+index 0000000000000..b7db1199f033a
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.c
 @@ -0,0 +1,374 @@
@@ -33692,7 +33692,7 @@ index 000000000000..b7db1199f033
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.h
 new file mode 100644
-index 000000000000..95a39071dd6b
+index 0000000000000..95a39071dd6b2
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.h
 @@ -0,0 +1,191 @@
@@ -33889,7 +33889,7 @@ index 000000000000..95a39071dd6b
 +#endif /* __MTK_DIP_DEV_H__ */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-smem-drv.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-smem-drv.c
 new file mode 100644
-index 000000000000..0c754cc458d0
+index 0000000000000..0c754cc458d0d
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-smem-drv.c
 @@ -0,0 +1,454 @@
@@ -34349,7 +34349,7 @@ index 000000000000..0c754cc458d0
 +MODULE_DESCRIPTION("Mediatek DIP shared memory driver");
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-smem.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-smem.h
 new file mode 100644
-index 000000000000..6098181a1e9d
+index 0000000000000..6098181a1e9d5
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-smem.h
 @@ -0,0 +1,24 @@
@@ -34379,7 +34379,7 @@ index 000000000000..6098181a1e9d
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2-util.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2-util.c
 new file mode 100644
-index 000000000000..62a6f1c881f1
+index 0000000000000..62a6f1c881f18
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2-util.c
 @@ -0,0 +1,1002 @@
@@ -35387,7 +35387,7 @@ index 000000000000..62a6f1c881f1
 +EXPORT_SYMBOL_GPL(mtk_dip_v4l2_buffer_done);
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2-util.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2-util.h
 new file mode 100644
-index 000000000000..0d0deabcb77e
+index 0000000000000..0d0deabcb77ef
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2-util.h
 @@ -0,0 +1,38 @@
@@ -35431,7 +35431,7 @@ index 000000000000..0d0deabcb77e
 +#endif /* __MTK_DIP_DEV_V4L2_H__ */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
 new file mode 100644
-index 000000000000..0318c4043309
+index 0000000000000..0318c40433097
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
 @@ -0,0 +1,360 @@
@@ -35797,7 +35797,7 @@ index 000000000000..0318c4043309
 +EXPORT_SYMBOL_GPL(mtk_dip_ctx_dip_reprocess_init);
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.h
 new file mode 100644
-index 000000000000..f66c599a8ad4
+index 0000000000000..f66c599a8ad46
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.h
 @@ -0,0 +1,64 @@
@@ -35867,7 +35867,7 @@ index 000000000000..f66c599a8ad4
 +#endif /*__MTK_DIP_V4L2__*/
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip.c
 new file mode 100644
-index 000000000000..975177051541
+index 0000000000000..975177051541e
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip.c
 @@ -0,0 +1,1420 @@
@@ -37293,7 +37293,7 @@ index 000000000000..975177051541
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip.h b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip.h
 new file mode 100644
-index 000000000000..6650c4ae98f6
+index 0000000000000..6650c4ae98f6c
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip.h
 @@ -0,0 +1,93 @@
@@ -37392,7 +37392,7 @@ index 000000000000..6650c4ae98f6
 +
 diff --git a/drivers/media/platform/mtk-isp/isp_50/seninf/Makefile b/drivers/media/platform/mtk-isp/isp_50/seninf/Makefile
 new file mode 100755
-index 000000000000..f1b2e2d2be3b
+index 0000000000000..f1b2e2d2be3bd
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/seninf/Makefile
 @@ -0,0 +1,4 @@
@@ -37402,7 +37402,7 @@ index 000000000000..f1b2e2d2be3b
 +obj-$(CONFIG_MTK_SENINF) += mtk_seninf.o
 diff --git a/drivers/media/platform/mtk-isp/isp_50/seninf/mtk_seninf.c b/drivers/media/platform/mtk-isp/isp_50/seninf/mtk_seninf.c
 new file mode 100644
-index 000000000000..7ac8a4a259c0
+index 0000000000000..7ac8a4a259c09
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/seninf/mtk_seninf.c
 @@ -0,0 +1,1339 @@
@@ -38747,7 +38747,7 @@ index 000000000000..7ac8a4a259c0
 +MODULE_ALIAS("MTK:mtk_seninf");
 diff --git a/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
 new file mode 100644
-index 000000000000..6280ae49a97d
+index 0000000000000..6280ae49a97d8
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_drv_def.h
 @@ -0,0 +1,201 @@
@@ -38954,7 +38954,7 @@ index 000000000000..6280ae49a97d
 +#endif /*__SENINF_DRV_DEF_H__ */
 diff --git a/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_reg.h b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_reg.h
 new file mode 100644
-index 000000000000..7402630ab7b6
+index 0000000000000..7402630ab7b68
 --- /dev/null
 +++ b/drivers/media/platform/mtk-isp/isp_50/seninf/seninf_reg.h
 @@ -0,0 +1,992 @@
@@ -39952,7 +39952,7 @@ index 000000000000..7402630ab7b6
 +#endif /* _SENINF_REG_H_ */
 diff --git a/drivers/media/platform/mtk-mdp3/Makefile b/drivers/media/platform/mtk-mdp3/Makefile
 new file mode 100644
-index 000000000000..cd1de4ef7f42
+index 0000000000000..cd1de4ef7f426
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/Makefile
 @@ -0,0 +1,15 @@
@@ -39973,7 +39973,7 @@ index 000000000000..cd1de4ef7f42
 +
 diff --git a/drivers/media/platform/mtk-mdp3/isp_reg.h b/drivers/media/platform/mtk-mdp3/isp_reg.h
 new file mode 100644
-index 000000000000..93552943c323
+index 0000000000000..93552943c3232
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/isp_reg.h
 @@ -0,0 +1,38 @@
@@ -40017,7 +40017,7 @@ index 000000000000..93552943c323
 +#endif  // __ISP_REG_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mdp-platform.h b/drivers/media/platform/mtk-mdp3/mdp-platform.h
 new file mode 100644
-index 000000000000..6926c3a754fa
+index 0000000000000..6926c3a754fa3
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mdp-platform.h
 @@ -0,0 +1,67 @@
@@ -40090,7 +40090,7 @@ index 000000000000..6926c3a754fa
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h b/drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h
 new file mode 100644
-index 000000000000..e3340726e6d4
+index 0000000000000..e3340726e6d43
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h
 @@ -0,0 +1,76 @@
@@ -40172,7 +40172,7 @@ index 000000000000..e3340726e6d4
 +#endif  // __MDP_REG_CCORR_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h b/drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
 new file mode 100644
-index 000000000000..5625d9f7810d
+index 0000000000000..5625d9f7810d6
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
 @@ -0,0 +1,207 @@
@@ -40385,7 +40385,7 @@ index 000000000000..5625d9f7810d
 +#endif  // __MDP_REG_RDMA_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h b/drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
 new file mode 100644
-index 000000000000..407b7691e9d1
+index 0000000000000..407b7691e9d15
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
 @@ -0,0 +1,110 @@
@@ -40501,7 +40501,7 @@ index 000000000000..407b7691e9d1
 +#endif // __MDP_REG_RSZ_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h b/drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
 new file mode 100644
-index 000000000000..7a3b857953e2
+index 0000000000000..7a3b857953e23
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
 @@ -0,0 +1,126 @@
@@ -40633,7 +40633,7 @@ index 000000000000..7a3b857953e2
 +#endif  // __MDP_REG_WDMA_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h b/drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
 new file mode 100644
-index 000000000000..376bc85c7703
+index 0000000000000..376bc85c77034
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
 @@ -0,0 +1,116 @@
@@ -40755,7 +40755,7 @@ index 000000000000..376bc85c7703
 +#endif  // __MDP_REG_WROT_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mmsys_config.h b/drivers/media/platform/mtk-mdp3/mmsys_config.h
 new file mode 100644
-index 000000000000..d1328840bbf2
+index 0000000000000..d1328840bbf22
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mmsys_config.h
 @@ -0,0 +1,189 @@
@@ -40950,7 +40950,7 @@ index 000000000000..d1328840bbf2
 +#endif  // __MMSYS_CONFIG_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mmsys_mutex.h b/drivers/media/platform/mtk-mdp3/mmsys_mutex.h
 new file mode 100644
-index 000000000000..9ff382cc37c8
+index 0000000000000..9ff382cc37c86
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mmsys_mutex.h
 @@ -0,0 +1,36 @@
@@ -40992,7 +40992,7 @@ index 000000000000..9ff382cc37c8
 +#endif  // __MMSYS_MUTEX_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mmsys_reg_base.h b/drivers/media/platform/mtk-mdp3/mmsys_reg_base.h
 new file mode 100644
-index 000000000000..441cb56fcbba
+index 0000000000000..441cb56fcbba4
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mmsys_reg_base.h
 @@ -0,0 +1,39 @@
@@ -41037,7 +41037,7 @@ index 000000000000..441cb56fcbba
 +#endif  // __MM_REG_BASE_H__
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-img-ipi.h b/drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
 new file mode 100644
-index 000000000000..681732b2316a
+index 0000000000000..681732b2316ac
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
 @@ -0,0 +1,282 @@
@@ -41325,7 +41325,7 @@ index 000000000000..681732b2316a
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
 new file mode 100644
-index 000000000000..707f967efa91
+index 0000000000000..707f967efa913
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
 @@ -0,0 +1,458 @@
@@ -41789,7 +41789,7 @@ index 000000000000..707f967efa91
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.h
 new file mode 100644
-index 000000000000..b61ab1ac4325
+index 0000000000000..b61ab1ac43259
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.h
 @@ -0,0 +1,57 @@
@@ -41852,7 +41852,7 @@ index 000000000000..b61ab1ac4325
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
 new file mode 100644
-index 000000000000..0d172f6b5f2b
+index 0000000000000..0d172f6b5f2bf
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
 @@ -0,0 +1,1325 @@
@@ -43183,7 +43183,7 @@ index 000000000000..0d172f6b5f2b
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.h
 new file mode 100644
-index 000000000000..0c65214ef695
+index 0000000000000..0c65214ef6952
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.h
 @@ -0,0 +1,177 @@
@@ -43366,7 +43366,7 @@ index 000000000000..0c65214ef695
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
 new file mode 100644
-index 000000000000..426f1a3aa94a
+index 0000000000000..426f1a3aa94a6
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
 @@ -0,0 +1,283 @@
@@ -43655,7 +43655,7 @@ index 000000000000..426f1a3aa94a
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
 new file mode 100644
-index 000000000000..bc3b168a4d5a
+index 0000000000000..bc3b168a4d5a2
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
 @@ -0,0 +1,88 @@
@@ -43749,7 +43749,7 @@ index 000000000000..bc3b168a4d5a
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-debug.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-debug.c
 new file mode 100644
-index 000000000000..0a97836aa71a
+index 0000000000000..0a97836aa71ad
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-debug.c
 @@ -0,0 +1,1102 @@
@@ -44857,7 +44857,7 @@ index 000000000000..0a97836aa71a
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-debug.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-debug.h
 new file mode 100644
-index 000000000000..537602f42209
+index 0000000000000..537602f422094
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-debug.h
 @@ -0,0 +1,40 @@
@@ -44903,7 +44903,7 @@ index 000000000000..537602f42209
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
 new file mode 100644
-index 000000000000..d5efd42c252c
+index 0000000000000..d5efd42c252ce
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
 @@ -0,0 +1,787 @@
@@ -45696,7 +45696,7 @@ index 000000000000..d5efd42c252c
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
 new file mode 100644
-index 000000000000..1f681b48c2ad
+index 0000000000000..1f681b48c2adb
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
 @@ -0,0 +1,52 @@
@@ -45754,7 +45754,7 @@ index 000000000000..1f681b48c2ad
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
 new file mode 100644
-index 000000000000..9ac79286216c
+index 0000000000000..9ac79286216c6
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
 @@ -0,0 +1,778 @@
@@ -46538,7 +46538,7 @@ index 000000000000..9ac79286216c
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
 new file mode 100644
-index 000000000000..daf2a4d2a935
+index 0000000000000..daf2a4d2a935d
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
 @@ -0,0 +1,388 @@
@@ -46932,7 +46932,7 @@ index 000000000000..daf2a4d2a935
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-ut.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-ut.c
 new file mode 100644
-index 000000000000..e259aeca54fb
+index 0000000000000..e259aeca54fbb
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-ut.c
 @@ -0,0 +1,663 @@
@@ -47601,7 +47601,7 @@ index 000000000000..e259aeca54fb
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
 new file mode 100644
-index 000000000000..e6189991331d
+index 0000000000000..e6189991331da
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
 @@ -0,0 +1,277 @@
@@ -47884,7 +47884,7 @@ index 000000000000..e6189991331d
 +
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
 new file mode 100644
-index 000000000000..f6551d774902
+index 0000000000000..f6551d774902a
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
 @@ -0,0 +1,89 @@
@@ -47978,7 +47978,7 @@ index 000000000000..f6551d774902
 +#endif  /* __MTK_MDP3_VPU_H__ */
 +
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index 01cab05e7b81..3c87c315e948 100644
+index 01cab05e7b818..3c87c315e9489 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
 @@ -595,8 +595,26 @@ static struct vpu_reserve_mblock vpu_reserve_mblock[] = {
@@ -48010,7 +48010,7 @@ index 01cab05e7b81..3c87c315e948 100644
  
  int vpu_reserve_mem_of_init(struct reserved_mem *rmem)
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.h b/drivers/media/platform/mtk-vpu/mtk_vpu.h
-index ca09de70ceda..9c4cd0f53292 100644
+index ca09de70cedae..9c4cd0f532926 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.h
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.h
 @@ -66,6 +66,13 @@ enum ipi_id {
@@ -48038,7 +48038,7 @@ index ca09de70ceda..9c4cd0f53292 100644
  };
  
 diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-index f4325329fbd6..fe4577a46869 100644
+index f4325329fbd6f..fe4577a46869d 100644
 --- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
 +++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
 @@ -323,6 +323,7 @@ static int __get_v4l2_format32(struct v4l2_format __user *p64,
@@ -48058,7 +48058,7 @@ index f4325329fbd6..fe4577a46869 100644
  				    sizeof(p64->fmt.meta)) ? -EFAULT : 0;
  	default:
 diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index feb749aaaa42..fcd355e06518 100644
+index feb749aaaa42f..fcd355e065188 100644
 --- a/drivers/media/v4l2-core/v4l2-dev.c
 +++ b/drivers/media/v4l2-core/v4l2-dev.c
 @@ -597,7 +597,8 @@ static void determine_valid_ioctls(struct video_device *vdev)
@@ -48102,7 +48102,7 @@ index feb749aaaa42..fcd355e06518 100644
  		SET_VALID_IOCTL(ops, VIDIOC_OVERLAY, vidioc_overlay);
  		SET_VALID_IOCTL(ops, VIDIOC_G_FBUF, vidioc_g_fbuf);
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index beb0d0722385..a65cdb039702 100644
+index beb0d07223859..a65cdb0397023 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
 @@ -194,6 +194,7 @@ const char *v4l2_type_names[] = {
@@ -48179,7 +48179,7 @@ index beb0d0722385..a65cdb039702 100644
  }
 diff --git a/drivers/memory/mtk-emi.c b/drivers/memory/mtk-emi.c
 new file mode 100644
-index 000000000000..cb6a988c4d70
+index 0000000000000..cb6a988c4d709
 --- /dev/null
 +++ b/drivers/memory/mtk-emi.c
 @@ -0,0 +1,405 @@
@@ -48590,7 +48590,7 @@ index 000000000000..cb6a988c4d70
 +
 diff --git a/drivers/mmc/host/mtk-sdio-proc.c b/drivers/mmc/host/mtk-sdio-proc.c
 new file mode 100644
-index 000000000000..6f4c3cd96d42
+index 0000000000000..6f4c3cd96d429
 --- /dev/null
 +++ b/drivers/mmc/host/mtk-sdio-proc.c
 @@ -0,0 +1,342 @@
@@ -48938,7 +48938,7 @@ index 000000000000..6f4c3cd96d42
 +}
 diff --git a/drivers/mmc/host/mtk-sdio-proc.h b/drivers/mmc/host/mtk-sdio-proc.h
 new file mode 100644
-index 000000000000..33659ba69be3
+index 0000000000000..33659ba69be32
 --- /dev/null
 +++ b/drivers/mmc/host/mtk-sdio-proc.h
 @@ -0,0 +1,48 @@
@@ -48992,7 +48992,7 @@ index 000000000000..33659ba69be3
 +};
 diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
 new file mode 100644
-index 000000000000..19a907810271
+index 0000000000000..19a9078102712
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_common.h
 @@ -0,0 +1,77 @@
@@ -49075,7 +49075,7 @@ index 000000000000..19a907810271
 +#endif
 diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
 new file mode 100644
-index 000000000000..167991b29161
+index 0000000000000..167991b29161f
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_scp.c
 @@ -0,0 +1,699 @@
@@ -49780,7 +49780,7 @@ index 000000000000..167991b29161
 +MODULE_DESCRIPTION("MediaTek SCP control driver");
 diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
 new file mode 100644
-index 000000000000..10b0cbda7aee
+index 0000000000000..10b0cbda7aee3
 --- /dev/null
 +++ b/drivers/remoteproc/mtk_scp_ipi.c
 @@ -0,0 +1,163 @@
@@ -49949,7 +49949,7 @@ index 000000000000..10b0cbda7aee
 +MODULE_DESCRIPTION("MediaTek scp IPI interface");
 diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
 new file mode 100644
-index 000000000000..e5e988941ea6
+index 0000000000000..e5e988941ea67
 --- /dev/null
 +++ b/drivers/rpmsg/mtk_rpmsg.c
 @@ -0,0 +1,396 @@
@@ -50351,7 +50351,7 @@ index 000000000000..e5e988941ea6
 +MODULE_DESCRIPTION("MediaTek scp rpmsg driver");
 diff --git a/include/dt-bindings/gce/mt8183-gce.h b/include/dt-bindings/gce/mt8183-gce.h
 new file mode 100644
-index 000000000000..aeb95154fac2
+index 0000000000000..aeb95154fac28
 --- /dev/null
 +++ b/include/dt-bindings/gce/mt8183-gce.h
 @@ -0,0 +1,177 @@
@@ -50534,7 +50534,7 @@ index 000000000000..aeb95154fac2
 +#endif
 diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset-controller/mt8183-resets.h
 new file mode 100644
-index 000000000000..f0d92af29f3f
+index 0000000000000..f0d92af29f3fa
 --- /dev/null
 +++ b/include/dt-bindings/reset-controller/mt8183-resets.h
 @@ -0,0 +1,89 @@
@@ -50629,7 +50629,7 @@ index 000000000000..f0d92af29f3f
 +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8183 */
 diff --git a/include/linux/platform_data/mtk_scp.h b/include/linux/platform_data/mtk_scp.h
 new file mode 100644
-index 000000000000..90f91431c5f4
+index 0000000000000..90f91431c5f44
 --- /dev/null
 +++ b/include/linux/platform_data/mtk_scp.h
 @@ -0,0 +1,166 @@
@@ -50801,7 +50801,7 @@ index 000000000000..90f91431c5f4
 +#endif /* _MTK_SCP_H */
 diff --git a/include/linux/rpmsg/mtk_rpmsg.h b/include/linux/rpmsg/mtk_rpmsg.h
 new file mode 100644
-index 000000000000..90f848696161
+index 0000000000000..90f848696161f
 --- /dev/null
 +++ b/include/linux/rpmsg/mtk_rpmsg.h
 @@ -0,0 +1,30 @@
@@ -50836,7 +50836,7 @@ index 000000000000..90f848696161
 +
 +#endif
 diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
-index 5848d92c30da..8f6c497e3b7b 100644
+index 5848d92c30da3..8f6c497e3b7b4 100644
 --- a/include/media/v4l2-ioctl.h
 +++ b/include/media/v4l2-ioctl.h
 @@ -318,6 +318,8 @@ struct v4l2_ioctl_ops {
@@ -50877,7 +50877,7 @@ index 5848d92c30da..8f6c497e3b7b 100644
  	int (*vidioc_reqbufs)(struct file *file, void *fh,
 diff --git a/include/soc/mediatek/emi.h b/include/soc/mediatek/emi.h
 new file mode 100644
-index 000000000000..83bdaeb6840b
+index 0000000000000..83bdaeb6840b8
 --- /dev/null
 +++ b/include/soc/mediatek/emi.h
 @@ -0,0 +1,116 @@
@@ -50998,7 +50998,7 @@ index 000000000000..83bdaeb6840b
 +
 +#endif
 diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index e4ee10ee917d..c561ac7fdbe3 100644
+index e4ee10ee917de..c561ac7fdbe31 100644
 --- a/include/uapi/linux/v4l2-controls.h
 +++ b/include/uapi/linux/v4l2-controls.h
 @@ -190,6 +190,10 @@ enum v4l2_colorfx {
@@ -51013,7 +51013,7 @@ index e4ee10ee917d..c561ac7fdbe3 100644
  /* The MPEG controls are applicable to all codec controls
   * and the 'MPEG' part of the define is historical */
 diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index fb0b74b698d0..a58a503ce5c3 100644
+index fb0b74b698d0f..a58a503ce5c30 100644
 --- a/include/uapi/linux/videodev2.h
 +++ b/include/uapi/linux/videodev2.h
 @@ -145,6 +145,7 @@ enum v4l2_buf_type {
@@ -51069,5 +51069,5 @@ index fb0b74b698d0..a58a503ce5c3 100644
  #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
  
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.22.0.rc1.257.g3120a18244-goog
 

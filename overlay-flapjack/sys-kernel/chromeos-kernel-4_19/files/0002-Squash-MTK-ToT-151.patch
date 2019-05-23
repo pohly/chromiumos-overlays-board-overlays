@@ -1,9 +1,9 @@
-From 1272f1c6486fdd9ea0a530db20d1b2327a44c26c Mon Sep 17 00:00:00 2001
+From 06fa6c7a04358c4f91eb80a6876febdf3d3e5f78 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 9 May 2019 11:18:51 -0700
-Subject: [PATCH 2/7] Squash MTK ToT #151.
+Date: Wed, 22 May 2019 07:59:40 -0700
+Subject: [PATCH 2/8] Squash MTK ToT #151.
 
-Change-Id: Icef8a6fc06f24ff1b00af0e76819454990da8883
+Change-Id: Ie080c7dac060b7311398c783245a27082bcad854
 ---
  .../display/mediatek/mediatek,dsi.txt         |   2 +-
  .../devicetree/bindings/mailbox/mtk-gce.txt   |  37 +-
@@ -67,7 +67,7 @@ Change-Id: Icef8a6fc06f24ff1b00af0e76819454990da8883
  59 files changed, 2797 insertions(+), 630 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-index fadf327c7cdf..bd68195458b9 100644
+index fadf327c7cdf7..bd68195458b9b 100644
 --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
 +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
 @@ -26,7 +26,7 @@ The MIPI TX configuration module controls the MIPI D-PHY.
@@ -80,7 +80,7 @@ index fadf327c7cdf..bd68195458b9 100644
  - clocks: PLL reference clock
  - clock-output-names: name of the output clock line to the DSI encoder
 diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-index 7d72b21c9e94..755b30fd6041 100644
+index 7d72b21c9e94d..755b30fd6041b 100644
 --- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
 +++ b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
 @@ -9,7 +9,7 @@ CMDQ driver uses mailbox framework for communication. Please refer to
@@ -155,7 +155,7 @@ index 7d72b21c9e94..755b30fd6041 100644
  		...
  	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-vpu.txt b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
-index 2a5bac37f9a2..015123250b82 100644
+index 2a5bac37f9a22..015123250b825 100644
 --- a/Documentation/devicetree/bindings/media/mediatek-vpu.txt
 +++ b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
 @@ -4,7 +4,7 @@ Video Processor Unit is a HW video controller. It controls HW Codec including
@@ -168,7 +168,7 @@ index 2a5bac37f9a2..015123250b82 100644
    - reg-names: Must include the following entries:
      "tcm": tcm base
 diff --git a/Documentation/devicetree/bindings/mfd/cros-ec.txt b/Documentation/devicetree/bindings/mfd/cros-ec.txt
-index 6245c9b1a68b..4860eabd0f72 100644
+index 6245c9b1a68bb..4860eabd0f729 100644
 --- a/Documentation/devicetree/bindings/mfd/cros-ec.txt
 +++ b/Documentation/devicetree/bindings/mfd/cros-ec.txt
 @@ -3,7 +3,7 @@ ChromeOS Embedded Controller
@@ -191,7 +191,7 @@ index 6245c9b1a68b..4860eabd0f72 100644
  - google,cros-ec-spi-pre-delay: Some implementations of the EC need a little
    time to wake up from sleep before they can receive SPI transfers at a high
 diff --git a/Makefile b/Makefile
-index cb22f3dc7848..520a4f465963 100644
+index cb22f3dc7848f..520a4f465963b 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -200,7 +200,7 @@ index cb22f3dc7848..520a4f465963 100644
  VERSION = 4
  PATCHLEVEL = 19
 diff --git a/README b/README
-index 2c927ccbd970..768caa3970ef 100644
+index 2c927ccbd9705..768caa3970ef9 100644
 --- a/README
 +++ b/README
 @@ -1,3 +1,4 @@
@@ -209,7 +209,7 @@ index 2c927ccbd970..768caa3970ef 100644
  ============
  
 diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index d9124842fdd0..3a55c454b65d 100644
+index d9124842fdd08..3a55c454b65dd 100644
 --- a/arch/arm64/boot/dts/mediatek/Makefile
 +++ b/arch/arm64/boot/dts/mediatek/Makefile
 @@ -9,3 +9,4 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
@@ -218,7 +218,7 @@ index d9124842fdd0..3a55c454b65d 100644
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-index 50dc1e1a6881..d9980051f9b6 100644
+index 50dc1e1a6881f..d9980051f9b68 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
 @@ -38,6 +38,10 @@
@@ -233,7 +233,7 @@ index 50dc1e1a6881..d9980051f9b6 100644
  	supply-names = "mali","mali_sram";
  	mali-supply = <&mt6358_vgpu_reg>;
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
-index 46b8f0c16d7b..9a19b9d7a8fd 100644
+index 46b8f0c16d7b2..9a19b9d7a8fdb 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 @@ -212,6 +212,17 @@
@@ -255,7 +255,7 @@ index 46b8f0c16d7b..9a19b9d7a8fd 100644
  &touchscreen {
  	reset-gpios = <&pio 156 0>;
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index f8e1c7f9f603..467bc98f551e 100644
+index f8e1c7f9f6035..467bc98f551ea 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -14,6 +14,17 @@
@@ -641,7 +641,7 @@ index f8e1c7f9f603..467bc98f551e 100644
  #include <arm/cros-ec-sbs.dtsi>
  
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 2f55a63f0bfd..eaf3be4b3568 100644
+index 2f55a63f0bfd4..eaf3be4b35689 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 @@ -6,11 +6,14 @@
@@ -1386,7 +1386,7 @@ index 2f55a63f0bfd..eaf3be4b3568 100644
  			compatible = "mediatek,mt8183-smi-larb";
  			reg = <0 0x14017000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 14dbbc992e29..86ef390d6160 100644
+index 14dbbc992e29c..86ef390d61605 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 @@ -124,6 +124,7 @@ CONFIG_COMMON_CLK_RK808=y
@@ -1472,7 +1472,7 @@ index 14dbbc992e29..86ef390d6160 100644
  CONFIG_VGA_ARB=y
  CONFIG_VGA_ARB_MAX_GPUS=16
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 30e9317390a8..cf176ec20448 100644
+index 30e9317390a8a..cf176ec20448d 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 @@ -24,6 +24,7 @@ CONFIG_ATH10K_TRACING=y
@@ -1594,7 +1594,7 @@ index 30e9317390a8..cf176ec20448 100644
 +# CONFIG_VIRTIO_NET is not set
 +# CONFIG_VIRTIO_WL is not set
 diff --git a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
-index d80920df41f9..df8dee5a9ad2 100644
+index d80920df41f92..df8dee5a9ad25 100644
 --- a/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-qualcomm.flavour.config
 @@ -43,6 +43,7 @@ CONFIG_COMMON_CLK_QCOM=y
@@ -1620,7 +1620,7 @@ index d80920df41f9..df8dee5a9ad2 100644
  CONFIG_VIDEOBUF2_MEMOPS=m
  CONFIG_VIDEOBUF2_V4L2=m
 diff --git a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
-index 80931110c50a..74542fedbd29 100644
+index 80931110c50af..74542fedbd29b 100644
 --- a/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-rockchip64.flavour.config
 @@ -546,10 +546,16 @@ CONFIG_THERMAL_WRITABLE_TRIPS=y
@@ -1641,7 +1641,7 @@ index 80931110c50a..74542fedbd29 100644
  CONFIG_USB_OHCI_HCD_PCI=y
  CONFIG_USB_PCI=y
 diff --git a/chromeos/config/arm64/common.config b/chromeos/config/arm64/common.config
-index e31977035cfe..7073cb8566dc 100644
+index e31977035cfe4..7073cb8566dc9 100644
 --- a/chromeos/config/arm64/common.config
 +++ b/chromeos/config/arm64/common.config
 @@ -161,7 +161,7 @@ CONFIG_CHARGER_CROS_USBPD=y
@@ -1654,7 +1654,7 @@ index e31977035cfe..7073cb8566dc 100644
  # CONFIG_CLK_QORIQ is not set
  # CONFIG_CLOCK_THERMAL is not set
 diff --git a/chromeos/config/armel/common.config b/chromeos/config/armel/common.config
-index 879eb506cb82..d7ddad0f26b4 100644
+index 879eb506cb82e..d7ddad0f26b48 100644
 --- a/chromeos/config/armel/common.config
 +++ b/chromeos/config/armel/common.config
 @@ -870,15 +870,21 @@ CONFIG_TIMER_PROBE=y
@@ -1680,7 +1680,7 @@ index 879eb506cb82..d7ddad0f26b4 100644
  # CONFIG_USB_STORAGE_REALTEK is not set
  CONFIG_USE_OF=y
 diff --git a/chromeos/config/base.config b/chromeos/config/base.config
-index e76dd4414e68..f9fcd8e0e4ea 100644
+index e76dd4414e689..f9fcd8e0e4eac 100644
 --- a/chromeos/config/base.config
 +++ b/chromeos/config/base.config
 @@ -3009,8 +3009,6 @@ CONFIG_USB_ARCH_HAS_HCD=y
@@ -1721,7 +1721,7 @@ index e76dd4414e68..f9fcd8e0e4ea 100644
  # CONFIG_USB_M66592 is not set
  # CONFIG_USB_MAX3421_HCD is not set
 diff --git a/chromeos/config/x86_64/common.config b/chromeos/config/x86_64/common.config
-index de448d408582..89cc91210bc5 100644
+index de448d408582c..89cc91210bc5c 100644
 --- a/chromeos/config/x86_64/common.config
 +++ b/chromeos/config/x86_64/common.config
 @@ -235,7 +235,7 @@ CONFIG_CHROMEOS=y
@@ -1756,7 +1756,7 @@ index de448d408582..89cc91210bc5 100644
  CONFIG_USB_OHCI_HCD=y
  CONFIG_USB_OHCI_HCD_PCI=y
 diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 9b8d4d7802fc..caa6c1b34aa2 100644
+index 9b8d4d7802fcb..caa6c1b34aa24 100644
 --- a/drivers/bluetooth/hci_qca.c
 +++ b/drivers/bluetooth/hci_qca.c
 @@ -535,6 +535,8 @@ static int qca_open(struct hci_uart *hu)
@@ -1769,7 +1769,7 @@ index 9b8d4d7802fc..caa6c1b34aa2 100644
  			hu->init_speed = qcadev->init_speed;
  			hu->oper_speed = qcadev->oper_speed;
 diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index 3dc1b9f15ea2..5df0e476e94d 100644
+index 3dc1b9f15ea2f..5df0e476e94d8 100644
 --- a/drivers/clk/mediatek/Makefile
 +++ b/drivers/clk/mediatek/Makefile
 @@ -44,3 +44,5 @@ obj-$(CONFIG_COMMON_CLK_MT8183_MFGCFG) += clk-mt8183-mfgcfg.o
@@ -1779,7 +1779,7 @@ index 3dc1b9f15ea2..5df0e476e94d 100644
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkdbg.o clkdbg-mt8183.o
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkchk.o clkchk-mt8183.o
 diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index 68f157b31b28..d1458b431463 100644
+index 68f157b31b289..d1458b4314630 100644
 --- a/drivers/clk/mediatek/clk-mt8183.c
 +++ b/drivers/clk/mediatek/clk-mt8183.c
 @@ -1204,13 +1204,21 @@ static int clk_mt8183_infra_probe(struct platform_device *pdev)
@@ -1806,7 +1806,7 @@ index 68f157b31b28..d1458b431463 100644
  
  static int clk_mt8183_mcu_probe(struct platform_device *pdev)
 diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
-index 37ae944548e9..8f6282ec4000 100644
+index 37ae944548e9b..8f6282ec40006 100644
 --- a/drivers/clk/mediatek/clk-mtk.h
 +++ b/drivers/clk/mediatek/clk-mtk.h
 @@ -236,4 +236,7 @@ struct clk *mtk_clk_register_ref2usb_tx(const char *name,
@@ -1818,7 +1818,7 @@ index 37ae944548e9..8f6282ec4000 100644
 +
  #endif /* __DRV_CLK_MTK_H */
 diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
-index d3551d5efef2..e6dff4db7430 100644
+index d3551d5efef24..e6dff4db74300 100644
 --- a/drivers/clk/mediatek/reset.c
 +++ b/drivers/clk/mediatek/reset.c
 @@ -27,6 +27,23 @@ struct mtk_reset {
@@ -1910,7 +1910,7 @@ index d3551d5efef2..e6dff4db7430 100644
 +}
 +
 diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
-index 82ae49c64221..8067a4be8311 100644
+index 82ae49c642211..8067a4be83115 100644
 --- a/drivers/gpu/drm/mediatek/Makefile
 +++ b/drivers/gpu/drm/mediatek/Makefile
 @@ -12,6 +12,8 @@ mediatek-drm-y := mtk_disp_color.o \
@@ -1923,7 +1923,7 @@ index 82ae49c64221..8067a4be8311 100644
  
  obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 28d5766ecb74..faea76259457 100644
+index 28d5766ecb747..faea762594579 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
 +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
 @@ -703,8 +703,8 @@ static struct platform_driver * const mtk_drm_drivers[] = {
@@ -1937,7 +1937,7 @@ index 28d5766ecb74..faea76259457 100644
  
  static int __init mtk_drm_init(void)
 diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 27b507eb4a99..5d8227c90371 100644
+index 27b507eb4a997..5d8227c90371c 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
 @@ -21,10 +21,12 @@
@@ -2444,7 +2444,7 @@ index 27b507eb4a99..5d8227c90371 100644
  	.probe = mtk_dsi_probe,
  	.remove = mtk_dsi_remove,
 diff --git a/drivers/gpu/drm/mediatek/mtk_mipi_tx.c b/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
-index 90e913108950..73d19dfb3836 100644
+index 90e913108950d..73d19dfb38365 100644
 --- a/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
 +++ b/drivers/gpu/drm/mediatek/mtk_mipi_tx.c
 @@ -11,292 +11,45 @@
@@ -2898,7 +2898,7 @@ index 90e913108950..73d19dfb3836 100644
  
  struct platform_driver mtk_mipi_tx_driver = {
 diff --git a/drivers/gpu/drm/panel/panel-innolux-p079zca.c b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
-index 88c7d035ace6..3fbc90218c5e 100644
+index 88c7d035ace66..3fbc90218c5eb 100644
 --- a/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 +++ b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 @@ -56,7 +56,7 @@ struct innolux_panel {
@@ -3115,7 +3115,7 @@ index 88c7d035ace6..3fbc90218c5e 100644
  
  	innolux->backlight = devm_of_find_backlight(dev);
 diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 841c005d8ebb..31dc4c5e37e1 100644
+index 841c005d8ebb2..31dc4c5e37e1c 100644
 --- a/drivers/mailbox/Kconfig
 +++ b/drivers/mailbox/Kconfig
 @@ -205,4 +205,22 @@ config MTK_CMDQ_MBOX
@@ -3142,7 +3142,7 @@ index 841c005d8ebb..31dc4c5e37e1 100644
 +	  You must enter the id.
  endif
 diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-index c818b5d011ae..b356e36d8f2a 100644
+index c818b5d011aef..b356e36d8f2ac 100644
 --- a/drivers/mailbox/Makefile
 +++ b/drivers/mailbox/Makefile
 @@ -44,3 +44,4 @@ obj-$(CONFIG_TEGRA_HSP_MBOX)	+= tegra-hsp.o
@@ -3151,7 +3151,7 @@ index c818b5d011ae..b356e36d8f2a 100644
  obj-$(CONFIG_MTK_CMDQ_MBOX)	+= mtk-cmdq-mailbox.o
 +obj-$(CONFIG_MTK_CMDQ_DEBUG)	+= mtk-cmdq-debug.o
 diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index aec46d5d3506..2c53ece47abd 100644
+index aec46d5d35061..2c53ece47abd7 100644
 --- a/drivers/mailbox/mtk-cmdq-mailbox.c
 +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
 @@ -15,9 +15,11 @@
@@ -3363,7 +3363,7 @@ index aec46d5d3506..2c53ece47abd 100644
  };
  
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index f8d35e3ac1dc..01cab05e7b81 100644
+index f8d35e3ac1dcc..01cab05e7b818 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
 @@ -49,25 +49,63 @@
@@ -4029,7 +4029,7 @@ index f8d35e3ac1dc..01cab05e7b81 100644
  };
  
 diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.h b/drivers/media/platform/mtk-vpu/mtk_vpu.h
-index aec0268be3d0..ca09de70ceda 100644
+index aec0268be3d01..ca09de70cedae 100644
 --- a/drivers/media/platform/mtk-vpu/mtk_vpu.h
 +++ b/drivers/media/platform/mtk-vpu/mtk_vpu.h
 @@ -100,6 +100,10 @@ enum rst_id {
@@ -4070,7 +4070,7 @@ index aec0268be3d0..ca09de70ceda 100644
 +
  #endif /* _MTK_VPU_H */
 diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
-index 63389f075f1d..4a291dabf2cc 100644
+index 63389f075f1dc..4a291dabf2ccb 100644
 --- a/drivers/memory/Kconfig
 +++ b/drivers/memory/Kconfig
 @@ -129,6 +129,15 @@ config JZ4780_NEMC
@@ -4090,7 +4090,7 @@ index 63389f075f1d..4a291dabf2cc 100644
  	bool
  	depends on ARCH_MEDIATEK || COMPILE_TEST
 diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
-index a01ab3e22f94..dbd49ba94cab 100644
+index a01ab3e22f94d..dbd49ba94cab5 100644
 --- a/drivers/memory/Makefile
 +++ b/drivers/memory/Makefile
 @@ -17,6 +17,7 @@ obj-$(CONFIG_FSL_CORENET_CF)	+= fsl-corenet-cf.o
@@ -4102,7 +4102,7 @@ index a01ab3e22f94..dbd49ba94cab 100644
  obj-$(CONFIG_DA8XX_DDRCTL)	+= da8xx-ddrctl.o
  
 diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index fef424efd65d..41eb0510e080 100644
+index fef424efd65d2..41eb0510e080d 100644
 --- a/drivers/mfd/cros_ec_dev.c
 +++ b/drivers/mfd/cros_ec_dev.c
 @@ -667,6 +667,16 @@ static int ec_device_probe(struct platform_device *pdev)
@@ -4123,7 +4123,7 @@ index fef424efd65d..41eb0510e080 100644
  	 * Add the class device
  	 * Link to the character device for creating the /dev entry
 diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-index ce8398e6f2c0..c8f3fe701ea7 100644
+index ce8398e6f2c0e..c8f3fe701ea7b 100644
 --- a/drivers/mmc/host/Makefile
 +++ b/drivers/mmc/host/Makefile
 @@ -23,7 +23,7 @@ obj-$(CONFIG_MMC_SDHCI_F_SDH30)	+= sdhci_f_sdh30.o
@@ -4136,7 +4136,7 @@ index ce8398e6f2c0..c8f3fe701ea7 100644
  obj-$(CONFIG_MMC_OMAP_HS)	+= omap_hsmmc.o
  obj-$(CONFIG_MMC_ATMELMCI)	+= atmel-mci.o
 diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 0de3749c9311..8aaa5d405987 100644
+index 0de3749c9311c..8aaa5d4059871 100644
 --- a/drivers/mmc/host/mtk-sd.c
 +++ b/drivers/mmc/host/mtk-sd.c
 @@ -39,6 +39,8 @@
@@ -4159,7 +4159,7 @@ index 0de3749c9311..8aaa5d405987 100644
  end:
  	pm_runtime_disable(host->dev);
 diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 6a4c7b488782..80a38ad0db15 100644
+index 6a4c7b4887827..80a38ad0db15a 100644
 --- a/drivers/net/wireless/ath/ath10k/core.c
 +++ b/drivers/net/wireless/ath/ath10k/core.c
 @@ -167,6 +167,32 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
@@ -4214,7 +4214,7 @@ index 6a4c7b488782..80a38ad0db15 100644
  	ret = ath10k_bmi_write32(ar, hi_dbg_uart_txpin, ar->hw_params.uart_pin);
  	if (ret) {
 diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
-index 9373a63b8646..8c86359354af 100644
+index 9373a63b86461..8c86359354afd 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_rx.c
 +++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
 @@ -2043,7 +2043,9 @@ static void ath10k_htt_rx_tx_compl_ind(struct ath10k *ar,
@@ -4229,7 +4229,7 @@ index 9373a63b8646..8c86359354af 100644
  				    tx_done.msdu_id, tx_done.status);
  			ath10k_txrx_tx_unref(htt, &tx_done);
 diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
-index f54ef2c37044..d099681da42b 100644
+index f54ef2c370441..d099681da42b6 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_tx.c
 +++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
 @@ -554,7 +554,8 @@ void ath10k_htt_tx_free(struct ath10k_htt *htt)
@@ -4277,7 +4277,7 @@ index f54ef2c37044..d099681da42b 100644
  	/* Initialize peer_id to INVALID_PEER because this is NOT
  	 * Reinjection path
 diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 70682dff865f..d863b57effdb 100644
+index 70682dff865f8..d863b57effdbe 100644
 --- a/drivers/net/wireless/ath/ath10k/hw.h
 +++ b/drivers/net/wireless/ath/ath10k/hw.h
 @@ -35,6 +35,7 @@ enum ath10k_bus {
@@ -4299,7 +4299,7 @@ index 70682dff865f..d863b57effdb 100644
  	bool rri_on_ddr;
  
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 9f631120a9be..1ea6d2dc2f29 100644
+index 9f631120a9be0..1ea6d2dc2f290 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
 @@ -2083,8 +2083,6 @@ static void ath10k_sdio_remove(struct sdio_func *func)
@@ -4312,7 +4312,7 @@ index 9f631120a9be..1ea6d2dc2f29 100644
  	ath10k_core_destroy(ar);
  }
 diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
-index f13d88906b5a..6a87bd89418c 100644
+index f13d88906b5a7..6a87bd89418cb 100644
 --- a/drivers/net/wireless/ath/ath10k/txrx.c
 +++ b/drivers/net/wireless/ath/ath10k/txrx.c
 @@ -91,7 +91,7 @@ int ath10k_txrx_tx_unref(struct ath10k_htt *htt,
@@ -4325,7 +4325,7 @@ index f13d88906b5a..6a87bd89418c 100644
  	spin_unlock_bh(&htt->tx_lock);
  
 diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index 893940d45f0d..27079acc3e1d 100644
+index 893940d45f0d0..27079acc3e1d9 100644
 --- a/drivers/pwm/pwm-mtk-disp.c
 +++ b/drivers/pwm/pwm-mtk-disp.c
 @@ -106,13 +106,13 @@ static int mtk_disp_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
@@ -4457,7 +4457,7 @@ index 893940d45f0d..27079acc3e1d 100644
  };
  MODULE_DEVICE_TABLE(of, mtk_disp_pwm_of_match);
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index f0abd2608044..01182936f4fa 100644
+index f0abd26080447..01182936f4fa8 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -22,6 +22,16 @@ config IMX_REMOTEPROC
@@ -4478,7 +4478,7 @@ index f0abd2608044..01182936f4fa 100644
  	tristate "OMAP remoteproc support"
  	depends on ARCH_OMAP4 || SOC_OMAP5
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index ce5d061e92be..16b3e5e7a81c 100644
+index ce5d061e92be5..16b3e5e7a81c8 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
 @@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_sysfs.o
@@ -4490,7 +4490,7 @@ index ce5d061e92be..16b3e5e7a81c 100644
  obj-$(CONFIG_WKUP_M3_RPROC)		+= wkup_m3_rproc.o
  obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
 diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index d0322b41eca5..85e3cc075cb4 100644
+index d0322b41eca54..85e3cc075cb47 100644
 --- a/drivers/rpmsg/Kconfig
 +++ b/drivers/rpmsg/Kconfig
 @@ -15,6 +15,15 @@ config RPMSG_CHAR
@@ -4510,7 +4510,7 @@ index d0322b41eca5..85e3cc075cb4 100644
  	tristate
  	select RPMSG
 diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
-index 9aa859502d27..ae92a7fb08f6 100644
+index 9aa859502d275..ae92a7fb08f62 100644
 --- a/drivers/rpmsg/Makefile
 +++ b/drivers/rpmsg/Makefile
 @@ -1,6 +1,7 @@
@@ -4522,7 +4522,7 @@ index 9aa859502d27..ae92a7fb08f6 100644
  obj-$(CONFIG_RPMSG_QCOM_GLINK_NATIVE) += qcom_glink_native.o
  obj-$(CONFIG_RPMSG_QCOM_GLINK_SMEM) += qcom_glink_smem.o
 diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index ff9fef5a032b..317ec441ad60 100644
+index ff9fef5a032b3..317ec441ad609 100644
 --- a/drivers/soc/mediatek/mtk-cmdq-helper.c
 +++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
 @@ -9,17 +9,109 @@
@@ -4813,7 +4813,7 @@ index ff9fef5a032b..317ec441ad60 100644
  	return err;
  }
 diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index c3f933d10295..2c7593702954 100644
+index c3f933d10295e..2c75937029543 100644
 --- a/drivers/tty/serial/8250/8250_mtk.c
 +++ b/drivers/tty/serial/8250/8250_mtk.c
 @@ -1,11 +1,23 @@
@@ -5465,7 +5465,7 @@ index c3f933d10295..2c7593702954 100644
  static const struct dev_pm_ops mtk8250_pm_ops = {
  	SET_SYSTEM_SLEEP_PM_OPS(mtk8250_suspend, mtk8250_resume)
 diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
-index 48d10a61e271..542b67a6b5a6 100644
+index 48d10a61e271c..542b67a6b5a65 100644
 --- a/drivers/usb/mtu3/mtu3_core.c
 +++ b/drivers/usb/mtu3/mtu3_core.c
 @@ -94,6 +94,7 @@ static int mtu3_device_enable(struct mtu3 *mtu)
@@ -5525,7 +5525,7 @@ index 48d10a61e271..542b67a6b5a6 100644
  	dev_info(mtu->dev, "IP version 0x%x(%s IP)\n", mtu->hw_version,
  		mtu->is_u3_ip ? "U3" : "U2");
 diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
-index ac60e9c8564e..7660d107e5bc 100644
+index ac60e9c8564e2..7660d107e5bcc 100644
 --- a/drivers/usb/mtu3/mtu3_dr.c
 +++ b/drivers/usb/mtu3/mtu3_dr.c
 @@ -401,7 +401,7 @@ void ssusb_set_force_mode(struct ssusb_mtk *ssusb,
@@ -5538,7 +5538,7 @@ index ac60e9c8564e..7660d107e5bc 100644
  	case MTU3_DR_FORCE_NONE:
  		value &= ~(SSUSB_U2_PORT_FORCE_IDDIG | SSUSB_U2_PORT_RG_IDDIG);
 diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
-index ccb73422c2fa..1dfd5ed5c8c5 100644
+index ccb73422c2fa2..1dfd5ed5c8c52 100644
 --- a/include/linux/mailbox/mtk-cmdq-mailbox.h
 +++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
 @@ -19,6 +19,10 @@
@@ -5561,7 +5561,7 @@ index ccb73422c2fa..1dfd5ed5c8c5 100644
  	CMDQ_CODE_WFE = 0x20,
  	CMDQ_CODE_EOC = 0x40,
 diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-index 00443e4ed9b7..f84e71c586e2 100644
+index 00443e4ed9b73..f84e71c586e23 100644
 --- a/include/linux/mfd/cros_ec.h
 +++ b/include/linux/mfd/cros_ec.h
 @@ -28,6 +28,7 @@
@@ -5573,7 +5573,7 @@ index 00443e4ed9b7..f84e71c586e2 100644
  /*
   * The EC is unresponsive for a time after a reboot command.  Add a
 diff --git a/include/linux/mfd/cros_ec_commands.h b/include/linux/mfd/cros_ec_commands.h
-index 41cb61a17fb8..ff095219165a 100644
+index 41cb61a17fb81..ff095219165ad 100644
 --- a/include/linux/mfd/cros_ec_commands.h
 +++ b/include/linux/mfd/cros_ec_commands.h
 @@ -1299,6 +1299,16 @@ enum ec_feature_code {
@@ -5594,7 +5594,7 @@ index 41cb61a17fb8..ff095219165a 100644
  	EC_FEATURE_ISH = 40,
  };
 diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
-index 54ade13a9b15..15884354af20 100644
+index 54ade13a9b157..15884354af20a 100644
 --- a/include/linux/soc/mediatek/mtk-cmdq.h
 +++ b/include/linux/soc/mediatek/mtk-cmdq.h
 @@ -13,11 +13,14 @@
@@ -5711,7 +5711,7 @@ index 54ade13a9b15..15884354af20 100644
 +
  #endif	/* __MTK_CMDQ_H__ */
 diff --git a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
-index 1bc0fafe5e29..d569157fe945 100644
+index 1bc0fafe5e290..d569157fe9457 100644
 --- a/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-afe-pcm.c
 @@ -955,6 +955,20 @@ static irqreturn_t mt8183_afe_irq_handler(int irq_id, void *dev)
@@ -5745,5 +5745,5 @@ index 1bc0fafe5e29..d569157fe945 100644
  			   mt8183_afe_runtime_resume, NULL)
  };
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.22.0.rc1.257.g3120a18244-goog
 

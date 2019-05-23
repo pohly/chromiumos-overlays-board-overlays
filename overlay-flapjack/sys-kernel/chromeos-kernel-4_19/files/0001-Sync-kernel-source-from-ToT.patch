@@ -1,9 +1,9 @@
-From d1b88f158f322059f1a81e9b4e16aeb30400109a Mon Sep 17 00:00:00 2001
+From 4e88bd3ef30aebf2aa6f603182a6927bf6d43c62 Mon Sep 17 00:00:00 2001
 From: YH Lin <yueherngl@google.com>
-Date: Thu, 9 May 2019 11:17:01 -0700
-Subject: [PATCH 1/7] Sync kernel source from ToT.
+Date: Wed, 22 May 2019 07:58:28 -0700
+Subject: [PATCH 1/8] Sync kernel source from ToT.
 
-Change-Id: I545a9f56ac1f03308165713ee1f071ed816bfcfc
+Change-Id: I518214d8365734183974b2be5a7e14aa57edf297
 ---
  .../bindings/net/qualcomm-bluetooth.txt       |  2 ++
  .../mach-rockchip/embedded/rk3288_resume.c    | 10 +++++-----
@@ -15,7 +15,7 @@ Change-Id: I545a9f56ac1f03308165713ee1f071ed816bfcfc
  7 files changed, 51 insertions(+), 17 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt b/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt
-index 824c0e23c544..2bcea50fe88d 100644
+index 824c0e23c5443..2bcea50fe88d6 100644
 --- a/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt
 +++ b/Documentation/devicetree/bindings/net/qualcomm-bluetooth.txt
 @@ -16,6 +16,7 @@ Optional properties for compatible string qcom,qca6174-bt:
@@ -35,7 +35,7 @@ index 824c0e23c544..2bcea50fe88d 100644
  };
  
 diff --git a/arch/arm/mach-rockchip/embedded/rk3288_resume.c b/arch/arm/mach-rockchip/embedded/rk3288_resume.c
-index bf187b9f0291..090dbb451429 100644
+index bf187b9f0291d..090dbb451429c 100644
 --- a/arch/arm/mach-rockchip/embedded/rk3288_resume.c
 +++ b/arch/arm/mach-rockchip/embedded/rk3288_resume.c
 @@ -58,31 +58,31 @@ static void __noreturn rk3288_resume_c(void)
@@ -76,7 +76,7 @@ index bf187b9f0291..090dbb451429 100644
  
  	if (rk3288_resume_params.ddr_resume_f)
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 77357ae4ebbe..2f55a63f0bfd 100644
+index 77357ae4ebbe7..2f55a63f0bfd4 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 @@ -414,6 +414,17 @@
@@ -98,7 +98,7 @@ index 77357ae4ebbe..2f55a63f0bfd 100644
  			compatible = "mediatek,mt8183-i2c";
  			reg = <0 0x1100f000 0 0x1000>,
 diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
-index 013fe3d21dbb..2ec202cb9dfd 100644
+index 013fe3d21dbb3..2ec202cb9dfd4 100644
 --- a/arch/x86/kernel/kvmclock.c
 +++ b/arch/x86/kernel/kvmclock.c
 @@ -117,12 +117,8 @@ static u64 kvm_sched_clock_read(void)
@@ -116,7 +116,7 @@ index 013fe3d21dbb..2ec202cb9dfd 100644
  	pv_time_ops.sched_clock = kvm_sched_clock_read;
  
 diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index 612268574fc7..645a89313960 100644
+index 612268574fc78..645a893139603 100644
 --- a/drivers/bluetooth/btqca.c
 +++ b/drivers/bluetooth/btqca.c
 @@ -332,7 +332,8 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
@@ -148,7 +148,7 @@ index 612268574fc7..645a89313960 100644
  	err = qca_download_firmware(hdev, &config);
  	if (err < 0) {
 diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index c72c56ea7480..e1fd0b0f0b15 100644
+index c72c56ea74808..e1fd0b0f0b15f 100644
 --- a/drivers/bluetooth/btqca.h
 +++ b/drivers/bluetooth/btqca.h
 @@ -139,7 +139,8 @@ enum qca_btsoc_type {
@@ -172,7 +172,7 @@ index c72c56ea7480..e1fd0b0f0b15 100644
  	return -EOPNOTSUPP;
  }
 diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 4ea995d610d2..9b8d4d7802fc 100644
+index 4ea995d610d25..9b8d4d7802fcb 100644
 --- a/drivers/bluetooth/hci_qca.c
 +++ b/drivers/bluetooth/hci_qca.c
 @@ -168,6 +168,7 @@ struct qca_serdev {
@@ -230,5 +230,5 @@ index 4ea995d610d2..9b8d4d7802fc 100644
  		if (IS_ERR(qcadev->susclk)) {
  			dev_err(&serdev->dev, "failed to acquire clk\n");
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.22.0.rc1.257.g3120a18244-goog
 

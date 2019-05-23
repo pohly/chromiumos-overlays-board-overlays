@@ -1,32 +1,19 @@
-From a887a1577f6ca6003141a75084f5d6c2c8019200 Mon Sep 17 00:00:00 2001
-From: jjian zhou <jjian.zhou@mediatek.com>
-Date: Fri, 26 Apr 2019 11:12:06 +0800
-Subject: [PATCH 7/7] CHROMIUM: arm64: dts: mt8183-kukui: add wifi power
+From 314a000a040c368f5a15b32cf936b0425b0f31b1 Mon Sep 17 00:00:00 2001
+From: YH Lin <yueherngl@google.com>
+Date: Wed, 22 May 2019 08:45:25 -0700
+Subject: [PATCH 7/8] CHROMIUM: arm64: dts: mt8183-kukui: add wifi power
  controller
 
-To comply with schematic design, remove gpio119 from
-mmc1_fixed_power and add it back as wlan_en pin in
-mmc1default. msdcpll is only for mmc module. Assign
-msdcpll to mmc1 clk for avoiding unexpected changes.
-
-BUG=b:131043339
-TEST=Cherry-pick and update kernel with
-     https://crrev.com/c/1585667. Make sure SDIO clk
-     is running at 200MHz correctly by checking
-     /sys/kernel/debug/mmc1/ios
-
-Change-Id: I325df93ae939e929618f7234f18c674cce4e4138
-Signed-off-by: jjian zhou <jjian.zhou@mediatek.com>
-Signed-off-by: Ayo Wu <ayowu@chromium.org>
+Change-Id: Ie8ce1132c29a2026ede186d4f5e0ee97714e477b
 ---
  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 22 ++++++++++++++++---
  1 file changed, 19 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 0bf7b3c081bf..21f30d0e00b5 100644
+index c0ae93c5aac83..ae21a9a0f7098 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -68,6 +68,20 @@
+@@ -82,6 +82,20 @@
  		enable-active-high;
  	};
  
@@ -47,7 +34,7 @@ index 0bf7b3c081bf..21f30d0e00b5 100644
  	reserved_memory: reserved-memory {
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -392,8 +406,8 @@
+@@ -407,8 +421,8 @@
  	pinctrl-names = "default", "state_uhs";
  	pinctrl-0 = <&mmc1_pins_default>;
  	pinctrl-1 = <&mmc1_pins_uhs>;
@@ -58,7 +45,7 @@ index 0bf7b3c081bf..21f30d0e00b5 100644
  	bus-width = <4>;
  	max-frequency = <200000000>;
  	drv-type = <2>;
-@@ -406,6 +420,8 @@
+@@ -421,6 +435,8 @@
  	non-removable;
  	no-mmc;
  	no-sd;
@@ -67,7 +54,7 @@ index 0bf7b3c081bf..21f30d0e00b5 100644
  };
  
  &mt6358_vdram2_reg {
-@@ -716,7 +732,7 @@
+@@ -754,7 +770,7 @@
  			mediatek,pull-down-adv = <10>;
  		};
  
@@ -77,5 +64,5 @@ index 0bf7b3c081bf..21f30d0e00b5 100644
  			output-high;
  		};
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.22.0.rc1.257.g3120a18244-goog
 

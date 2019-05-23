@@ -1,13 +1,9 @@
-From 9e8f15e4951e6204582db864c06bb50daeff1272 Mon Sep 17 00:00:00 2001
-From: Dongchun Zhu <dongchun.zhu@mediatek.com>
-Date: Tue, 26 Mar 2019 14:27:17 +0800
-Subject: [PATCH 4/7] TEST-ONLY: Bringup Giant sensor OV02A10
+From 4f6a8b06a3292fd7d21ac233e74ce3b57156de4a Mon Sep 17 00:00:00 2001
+From: YH Lin <yueherngl@google.com>
+Date: Wed, 22 May 2019 08:02:12 -0700
+Subject: [PATCH 4/8] TEST-ONLY: Bringup Giant sensor OV02A10
 
-1. Add ov02a10 driver
-2. Update board device tree for HW change
-
-Change-Id: I3109722c70147bfd3140623a472aac595010a890
-Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
+Change-Id: I8674e0aca6dafb88246bc9181acbc68312f14b8b
 ---
  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   20 +-
  .../arm64/chromiumos-arm64.flavour.config     |    2 +-
@@ -19,7 +15,7 @@ Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
  create mode 100644 drivers/media/i2c/ov02a10.c
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index b2fd77e04164..fc61d7d25af5 100644
+index b2fd77e04164c..fc61d7d25af5f 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -228,7 +228,7 @@
@@ -92,7 +88,7 @@ index b2fd77e04164..fc61d7d25af5 100644
  	};
  
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 4a054df0d6cb..065254f44892 100644
+index 4a054df0d6cb1..065254f448922 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 @@ -1013,8 +1013,8 @@ CONFIG_VIDEO_MEDIATEK_MDP3=y
@@ -106,7 +102,7 @@ index 4a054df0d6cb..065254f44892 100644
  # CONFIG_VIDEO_PVRUSB2 is not set
  # CONFIG_VIDEO_QCOM_CAMSS is not set
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 74855922e1c7..1dec1fdc2932 100644
+index 74855922e1c74..1dec1fdc29321 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 @@ -284,8 +284,8 @@ CONFIG_VIDEO_MEDIATEK_MDP3=y
@@ -120,7 +116,7 @@ index 74855922e1c7..1dec1fdc2932 100644
  # CONFIG_VIDEO_STK1160_COMMON is not set
  # CONFIG_VIDEO_TM6000 is not set
 diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 7f6e4d35d985..3719036912b7 100644
+index 7f6e4d35d9851..3719036912b7e 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
 @@ -43,6 +43,18 @@ config VIDEO_OV5695
@@ -143,7 +139,7 @@ index 7f6e4d35d985..3719036912b7 100644
  # Encoder / Decoder module configuration
  #
 diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index a94eb03d10d4..e2673e0e73d8 100644
+index a94eb03d10d4e..e2673e0e73d82 100644
 --- a/drivers/media/i2c/Makefile
 +++ b/drivers/media/i2c/Makefile
 @@ -72,6 +72,7 @@ obj-$(CONFIG_VIDEO_OV5645) += ov5645.o
@@ -156,7 +152,7 @@ index a94eb03d10d4..e2673e0e73d8 100644
  obj-$(CONFIG_VIDEO_OV7640) += ov7640.o
 diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
 new file mode 100644
-index 000000000000..e1cd303e8a21
+index 0000000000000..e1cd303e8a21d
 --- /dev/null
 +++ b/drivers/media/i2c/ov02a10.c
 @@ -0,0 +1,1055 @@
@@ -1216,5 +1212,5 @@ index 000000000000..e1cd303e8a21
 +MODULE_LICENSE("GPL v2");
 +
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.22.0.rc1.257.g3120a18244-goog
 
