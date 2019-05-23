@@ -32,3 +32,6 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7260 ibt-hw fw_sst"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
+
+# Enable background blur.
+USE="${USE} background_blur"
