@@ -28,3 +28,6 @@ TTY_CONSOLE="ttyS1"
 
 # All firmware to build from the EC code base.
 EC_FIRMWARE="dragonegg"
+
+# Enable background blur.
+USE="${USE} background_blur"
