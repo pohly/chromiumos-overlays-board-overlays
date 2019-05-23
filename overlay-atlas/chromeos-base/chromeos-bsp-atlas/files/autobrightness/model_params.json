@@ -1,5 +1,6 @@
 {
   "auto_brightness_als_horizon_seconds": 4,
+  "enabled": true,
   "global_curve": {
     "log_lux": [
       3.69,
