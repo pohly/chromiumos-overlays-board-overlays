@@ -17,11 +17,6 @@ modify_kernel_command_line() {
   # https://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Which-kernel-
   sed -i -e 's/cros_secure/cros_efi/g' "${config_file}"
 
-  # Add vsyscall=emulate to command-line. Chromeos kernel defaults to
-  # vsyscall=none, but Lakitu users can run containers with old glibc which has
-  # dependency on vsyscall.
-  echo "vsyscall=emulate" >> "${config_file}"
-
   # Enable AppArmor by default.
   echo "security=apparmor" >> "${config_file}"
 
