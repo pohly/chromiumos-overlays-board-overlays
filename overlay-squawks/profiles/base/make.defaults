@@ -34,3 +34,6 @@ USE="${USE} -unibuild"
 
 # Uncomment this line to activate the serial port.
 #TTY_CONSOLE="ttyS0"
+
+# Enable background blur.
+USE="${USE} background_blur"
