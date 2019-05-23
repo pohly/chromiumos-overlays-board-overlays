@@ -26,3 +26,6 @@ INPUT_DEVICES="wacom pixart"
 # Uncomment these lines to activate the serial port.
 #TTY_CONSOLE="ttyS2"
 #USE="${USE} pcserial"
+
+# Enable background blur.
+USE="${USE} background_blur"
