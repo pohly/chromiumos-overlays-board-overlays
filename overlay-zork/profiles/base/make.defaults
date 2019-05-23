@@ -37,3 +37,6 @@ USE="${USE} -cros_ec_utils"
 
 # With amdgpu support.
 USE="${USE} builtin_fw_amdgpu"
+
+# Enable background blur.
+USE="${USE} background_blur"
