@@ -261,9 +261,13 @@ Options=$(stateful_mount_options)
 # Args:
 # device: The device to mount.
 # output_dir: The directory to output the unit to.
+# enable_dir[Optional]: The directory containing the symlink
+# to the output unit for enabling the output unit. It should
+# be an absolute path.
 gen_logs_mount() {
   local -r device="$1"
   local -r output_dir="$2"
+  local -r enable_dir="$3"
   echo "
 [Unit]
 Before=local-fs.target systemd-journal-flush.service
@@ -278,6 +282,12 @@ Where=/var/log
 Type=ext4
 Options=$(stateful_mount_options)
 " > "${output_dir}/var-log.mount"
+
+  if [[ -n "${enable_dir}" ]]; then
+    # Creating symlink as required by systemd-239
+    ln -s "${output_dir}/var-log.mount" \
+       "${enable_dir}/var-log.mount"
+  fi
 }
 
 main() {
@@ -292,7 +302,8 @@ main() {
   gen_stateful_partition_mount "${FS_FORMAT_STATE}" "${MKFS_STATEFUL}" \
     "${output_root}" "${output_root}/local-fs.target.wants"
   if [[ -n "${LOGS_DEV}" ]]; then
-    gen_logs_mount "${LOGS_DEV}" "${output_root}/local-fs.target.wants"
+    gen_logs_mount "${LOGS_DEV}" "${output_root}" \
+      "${output_root}/local-fs.target.wants"
   fi
 }
 
