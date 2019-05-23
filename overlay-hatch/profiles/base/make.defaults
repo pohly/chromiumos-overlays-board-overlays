@@ -29,3 +29,6 @@ USE="${USE} keyboard_includes_side_buttons"
 
 # Enable background blur.
 USE="${USE} background_blur"
+
+# Enable next (up)rev of wpa_supplicant
+USE="${USE} wpa_supplicant_next"
