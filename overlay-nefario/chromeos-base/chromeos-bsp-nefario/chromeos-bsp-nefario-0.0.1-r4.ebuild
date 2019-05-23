@@ -1,1 +1,0 @@
-chromeos-bsp-nefario-0.0.1.ebuild
