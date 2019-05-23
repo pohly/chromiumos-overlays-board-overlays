@@ -41,3 +41,6 @@ USE="${USE} keyboard_includes_side_buttons"
 
 #Include the wacom firmware updating tool
 INPUT_DEVICES="wacom"
+
+# Enable background blur.
+USE="${USE} background_blur"
