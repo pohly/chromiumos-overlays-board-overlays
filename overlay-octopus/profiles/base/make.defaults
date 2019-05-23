@@ -26,3 +26,6 @@ INPUT_DEVICES="wacom"
 INPUT_DEVICES="${INPUT_DEVICES} weida"
 # Include the goodix firmware updating tool
 INPUT_DEVICES="${INPUT_DEVICES} goodix"
+
+# Enable background blur.
+USE="${USE} background_blur"
