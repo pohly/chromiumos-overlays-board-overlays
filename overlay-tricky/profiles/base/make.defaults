@@ -26,3 +26,6 @@ USE="${USE} tpm_slb9655"
 USE="${USE} -unibuild"
 
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7260 ibt-hw"
+
+# Enable background blur.
+USE="${USE} background_blur"
