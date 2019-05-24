@@ -63,3 +63,10 @@ chromeos:
       skus:
         - $sku-id: 255
           config: *common_config
+    - $device-name: "kindred"
+      $fw-name: "Kindred"
+      products:
+        - $key-id: "HATCH"
+      skus:
+        - $sku-id: 255
+          config: *common_config
