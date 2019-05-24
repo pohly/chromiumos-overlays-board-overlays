@@ -3,7 +3,7 @@
 
 EAPI=5
 
-DESCRIPTION="Chrome OS Model configuration package for coral"
+DESCRIPTION="Chrome OS Model configuration package for octopus"
 HOMEPAGE="http://src.chromium.org"
 
 LICENSE="BSD-Google"
