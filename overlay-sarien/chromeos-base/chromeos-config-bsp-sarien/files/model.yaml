@@ -15,8 +15,8 @@ common_config: &common_config
     is-lid-convertible: "{{$is-lid-convertible-val}}"
     has-lid-accelerometer: "{{$has-lid-accelerometer-val}}"
     has-base-accelerometer: "{{$has-base-accelerometer-val}}"
-    has-base-gyroscope: "{{$has-base-gyroscope-val}}"
-    has-base-magnetometer: "{{$has-base-magnetometer-val}}"
+    has-lid-gyroscope: "{{$has-lid-gyroscope-val}}"
+    has-lid-magnetometer: "{{$has-lid-magnetometer-val}}"
     has-touchscreen: "{{$has-touchscreen-val}}"
   audio:
     main:
@@ -63,8 +63,8 @@ chromeos:
       $is-lid-convertible-val: False
       $has-lid-accelerometer-val: False
       $has-base-accelerometer-val: False
-      $has-base-gyroscope-val: False
-      $has-base-magnetometer-val: False
+      $has-lid-gyroscope-val: False
+      $has-lid-magnetometer-val: False
       $has-touchscreen-val: True
       skus:
         - $sku-id: 1
@@ -76,8 +76,8 @@ chromeos:
       $is-lid-convertible-val: True
       $has-lid-accelerometer-val: True
       $has-base-accelerometer-val: True
-      $has-base-gyroscope-val: True
-      $has-base-magnetometer-val: True
+      $has-lid-gyroscope-val: True
+      $has-lid-magnetometer-val: True
       $has-touchscreen-val: True
       skus:
         - $sku-id: 2

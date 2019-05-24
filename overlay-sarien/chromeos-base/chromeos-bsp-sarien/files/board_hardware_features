@@ -30,24 +30,20 @@ disable_feature() {
   modify_feature "$@" "<feature " "<unavailable-feature "
 }
 
+has_hardware_property() {
+  [ "$(/usr/bin/cros_config /hardware-properties $1)" = "true" ]
+}
+
 has_accelerometer() {
-  local has_base_accelerometer
-  has_base_accelerometer="$(/usr/bin/cros_config /hardware-properties has-base-accelerometer)"
-  local has_lid_accelerometer
-  has_lid_accelerometer="$(/usr/bin/cros_config /hardware-properties has-lid-accelerometer)"
-  [ "${has_base_accelerometer}" = "true" ] || [ "${has_lid_accelerometer}" = "true" ]
+  has_hardware_property has-base-accelerometer || has_hardware_property has-lid-accelerometer
 }
 
 has_gyro() {
-  local has_base_gyroscope
-  has_base_gyroscope="$(/usr/bin/cros_config /hardware-properties has-base-gyroscope)"
-  [ "${has_base_gyroscope}" = "true" ]
+  has_hardware_property has-base-gyroscope || has_hardware_property has-lid-gyroscope
 }
 
 has_compass() {
-  local has_base_magnetometer
-  has_base_magnetometer="$(/usr/bin/cros_config /hardware-properties has-base-magnetometer)"
-  [ "${has_base_magnetometer}" = "true" ]
+  has_hardware_property has-base-magnetometer || has_hardware_property has-lid-magnetometer
 }
 
 has_multicamera() {
@@ -57,9 +53,7 @@ has_multicamera() {
 }
 
 has_touchscreen() {
-  local has_touchscreen
-  has_touchscreen="$(/usr/bin/cros_config /hardware-properties has-touchscreen)"
-  [ "${has_touchscreen}" = "true" ]
+  has_hardware_property has-touchscreen
 }
 
 main() {
