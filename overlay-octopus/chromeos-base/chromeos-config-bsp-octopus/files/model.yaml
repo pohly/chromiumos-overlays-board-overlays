@@ -458,3 +458,21 @@ chromeos:
         - $sku-id-val: 52
           $stylus-category: "external"
           config: *convertible_config
+    # This is a temporary model with SKU ID - 255 which is expected to be
+    # provisioned with correct SKU ID in the factory flow. And HWID verification
+    # will also catch the DUT still with 255 and report error.
+    - $device-name: "unprovisioned_garg"
+      skus:
+        - $sku-id-val: 255
+          $fw-name: "Garg"
+          config: *unprovisioned_convertible_config
+    - $device-name: "garg"
+      $fw-name: "Garg"
+      $num-mic-locations: 1
+      skus:
+        - $sku-id-val: 1
+          config: *clamshell_config
+        - $sku-id-val: 9
+          config: *clamshell_config
+        - $sku-id-val: 17
+          config: *clamshell_config
