@@ -57,4 +57,8 @@ src_install() {
 	# Install device-specific automatic brightness model parameters.
 	insinto "/usr/share/chromeos-assets/autobrightness"
 	doins "${FILESDIR}/autobrightness/model_params.json"
+
+	# Install device-specific custom dptf profile.
+	insinto "/etc/dptf"
+	doins "${FILESDIR}"/dptf/*
 }
