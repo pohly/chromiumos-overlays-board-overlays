@@ -10,17 +10,16 @@ audio_common: &audio_common
   $card: "acpd7219m98357"
 
   cras-config-dir: "{{$audio-config}}"
-  ucm-suffix: "{{$audio-config}}"
 
   files:
     - source: "cras-config/{{cras-config-dir}}/{{$card}}"
       destination: "{{$cras_root}}/{{cras-config-dir}}/{{$card}}"
     - source: "cras-config/{{cras-config-dir}}/dsp.ini"
       destination: "{{$cras_root}}/{{cras-config-dir}}/dsp.ini"
-    - source: "ucm-config/{{$card}}.{{ucm-suffix}}/HiFi.conf"
-      destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/HiFi.conf"
-    - source: "ucm-config/{{$card}}.{{ucm-suffix}}/{{$card}}.{{ucm-suffix}}.conf"
-      destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/{{$card}}.{{ucm-suffix}}.conf"
+    - source: "ucm-config/{{$card}}/HiFi.conf"
+      destination: "{{$ucm_root}}/{{$card}}/HiFi.conf"
+    - source: "ucm-config/{{$card}}/{{$card}}.conf"
+      destination: "{{$ucm_root}}/{{$card}}/{{$card}}.conf"
 
 touch_common: &touch_common
   $touch_present: "no"
