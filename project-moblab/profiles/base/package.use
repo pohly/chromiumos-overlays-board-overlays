@@ -16,8 +16,10 @@ app-emulation/docker -aufs -device-mapper overlay
 
 app-emulation/containerd -btrfs
 
-dev-db/mariadb -backup -sst-mariabackup -sst-xtrabackup -systemd -jdbc
+dev-db/mariadb  -backup -sst-mariabackup -sst-xtrabackup -systemd -jdbc yassl
 
 chromeos-base/autotest-all -bluetooth -buffet -cheets -cras -cros_disks -cros_p2p -debugd -kvm_host -peerd -power_management -shill -tpm2 -tpm
 
 chromeos-base/autotest-server -tests_graphics_WebGLAquarium -graphics_WebGLManyPlanetsDeep
+
+dev-db/mariadb-connector-c mysqlcompat
