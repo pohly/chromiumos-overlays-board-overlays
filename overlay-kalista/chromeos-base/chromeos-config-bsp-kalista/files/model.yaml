@@ -51,6 +51,7 @@ device_config: &device_config
     # Max brightness is 7500, as reported by
     # /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/max_brightness
     min-visible-backlight-level: "2250"
+    turn-off-screen-timeout-ms: "0"
 
 
 chromeos:
