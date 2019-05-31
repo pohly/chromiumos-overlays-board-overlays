@@ -13,7 +13,7 @@ KEYWORDS="*"
 S=${WORKDIR}/${P}-glk
 
 src_install() {
-	insinto /lib/firmware/intel
+	insinto /lib/firmware/intel/sof
 	doins sof-glk.ri
 	dodoc README
 }
