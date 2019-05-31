@@ -19,7 +19,7 @@ IUSE=""
 S="${WORKDIR}"/"${TARBALL_NAME}"
 
 src_install() {
-	insinto /lib/firmware/intel
+	insinto /lib/firmware/intel/sof-tplg
 	doins *.tplg
 	dodoc README
 }
