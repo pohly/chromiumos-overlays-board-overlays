@@ -30,5 +30,8 @@ USE="${USE} -touchpad_wakeup"
 # unified builds.
 USE="${USE} -unibuild"
 
+# Enable usbip
+USE="${USE} usbip"
+
 # Declare set of enabled consoles
 #TTY_CONSOLE="ttyS0"
