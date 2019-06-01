@@ -24,6 +24,8 @@ USE="${USE} biod"
 # Include the goodix firmware updating tool
 INPUT_DEVICES="goodix"
 
+# Avoid inhibiting the keyboard (which reports events from side buttons).
+USE="${USE} keyboard_includes_side_buttons"
 
 # Enable background blur.
 USE="${USE} background_blur"
