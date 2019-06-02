@@ -23,10 +23,9 @@ modify_kernel_command_line() {
   # Turn on tx napi for the virtio_net driver.
   echo "virtio_net.napi_tx=1" >> "${config_file}"
 
-  # Tell systemd to not use unified cgroup hierarchy (cgroups-v2) yet for
-  # anything.
+  # Enable cgroup-v2 hybrid mode
   echo "systemd.unified_cgroup_hierarchy=false" >> "${config_file}"
-  echo "systemd.legacy_systemd_cgroup_controller=true" >> "${config_file}"
+  echo "systemd.legacy_systemd_cgroup_controller=false" >> "${config_file}"
 
   # Disable Container Security Monitor by default.
   echo "csm.disabled=1" >> "${config_file}"
