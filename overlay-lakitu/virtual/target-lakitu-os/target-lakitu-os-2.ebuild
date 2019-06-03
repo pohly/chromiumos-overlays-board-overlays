@@ -48,6 +48,7 @@ LAKITU_RDEPEND="
 		sys-kernel/dump-capture-kernel
 	)
 	net-analyzer/netcat
+	net-firewall/conntrack-tools
 	net-firewall/ebtables
 	net-fs/autofs
 	net-misc/bridge-utils
