@@ -80,3 +80,9 @@ chromeos:
             power:
               << : *power_common
               $internal-backlight-no-als-battery-brightness: "62.5"
+        - $sku-id: 0x2861  # non-touch
+          config:
+            <<: *common_config
+            power:
+              << : *power_common
+              $internal-backlight-no-als-battery-brightness: "62.5"
