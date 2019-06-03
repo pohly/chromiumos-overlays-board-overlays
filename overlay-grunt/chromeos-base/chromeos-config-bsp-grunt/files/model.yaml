@@ -4,6 +4,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+audio_common: &audio_common
+  $cras_root: "/etc/cras"
+  $ucm_root: "/usr/share/alsa/ucm"
+  $card: "acpd7219m98357"
+
+  cras-config-dir: "{{$audio-config}}"
+  ucm-suffix: "{{$audio-config}}"
+
+  files:
+    - source: "cras-config/{{cras-config-dir}}/{{$card}}"
+      destination: "{{$cras_root}}/{{cras-config-dir}}/{{$card}}"
+    - source: "cras-config/{{cras-config-dir}}/dsp.ini"
+      destination: "{{$cras_root}}/{{cras-config-dir}}/dsp.ini"
+    - source: "ucm-config/{{$card}}.{{ucm-suffix}}/HiFi.conf"
+      destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/HiFi.conf"
+    - source: "ucm-config/{{$card}}.{{ucm-suffix}}/{{$card}}.{{ucm-suffix}}.conf"
+      destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/{{$card}}.{{ucm-suffix}}.conf"
+
 touch_common: &touch_common
   $touch_present: "no"
   present: "{{$touch_present}}"
@@ -29,23 +47,7 @@ base_config: &base_config
       first-api-level: "28"
       metrics-tag: "{{$device-name}}"
   audio:
-    main:
-      $cras_root: "/etc/cras"
-      $ucm_root: "/usr/share/alsa/ucm"
-      $card: "acpd7219m98357"
-
-      cras-config-dir: "{{$audio-config}}"
-      ucm-suffix: "{{$audio-config}}"
-
-      files:
-        - source: "cras-config/{{cras-config-dir}}/{{$card}}"
-          destination: "{{$cras_root}}/{{cras-config-dir}}/{{$card}}"
-        - source: "cras-config/{{cras-config-dir}}/dsp.ini"
-          destination: "{{$cras_root}}/{{cras-config-dir}}/dsp.ini"
-        - source: "ucm-config/{{$card}}.{{ucm-suffix}}/HiFi.conf"
-          destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/HiFi.conf"
-        - source: "ucm-config/{{$card}}.{{ucm-suffix}}/{{$card}}.{{ucm-suffix}}.conf"
-          destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/{{$card}}.{{ucm-suffix}}.conf"
+    main: *audio_common
   brand-code: "{{$brand-code}}"
   name: "{{$device-name}}"
   identity:
