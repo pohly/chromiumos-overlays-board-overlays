@@ -64,3 +64,5 @@ chromeos:
       skus:
         - $sku-id: 0x2863  # leona
           config: *common_config
+        - $sku-id: 0x2861  # non-touch
+          config: *common_config
