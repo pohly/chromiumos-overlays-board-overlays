@@ -72,3 +72,6 @@ sys-kernel/dump-capture-kernel -module_sign
 
 # Enable full lvm2 install.
 sys-fs/lvm2 -device-mapper-only
+
+# Enable virtio balloon driver.
+sys-kernel/lakitu-kernel-4_19 virtio_balloon
