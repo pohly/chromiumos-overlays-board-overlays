@@ -24,4 +24,4 @@ USE="${USE} android_aep"
 
 USE="${USE} drm_atomic"
 
-USE="${USE} vulkan"
+USE="${USE} -vulkan"
