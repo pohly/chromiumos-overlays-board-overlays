@@ -43,6 +43,9 @@ src_install() {
 
 	insinto "$(systemd_get_unitdir)"/systemd-fsck@.service.d
 	doins "${FILESDIR}"/fsck-log-to-serial-console.conf
+
+	# Nvidia drivers are mounted here at runtime
+	keepdir /usr/share/nvidia
 }
 
 pkg_postinst() {
