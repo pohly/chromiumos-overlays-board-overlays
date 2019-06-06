@@ -1,12 +1,922 @@
-From a99b143b9f30bf0bc08dc310f2a1a3babe93af87 Mon Sep 17 00:00:00 2001
-From: YH Lin <yueherngl@google.com>
-Date: Wed, 22 May 2019 10:19:45 -0700
-Subject: [PATCH 2/3] MTK TOT #184 - HQ TOT #37 Squash
+From a7fcd02e6c1392a72f79d6173d56d65aafd9c3ae Mon Sep 17 00:00:00 2001
+From: Nicolas Boichat <drinkcat@chromium.org>
+Date: Thu, 7 Mar 2019 18:17:32 +0800
+Subject: [PATCH 2/3] HQ-TOT 40
 
-Change-Id: I9289075961440355463e9f5219eaf1d19c0ce086
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/1475596/40
+
+Add regulators, change required DT entries.
+
+BUG=b:124335972
+TEST=Boot kukui P2
+
+Change-Id: I9992bb3b1427a3baf20fe99c08e2252d9900d83d
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+FIXUP: FROMLIST: arm64: dts: add display nodes for mt8183
+
+This patch add display nodes for mt8183
+
+BUG=b:126008314
+TEST=Boot to shell
+
+Change-Id: Ia099f934da5d1f762e6337e9f48667883518a3fa
+Signed-off-by: CK Hu <ck.hu@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+CHROMIUM: drm/panel: panel-innolux: Allow 2 reset pins for panel
+
+This is useful when there is a bridge between the SoC and the
+panel.
+
+BUG=b:123669273
+TEST=Boot rev2
+
+[rebase note: see b/124335972 for justification of CHROMIUM tag]
+
+Change-Id: I487b27f858a262c9bfea16aab8b0321229846025
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+
+CHROMIUM: drm/panel: panel-innolux: Add support for P097PFZ behind SSD2858
+
+Add commands to setup P097PFZ behing SSD2858 (4 to 8 lanes bridge).
+
+For some unclear reasons, the initialization commands that P097PFZ
+is supposed to require... don't seem to be required (and actually
+break display if we sent them).
+
+We also need to change the code that sends the MIPI commands to add
+necessary delays.
+
+BUG=b:123669273
+TEST=Boot kukui rev2
+
+[rebase note: see b/124335972 for justification of CHROMIUM tag.
+To make this cleaner, we should probably use a proper DRM bridge to
+setup the bridge (instead of hacking the panel driver).]
+
+Change-Id: I0cbe84a496bfd029be4db1fe05e316659eab3468
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+
+FROMLIST: gpu/drm: mediatek: call mtk_dsi_stop() after mtk_drm_crtc_atomic_disable()
+
+mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(), which needs
+ovl irq for drm_crtc_wait_one_vblank(), since after mtk_dsi_stop() is called,
+ovl irq will be disabled. If drm_crtc_wait_one_vblank() is called after last
+irq, it will timeout with this message: "vblank wait timed out on crtc 0". This
+happens sometimes when turning off the screen.
+
+In drm_atomic_helper.c#disable_outputs(),
+the calling sequence when turning off the screen is:
+
+1. mtk_dsi_encoder_disable()
+     --> mtk_output_dsi_disable()
+       --> mtk_dsi_stop();  // sometimes make vblank timeout in atomic_disable
+         --> mtk_dsi_poweroff();
+2. mtk_drm_crtc_atomic_disable()
+     --> drm_crtc_wait_one_vblank();
+     ...
+       --> mtk_dsi_ddp_stop()
+         --> mtk_dsi_poweroff();
+
+Change to make mtk_dsi_stop() called in mtk_dsi_ddp_stop() instead of
+mtk_output_dsi_disable().
+
+(am from https://patchwork.kernel.org/patch/10856865/)
+
+TEST=suspend_stress_test 182 iteration no timeout warning
+BUG=b:124486047
+
+Fixes: 0707632b5bac ("drm/mediatek: update DSI sub driver flow for sending commands to panel")
+Change-Id: I0916976b27877ed700e339c31022b393ca9e91a4
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+
+DO-NOT-SUBMIT: QCA wifi patches SQUASH
+
+SQUASH of kukui wifi tot #32
+
+including:
+
+basic functionality:
+None
+
+bug fix:
+DO-NOT-SUBMIT: kukui: ath10k: move some warning msg to dbg(CL:1639747/1)
+FROMLIST: ath10k: add report MIC error for sdio chip(CL:1630539/2)
+FROMLIST: ath10k: change firmware file name for UTF mode of SDIO/USB(CL:1628527/2)
+FROMLIST: ath10k: add missing error handling(CL:1627070/4)
+FROMLIST: ath10k: acquire lock to fix lockdep's warning(CL:1594406/10)
+FROMLIST: ath10k: remove mmc_hw_reset while hif power down(CL:1585667/14)
+FROMLIST: ath10k: add support for firmware crash recovery on SDIO chip(CL:1568867/19)
+
+BUG=b:121980879
+TEST=1) checkout CL:1317245/195
+     2) revert 1b6091c(old suqash)
+     3) rebase on m/master
+     4) cherry-pick this one
+     5) build, boot and check wifi connection
+
+Change-Id: Iaebb8cf6f4604ec52b6a0b8500aef5d2d20b182c
+
+DO-NOT-SUBMIT: Kukui ToT
+
+Minimal set of patches to boot kukui
+
+BUG=b:109911488
+TEST=Boot to shell
+
+Change-Id: I4b8194d5cd0b31670bb2ed7310747bed38775545
+
+FROMLIST: pinctrl: mediatek: Ignore interrupts that are wake only during resume
+
+Before suspending, mtk-eint would set the interrupt mask to the
+one in wake_mask. However, some of these interrupts may not have a
+corresponding interrupt handler, or the interrupt may be disabled.
+
+On resume, the eint irq handler would trigger nevertheless,
+and irq/pm.c:irq_pm_check_wakeup would be called, which would
+try to call irq_disable. However, if the interrupt is not enabled
+(irqd_irq_disabled(&desc->irq_data) is true), the call does nothing,
+and the interrupt is left enabled in the eint driver.
+
+Especially for level-sensitive interrupts, this will lead to an
+interrupt storm on resume.
+
+If we detect that an interrupt is only in wake_mask, but not in
+cur_mask, we can just mask it out immediately (as mtk_eint_resume
+would do anyway at a later stage in the resume sequence, when
+restoring cur_mask).
+
+Fixes: bf22ff45bed ("genirq: Avoid unnecessary low level irq function calls")
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+(am from https://patchwork.kernel.org/patch/10921143/)
+(also found at https://lkml.kernel.org/r/20190429035515.73611-2-drinkcat@chromium.org)
+
+BUG=b:129240721
+TEST=on kukui, EC can wake system from suspend
+
+Change-Id: Ic38985aa7c4dd4a4c5ad6595809ac8a4bc320ace
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+
+FROMLIST: pinctrl: mediatek: Update cur_mask in mask/mask ops
+
+During suspend/resume, mtk_eint_mask may be called while
+wake_mask is active. For example, this happens if a wake-source
+with an active interrupt handler wakes the system:
+irq/pm.c:irq_pm_check_wakeup would disable the interrupt, so
+that it can be handled later on in the resume flow.
+
+However, this may happen before mtk_eint_do_resume is called:
+in this case, wake_mask is loaded, and cur_mask is restored
+from an older copy, re-enabling the interrupt, and causing
+an interrupt storm (especially for level interrupts).
+
+Instead, we just record mask/unmask changes in cur_mask. This
+also avoids the need to read the current mask in eint_do_suspend,
+and we can remove mtk_eint_chip_read_mask function.
+
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+(am from https://patchwork.kernel.org/patch/10921147/)
+(also found at https://lkml.kernel.org/r/20190429035515.73611-3-drinkcat@chromium.org)
+
+BUG=b:129240721
+TEST=on kukui, EC can wake system from suspend
+
+Change-Id: I77d55cfb9ad3a0a0078f931695d6aeb8a6e5c217
+Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+
+WIP: usb: mtu3: Modification for MTU3 dualrole mode switch
+
+Usage:
+to host:
+	echo host > /sys/kernel/debug/usb/11201000.usb/mode
+to device:
+	echo device > /sys/kernel/debug/usb/11201000.usb/mode
+
+BUG=b:109911488
+TEST=Boot to shell and do host/device mode change
+
+Change-Id: Ie6d5b864ea36a40b959df6d06d4e038b7c3d74ee
+Signed-off-by: Jumin Li <jumin.li@mediatek.com>
+
+CHROMIUM: arm64: dts: mt8183: Add manual switch property
+
+Enable manual dual mode
+Set maximum-speed as high-speed
+
+BUG=b:109911488
+TEST=build and boot to shell and do usb features test
+
+Change-Id: Iea92b3d15823229cf9816275b22cc582ad470aa9
+Signed-off-by: Jumin Li <jumin.li@mediatek.com>
+
+DO-NOT-SUBMIT: Snapshot of CMDQ ToT
+
+Snapshot of CMDQ ToT patch set 11 (FROMLIST v3)
+
+BUG=b:109911488
+TEST=Display UI
+
+Change-Id: Ie936fd7f2c16875d16a1cb87402a23d2609fa303
+Signed-off-by: CK Hu <ck.hu@mediatek.com>
+
+BACKPORT: FROMLIST: arm64: dts: add gce node for mt8183
+
+add gce device node for mt8183
+(am from https://patchwork.kernel.org/patch/10932479/)
+
+BUG=b:109911488
+TEST=build and boot to shell
+
+Change-Id: I1edbdd1be9db1f128d984adc81895cb80c61e4eb
+Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+Signed-off-by: CK Hu <ck.hu@mediatek.com>
+
+DO-NOT-SUBMIT: Snapshot of VPU patches
+
+Snapshot of VPU patches.
+
+BUG=b:109911488
+TEST=Boot to shell
+
+Change-Id: I47a3afb7edafea353eea566d3fe6468feeedf9cd
+Signed-off-by: CK Hu <ck.hu@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+DO-NOT-SUBMIT: arm64: dts: mt8183: add vpu node
+
+New add vpu node
+
+BUG=b:109911488
+TEST=build and boot to shell
+
+Change-Id: I0868a628e8c9f30e550ad034fd786ea566ca044b
+Signed-off-by: Erin Lo <erin.lo@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+FROMLIST: dt-bindings: soc: Add MT8183 emi dt-bindings
+
+Add emi dt-bindings of MT8183 in binding document.
+
+Signed-off-by: Xi Chen <xixi.chen@mediatek.com>
+(am from https://patchwork.kernel.org/patch/10921319/)
+[eddie.huang: remove change-id in commit message]
+
+BUG=b:109911488
+TEST=build pass and boot to shell
+
+Change-Id: I7182f3eda5835af8bf081d1056228bf73cb63f61
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+BACKPORT: FROMLIST: arm64: dts: mt8183: add emi node
+
+Add emi dts node.
+
+(am from https://patchwork.kernel.org/patch/10921629/)
+[eddie.huang: remove change-id in commit message.
+ Fix context confclit]
+
+BUG=b:109911488
+TEST=build pass and boot to shell
+
+Change-Id: I0b84e566d20af6fcb33b91f69be2f14f40a6e540
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+BACKPORT: FROMLIST: mt8183: emi: add bandwidth driver support
+
+EMI provides interface for get bandwidth  on every 1 miliseconds.
+Currently, just support GPU bandwidth info.
+
+Signed-off-by: Xi Chen <xixi.chen@mediatek.com>
+
+(am from https://patchwork.kernel.org/patch/10921627/)
+[eddie.huang: fix context confclit. Remove change-id in commit message.
+ Add MTK_EMI_MBW description to let defconfig to select]
+
+BUG=b:109911488
+TEST=build pass and boot to shell
+
+Change-Id: I10d8f36d78c1dca8d91bc0e242fe83209a6c8190
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+WIP: clk: mediatek: mt8183: Register 13MHz clock earlier for clocksource
+
+The 13MHz clock should be registered before clocksource driver is
+initialized. Use CLK_OF_DECLARE_DRIVER() to guarantee.
+
+BUG=b:126007177
+TEST=build and boot to shell
+
+Change-Id: I63f1c881bb4053da4214ddb14d725b37fd108ffd
+Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+Signed-off-by: Dehui Sun <dehui.sun@mediatek.com>
+
+WIP: arm64: dts: mt8183: add systimer0 node
+
+Add systimer0 node to the mt8183's devicetree.
+
+BUG=b:109911488
+BUG=None
+TEST=build and boot to shell
+
+Change-Id: I816152c47ad0aa86eb269b654d3a22d953f60c81
+Signed-off-by: Dehui Sun <dehui.sun@mediatek.com>
+
+WIP: serial: 8250-mtk: modify serial driver
+
+modify serial power management function.
+
+BUG=b:129106594
+TEST=build and boot to shell
+
+Change-Id: I23051b5f23ad314be518fce994d7affb2a8b1a27
+Signed-off-by: Changqi Hu <changqi.hu@mediatek.com>
+
+WIP: thermal: mtk_thermal: add suspend/resume callback
+
+Added suspend/resume callback to disable/enable Mediatek thermal sensor
+respectively. Since thermal power domain is off in suspend, thermal driver
+needs re-initialization during resume.
+
+BUG=none
+TEST: boot to shell
+
+Change-Id: I43f9af5c2d2b682f985eb570d6ed984243772e91
+Signed-off-by: Louis Yu <louis.yu@mediatek.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+
+HACK: clkdbg: clkdbg support for 8183
+
+Clkdbg provides commands to view clock info and operate clocks,
+such as enable/disable clocks and change their rate. Use the
+following command to see available clkdbg commands:
+.
+   echo cmds > /proc/clkdbg ; cat /proc/clkdbg
+.
+
+BUG=b:109911488
+TEST=build and boot to shell
+
+Change-Id: Ieb6a05b7f5ee9330cd10a02fafbdfc6654163f5e
+Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+
+HACK: clkchk: add clkchk support for 8183
+
+dump the clocks those still ON during system suspend
+
+BUG=b:109911488
+TEST=build and boot to shell
+
+Change-Id: Ifb7a0d683aed75b57161b27d76efd4318395dbca
+Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+
+HACK: sdio: mediatek: add sdio debug driver
+
+New add sdio debug driver
+
+BUG=b:109911488
+TEST=cmd test is ok
+
+Change-Id: Id1f53eb395a035caffc03a3a6f0e6c554c63a9ad
+Signed-off-by: jjian zhou <jjian.zhou@mediatek.com>
+
+CHROMIUM: config: Enable MT8183 usb dualrole mode configs
+
+Features be enabled as follow:
+    USB mtu3 dualrole mode
+    USB gadget configfs functions
+    USB gadget ACM/MASS_STORAGE/SERIAL features
+
+The change is generated from the following commands:
+
+cat <<EOF | tee -a \
+    chromeos/config/arm64/chromiumos-arm64.flavour.config \
+    chromeos/config/arm64/chromiumos-mediatek.flavour.config
+
+CONFIG_USB_CONFIGFS=m
+CONFIG_USB_CONFIGFS_ACM=y
+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+CONFIG_USB_CONFIGFS_SERIAL=y
+CONFIG_USB_F_ACM=y
+CONFIG_USB_F_FS=m
+CONFIG_USB_F_MASS_STORAGE=y
+CONFIG_USB_F_SERIAL=y
+CONFIG_USB_MTU3_DEBUG=y
+CONFIG_USB_MTU3_DUAL_ROLE=y
+
+EOF
+
+./chromeos/scripts/kernelconfig olddefconfig
+
+BUG=b:109911488
+TEST=build and boot to shell and test the function of these configs
+
+Change-Id: Ie957cae98b3331668f4e29332c25714776e5fe80
+Signed-off-by: Jumin Li <jumin.li@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+CHROMIUM: config: Enable MT8183 emi configs
+
+The change is generated from the following commands:
+
+cat <<EOF | tee -a \
+   chromeos/config/arm64/chromiumos-arm64.flavour.config \
+   chromeos/config/arm64/chromiumos-mediatek.flavour.config
+
+CONFIG_MTK_EMI_MBW=y
+
+EOF
+
+./chromeos/scripts/kernelconfig olddefconfig
+
+BUG=b:109911488
+TEST=build and boot to shell
+
+Change-Id: I9c92096719b72c077258a5d2b52b3ccec272af39
+Signed-off-by: Xi Chen <xixi.chen@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+FROMLIST: PM / devfreq: Generic CPU frequency to device frequency mapping governor
+
+Many CPU architectures have caches that can scale independent of the CPUs.
+Frequency scaling of the caches is necessary to make sure the cache is not
+a performance bottleneck that leads to poor performance and power. The same
+idea applies for RAM/DDR.
+
+To achieve this, this patch adds a generic devfreq governor that takes the
+current frequency of each CPU frequency domain and then adjusts the
+frequency of the cache (or any devfreq device) based on the frequency of
+the CPUs. It listens to CPU frequency transition notifiers to keep itself
+up to date on the current CPU frequency.
+
+To decide the frequency of the device, the governor does one of the
+following:
+
+* Uses a CPU frequency to device frequency mapping table
+  - Either one mapping table used for all CPU freq policies (typically used
+    for system with homogeneous cores/clusters that have the same OPPs).
+  - One mapping table per CPU freq policy (typically used for ASMP systems
+    with heterogeneous CPUs with different OPPs)
+
+OR
+
+* Scales the device frequency in proportion to the CPU frequency. So, if
+  the CPUs are running at their max frequency, the device runs at its max
+  frequency.  If the CPUs are running at their min frequency, the device
+  runs at its min frequency. And interpolated for frequencies in between.
+
+Signed-off-by: Saravana Kannan <skannan@codeaurora.org>
+
+(am from https://patchwork.kernel.org/patch/10553171/)
+
+BUG=b:122571050
+TEST=boot to kukui
+
+Change-Id: I299eecb1f1bb12679fcb394a28fb2655760568d2
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+
+CHROMIUM: config: Enable cpufreq-map governor for mtk-cci
+
+cat <<EOF | tee -a \
+   chromeos/config/arm64/chromiumos-mediatek.flavour.config
+
+CONFIG_DEVFREQ_GOV_CPUFREQ_MAP=y
+
+EOF
+
+./chromeos/scripts/kernelconfig olddefconfig
+
+BUG=b:122571050
+TEST=echo cpufreq-map > /sys/class/devfreq/devfreq0/governor;
+observe /sys/class/devfreq/devfreq0/trans_stat
+
+Change-Id: Ie822b0fc47dc04a9019383dd079854b73e8840e9
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+CHROMIUM: arm64: dts: mt8183: set devfreq-cpufreq-map for mt8183-cci
+
+Set cpu frequency to cci frequency mapping table.
+
+BUG=b:122571050
+TEST=boot to kukui
+
+Change-Id: I531cd70c98fc86155eb99a932737cb3ed0d02fb5
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+
+WIP: devfreq: mt8183-cci: using cpufreq-map governor in cci dvfs driver
+
+1. remove mtk_cci_vmon governor, using cpufreq-map
+2. SVS: TBD
+
+BUG=b:122571050
+TEST=cat /sys/class/devfreq/devfreq0/governor
+TEST=run speedometer
+
+Change-Id: I4c4da92dde5f369aaf07a55761f3f9cdc9e80f44
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+
+FIXUP: arm64: dts: mediatek: Modify opp table for cpu big cluster for mt8183
+
+Modify opp table for cpu big cluster for mt8183
+
+BUG=b:129039370
+TEST=build and boot to shell
+
+Change-Id: I54569c513c36db0e08011d0a4f474b1e8808ae3a
+Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+
+DO-NOT-SUBMIT: Snapshot of iommu tot
+
+Snapshot of iommu tot. (CL:1369894/26)
+
+BUG=b:109911488
+TEST=Boot to shell
+
+Change-Id: Iec62b81c8e3162110723d7b6e6e759d3672b3af8
+Signed-off-by: CK Hu <ck.hu@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+WIP: arm64: dts: mediatek: Get rid of mediatek,larb for MM nodes
+
+After adding device_link between the IOMMU consumer and smi,
+the mediatek,larb is unnecessary now.
+
+Change-Id: I3b4457af3df3bc51705af618cb09085953fbcd12
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+
+WIP: drm/panel: add panel driver for boe-tv101wum
+
+BUG=b:129299873
+TEST=build and boot to shell
+
+Change-Id: I08d1ddb1a2d368ccbcd1e358cb5e302b8161328b
+Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+
+CHROMIUM: config: enable boe TV101WUM panel support
+
+The change is generated from the following commands:
+
+cat <<EOF | tee -a \
+chromeos/config/arm64/chromiumos-arm64.flavour.config \
+chromeos/config/arm64/chromiumos-mediatek.flavour.config
+
+CONFIG_DRM_PANEL_BOE_TV101WUM=y
+
+EOF
+
+./chromeos/scripts/kernelconfig olddefconfig
+
+BUG=b:129299873
+TEST=build and boot to shell
+
+Change-Id: Ice61a327f17e69bd2207a9033dda7460ec078765
+Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+CHROMIUM: arm64: dts: mt8183: add krane rev3 board dts and Makefile
+
+add krane rev3 board dts and Makefile
+
+BUG=b:131115073
+TEST=build and boot to shell
+
+Change-Id: I65906cf9a89353c3040e751b85bd2f9710f74802
+Signed-off-by: Ben Ho <Ben.Ho@mediatek.com>
+
+CHROMIUM: arm64: dts: mt8183-kukui: add wifi power controller
+
+To comply with schematic design, remove gpio119 from
+mmc1_fixed_power and add it back as wlan_en pin in
+mmc1default. msdcpll is only for mmc module. Assign
+msdcpll to mmc1 clk for avoiding unexpected changes.
+
+BUG=b:131043339
+TEST=Cherry-pick and update kernel with
+     https://crrev.com/c/1585667. Make sure SDIO clk
+     is running at 200MHz correctly by checking
+     /sys/kernel/debug/mmc1/ios
+
+Change-Id: I325df93ae939e929618f7234f18c674cce4e4138
+Signed-off-by: jjian zhou <jjian.zhou@mediatek.com>
+Signed-off-by: Ayo Wu <ayowu@chromium.org>
+
+DO-NOT-SUBMIT: Kukui MTK ToT
+
+Collect MTK patches on chromeos-4.19
+
+BUG=b:109911488
+TEST=Boot to shell
+
+Change-Id: Ifed5c7cb2dacf916c2ac41c4a70f07215f46f0d7
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+
+CHROMIUM: config: enable BOE HIMAX8279D config
+
+The change is generated from the following commands:
+
+cat <<EOF | tee -a \
+	chromeos/config/arm64/chromiumos-arm64.flavour.config \
+	chromeos/config/arm64/chromiumos-mediatek.flavour.config
+
+CONFIG_DRM_PANEL_BOE_HIMAX8279D=y
+EOF
+
+./chromeos/scripts/kernelconfig olddefconfig
+
+BUG=b:128652504
+TEST=None
+
+Change-Id: Idc9444ee10a99a994839cc686c8ec1d0e05a9130
+
+WIP: CHROMIUM: arm64: dts: mt8183: add flapjack board rev3 dts and Makefile
+
+Add flapjack board rev3 dts and Makefile.
+
+1. Board ID of P0C and P1 is 3.
+2. SKU ID Map:
+	0: CBI is blank
+	1: 8 inch flapjack
+	3: 10 inch flapjack
+3. Display Panel Info
+	hwconfig0:  boe,himax8279d10p
+	hwconfig1:  boe,himax8279d8p
+
+TO-DO: The hwconfig may changes in future.
+
+BUG=b:124634888
+TEST=build and boot to shell
+
+Change-Id: Iee95096bf8ddabe0747b5d8adc735c4bae209c3d
+Signed-off-by: Kaka Ni <nigang@huaqin.corp-partner.google.com>
+
+CHROMIUM: arm64: dts: mt8183: Support Wacom W9015A for flapjack
+
+Enable Stylus Wacom W9015A for flapjack
+
+BUG=b:124639007
+TEST=1). Boot to shell
+     2). Run "evtest" in console and get results :
+
+	Available devices:
+	/dev/input/event0:      hid-over-i2c 2D1F:490C
+	/dev/input/event1:      hid-over-i2c 2D1F:490C Pen
+
+Change-Id: I3d9ae8fd61350f0e73c8b5f5d4ebcba9d851acd4
+Signed-off-by: Kaka Ni <nigang@huaqin.corp-partner.google.com>
+
+DO-NOT-SUBMIT:ASoC: mt8183: machine driver support da7219
+
+Cherry-picks CL:1520431
+Only for Huaqin Flapjack ToT
+
+BUG=b:124717947
+TEST=build pass and boot to shell
+
+Change-Id: Idbdc9bb99f7d4b3ce1d5ff1ff4c344a53b939295
+
+WIP: CHROMIUM: config: enable SND_SOC_MT8183_DA7219_MAX98357A
+
+Cherry-picks CL:1424761
+Only for Huaqin Flapjack ToT
+
+BUG=None
+TEST=None
+Change-Id: I94c3b3b229c7dda4124dbc42895b2ae78ed6cdee
+
+WIP: CHROMIUM: arm64: dts: mt8183: Support DA7219
+
+Cherry-picks CL:1424761
+Only for Huaqin Flapjack ToT
+
+BUG=None
+TEST=None
+
+Change-Id: I8683080325dae35133a9981b3af10d68b5412345
+
+DO-NOT-SUBMIT:max98357a:add dai without triggered by pcm
+
+Cherry-picks CL:1520429
+Only for Huaqin Flapjack ToT
+
+max98357a's enable pin need setting independently
+when max98357a is shared I2S with other codec.
+
+add dai "max98357a-hifi" without pcm trigger,
+and use "Spk PA Switch" to set the enable pin.
+
+BRANCH=none
+BUG=b:124721198
+TEST= build flapjack ok, and can boot up to shell.
+
+Change-Id: I81e4c091f501d10315b829eb78e7c18cecbfac9f
+
+WIP:flapjack:separate speaker control from pcm
+
+use dai "max98357a-hifi" to separate speaker control from pcm
+
+BRANCH=none
+BUG=b:124721198
+TEST=local build test ok.
+
+Change-Id: I5dc7c5932b9331dd395adcdad0d3aacb740a72fc
+
+DO-NOT-SUBMIT: CHROMIUM: iio: Add SEMTECH SX9311 sensor driver
+
+Add SEMTECH SX9311 driver. just include it in Flapjack ToT Tree.
+
+BUG=b:124858024
+BRANCH=None
+TEST=On Nocturne, check:
+  - that the device is correctly probed and instantiated;
+  - that it is possible to enable events on all channels and read from /dev
+  - can test with toolkit
+
+Change-Id: Id7d38b30d2a66dfdbe78a1c86e4428e5f2207f7d
+
+DO-NOT-SUBMIT: thermal: mediatek: mt8183: fix bank number settings
+
+Cherry-picked from CL:1510928 to Huaqin ToT
+
+mt8183 does not have bank.
+The micro of MT8183_NUM_ZONES should set to 1.
+
+Fixes: a4ffe6b52d27 ("thermal: mediatek: add support for MT8183")
+Change-Id: I6c4d6e37dd40ff9129d0c43eb697afa60c94309a
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+
+TEST-ONLY: drm/bridge: add it6505 driver
+
+This CL is only for Flapjack debug to fix re-plug in can't be recognized
+issue.
+
+Please DO-NOT-SUBMIT.
+
+support it6505
+
+BUG=b:109911488
+TEST= no
+
+Change-Id: I3014cd5db5a0efe1edbd4d5c158d1b010015550c
+
+DO-NOT-SUBMIT: Add Auo nt51021d and Inx ota7290d MIPI-DSI LCD panel
+
+BUG=None
+TEST=build and boot to shell
+
+Change-Id: I1e8cc7f39d62fc29bd0561968cd453b2c20abc99
+
+DO-NOT-SUBMIT: Change 8inch 1st panel boe-tv080wum-ng0 to normal scan
+
+BUG=None
+TEST=build and boot to shell
+
+Change-Id: I189e19cb4ea128b3b0eb271ab760bf87f5bd3474
+
+DO-NOT-SUBMIT: Change 10inch 1st panel boe-tv101wum-ng0 to normal scan
+
+BUG=None
+TEST=build and boot to shell
+
+Change-Id: I6761fb2d49f53888206f1ab56007ff4638da93d9
+
+CHROMIUM: arm64: dts: mt8183: Modify flapjack panel config
+
+SKU_ID w/o LCM_ID  0x1:
+8inch boe,tv080wum_ng0: mt8183-flapjack-rev4-sku1-hwconfig2
+8inch auo,nt51021d8p:   mt8183-flapjack-rev4-sku1-hwconfig4
+
+SKU_ID w/o LCM_ID  0x3:
+10inch boe,tv101wum_ng0: mt8183-flapjack-rev4-sku3-hwconfig1
+10inch inx,ota7290d10p:  mt8183-flapjack-rev4-sku3-hwconfig3
+
+BUG=None
+TEST=build and boot to shell
+
+Change-Id: I43120b7feb54cd6b11463174b5fa2e54e87f660a
+
+CHROMIUM: drm/panel: Add helper for reading DT rotation
+
+This adds a helper function for reading the rotation (panel
+orientation) from the device tree.
+
+BUG=b:121173026
+TEST=emerge-flapjack chromeos-kernel-4_14
+
+Change-Id: I5a195c3aa23346aff4629967b891b89357056544
+Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+
+CHROMIUM: drm/panel: Add attach/detach callbacks
+
+This adds the attach/detach callbacks. These are for setting up
+internal state for the connector/panel pair that can't be done at
+probe (since the connector doesn't exist) and which don't need to be
+repeatedly done for every get/modes, prepare, or enable callback.
+Values such as the panel orientation, and display size can be filled
+in for the connector.
+
+BUG=b:121173026
+TEST=emerge-flapjack chromeos-kernel-4_19
+
+Change-Id: I9d1f56ce585a561e82068cc373a8f636643c1e33
+Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+
+CHROMIUM: drm/panel: add boe himax8279d orientation
+
+This adds reading the panel orientation from the device tree to the
+boe himax8279d panel driver. This is done by adding the drm_panel
+attach callback. The width_mm, heigh_mm, and bpc values are also
+updated for the connector display info in this function since it makes
+more sense there than in get_modes (which is called multiple times).
+
+BUG=b:121173026
+TEST=boot flapjack
+
+Change-Id: I2b75f22c101aedc986d6d086657965e3f3e4615b
+Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+
+CHROMIUM: drm/mtk: add panel orientation property
+
+This inits the panel orientation property for the mediatek dsi driver
+if the panel orientation (connector.display_info.panel_orientation) is
+not DRM_MODE_PANEL_ORIENTATION_UNKNOWN.
+
+BUG=b:121173026
+TEST=boot Flapjack
+
+Change-Id: I3955e2ff0d633586cc77b34a649b385cf9c3aa19
+Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+
+HACK: drm/mtk: set plane rotation based on panel orientation
+
+This sets a 180 degree rotation if there's an upside down panel. This
+is only a temporary solution until userspace handles this properly by
+specifying the rotation itself when the panel is upside down.
+
+BUG=b:121173026
+TEST=boot flapjack
+
+Change-Id: I8f2d3c154610ee1837d1f2af6e6c22f85e790fc2
+Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+
+DO NOT COMMIT: dts: mediatek: add rotation property for flapjack
+
+This adds the default rotation property for flapjack panels.
+
+BUG=b:121173026
+TEST=boot flapjack and check that the display isn't flipped
+
+Change-Id: I7d29173f4e159dc6fac1bd2263483325e09980bc
+Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+
+WIP: CHROMIUM: arm64: dts: mt8183: add flapjack board rev5 compatible
+
+Currently, LCM_ID are pulled up to 1800 mV. This causes inaccurate
+reading by ADC.
+
+We change the pull-up to 3300 mV. This patch adjusts the thresholds
+accordingly.
+
+we add new board version for this change
+
+Change-Id: I1dfb38f58f1affd99a0f9fbb5cca9aa5c1f029f9
+
+DO-NOT-SUBMIT: WIFI FTM patch
+
+BUG=b:124327202
+BRANCH=none
+TEST=build pass and support the FTM mode
+
+Change-Id: I43280a12cebe088a91e7ef96c2ba2d688efe614b
+
+TEST-ONLY: set dpi pins as gpio and output low when dpi disabled
+
+Pull dpi pins low when dpi has nothing to display. Or theree will be
+Some dpi pins (Hsync Vsync DE ... ) keeping high voltage. And will
+cause leadage.
+
+Please DO-NOT-SUBMIT.
+
+BUG=b:132674731
+TEST=build and boot to shell
+
+Change-Id: I6b6cfab647cb05357d717590140346a5a746ab9c
+
+DO-NOT-SUBMIT:  Flapjack Huaqin ToT
+
+Collect Huaqin patches on chromeos-4.19
+
+Rely On MTK's Tot Tree: CL:1317245
+
+BUG=b:124595117
+TEST=Boot to shell
+
+Change-Id: Iaec249f694c9a1aaff3236bdfd098194e8d64a4a
 ---
  .../bindings/iio/proximity/sx9311.txt         |   19 +
- README                                        |    1 +
+ README                                        |    3 +-
  arch/arm64/boot/dts/mediatek/Makefile         |    4 +
  arch/arm64/boot/dts/mediatek/mt6358.dtsi      |    4 +-
  .../mt8183-flapjack-rev4-sku1-hwconfig2.dts   |  278 ++
@@ -22,9 +932,9 @@ Change-Id: I9289075961440355463e9f5219eaf1d19c0ce086
  drivers/gpu/drm/bridge/ite-it6505.c           | 2948 +++++++++++++++++
  drivers/gpu/drm/drm_panel.c                   |   38 +-
  drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   14 +
- drivers/gpu/drm/mediatek/mtk_dpi.c            |   69 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c            |   13 +-
  drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   28 +
- drivers/gpu/drm/mediatek/mtk_dsi.c            |   15 +
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |   18 +
  drivers/gpu/drm/panel/panel-boe-himax8279d.c  |  954 +++++-
  drivers/iio/proximity/Kconfig                 |   13 +
  drivers/iio/proximity/Makefile                |    1 +
@@ -32,11 +942,11 @@ Change-Id: I9289075961440355463e9f5219eaf1d19c0ce086
  drivers/net/wireless/ath/ath10k/core.c        |    2 +-
  drivers/net/wireless/ath/ath10k/hif.h         |    6 +-
  drivers/net/wireless/ath/ath10k/sdio.c        |    5 +-
- drivers/thermal/mtk_thermal.c                 |  117 +-
+ drivers/thermal/mtk_thermal.c                 |    2 -
  include/drm/drm_panel.h                       |   11 +
  sound/soc/codecs/max98357a.c                  |   96 +-
  .../mediatek/mt8183/mt8183-da7219-max98357.c  |    2 +-
- 31 files changed, 6822 insertions(+), 41 deletions(-)
+ 31 files changed, 6656 insertions(+), 41 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/iio/proximity/sx9311.txt
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig2.dts
  create mode 100755 arch/arm64/boot/dts/mediatek/mt8183-flapjack-rev4-sku1-hwconfig4.dts
@@ -45,7 +955,6 @@ Change-Id: I9289075961440355463e9f5219eaf1d19c0ce086
  create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-flapjack.dtsi
  create mode 100755 drivers/gpu/drm/bridge/ite-it6505.c
  create mode 100644 drivers/iio/proximity/sx9311.c
- mode change 100644 => 100755 drivers/thermal/mtk_thermal.c
  mode change 100644 => 100755 sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 
 diff --git a/Documentation/devicetree/bindings/iio/proximity/sx9311.txt b/Documentation/devicetree/bindings/iio/proximity/sx9311.txt
@@ -74,14 +983,17 @@ index 000000000000..65a1114e4147
 +		int-gpio = <&pio 5 0>;
 +	};
 diff --git a/README b/README
-index 768caa3970ef..185abb9dd570 100644
+index 768caa3970ef..5f0f9bcd9863 100644
 --- a/README
 +++ b/README
-@@ -1,3 +1,4 @@
+@@ -1,6 +1,5 @@
 +HUAQIN FLAPJACK TOT
  MTK TOT
- Linux kernel
- ============
+-Linux kernel
+-============
+ 
+ There are several guides for kernel developers and users. These guides can
+ be rendered in a number of formats, like HTML and PDF. Please read
 diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
 index d09409979c84..95c7896b6d19 100644
 --- a/arch/arm64/boot/dts/mediatek/Makefile
@@ -1373,7 +2285,7 @@ index 000000000000..7bcc6d8e5b62
 +};
 +
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index b68a22ee274f..ca493e116abc 100644
+index e93b0587cfbc..aa67bb4cedcf 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -73,6 +73,15 @@
@@ -1516,7 +2428,7 @@ index b68a22ee274f..ca493e116abc 100644
  	mmc0_pins_default: mmc0default {
  		pins_cmd_dat {
  			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
-@@ -773,6 +878,12 @@
+@@ -774,6 +879,12 @@
  			#address-cells = <1>;
  			#size-cells = <0>;
  		};
@@ -1530,10 +2442,10 @@ index b68a22ee274f..ca493e116abc 100644
  };
  
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index ad3bc5a7ec34..99c4bbc1463f 100644
+index ff9ce0f93a3e..93b78344925d 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -1572,6 +1572,17 @@
+@@ -1625,6 +1625,17 @@
  			phy-names = "dphy";
  		};
  
@@ -1552,10 +2464,10 @@ index ad3bc5a7ec34..99c4bbc1463f 100644
  			compatible = "mediatek,mt8183-disp-mutex";
  			reg = <0 0x14016000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index e3b626359fe9..3115728f8f68 100644
+index ba263ecb9cd9..8b791d78b328 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -175,6 +175,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
+@@ -173,6 +173,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5514=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5676=y
  CONFIG_SND_SOC_MT8183=y
@@ -1564,10 +2476,10 @@ index e3b626359fe9..3115728f8f68 100644
  CONFIG_SND_SOC_RK3399_GRU_SOUND=y
  CONFIG_SND_SOC_ROCKCHIP=y
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index 1fd98858ba2f..4e5b59f406c5 100644
+index 9a2ddb58a7d7..cac227d1cf69 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-@@ -30,6 +30,9 @@ CONFIG_DRM_ANALOGIX_ANX78XX=y
+@@ -31,6 +31,9 @@ CONFIG_DRM_ANALOGIX_ANX78XX=y
  CONFIG_DRM_MEDIATEK=y
  CONFIG_DRM_MEDIATEK_HDMI=y
  CONFIG_DRM_PANEL_BOE_TV101WUM=y
@@ -1577,7 +2489,7 @@ index 1fd98858ba2f..4e5b59f406c5 100644
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  # CONFIG_EFI is not set
  CONFIG_ENERGY_MODEL=y
-@@ -74,6 +77,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
+@@ -73,6 +76,7 @@ CONFIG_SND_SOC_MT8173_RT5650=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5514=y
  CONFIG_SND_SOC_MT8173_RT5650_RT5676=y
  CONFIG_SND_SOC_MT8183=y
@@ -1585,7 +2497,7 @@ index 1fd98858ba2f..4e5b59f406c5 100644
  CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=y
  CONFIG_SPI_GPIO=y
  CONFIG_SPI_MT65XX=y
-@@ -89,3 +93,14 @@ CONFIG_USB_MTU3=y
+@@ -87,3 +91,14 @@ CONFIG_USB_MTU3=y
  CONFIG_USB_MTU3_DEBUG=y
  CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
@@ -4674,170 +5586,42 @@ index ebadcfed3a0a..b33fe170732b 100644
  	writel_relaxed(con, comp->regs + DISP_REG_OVL_CON(idx));
  	writel_relaxed(pitch, comp->regs + DISP_REG_OVL_PITCH(idx));
 diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 62a9d47df948..e03815fa9e64 100644
+index b748d63cd3f1..e03815fa9e64 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -17,10 +17,12 @@
- #include <drm/drm_of.h>
- #include <linux/kernel.h>
- #include <linux/component.h>
--#include <linux/platform_device.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-+#include <linux/of_gpio.h>
- #include <linux/of_graph.h>
-+#include <linux/pinctrl/consumer.h>
-+#include <linux/platform_device.h>
- #include <linux/interrupt.h>
- #include <linux/types.h>
- #include <linux/clk.h>
-@@ -79,6 +81,9 @@ struct mtk_dpi {
- 	enum mtk_dpi_out_yc_map yc_map;
- 	enum mtk_dpi_out_bit_num bit_num;
- 	enum mtk_dpi_out_channel_swap channel_swap;
-+	struct pinctrl *pinctrl;
-+	struct pinctrl_state *pins_default;
-+	struct pinctrl_state *pins_dpi;
- 	int refcount;
- };
- 
-@@ -117,6 +122,8 @@ struct mtk_dpi_conf {
- 	unsigned int (*cal_factor)(int clock);
- 	u32 reg_h_fre_con;
- 	bool edge_sel_en;
-+	bool dual_edge;
-+	bool dpi_pin_ctrl;
- };
- 
- static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 mask)
-@@ -353,6 +360,15 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
+@@ -360,11 +360,13 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0, EDGE_SEL_EN);
  }
  
+-static void mtk_dpi_enable_dual_edge(struct mtk_dpi *dpi)
 +static void mtk_dpi_config_dual_edge(struct mtk_dpi *dpi)
-+{
+ {
+-	mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE,
+-		     DDR_EN | DDR_4PHASE);
+-	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, EDGE_SEL, EDGE_SEL);
 +	if (dpi->conf->dual_edge) {
 +		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE,
 +			     DDR_EN | DDR_4PHASE);
 +		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, EDGE_SEL, EDGE_SEL);
 +	}
-+}
-+
+ }
+ 
  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 					enum mtk_dpi_out_color_format format)
- {
-@@ -384,6 +400,9 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
- 	if (--dpi->refcount != 0)
- 		return;
- 
-+	if (dpi->conf->dpi_pin_ctrl)
-+		pinctrl_select_state(dpi->pinctrl, dpi->pins_default);
-+
- 	mtk_dpi_disable(dpi);
- 	clk_disable_unprepare(dpi->pixel_clk);
- 	clk_disable_unprepare(dpi->engine_clk);
-@@ -408,6 +427,9 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
- 		goto err_pixel;
- 	}
- 
-+	if (dpi->conf->dpi_pin_ctrl)
-+		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
-+
- 	mtk_dpi_enable(dpi);
- 	return 0;
- 
-@@ -444,7 +466,8 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
- 	pll_rate = clk_get_rate(dpi->tvd_clk);
- 
- 	vm.pixelclock = pll_rate / factor;
--	clk_set_rate(dpi->pixel_clk, vm.pixelclock);
-+	clk_set_rate(dpi->pixel_clk,
-+		     vm.pixelclock * (dpi->conf->dual_edge ? 2 : 1));
- 	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
- 
- 	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
-@@ -509,6 +532,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+@@ -530,8 +532,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
  	mtk_dpi_config_color_format(dpi, dpi->color_format);
  	mtk_dpi_config_2n_h_fre(dpi);
  	mtk_dpi_config_disable_edge(dpi);
+-	if (dpi->conf->dual_edge)
+-		mtk_dpi_enable_dual_edge(dpi);
 +	mtk_dpi_config_dual_edge(dpi);
  	mtk_dpi_sw_reset(dpi, false);
  
  	return 0;
-@@ -671,6 +695,16 @@ static unsigned int mt2701_calculate_factor(int clock)
- 		return 2;
- }
- 
-+static unsigned int mt8183_calculate_factor(int clock)
-+{
-+	if (clock <= 27000)
-+		return 8;
-+	else if (clock <= 167000)
-+		return 4;
-+	else
-+		return 2;
-+}
-+
- static const struct mtk_dpi_conf mt8173_conf = {
- 	.cal_factor = mt8173_calculate_factor,
- 	.reg_h_fre_con = 0xe0,
-@@ -682,6 +716,13 @@ static const struct mtk_dpi_conf mt2701_conf = {
- 	.edge_sel_en = true,
- };
- 
-+static const struct mtk_dpi_conf mt8183_conf = {
-+	.cal_factor = mt8183_calculate_factor,
-+	.reg_h_fre_con = 0xe0,
-+	.dual_edge = true,
-+	.dpi_pin_ctrl = true,
-+};
-+
- static int mtk_dpi_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -697,6 +738,27 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 	dpi->dev = dev;
- 	dpi->conf = (struct mtk_dpi_conf *)of_device_get_match_data(dev);
- 
-+	if (dpi->conf->dpi_pin_ctrl) {
-+		dpi->pinctrl = devm_pinctrl_get(&pdev->dev);
-+		if (IS_ERR(dpi->pinctrl)) {
-+			dev_err(&pdev->dev, "Cannot find pinctrl!\n");
-+			return PTR_ERR(dpi->pinctrl);
-+		}
-+
-+		dpi->pins_default = pinctrl_lookup_state(dpi->pinctrl,
-+							 "default");
-+		if (IS_ERR(dpi->pins_default)) {
-+			dev_err(&pdev->dev, "Cannot find pinctrl default!\n");
-+			return PTR_ERR(dpi->pins_default);
-+		}
-+
-+		dpi->pins_dpi = pinctrl_lookup_state(dpi->pinctrl, "dpimode");
-+		if (IS_ERR(dpi->pins_dpi)) {
-+			dev_err(&pdev->dev, "Cannot find pinctrl dpimode!\n");
-+			return PTR_ERR(dpi->pins_dpi);
-+		}
-+	}
-+
- 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	dpi->regs = devm_ioremap_resource(dev, mem);
- 	if (IS_ERR(dpi->regs)) {
-@@ -777,6 +839,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
- 	{ .compatible = "mediatek,mt8173-dpi",
- 	  .data = &mt8173_conf,
- 	},
-+	{ .compatible = "mediatek,mt8183-dpi",
-+	  .data = &mt8183_conf,
-+	},
- 	{ },
- };
- 
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-index 654fc9a8e78c..d9f5f75a51c4 100644
+index 60e101ca9d03..7249e82bff45 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
 +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-@@ -459,14 +459,41 @@ static void mtk_drm_crtc_atomic_begin(struct drm_crtc *crtc,
+@@ -455,14 +455,41 @@ static void mtk_drm_crtc_atomic_begin(struct drm_crtc *crtc,
  	}
  }
  
@@ -4879,7 +5663,7 @@ index 654fc9a8e78c..d9f5f75a51c4 100644
  	if (mtk_crtc->event)
  		mtk_crtc->pending_needs_vblank = true;
  	for (i = 0; i < mtk_crtc->layer_nr; i++) {
-@@ -477,6 +504,7 @@ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+@@ -473,6 +500,7 @@ static void mtk_drm_crtc_atomic_flush(struct drm_crtc *crtc,
  		if (plane_state->pending.dirty) {
  			plane_state->pending.config = true;
  			plane_state->pending.dirty = false;
@@ -4888,7 +5672,7 @@ index 654fc9a8e78c..d9f5f75a51c4 100644
  		}
  	}
 diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 5d8227c90371..661566b3535a 100644
+index 776a460a891e..3ac2d8769bf4 100644
 --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
 +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
 @@ -877,10 +877,25 @@ static int mtk_dsi_create_connector(struct drm_device *drm, struct mtk_dsi *dsi)
@@ -4917,6 +5701,23 @@ index 5d8227c90371..661566b3535a 100644
  err_connector_cleanup:
  	drm_connector_cleanup(&dsi->conn);
  	return ret;
+@@ -948,6 +963,7 @@ static void mtk_dsi_ddp_stop(struct mtk_ddp_comp *comp)
+ {
+ 	struct mtk_dsi *dsi = container_of(comp, struct mtk_dsi, ddp_comp);
+ 
++	mtk_dsi_stop(dsi);
+ 	mtk_dsi_poweroff(dsi);
+ }
+ 
+@@ -1301,6 +1317,8 @@ static int mtk_dsi_remove(struct platform_device *pdev)
+ 	struct mtk_dsi *dsi = platform_get_drvdata(pdev);
+ 
+ 	mtk_output_dsi_disable(dsi);
++	mtk_dsi_stop(dsi);
++	mtk_dsi_poweroff(dsi);
+ 	component_del(&pdev->dev, &mtk_dsi_component_ops);
+ 
+ 	return 0;
 diff --git a/drivers/gpu/drm/panel/panel-boe-himax8279d.c b/drivers/gpu/drm/panel/panel-boe-himax8279d.c
 index ff5a89e38fd7..b854455c9d88 100644
 --- a/drivers/gpu/drm/panel/panel-boe-himax8279d.c
@@ -7112,7 +7913,7 @@ index 000000000000..408c349dd436
 +MODULE_DESCRIPTION("Driver for Semtech SX9311 proximity sensor");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index e4144a41f763..c75e6e76bb0d 100644
+index b91f2679945c..6a4eaddaa530 100644
 --- a/drivers/net/wireless/ath/ath10k/core.c
 +++ b/drivers/net/wireless/ath/ath10k/core.c
 @@ -2460,7 +2460,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
@@ -7151,10 +7952,10 @@ index 5f7f1e08866f..5c342a1a2b9a 100644
  }
  
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 2707151535ec..dec2ede7818a 100644
+index 7beac869bf58..e16691b75a3b 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
-@@ -1632,7 +1632,7 @@ static int ath10k_sdio_hif_diag_write_mem(struct ath10k *ar, u32 address,
+@@ -1640,7 +1640,7 @@ static int ath10k_sdio_hif_diag_write_mem(struct ath10k *ar, u32 address,
  	return 0;
  }
  
@@ -7163,7 +7964,7 @@ index 2707151535ec..dec2ede7818a 100644
  {
  	struct ath10k_sdio *ar_sdio = ath10k_sdio_priv(ar);
  	u32 addr, val;
-@@ -1655,7 +1655,8 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
+@@ -1663,7 +1663,8 @@ static int ath10k_sdio_hif_swap_mailbox(struct ath10k *ar)
  			   "sdio mailbox swap service disabled\n");
  		ar_sdio->swap_mbox = false;
  	}
@@ -7174,73 +7975,10 @@ index 2707151535ec..dec2ede7818a 100644
  }
  
 diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-old mode 100644
-new mode 100755
-index e4ea7f6aef20..61a18c0d271c
+index 3eaa37cefb90..b8adb9c53c69 100644
 --- a/drivers/thermal/mtk_thermal.c
 +++ b/drivers/thermal/mtk_thermal.c
-@@ -219,6 +219,9 @@ enum {
- /* The total number of temperature sensors in the MT8183 */
- #define MT8183_NUM_SENSORS	6
- 
-+/* The number of banks in the MT8183 */
-+#define MT8183_NUM_ZONES               5
-+
- /* The number of sensing points per bank */
- #define MT8183_NUM_SENSORS_PER_ZONE	 6
- 
-@@ -275,8 +278,12 @@ struct mtk_thermal {
- };
- 
- /* MT8183 thermal sensor data */
--static const int mt8183_bank_data[MT8183_NUM_SENSORS] = {
--	MT8183_TS1, MT8183_TS2, MT8183_TS3, MT8183_TS4, MT8183_TS5, MT8183_TSABB
-+static const int mt8183_bank_data[MT8183_NUM_ZONES][2] = {
-+	{MT8183_TS1},
-+	{MT8183_TS2},
-+	{MT8183_TS3},
-+	{MT8183_TS4},
-+	{MT8183_TS5},
- };
- 
- static const int mt8183_msr[MT8183_NUM_SENSORS_PER_ZONE] = {
-@@ -506,7 +513,7 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
- 
- static const struct mtk_thermal_data mt8183_thermal_data = {
- 	.auxadc_channel = MT8183_TEMP_AUXADC_CHANNEL,
--	.num_banks = MT8183_NUM_SENSORS_PER_ZONE,
-+	.num_banks = MT8183_NUM_ZONES,
- 	.num_sensors = MT8183_NUM_SENSORS,
- 	.vts_index = mt8183_vts_index,
- 	.cali_val = MT8183_CALIBRATION,
-@@ -515,8 +522,24 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
- 	.need_switch_bank = false,
- 	.bank_data = {
- 		{
--			.num_sensors = 6,
--			.sensors = mt8183_bank_data,
-+			.num_sensors = 1,
-+			.sensors = mt8183_bank_data[0],
-+		},
-+                {
-+			.num_sensors = 1,
-+			.sensors = mt8183_bank_data[1],
-+		},
-+		{
-+			.num_sensors = 1,
-+			.sensors = mt8183_bank_data[2],
-+		},
-+		{
-+			.num_sensors = 1,
-+			.sensors = mt8183_bank_data[3],
-+		},
-+		{
-+			.num_sensors = 1,
-+			.sensors = mt8183_bank_data[4],
- 		},
- 	},
- 
-@@ -605,7 +628,6 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+@@ -621,7 +621,6 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
  		temp = raw_to_mcelsius(mt,
  				       conf->bank_data[bank->id].sensors[i],
  				       raw);
@@ -7248,7 +7986,7 @@ index e4ea7f6aef20..61a18c0d271c
  		/*
  		 * The first read of a sensor often contains very high bogus
  		 * temperature value. Filter these out so that the system does
-@@ -617,7 +639,6 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+@@ -633,7 +632,6 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
  		if (temp > max)
  			max = temp;
  	}
@@ -7256,106 +7994,6 @@ index e4ea7f6aef20..61a18c0d271c
  	return max;
  }
  
-@@ -642,10 +663,80 @@ static int mtk_read_temp(void *data, int *temperature)
- 	return 0;
- }
- 
-+static int mtk_read_zone1_temp(void *data, int *temperature)
-+{
-+        struct mtk_thermal *mt = data;
-+	struct mtk_thermal_bank *bank = &mt->banks[0];
-+
-+        *temperature = mtk_thermal_bank_temperature(bank);
-+
-+	return 0;
-+}
-+
-+static int mtk_read_zone2_temp(void *data, int *temperature)
-+{
-+        struct mtk_thermal *mt = data;
-+        struct mtk_thermal_bank *bank = &mt->banks[1];
-+
-+        *temperature = mtk_thermal_bank_temperature(bank);
-+
-+        return 0;
-+}
-+
-+static int mtk_read_zone3_temp(void *data, int *temperature)
-+{
-+        struct mtk_thermal *mt = data;
-+        struct mtk_thermal_bank *bank = &mt->banks[2];
-+
-+        *temperature = mtk_thermal_bank_temperature(bank);
-+
-+        return 0;
-+}
-+
-+static int mtk_read_zone4_temp(void *data, int *temperature)
-+{
-+        struct mtk_thermal *mt = data;
-+        struct mtk_thermal_bank *bank = &mt->banks[3];
-+
-+        *temperature = mtk_thermal_bank_temperature(bank);
-+
-+        return 0;
-+}
-+
-+static int mtk_read_zone5_temp(void *data, int *temperature)
-+{
-+        struct mtk_thermal *mt = data;
-+        struct mtk_thermal_bank *bank = &mt->banks[4];
-+
-+        *temperature = mtk_thermal_bank_temperature(bank);
-+
-+        return 0;
-+}
-+
- static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
- 	.get_temp = mtk_read_temp,
- };
- 
-+static const struct thermal_zone_of_device_ops mtk_thermal_zone1_ops = {
-+        .get_temp = mtk_read_zone1_temp,
-+};
-+
-+static const struct thermal_zone_of_device_ops mtk_thermal_zone2_ops = {
-+        .get_temp = mtk_read_zone2_temp,
-+};
-+
-+static const struct thermal_zone_of_device_ops mtk_thermal_zone3_ops = {
-+        .get_temp = mtk_read_zone3_temp,
-+};
-+
-+static const struct thermal_zone_of_device_ops mtk_thermal_zone4_ops = {
-+        .get_temp = mtk_read_zone4_temp,
-+};
-+
-+static const struct thermal_zone_of_device_ops mtk_thermal_zone5_ops = {
-+        .get_temp = mtk_read_zone5_temp,
-+};
-+
- static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
- 				  int ctrl_id)
-@@ -960,7 +1051,17 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, mt);
- 
- 	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
--						     &mtk_thermal_ops);
-+							&mtk_thermal_ops);
-+        tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 1, mt,
-+							&mtk_thermal_zone1_ops);
-+	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 2, mt,
-+							&mtk_thermal_zone2_ops);
-+	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 3, mt,
-+							&mtk_thermal_zone3_ops);
-+	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 4, mt,
-+							&mtk_thermal_zone4_ops);
-+	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 5, mt,
-+							&mtk_thermal_zone5_ops);
- 	if (IS_ERR(tzdev)) {
- 		ret = PTR_ERR(tzdev);
- 		goto err_disable_clk_peri_therm;
 diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
 index 8c738c0e6e9f..e136e3a3c996 100644
 --- a/include/drm/drm_panel.h
@@ -7528,10 +8166,10 @@ index 9aac1fda94c8..cfecbdaa5853 100644
 diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 old mode 100644
 new mode 100755
-index 1e7e8aed8707..c25ed84e2117
+index c978938292bb..f9eb3229a578
 --- a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
 +++ b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-@@ -34,7 +34,7 @@ static struct snd_soc_dai_link_component
+@@ -22,7 +22,7 @@ static struct snd_soc_dai_link_component
  mt8183_da7219_max98357_external_codecs[] = {
  	{
  		.name = "max98357a",
@@ -7541,5 +8179,5 @@ index 1e7e8aed8707..c25ed84e2117
  	{
  		.name = "da7219.5-001a",
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.20.1
 

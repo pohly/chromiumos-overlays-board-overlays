@@ -1,4 +1,4 @@
-From 302199f51a5085fc228d6c723de9f4d79297e54a Mon Sep 17 00:00:00 2001
+From c3b41da9dfc6ab2cc9bb41181b38eef9818a72a3 Mon Sep 17 00:00:00 2001
 From: "yanjie.jiang" <yanjie.jiang@mediatek.com>
 Date: Tue, 16 Apr 2019 16:48:00 +0800
 Subject: [PATCH 3/3] ccci: add md_off flow
@@ -33,10 +33,10 @@ Signed-off-by: yanjie.jiang@mediatek.corp-partner.google.com
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 old mode 100644
 new mode 100755
-index 99c4bbc1463f..464598bc22cb
+index 93b78344925d..111ecd4e3bc3
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -705,6 +705,10 @@
+@@ -758,6 +758,10 @@
  			status = "disabled";
  		};
  
@@ -274,5 +274,5 @@ index 000000000000..b94f93f4558f
 +
 +
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.20.1
 
