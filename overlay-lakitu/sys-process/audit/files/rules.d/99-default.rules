@@ -1,7 +1,6 @@
 # The following rule allows logging of the following message types
 # and tells the kernel to ignore everything else.
 #  - CONFIG_CHANGE
-#  - INTEGRITY_RULE
 #  - AVC (for AppArmor permission check messages)
 
--a exclude,never -F msgtype!=CONFIG_CHANGE -F msgtype!=INTEGRITY_RULE -F msgtype!=AVC
+-a exclude,never -F msgtype!=CONFIG_CHANGE -F msgtype!=AVC
