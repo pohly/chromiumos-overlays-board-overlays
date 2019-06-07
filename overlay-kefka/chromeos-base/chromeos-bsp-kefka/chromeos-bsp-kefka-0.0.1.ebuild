@@ -1,7 +1,7 @@
 # Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=5
 
 inherit appid cros-audio-configs
 
@@ -12,6 +12,7 @@ LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="-* amd64 x86"
 S="${WORKDIR}"
+IUSE="kefka-kernelnext"
 
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
@@ -26,8 +27,12 @@ src_install() {
 	insinto "/usr/share/power_manager/board_specific"
 	doins "${FILESDIR}"/powerd_prefs/*
 
-	# Install audio configs.
-	local audio_config_dir="${FILESDIR}/audio-config"
+	# Install audio config files
+	if use kefka-kernelnext; then
+		local audio_config_dir="${FILESDIR}/kernelnext-audio-config"
+	else
+		local audio_config_dir="${FILESDIR}/audio-config"
+	fi
 	install_audio_configs kefka "${audio_config_dir}"
 
 	# Install Bluetooth ID override.
