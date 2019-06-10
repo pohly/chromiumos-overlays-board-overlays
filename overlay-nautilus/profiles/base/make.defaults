@@ -57,3 +57,6 @@ INPUT_DEVICES="wacom"
 # Comment these lines to disable the serial port.
 #TTY_CONSOLE="ttyS0"
 #USE="${USE} pcserial"
+
+# Enable background blur.
+USE="${USE} background_blur"
