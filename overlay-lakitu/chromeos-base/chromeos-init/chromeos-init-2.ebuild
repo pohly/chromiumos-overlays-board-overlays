@@ -2,6 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# Although this package is not a dependency of virtual/target-os, it is
+# requried for signer test to create a recovery image so the the test will
+# pass. See crrev/c/439390 for more details.
+
 EAPI=5
 
 DESCRIPTION=""
