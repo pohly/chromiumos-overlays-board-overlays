@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit appid cros-audio-configs
+inherit appid cros-unibuild
 
 DESCRIPTION="Ebuild which pulls in any necessary ebuilds as dependencies
 or portage actions."
@@ -16,17 +16,19 @@ IUSE=""
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="chromeos-base/chromeos-bsp-baseboard-kukui"
+RDEPEND="
+	chromeos-base/chromeos-config
+	chromeos-base/chromeos-bsp-baseboard-kukui
+"
 DEPEND="${RDEPEND}"
 
 src_install() {
 	doappid "{50F3C95B-CA5B-4AF8-87A2-8CD19588BD12}" "CHROMEBOOK"
 
-	# Install audio config files
-	local audio_config_dir="${FILESDIR}/audio-config"
-	install_audio_configs kukui "${audio_config_dir}"
-
 	# Install Bluetooth ID override
 	insinto "/etc/bluetooth"
 	doins "${FILESDIR}/main.conf"
+
+	# Install audio config
+	unibuild_install_audio_files
 }

@@ -21,6 +21,25 @@ common_config: &common_config
     key-id: "{{$key-id}}"
     signature-id: "{{$device-name}}"
   test-label: "{{$device-name}}"
+  audio:
+    main:
+      $cras_root: "/etc/cras"
+      $ucm_root: "/usr/share/alsa/ucm"
+      $card: "mt8183_mt6358_ts3a227_max98357"
+      cras-config-dir: "{{$device-name}}"
+      $ucm-source-suffix: ""
+      ucm-suffix: "{{$device-name}}"
+      $cras-source: "{{cras-config-dir}}/audio/cras-config"
+      $cras-dest: "{{$cras_root}}/{{cras-config-dir}}"
+      $ucm-source: "{{cras-config-dir}}/audio/ucm-config{{$ucm-source-suffix}}"
+      $ucm-dest: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}"
+      files:
+        - source: "{{$cras-source}}/{{$card}}"
+          destination: "{{$cras-dest}}/{{$card}}"
+        - source: "{{$ucm-source}}/HiFi.conf"
+          destination: "{{$ucm-dest}}/HiFi.conf"
+        - source: "{{$ucm-source}}/{{$card}}.conf"
+          destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
 
 kukui-config: &kukui_config
   <<: *common_config
