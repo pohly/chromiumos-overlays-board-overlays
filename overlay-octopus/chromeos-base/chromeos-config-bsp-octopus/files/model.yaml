@@ -399,6 +399,8 @@ chromeos:
     - $device-name: "bloog"
       $fw-name: "Bloog"
       $num-mic-locations: 1
+      $ucm_src_root: "{{$device-name}}"
+      $ucm_extra_suffix: "{{$device-name}}"
       skus:
         - $sku-id-val: 33
           $stylus-category: "external"
@@ -415,6 +417,8 @@ chromeos:
     - $device-name: "blooguard"
       $fw-name: "Bloog"
       $num-mic-locations: 1
+      $ucm_src_root: "{{$device-name}}"
+      $ucm_extra_suffix: "{{$device-name}}"
       skus:
         - $sku-id-val: 49
           $has-keyboard-backlight: 1
