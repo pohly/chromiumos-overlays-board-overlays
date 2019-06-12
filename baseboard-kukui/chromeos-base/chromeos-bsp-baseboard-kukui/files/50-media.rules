@@ -3,5 +3,6 @@ SUBSYSTEM!="video4linux", GOTO="media_end"
 
 ATTR{name}=="mtk-vcodec-dec", SYMLINK+="video-dec0"
 ATTR{name}=="mtk-vcodec-enc", SYMLINK+="video-enc"
+ATTR{name}=="mtk-mdp3:m2m", SYMLINK+="image-proc0"
 
 LABEL="media_end"
