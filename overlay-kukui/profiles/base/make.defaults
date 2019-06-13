@@ -21,6 +21,9 @@ USE="${USE} touch_centric_device"
 
 EC_FIRMWARE="kukui"
 
+# Include the goodix firmware updating tool
+INPUT_DEVICES="goodix"
+
 # Uncomment these lines to activate the serial port.
 # Enable kernel serial drivers
 USE="${USE} pcserial"
