@@ -58,7 +58,9 @@ device-config: &device_config
         - source: "{{$ucm_src_root}}/audio/ucm-config/{{$card}}.{{$num-mic-locations}}mic/HiFi.conf"
           destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/HiFi.conf"
   camera:
+    $camera-clock: "monotonic"
     count: "{{$num-mic-locations}}"
+    clock: "{{$camera-clock}}"
   power:
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
@@ -280,6 +282,7 @@ chromeos:
         - $sku-id-val: 25
           config: *convertible_config
         - $sku-id-val: 26
+          $camera-clock: "boottime"
           config: *convertible_config
     # This is a temporary model with SKU ID - 255 which is expected to be
     # provisioned with correct SKU ID in the factory flow. And HWID verification
