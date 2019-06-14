@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-CROS_WORKON_COMMIT="1f92c7a079ac0c10d85fa5d2c9ffb9b0afcc7745"
-CROS_WORKON_TREE="e61e728e4dea70b845c8664e970834ee4ca3c349"
+CROS_WORKON_COMMIT="a2e6f608234aa43e56092a80923f4797bb0023ef"
+CROS_WORKON_TREE="91f0f1a5564fb439b73948e92d389e360338841c"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
 CROS_WORKON_LOCALNAME="kernel/v4.19"
 
@@ -92,4 +92,4 @@ src_install() {
 # NOTE: There's nothing magic keeping this number prime but you just need to
 # make _any_ change to this file.  ...so why not keep it prime?
 #
-# The coolest prime number is: 3
+# The coolest prime number is: 5
