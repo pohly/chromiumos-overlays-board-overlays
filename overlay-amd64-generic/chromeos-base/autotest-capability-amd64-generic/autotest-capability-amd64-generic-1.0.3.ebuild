@@ -17,4 +17,6 @@ DEPEND="${RDEPEND}"
 src_install() {
 	insinto /etc/autotest-capability/
 	doins "${FILESDIR}"/*
+	# Broken intentionally: crbug.com/904155
+	exit 1
 }
