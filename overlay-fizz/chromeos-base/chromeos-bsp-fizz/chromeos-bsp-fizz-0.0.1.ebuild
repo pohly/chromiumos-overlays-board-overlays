@@ -15,10 +15,7 @@ IUSE="fizz-cfm"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="
-	chromeos-base/chromeos-bsp-baseboard-fizz
-	chromeos-base/jabra-vold
-"
+RDEPEND="chromeos-base/chromeos-bsp-baseboard-fizz"
 DEPEND="${RDEPEND}"
 
 src_install() {

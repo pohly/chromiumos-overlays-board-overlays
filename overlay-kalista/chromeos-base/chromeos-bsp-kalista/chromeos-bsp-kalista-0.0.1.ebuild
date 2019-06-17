@@ -16,10 +16,7 @@ IUSE="kalista-cfm"
 S="${WORKDIR}"
 
 # Add dependencies on other ebuilds from within this board overlay
-RDEPEND="
-	chromeos-base/chromeos-config
-	chromeos-base/jabra-vold
-"
+RDEPEND="chromeos-base/chromeos-config"
 DEPEND="${RDEPEND}"
 
 src_install() {

@@ -17,7 +17,6 @@ S="${WORKDIR}"
 # Add dependencies on other ebuilds from within this board overlay
 RDEPEND="
 	chromeos-base/chromeos-bsp-baseboard-jecht
-	chromeos-base/jabra-vold
 	media-libs/go2001-fw
 	media-libs/go2001-rules
 	!<media-sound/adhd-0.0.1-r1687
