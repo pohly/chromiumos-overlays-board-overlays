@@ -41,4 +41,10 @@ src_install() {
 	# used to search file names of firmware blobs.
 	exeinto "/opt/google/touch/scripts"
 	doexe "${FILESDIR}"/arcada/get_board_specific_wacom_hwid.sh
+
+	# Both Sarien and Arcada contain an RTC in the EC that needs to
+	# be kept in sync with local time so that charge scheduling happens
+	# at the correct time. This upstart script will do that.
+	insinto /etc/init
+	doins "${FILESDIR}/wilco_sync_ec_rtc.conf"
 }
