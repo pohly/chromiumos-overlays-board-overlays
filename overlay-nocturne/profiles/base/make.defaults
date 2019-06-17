@@ -49,6 +49,8 @@ USE="${USE} hammerd"
 # unified builds.
 USE="${USE} -unibuild"
 
+USE="${USE} ime_addons"
+
 # Enable Intel wifi and bt firmware
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw"
 
