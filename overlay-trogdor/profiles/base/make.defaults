@@ -1,0 +1,20 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} trogdor"
+
+# Enable firmware detachable ui
+USE="${USE} detachable_ui"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Enable QMI support in ModemManager
+USE="${USE} qmi"
+
+# All firmwares to build from the EC code base
+EC_FIRMWARE="trogdor"

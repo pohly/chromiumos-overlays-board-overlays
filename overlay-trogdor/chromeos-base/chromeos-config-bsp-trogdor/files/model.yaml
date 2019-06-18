@@ -1,0 +1,26 @@
+#
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+#
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+common_config: &common_config
+  name: "{{$device-name}}"
+  identity:
+    platform-name: "Trogdor"
+    device-tree-compatible-match: "google,trogdor"
+  firmware:
+    build-targets:
+      coreboot: "trogdor"
+      ec: "trogdor"
+      depthcharge: "trogdor"
+      libpayload: "trogdor"
+    no-firmware: True
+  test-label: "{{$device-name}}"
+chromeos:
+  devices:
+    - $device-name: "trogdor"
+      products:
+        - $key-id: "TROGDOR"
+      skus:
+        - config: *common_config

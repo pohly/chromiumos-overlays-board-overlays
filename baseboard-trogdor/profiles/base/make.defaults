@@ -1,0 +1,40 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+USE="${USE} cros_ec eclog mosys_eventlog -opengl"
+USE="${USE} opengles touchview watchdog"
+USE="${USE} wifi_force_powersave"
+# Make GPU sandboxing failures not fatal because we use LLVM
+USE="${USE} gpu_sandbox_failures_not_fatal"
+
+# Enable TPM2 for H1
+USE="${USE} -tpm tpm2"
+
+# Include prebuilt (&signed) CR50 FW
+USE="${USE} cr50_onboard"
+
+# Enable KVM
+USE="${USE} kvm_host"
+
+# Google USBPD peripheral firmwares
+LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
+
+VIDEO_CARDS="msm"
+
+# Declare set of enabled consoles
+TTY_CONSOLE="ttyMSM0"
+
+#### Below is temporary until we get the normal video card working ####
+
+# LLVM is required to build the llvmpipe driver.
+#
+# NOTE: we currently turn on _both_ llvmpipe and msm video cards.  The
+# msm video card will be used by the "minigbm" ebuild and the "llvmpipe"
+# by the mesa one.  We'd remove this when mesa supports "msm"
+USE="${USE} llvm"
+VIDEO_CARDS="${VIDEO_CARDS} llvmpipe"
