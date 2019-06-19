@@ -64,6 +64,13 @@ base_config: &base_config
       - source: "{{$dptf-device}}/thermal/dptf.dv"
         destination: "/etc/dptf/{{$dptf-device}}/dptf.dv"
 
+convertible_base_config: &convertible_base_config
+  hardware-properties:
+    is-lid-convertible: True
+    has-lid-accelerometer: True
+    has-base-accelerometer: True
+    has-base-gyroscope: True
+
 device_config: &device_config
   <<: *base_config
   identity:
@@ -73,6 +80,9 @@ device_config: &device_config
   firmware-signing:
     key-id: "{{$key-id}}"
     signature-id: "{{$device-name}}"
+
+convertible_config: &convertible_config
+  <<: [ *device_config, *convertible_base_config ]
 
 wl_device_config: &wl_device_config
   <<: *base_config
@@ -86,6 +96,9 @@ wl_device_config: &wl_device_config
     key-id: "{{$key-id}}"
     signature-id: "{{$signature-id}}"
     sig-id-in-customization-id: true
+
+wl_convertible_config: &wl_convertible_config
+  <<: [ *wl_device_config, *convertible_base_config ]
 
 preallocated_wl_product: &preallocated_wl_product
   $whitelabel-tag: "TBD-{{$brand-code}}"
@@ -194,9 +207,9 @@ chromeos:
           $key-id: "CORALF"
       skus:
         - $sku-id: 37
-          config: *wl_device_config
+          config: *wl_convertible_config
         - $sku-id: 38
-          config: *wl_device_config
+          config: *wl_convertible_config
     - $device-name: "blacktiplte"
       $bluetooth-device: "blacktip"
       $dptf-device: "astronaut"
@@ -238,12 +251,12 @@ chromeos:
           $key-id: "CORALA"
       skus:
         - $sku-id: 8
-          config: *device_config
+          config: *convertible_config
         - $sku-id: 11
           $ucm: "2mic"
           $ucm-device: "bruce"
           $ucm-target-suffix: "Bruce360"
-          config: *device_config
+          config: *convertible_config
     - $device-name: "epaulette"
       $dptf-device: "astronaut"
       # TODO(epaulette-odm): Modify the current conf files as
@@ -273,13 +286,13 @@ chromeos:
           $key-id: "CORALA"
       skus:
         - $sku-id: 4
-          config: *device_config
+          config: *convertible_config
         - $sku-id: 5
-          config: *device_config
+          config: *convertible_config
         - $sku-id: 9
-          config: *device_config
+          config: *convertible_config
         - $sku-id: 10
-          config: *device_config
+          config: *convertible_config
     - $device-name: "nasher"
       $ucm: ""
       $ucm-suffix-path: ""
@@ -308,16 +321,16 @@ chromeos:
       skus:
         - $sku-id: 163
           $ucm: "nasher"
-          config: *device_config
+          config: *convertible_config
         - $sku-id: 164
           $ucm: "nasher"
-          config: *device_config
+          config: *convertible_config
         - $sku-id: 165
           $ucm: "2micNasher360"
-          config: *device_config
+          config: *convertible_config
         - $sku-id: 166
           $ucm: "2micNasher360"
-          config: *device_config
+          config: *convertible_config
     - $device-name: "porbeagle"
       $dptf-device: "astronaut"
       $cras: "astronaut"
@@ -369,7 +382,7 @@ chromeos:
           $key-id: "CORALD"
       skus:
         - $sku-id: 71
-          config: *device_config
+          config: *convertible_config
     - $device-name: "santa"
       $cras: "astronaut"
       $dptf-device: "astronaut"
