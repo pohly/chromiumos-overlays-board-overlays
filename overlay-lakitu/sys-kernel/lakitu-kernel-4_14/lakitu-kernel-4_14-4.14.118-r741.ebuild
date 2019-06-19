@@ -1,11 +1,11 @@
-# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-CROS_WORKON_COMMIT="905bff277dcef1c1d702008912de42422664a9ad"
-CROS_WORKON_TREE="cfc6d724fe49b77336a4000914ff07040dcd6eed"
+EAPI=5
+CROS_WORKON_COMMIT="a55ac98467c3a8b6d2173cf04ebae5e3ab491350"
+CROS_WORKON_TREE="ec325570a5d0e8db343e3e27e4a62d34c17c41e4"
 CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
-CROS_WORKON_LOCALNAME="kernel/v4.19"
+CROS_WORKON_LOCALNAME="kernel/v4.14"
 
 CHROMEOS_KERNEL_CONFIG="${FILESDIR}/base.config"
 
@@ -15,7 +15,7 @@ inherit cros-workon cros-kernel2 osreleased
 STRIP_MASK+=" /usr/src/${P}/build/vmlinux"
 STRIP_MASK+=" *.ko"
 
-DESCRIPTION="Chromium OS Linux Kernel 4.19"
+DESCRIPTION="Chromium OS Linux Kernel 4.14"
 HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
 KEYWORDS="*"
 IUSE="module_sign gpu"
@@ -41,12 +41,6 @@ src_configure() {
 	cros-kernel2_src_configure
 }
 
-# Change for EAPI=6
-src_prepare() {
-        default
-        cros-kernel2_src_prepare
-}
-
 tar_kernel_source() {
 	# Put kernel source tarball under /opt to avoid it gets
 	# masked by INSTALL_MASK.
@@ -62,8 +56,8 @@ write_toolchain_env() {
 	# in toolchain_env
 	local toolchain_env_dir=etc
 	# Example for toolchain_env content:
-	# CC=x86_64-cros-linux-gnu-clang
-	# CXX=x86_64-cros-linux-gnu-clang++
+	# CC=x86_64-cros-linux-gnu-gcc
+	# CXX=x86_64-cros-linux-gnu-g++
 	# The file will be deleted after copying data to BUILD_DIR artifact
 	echo "CC=${CC}" > "${D}/${toolchain_env_dir}/toolchain_env"
 	echo "CXX=${CXX}" >> "${D}/${toolchain_env_dir}/toolchain_env"
@@ -85,11 +79,11 @@ src_install() {
 
 # Change the following (commented out) number to the next prime number
 # when you change base.config.  This workaround will force the
-# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_19 ebuild and pick up the
+# ChromeOS CQ to uprev sys-kernel/lakitu-kernel-4_14 ebuild and pick up the
 # configuration changes.  In absence of this workaround the config changes
 # would not be picked up unless there was a code change in kernel source tree.
 #
 # NOTE: There's nothing magic keeping this number prime but you just need to
 # make _any_ change to this file.  ...so why not keep it prime?
 #
-# The coolest prime number is: 5
+# The coolest prime number is: 89
