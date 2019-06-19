@@ -57,6 +57,42 @@ index 000000000000..982a30bcfc86
 +				< 2649600 1728000 >;
 +		};
 +	};
+diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.txt b/Documentation/devicetree/bindings/display/bridge/ite,it6505.txt
+new file mode 100644
+index 000000000000..c3506ac4c980
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.txt
+@@ -0,0 +1,30 @@
++iTE it6505 DP bridge bindings
++
++Required properties:
++        - compatible: "ite,it6505"
++        - reg: i2c address of the bridge
++        - ovdd-supply: I/O voltage
++        - pwr18-supply: Core voltage
++        - interrupts: interrupt specifier of INT pin
++        - reset-gpios: gpio specifier of RESET pin
++
++Example:
++	it6505dptx: it6505dptx@5c {
++                compatible = "ite,it6505";
++                status = "okay";
++                interrupt-parent = <&pio>;
++                interrupts = <152 IRQ_TYPE_EDGE_RISING 152 0>;
++                reg = <0x5c>;
++                pinctrl-names = "default";
++                pinctrl-0 = <&it6505_pins>;
++                ovdd-supply = <&mt6358_vsim1_reg>;
++                pwr18-supply = <&it6505_pp18_reg>;
++                reset-gpios = <&pio 179 1>;
++                hpd-gpios = <&pio 9 0>;
++                extcon = <&usbc_extcon>;
++                port {
++                        it6505_in: endpoint {
++                                remote-endpoint = <&dpi_out>;
++                        };
++                };
++        };
 diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
 index 5467470c7b8a..bc8e30c20c64 100644
 --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
@@ -126,81 +162,6 @@ index 5467470c7b8a..bc8e30c20c64 100644
  };
  
  color0: color@14013000 {
-diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-index 7d72b21c9e94..755b30fd6041 100644
---- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-+++ b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-@@ -9,7 +9,7 @@ CMDQ driver uses mailbox framework for communication. Please refer to
- mailbox.txt for generic information about mailbox device-tree bindings.
- 
- Required properties:
--- compatible: Must be "mediatek,mt8173-gce"
-+- compatible: can be "mediatek,mt8173-gce" or "mediatek,mt8183-gce"
- - reg: Address range of the GCE unit
- - interrupts: The interrupt signal from the GCE block
- - clock: Clocks according to the common clock binding
-@@ -21,15 +21,31 @@ Required properties:
- 	priority: Priority of GCE thread.
- 	atomic_exec: GCE processing continuous packets of commands in atomic
- 		way.
-+- #event-cells: Should be 1.
-+	<&phandle event_number>
-+	phandle: Label name of a gce node.
-+	event_number: the event number defined in 'dt-bindings/gce/mt8173-gce.h'
-+		      or 'dt-binding/gce/mt8183-gce.h'.
-+- #subsys-cells: Should be 3.
-+	<&phandle subsys_number start_offset size>
-+	phandle: Label name of a gce node.
-+	subsys_number: specify the sub-system id which is corresponding
-+		       to the register address.
-+	start_offset: the start offset of register address that GCE can access.
-+	size: the total size of register address that GCE can access.
- 
- Required properties for a client device:
- - mboxes: Client use mailbox to communicate with GCE, it should have this
-   property and list of phandle, mailbox specifiers.
--- mediatek,gce-subsys: u32, specify the sub-system id which is corresponding
-+Optional propertier for a client device:
-+- mediatek,gce-client-reg: u32, specify the sub-system id which is corresponding
-   to the register address.
-+- mediatek,gce-event-names: the event name can be defined by user.
-+- mediatek,gce-events: u32, the event number defined in
-+  'dt-bindings/gce/mt8173-gce.h' or 'dt-binding/gce/mt8183-gce.h'.
- 
--Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h'. Such as
--sub-system ids, thread priority, event ids.
-+Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h'
-+or 'dt-binding/gce/mt8183-gce.h'. Such as sub-system ids, thread priority, event ids.
- 
- Example:
- 
-@@ -39,8 +55,9 @@ Example:
- 		interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_GCE>;
- 		clock-names = "gce";
--		thread-num = CMDQ_THR_MAX_COUNT;
- 		#mbox-cells = <3>;
-+		#event-cells = <1>;
-+		#subsys-cells = <2>;
- 	};
- 
- Example for a client device:
-@@ -49,9 +66,11 @@ Example for a client device:
- 		compatible = "mediatek,mt8173-mmsys";
- 		mboxes = <&gce 0 CMDQ_THR_PRIO_LOWEST 1>,
- 			 <&gce 1 CMDQ_THR_PRIO_LOWEST 1>;
--		mediatek,gce-subsys = <SUBSYS_1400XXXX>;
--		mutex-event-eof = <CMDQ_EVENT_MUTEX0_STREAM_EOF
--				CMDQ_EVENT_MUTEX1_STREAM_EOF>;
--
-+		mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>,
-+					  <&gce SUBSYS_1401XXXX 0x2000 0x100>;
-+		mediatek,gce-event-names = "rdma0_sof",
-+					   "rsz0_sof";
-+		mediatek,gce-events = <&gce CMDQ_EVENT_MDP_RDMA0_SOF>,
-+				      <&gce CMDQ_EVENT_MDP_RSZ0_SOF>;
- 		...
- 	};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
 index 3813947b4d4f..c9f89132830c 100644
 --- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
@@ -304,19 +265,6 @@ index b6b5dde6abd8..5c9ee6af3cfa 100644
      iommus = <&iommu M4U_PORT_VENC_RCPU>,
               <&iommu M4U_PORT_VENC_REC>,
               <&iommu M4U_PORT_VENC_BSDMA>,
-diff --git a/Documentation/devicetree/bindings/media/mediatek-vpu.txt b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
-index 2a5bac37f9a2..015123250b82 100644
---- a/Documentation/devicetree/bindings/media/mediatek-vpu.txt
-+++ b/Documentation/devicetree/bindings/media/mediatek-vpu.txt
-@@ -4,7 +4,7 @@ Video Processor Unit is a HW video controller. It controls HW Codec including
- H.264/VP8/VP9 Decode, H.264/VP8 Encode and Image Processor (scale/rotate/color convert).
- 
- Required properties:
--  - compatible: "mediatek,mt8173-vpu"
-+  - compatible:"mediatek,mt8173-vpu", "mediatek,mt8183-vpu", "mediatek,reserve-memory-vpu_share"
-   - reg: Must contain an entry for each entry in reg-names.
-   - reg-names: Must include the following entries:
-     "tcm": tcm base
 diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt b/Documentation/devicetree/bindings/memory-controllers/mediatek,emi.txt
 new file mode 100644
 index 000000000000..a19e3b39ba66
@@ -342,8 +290,20 @@ index 000000000000..a19e3b39ba66
 +			 <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>, /* CGM */
 +			 <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
 +};
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.txt b/Documentation/devicetree/bindings/vendor-prefixes.txt
+index 2c3fc512e746..c088646f3f1e 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.txt
++++ b/Documentation/devicetree/bindings/vendor-prefixes.txt
+@@ -184,6 +184,7 @@ iom	Iomega Corporation
+ isee	ISEE 2007 S.L.
+ isil	Intersil
+ issi	Integrated Silicon Solutions Inc.
++ite	iTE Tech. Inc.
+ itead	ITEAD Intelligent Systems Co.Ltd
+ iwave  iWave Systems Technologies Pvt. Ltd.
+ jdi	Japan Display Inc.
 diff --git a/Makefile b/Makefile
-index 1241e0120740..434373aa4d87 100644
+index 045c0cf11e7d..04b5c73760bd 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -371,6 +331,32 @@ index 3a55c454b65d..d09409979c84 100644
 +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
+diff --git a/arch/arm64/boot/dts/mediatek/mt6358.dtsi b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
+index a7e655c42a54..a049ac2e39f7 100644
+--- a/arch/arm64/boot/dts/mediatek/mt6358.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
+@@ -114,8 +114,8 @@
+ 
+ 			mt6358_vsim1_reg: ldo_vsim1 {
+ 				regulator-name = "vsim1";
+-				regulator-min-microvolt = <1700000>;
+-				regulator-max-microvolt = <3100000>;
++				regulator-min-microvolt = <2700000>;
++				regulator-max-microvolt = <2700000>;
+ 				regulator-enable-ramp-delay = <540>;
+ 			};
+ 
+@@ -349,8 +349,8 @@
+ 
+ 			mt6358_vsim2_reg: ldo_vsim2 {
+ 				regulator-name = "vsim2";
+-				regulator-min-microvolt = <1700000>;
+-				regulator-max-microvolt = <3100000>;
++				regulator-min-microvolt = <2700000>;
++				regulator-max-microvolt = <2700000>;
+ 				regulator-enable-ramp-delay = <540>;
+ 			};
+ 		};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
 new file mode 100644
 index 000000000000..4c71b09e26a3
@@ -702,8 +688,35 @@ index 000000000000..4c71b09e26a3
 +	};
 +};
 +
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
+index 0f78005f705c..96e101d6b346 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
+@@ -225,6 +225,10 @@
+ 	};
+ };
+ 
++&it6505dptx {
++	ovdd-supply = <&mt6358_vsim1_reg>;
++};
++
+ &i2c0 {
+ 	status = "okay";
+ 
+@@ -251,3 +255,11 @@
+ 			 <PINMUX_GPIO12__FUNC_TP_UTXD1_AO>;
+ 	};
+ };
++
++&sound {
++	mediatek,headset-codec = <&ts3a227e>;
++};
++
++&ts3a227e {
++	status = "okay";
++};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
-index f950c87b1672..7ac53e3bbfff 100644
+index f950c87b1672..ba0ffaf330d4 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev2.dts
 @@ -4,6 +4,7 @@
@@ -866,7 +879,7 @@ index f950c87b1672..7ac53e3bbfff 100644
  	touch_default: touchdefault {
  		pin_irq {
  			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
-@@ -297,6 +429,13 @@
+@@ -297,9 +429,24 @@
  			output-low;
  		};
  	};
@@ -880,61 +893,190 @@ index f950c87b1672..7ac53e3bbfff 100644
  };
  
  &scp_pins {
+ 	/* EINT pins are used for other purpose on rev2. */
+ 	/delete-node/ pins_eint;
+ };
++
++&sound {
++	mediatek,headset-codec = <&ts3a227e>;
++};
++
++&ts3a227e {
++	status = "okay";
++};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index e30bc9517fbb..e93b0587cfbc 100644
+index 6e8549859067..33cf69b5899f 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -59,6 +59,20 @@
- 		regulator-boot-on;
+@@ -41,6 +41,15 @@
+ 		clock-output-names = "clk32k";
  	};
  
-+	mmc1_fixed_power: regulator@3 {
++	it6505_pp18_reg: regulator@0 {
 +		compatible = "regulator-fixed";
-+		regulator-name = "mmc1_power";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	mmc1_fixed_io: regulator@4 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "mmc1_io";
++		regulator-name = "it6505_pp18";
 +		regulator-min-microvolt = <1800000>;
 +		regulator-max-microvolt = <1800000>;
++		gpio = <&pio 178 0>;
++		enable-active-high;
 +	};
 +
- 	reserved_memory: reserved-memory {
- 		#address-cells = <2>;
- 		#size-cells = <2>;
-@@ -294,8 +308,8 @@
- 	pinctrl-names = "default", "state_uhs";
- 	pinctrl-0 = <&mmc1_pins_default>;
- 	pinctrl-1 = <&mmc1_pins_uhs>;
--	vmmc-supply = <&mt6358_vmch_reg>;
--	vqmmc-supply = <&mt6358_vmc_reg>;
-+	vmmc-supply = <&mmc1_fixed_power>;
-+	vqmmc-supply = <&mmc1_fixed_io>;
- 	bus-width = <4>;
- 	max-frequency = <200000000>;
- 	drv-type = <2>;
-@@ -308,6 +322,8 @@
- 	non-removable;
- 	no-mmc;
- 	no-sd;
-+	assigned-clocks = <&topckgen CLK_TOP_MUX_MSDC30_1>;
-+	assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
+ 	lcd_pp3300: regulator@1 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "lcd_pp3300";
+@@ -114,7 +123,6 @@
+ 	sound: mt8183-mt6358-ts3a227e-max98357a {
+ 		compatible = "mediatek,mt8183_mt6358_ts3a227_max98357";
+ 		mediatek,platform = <&afe>;
+-		mediatek,headset-codec = <&ts3a227e>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&aud_pins>;
+ 		status = "okay";
+@@ -171,6 +179,18 @@
+ 	proc-supply = <&mt6358_vproc11_reg>;
  };
  
- &mt6358_vdram2_reg {
-@@ -520,7 +536,7 @@
- 			mediatek,pull-down-adv = <10>;
- 		};
++&dpi0 {
++	pinctrl-names = "default", "dpimode";
++	pinctrl-0 = <&dpi_pin_default>;
++	pinctrl-1 = <&dpi_pin_func>;
++	status = "okay";
++	port {
++		dpi_out: endpoint {
++			remote-endpoint = <&it6505_in>;
++		};
++	};
++};
++
+ &dsi0 {
+ 	status = "okay";
+ 	#address-cells = <1>;
+@@ -246,6 +266,28 @@
+ 	pinctrl-0 = <&i2c3_pins>;
+ 	status = "okay";
+ 	clock-frequency = <100000>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	it6505dptx: it6505dptx@5c {
++		compatible = "ite,it6505";
++		status = "okay";
++		interrupt-parent = <&pio>;
++		interrupts = <152 IRQ_TYPE_EDGE_RISING 152 0>;
++		reg = <0x5c>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&it6505_pins>;
++		ovdd-supply = <&mt6358_vsim2_reg>;
++		pwr18-supply = <&it6505_pp18_reg>;
++		reset-gpios = <&pio 179 1>;
++		hpd-gpios = <&pio 9 0>;
++		extcon = <&usbc_extcon>;
++		port {
++			it6505_in: endpoint {
++				remote-endpoint = <&dpi_out>;
++			};
++		};
++	};
+ };
  
--		pins_wifi {
-+		pins_wlan_en {
- 			pinmux = <PINMUX_GPIO119__FUNC_GPIO119>;
- 			output-high;
+ &i2c4 {
+@@ -270,6 +312,7 @@
+ 		reg = <0x3b>;
+ 		interrupt-parent = <&pio>;
+ 		interrupts = <157 IRQ_TYPE_LEVEL_LOW>;
++		status = "disabled";
+ 	};
+ };
+ 
+@@ -380,6 +423,51 @@
  		};
-@@ -801,7 +817,8 @@
+ 	};
+ 
++	dpi_pin_default: dpi_pin_default {
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO13__FUNC_GPIO13>,
++				<PINMUX_GPIO14__FUNC_GPIO14>,
++				<PINMUX_GPIO15__FUNC_GPIO15>,
++				<PINMUX_GPIO16__FUNC_GPIO16>,
++				<PINMUX_GPIO17__FUNC_GPIO17>,
++				<PINMUX_GPIO18__FUNC_GPIO18>,
++				<PINMUX_GPIO19__FUNC_GPIO19>,
++				<PINMUX_GPIO20__FUNC_GPIO20>,
++				<PINMUX_GPIO21__FUNC_GPIO21>,
++				<PINMUX_GPIO22__FUNC_GPIO22>,
++				<PINMUX_GPIO23__FUNC_GPIO23>,
++				<PINMUX_GPIO24__FUNC_GPIO24>,
++				<PINMUX_GPIO25__FUNC_GPIO25>,
++				<PINMUX_GPIO26__FUNC_GPIO26>,
++				<PINMUX_GPIO27__FUNC_GPIO27>,
++				<PINMUX_GPIO28__FUNC_GPIO28>;
++				drive-strength = <MTK_DRIVE_6mA>;
++				output-low;
++		};
++	};
++
++	dpi_pin_func: dpi_pin_func {
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO13__FUNC_DBPI_D0>,
++				<PINMUX_GPIO14__FUNC_DBPI_D1>,
++				<PINMUX_GPIO15__FUNC_DBPI_D2>,
++				<PINMUX_GPIO16__FUNC_DBPI_D3>,
++				<PINMUX_GPIO17__FUNC_DBPI_D4>,
++				<PINMUX_GPIO18__FUNC_DBPI_D5>,
++				<PINMUX_GPIO19__FUNC_DBPI_D6>,
++				<PINMUX_GPIO20__FUNC_DBPI_D7>,
++				<PINMUX_GPIO21__FUNC_DBPI_D8>,
++				<PINMUX_GPIO22__FUNC_DBPI_D9>,
++				<PINMUX_GPIO23__FUNC_DBPI_D10>,
++				<PINMUX_GPIO24__FUNC_DBPI_D11>,
++				<PINMUX_GPIO25__FUNC_DBPI_HSYNC>,
++				<PINMUX_GPIO26__FUNC_DBPI_VSYNC>,
++				<PINMUX_GPIO27__FUNC_DBPI_DE>,
++				<PINMUX_GPIO28__FUNC_DBPI_CK>;
++				drive-strength = <MTK_DRIVE_6mA>;
++		};
++	};
++
+ 	ec_ap_int_odl: ec_ap_int_odl {
+ 		pins1 {
+ 			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
+@@ -465,6 +553,22 @@
+ 		};
+ 	};
+ 
++	it6505_pins: it6505_pins {
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO178__FUNC_GPIO178>,
++					<PINMUX_GPIO179__FUNC_GPIO179>;
++			output-low;
++			bias-pull-up;
++		};
++
++		pins_cmd_dat1 {
++			pinmux = <PINMUX_GPIO9__FUNC_GPIO9>,
++					<PINMUX_GPIO152__FUNC_GPIO152>;
++			input-enable;
++			bias-pull-up;
++		};
++	};
++
+ 	mmc0_pins_default: mmc0default {
+ 		pins_cmd_dat {
+ 			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
+@@ -786,6 +890,12 @@
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 		};
++
++		usbc_extcon: extcon@0 {
++			compatible = "google,extcon-usbc-cros-ec";
++			google,usb-port-id = <0>;
++			#extcon-cells = <0>;
++		};
+ 	};
+ };
+ 
+@@ -829,7 +939,8 @@
  };
  
  &ssusb {
@@ -945,42 +1087,10 @@ index e30bc9517fbb..e93b0587cfbc 100644
  	status = "okay";
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index ba43207e2ecc..ff9ce0f93a3e 100644
+index 1e791d585ad0..537b5d15c180 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -6,6 +6,7 @@
-  */
- 
- #include <dt-bindings/clock/mt8183-clk.h>
-+#include <dt-bindings/gce/mt8183-gce.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/memory/mt8183-larb-port.h>
-@@ -22,11 +23,6 @@
- 	#size-cells = <2>;
- 
- 	aliases {
--		ovl0 = &ovl0;
--		ovl_2l0 = &ovl0_2l;
--		ovl_2l1 = &ovl1_2l;
--		rdma0 = &rdma0;
--		rdma1 = &rdma1;
- 		i2c0 = &i2c0;
- 		i2c1 = &i2c1;
- 		i2c2 = &i2c2;
-@@ -39,6 +35,11 @@
- 		i2c9 = &i2c9;
- 		i2c10 = &i2c10;
- 		i2c11 = &i2c11;
-+		ovl0 = &ovl0;
-+		ovl_2l0 = &ovl_2l0;
-+		ovl_2l1 = &ovl_2l1;
-+		rdma0 = &rdma0;
-+		rdma1 = &rdma1;
- 	};
- 
- 	cluster0_opp: opp_table0 {
-@@ -114,67 +115,67 @@
+@@ -115,67 +115,67 @@
  		opp-shared;
  		opp00 {
  			opp-hz = /bits/ 64 <793000000>;
@@ -1064,7 +1174,7 @@ index ba43207e2ecc..ff9ce0f93a3e 100644
  		};
  	};
  
-@@ -254,6 +255,29 @@
+@@ -255,6 +255,29 @@
  		operating-points-v2 = <&cci_opp>;
  	};
  
@@ -1094,108 +1204,21 @@ index ba43207e2ecc..ff9ce0f93a3e 100644
  	cpus {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -302,6 +326,7 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster0_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
+@@ -532,6 +555,13 @@
+ 			#reset-cells = <1>;
  		};
  
- 		cpu1: cpu@1 {
-@@ -316,6 +341,7 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster0_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -330,6 +356,7 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster0_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -344,6 +371,7 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster0_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
- 		};
- 
- 		cpu4: cpu@100 {
-@@ -358,6 +386,7 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster1_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
- 		};
- 
- 		cpu5: cpu@101 {
-@@ -372,6 +401,7 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster1_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
- 		};
- 
- 		cpu6: cpu@102 {
-@@ -386,6 +416,7 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster1_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
- 		};
- 
- 		cpu7: cpu@103 {
-@@ -400,6 +431,29 @@
- 				 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
- 			clock-names = "cpu", "intermediate";
- 			operating-points-v2 = <&cluster1_opp>;
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER>;
++		pericfg: power-controller@10003000 {
++			compatible = "mediatek,mt8183-pericfg", "syscon";
++			reg = <0 0x10003000 0 0x1000>;
++			#clock-cells = <1>;
++			#reset-cells = <1>;
 +		};
 +
-+		idle-states {
-+			entry-method = "arm,psci";
-+
-+			MCDI_CPU: mcdi-cpu {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x00010001>;
-+				entry-latency-us = <200>;
-+				exit-latency-us = <200>;
-+				min-residency-us = <800>;
-+			};
-+
-+			MCDI_CLUSTER: mcdi-cluster {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x01010001>;
-+				entry-latency-us = <250>;
-+				exit-latency-us = <400>;
-+				min-residency-us = <1300>;
-+			};
- 		};
- 	};
- 
-@@ -603,6 +657,14 @@
- 			clock-names = "spi", "wrap";
- 		};
- 
-+		systimer@10017000 {
-+			compatible = "mediatek,mt8183-timer",
-+				     "mediatek,mt6765-timer";
-+			reg = <0 0x10017000 0 0x1000>;
-+			interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&topckgen CLK_TOP_CLK13M>;
-+		};
-+
- 		iommu: iommu@10205000 {
- 			compatible = "mediatek,mt8183-m4u";
- 			reg = <0 0x10205000 0 0x1000>;
-@@ -612,6 +674,38 @@
+ 		pio: pinctrl@10005000 {
+ 			compatible = "mediatek,mt8183-pinctrl";
+ 			reg = <0 0x10005000 0 0x1000>,
+@@ -652,6 +682,17 @@
  			#iommu-cells = <1>;
  		};
  
@@ -1210,53 +1233,43 @@ index ba43207e2ecc..ff9ce0f93a3e 100644
 +						 <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>; /* ELM */
 +		};
 +
-+		gce: gce@10238000 {
-+			compatible = "mediatek,mt8183-gce";
-+			reg = <0 0x10238000 0 0x4000>;
-+			interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_LOW>;
-+			#mbox-cells = <3>;
-+			#subsys-cells = <3>;
-+			clocks = <&infracfg CLK_INFRA_GCE>;
-+			clock-names = "gce";
-+		};
-+
-+		vpu: vpu@10500000 {
-+			compatible = "mediatek,mt8183-vpu", "mediatek,mt8173-vpu";
-+			reg = <0 0x10500000 0 0x80000>,
-+			      <0 0x105c0000 0 0x1000>;
-+			reg-names = "tcm", "cfg_reg";
-+			interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_INFRA_SCPSYS>;
-+			clock-names = "main";
-+			status = "disabled";
-+		};
-+
- 		scp: scp@10500000 {
- 			compatible = "mediatek,mt8183-scp";
- 			reg = <0 0x10500000 0 0x80000>,
-@@ -1436,27 +1530,24 @@
+ 		gce: gce@10238000 {
+ 			compatible = "mediatek,mt8183-gce";
+ 			reg = <0 0x10238000 0 0x4000>;
+@@ -1125,6 +1166,8 @@
+ 			clocks = <&infracfg CLK_INFRA_UNIPRO_SCK>,
+ 				 <&infracfg CLK_INFRA_USB>;
+ 			clock-names = "sys_ck", "ref_ck";
++			wakeup-source;
++			mediatek,syscon-wakeup = <&pericfg 0x400 1>;
+ 			#address-cells = <2>;
+ 			#size-cells = <2>;
+ 			ranges;
+@@ -1295,6 +1338,7 @@
+ 				clocks = <&clk26m>;
+ 				clock-names = "ref";
+ 				#phy-cells = <1>;
++				mediatek,eye-vrt = <1>;
+ 				status = "okay";
+ 			};
+ 
+@@ -1496,7 +1540,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL0>;
  			iommus = <&iommu M4U_PORT_DISP_OVL0>;
 -			mediatek,larb = <&larb0>;
  		};
  
--		ovl0_2l: ovl@14009000 {
-+		ovl_2l0: ovl@14009000 {
- 			compatible = "mediatek,mt8183-disp-ovl-2l";
- 			reg = <0 0x14009000 0 0x1000>;
- 			interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_LOW>;
+ 		ovl_2l0: ovl@14009000 {
+@@ -1506,7 +1549,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL0_2L>;
  			iommus = <&iommu M4U_PORT_DISP_2L_OVL0_LARB0>;
 -			mediatek,larb = <&larb0>;
  		};
  
--		ovl1_2l: ovl@1400a000 {
-+		ovl_2l1: ovl@1400a000 {
- 			compatible = "mediatek,mt8183-disp-ovl-2l";
- 			reg = <0 0x1400a000 0 0x1000>;
- 			interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_LOW>;
+ 		ovl_2l1: ovl@1400a000 {
+@@ -1516,7 +1558,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL1_2L>;
  			iommus = <&iommu M4U_PORT_DISP_2L_OVL1_LARB0>;
@@ -1264,7 +1277,7 @@ index ba43207e2ecc..ff9ce0f93a3e 100644
  		};
  
  		rdma0: rdma@1400b000 {
-@@ -1466,7 +1557,6 @@
+@@ -1526,7 +1567,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
  			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
@@ -1272,7 +1285,7 @@ index ba43207e2ecc..ff9ce0f93a3e 100644
  		};
  
  		rdma1: rdma@1400c000 {
-@@ -1476,7 +1566,6 @@
+@@ -1536,7 +1576,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
  			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
@@ -1280,22 +1293,26 @@ index ba43207e2ecc..ff9ce0f93a3e 100644
  		};
  
  		color0: color@1400e000 {
-@@ -1536,6 +1625,13 @@
+@@ -1596,6 +1635,17 @@
  			phy-names = "dphy";
  		};
  
-+		mutex: mutex@14016000 {
-+			compatible = "mediatek,mt8183-disp-mutex";
-+			reg = <0 0x14016000 0 0x1000>;
-+			interrupts = <GIC_SPI 217 IRQ_TYPE_LEVEL_LOW>;
++		dpi0: dpi@14015000 {
++			compatible = "mediatek,mt8183-dpi";
++			reg = <0 0x14015000 0 0x1000>;
++			interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_LOW>;
 +			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_DPI_IF>,
++				 <&mmsys CLK_MM_DPI_MM>,
++				 <&apmixedsys CLK_APMIXED_TVDPLL>;
++			clock-names = "pixel", "engine", "pll";
 +		};
 +
- 		larb0: larb@14017000 {
- 			compatible = "mediatek,mt8183-smi-larb";
- 			reg = <0 0x14017000 0 0x1000>;
+ 		mutex: mutex@14016000 {
+ 			compatible = "mediatek,mt8183-disp-mutex";
+ 			reg = <0 0x14016000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index de753bd63ded..ba263ecb9cd9 100644
+index 513a1569a10d..cfbf0d28d132 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 @@ -40,6 +40,7 @@ CONFIG_DRM_ANALOGIX_ANX78XX=y
@@ -1314,7 +1331,7 @@ index de753bd63ded..ba263ecb9cd9 100644
  CONFIG_MTK_IOMMU=y
  CONFIG_MTK_PMIC_WRAP=y
  CONFIG_MTK_SCP=m
-@@ -183,8 +185,11 @@ CONFIG_SPI_QCOM_QSPI=y
+@@ -183,8 +185,10 @@ CONFIG_SPI_QCOM_QSPI=y
  CONFIG_SPI_ROCKCHIP=y
  CONFIG_SPMI=y
  CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
@@ -1323,28 +1340,28 @@ index de753bd63ded..ba263ecb9cd9 100644
 +CONFIG_USB_CONFIGFS_SERIAL=y
  CONFIG_USB_MTU3=y
 -CONFIG_USB_MTU3_HOST=y
-+CONFIG_USB_MTU3_DEBUG=y
  CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIRTIO_BLK=y
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index e02669621c75..9a2ddb58a7d7 100644
+index e02669621c75..c9ec40995030 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-@@ -25,10 +25,12 @@ CONFIG_COMMON_CLK_MT8183_MMSYS=y
+@@ -25,10 +25,13 @@ CONFIG_COMMON_CLK_MT8183_MMSYS=y
  CONFIG_COMMON_CLK_MT8183_VDECSYS=y
  CONFIG_COMMON_CLK_MT8183_VENCSYS=y
  CONFIG_CROS_EC_RPMSG=m
 +CONFIG_DEVFREQ_GOV_CPUFREQ_MAP=y
  CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
  CONFIG_DRM_ANALOGIX_ANX78XX=y
++CONFIG_DRM_ITE_IT6505=y
  CONFIG_DRM_MEDIATEK=y
  CONFIG_DRM_MEDIATEK_HDMI=y
 +CONFIG_DRM_PANEL_BOE_TV101WUM=y
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  # CONFIG_EFI is not set
  CONFIG_ENERGY_MODEL=y
-@@ -46,6 +48,7 @@ CONFIG_MMC_MTK=y
+@@ -46,6 +49,7 @@ CONFIG_MMC_MTK=y
  CONFIG_MTD_MT81xx_NOR=y
  CONFIG_MTK_CMDQ=y
  CONFIG_MTK_EFUSE=y
@@ -1352,7 +1369,7 @@ index e02669621c75..9a2ddb58a7d7 100644
  CONFIG_MTK_IOMMU=y
  CONFIG_MTK_PMIC_WRAP=y
  CONFIG_MTK_SCP=m
-@@ -77,7 +80,10 @@ CONFIG_STAGING_MEDIA=y
+@@ -77,7 +81,9 @@ CONFIG_STAGING_MEDIA=y
  CONFIG_TCG_CR50_I2C=y
  CONFIG_TMPFS=y
  CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
@@ -1361,7 +1378,6 @@ index e02669621c75..9a2ddb58a7d7 100644
 +CONFIG_USB_CONFIGFS_SERIAL=y
  CONFIG_USB_MTU3=y
 -CONFIG_USB_MTU3_HOST=y
-+CONFIG_USB_MTU3_DEBUG=y
  CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
 diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
@@ -1375,95 +1391,71 @@ index 3dc1b9f15ea2..5df0e476e94d 100644
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkdbg.o clkdbg-mt8183.o
 +obj-$(CONFIG_COMMON_CLK_MT8183) += clkchk.o clkchk-mt8183.o
 diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index e8d7bebe2d7a..b35a3c742062 100644
+index e749f40660a2..de22ba0b372a 100644
 --- a/drivers/clk/mediatek/clk-mt8183.c
 +++ b/drivers/clk/mediatek/clk-mt8183.c
-@@ -25,9 +25,11 @@ static const struct mtk_fixed_clk top_fixed_clks[] = {
- 	FIXED_CLK(CLK_TOP_UNIVP_192M, "univpll_192m", "univpll", 192000000),
+@@ -1001,6 +1001,25 @@ static const struct mtk_gate infra_clks[] = {
+ 		"msdc50_0_sel", 24),
  };
  
-+static const struct mtk_fixed_factor top_early_divs[] = {
-+	FACTOR(CLK_TOP_CLK13M, "clk13m", "clk26m", 1, 2),
++static const struct mtk_gate_regs peri_cg_regs = {
++	.set_ofs = 0x20c,
++	.clr_ofs = 0x20c,
++	.sta_ofs = 0x20c,
 +};
 +
- static const struct mtk_fixed_factor top_divs[] = {
--	FACTOR(CLK_TOP_CLK13M, "clk13m", "clk26m", 1,
--		2),
- 	FACTOR(CLK_TOP_F26M_CK_D2, "csw_f26m_ck_d2", "clk26m", 1,
- 		2),
- 	FACTOR(CLK_TOP_SYSPLL_CK, "syspll_ck", "mainpll", 1,
-@@ -1148,37 +1150,62 @@ static int clk_mt8183_apmixed_probe(struct platform_device *pdev)
- 	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
- }
- 
-+static struct clk_onecell_data *top_clk_data;
-+
-+static void clk_mt8183_top_init_early(struct device_node *node)
-+{
-+	int i;
-+
-+	if (!top_clk_data) {
-+		top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
-+
-+		for (i = 0; i < CLK_TOP_NR_CLK; i++)
-+			top_clk_data->clks[i] = ERR_PTR(-EPROBE_DEFER);
-+	}
-+
-+	mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs),
-+			top_clk_data);
-+
-+	of_clk_add_provider(node, of_clk_src_onecell_get, top_clk_data);
++#define GATE_PERI(_id, _name, _parent, _shift) {        \
++	.id = _id,                              \
++	.name = _name,                          \
++	.parent_name = _parent,                 \
++	.regs = &peri_cg_regs,                  \
++	.shift = _shift,                        \
++	.ops = &mtk_clk_gate_ops_no_setclr_inv, \
 +}
 +
-+CLK_OF_DECLARE_DRIVER(mt8183_topckgen, "mediatek,mt8183-topckgen",
-+			clk_mt8183_top_init_early);
++static const struct mtk_gate peri_clks[] = {
++	GATE_PERI(CLK_PERIAXI, "periaxi", "axi_sel", 31),
++};
 +
- static int clk_mt8183_top_probe(struct platform_device *pdev)
- {
- 	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	void __iomem *base;
--	struct clk_onecell_data *clk_data;
- 	struct device_node *node = pdev->dev.of_node;
- 
- 	base = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
--	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
-+	if (!top_clk_data)
-+		top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
- 
- 	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
--		clk_data);
-+		top_clk_data);
-+
-+	mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs),
-+		top_clk_data);
- 
--	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
-+	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
- 
- 	mtk_clk_register_muxes(top_muxes, ARRAY_SIZE(top_muxes),
--		node, &mt8183_clk_lock, clk_data);
-+		node, &mt8183_clk_lock, top_clk_data);
- 
- 	mtk_clk_register_composites(top_aud_muxes, ARRAY_SIZE(top_aud_muxes),
--		base, &mt8183_clk_lock, clk_data);
-+		base, &mt8183_clk_lock, top_clk_data);
- 
- 	mtk_clk_register_composites(top_aud_divs, ARRAY_SIZE(top_aud_divs),
--		base, &mt8183_clk_lock, clk_data);
-+		base, &mt8183_clk_lock, top_clk_data);
- 
- 	mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks),
--		clk_data);
-+		top_clk_data);
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	return of_clk_add_provider(node, of_clk_src_onecell_get, top_clk_data);
+ static const struct mtk_gate_regs apmixed_cg_regs = {
+ 	.set_ofs = 0x20,
+ 	.clr_ofs = 0x20,
+@@ -1224,6 +1243,25 @@ static int clk_mt8183_infra_probe(struct platform_device *pdev)
+ 	return r;
  }
  
- static int clk_mt8183_infra_probe(struct platform_device *pdev)
++static int clk_mt8183_peri_probe(struct platform_device *pdev)
++{
++	struct clk_onecell_data *clk_data;
++	int r;
++	struct device_node *node = pdev->dev.of_node;
++
++	clk_data = mtk_alloc_clk_data(CLK_PERI_NR_CLK);
++
++	mtk_clk_register_gates(node, peri_clks, ARRAY_SIZE(peri_clks),
++		clk_data);
++
++	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	if (r)
++		pr_err("%s(): could not register clock provider: %d\n",
++			__func__, r);
++
++	return r;
++}
++
+ static int clk_mt8183_mcu_probe(struct platform_device *pdev)
+ {
+ 	struct clk_onecell_data *clk_data;
+@@ -1254,6 +1292,9 @@ static const struct of_device_id of_match_clk_mt8183[] = {
+ 		.compatible = "mediatek,mt8183-infracfg",
+ 		.data = clk_mt8183_infra_probe,
+ 	}, {
++		.compatible = "mediatek,mt8183-pericfg",
++		.data = clk_mt8183_peri_probe,
++	},  {
+ 		.compatible = "mediatek,mt8183-mcucfg",
+ 		.data = clk_mt8183_mcu_probe,
+ 	}, {
 diff --git a/drivers/clk/mediatek/clkchk-mt8183.c b/drivers/clk/mediatek/clkchk-mt8183.c
 new file mode 100644
 index 000000000000..c7b081fbc44b
@@ -5904,7 +5896,7 @@ index 000000000000..084a3ffb8f54
 +MODULE_DESCRIPTION("devfreq gov that sets dev freq based on current CPU freq");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/devfreq/mt8183-cci-devfreq.c b/drivers/devfreq/mt8183-cci-devfreq.c
-index 250c963789f3..a153adee033e 100644
+index b5d8c1ff493f..a153adee033e 100644
 --- a/drivers/devfreq/mt8183-cci-devfreq.c
 +++ b/drivers/devfreq/mt8183-cci-devfreq.c
 @@ -17,164 +17,7 @@
@@ -6014,7 +6006,7 @@ index 250c963789f3..a153adee033e 100644
 -						cci_df->proc_reg_uV);
 -	ret = PTR_ERR_OR_ZERO(opp);
 -	if (ret) {
--		pr_err("%s[%d], cannot find opp with voltage=%d: %d\n",
+-		pr_err("%s[%d], cannot find opp with voltage=%lu: %d\n",
 -		       __func__, __LINE__, cci_df->proc_reg_uV, ret);
 -		return ret;
 -	}
@@ -6145,6 +6137,2654 @@ index 250c963789f3..a153adee033e 100644
  	platform_driver_unregister(&cci_devfreq_driver);
  }
  module_exit(mtk_cci_devfreq_exit)
+diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+index 9c9c4df1a1cf..751c25f3cc9f 100644
+--- a/drivers/gpu/drm/bridge/Kconfig
++++ b/drivers/gpu/drm/bridge/Kconfig
+@@ -43,6 +43,13 @@ config DRM_DUMB_VGA_DAC
+ 	  Support for non-programmable RGB to VGA DAC bridges, such as ADI
+ 	  ADV7123, TI THS8134 and THS8135 or passive resistor ladder DACs.
+ 
++config DRM_ITE_IT6505
++	tristate "ITE IT6505 DP bridge"
++	depends on OF
++	select DRM_KMS_HELPER
++	help
++	  ITE IT6505 DP bridge chip driver.
++
+ config DRM_LVDS_ENCODER
+ 	tristate "Transparent parallel to LVDS encoder support"
+ 	depends on OF
+diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
+index 4934fcf5a6f8..f5abca593f71 100644
+--- a/drivers/gpu/drm/bridge/Makefile
++++ b/drivers/gpu/drm/bridge/Makefile
+@@ -2,6 +2,7 @@
+ obj-$(CONFIG_DRM_ANALOGIX_ANX78XX) += analogix-anx78xx.o
+ obj-$(CONFIG_DRM_CDNS_DSI) += cdns-dsi.o
+ obj-$(CONFIG_DRM_DUMB_VGA_DAC) += dumb-vga-dac.o
++obj-$(CONFIG_DRM_ITE_IT6505) += ite-it6505.o
+ obj-$(CONFIG_DRM_LVDS_ENCODER) += lvds-encoder.o
+ obj-$(CONFIG_DRM_MEGACHIPS_STDPXXXX_GE_B850V3_FW) += megachips-stdpxxxx-ge-b850v3-fw.o
+ obj-$(CONFIG_DRM_NXP_PTN3460) += nxp-ptn3460.o
+diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+new file mode 100644
+index 000000000000..8ffd0fc9dc0e
+--- /dev/null
++++ b/drivers/gpu/drm/bridge/ite-it6505.c
+@@ -0,0 +1,2612 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
++ */
++#include <linux/bits.h>
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/extcon.h>
++#include <linux/fs.h>
++#include <linux/gpio/consumer.h>
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++#include <linux/semaphore.h>
++#include <linux/types.h>
++
++#include <crypto/hash.h>
++#include <crypto/sha.h>
++
++#include <drm/drm_atomic_helper.h>
++#include <drm/drm_crtc.h>
++#include <drm/drm_crtc_helper.h>
++#include <drm/drm_dp_helper.h>
++#include <drm/drm_edid.h>
++
++#define AX 0
++#define BX 1
++#define AUDSEL I2S
++#define AUDTYPE LPCM
++#define AUDFS AUD48K
++#define AUDCH 2
++/* 0: Standard I2S;1: 32bit I2S */
++#define I2SINPUTFMT 1
++/* 0: Left-justified;1: Right-justified */
++#define I2SJUSTIFIED 0
++/* 0: Data delay 1T correspond to WS;1: No data delay correspond to WS */
++#define I2SDATADELAY 0
++/* 0: is left channel;1: is right channel */
++#define I2SWSCHANNEL 0
++/* 0: MSB shift first;1: LSB shift first */
++#define I2SDATASEQ 0
++
++#define LANESWAP 0
++#define LANE 4
++#define _HBR 1
++#define ENHFRAME 1
++#define ENSSC 1
++#define FLAGTRAINDOWN 100
++#define TRAINFAILCNT 5
++#define TRAINFAILHPD 3
++#define AUX_WAIT_TIMEOUT_MS 15
++#define PCLK_DELAY 1
++#define PCLK_INV 0
++#define EDIDRETRYTIME 5
++#define SHOWVIDEOTIMING 2
++#define PWROFFRETRYTIME 5
++
++/* AX or BX */
++#define CHIP_VERSION BX
++
++enum sys_status {
++	SYS_UNPLUG = 0,
++	SYS_HPD,
++	SYS_AUTOTRAIN,
++	SYS_WAIT,
++	SYS_TRAINFAIL,
++	SYS_ReHDCP,
++	SYS_PWRDN,
++	SYS_NOROP,
++	SYS_Unknown,
++};
++
++enum it6505_aud_sel {
++	I2S = 0,
++	SPDIF,
++};
++
++enum it6505_aud_fs {
++	AUD24K = 0x6,
++	AUD32K = 0x3,
++	AUD48K = 0x2,
++	AUD96K = 0xA,
++	AUD192K = 0xE,
++	AUD44P1K = 0x0,
++	AUD88P2K = 0x8,
++	AUD176P4K = 0xC,
++};
++
++enum it6505_aud_type {
++	LPCM = 0,
++	NLPCM,
++	DSS,
++	HBR,
++};
++
++enum aud_word_length {
++	AUD16BIT = 0,
++	AUD18BIT,
++	AUD20BIT,
++	AUD24BIT,
++};
++
++/* Audio Sample Word Length: AUD16BIT, AUD18BIT, AUD20BIT, AUD24BIT */
++#define AUDWORDLENGTH AUD24BIT
++
++struct it6505_platform_data {
++	struct regulator *pwr18;
++	struct regulator *ovdd;
++	struct gpio_desc *gpiod_hpd;
++	struct gpio_desc *gpiod_reset;
++};
++
++struct it6505_dp_port {
++	struct it6505 *it6505_dp;
++	struct notifier_block event_nb;
++	struct extcon_dev *extcon;
++	struct work_struct extcon_wq;
++};
++
++struct it6505 {
++	struct drm_dp_aux aux;
++	struct drm_bridge bridge;
++	struct i2c_client *client;
++	struct edid *edid;
++	struct drm_connector connector;
++	struct drm_dp_link link;
++	struct it6505_platform_data pdata;
++	struct mutex lock;
++	struct regmap *regmap;
++	struct it6505_dp_port *port;
++	struct drm_display_mode vid_info;
++	/* thread sequence control */
++	struct semaphore sem_notifier;
++
++	u8 dpcd[DP_RECEIVER_CAP_SIZE];
++	enum sys_status status;
++	u8 dumpdpcd[30];
++	bool hbr;
++	u8 lane;
++	u8 en_ssc;
++	bool en_hframe;
++	bool laneswap;
++
++	enum it6505_aud_sel aud_sel;
++	enum it6505_aud_fs aud_fs;
++	enum it6505_aud_type aud_type;
++	u8 aud_ch;
++	u8 i2s_input_fmt;
++	u8 i2s_justified;
++	u8 i2s_data_delay;
++	u8 i2s_ws_channel;
++	u8 i2s_data_seq;
++	u8 vidstable_done;
++	enum aud_word_length audwordlength;
++	unsigned int en_hdcp;
++	unsigned int en_pwronoff;
++	unsigned int en_audio;
++	u8 cntfsm;
++	u8 train_fail_hpd;
++	bool cp_capable;
++	unsigned int bstatus;
++	bool cp_done;
++	u8 downstream_repeater;
++	u8 am0[8];
++	u8 binfo[2];
++	u8 ksvlist[5 * 12];
++	u8 shainput[64];
++	u8 av[5][4];
++	u8 bv[5][4];
++	bool powered;
++	/* it6505 driver hold option */
++	unsigned int it6505_drv_hold;
++};
++
++static int it6505_poweron(struct it6505 *it6505);
++static int it6505_poweroff(struct it6505 *it6505);
++static void it6505_int_mask_off(struct it6505 *it6505);
++
++static const struct regmap_range it6505_bridge_volatile_ranges[] = {
++	{ .range_min = 0, .range_max = 0xFF },
++};
++
++static const struct regmap_access_table it6505_bridge_volatile_table = {
++	.yes_ranges = it6505_bridge_volatile_ranges,
++	.n_yes_ranges = ARRAY_SIZE(it6505_bridge_volatile_ranges),
++};
++
++static const struct regmap_config it6505_bridge_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.volatile_table = &it6505_bridge_volatile_table,
++	.cache_type = REGCACHE_NONE,
++};
++
++static int dptxrd(struct it6505 *it6505, unsigned int reg_addr,
++		  unsigned int *value)
++{
++	int err;
++	struct device *dev = &it6505->client->dev;
++
++	err = regmap_read(it6505->regmap, reg_addr, value);
++	if (err < 0) {
++		DRM_DEV_ERROR(dev, "read failed reg[0x%x] err: %d", reg_addr,
++			      err);
++		return err;
++	}
++
++	return 0;
++}
++
++static void it6505_dump(struct it6505 *it6505)
++{
++	unsigned int value[16], i, j;
++	struct device *dev = &it6505->client->dev;
++
++	for (i = 0; i <= 0xff; i += 16) {
++		for (j = 0; j < 16; j++)
++			dptxrd(it6505, i + j, value + j);
++		DRM_DEV_DEBUG_DRIVER(dev, "[0x%02x] = %16ph", i, value);
++	}
++}
++
++static int dptxwr(struct it6505 *it6505, unsigned int reg_addr,
++		  unsigned int reg_val)
++{
++	int err;
++	struct device *dev = &it6505->client->dev;
++
++	err = regmap_write(it6505->regmap, reg_addr, reg_val);
++
++	if (err < 0) {
++		DRM_DEV_ERROR(dev, "write failed reg[0x%x] = 0x%x err = %d",
++			      reg_addr, reg_val, err);
++		return err;
++	}
++
++	return 0;
++}
++
++static int dptxset(struct it6505 *it6505, unsigned int reg, unsigned int mask,
++		   unsigned int value)
++{
++	int err;
++	struct device *dev = &it6505->client->dev;
++
++	err = regmap_update_bits(it6505->regmap, reg, mask, value);
++	if (err < 0) {
++		DRM_DEV_ERROR(
++			dev, "write reg[0x%x] = 0x%x mask = 0x%x failed err %d",
++			reg, value, mask, err);
++		return err;
++	}
++
++	return 0;
++}
++
++static inline struct it6505 *connector_to_it6505(struct drm_connector *c)
++{
++	return container_of(c, struct it6505, connector);
++}
++
++static inline struct it6505 *bridge_to_it6505(struct drm_bridge *bridge)
++{
++	return container_of(bridge, struct it6505, bridge);
++}
++
++static void it6505_init_fsm(struct it6505 *it6505)
++{
++	it6505->en_audio = 1;
++	it6505->aud_sel = AUDSEL;
++	it6505->aud_fs = AUDFS;
++	it6505->aud_ch = AUDCH;
++	it6505->aud_type = AUDTYPE;
++	it6505->i2s_input_fmt = I2SINPUTFMT;
++	it6505->i2s_justified = I2SJUSTIFIED;
++	it6505->i2s_data_delay = I2SDATADELAY;
++	it6505->i2s_ws_channel = I2SWSCHANNEL;
++	it6505->i2s_data_seq = I2SDATASEQ;
++	it6505->audwordlength = AUDWORDLENGTH;
++
++	it6505->status = SYS_Unknown;
++	it6505->hbr = _HBR;
++	it6505->lane = LANE;
++	it6505->en_ssc = ENSSC;
++	it6505->en_hframe = ENHFRAME;
++	it6505->en_hdcp = 1;
++	it6505->laneswap = LANESWAP;
++	it6505->vidstable_done = 0;
++}
++
++static void it6505_termination_on(struct it6505 *it6505)
++{
++#if (CHIP_VERSION == BX)
++	dptxset(it6505, 0x5D, 0x80, 0x00);
++	dptxset(it6505, 0x5E, 0x02, 0x02);
++#endif
++}
++
++static void it6505_termination_off(struct it6505 *it6505)
++{
++#if (CHIP_VERSION == BX)
++	dptxset(it6505, 0x5D, 0x80, 0x80);
++	dptxset(it6505, 0x5E, 0x02, 0x00);
++	dptxset(it6505, 0x5C, 0xF0, 0x00);
++#endif
++}
++
++static bool dptx_getsinkhpd(struct it6505 *it6505)
++{
++	unsigned int value;
++	int ret;
++
++	ret = dptxrd(it6505, 0x0D, &value);
++
++	if (ret < 0)
++		return false;
++
++	return (value & 2) == 2;
++}
++
++static void show_vid_info(struct it6505 *it6505)
++{
++	int hsync_pol, vsync_pol, interlaced;
++	int htotal, hdes, hdew, hfph, hsyncw;
++	int vtotal, vdes, vdew, vfph, vsyncw;
++	int rddata, rddata1, i;
++	int pclk, sum;
++
++	usleep_range(10000, 15000);
++	dptxwr(it6505, 0x0F, 0x00);
++	dptxrd(it6505, 0xa0, &rddata);
++	hsync_pol = rddata & BIT(0);
++	vsync_pol = (rddata & BIT(2)) >> 2;
++	interlaced = (rddata & BIT(4)) >> 4;
++
++	dptxrd(it6505, 0xa1, &rddata);
++	dptxrd(it6505, 0xa2, &rddata1);
++	htotal = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa3, &rddata);
++	dptxrd(it6505, 0xa4, &rddata1);
++
++	hdes = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa5, &rddata);
++	dptxrd(it6505, 0xa6, &rddata1);
++
++	hdew = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa7, &rddata);
++	dptxrd(it6505, 0xa8, &rddata1);
++
++	hfph = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xa9, &rddata);
++	dptxrd(it6505, 0xaa, &rddata1);
++
++	hsyncw = ((rddata1 & 0x1F) << 8) + rddata;
++
++	dptxrd(it6505, 0xab, &rddata);
++	dptxrd(it6505, 0xac, &rddata1);
++	vtotal = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xad, &rddata);
++	dptxrd(it6505, 0xae, &rddata1);
++	vdes = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xaf, &rddata);
++	dptxrd(it6505, 0xb0, &rddata1);
++	vdew = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xb1, &rddata);
++	dptxrd(it6505, 0xb2, &rddata1);
++	vfph = ((rddata1 & 0x0F) << 8) + rddata;
++
++	dptxrd(it6505, 0xb3, &rddata);
++	dptxrd(it6505, 0xb4, &rddata1);
++	vsyncw = ((rddata1 & 0x0F) << 8) + rddata;
++
++	sum = 0;
++	for (i = 0; i < 100; i++) {
++		dptxset(it6505, 0x12, 0x80, 0x80);
++		usleep_range(10000, 15000);
++		dptxset(it6505, 0x12, 0x80, 0x00);
++
++		dptxrd(it6505, 0x13, &rddata);
++		dptxrd(it6505, 0x14, &rddata1);
++		rddata = ((rddata1 & 0x0F) << 8) + rddata;
++
++		sum += rddata;
++	}
++
++	sum /= 100;
++	pclk = 13500 * 2048 / sum;
++	it6505->vid_info.clock = pclk;
++	it6505->vid_info.hdisplay = hdew;
++	it6505->vid_info.hsync_start = hdew + hfph;
++	it6505->vid_info.hsync_end = hdew + hfph + hsyncw;
++	it6505->vid_info.htotal = htotal;
++	it6505->vid_info.vdisplay = vdew;
++	it6505->vid_info.vsync_start = vdew + vfph;
++	it6505->vid_info.vsync_end = vdew + vfph + vsyncw;
++	it6505->vid_info.vtotal = vtotal;
++	it6505->vid_info.vrefresh = pclk / htotal / vtotal;
++
++	DRM_DEV_DEBUG_DRIVER(&it6505->client->dev, DRM_MODE_FMT,
++			     DRM_MODE_ARG(&it6505->vid_info));
++}
++
++static void dptx_sys_chg(struct it6505 *it6505, enum sys_status newstate)
++{
++	unsigned int i = 0;
++	struct device *dev = &it6505->client->dev;
++
++	if (newstate != SYS_UNPLUG) {
++		if (!dptx_getsinkhpd(it6505))
++			newstate = SYS_UNPLUG;
++	}
++
++	it6505->status = newstate;
++
++	switch (it6505->status) {
++	case SYS_UNPLUG:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "sys_state is changing to SYS_UNPLUG!");
++		kfree(it6505->edid);
++		it6505->edid = NULL;
++		DRM_DEV_DEBUG_DRIVER(dev, "Free it6505 EDID memory");
++		it6505_int_mask_off(it6505);
++		it6505_termination_off(it6505);
++		break;
++	case SYS_HPD:
++		DRM_DEV_DEBUG_DRIVER(dev, "sys_state is changing to SYS_HPD!");
++		it6505_termination_on(it6505);
++		break;
++	case SYS_AUTOTRAIN:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "sys_state is changing to SYS_AUTOTRAIN!");
++		break;
++	case SYS_WAIT:
++		DRM_DEV_DEBUG_DRIVER(dev, "sys_state is changing to SYS_WAIT!");
++		break;
++	case SYS_ReHDCP:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "sys_state is changing to SYS_ReHDCP!");
++		break;
++	case SYS_NOROP:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "sys_state is changing to SYS_NOROP!");
++		for (i = 0; i < SHOWVIDEOTIMING; i++)
++			show_vid_info(it6505);
++		break;
++	case SYS_TRAINFAIL:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "sys_state is changing to SYS_TRAINFAIL!");
++		/* it6505 goes to idle */
++		break;
++	default:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "sys_state is changing to SYS_UNKNOWN!");
++		break;
++	}
++}
++
++static bool it6505_aux_op_finished(struct it6505 *it6505)
++{
++	unsigned int value;
++	int err;
++
++	err = regmap_read(it6505->regmap, 0x2b, &value);
++	if (err < 0)
++		return false;
++
++	return (value & BIT(5)) == 0;
++}
++
++static int dptx_auxwait(struct it6505 *it6505)
++{
++	unsigned int status;
++	unsigned long timeout;
++	int err;
++	struct device *dev = &it6505->client->dev;
++
++	timeout = jiffies + msecs_to_jiffies(AUX_WAIT_TIMEOUT_MS) + 1;
++
++	while (!it6505_aux_op_finished(it6505)) {
++		if (time_after(jiffies, timeout)) {
++			DRM_DEV_ERROR(dev, "Timed out waiting AUX to finish");
++			return -ETIMEDOUT;
++		}
++		usleep_range(1000, 2000);
++	}
++
++	err = dptxrd(it6505, 0x9f, &status);
++	if (err < 0) {
++		DRM_DEV_ERROR(dev, "Failed to read AUX channel: %d", err);
++		return err;
++	}
++
++	if (status & 0x03) {
++		DRM_DEV_ERROR(dev, "Failed to wait for AUX (status: 0x%x)",
++			      status);
++		return -ETIMEDOUT;
++	}
++
++	return 0;
++}
++
++static int dptx_aux_r_edid(struct it6505 *it6505, unsigned int nosegw,
++			   unsigned int block, unsigned int offset)
++{
++	unsigned int value, status;
++	int ret;
++	struct device *dev = &it6505->client->dev;
++
++	/* enable pc aux access */
++	dptxwr(it6505, 0x23, (nosegw << 6) + 0x03);
++	/* edid fifo clr */
++	dptxwr(it6505, 0x23, (nosegw << 6) + 0x82);
++	/* start address[7:0] */
++	dptxwr(it6505, 0x24, (block % 2) * 128 + offset);
++	/* start address[15:8] */
++	dptxwr(it6505, 0x25, block / 256);
++	/* writenum[3:0]+startadr[19:16] */
++	dptxwr(it6505, 0x26, 0xf0);
++	/* aux edid read fire */
++	dptxwr(it6505, 0x2b, 0x0b);
++	dptx_auxwait(it6505);
++
++	ret = dptxrd(it6505, 0x07, &value);
++	if (ret)
++		return ret;
++
++	if (value & BIT(0)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "aux channel request fail interrupt");
++
++		ret = dptxrd(it6505, 0x9f, &status);
++		if (ret) {
++			DRM_DEV_DEBUG_DRIVER(dev, "AUX channel failed: %d",
++					     ret);
++			return ret;
++		}
++
++		switch ((status & 0xc0) >> 6) {
++		case 0:
++			DRM_DEV_DEBUG_DRIVER(dev, "no error !!!");
++			return 0;
++		case 1:
++			DRM_DEV_DEBUG_DRIVER(
++				dev, "defer > 7 times status: 0x%x!", status);
++			return -ETIMEDOUT;
++
++		case 2:
++			DRM_DEV_DEBUG_DRIVER(dev, "Nack response status: 0x%x!",
++					     status);
++			return -ETIMEDOUT;
++
++		default:
++			DRM_DEV_DEBUG_DRIVER(dev, "timeout status: 0x%x!",
++					     status);
++			return -ETIMEDOUT;
++		}
++	}
++	return 0;
++}
++
++static int dptx_get_edidblock(struct it6505 *it6505, u8 *pedidbuff,
++			      unsigned int blockno, unsigned int *chk)
++{
++	ushort i;
++	unsigned int offset, value, reg0d;
++	struct device *dev = &it6505->client->dev;
++
++	if (pedidbuff == NULL)
++		return -ENOMEM;
++
++	dptxset(it6505, 0x05, 0x08, 0x08);
++	dptxset(it6505, 0x05, 0x08, 0x00);
++	DRM_DEV_DEBUG_DRIVER(dev, "blocknum = %d", blockno);
++	for (offset = 0; offset < 0x80; offset += 8) {
++		dptxrd(it6505, 0x0D, &reg0d);
++		if (!(reg0d & BIT(1))) {
++			dptx_sys_chg(it6505, SYS_UNPLUG);
++			return -ENXIO;
++		}
++		dptx_aux_r_edid(it6505, 1, blockno, offset);
++
++		for (i = 0; i < 8; i++) {
++			dptxrd(it6505, 0x2f, &value);
++			pedidbuff[offset + i] = value;
++		}
++		DRM_DEV_DEBUG_DRIVER(dev, "[0x%02x]: %8ph", offset,
++				     pedidbuff + offset);
++	}
++	/* disable pc aux access */
++	dptxwr(it6505, 0x23, 1 << 6);
++
++	*chk = 0;
++	for (i = 0; i < 0x80; i++)
++		*chk += pedidbuff[i];
++
++	*chk &= 0xff;
++
++	return 0;
++}
++
++static int it6505_get_extension_num(struct it6505 *it6505, u8 *block)
++{
++	unsigned int checksum = 0, retrytime = 0, reg0d;
++	int err;
++	u8 buff[EDID_LENGTH];
++	struct device *dev = &it6505->client->dev;
++
++	do {
++		dptxrd(it6505, 0x0D, &reg0d);
++		if (!(reg0d & BIT(1))) {
++			dptx_sys_chg(it6505, SYS_UNPLUG);
++			return -ENXIO;
++		}
++		err = dptx_get_edidblock(it6505, buff, 0, &checksum);
++		if (err < 0)
++			return err;
++		retrytime++;
++		DRM_DEV_DEBUG_DRIVER(dev, "read EDID %d time", retrytime);
++	} while (checksum != 0 && retrytime < EDIDRETRYTIME);
++
++	if (checksum)
++		return -EINVAL;
++	*block = buff[0x7e];
++	DRM_DEV_DEBUG_DRIVER(dev, "extension number: %d", *block);
++	return 0;
++}
++
++static struct edid *it6505_get_edid(struct it6505 *it6505)
++{
++	unsigned int checksum = 0, retrytime = 0;
++	unsigned int i, reg0d, total_size;
++	u8 block;
++	u8 *pedidbuff = kmalloc(EDID_LENGTH, GFP_KERNEL);
++	u8 *pedidbuff1;
++	struct device *dev = &it6505->client->dev;
++
++	if (!pedidbuff)
++		return NULL;
++
++	it6505_dump(it6505);
++	if (it6505_get_extension_num(it6505, &block) < 0)
++		return NULL;
++	/* dp does not have the hdmi tx four block test requirement */
++	if (block > 2)
++		block = 2;
++
++	total_size = (block + 1) * EDID_LENGTH;
++	if (total_size > EDID_LENGTH) {
++		pedidbuff1 = krealloc(pedidbuff, total_size, GFP_KERNEL);
++		if (!pedidbuff1) {
++			kfree(pedidbuff);
++			return NULL;
++		}
++		pedidbuff = pedidbuff1;
++	}
++
++	for (i = 0; i <= block; i++) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Read block 0x%x", i);
++		retrytime = 0;
++		do {
++			dptxrd(it6505, 0x0D, &reg0d);
++			if (!(reg0d & BIT(1))) {
++				dptx_sys_chg(it6505, SYS_UNPLUG);
++				kfree(pedidbuff);
++				return NULL;
++			}
++			if (dptx_get_edidblock(it6505,
++					       pedidbuff + i * EDID_LENGTH, i,
++					       &checksum) < 0)
++				return NULL;
++			DRM_DEV_DEBUG_DRIVER(dev, "%s in block %d %s!",
++					     checksum ? "Fake" : "True", i,
++					     checksum ? "and read again" : "");
++			retrytime++;
++			DRM_DEV_DEBUG_DRIVER(dev, "read EDID %d time",
++					     retrytime);
++		} while (checksum != 0 && retrytime < EDIDRETRYTIME);
++		if (checksum) {
++			kfree(pedidbuff);
++			return NULL;
++		}
++	}
++	return (struct edid *)pedidbuff;
++}
++
++static int it6505_get_modes(struct drm_connector *connector)
++{
++	struct it6505 *ctx = connector_to_it6505(connector);
++	int err, num_modes = 0;
++	unsigned int reg9f, reg0d;
++	struct device *dev = &ctx->client->dev;
++
++	err = it6505_poweron(ctx);
++	if (err) {
++		DRM_DEV_ERROR(dev, "power on fail");
++		goto unlock;
++	}
++	ctx->train_fail_hpd = TRAINFAILHPD;
++	if (ctx->edid)
++		return drm_add_edid_modes(connector, ctx->edid);
++	mutex_lock(&ctx->lock);
++	dptxrd(ctx, 0x0D, &reg0d);
++	if (reg0d & BIT(1))
++		dptx_sys_chg(ctx, SYS_HPD);
++	else
++		dptx_sys_chg(ctx, SYS_UNPLUG);
++
++	dptxrd(ctx, 0x9F, &reg9f);
++	DRM_DEV_DEBUG_DRIVER(dev, "Aux status reg9F = 0x%02x", reg9f);
++	ctx->edid = it6505_get_edid(ctx);
++	if (!ctx->edid) {
++		DRM_DEV_ERROR(dev, "Failed to read EDID");
++		goto unlock;
++	}
++
++	err = drm_connector_update_edid_property(connector, ctx->edid);
++	if (err) {
++		DRM_DEV_ERROR(dev, "Failed to update EDID property: %d", err);
++		goto unlock;
++	}
++
++	num_modes = drm_add_edid_modes(connector, ctx->edid);
++
++unlock:
++	mutex_unlock(&ctx->lock);
++
++	return num_modes;
++}
++
++static const struct drm_connector_helper_funcs it6505_connector_helper_funcs = {
++	.get_modes = it6505_get_modes,
++};
++
++static enum drm_connector_status it6505_detect(struct drm_connector *connector,
++					       bool force)
++{
++	struct it6505 *ctx = connector_to_it6505(connector);
++
++	if (gpiod_get_value(ctx->pdata.gpiod_hpd))
++		return connector_status_disconnected;
++
++	return connector_status_connected;
++}
++
++static const struct drm_connector_funcs it6505_connector_funcs = {
++	.fill_modes = drm_helper_probe_single_connector_modes,
++	.detect = it6505_detect,
++	.destroy = drm_connector_cleanup,
++	.reset = drm_atomic_helper_connector_reset,
++	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
++	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
++};
++
++static ssize_t it6505_aux_transfer(struct drm_dp_aux *aux,
++				   struct drm_dp_aux_msg *msg)
++{
++	return 0;
++}
++
++static int it6505_extcon_notifier(struct notifier_block *self,
++				  unsigned long event, void *ptr)
++{
++	struct it6505_dp_port *port =
++		container_of(self, struct it6505_dp_port, event_nb);
++
++	schedule_work(&port->extcon_wq);
++	return NOTIFY_DONE;
++}
++
++static void it6505_extcon_work(struct work_struct *work)
++{
++	struct it6505_dp_port *port =
++		container_of(work, struct it6505_dp_port, extcon_wq);
++	struct it6505 *ctx = port->it6505_dp;
++	int reg06;
++	int state = extcon_get_state(port->extcon, EXTCON_DISP_DP);
++	unsigned int pwroffretry = 0;
++	struct device *dev = &ctx->client->dev;
++
++	if (dptxrd(ctx, 0x06, &reg06) < 0)
++		goto no_power;
++	if (!(reg06 & BIT(0))) {
++		DRM_DEV_DEBUG_DRIVER(dev, "no extcon event and return");
++		return;
++	}
++no_power:
++	down(&ctx->sem_notifier);
++	DRM_DEV_DEBUG_DRIVER(dev, "EXTCON_DISP_DP = %d", state);
++	if (state > 0) {
++		DRM_DEV_DEBUG_DRIVER(dev, "start to power on");
++		it6505_poweron(ctx);
++		drm_helper_hpd_irq_event(ctx->connector.dev);
++	} else {
++		drm_helper_hpd_irq_event(ctx->connector.dev);
++		if (ctx->en_pwronoff) {
++			DRM_DEV_DEBUG_DRIVER(dev, "start to power off");
++			while (it6505_poweroff(ctx) &&
++			       pwroffretry++ < PWROFFRETRYTIME) {
++				DRM_DEV_DEBUG_DRIVER(dev,
++						     "power off fail %d times",
++						     pwroffretry);
++			}
++			DRM_DEV_DEBUG_DRIVER(dev, "power off it6505 success!");
++		}
++	}
++	up(&ctx->sem_notifier);
++}
++
++static int it6505_use_notifier_module(struct it6505 *ctx)
++{
++	struct it6505_dp_port *port = ctx->port;
++	int ret;
++	struct device *dev = &ctx->client->dev;
++
++	port->event_nb.notifier_call = it6505_extcon_notifier;
++	INIT_WORK(&port->extcon_wq, it6505_extcon_work);
++	ret = devm_extcon_register_notifier(&ctx->client->dev, port->extcon,
++					    EXTCON_DISP_DP, &port->event_nb);
++	if (ret) {
++		DRM_DEV_ERROR(dev, "failed to register notifier for DP");
++		return ret;
++	}
++	return 0;
++}
++
++static int it6505_bridge_attach(struct drm_bridge *bridge)
++{
++	struct it6505 *ctx = bridge_to_it6505(bridge);
++	struct device *dev;
++	int err;
++
++	dev = &ctx->client->dev;
++	if (!bridge->encoder) {
++		DRM_DEV_ERROR(dev, "Parent encoder object not found");
++		return -ENODEV;
++	}
++
++	err = drm_connector_init(bridge->dev, &ctx->connector,
++				 &it6505_connector_funcs,
++				 DRM_MODE_CONNECTOR_DisplayPort);
++	if (err) {
++		DRM_DEV_ERROR(dev, "Failed to initialize connector: %d", err);
++		goto unregister_aux;
++	}
++
++	drm_connector_helper_add(&ctx->connector,
++				 &it6505_connector_helper_funcs);
++
++	err = drm_connector_register(&ctx->connector);
++	if (err) {
++		DRM_DEV_ERROR(dev, "Failed to register connector: %d", err);
++		goto unregister_aux;
++	}
++
++	ctx->connector.polled = DRM_CONNECTOR_POLL_HPD;
++
++	err = drm_connector_attach_encoder(&ctx->connector, bridge->encoder);
++	if (err) {
++		DRM_DEV_ERROR(dev, "Failed to link up connector to encoder: %d",
++			      err);
++		goto unregister_connector;
++	}
++
++	return 0;
++
++unregister_connector:
++	drm_connector_unregister(&ctx->connector);
++unregister_aux:
++	drm_dp_aux_unregister(&ctx->aux);
++	return err;
++}
++
++static void it6505_bridge_detach(struct drm_bridge *bridge)
++{
++	struct it6505 *ctx = bridge_to_it6505(bridge);
++	struct it6505_dp_port *port = ctx->port;
++
++	if (port) {
++		devm_extcon_unregister_notifier(&ctx->client->dev, port->extcon,
++						EXTCON_DISP_DP,
++						&port->event_nb);
++		flush_work(&port->extcon_wq);
++		ctx->port = NULL;
++	}
++	drm_connector_unregister(&ctx->connector);
++	drm_dp_aux_unregister(&ctx->aux);
++}
++
++static enum drm_mode_status
++it6505_bridge_mode_valid(struct drm_bridge *bridge,
++			 const struct drm_display_mode *mode)
++{
++	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
++		return MODE_NO_INTERLACE;
++
++	/* Max 1200p at 5.4 Ghz, one lane */
++	if (mode->clock > 80000)
++		return MODE_CLOCK_HIGH;
++
++	return MODE_OK;
++}
++
++static int it6505_send_video_infoframe(struct it6505 *it6505,
++				       struct hdmi_avi_infoframe *frame)
++{
++	u8 buffer[HDMI_INFOFRAME_HEADER_SIZE + HDMI_AVI_INFOFRAME_SIZE];
++	int err;
++	struct device *dev = &it6505->client->dev;
++
++	err = hdmi_avi_infoframe_pack(frame, buffer, sizeof(buffer));
++	if (err < 0) {
++		DRM_DEV_ERROR(dev, "Failed to pack AVI infoframe: %d\n", err);
++		return err;
++	}
++
++	err = dptxset(it6505, 0xe8, 1, 0);
++	if (err)
++		return err;
++
++	err = regmap_bulk_write(it6505->regmap, 0xe9, buffer, frame->length);
++	if (err)
++		return err;
++
++	err = dptxset(it6505, 0xe8, 1, 1);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static void it6505_bridge_mode_set(struct drm_bridge *bridge,
++				   struct drm_display_mode *mode,
++				   struct drm_display_mode *adjusted_mode)
++{
++	struct it6505 *ctx = bridge_to_it6505(bridge);
++	struct hdmi_avi_infoframe frame;
++	int err;
++	struct device *dev = &ctx->client->dev;
++
++	mutex_lock(&ctx->lock);
++	err = drm_hdmi_avi_infoframe_from_display_mode(&frame, adjusted_mode,
++						       false);
++	if (err) {
++		DRM_DEV_ERROR(dev, "Failed to setup AVI infoframe: %d", err);
++		goto unlock;
++	}
++	ctx->vid_info.base.id = adjusted_mode->base.id;
++	strlcpy(ctx->vid_info.name, adjusted_mode->name, DRM_DISPLAY_MODE_LEN);
++	ctx->vid_info.type = adjusted_mode->type;
++	ctx->vid_info.flags = adjusted_mode->flags;
++	err = it6505_send_video_infoframe(ctx, &frame);
++	if (err)
++		DRM_DEV_ERROR(dev, "Failed to send AVI infoframe: %d", err);
++
++unlock:
++	mutex_unlock(&ctx->lock);
++}
++
++static void dptx_init(struct it6505 *it6505)
++{
++	dptxwr(it6505, 0x05, 0x3B);
++	usleep_range(1000, 2000);
++	dptxwr(it6505, 0x05, 0x1F);
++	usleep_range(1000, 1500);
++}
++
++static void it6505_int_mask_on(struct it6505 *it6505)
++{
++	dptxwr(it6505, 0x09, 0x1F);
++	dptxwr(it6505, 0x0A, 0x07);
++	dptxwr(it6505, 0x0B, 0x90);
++}
++
++static void it6505_int_mask_off(struct it6505 *it6505)
++{
++	dptxwr(it6505, 0x09, 0x00);
++	dptxwr(it6505, 0x0A, 0x00);
++	dptxwr(it6505, 0x0B, 0x00);
++}
++
++static void dptx_set_aud_fmt(struct it6505 *it6505, enum it6505_aud_sel audsel,
++			     unsigned int audch)
++{
++	unsigned int audsrc;
++	/* I2S MODE */
++	dptxwr(it6505, 0xB9,
++	       (it6505->audwordlength << 5) | (it6505->i2s_data_seq << 4) |
++		       (it6505->i2s_ws_channel << 3) |
++		       (it6505->i2s_data_delay << 2) |
++		       (it6505->i2s_justified << 1) | it6505->i2s_input_fmt);
++	if (audsel == SPDIF) {
++		dptxwr(it6505, 0xBA, 0x00);
++		/* 0x30 = 128*FS */
++		dptxset(it6505, 0x11, 0xF0, 0x30);
++	} else {
++		dptxwr(it6505, 0xBA, 0xe4);
++	}
++
++	dptxwr(it6505, 0xBB, 0x00);
++	dptxwr(it6505, 0xBC, 0x00);
++	audsrc = 1;
++
++	if (audch > 2)
++		audsrc |= 2;
++
++	if (audch > 4)
++		audsrc |= 4;
++
++	if (audch == 8)
++		audsrc |= 8;
++
++	audsrc |= audsel << 4;
++
++	dptxwr(it6505, 0xB8, audsrc);
++}
++
++static void dptx_set_aud_chsts(struct it6505 *it6505,
++			       enum it6505_aud_type audtype,
++			       enum it6505_aud_fs audfs)
++{
++	/* Channel Status */
++	dptxwr(it6505, 0xBF, audtype << 1);
++	dptxwr(it6505, 0xC0, 0x00);
++	dptxwr(it6505, 0xC1, 0x00);
++	dptxwr(it6505, 0xC2, audfs);
++	switch (it6505->audwordlength) {
++	case AUD16BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x02);
++		break;
++
++	case AUD18BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x04);
++		break;
++
++	case AUD20BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x03);
++		break;
++
++	case AUD24BIT:
++		dptxwr(it6505, 0xC3, ((~audfs) << 4) + 0x0B);
++		break;
++	}
++}
++
++static void dptx_set_audio_infoframe(struct it6505 *it6505, unsigned int audch)
++{
++	struct device *dev = &it6505->client->dev;
++
++	dptxwr(it6505, 0xf7, audch - 1);
++
++	switch (audch) {
++	case 2:
++		dptxwr(it6505, 0xF9, 0x00);
++		break;
++	case 3:
++		dptxwr(it6505, 0xF9, 0x01);
++		break;
++	case 4:
++		dptxwr(it6505, 0xF9, 0x03);
++		break;
++	case 5:
++		dptxwr(it6505, 0xF9, 0x07);
++		break;
++	case 6:
++		dptxwr(it6505, 0xF9, 0x0B);
++		break;
++	case 7:
++		dptxwr(it6505, 0xF9, 0x0F);
++		break;
++	case 8:
++		dptxwr(it6505, 0xF9, 0x1F);
++		break;
++	default:
++		DRM_DEV_ERROR(dev, "audio channel number error: %u", audch);
++	}
++	/* Enable Audio InfoFrame */
++	dptxset(it6505, 0xE8, 0x22, 0x22);
++}
++
++static void it6505_set_audio(struct it6505 *it6505, enum it6505_aud_sel audsel,
++			     enum it6505_aud_type audtype,
++			     enum it6505_aud_fs audfs, unsigned int audch)
++{
++	/* Audio Clock Domain Reset */
++	dptxset(it6505, 0x05, 0x02, 0x02);
++	/* Audio mute */
++	dptxset(it6505, 0xD3, 0x20, 0x20);
++	/* Release Audio Clock Domain Reset */
++	dptxset(it6505, 0x05, 0x02, 0x00);
++
++	dptx_set_aud_chsts(it6505, audtype, audfs);
++	dptx_set_audio_infoframe(it6505, audch);
++	dptx_set_aud_fmt(it6505, audsel, audch);
++	/* Enable Enhanced Audio TimeStmp Mode */
++	dptxset(it6505, 0xD4, 0x04, 0x04);
++	/* Disable Full Audio Packet */
++	dptxset(it6505, 0xBB, 0x10, 0x00);
++
++	dptxwr(it6505, 0xDE, 0x00);
++	dptxwr(it6505, 0xDF, 0x80);
++	dptxwr(it6505, 0xE0, 0x00);
++	dptxset(it6505, 0xD3, 0x20, 0x00);
++
++	/* Clear Video M Error Interrupt */
++	dptxset(it6505, 0x08, 0x08, 0x08);
++	/* Clear Audio FIFO OverFlow Interrupt */
++	dptxset(it6505, 0x07, 0x04, 0x04);
++}
++
++/***************************************************************************
++ * DPCD Read and EDID
++ ***************************************************************************/
++
++static unsigned int dptx_dpcdrd(struct it6505 *it6505, unsigned long offset)
++{
++	unsigned int startadr0, startadr1, startadr2;
++
++	startadr0 = (unsigned int)((offset >> 0) & 0xFF);
++	startadr1 = (unsigned int)((offset >> 8) & 0xFF);
++	startadr2 = (unsigned int)((offset >> 16) & 0x0F);
++	/* Enable PC Aux Access */
++	dptxwr(it6505, 0x23, (0 << 6) + 0x02);
++	/* Start Address[7:0] */
++	dptxwr(it6505, 0x24, startadr0);
++	/* Start Address[15:8] */
++	dptxwr(it6505, 0x25, startadr1);
++	/* WriteNum[3:0]+StartAdr[19:16] */
++	dptxwr(it6505, 0x26, startadr2);
++	/* Aux Read Fire */
++	dptxwr(it6505, 0x2B, 0x00);
++	dptx_auxwait(it6505);
++	/* Disable PC Aux Access */
++	dptxwr(it6505, 0x23, (0 << 6) + 0x00);
++
++	dptxrd(it6505, 0x2C, &startadr0);
++
++	return startadr0;
++}
++
++static int dptx_dpcdwr(struct it6505 *it6505, unsigned long offset,
++		       unsigned long datain)
++{
++	unsigned int startadr0, startadr1, startadr2;
++
++	startadr0 = (unsigned int)(offset >> 0) & 0xFF;
++	startadr1 = (unsigned int)(offset >> 8) & 0xFF;
++	startadr2 = (unsigned int)(offset >> 16) & 0x0F;
++	/* Enable PC Aux Access */
++	dptxwr(it6505, 0x23, (1 << 6) + 0x02);
++	/* Start Address[7:0] */
++	dptxwr(it6505, 0x24, startadr0);
++	/* Start Address[15:8] */
++	dptxwr(it6505, 0x25, startadr1);
++	/* WriteNum[3:0]+StartAdr[19:16] */
++	dptxwr(it6505, 0x26, startadr2);
++	/* WriteData Byte 1 */
++	dptxwr(it6505, 0x27, datain);
++	/* Aux Write Fire */
++	dptxwr(it6505, 0x2B, 0x05);
++	dptx_auxwait(it6505);
++	/* Aux Read Fire */
++	dptxwr(it6505, 0x2B, 0x00);
++	dptx_auxwait(it6505);
++	/* Disable PC Aux Access */
++	dptxwr(it6505, 0x23, (1 << 6) + 0x00);
++
++	dptxrd(it6505, 0x2C, &startadr0);
++
++	if (startadr0 != datain)
++		return -EINVAL;
++
++	return 0;
++}
++
++static void it6505_get_dpcd(struct it6505 *it6505)
++{
++	unsigned int offset = 0;
++	struct device *dev = &it6505->client->dev;
++
++	for (offset = 0; offset < 0x10; offset++)
++		it6505->dumpdpcd[offset] = dptx_dpcdrd(it6505, offset);
++
++	DRM_DEV_DEBUG_DRIVER(dev, "DPCD[0x00] = %16ph", it6505->dumpdpcd);
++}
++
++static void it6505_parse_dpcd(struct it6505 *it6505)
++{
++	u8 max_lanes, dpcd_rev;
++	struct device *dev = &it6505->client->dev;
++
++	dpcd_rev = it6505->dumpdpcd[0];
++	DRM_DEV_DEBUG_DRIVER(dev, "#########DPCD Rev.: %d.%d###########",
++			     dpcd_rev >> 4, dpcd_rev & 0x0F);
++
++	switch (it6505->dumpdpcd[1]) {
++	case 0x06:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Maximum Link Rate: 1.62Gbps per lane");
++		if (it6505->hbr) {
++			DRM_DEV_DEBUG_DRIVER(
++				dev, "Not support HBR Mode, will train LBR");
++			it6505->hbr = false;
++		} else {
++			DRM_DEV_DEBUG_DRIVER(dev, "Training LBR");
++		}
++		break;
++
++	case 0x0A:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Maximum Link Rate: 2.7Gbps per lane");
++		if (!it6505->hbr) {
++			DRM_DEV_DEBUG_DRIVER(
++				dev, "Support HBR Mode, will train LBR");
++			it6505->hbr = false;
++		} else {
++			DRM_DEV_DEBUG_DRIVER(dev, "Training HBR");
++		}
++		break;
++
++	case 0x14:
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Maximum Link Rate: 2.7Gbps per lane");
++		break;
++
++	default:
++		DRM_DEV_ERROR(dev, "Unknown Maximum Link Rate: %u",
++			      it6505->dumpdpcd[1]);
++		break;
++	}
++
++	max_lanes = it6505->dumpdpcd[2] & 0x1F;
++	if (max_lanes == 1 || max_lanes == 2 || max_lanes == 4) {
++		DRM_DEV_DEBUG_DRIVER(
++			dev, "Maximum Lane Count: %u lane, it6505->lane = %u",
++			max_lanes, it6505->lane);
++		if (it6505->lane > max_lanes)
++			it6505->lane = max_lanes;
++		DRM_DEV_DEBUG_DRIVER(dev, "Training %u lane", it6505->lane);
++	} else {
++		DRM_DEV_ERROR(dev, "Maximum Lane Count Error: %u", max_lanes);
++	}
++
++	if (dpcd_rev >= 0x11 && it6505->dumpdpcd[2] & BIT(7)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Support Enhanced Framing Mode");
++	} else {
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Can not support Enhanced Framing Mode");
++		it6505->en_hframe = 0;
++	}
++
++	if (it6505->dumpdpcd[3] & BIT(0)) {
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Maximum Down-Spread: 0.5, support SSC!");
++	} else {
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Maximum Down-Spread: 0, No support SSC!");
++		it6505->en_ssc = 0;
++	}
++
++	if (dpcd_rev >= 0x11 && it6505->dumpdpcd[3] & BIT(6))
++		DRM_DEV_DEBUG_DRIVER(dev, "Support No AUX Training");
++	else
++		DRM_DEV_DEBUG_DRIVER(dev, "Can not support No AUX Training");
++
++	if (dptx_dpcdrd(it6505, 0x68028) & BIT(0)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Sink support HDCP!");
++		it6505->cp_capable = true;
++	} else {
++		DRM_DEV_DEBUG_DRIVER(dev, "Sink not support HDCP!");
++		it6505->cp_capable = false;
++		it6505->en_hdcp = 0;
++	}
++
++	if (dptx_dpcdrd(it6505, 0x68028) & BIT(1)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Downstream is repeater!!");
++		it6505->downstream_repeater = true;
++	} else {
++		DRM_DEV_DEBUG_DRIVER(dev, "Downstream is receiver!!");
++		it6505->downstream_repeater = false;
++	}
++}
++
++static void it6505_enable_hdcp(struct it6505 *it6505)
++{
++	int i;
++	u8 bksvs[5], c;
++	struct device *dev = &it6505->client->dev;
++
++	/* Disable CP_Desired */
++	dptxset(it6505, 0x38, 0x0B, 0x00);
++	dptxset(it6505, 0x05, 0x10, 0x10);
++
++	usleep_range(1000, 1500);
++	c = dptx_dpcdrd(it6505, 0x68028);
++	DRM_DEV_DEBUG_DRIVER(dev, "DPCD[0x68028]: 0x%x\n", c);
++	if (!c)
++		return;
++
++	dptxset(it6505, 0x05, 0x10, 0x00);
++	/* Disable CP_Desired */
++	dptxset(it6505, 0x38, 0x01, 0x00);
++	/* Use R0' 100ms waiting */
++	dptxset(it6505, 0x38, 0x08, 0x00);
++	/* clear the repeater List Chk Done and fail bit */
++	dptxset(it6505, 0x39, 0x30, 0x00);
++
++	for (i = 0; i < 5; i++)
++		bksvs[i] = dptx_dpcdrd(it6505, 0x68000 + i);
++
++	DRM_DEV_DEBUG_DRIVER(dev, "Sink BKSV = %5ph", bksvs);
++
++	/* Select An Generator */
++	dptxset(it6505, 0x3A, 0x01, 0x01);
++	/* Enable An Generator */
++	dptxset(it6505, 0x3A, 0x02, 0x02);
++	/* delay1ms(10);*/
++	usleep_range(10000, 15000);
++	/* Stop An Generator */
++	dptxset(it6505, 0x3A, 0x02, 0x00);
++
++	dptxset(it6505, 0x38, 0x01, 0x01);
++	dptxset(it6505, 0x39, 0x01, 0x01);
++}
++
++static void it6505_lanespeed_setup(struct it6505 *it6505)
++{
++	if (!it6505->hbr) {
++		dptxset(it6505, 0x16, 0x01, 0x01);
++		dptxset(it6505, 0x5C, 0x02, 0x00);
++	} else {
++		dptxset(it6505, 0x16, 0x01, 0x00);
++		dptxset(it6505, 0x5C, 0x02, 0x02);
++	}
++}
++
++static void it6505_lane_swap(struct it6505 *it6505)
++{
++	int err;
++	union extcon_property_value property;
++	struct device *dev = &it6505->client->dev;
++
++	err = extcon_get_property(it6505->port->extcon, EXTCON_DISP_DP,
++				  EXTCON_PROP_USB_TYPEC_POLARITY, &property);
++	if (err) {
++		DRM_DEV_ERROR(dev, "get property fail!");
++		return;
++	}
++	it6505->laneswap = property.intval;
++
++	dptxset(it6505, 0x16, 0x08, it6505->laneswap ? 0x08 : 0x00);
++	dptxset(it6505, 0x16, 0x06, (it6505->lane - 1) << 1);
++	DRM_DEV_DEBUG_DRIVER(dev, "it6505->laneswap = 0x%x", it6505->laneswap);
++
++	if (it6505->laneswap) {
++		switch (it6505->lane) {
++		case 1:
++			dptxset(it6505, 0x5C, 0xF1, 0x81);
++			break;
++		case 2:
++			dptxset(it6505, 0x5C, 0xF1, 0xC1);
++			break;
++		default:
++			dptxset(it6505, 0x5C, 0xF1, 0xF1);
++			break;
++		}
++	} else {
++		switch (it6505->lane) {
++		case 1:
++			dptxset(it6505, 0x5C, 0xF1, 0x11);
++			break;
++		case 2:
++			dptxset(it6505, 0x5C, 0xF1, 0x31);
++			break;
++		default:
++			dptxset(it6505, 0x5C, 0xF1, 0xF1);
++			break;
++		}
++	}
++}
++
++static void it6505_lane_config(struct it6505 *it6505)
++{
++	it6505_lanespeed_setup(it6505);
++	it6505_lane_swap(it6505);
++}
++
++static void dptx_chgbank(struct it6505 *it6505, unsigned int bank_id)
++{
++	dptxset(it6505, 0x0F, 0x01, bank_id & BIT(0));
++}
++
++static void it6505_set_ssc(struct it6505 *it6505)
++{
++	struct device *dev = &it6505->client->dev;
++
++	dptxset(it6505, 0x16, 0x10, it6505->en_ssc << 4);
++	if (it6505->en_ssc) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Enable 27M 4463 PPM SSC");
++		dptx_chgbank(it6505, 1);
++		dptxwr(it6505, 0x88, 0x9e);
++		dptxwr(it6505, 0x89, 0x1c);
++		dptxwr(it6505, 0x8A, 0x42);
++		dptx_chgbank(it6505, 0);
++		dptxwr(it6505, 0x58, 0x07);
++		dptxwr(it6505, 0x59, 0x29);
++		dptxwr(it6505, 0x5A, 0x03);
++		/* Stamp Interrupt Step */
++		dptxset(it6505, 0xD4, 0x30, 0x10);
++		dptx_dpcdwr(it6505, 0x107, 0x10);
++	} else {
++		dptx_dpcdwr(it6505, 0x107, 0x00);
++		dptxset(it6505, 0xD4, 0x30, 0x00);
++	}
++}
++
++static void pclk_phase(struct it6505 *it6505)
++{
++	dptxset(it6505, 0x10, 0x03, PCLK_DELAY);
++	dptxset(it6505, 0x12, 0x10, PCLK_INV << 4);
++}
++
++static void afe_driving_setting(struct it6505 *it6505)
++{
++	dptxset(it6505, 0x0F, 0x01, 0x01);
++	dptxwr(it6505, 0x7E, 0x93);
++	dptxwr(it6505, 0x7F, 0x2A);
++	dptxwr(it6505, 0x81, 0x85);
++	dptxset(it6505, 0x0F, 0x01, 0x00);
++}
++
++static void dptx_output(struct it6505 *it6505, unsigned int hbr,
++			unsigned int lane, unsigned int laneswap,
++			unsigned int en_ssc, unsigned int en_hframe)
++{
++	dptxwr(it6505, 0x05, 0x13);
++	/* change bank 0 */
++	dptxset(it6505, 0x0F, 0x01, 0x00);
++	/* RegTxFFRst set */
++	dptxset(it6505, 0x61, 0x02, 0x02);
++	/* RegTxFFRst clear */
++	dptxset(it6505, 0x61, 0x02, 0x00);
++	dptxwr(it6505, 0x64, 0x10);
++	dptxwr(it6505, 0x65, 0x80);
++	dptxwr(it6505, 0x66, 0x10);
++	dptxwr(it6505, 0x67, 0x4F);
++	dptxwr(it6505, 0x68, 0x09);
++	dptxwr(it6505, 0x69, 0xBA);
++	dptxwr(it6505, 0x6A, 0x3B);
++	dptxwr(it6505, 0x6B, 0x4B);
++	dptxwr(it6505, 0x6C, 0x3E);
++	dptxwr(it6505, 0x6D, 0x4F);
++	dptxwr(it6505, 0x6E, 0x09);
++	dptxwr(it6505, 0x6F, 0x56);
++	dptxwr(it6505, 0x70, 0x0E);
++	dptxwr(it6505, 0x71, 0x00);
++	dptxwr(it6505, 0x72, 0x00);
++	dptxwr(it6505, 0x73, 0x4F);
++	dptxwr(it6505, 0x74, 0x09);
++	dptxwr(it6505, 0x75, 0x00);
++	dptxwr(it6505, 0x76, 0x00);
++	dptxwr(it6505, 0x77, 0xE7);
++	dptxwr(it6505, 0x78, 0x10);
++	dptxwr(it6505, 0xE8, 0x00);
++	dptxset(it6505, 0xCE, 0x70, 0x60);
++	dptxset(it6505, 0xD0, 0xC0, 0x80);
++	dptxwr(it6505, 0xCA, 0x4D);
++	dptxwr(it6505, 0xC9, 0xF5);
++	dptxwr(it6505, 0x5C, 0x02);
++
++	dptx_dpcdwr(it6505, 0x600, 0x01);
++	dptxset(it6505, 0x59, 0x01, 0x01);
++	dptxset(it6505, 0x5A, 0x05, 0x01);
++	dptxwr(it6505, 0x12, 0x01);
++	dptxwr(it6505, 0xCB, 0x17);
++	dptxwr(it6505, 0x11, 0x09);
++	dptxwr(it6505, 0x20, 0x28);
++	dptxset(it6505, 0x23, 0x30, 0x00);
++	dptxset(it6505, 0x3A, 0x04, 0x04);
++	dptxset(it6505, 0x15, 0x01, 0x01);
++	dptxwr(it6505, 0x0C, 0x08);
++
++	dptxset(it6505, 0x5F, 0x20, 0x00);
++	it6505_lane_config(it6505);
++
++	it6505_set_ssc(it6505);
++
++	if (en_hframe) {
++		dptxwr(it6505, 0xD3, 0x33);
++		dptx_dpcdwr(it6505, 0x101, 0x80);
++	} else {
++		dptxwr(it6505, 0xD3, 0x32);
++	}
++
++	dptxset(it6505, 0x15, 0x02, 0x02);
++	dptxset(it6505, 0x15, 0x02, 0x00);
++	dptxset(it6505, 0x05, 0x03, 0x02);
++	dptxset(it6505, 0x05, 0x03, 0x00);
++
++	/* reg60[2] = InDDR */
++	dptxwr(it6505, 0x60, 0x44);
++	/* M444B24 format */
++	dptxwr(it6505, 0x62, 0x01);
++	/* select RGB Bypass CSC */
++	dptxwr(it6505, 0x63, 0x00);
++
++	pclk_phase(it6505);
++	dptxset(it6505, 0x61, 0x01, 0x01);
++	dptxwr(it6505, 0x06, 0xFF);
++	dptxwr(it6505, 0x07, 0xFF);
++	dptxwr(it6505, 0x08, 0xFF);
++
++	dptxset(it6505, 0xd3, 0x30, 0x00);
++	dptxset(it6505, 0xd4, 0x41, 0x41);
++	dptxset(it6505, 0xe8, 0x11, 0x11);
++
++	afe_driving_setting(it6505);
++	dptxwr(it6505, 0x17, 0x04);
++	dptxwr(it6505, 0x17, 0x01);
++}
++
++static void dptx_process_sys_wait(struct it6505 *it6505)
++{
++	u8 dpcd1[0x09], dpcd2[0x18];
++	int i, reg0e, reg0d, len1, len2;
++	struct device *dev = &it6505->client->dev;
++
++	dptxrd(it6505, 0x0E, &reg0e);
++	len1 = ARRAY_SIZE(dpcd1);
++	len2 = ARRAY_SIZE(dpcd2);
++	DRM_DEV_DEBUG_DRIVER(dev,
++			     "SYS_WAIT state parse %d dpcd offset!",
++			     len1 + len2);
++
++	for (i = 0; i < len1; i++)
++		dpcd1[i] = dptx_dpcdrd(it6505, 0x100 + i);
++
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd[0x100] = %*ph", len1, dpcd1);
++	for (i = 0; i < len2; i++)
++		dpcd2[i] = dptx_dpcdrd(it6505, 0x200 + i);
++
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd[0x200] = %*ph", len2, dpcd2);
++	if (reg0e & BIT(4)) {
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Auto Link Training Success...");
++		DRM_DEV_DEBUG_DRIVER(dev, "Link State : 0x%x",
++				     reg0e & 0x1F);
++		if (it6505->en_audio) {
++			DRM_DEV_DEBUG_DRIVER(dev, "Enable audio!");
++			it6505_set_audio(it6505, it6505->aud_sel,
++					 it6505->aud_type,
++					 it6505->aud_fs,
++					 it6505->aud_ch);
++		}
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "it6505->VidStable_Done = %02x",
++				     it6505->vidstable_done);
++		if (it6505->cp_capable) {
++			DRM_DEV_DEBUG_DRIVER(dev, "Support HDCP");
++			if (it6505->en_hdcp) {
++				DRM_DEV_DEBUG_DRIVER(dev,
++						     "Enable HDCP");
++				dptx_sys_chg(it6505, SYS_ReHDCP);
++			} else {
++				DRM_DEV_DEBUG_DRIVER(dev,
++						     "Disable HDCP");
++				dptx_sys_chg(it6505, SYS_NOROP);
++			}
++		} else {
++			DRM_DEV_DEBUG_DRIVER(dev, "Not support HDCP");
++			dptx_sys_chg(it6505, SYS_NOROP);
++		}
++	} else {
++		dptxrd(it6505, 0x0D, &reg0d);
++		dptxrd(it6505, 0x0E, &reg0e);
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "Auto Link Training fail step %d",
++				     it6505->cntfsm);
++		DRM_DEV_DEBUG_DRIVER(dev, "reg0E:0x%x, reg0D:0x%x",
++				     reg0e, reg0d);
++		if (it6505->cntfsm > 0) {
++			it6505->cntfsm--;
++			dptx_sys_chg(it6505, SYS_AUTOTRAIN);
++		} else {
++			DRM_DEV_DEBUG_DRIVER(
++				dev, "Auto Training Fail %d times",
++				TRAINFAILCNT);
++			DRM_DEV_DEBUG_DRIVER(dev,
++					     "Sys change to SYS_HPD");
++			dptx_dpcdwr(it6505, 0x102, 0x00);
++			if (it6505->train_fail_hpd > 0) {
++				it6505->train_fail_hpd--;
++				dptx_sys_chg(it6505, SYS_HPD);
++			} else {
++				dptx_sys_chg(it6505, SYS_TRAINFAIL);
++			}
++		}
++	}
++}
++
++static void dptx_sys_fsm(struct it6505 *it6505)
++{
++	unsigned int i;
++	int reg0e, reg0d, reg9f;
++	struct device *dev = &it6505->client->dev;
++	unsigned int ar0_low, ar0_high, br0_low, br0_high;
++
++	dptxrd(it6505, 0x0D, &reg0d);
++
++	if (it6505->status != SYS_UNPLUG && !(reg0d & BIT(1)))
++		dptx_sys_chg(it6505, SYS_UNPLUG);
++	DRM_DEV_DEBUG_DRIVER(dev, "state: %d", it6505->status);
++	switch (it6505->status) {
++	case SYS_UNPLUG:
++		break;
++
++	case SYS_HPD:
++		dptxrd(it6505, 0x9f, &reg9f);
++		DRM_DEV_DEBUG_DRIVER(dev, "Aux channel status reg9F=0x%02x",
++				     reg9f);
++		/* GETDPCD */
++		it6505_get_dpcd(it6505);
++		it6505_parse_dpcd(it6505);
++
++		/*
++		 * training fail TRAINFAILCNT times,
++		 * then change to HPD to restart
++		 */
++		it6505->cntfsm = TRAINFAILCNT;
++		DRM_DEV_DEBUG_DRIVER(dev, "will Train %s %d lanes",
++				     it6505->hbr ? "HBR" : "LBR", it6505->lane);
++		dptx_sys_chg(it6505, SYS_AUTOTRAIN);
++		break;
++
++	case SYS_AUTOTRAIN:
++		dptx_output(it6505, it6505->hbr, it6505->lane, it6505->laneswap,
++			    it6505->en_ssc, it6505->en_hframe);
++
++		/*
++		 * waiting for training down flag
++		 * because we don't know
++		 * how long this step will be completed
++		 * so use step 1ms to wait
++		 */
++		for (i = 0; i < FLAGTRAINDOWN; i++) {
++			usleep_range(1000, 2000);
++			dptxrd(it6505, 0x0E, &reg0e);
++			if (reg0e & BIT(4))
++				break;
++		}
++
++		dptx_sys_chg(it6505, SYS_WAIT);
++		break;
++
++	case SYS_WAIT:
++		dptx_process_sys_wait(it6505);
++		break;
++
++	case SYS_ReHDCP:
++		msleep(500);
++		dptxrd(it6505, 0x3B, &ar0_low);
++		dptxrd(it6505, 0x3C, &ar0_high);
++		dptxrd(it6505, 0x45, &br0_low);
++		dptxrd(it6505, 0x46, &br0_high);
++		DRM_DEV_DEBUG_DRIVER(dev, "Before EnableHDCP");
++		DRM_DEV_DEBUG_DRIVER(dev, "Ar0_low:%x, Ar0_high:%x", ar0_low,
++				     ar0_high);
++		DRM_DEV_DEBUG_DRIVER(dev, "Br0_low:%x, Br0_high:%x", br0_low,
++				     br0_high);
++		it6505_enable_hdcp(it6505);
++		msleep(200);
++		DRM_DEV_DEBUG_DRIVER(dev, "SYS_ReHDCP end");
++		break;
++
++	case SYS_NOROP:
++		break;
++
++	case SYS_TRAINFAIL:
++		break;
++
++	default:
++		DRM_DEV_ERROR(dev, "sys_state change to unknown_state: %d",
++			      it6505->status);
++		break;
++	}
++}
++
++static int it6505_poweron(struct it6505 *it6505)
++{
++	struct it6505_platform_data *pdata = &it6505->pdata;
++	int err = 0;
++	struct device *dev = &it6505->client->dev;
++
++	if (it6505->powered) {
++		DRM_DEV_DEBUG_DRIVER(dev, "it6505 already powered on");
++		return 0;
++	}
++
++	DRM_DEV_DEBUG_DRIVER(dev, "it6505 start to power on");
++
++	err = regulator_enable(pdata->pwr18);
++	DRM_DEV_DEBUG_DRIVER(dev, "%s to enable pwr18 regulator",
++			     err ? "Failed" : "Succeeded");
++	if (err)
++		return err;
++	/* time interval between IVDD and OVDD at least be 1ms */
++	usleep_range(1000, 2000);
++	err = regulator_enable(pdata->ovdd);
++	DRM_DEV_DEBUG_DRIVER(dev, "%s to enable ovdd regulator",
++			     err ? "Failed" : "Succeeded");
++	if (err) {
++		regulator_disable(pdata->pwr18);
++		return err;
++	}
++	/* time interval between OVDD and SYSRSTN at least be 10ms */
++	usleep_range(10000, 20000);
++	gpiod_set_value_cansleep(pdata->gpiod_reset, 0);
++	usleep_range(1000, 2000);
++	gpiod_set_value_cansleep(pdata->gpiod_reset, 1);
++	usleep_range(10000, 20000);
++
++	dptx_init(it6505);
++	it6505->powered = true;
++	return 0;
++}
++
++static int it6505_poweroff(struct it6505 *it6505)
++{
++	struct it6505_platform_data *pdata = &it6505->pdata;
++	int err = 0;
++	struct device *dev = &it6505->client->dev;
++
++	if (!(it6505->powered)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "power had been already off");
++		return 0;
++	}
++	gpiod_set_value_cansleep(pdata->gpiod_reset, 0);
++	err = regulator_disable(pdata->pwr18);
++	DRM_DEV_DEBUG_DRIVER(dev, "%s to disable pwr18 regulator",
++			     err ? "Failed" : "Succeeded");
++	if (err)
++		return err;
++	err = regulator_disable(pdata->ovdd);
++	DRM_DEV_DEBUG_DRIVER(dev, "%s to disable ovdd regulator",
++			     err ? "Failed" : "Succeeded");
++	if (err)
++		return err;
++
++	kfree(it6505->edid);
++	it6505->edid = NULL;
++	it6505->powered = false;
++	return 0;
++}
++
++static int sha1_digest(struct it6505 *it6505, u8 *sha1_input, unsigned int size,
++		       u8 *output_av)
++{
++	struct shash_desc *desc;
++	struct crypto_shash *tfm;
++	int err;
++	struct device *dev = &it6505->client->dev;
++
++	tfm = crypto_alloc_shash("sha1", 0, 0);
++	if (IS_ERR(tfm)) {
++		DRM_DEV_ERROR(dev, "crypto_alloc_shash sha1 failed");
++		return PTR_ERR(tfm);
++	}
++	desc = kzalloc(sizeof(*desc) + crypto_shash_descsize(tfm), GFP_KERNEL);
++	if (!desc) {
++		crypto_free_shash(tfm);
++		return -ENOMEM;
++	}
++
++	desc->tfm = tfm;
++	err = crypto_shash_digest(desc, sha1_input, size, output_av);
++	if (err)
++		DRM_DEV_ERROR(dev, "crypto_shash_digest sha1 failed");
++
++	crypto_free_shash(tfm);
++	kfree(desc);
++	return err;
++}
++
++static int it6505_makeup_sha1_input(struct it6505 *it6505)
++{
++	int msgcnt = 0, i;
++	unsigned int value;
++	struct device *dev = &it6505->client->dev;
++
++	dptxset(it6505, 0x3A, 0x20, 0x20);
++	for (i = 0; i < 8; i++) {
++		dptxrd(it6505, 0x4C + i, &value);
++		it6505->am0[i] = value;
++	}
++	DRM_DEV_DEBUG_DRIVER(dev, "read am0 = %8ph", it6505->am0);
++	dptxset(it6505, 0x3A, 0x20, 0x00);
++
++	it6505->binfo[0] = dptx_dpcdrd(it6505, 0x6802A);
++	it6505->binfo[1] = dptx_dpcdrd(it6505, 0x6802B);
++	DRM_DEV_DEBUG_DRIVER(dev, "read Binfo!!");
++	DRM_DEV_DEBUG_DRIVER(dev, "Attached devices: %02x",
++			     it6505->binfo[0] & 0x7F);
++
++	DRM_DEV_DEBUG_DRIVER(dev, "%s 127 devices are attached",
++			     (it6505->binfo[0] & BIT(7)) ? "over" : "under");
++	DRM_DEV_DEBUG_DRIVER(dev, "depth, attached levels: %02x",
++			     it6505->binfo[1] & 0x07);
++	DRM_DEV_DEBUG_DRIVER(dev, "%s than seven levels cascaded",
++			     (it6505->binfo[1] & BIT(3)) ? "more" : "less");
++
++	for (i = 0; i < (it6505->binfo[0] & 0x7F); i++) {
++		it6505->shainput[msgcnt] = it6505->ksvlist[msgcnt] =
++			dptx_dpcdrd(it6505, 0x6802C + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt] = it6505->ksvlist[msgcnt] =
++			dptx_dpcdrd(it6505, 0x6802D + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt] = it6505->ksvlist[msgcnt] =
++			dptx_dpcdrd(it6505, 0x6802E + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt] = it6505->ksvlist[msgcnt] =
++			dptx_dpcdrd(it6505, 0x6802F + (i % 3) * 5);
++		msgcnt++;
++		it6505->shainput[msgcnt] = it6505->ksvlist[msgcnt] =
++			dptx_dpcdrd(it6505, 0x68030 + (i % 3) * 5);
++		msgcnt++;
++
++		DRM_DEV_DEBUG_DRIVER(dev, "KSV List %d device : %5ph", i,
++				     it6505->ksvlist + i * 5);
++	}
++	it6505->shainput[msgcnt++] = it6505->binfo[0];
++	it6505->shainput[msgcnt++] = it6505->binfo[1];
++	for (i = 0; i < 8; i++)
++		it6505->shainput[msgcnt++] = it6505->am0[i];
++
++	DRM_DEV_DEBUG_DRIVER(dev, "SHA Message Count = %d", msgcnt);
++	return msgcnt;
++}
++
++static void it6505_check_sha1_result(struct it6505 *it6505)
++{
++	unsigned int i, shapass;
++	struct device *dev = &it6505->client->dev;
++
++	DRM_DEV_DEBUG_DRIVER(dev, "SHA calculate complete");
++	for (i = 0; i < 5; i++)
++		DRM_DEV_DEBUG_DRIVER(dev, "av %d: %4ph", i, it6505->av[i]);
++
++	shapass = 1;
++	for (i = 0; i < 5; i++) {
++		it6505->bv[i][0] = dptx_dpcdrd(it6505, 0x68017 + i * 4);
++		it6505->bv[i][1] = dptx_dpcdrd(it6505, 0x68016 + i * 4);
++		it6505->bv[i][2] = dptx_dpcdrd(it6505, 0x68015 + i * 4);
++		it6505->bv[i][3] = dptx_dpcdrd(it6505, 0x68014 + i * 4);
++		DRM_DEV_DEBUG_DRIVER(dev, "bv %d: %4ph", i, it6505->bv[i]);
++		if ((it6505->bv[i][0] != it6505->av[i][0]) ||
++		    (it6505->bv[i][1] != it6505->av[i][1]) ||
++		    (it6505->bv[i][2] != it6505->av[i][2]) ||
++		    (it6505->bv[i][3] != it6505->av[i][3])) {
++			shapass = 0;
++		}
++	}
++	if (shapass) {
++		DRM_DEV_DEBUG_DRIVER(dev, "SHA check result pass!");
++		dptxset(it6505, 0x39, BIT(4), BIT(4));
++	} else {
++		DRM_DEV_DEBUG_DRIVER(dev, "SHA check result fail");
++		dptxset(it6505, 0x39, BIT(5), BIT(5));
++	}
++}
++
++static void to_fsm_status(struct it6505 *it6505, enum sys_status status)
++{
++	while (it6505->status != status) {
++		dptx_sys_fsm(it6505);
++		if (it6505->status == SYS_UNPLUG)
++			return;
++	}
++}
++
++static void go_on_fsm(struct it6505 *it6505);
++
++static void hpd_irq(struct it6505 *it6505)
++{
++	unsigned int dpcd200, dpcd201, dpcd202, dpcd203;
++	unsigned int dpcd204, dpcd205, aux_busy_cnt, aux_busy, value, reg55;
++	int ret, len;
++	struct device *dev = &it6505->client->dev;
++
++	dpcd200 = dptx_dpcdrd(it6505, 0x200);
++	dpcd201 = dptx_dpcdrd(it6505, 0x201);
++	dpcd202 = dptx_dpcdrd(it6505, 0x202);
++	dpcd203 = dptx_dpcdrd(it6505, 0x203);
++	dpcd204 = dptx_dpcdrd(it6505, 0x204);
++	dpcd205 = dptx_dpcdrd(it6505, 0x205);
++
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd200 = 0x%x", dpcd200);
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd201 = 0x%x", dpcd201);
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd202 = 0x%x", dpcd202);
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd203 = 0x%x", dpcd203);
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd204 = 0x%x", dpcd204);
++	DRM_DEV_DEBUG_DRIVER(dev, "dpcd205 = 0x%x", dpcd205);
++
++	if (dpcd201 & BIT(2)) {
++		ret = dptxrd(it6505, 0x38, &value);
++		it6505->bstatus = dptx_dpcdrd(it6505, 0x68029);
++		dptxrd(it6505, 0x55, &reg55);
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "reg0x55 = 0x%02x, reg0x68029 = 0x%02x",
++				     reg55, it6505->bstatus);
++		if (value & BIT(0) &&
++		    (!it6505->cp_done || it6505->bstatus & BIT(2))) {
++			DRM_DEV_DEBUG_DRIVER(
++				dev, "Trigger CP_IRQ to HDCP engine");
++			dptxset(it6505, 0x39, 0x02, 0x02);
++			aux_busy_cnt = 0;
++			do {
++				usleep_range(1000, 1500);
++				aux_busy_cnt++;
++				ret = dptxrd(it6505, 0x2B, &value);
++				aux_busy = (value & BIT(5)) >> 5;
++			} while (aux_busy == 1 && aux_busy_cnt < 20);
++
++			if (aux_busy) {
++				DRM_DEV_DEBUG_DRIVER(
++					dev, "AUX Busy Period!");
++			} else {
++				msleep(1000);
++				dptxrd(it6505, 0x55, &it6505->bstatus);
++				DRM_DEV_DEBUG_DRIVER(
++					dev,
++					"bstatus = %d", it6505->bstatus);
++			}
++		}
++		DRM_DEV_DEBUG_DRIVER(dev, "Receive CP_IRQ!");
++		it6505->bstatus = dptx_dpcdrd(it6505, 0x68029);
++		dptxrd(it6505, 0x55, &reg55);
++		DRM_DEV_DEBUG_DRIVER(dev, "Cause of the interrupt!");
++		DRM_DEV_DEBUG_DRIVER(dev,
++				     "reg0x68029 = 0x%02x, reg0x55 = 0x%02x",
++				     it6505->bstatus, reg55);
++
++		if (it6505->bstatus & BIT(0)) {
++			DRM_DEV_DEBUG_DRIVER(dev, "HDCP KSV list ready");
++			len = it6505_makeup_sha1_input(it6505);
++			sha1_digest(it6505, it6505->shainput, len,
++				    (u8 *)it6505->av);
++
++			it6505_check_sha1_result(it6505);
++		}
++		if (it6505->bstatus & BIT(1))
++			DRM_DEV_DEBUG_DRIVER(dev, "HDCP R0' ready");
++		if (it6505->bstatus & BIT(2)) {
++			DRM_DEV_DEBUG_DRIVER(
++				dev, "Link Integrity Fail, restart HDCP");
++			dptx_sys_chg(it6505, SYS_ReHDCP);
++		}
++	}
++
++	if ((dpcd204 & BIT(7)) == 0x80) {
++		if ((it6505->lane == 1 && (dpcd202 & BIT(2)) != 0x04) ||
++		    (it6505->lane == 2 && (dpcd202 & 0x44) != 0x44) ||
++		    (it6505->lane == 4 &&
++		     ((dpcd202 & 0x44) != 0x44 || (dpcd203 & 0x44) != 0x44)) ||
++		    (it6505->lane == 1 && (dpcd203 & BIT(6)) != 0x40) ||
++		    (it6505->lane == 2 && (dpcd203 & 0x44) != 0x44) ||
++		    (it6505->lane == 4 &&
++		     ((dpcd203 & 0x44) != 0x44 || (dpcd202 & 0x44) != 0x44)) ||
++		    (dpcd204 & BIT(0)) != 0x01) {
++			DRM_DEV_DEBUG_DRIVER(dev, "Link Re-Training");
++			dptxset(it6505, 0xD3, 0x30, 0x30);
++			dptxset(it6505, 0xE8, 0x33, 0x00);
++			msleep(500);
++			dptx_sys_chg(it6505, SYS_HPD);
++			go_on_fsm(it6505);
++		}
++	}
++}
++
++static void go_on_fsm(struct it6505 *it6505)
++{
++	struct device *dev = &it6505->client->dev;
++
++	if (it6505->cp_capable) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Support HDCP, cp_capable: %d",
++				     it6505->cp_capable);
++		if (it6505->en_hdcp) {
++			DRM_DEV_DEBUG_DRIVER(dev, "Enable HDCP");
++			to_fsm_status(it6505, SYS_ReHDCP);
++			dptx_sys_fsm(it6505);
++			if (it6505->downstream_repeater) {
++				DRM_DEV_DEBUG_DRIVER(dev, "Is repeater");
++				hpd_irq(it6505);
++			}
++		} else {
++			DRM_DEV_DEBUG_DRIVER(dev, "Disable HDCP");
++			to_fsm_status(it6505, SYS_NOROP);
++		}
++	} else {
++		DRM_DEV_DEBUG_DRIVER(dev, "Not support HDCP");
++		to_fsm_status(it6505, SYS_NOROP);
++	}
++}
++
++static void it6505_check_reg06(struct it6505 *it6505, unsigned int reg06)
++{
++	unsigned int rddata, err;
++	union extcon_property_value property;
++	struct device *dev = &it6505->client->dev;
++
++	if (reg06 & BIT(0)) {
++		/* hpd pin status change */
++		DRM_DEV_DEBUG_DRIVER(dev, "HPD Change Interrupt");
++		dptxrd(it6505, 0x0D, &rddata);
++		if (rddata & BIT(1)) {
++			err = extcon_get_property(
++				it6505->port->extcon, EXTCON_DISP_DP,
++				EXTCON_PROP_USB_TYPEC_POLARITY, &property);
++			if (err) {
++				DRM_DEV_DEBUG_DRIVER(dev, "get property fail");
++			}
++
++			it6505->laneswap = property.intval;
++			DRM_DEV_DEBUG_DRIVER(dev, "laneswap: %d",
++					     it6505->laneswap);
++			dptx_sys_chg(it6505, SYS_HPD);
++			dptx_sys_fsm(it6505);
++			go_on_fsm(it6505);
++		} else {
++			dptx_sys_chg(it6505, SYS_UNPLUG);
++		}
++	}
++
++	if (it6505->cp_capable) {
++		if (reg06 & BIT(3)) {
++			DRM_DEV_DEBUG_DRIVER(dev,
++					     "HDCP encryption Fail Interrupt");
++			DRM_DEV_DEBUG_DRIVER(dev, "HDCP retry");
++			it6505->cp_done = 0;
++			it6505->en_hdcp = 0;
++			dptx_sys_fsm(it6505);
++			if (it6505->downstream_repeater) {
++				DRM_DEV_DEBUG_DRIVER(dev, "Is repeater");
++				hpd_irq(it6505);
++			}
++		}
++
++		if (reg06 & BIT(4)) {
++			DRM_DEV_DEBUG_DRIVER(dev,
++					     "HDCP encryption Done Interrupt");
++			it6505->cp_done = 1;
++			it6505->en_hdcp = 1;
++			dptx_sys_chg(it6505, SYS_NOROP);
++		}
++	}
++
++	if (reg06 & BIT(1)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "HPD IRQ Interrupt");
++		hpd_irq(it6505);
++	}
++
++	if (reg06 & BIT(2)) {
++		dptxrd(it6505, 0x0D, &rddata);
++
++		if ((rddata & BIT(2)) >> 2) {
++			DRM_DEV_DEBUG_DRIVER(dev, "Video Stable On Interrupt");
++			it6505->vidstable_done = 1;
++		} else {
++			DRM_DEV_DEBUG_DRIVER(dev, "Video Stable Off Interrupt");
++			it6505->vidstable_done = 0;
++		}
++	}
++}
++
++static void it6505_check_reg07(struct it6505 *it6505, unsigned int reg07)
++{
++	struct device *dev = &it6505->client->dev;
++
++	if (it6505->status == SYS_UNPLUG)
++		return;
++	if (reg07 & BIT(0))
++		DRM_DEV_DEBUG_DRIVER(dev, "AUX PC Request Fail Interrupt");
++
++	if (reg07 & BIT(1)) {
++		unsigned int ar0_low, ar0_high, br0_low, br0_high;
++
++		DRM_DEV_DEBUG_DRIVER(dev, "HDCP event Interrupt");
++		it6505->bstatus = dptx_dpcdrd(it6505, 0x68029);
++		dptxrd(it6505, 0x3B, &ar0_low);
++		dptxrd(it6505, 0x3C, &ar0_high);
++		dptxrd(it6505, 0x45, &br0_low);
++		dptxrd(it6505, 0x46, &br0_high);
++		/*
++		 * Read Bstatus to determine what happened
++		 */
++		DRM_DEV_DEBUG_DRIVER(dev, "Bstatus reg0x68029: %02x",
++				     it6505->bstatus);
++		if (!(it6505->bstatus & BIT(0))) {
++			DRM_DEV_DEBUG_DRIVER(dev,
++					     "Ar0_low: %02x Ar0_high: %02x",
++					     ar0_low, ar0_high);
++			DRM_DEV_DEBUG_DRIVER(dev,
++					     "Br0_low: %02x Br0_high: %02x",
++					     br0_low, br0_high);
++		}
++	}
++	if (it6505->en_audio && (reg07 & BIT(2))) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Audio FIFO OverFlow Interrupt");
++		dptxset(it6505, 0xD3, 0x20, 0x20);
++		dptxset(it6505, 0xE8, 0x22, 0x00);
++		dptxset(it6505, 0xB8, 0x80, 0x80);
++		dptxset(it6505, 0xB8, 0x80, 0x00);
++		it6505_set_audio(it6505, it6505->aud_sel, it6505->aud_type,
++				 it6505->aud_fs, it6505->aud_ch);
++	}
++}
++
++static void it6505_check_reg08(struct it6505 *it6505, unsigned int reg08)
++{
++	struct device *dev = &it6505->client->dev;
++
++	if (it6505->status == SYS_UNPLUG)
++		return;
++	if (reg08 & BIT(4)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "Link Training Fail Interrupt");
++		/* restart training */
++		dptx_sys_chg(it6505, SYS_AUTOTRAIN);
++		go_on_fsm(it6505);
++	}
++
++	if (reg08 & BIT(7)) {
++		DRM_DEV_DEBUG_DRIVER(dev, "IO Latch FIFO OverFlow Interrupt");
++		dptxset(it6505, 0x61, 0x02, 0x02);
++		dptxset(it6505, 0x61, 0x02, 0x00);
++	}
++}
++
++static void it6505_dptx_irq(struct it6505 *it6505)
++{
++	unsigned int reg06, reg07, reg08, reg0d;
++	struct device *dev = &it6505->client->dev;
++
++	dptxrd(it6505, 0x06, &reg06);
++	dptxrd(it6505, 0x07, &reg07);
++	dptxrd(it6505, 0x08, &reg08);
++	dptxrd(it6505, 0x0D, &reg0d);
++
++	dptxwr(it6505, 0x06, reg06);
++	dptxwr(it6505, 0x07, reg07);
++	dptxwr(it6505, 0x08, reg08);
++
++	DRM_DEV_DEBUG_DRIVER(dev, "reg06 = 0x%02x", reg06);
++	DRM_DEV_DEBUG_DRIVER(dev, "reg07 = 0x%02x", reg07);
++	DRM_DEV_DEBUG_DRIVER(dev, "reg08 = 0x%02x", reg08);
++	DRM_DEV_DEBUG_DRIVER(dev, "reg0d = 0x%02x", reg0d);
++
++	if (reg06 != 0)
++		it6505_check_reg06(it6505, reg06);
++
++	if (reg07 != 0)
++		it6505_check_reg07(it6505, reg07);
++
++	if (reg08 != 0)
++		it6505_check_reg08(it6505, reg08);
++}
++
++static void it6505_bridge_enable(struct drm_bridge *bridge)
++{
++	struct it6505 *ctx = bridge_to_it6505(bridge);
++
++	it6505_init_fsm(ctx);
++	it6505_int_mask_on(ctx);
++	dptx_sys_chg(ctx, SYS_HPD);
++}
++
++static const struct drm_bridge_funcs it6505_bridge_funcs = {
++	.attach = it6505_bridge_attach,
++	.detach = it6505_bridge_detach,
++	.mode_valid = it6505_bridge_mode_valid,
++	.mode_set = it6505_bridge_mode_set,
++	.enable = it6505_bridge_enable,
++};
++
++static void it6505_clear_int(struct it6505 *it6505)
++{
++	dptxwr(it6505, 0x06, 0xFF);
++	dptxwr(it6505, 0x07, 0xFF);
++	dptxwr(it6505, 0x08, 0xFF);
++}
++
++static irqreturn_t it6505_intp_threaded_handler(int unused, void *data)
++{
++	struct it6505 *ctx = data;
++	struct device *dev = &ctx->client->dev;
++
++	msleep(100);
++	down(&ctx->sem_notifier);
++
++	if (ctx->it6505_drv_hold)
++		it6505_clear_int(ctx);
++
++	if (ctx->it6505_drv_hold == 0 && ctx->powered) {
++		DRM_DEV_DEBUG_DRIVER(dev, "into it6505_dptx_irq");
++		it6505_dptx_irq(ctx);
++	}
++
++	up(&ctx->sem_notifier);
++	return IRQ_HANDLED;
++}
++
++static int it6505_init_pdata(struct it6505 *it6505)
++{
++	struct it6505_platform_data *pdata = &it6505->pdata;
++	struct device *dev = &it6505->client->dev;
++
++	/* 1.0V digital core power regulator  */
++	pdata->pwr18 = devm_regulator_get(dev, "pwr18");
++	if (IS_ERR(pdata->pwr18)) {
++		DRM_DEV_ERROR(dev, "pwr18 regulator not found");
++		return PTR_ERR(pdata->pwr18);
++	}
++
++	pdata->ovdd = devm_regulator_get(dev, "ovdd");
++	if (IS_ERR(pdata->ovdd)) {
++		DRM_DEV_ERROR(dev, "ovdd regulator not found");
++		return PTR_ERR(pdata->ovdd);
++	}
++
++	/* GPIO for HPD */
++	pdata->gpiod_hpd = devm_gpiod_get(dev, "hpd", GPIOD_IN);
++	if (IS_ERR(pdata->gpiod_hpd))
++		return PTR_ERR(pdata->gpiod_hpd);
++
++	/* GPIO for chip reset */
++	pdata->gpiod_reset = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
++
++	return PTR_ERR_OR_ZERO(pdata->gpiod_reset);
++}
++
++static ssize_t drv_hold_show(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", ctx->it6505_drv_hold);
++}
++
++static ssize_t drv_hold_store(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t count)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	if (kstrtoint(buf, 10, &ctx->it6505_drv_hold) < 0)
++		return -EINVAL;
++	return count;
++}
++
++static ssize_t print_timing_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++	struct drm_display_mode *vid = &ctx->vid_info;
++	char *str = buf, *end = buf + PAGE_SIZE;
++
++	str += scnprintf(str, end - str, "---video timing---\n");
++	str += scnprintf(str, end - str, "PCLK:%d.%03dMHz\n", vid->clock / 1000,
++			 vid->clock % 1000);
++	str += scnprintf(str, end - str, "HTotal:%d\n", vid->htotal);
++	str += scnprintf(str, end - str, "HActive:%d\n", vid->hdisplay);
++	str += scnprintf(str, end - str, "HFrontPorch:%d\n",
++			 vid->hsync_start - vid->hdisplay);
++	str += scnprintf(str, end - str, "HSyncWidth:%d\n",
++			 vid->hsync_end - vid->hsync_start);
++	str += scnprintf(str, end - str, "HBackPorch:%d\n",
++			 vid->htotal - vid->hsync_end);
++	str += scnprintf(str, end - str, "VTotal:%d\n", vid->vtotal);
++	str += scnprintf(str, end - str, "VActive:%d\n", vid->vdisplay);
++	str += scnprintf(str, end - str, "VFrontPorch:%d\n",
++			 vid->vsync_start - vid->vdisplay);
++	str += scnprintf(str, end - str, "VSyncWidth:%d\n",
++			 vid->vsync_end - vid->vsync_start);
++	str += scnprintf(str, end - str, "VBackPorch:%d\n",
++			 vid->vtotal - vid->vsync_end);
++
++	return str - buf;
++}
++
++static ssize_t sha_debug_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	int i = 0;
++	char *str = buf, *end = buf + PAGE_SIZE;
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	str += scnprintf(str, end - str, "sha input:\n");
++	for (i = 0; i < ARRAY_SIZE(ctx->shainput); i += 16)
++		str += scnprintf(str, end - str, "%16ph\n", ctx->shainput + i);
++
++	str += scnprintf(str, end - str, "av:\n");
++	for (i = 0; i < ARRAY_SIZE(ctx->av); i++)
++		str += scnprintf(str, end - str, "%4ph\n", ctx->av[i]);
++
++	str += scnprintf(str, end - str, "bv:\n");
++	for (i = 0; i < ARRAY_SIZE(ctx->bv); i++)
++		str += scnprintf(str, end - str, "%4ph\n", ctx->bv[i]);
++
++	return end - str;
++}
++
++static ssize_t en_hdcp_show(struct device *dev, struct device_attribute *attr,
++			    char *buf)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", ctx->en_hdcp);
++}
++
++static ssize_t en_hdcp_store(struct device *dev, struct device_attribute *attr,
++			     const char *buf, size_t count)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++	unsigned int reg3f, hdcp;
++
++	if (!ctx->powered || ctx->status == SYS_UNPLUG) {
++		DRM_DEV_DEBUG_DRIVER(dev, "can not set en_hdcp");
++		return -EINVAL;
++	}
++	if (kstrtoint(buf, 10, &ctx->en_hdcp) < 0)
++		return -EINVAL;
++
++	if (ctx->en_hdcp) {
++		if (ctx->cp_capable) {
++			dptx_sys_chg(ctx, SYS_ReHDCP);
++			dptx_sys_fsm(ctx);
++		} else {
++			DRM_DEV_ERROR(dev, "sink not support HDCP");
++			ctx->en_hdcp = 0;
++		}
++	} else {
++		dptxset(ctx, 0x05, 0x10, 0x10);
++		dptxset(ctx, 0x05, 0x10, 0x00);
++		dptxrd(ctx, 0x3F, &reg3f);
++		hdcp = (reg3f & BIT(7)) >> 7;
++		DRM_DEV_DEBUG_DRIVER(dev, "%s to disable hdcp",
++				     hdcp ? "failed" : "succeeded");
++		if (hdcp)
++			ctx->en_hdcp = 1;
++	}
++	return count;
++}
++
++static ssize_t en_pwronoff_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", ctx->en_pwronoff);
++}
++
++static ssize_t en_pwronoff_store(struct device *dev,
++				 struct device_attribute *attr, const char *buf,
++				 size_t count)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	if (kstrtoint(buf, 10, &ctx->en_pwronoff) < 0)
++		return -EINVAL;
++	return count;
++}
++
++static ssize_t en_audio_show(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", ctx->en_audio);
++}
++
++static ssize_t en_audio_store(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t count)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	if (!ctx->powered || ctx->status == SYS_UNPLUG) {
++		DRM_DEV_DEBUG_DRIVER(dev, "can not set en_audio");
++		return -EINVAL;
++	}
++	if (kstrtoint(buf, 10, &ctx->en_audio) < 0)
++		return -EINVAL;
++	if (ctx->en_audio) {
++		it6505_set_audio(ctx, ctx->aud_sel, ctx->aud_type, ctx->aud_fs,
++				 ctx->aud_ch);
++	} else {
++		dptxset(ctx, 0x05, 0x02, 0x02);
++		dptxset(ctx, 0x05, 0x02, 0x00);
++	}
++	DRM_DEV_DEBUG_DRIVER(dev, "%s audio",
++			     ctx->en_audio ? "Enable" : "Disable");
++	return count;
++}
++
++static ssize_t force_pwronoff_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++	int pwr;
++
++	if (kstrtoint(buf, 10, &pwr) < 0)
++		return -EINVAL;
++	if (pwr)
++		it6505_poweron(ctx);
++	else
++		it6505_poweroff(ctx);
++	return count;
++}
++
++static ssize_t pwr_status_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct it6505 *ctx = dev_get_drvdata(dev);
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", ctx->powered);
++}
++
++static DEVICE_ATTR_RO(print_timing);
++static DEVICE_ATTR_RO(pwr_status);
++static DEVICE_ATTR_RO(sha_debug);
++static DEVICE_ATTR_WO(force_pwronoff);
++static DEVICE_ATTR_RW(drv_hold);
++static DEVICE_ATTR_RW(en_hdcp);
++static DEVICE_ATTR_RW(en_pwronoff);
++static DEVICE_ATTR_RW(en_audio);
++
++static const struct attribute *it6505_attrs[] = {
++	&dev_attr_drv_hold.attr,
++	&dev_attr_print_timing.attr,
++	&dev_attr_sha_debug.attr,
++	&dev_attr_en_hdcp.attr,
++	&dev_attr_en_pwronoff.attr,
++	&dev_attr_en_audio.attr,
++	&dev_attr_force_pwronoff.attr,
++	&dev_attr_pwr_status.attr,
++	NULL,
++};
++
++static int it6505_i2c_probe(struct i2c_client *client,
++			    const struct i2c_device_id *id)
++{
++	struct it6505 *ctx;
++	struct it6505_platform_data *pdata;
++	struct device *dev = &client->dev;
++	struct extcon_dev *extcon;
++	struct it6505_dp_port *port;
++	int err = 0, hpd_irq, intp_irq;
++
++	ctx = devm_kzalloc(&client->dev, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++
++	mutex_init(&ctx->lock);
++
++	pdata = &ctx->pdata;
++
++	ctx->bridge.of_node = client->dev.of_node;
++	ctx->client = client;
++	i2c_set_clientdata(client, ctx);
++
++	/* get extcon device from DTS */
++	extcon = extcon_get_edev_by_phandle(dev, 0);
++	if (PTR_ERR(extcon) == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++	if (IS_ERR(extcon)) {
++		DRM_DEV_ERROR(dev, "can not get extcon device!");
++		return -EINVAL;
++	}
++
++	port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
++	if (!port)
++		return -ENOMEM;
++	port->extcon = extcon;
++	port->it6505_dp = ctx;
++	ctx->port = port;
++	err = it6505_use_notifier_module(ctx);
++	if (err < 0)
++		return err;
++
++	err = it6505_init_pdata(ctx);
++	if (err) {
++		DRM_DEV_ERROR(dev, "Failed to initialize pdata: %d", err);
++		return err;
++	}
++
++	ctx->regmap =
++		devm_regmap_init_i2c(client, &it6505_bridge_regmap_config);
++	if (IS_ERR(ctx->regmap)) {
++		DRM_DEV_ERROR(dev, "regmap i2c init failed");
++		return PTR_ERR(ctx->regmap);
++	}
++
++	hpd_irq = gpiod_to_irq(pdata->gpiod_hpd);
++
++	if (hpd_irq < 0) {
++		DRM_DEV_ERROR(dev, "Failed to get HPD IRQ: %d", hpd_irq);
++		return -ENODEV;
++	}
++
++	intp_irq = client->irq;
++
++	if (!intp_irq) {
++		DRM_DEV_ERROR(dev, "Failed to get CABLE_DET and INTP IRQ");
++		return -ENODEV;
++	}
++
++	err = devm_request_threaded_irq(&client->dev, intp_irq, NULL,
++					it6505_intp_threaded_handler,
++					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
++					"it6505-intp", ctx);
++	if (err) {
++		DRM_DEV_ERROR(dev, "Failed to request INTP threaded IRQ: %d",
++			      err);
++		return err;
++	}
++
++	/* Register aux channel */
++	ctx->aux.name = "DP-AUX";
++	ctx->aux.dev = dev;
++	ctx->aux.transfer = it6505_aux_transfer;
++	err = drm_dp_aux_register(&ctx->aux);
++	if (err < 0) {
++		DRM_DEV_ERROR(dev, "Failed to register aux: %d", err);
++		return err;
++	}
++
++	/* thread sequence control */
++	sema_init(&ctx->sem_notifier, 1);
++	ctx->en_pwronoff = 1;
++	ctx->powered = 0;
++	ctx->it6505_drv_hold = 0;
++	err = sysfs_create_files(&client->dev.kobj, it6505_attrs);
++	if (err) {
++		drm_dp_aux_unregister(&ctx->aux);
++		return err;
++	}
++
++	ctx->bridge.funcs = &it6505_bridge_funcs;
++	drm_bridge_add(&ctx->bridge);
++	return 0;
++}
++
++static int it6505_remove(struct i2c_client *client)
++{
++	struct it6505 *ctx = i2c_get_clientdata(client);
++
++	drm_bridge_remove(&ctx->bridge);
++	sysfs_remove_files(&client->dev.kobj, it6505_attrs);
++	kfree(ctx->edid);
++	ctx->edid = NULL;
++	drm_connector_unregister(&ctx->connector);
++	drm_dp_aux_unregister(&ctx->aux);
++	return 0;
++}
++
++static const struct i2c_device_id it6505_id[] = {
++	{ "it6505", 0 },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(i2c, it6505_id);
++
++static const struct of_device_id it6505_of_match[] = {
++	{ .compatible = "ite,it6505" },
++	{ }
++};
++
++struct i2c_driver it6505_i2c_driver = {
++	.driver = {
++		.name = "it6505_dptx",
++		.owner = THIS_MODULE,
++		.of_match_table = it6505_of_match,
++	},
++	.probe = it6505_i2c_probe,
++	.remove = it6505_remove,
++	.id_table = it6505_id,
++};
++
++static int __init it6505_init(void)
++{
++	i2c_add_driver(&it6505_i2c_driver);
++	return 0;
++}
++
++static void __exit it6505_exit(void)
++{
++	i2c_del_driver(&it6505_i2c_driver);
++}
++
++module_init(it6505_init);
++module_exit(it6505_exit);
++
++MODULE_AUTHOR("Jitao Shi <jitao.shi@mediatek.com>");
++MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
++MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
 index f70d33c8b495..60e101ca9d03 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
@@ -7209,6 +9849,19 @@ index 88c7d035ace6..f52c892323c3 100644
  	}
  
  	innolux->backlight = devm_of_find_backlight(dev);
+diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
+index 54890d74779d..7bdb5e3b036b 100644
+--- a/drivers/input/keyboard/cros_ec_keyb.c
++++ b/drivers/input/keyboard/cros_ec_keyb.c
+@@ -267,7 +267,7 @@ static int cros_ec_keyb_work(struct notifier_block *nb,
+ 	if (queued_during_suspend && !device_may_wakeup(ckdev->dev))
+ 		return NOTIFY_OK;
+ 
+-	switch (ckdev->ec->event_data.event_type) {
++	switch (ckdev->ec->event_data.event_type & EC_MKBP_EVENT_TYPE_MASK) {
+ 	case EC_MKBP_EVENT_KEY_MATRIX:
+ 		pm_wakeup_event(ckdev->dev, 0);
+ 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
 index 803084c86124..43e420cdab6e 100644
 --- a/drivers/iommu/mtk_iommu.c
@@ -7385,869 +10038,6 @@ index d70bdf64ab71..832ea99f7a16 100644
 -}
 -subsys_initcall(m4u_init);
 +builtin_platform_driver(mtk_iommu_driver);
-diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 841c005d8ebb..31dc4c5e37e1 100644
---- a/drivers/mailbox/Kconfig
-+++ b/drivers/mailbox/Kconfig
-@@ -205,4 +205,22 @@ config MTK_CMDQ_MBOX
- 	  mailbox driver. The CMDQ is used to help read/write registers with
- 	  critical time limitation, such as updating display configuration
- 	  during the vblank.
-+
-+config MTK_CMDQ_DEBUG
-+	tristate "MediaTek CMDQ Mailbox Debug"
-+	depends on MTK_CMDQ_MBOX
-+	help
-+	  Say yes here to add support for debugging CMDQ driver when timeout
-+	  or irq status error happens. It will print some useful information
-+	  for location problem, such as thread id, PC value and instructions
-+	  of command queue buffer.
-+
-+config MTK_CMDQ_DEBUG_SOC
-+	int "MediaTek CMDQ Mailbox Debug SOC"
-+	depends on MTK_CMDQ_DEBUG
-+	help
-+	  Enter the SOC id that you want to debug CMDQ driver when timeout
-+	  or irq status error happens.
-+	  The SOC id is a decimal integer, e.g. 8173 for MT8173 SOC.
-+	  You must enter the id.
- endif
-diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-index c818b5d011ae..b356e36d8f2a 100644
---- a/drivers/mailbox/Makefile
-+++ b/drivers/mailbox/Makefile
-@@ -44,3 +44,4 @@ obj-$(CONFIG_TEGRA_HSP_MBOX)	+= tegra-hsp.o
- obj-$(CONFIG_STM32_IPCC) 	+= stm32-ipcc.o
- 
- obj-$(CONFIG_MTK_CMDQ_MBOX)	+= mtk-cmdq-mailbox.o
-+obj-$(CONFIG_MTK_CMDQ_DEBUG)	+= mtk-cmdq-debug.o
-diff --git a/drivers/mailbox/mtk-cmdq-debug.c b/drivers/mailbox/mtk-cmdq-debug.c
-new file mode 100644
-index 000000000000..61985342d564
---- /dev/null
-+++ b/drivers/mailbox/mtk-cmdq-debug.c
-@@ -0,0 +1,582 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) 2018 MediaTek Inc.
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mailbox/mtk-cmdq-mailbox.h>
-+#include <linux/workqueue.h>
-+#include "mtk-cmdq-debug.h"
-+#if CONFIG_MTK_CMDQ_DEBUG_SOC == 8173
-+#include <dt-bindings/gce/mt8173-gce.h>
-+#elif CONFIG_MTK_CMDQ_DEBUG_SOC == 8183
-+#include <dt-bindings/gce/mt8183-gce.h>
-+#else
-+static int __error__[-1]; /* Complle error if SOC is not set. */
-+#endif
-+
-+#define CMDQ_OP_CODE_MASK			(0xff << CMDQ_OP_CODE_SHIFT)
-+#define CMDQ_NUM_CMD(t)				(t->cmd_buf_size / CMDQ_INST_SIZE)
-+#define CMDQ_GET_32B_VALUE(arg_b, arg_c)	((u32)((arg_b) << 16) | (arg_c))
-+#define CMDQ_REG_IDX_PREFIX(type)		((type) ? "" : "Reg Index ")
-+
-+struct cmdq_instruction {
-+	s16 arg_c:16;
-+	s16 arg_b:16;
-+	s16 arg_a:16;
-+	u8 s_op:5;
-+	u8 arg_c_type:1;
-+	u8 arg_b_type:1;
-+	u8 arg_a_type:1;
-+	u8 op:8;
-+};
-+
-+void cmdq_buf_print_write(struct device *dev, u32 offset,
-+			  struct cmdq_instruction *cmdq_inst)
-+{
-+	u32 addr = ((u32)(cmdq_inst->arg_a |
-+		    (cmdq_inst->s_op << CMDQ_SUBSYS_SHIFT)));
-+
-+	dev_err(dev, "0x%08x [Write | Store] %s0x%08x = %s0x%08x\n",
-+		offset, cmdq_inst->arg_a_type ? "*Reg Index " : "SubSys Reg ",
-+		addr, CMDQ_REG_IDX_PREFIX(!cmdq_inst->arg_b_type),
-+		cmdq_inst->arg_b_type ? cmdq_inst->arg_b :
-+		CMDQ_GET_32B_VALUE(cmdq_inst->arg_b, cmdq_inst->arg_c));
-+}
-+
-+static void cmdq_buf_print_wfe(struct device *dev, u32 offset,
-+			       struct cmdq_instruction *cmdq_inst)
-+{
-+	const char *event_str;
-+	u32 cmd = CMDQ_GET_32B_VALUE(cmdq_inst->arg_b, cmdq_inst->arg_c);
-+
-+	switch (cmdq_inst->arg_a) {
-+#if CONFIG_MTK_CMDQ_DEBUG_SOC == 8173
-+	case CMDQ_EVENT_DISP_OVL0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL1_SOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL1_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA1_SOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA1_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA2_SOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA2_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_WDMA0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_WDMA0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_WDMA1_SOF:
-+		event_str = "CMDQ_EVENT_DISP_WDMA1_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL1_EOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL1_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA1_EOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA1_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA2_EOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA2_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_WDMA0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_WDMA0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_WDMA1_EOF:
-+		event_str = "CMDQ_EVENT_DISP_WDMA1_EOF";
-+		break;
-+	case CMDQ_EVENT_MUTEX0_STREAM_EOF:
-+		event_str = "CMDQ_EVENT_MUTEX0_STREAM_EOF";
-+		break;
-+	case CMDQ_EVENT_MUTEX1_STREAM_EOF:
-+		event_str = "CMDQ_EVENT_MUTEX1_STREAM_EOF";
-+		break;
-+	case CMDQ_EVENT_MUTEX2_STREAM_EOF:
-+		event_str = "CMDQ_EVENT_MUTEX2_STREAM_EOF";
-+		break;
-+	case CMDQ_EVENT_MUTEX3_STREAM_EOF:
-+		event_str = "CMDQ_EVENT_MUTEX3_STREAM_EOF";
-+		break;
-+	case CMDQ_EVENT_MUTEX4_STREAM_EOF:
-+		event_str = "CMDQ_EVENT_MUTEX4_STREAM_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA0_UNDERRUN:
-+		event_str = "CMDQ_EVENT_DISP_RDMA0_UNDERRUN";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA1_UNDERRUN:
-+		event_str = "CMDQ_EVENT_DISP_RDMA1_UNDERRUN";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA2_UNDERRUN:
-+		event_str = "CMDQ_EVENT_DISP_RDMA2_UNDERRUN";
-+		break;
-+#elif CONFIG_MTK_CMDQ_DEBUG_SOC == 8183
-+	case CMDQ_EVENT_DISP_RDMA0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA1_SOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA1_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_RDMA0_SOF:
-+		event_str = "CMDQ_EVENT_MDP_RDMA0_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_RSZ0_SOF:
-+		event_str = "CMDQ_EVENT_MDP_RSZ0_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_RSZ1_SOF:
-+		event_str = "CMDQ_EVENT_MDP_RSZ1_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_TDSHP_SOF:
-+		event_str = "CMDQ_EVENT_MDP_TDSHP_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_WROT0_SOF:
-+		event_str = "CMDQ_EVENT_MDP_WROT0_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_WDMA0_SOF:
-+		event_str = "CMDQ_EVENT_MDP_WDMA0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL0_2L_SOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_2L_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL1_2L_SOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL1_2L_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_WDMA0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_WDMA0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_COLOR0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_COLOR0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_CCORR0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_CCORR0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_AAL0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_AAL0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_GAMMA0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_GAMMA0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_DITHER0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_DITHER0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_PWM0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_PWM0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_DSI0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_DSI0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_DPI0_SOF:
-+		event_str = "CMDQ_EVENT_DISP_DPI0_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RSZ_SOF:
-+		event_str = "CMDQ_EVENT_DISP_RSZ_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_AAL_SOF:
-+		event_str = "CMDQ_EVENT_MDP_AAL_SOF";
-+		break;
-+	case CMDQ_EVENT_MDP_CCORR_SOF:
-+		event_str = "CMDQ_EVENT_MDP_CCORR_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_DBI_SOF:
-+		event_str = "CMDQ_EVENT_DISP_DBI_SOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA1_EOF:
-+		event_str = "CMDQ_EVENT_DISP_RDMA1_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_RDMA0_EOF:
-+		event_str = "CMDQ_EVENT_MDP_RDMA0_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_RSZ0_EOF:
-+		event_str = "CMDQ_EVENT_MDP_RSZ0_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_RSZ1_EOF:
-+		event_str = "CMDQ_EVENT_MDP_RSZ1_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_TDSHP_EOF:
-+		event_str = "CMDQ_EVENT_MDP_TDSHP_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_WROT0_EOF:
-+		event_str = "CMDQ_EVENT_MDP_WROT0_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_WDMA0_EOF:
-+		event_str = "CMDQ_EVENT_MDP_WDMA0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL0_2L_EOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_2L_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL1_2L_EOF:
-+		event_str = "CMDQ_EVENT_DISP_OVL1_2L_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_WDMA0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_WDMA0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_COLOR0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_COLOR0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_CCORR0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_CCORR0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_AAL0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_AAL0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_GAMMA0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_GAMMA0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_DITHER0_EOF:
-+		event_str = "CMDQ_EVENT_DISP_DITHER0_EOF";
-+		break;
-+	case CMDQ_EVENT_DSI0_EOF:
-+		event_str = "CMDQ_EVENT_DSI0_EOF";
-+		break;
-+	case CMDQ_EVENT_DPI0_EOF:
-+		event_str = "CMDQ_EVENT_DPI0_EOF";
-+		break;
-+	case CMDQ_EVENT_DISP_RSZ_EOF:
-+		event_str = "CMDQ_EVENT_DISP_RSZ_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_AAL_EOF:
-+		event_str = "CMDQ_EVENT_MDP_AAL_EOF";
-+		break;
-+	case CMDQ_EVENT_MDP_CCORR_EOF:
-+		event_str = "CMDQ_EVENT_MDP_CCORR_EOF";
-+		break;
-+	case CMDQ_EVENT_DBI_EOF:
-+		event_str = "CMDQ_EVENT_DBI_EOF";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE0:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE0";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE1:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE1";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE2:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE2";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE3:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE3";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE4:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE4";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE5:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE5";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE6:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE6";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE7:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE7";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE8:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE8";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE9:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE9";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE10:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE10";
-+		break;
-+	case CMDQ_EVENT_MUTEX_STREAM_DONE11:
-+		event_str = "CMDQ_EVENT_MUTEX_STREAM_DONE11";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA0_BUF_UNDERRUN_EVEN:
-+		event_str = "CMDQ_EVENT_DISP_RDMA0_BUF_UNDERRUN_EVEN";
-+		break;
-+	case CMDQ_EVENT_DISP_RDMA1_BUF_UNDERRUN_EVEN:
-+		event_str = "CMDQ_EVENT_DISP_RDMA1_BUF_UNDERRUN_EVEN";
-+		break;
-+	case CMDQ_EVENT_DSI0_TE_EVENT:
-+		event_str = "CMDQ_EVENT_DSI0_TE_EVENT";
-+		break;
-+	case CMDQ_EVENT_DSI0_IRQ_EVENT:
-+		event_str = "CMDQ_EVENT_DSI0_IRQ_EVENT";
-+		break;
-+	case CMDQ_EVENT_DSI0_DONE_EVENT:
-+		event_str = "CMDQ_EVENT_DSI0_DONE_EVENT";
-+		break;
-+	case CMDQ_EVENT_DISP_WDMA0_SW_RST_DONE:
-+		event_str = "CMDQ_EVENT_DISP_WDMA0_SW_RST_DONE";
-+		break;
-+	case CMDQ_EVENT_MDP_WDMA_SW_RST_DONE:
-+		event_str = "CMDQ_EVENT_MDP_WDMA_SW_RST_DONE";
-+		break;
-+	case CMDQ_EVENT_MDP_WROT0_SW_RST_DONE:
-+		event_str = "CMDQ_EVENT_MDP_WROT0_SW_RST_DONE";
-+		break;
-+	case CMDQ_EVENT_MDP_RDMA0_SW_RST_DONE:
-+		event_str = "CMDQ_EVENT_MDP_RDMA0_SW_RST_DONE";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL0_FRAME_RST_DONE_PULE:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_FRAME_RST_DONE_PULE";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL0_2L_FRAME_RST_DONE_ULSE:
-+		event_str = "CMDQ_EVENT_DISP_OVL0_2L_FRAME_RST_DONE_ULSE";
-+		break;
-+	case CMDQ_EVENT_DISP_OVL1_2L_FRAME_RST_DONE_ULSE:
-+		event_str = "CMDQ_EVENT_DISP_OVL1_2L_FRAME_RST_DONE_ULSE";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_0:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_0";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_1:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_1";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_2:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_2";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_3:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_3";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_4:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_4";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_5:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_5";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_6:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_6";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_7:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_7";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_8:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_8";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_9:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_9";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_10:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_10";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_11:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_11";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_12:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_12";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_13:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_13";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_14:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_14";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_15:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_15";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_16:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_16";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_17:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_17";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_P2_18:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_P2_18";
-+		break;
-+	case CMDQ_EVENT_AMD_FRAME_DONE:
-+		event_str = "CMDQ_EVENT_AMD_FRAME_DONE";
-+		break;
-+	case CMDQ_EVENT_DVE_DONE:
-+		event_str = "CMDQ_EVENT_DVE_DONE";
-+		break;
-+	case CMDQ_EVENT_WMFE_DONE:
-+		event_str = "CMDQ_EVENT_WMFE_DONE";
-+		break;
-+	case CMDQ_EVENT_RSC_DONE:
-+		event_str = "CMDQ_EVENT_RSC_DONE";
-+		break;
-+	case CMDQ_EVENT_MFB_DONE:
-+		event_str = "CMDQ_EVENT_MFB_DONE";
-+		break;
-+	case CMDQ_EVENT_WPE_A_DONE:
-+		event_str = "CMDQ_EVENT_WPE_A_DONE";
-+		break;
-+	case CMDQ_EVENT_SPE_B_DONE:
-+		event_str = "CMDQ_EVENT_SPE_B_DONE";
-+		break;
-+	case CMDQ_EVENT_OCC_DONE:
-+		event_str = "CMDQ_EVENT_OCC_DONE";
-+		break;
-+	case CMDQ_EVENT_VENC_CMDQ_FRAME_DONE:
-+		event_str = "CMDQ_EVENT_VENC_CMDQ_FRAME_DONE";
-+		break;
-+	case CMDQ_EVENT_JPG_ENC_CMDQ_DONE:
-+		event_str = "CMDQ_EVENT_JPG_ENC_CMDQ_DONE";
-+		break;
-+	case CMDQ_EVENT_JPG_DEC_CMDQ_DONE:
-+		event_str = "CMDQ_EVENT_JPG_DEC_CMDQ_DONE";
-+		break;
-+	case CMDQ_EVENT_VENC_CMDQ_MB_DONE:
-+		event_str = "CMDQ_EVENT_VENC_CMDQ_MB_DONE";
-+		break;
-+	case CMDQ_EVENT_VENC_CMDQ_128BYTE_DONE:
-+		event_str = "CMDQ_EVENT_VENC_CMDQ_128BYTE_DONE";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_A:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_A";
-+		break;
-+	case CMDQ_EVENT_ISP_FRAME_DONE_B:
-+		event_str = "CMDQ_EVENT_ISP_FRAME_DONE_B";
-+		break;
-+	case CMDQ_EVENT_CAMSV0_PASS1_DONE:
-+		event_str = "CMDQ_EVENT_CAMSV0_PASS1_DONE";
-+		break;
-+	case CMDQ_EVENT_CAMSV1_PASS1_DONE:
-+		event_str = "CMDQ_EVENT_CAMSV1_PASS1_DONE";
-+		break;
-+	case CMDQ_EVENT_CAMSV2_PASS1_DONE:
-+		event_str = "CMDQ_EVENT_CAMSV2_PASS1_DONE";
-+		break;
-+	case CMDQ_EVENT_TSF_DONE:
-+		event_str = "CMDQ_EVENT_TSF_DONE";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM0_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM0_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM1_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM1_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM2_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM2_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM3_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM3_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM4_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM4_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM5_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM5_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM6_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM6_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_SENINF_CAM7_FIFO_FULL:
-+		event_str = "CMDQ_EVENT_SENINF_CAM7_FIFO_FULL";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE0_DONE0:
-+		event_str = "CMDQ_EVENT_IPU_CORE0_DONE0";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE0_DONE1:
-+		event_str = "CMDQ_EVENT_IPU_CORE0_DONE1";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE0_DONE2:
-+		event_str = "CMDQ_EVENT_IPU_CORE0_DONE2";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE0_DONE3:
-+		event_str = "CMDQ_EVENT_IPU_CORE0_DONE3";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE1_DONE0:
-+		event_str = "CMDQ_EVENT_IPU_CORE1_DONE0";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE1_DONE1:
-+		event_str = "CMDQ_EVENT_IPU_CORE1_DONE1";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE1_DONE2:
-+		event_str = "CMDQ_EVENT_IPU_CORE1_DONE2";
-+		break;
-+	case CMDQ_EVENT_IPU_CORE1_DONE3:
-+		event_str = "CMDQ_EVENT_IPU_CORE1_DONE3";
-+		break;
-+#endif
-+
-+	default:
-+		event_str = "UNKNOWN";
-+		break;
-+	}
-+
-+	dev_err(dev, "0x%08x %s event %u\n", offset,
-+		(cmd && CMDQ_WFE_OPTION) ? "wait for" : "clear",
-+		cmdq_inst->arg_a);
-+}
-+
-+void cmdq_buf_print_mask(struct device *dev, u32 offset,
-+			 struct cmdq_instruction *cmdq_inst)
-+{
-+	u32 mask = CMDQ_GET_32B_VALUE(cmdq_inst->arg_b, cmdq_inst->arg_c);
-+
-+	dev_err(dev, "0x%08x mask 0x%08x\n", offset, ~mask);
-+}
-+
-+void cmdq_buf_print_misc(struct device *dev, u32 offset,
-+			 struct cmdq_instruction *cmdq_inst)
-+{
-+	char *cmd_str;
-+
-+	switch (cmdq_inst->op) {
-+	case CMDQ_CODE_JUMP:
-+		cmd_str = "jump";
-+		break;
-+	case CMDQ_CODE_EOC:
-+		cmd_str = "eoc";
-+		break;
-+	case CMDQ_CODE_POLL:
-+		cmd_str = "polling";
-+		break;
-+	default:
-+		cmd_str = "unknown";
-+		break;
-+	}
-+
-+	dev_err(dev, "0x%08x %s\n", offset, cmd_str);
-+}
-+
-+void cmdq_debug_buf_dump_work(struct work_struct *work_item)
-+{
-+	struct cmdq_buf_dump *buf_dump = container_of(work_item,
-+			struct cmdq_buf_dump, dump_work);
-+	struct device *dev = buf_dump->dev;
-+	struct cmdq_instruction *cmdq_inst =
-+		(struct cmdq_instruction *)buf_dump->cmd_buf;
-+	u32 i, offset = 0;
-+
-+	dev_err(dev, "dump %s task start ----------\n",
-+		buf_dump->timeout ? "timeout" : "error");
-+	for (i = 0; i < CMDQ_NUM_CMD(buf_dump); i++) {
-+		if (offset == buf_dump->pa_offset)
-+			dev_err(dev,
-+				"\e[1;31;40m==========ERROR==========\e[0m\n");
-+		switch (cmdq_inst[i].op) {
-+		case CMDQ_CODE_WRITE:
-+			cmdq_buf_print_write(dev, offset, &cmdq_inst[i]);
-+			break;
-+		case CMDQ_CODE_WFE:
-+			cmdq_buf_print_wfe(dev, offset, &cmdq_inst[i]);
-+			break;
-+		case CMDQ_CODE_MASK:
-+			cmdq_buf_print_mask(dev, offset, &cmdq_inst[i]);
-+			break;
-+		default:
-+			cmdq_buf_print_misc(dev, offset, &cmdq_inst[i]);
-+			break;
-+		}
-+		if (offset == buf_dump->pa_offset)
-+			dev_err(dev,
-+				"\e[1;31;40m==========ERROR==========\e[0m\n");
-+		offset += CMDQ_INST_SIZE;
-+	}
-+	dev_err(dev, "dump %s task end   ----------\n",
-+		buf_dump->timeout ? "timeout" : "error");
-+
-+	kfree(buf_dump->cmd_buf);
-+	kfree(buf_dump);
-+}
-+EXPORT_SYMBOL(cmdq_debug_buf_dump_work);
-+
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/mailbox/mtk-cmdq-debug.h b/drivers/mailbox/mtk-cmdq-debug.h
-new file mode 100644
-index 000000000000..5392b00c9394
---- /dev/null
-+++ b/drivers/mailbox/mtk-cmdq-debug.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018 MediaTek Inc.
-+ *
-+ */
-+
-+#ifndef MTK_CMDQ_DEBUG_H
-+#define MTK_CMDQ_DEBUG_H
-+
-+struct cmdq_buf_dump {
-+	struct device		*dev; /* device of cmdq controller */
-+	struct work_struct	dump_work;
-+	bool			timeout; /* 0: error, 1: timeout */
-+	void			*cmd_buf;
-+	size_t			cmd_buf_size;
-+	u32			pa_offset; /* pa_curr - pa_base */
-+};
-+
-+void cmdq_debug_buf_dump_work(struct work_struct *work_item);
-+
-+#endif /* MTK_CMDQ_DEBUG_H */
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index aec46d5d3506..2c53ece47abd 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -15,9 +15,11 @@
- #include <linux/mailbox_controller.h>
- #include <linux/mailbox/mtk-cmdq-mailbox.h>
- #include <linux/of_device.h>
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+#include "mtk-cmdq-debug.h"
-+#endif
- 
- #define CMDQ_OP_CODE_MASK		(0xff << CMDQ_OP_CODE_SHIFT)
--#define CMDQ_IRQ_MASK			0xffff
- #define CMDQ_NUM_CMD(t)			(t->cmd_buf_size / CMDQ_INST_SIZE)
- 
- #define CMDQ_CURR_IRQ_STATUS		0x10
-@@ -34,6 +36,7 @@
- #define CMDQ_THR_END_ADDR		0x24
- #define CMDQ_THR_WAIT_TOKEN		0x30
- #define CMDQ_THR_PRIORITY		0x40
-+#define CMDQ_SYNC_TOKEN_UPDATE		0x68
- 
- #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
- #define CMDQ_THR_ENABLED		0x1
-@@ -71,11 +74,38 @@ struct cmdq {
- 	void __iomem		*base;
- 	u32			irq;
- 	u32			thread_nr;
-+	u32			irq_mask;
- 	struct cmdq_thread	*thread;
- 	struct clk		*clock;
- 	bool			suspended;
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+	struct workqueue_struct *buf_dump_wq;
-+#endif
- };
- 
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+static void cmdq_buf_dump_schedule(struct cmdq_task *task, bool timeout,
-+				   u32 pa_curr)
-+{
-+	struct device *dev = task->cmdq->mbox.dev;
-+	struct cmdq_buf_dump *buf_dump;
-+
-+	buf_dump = kmalloc(sizeof(*buf_dump), GFP_ATOMIC);
-+	buf_dump->dev = dev;
-+	buf_dump->timeout = timeout;
-+	buf_dump->cmd_buf = kmalloc(task->pkt->cmd_buf_size, GFP_ATOMIC);
-+	buf_dump->cmd_buf_size = task->pkt->cmd_buf_size;
-+	buf_dump->pa_offset = pa_curr - task->pa_base;
-+	dma_sync_single_for_cpu(dev, task->pa_base,
-+				task->pkt->cmd_buf_size, DMA_TO_DEVICE);
-+	memcpy(buf_dump->cmd_buf, task->pkt->va_base, task->pkt->cmd_buf_size);
-+	dma_sync_single_for_device(dev, task->pa_base,
-+				   task->pkt->cmd_buf_size, DMA_TO_DEVICE);
-+	INIT_WORK(&buf_dump->dump_work, cmdq_debug_buf_dump_work);
-+	queue_work(task->cmdq->buf_dump_wq, &buf_dump->dump_work);
-+}
-+#endif
-+
- static int cmdq_thread_suspend(struct cmdq *cmdq, struct cmdq_thread *thread)
- {
- 	u32 status;
-@@ -103,8 +133,12 @@ static void cmdq_thread_resume(struct cmdq_thread *thread)
- 
- static void cmdq_init(struct cmdq *cmdq)
- {
-+	int i;
-+
- 	WARN_ON(clk_enable(cmdq->clock) < 0);
- 	writel(CMDQ_THR_ACTIVE_SLOT_CYCLES, cmdq->base + CMDQ_THR_SLOT_CYCLES);
-+	for (i = 0; i <= CMDQ_MAX_EVENT; i++)
-+		writel(i, cmdq->base + CMDQ_SYNC_TOKEN_UPDATE);
- 	clk_disable(cmdq->clock);
- }
- 
-@@ -211,12 +245,19 @@ static void cmdq_task_exec_done(struct cmdq_task *task, enum cmdq_cb_status sta)
- 	list_del(&task->list_entry);
- }
- 
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+static void cmdq_task_handle_error(struct cmdq_task *task, u32 pa_curr)
-+#else
- static void cmdq_task_handle_error(struct cmdq_task *task)
-+#endif
- {
- 	struct cmdq_thread *thread = task->thread;
- 	struct cmdq_task *next_task;
- 
- 	dev_err(task->cmdq->mbox.dev, "task 0x%p error\n", task);
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+	cmdq_buf_dump_schedule(task, false, pa_curr);
-+#endif
- 	WARN_ON(cmdq_thread_suspend(task->cmdq, thread) < 0);
- 	next_task = list_first_entry_or_null(&thread->task_busy_list,
- 			struct cmdq_task, list_entry);
-@@ -264,7 +305,11 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
- 			kfree(task);
- 		} else if (err) {
- 			cmdq_task_exec_done(task, CMDQ_CB_ERROR);
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+			cmdq_task_handle_error(curr_task, curr_pa);
-+#else
- 			cmdq_task_handle_error(curr_task);
-+#endif
- 			kfree(task);
- 		}
- 
-@@ -284,11 +329,11 @@ static irqreturn_t cmdq_irq_handler(int irq, void *dev)
- 	unsigned long irq_status, flags = 0L;
- 	int bit;
- 
--	irq_status = readl(cmdq->base + CMDQ_CURR_IRQ_STATUS) & CMDQ_IRQ_MASK;
--	if (!(irq_status ^ CMDQ_IRQ_MASK))
-+	irq_status = readl(cmdq->base + CMDQ_CURR_IRQ_STATUS) & cmdq->irq_mask;
-+	if (!(irq_status ^ cmdq->irq_mask))
- 		return IRQ_NONE;
- 
--	for_each_clear_bit(bit, &irq_status, fls(CMDQ_IRQ_MASK)) {
-+	for_each_clear_bit(bit, &irq_status, cmdq->thread_nr) {
- 		struct cmdq_thread *thread = &cmdq->thread[bit];
- 
- 		spin_lock_irqsave(&thread->chan->lock, flags);
-@@ -337,6 +382,9 @@ static int cmdq_remove(struct platform_device *pdev)
- {
- 	struct cmdq *cmdq = platform_get_drvdata(pdev);
- 
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+	destroy_workqueue(cmdq->buf_dump_wq);
-+#endif
- 	mbox_controller_unregister(&cmdq->mbox);
- 	clk_unprepare(cmdq->clock);
- 
-@@ -430,6 +478,36 @@ static int cmdq_mbox_startup(struct mbox_chan *chan)
- 
- static void cmdq_mbox_shutdown(struct mbox_chan *chan)
- {
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+	struct cmdq_thread *thread = (struct cmdq_thread *)chan->con_priv;
-+	struct cmdq *cmdq = dev_get_drvdata(chan->mbox->dev);
-+	struct cmdq_task *task, *tmp;
-+	unsigned long flags;
-+	bool first_task = true;
-+
-+	spin_lock_irqsave(&thread->chan->lock, flags);
-+
-+	if (list_empty(&thread->task_busy_list)) {
-+		spin_unlock_irqrestore(&thread->chan->lock, flags);
-+		return;
-+	}
-+
-+	dev_err(cmdq->mbox.dev, "cmdq timeout\n");
-+	list_for_each_entry_safe(task, tmp, &thread->task_busy_list,
-+				 list_entry) {
-+		if (first_task) {
-+			cmdq_buf_dump_schedule(task, true, readl(
-+					thread->base + CMDQ_THR_CURR_ADDR));
-+			first_task = false;
-+		}
-+		cmdq_task_exec_done(task, CMDQ_CB_ERROR);
-+		kfree(task);
-+	}
-+
-+	cmdq_thread_disable(cmdq, thread);
-+	clk_disable(cmdq->clock);
-+	spin_unlock_irqrestore(&thread->chan->lock, flags);
-+#endif
- }
- 
- static const struct mbox_chan_ops cmdq_mbox_chan_ops = {
-@@ -478,6 +556,9 @@ static int cmdq_probe(struct platform_device *pdev)
- 		dev_err(dev, "failed to get irq\n");
- 		return -EINVAL;
- 	}
-+
-+	cmdq->thread_nr = (u32)(unsigned long)of_device_get_match_data(dev);
-+	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
- 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
- 			       "mtk_cmdq", cmdq);
- 	if (err < 0) {
-@@ -494,7 +575,6 @@ static int cmdq_probe(struct platform_device *pdev)
- 		return PTR_ERR(cmdq->clock);
- 	}
- 
--	cmdq->thread_nr = (u32)(unsigned long)of_device_get_match_data(dev);
- 	cmdq->mbox.dev = dev;
- 	cmdq->mbox.chans = devm_kcalloc(dev, cmdq->thread_nr,
- 					sizeof(*cmdq->mbox.chans), GFP_KERNEL);
-@@ -532,6 +612,14 @@ static int cmdq_probe(struct platform_device *pdev)
- 
- 	cmdq_init(cmdq);
- 
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+	cmdq->buf_dump_wq = alloc_ordered_workqueue(
-+			"%s", WQ_MEM_RECLAIM | WQ_HIGHPRI,
-+			"cmdq_buf_dump");
-+#endif
-+	for (i = 0; i <= CMDQ_MAX_EVENT; i++)
-+		writel(i, cmdq->base + CMDQ_SYNC_TOKEN_UPDATE);
-+
- 	return 0;
- }
- 
-@@ -542,6 +630,7 @@ static const struct dev_pm_ops cmdq_pm_ops = {
- 
- static const struct of_device_id cmdq_of_ids[] = {
- 	{.compatible = "mediatek,mt8173-gce", .data = (void *)16},
-+	{.compatible = "mediatek,mt8183-gce", .data = (void *)24},
- 	{}
- };
- 
 diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
 index f761e4d8bf2a..2f375386e376 100644
 --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
@@ -8601,713 +10391,6 @@ index 39375b8ea27c..c3a1871d4739 100644
  	for (i = enc_clk->clk_num - 1; i >= 0; i--)
  		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
  }
-diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index f8d35e3ac1dc..01cab05e7b81 100644
---- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
-+++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-@@ -49,25 +49,63 @@
- #define VPU_P_FW_SIZE		(VPU_PTCM_SIZE + VPU_EXT_P_SIZE)
- #define VPU_D_FW_SIZE		(VPU_DTCM_SIZE + VPU_EXT_D_SIZE)
- /* the size of share buffer between Host and  VPU */
--#define SHARE_BUF_SIZE		48
- 
- /* binary firmware name */
- #define VPU_P_FW		"vpu_p.bin"
- #define VPU_D_FW		"vpu_d.bin"
- 
--#define VPU_RESET		0x0
--#define VPU_TCM_CFG		0x0008
--#define VPU_PMEM_EXT0_ADDR	0x000C
--#define VPU_PMEM_EXT1_ADDR	0x0010
--#define VPU_TO_HOST		0x001C
--#define VPU_DMEM_EXT0_ADDR	0x0014
--#define VPU_DMEM_EXT1_ADDR	0x0018
--#define HOST_TO_VPU		0x0024
--#define VPU_PC_REG		0x0060
--#define VPU_WDT_REG		0x0084
-+enum vpu_regs_idx {
-+	VPU_RESET,
-+	VPU_TCM_CFG,
-+	VPU_TO_HOST,
-+	HOST_TO_VPU,
-+	VPU_PC_REG,
-+	VPU_WDT_REG,
-+
-+	/* MT8173 only regs */
-+	VPU_PMEM_EXT0_ADDR,
-+	VPU_PMEM_EXT1_ADDR,
-+	VPU_DMEM_EXT0_ADDR,
-+	VPU_DMEM_EXT1_ADDR,
-+};
-+
-+enum vpu_type {
-+	VPU_MT8173,
-+	VPU_MT8183,
-+};
- 
--/* vpu inter-processor communication interrupt */
--#define VPU_IPC_INT		BIT(8)
-+/**
-+ * struct hw_type - VPU hardware type
-+ *
-+ * @regs:		the register index for VPU configuration
-+ * @dtcm_offset:	the offset to get data tcm address
-+ * @share_obj_sz:	share object size, including id, len, share_buf
-+ * @ptcm_sz:		maximum program TCM (Tightly-Coupled Memory) size
-+ * @dtcm_sz:		maximum data TCM (Tightly-Coupled Memory) size
-+ * @ext_p_sz:		daynamic allocated maximum extended program memory size
-+ * @ext_d_sz:		daynamic allocated maximum extended data memory size
-+ * @type:		the soc where VPU embedded
-+ * @ext_mem_support:	extended memory support
-+ * @fw_p:		program firmware name
-+ * @fw_d:		data firmware name
-+ * @ipc_int:		inter-processor communication interrupt bit
-+ * @wdt_int:		vpu watch dog timer interrupt bit
-+ */
-+struct hw_type {
-+	int *regs;
-+	unsigned long dtcm_offset;
-+	size_t share_obj_sz;
-+	size_t ptcm_sz;
-+	size_t dtcm_sz;
-+	size_t ext_p_sz;
-+	size_t ext_d_sz;
-+	u32 type;
-+	bool ext_mem_support;
-+	char *fw_p;
-+	char *fw_d;
-+	u32 ipc_int;
-+	u32 wdt_int;
-+};
- 
- /**
-  * enum vpu_fw_type - VPU firmware type
-@@ -173,7 +211,8 @@ struct vpu_ipi_desc {
- struct share_obj {
- 	s32 id;
- 	u32 len;
--	unsigned char share_buf[SHARE_BUF_SIZE];
-+	 /* "share_buf" must be in the last member of this data structure */
-+	unsigned char *share_buf;
- };
- 
- /**
-@@ -188,6 +227,7 @@ struct share_obj {
-  * @send_buf:		VPU DTCM share buffer for sending
-  * @dev:		VPU struct device
-  * @clk:		VPU clock on/off
-+ * @hw:			the different VPU hardware embedded into mtk SoCs
-  * @fw_loaded:		indicate VPU firmware loaded
-  * @enable_4GB:		VPU 4GB mode on/off
-  * @vpu_mutex:		protect mtk_vpu (except recv_buf) and ensure only
-@@ -195,7 +235,7 @@ struct share_obj {
-  *			suppose a client is using VPU to decode VP8.
-  *			If the other client wants to encode VP8,
-  *			it has to wait until VP8 decode completes.
-- * @wdt_refcnt:		WDT reference count to make sure the watchdog can be
-+ * @wdt_refcnt: 	WDT reference count to make sure the watchdog can be
-  *			disabled if no other client is using VPU service
-  * @ack_wq:		The wait queue for each codec and mdp. When sleeping
-  *			processes wake up, they will check the condition
-@@ -215,6 +255,7 @@ struct mtk_vpu {
- 	struct share_obj *send_buf;
- 	struct device *dev;
- 	struct clk *clk;
-+	const struct hw_type *hw;
- 	bool fw_loaded;
- 	bool enable_4GB;
- 	struct mutex vpu_mutex; /* for protecting vpu data data structure */
-@@ -223,14 +264,64 @@ struct mtk_vpu {
- 	bool ipi_id_ack[IPI_MAX];
- };
- 
-+static int mt8173_regs[] = {
-+	[VPU_RESET] =		0x0,
-+	[VPU_TCM_CFG] =		0x8,
-+	[VPU_TO_HOST] =		0x1C,
-+	[HOST_TO_VPU] =		0x24,
-+	[VPU_PC_REG] =		0x60,
-+	[VPU_WDT_REG] =		0x84,
-+	[VPU_PMEM_EXT0_ADDR] =	0x0C,
-+	[VPU_PMEM_EXT1_ADDR] =	0x10,
-+	[VPU_DMEM_EXT0_ADDR] =	0x14,
-+	[VPU_DMEM_EXT1_ADDR] =	0x18,
-+};
-+
-+static int mt8183_regs[] = {
-+	[VPU_RESET] =		0x0,
-+	[VPU_TO_HOST] =		0x1C,
-+	[HOST_TO_VPU] =		0x28,
-+	[VPU_PC_REG] =		0xB4,
-+	[VPU_WDT_REG] =		0x1C,
-+};
-+
-+static const struct hw_type vpu_mt8173 = {
-+	.regs = mt8173_regs,
-+	.dtcm_offset = 0x18000,
-+	.share_obj_sz = (8+48),
-+	.ptcm_sz = (96 * SZ_1K),
-+	.dtcm_sz = (32 * SZ_1K),
-+	.ext_p_sz = SZ_1M,
-+	.ext_d_sz = SZ_4M,
-+	.type = VPU_MT8173,
-+	.ext_mem_support = true,
-+	.fw_p = "vpu_p.bin",
-+	.fw_d = "vpu_d.bin",
-+	.ipc_int = BIT(8),
-+};
-+
-+static const struct hw_type vpu_mt8183 = {
-+	.regs = mt8183_regs,
-+	.dtcm_offset = 0,
-+	.share_obj_sz = (8+288),
-+	.ptcm_sz = (512 * SZ_1K),
-+	.dtcm_sz = (512 * SZ_1K),
-+	.ext_p_sz = 0,
-+	.ext_d_sz = 0,
-+	.type = VPU_MT8183,
-+	.ext_mem_support = false,
-+	.ipc_int = BIT(0),
-+	.wdt_int = BIT(8),
-+};
-+
- static inline void vpu_cfg_writel(struct mtk_vpu *vpu, u32 val, u32 offset)
- {
--	writel(val, vpu->reg.cfg + offset);
-+	writel(val, vpu->reg.cfg + vpu->hw->regs[offset]);
- }
- 
- static inline u32 vpu_cfg_readl(struct mtk_vpu *vpu, u32 offset)
- {
--	return readl(vpu->reg.cfg + offset);
-+	return readl(vpu->reg.cfg + vpu->hw->regs[offset]);
- }
- 
- static inline bool vpu_running(struct mtk_vpu *vpu)
-@@ -295,9 +386,10 @@ int vpu_ipi_register(struct platform_device *pdev,
- }
- EXPORT_SYMBOL_GPL(vpu_ipi_register);
- 
--int vpu_ipi_send(struct platform_device *pdev,
-+int vpu_ipi_send_sync_async(struct platform_device *pdev,
- 		 enum ipi_id id, void *buf,
--		 unsigned int len)
-+		 unsigned int len,
-+		 unsigned int wait)
- {
- 	struct mtk_vpu *vpu = platform_get_drvdata(pdev);
- 	struct share_obj *send_obj = vpu->send_buf;
-@@ -305,7 +397,7 @@ int vpu_ipi_send(struct platform_device *pdev,
- 	int ret = 0;
- 
- 	if (id <= IPI_VPU_INIT || id >= IPI_MAX ||
--	    len > sizeof(send_obj->share_buf) || !buf) {
-+	    len > (vpu->hw->share_obj_sz - 8) || !buf) {
- 		dev_err(vpu->dev, "failed to send ipi message\n");
- 		return -EINVAL;
- 	}
-@@ -333,24 +425,27 @@ int vpu_ipi_send(struct platform_device *pdev,
- 		}
- 	} while (vpu_cfg_readl(vpu, HOST_TO_VPU));
- 
--	memcpy((void *)send_obj->share_buf, buf, len);
-+	memcpy((void *)&send_obj->share_buf, buf, len);
- 	send_obj->len = len;
- 	send_obj->id = id;
- 
- 	vpu->ipi_id_ack[id] = false;
-+	mb();
- 	/* send the command to VPU */
- 	vpu_cfg_writel(vpu, 0x1, HOST_TO_VPU);
- 
- 	mutex_unlock(&vpu->vpu_mutex);
- 
--	/* wait for VPU's ACK */
--	timeout = msecs_to_jiffies(IPI_TIMEOUT_MS);
--	ret = wait_event_timeout(vpu->ack_wq, vpu->ipi_id_ack[id], timeout);
--	vpu->ipi_id_ack[id] = false;
--	if (ret == 0) {
--		dev_err(vpu->dev, "vpu ipi %d ack time out !", id);
--		ret = -EIO;
--		goto clock_disable;
-+	if (wait) {
-+		/* wait for VPU's ACK */
-+		timeout = msecs_to_jiffies(IPI_TIMEOUT_MS);
-+		ret = wait_event_timeout(vpu->ack_wq, vpu->ipi_id_ack[id], timeout);
-+		vpu->ipi_id_ack[id] = false;
-+		if (ret == 0) {
-+			dev_err(vpu->dev, "vpu ipi %d ack time out !", id);
-+			ret = -EIO;
-+			goto clock_disable;
-+		}
- 	}
- 	vpu_clock_disable(vpu);
- 
-@@ -363,6 +458,15 @@ int vpu_ipi_send(struct platform_device *pdev,
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(vpu_ipi_send_sync_async);
-+
-+int vpu_ipi_send(struct platform_device *pdev,
-+		 enum ipi_id id, void *buf,
-+		 unsigned int len)
-+{
-+	return vpu_ipi_send_sync_async(pdev, id, buf, len, 1);
-+
-+}
- EXPORT_SYMBOL_GPL(vpu_ipi_send);
- 
- static void vpu_wdt_reset_func(struct work_struct *ws)
-@@ -442,16 +546,16 @@ void *vpu_mapping_dm_addr(struct platform_device *pdev,
- 	struct mtk_vpu *vpu = platform_get_drvdata(pdev);
- 
- 	if (!dtcm_dmem_addr ||
--	    (dtcm_dmem_addr > (VPU_DTCM_SIZE + VPU_EXT_D_SIZE))) {
-+	    (dtcm_dmem_addr > (vpu->hw->dtcm_sz + vpu->hw->ext_d_sz))) {
- 		dev_err(vpu->dev, "invalid virtual data memory address\n");
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	if (dtcm_dmem_addr < VPU_DTCM_SIZE)
-+	if (dtcm_dmem_addr < vpu->hw->dtcm_sz)
- 		return (__force void *)(dtcm_dmem_addr + vpu->reg.tcm +
--					VPU_DTCM_OFFSET);
-+					vpu->hw->dtcm_offset);
- 
--	return vpu->extmem[D_FW].va + (dtcm_dmem_addr - VPU_DTCM_SIZE);
-+	return vpu->extmem[D_FW].va + (dtcm_dmem_addr - vpu->hw->dtcm_sz);
- }
- EXPORT_SYMBOL_GPL(vpu_mapping_dm_addr);
- 
-@@ -478,14 +582,138 @@ struct platform_device *vpu_get_plat_device(struct platform_device *pdev)
- }
- EXPORT_SYMBOL_GPL(vpu_get_plat_device);
- 
-+#if VPU_RESERVED_MEM
-+phys_addr_t vpu_mem_base_phys;
-+phys_addr_t vpu_mem_base_virt;
-+phys_addr_t vpu_mem_size;
-+
-+#ifdef CONFIG_OF_RESERVED_MEM
-+#define VPU_MEM_RESERVED_KEY "mediatek,reserve-memory-vpu_share"
-+
-+static struct vpu_reserve_mblock vpu_reserve_mblock[] = {
-+	{
-+		.num = ISP_MEM_ID,
-+		.start_phys = 0x0,
-+		.start_virt = 0x0,
-+		.size = 0x1400000,  /*20MB*/
-+	},
-+};
-+
-+int vpu_reserve_mem_of_init(struct reserved_mem *rmem)
-+{
-+	enum vpu_reserve_mem_id_t id;
-+	phys_addr_t accumlate_memory_size = 0;
-+
-+	vpu_mem_base_phys = (phys_addr_t) rmem->base;
-+	vpu_mem_size = (phys_addr_t) rmem->size;
-+	if ((vpu_mem_base_phys >= (0x90000000ULL)) || (vpu_mem_base_phys <= 0x0)) {
-+		/*The vpu remap region is fixed, only
-+		 * 0x4000_0000ULL~0x9FFF_FFFFULL
-+		 * can be accessible
-+		 */
-+		pr_err("[VPU] The allocated memory(0x%llx) is larger than expected\n", vpu_mem_base_phys);
-+		/*should not call WARN_ON() here or there is no log, return -1
-+		 * instead.
-+		 */
-+		return -1;
-+	}
-+
-+	pr_debug("[VPU] phys:0x%llx - 0x%llx (0x%llx)\n", (phys_addr_t)rmem->base,
-+			(phys_addr_t)rmem->base + (phys_addr_t)rmem->size, (phys_addr_t)rmem->size);
-+	accumlate_memory_size = 0;
-+	for (id = 0; id < NUMS_MEM_ID; id++) {
-+		vpu_reserve_mblock[id].start_phys = vpu_mem_base_phys + accumlate_memory_size;
-+		accumlate_memory_size += vpu_reserve_mblock[id].size;
-+		pr_debug("[VPU][reserve_mem:%d]: phys:0x%llx - 0x%llx (0x%llx)\n", id,
-+			vpu_reserve_mblock[id].start_phys,
-+			vpu_reserve_mblock[id].start_phys+vpu_reserve_mblock[id].size,
-+			vpu_reserve_mblock[id].size);
-+	}
-+	return 0;
-+}
-+
-+RESERVEDMEM_OF_DECLARE(vpu_reserve_mem_init, VPU_MEM_RESERVED_KEY, vpu_reserve_mem_of_init);
-+#endif
-+
-+static int vpu_reserve_memory_ioremap(void)
-+{
-+	enum vpu_reserve_mem_id_t id;
-+	phys_addr_t accumlate_memory_size;
-+
-+
-+	if ((vpu_mem_base_phys >= (0x90000000ULL)) || (vpu_mem_base_phys <= 0x0)) {
-+		/*The vpu remap region is fixed, only
-+		 * 0x4000_0000ULL~0x8FFF_FFFFULL
-+		 * can be accessible
-+		 */
-+		pr_err("[VPU] The allocated memory(0x%llx) is larger than expected\n", vpu_mem_base_phys);
-+		/*call WARN_ON() here to assert the unexpected memory allocation
-+		 */
-+		WARN_ON(1);
-+		return -1;
-+	}
-+	accumlate_memory_size = 0;
-+	vpu_mem_base_virt = (phys_addr_t)(size_t)ioremap_wc(vpu_mem_base_phys, vpu_mem_size);
-+	pr_debug("[VPU]reserve mem: virt:0x%llx - 0x%llx (0x%llx)\n", (phys_addr_t)vpu_mem_base_virt,
-+		(phys_addr_t)vpu_mem_base_virt + (phys_addr_t)vpu_mem_size, vpu_mem_size);
-+	for (id = 0; id < NUMS_MEM_ID; id++) {
-+		vpu_reserve_mblock[id].start_virt = vpu_mem_base_virt + accumlate_memory_size;
-+		accumlate_memory_size += vpu_reserve_mblock[id].size;
-+	}
-+	/* the reserved memory should be larger then expected memory
-+	 * or vpu_reserve_mblock does not match dts
-+	 */
-+	WARN_ON(accumlate_memory_size > vpu_mem_size);
-+#ifdef DEBUG
-+	for (id = 0; id < NUMS_MEM_ID; id++) {
-+		pr_info("[VPU][mem_reserve-%d] phys:0x%llx,virt:0x%llx,size:0x%llx\n",
-+			id, vpu_get_reserve_mem_phys(id), vpu_get_reserve_mem_virt(id), vpu_get_reserve_mem_size(id));
-+	}
-+#endif
-+	return 0;
-+}
-+
-+phys_addr_t vpu_get_reserve_mem_phys(enum vpu_reserve_mem_id_t id)
-+{
-+	if (id >= NUMS_MEM_ID) {
-+		pr_err("[VPU] no reserve memory for %d", id);
-+		return 0;
-+	} else
-+		return vpu_reserve_mblock[id].start_phys;
-+}
-+EXPORT_SYMBOL_GPL(vpu_get_reserve_mem_phys);
-+
-+phys_addr_t vpu_get_reserve_mem_virt(enum vpu_reserve_mem_id_t id)
-+{
-+	if (id >= NUMS_MEM_ID) {
-+		pr_err("[VPU] no reserve memory for %d", id);
-+		return 0;
-+	} else
-+		return vpu_reserve_mblock[id].start_virt;
-+}
-+EXPORT_SYMBOL_GPL(vpu_get_reserve_mem_virt);
-+
-+phys_addr_t vpu_get_reserve_mem_size(enum vpu_reserve_mem_id_t id)
-+{
-+	if (id >= NUMS_MEM_ID) {
-+		pr_err("[VPU] no reserve memory for %d", id);
-+		return 0;
-+	} else
-+		return vpu_reserve_mblock[id].size;
-+}
-+EXPORT_SYMBOL_GPL(vpu_get_reserve_mem_size);
-+#endif
-+
- /* load vpu program/data memory */
- static int load_requested_vpu(struct mtk_vpu *vpu,
- 			      const struct firmware *vpu_fw,
- 			      u8 fw_type)
- {
--	size_t tcm_size = fw_type ? VPU_DTCM_SIZE : VPU_PTCM_SIZE;
--	size_t fw_size = fw_type ? VPU_D_FW_SIZE : VPU_P_FW_SIZE;
--	char *fw_name = fw_type ? VPU_D_FW : VPU_P_FW;
-+	size_t tcm_size = fw_type ? vpu->hw->dtcm_sz : vpu->hw->ptcm_sz;
-+	size_t fw_size = fw_type
-+		       ? vpu->hw->dtcm_sz + vpu->hw->ext_d_sz
-+		       : vpu->hw->ptcm_sz + vpu->hw->ext_p_sz;
-+	char *fw_name = fw_type ? vpu->hw->fw_d : vpu->hw->fw_p;
- 	size_t dl_size = 0;
- 	size_t extra_fw_size = 0;
- 	void *dest;
-@@ -519,7 +747,7 @@ static int load_requested_vpu(struct mtk_vpu *vpu,
- 	}
- 	dest = (__force void *)vpu->reg.tcm;
- 	if (fw_type == D_FW)
--		dest += VPU_DTCM_OFFSET;
-+		dest += vpu->hw->dtcm_offset;
- 	memcpy(dest, vpu_fw->data, dl_size);
- 	/* download to extended memory if need */
- 	if (extra_fw_size > 0) {
-@@ -567,21 +795,33 @@ int vpu_load_firmware(struct platform_device *pdev)
- 
- 	run->signaled = false;
- 	dev_dbg(vpu->dev, "firmware request\n");
--	/* Downloading program firmware to device*/
--	ret = load_requested_vpu(vpu, vpu_fw, P_FW);
--	if (ret < 0) {
--		dev_err(dev, "Failed to request %s, %d\n", VPU_P_FW, ret);
--		goto OUT_LOAD_FW;
-+	if (vpu->hw->type == VPU_MT8173) {
-+		/* Downloading program firmware to device*/
-+		ret = load_requested_vpu(vpu, vpu_fw, P_FW);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to request %s, %d\n",
-+				vpu->hw->fw_p, ret);
-+			goto OUT_LOAD_FW;
-+		}
-+
-+		/* Downloading data firmware to device */
-+		ret = load_requested_vpu(vpu, vpu_fw, D_FW);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to request %s, %d\n",
-+				vpu->hw->fw_d, ret);
-+			goto OUT_LOAD_FW;
-+		}
- 	}
-+	vpu->fw_loaded = true;
- 
--	/* Downloading data firmware to device */
--	ret = load_requested_vpu(vpu, vpu_fw, D_FW);
--	if (ret < 0) {
--		dev_err(dev, "Failed to request %s, %d\n", VPU_D_FW, ret);
-+#if VPU_RESERVED_MEM
-+	ret = vpu_reserve_memory_ioremap();
-+	if (ret) {
-+		dev_err(dev, "vpu_reserve_memory_ioremap failed\n");
- 		goto OUT_LOAD_FW;
- 	}
-+#endif
- 
--	vpu->fw_loaded = true;
- 	/* boot up vpu */
- 	vpu_cfg_writel(vpu, 0x1, VPU_RESET);
- 
-@@ -631,12 +871,14 @@ static ssize_t vpu_debug_read(struct file *file, char __user *user_buf,
- 	int ret;
- 	struct device *dev = file->private_data;
- 	struct mtk_vpu *vpu = dev_get_drvdata(dev);
-+	struct platform_device *pdev = to_platform_device(dev);
- 
- 	ret = vpu_clock_enable(vpu);
- 	if (ret) {
- 		dev_err(vpu->dev, "[VPU] enable clock failed %d\n", ret);
- 		return 0;
- 	}
-+	vpu_load_firmware(pdev);
- 
- 	/* vpu register status */
- 	running = vpu_running(vpu);
-@@ -671,7 +913,10 @@ static const struct file_operations vpu_debug_fops = {
- static void vpu_free_ext_mem(struct mtk_vpu *vpu, u8 fw_type)
- {
- 	struct device *dev = vpu->dev;
--	size_t fw_ext_size = fw_type ? VPU_EXT_D_SIZE : VPU_EXT_P_SIZE;
-+	size_t fw_ext_size = fw_type ? vpu->hw->ext_d_sz : vpu->hw->ext_p_sz;
-+
-+	if (!vpu->hw->ext_mem_support)
-+		return;
- 
- 	dma_free_coherent(dev, fw_ext_size, vpu->extmem[fw_type].va,
- 			  vpu->extmem[fw_type].pa);
-@@ -680,11 +925,14 @@ static void vpu_free_ext_mem(struct mtk_vpu *vpu, u8 fw_type)
- static int vpu_alloc_ext_mem(struct mtk_vpu *vpu, u32 fw_type)
- {
- 	struct device *dev = vpu->dev;
--	size_t fw_ext_size = fw_type ? VPU_EXT_D_SIZE : VPU_EXT_P_SIZE;
-+	size_t fw_ext_size = fw_type ? vpu->hw->ext_d_sz : vpu->hw->ext_p_sz;
- 	u32 vpu_ext_mem0 = fw_type ? VPU_DMEM_EXT0_ADDR : VPU_PMEM_EXT0_ADDR;
- 	u32 vpu_ext_mem1 = fw_type ? VPU_DMEM_EXT1_ADDR : VPU_PMEM_EXT1_ADDR;
- 	u32 offset_4gb = vpu->enable_4GB ? 0x40000000 : 0;
- 
-+	if (!vpu->hw->ext_mem_support)
-+		return 0;
-+
- 	vpu->extmem[fw_type].va = dma_alloc_coherent(dev,
- 					       fw_ext_size,
- 					       &vpu->extmem[fw_type].pa,
-@@ -711,9 +959,11 @@ static void vpu_ipi_handler(struct mtk_vpu *vpu)
- {
- 	struct share_obj *rcv_obj = vpu->recv_buf;
- 	struct vpu_ipi_desc *ipi_desc = vpu->ipi_desc;
-+	char tmp_data[288];
- 
- 	if (rcv_obj->id < IPI_MAX && ipi_desc[rcv_obj->id].handler) {
--		ipi_desc[rcv_obj->id].handler(rcv_obj->share_buf,
-+		memcpy_fromio(tmp_data, &rcv_obj->share_buf, rcv_obj->len);
-+		ipi_desc[rcv_obj->id].handler(&tmp_data[0],
- 					      rcv_obj->len,
- 					      ipi_desc[rcv_obj->id].priv);
- 		if (rcv_obj->id > IPI_VPU_INIT) {
-@@ -727,15 +977,31 @@ static void vpu_ipi_handler(struct mtk_vpu *vpu)
- 
- static int vpu_ipi_init(struct mtk_vpu *vpu)
- {
--	/* Disable VPU to host interrupt */
--	vpu_cfg_writel(vpu, 0x0, VPU_TO_HOST);
-+	if (vpu->hw->type == VPU_MT8173) {
-+		/* clear VPU to host interrupt */
-+		vpu_cfg_writel(vpu, 0x0, VPU_TO_HOST);
-+		/* get shared buffer */
-+		vpu->recv_buf = (__force struct share_obj *)(vpu->reg.tcm +
-+							vpu->hw->dtcm_offset);
-+		vpu->send_buf = (__force struct share_obj *)(vpu->reg.tcm +
-+							vpu->hw->dtcm_offset +
-+							vpu->hw->share_obj_sz);
-+	} else if (vpu->hw->type == VPU_MT8183) {
-+		/* clear VPU to host interrupt */
-+		vpu_cfg_writel(vpu, vpu->hw->ipc_int, VPU_TO_HOST);
-+		/* get shared buffer */
-+		vpu->send_buf = (__force struct share_obj *) (vpu->reg.tcm +
-+						0x800 -
-+						vpu->hw->share_obj_sz);
-+
-+		vpu->recv_buf = (__force struct share_obj *)(vpu->reg.tcm +
-+						0x800 -
-+						vpu->hw->share_obj_sz -
-+						vpu->hw->share_obj_sz);
-+	}
- 
--	/* shared buffer initialization */
--	vpu->recv_buf = (__force struct share_obj *)(vpu->reg.tcm +
--						     VPU_DTCM_OFFSET);
--	vpu->send_buf = vpu->recv_buf + 1;
--	memset(vpu->recv_buf, 0, sizeof(struct share_obj));
--	memset(vpu->send_buf, 0, sizeof(struct share_obj));
-+	memset_io(vpu->recv_buf, 0, vpu->hw->share_obj_sz);
-+	memset_io(vpu->send_buf, 0, vpu->hw->share_obj_sz);
- 
- 	return 0;
- }
-@@ -757,20 +1023,41 @@ static irqreturn_t vpu_irq_handler(int irq, void *priv)
- 		return IRQ_NONE;
- 	}
- 	vpu_to_host = vpu_cfg_readl(vpu, VPU_TO_HOST);
--	if (vpu_to_host & VPU_IPC_INT) {
-+	if (vpu_to_host & vpu->hw->ipc_int) {
- 		vpu_ipi_handler(vpu);
- 	} else {
- 		dev_err(vpu->dev, "vpu watchdog timeout! 0x%x", vpu_to_host);
- 		queue_work(vpu->wdt.wq, &vpu->wdt.ws);
- 	}
- 
--	/* VPU won't send another interrupt until we set VPU_TO_HOST to 0. */
--	vpu_cfg_writel(vpu, 0x0, VPU_TO_HOST);
-+	mb();
-+	/*
-+	 * VPU won't send another interrupt until
-+	 * we clear the corresponding bits.
-+	 */
-+	if (vpu->hw->type == VPU_MT8173)
-+		vpu_cfg_writel(vpu, 0x0, VPU_TO_HOST);
-+	else if (vpu->hw->type == VPU_MT8183)
-+		vpu_cfg_writel(vpu, vpu->hw->ipc_int | vpu->hw->wdt_int,
-+			       VPU_TO_HOST);
- 	clk_disable(vpu->clk);
- 
- 	return IRQ_HANDLED;
- }
- 
-+static const struct of_device_id mtk_vpu_match[] = {
-+	{
-+		.compatible = "mediatek,mt8173-vpu",
-+		.data = &vpu_mt8173,
-+	},
-+	{
-+		.compatible = "mediatek,mt8183-vpu",
-+		.data = &vpu_mt8183,
-+	},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mtk_vpu_match);
-+
- #ifdef CONFIG_DEBUG_FS
- static struct dentry *vpu_debugfs;
- #endif
-@@ -780,6 +1067,8 @@ static int mtk_vpu_probe(struct platform_device *pdev)
- 	struct device *dev;
- 	struct resource *res;
- 	int ret = 0;
-+	const struct of_device_id *of_id =
-+		of_match_device(mtk_vpu_match, &pdev->dev);
- 
- 	dev_dbg(&pdev->dev, "initialization\n");
- 
-@@ -789,6 +1078,7 @@ static int mtk_vpu_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	vpu->dev = &pdev->dev;
-+	vpu->hw = of_id->data;
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "tcm");
- 	vpu->reg.tcm = devm_ioremap_resource(dev, res);
- 	if (IS_ERR((__force void *)vpu->reg.tcm))
-@@ -854,7 +1144,8 @@ static int mtk_vpu_probe(struct platform_device *pdev)
- #endif
- 
- 	/* Set PTCM to 96K and DTCM to 32K */
--	vpu_cfg_writel(vpu, 0x2, VPU_TCM_CFG);
-+	if (vpu->hw->type == VPU_MT8173)
-+		vpu_cfg_writel(vpu, 0x2, VPU_TCM_CFG);
- 
- 	vpu->enable_4GB = !!(totalram_pages > (SZ_2G >> PAGE_SHIFT));
- 	dev_info(dev, "4GB mode %u\n", vpu->enable_4GB);
-@@ -921,14 +1212,6 @@ static int mtk_vpu_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static const struct of_device_id mtk_vpu_match[] = {
--	{
--		.compatible = "mediatek,mt8173-vpu",
--	},
--	{},
--};
--MODULE_DEVICE_TABLE(of, mtk_vpu_match);
--
- static int mtk_vpu_remove(struct platform_device *pdev)
- {
- 	struct mtk_vpu *vpu = platform_get_drvdata(pdev);
-@@ -953,7 +1236,7 @@ static struct platform_driver mtk_vpu_driver = {
- 	.remove	= mtk_vpu_remove,
- 	.driver	= {
- 		.name	= "mtk_vpu",
--		.of_match_table = mtk_vpu_match,
-+		.of_match_table = of_match_ptr(mtk_vpu_match),
- 	},
- };
- 
-diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.h b/drivers/media/platform/mtk-vpu/mtk_vpu.h
-index aec0268be3d0..ca09de70ceda 100644
---- a/drivers/media/platform/mtk-vpu/mtk_vpu.h
-+++ b/drivers/media/platform/mtk-vpu/mtk_vpu.h
-@@ -100,6 +100,10 @@ enum rst_id {
- int vpu_ipi_register(struct platform_device *pdev, enum ipi_id id,
- 		     ipi_handler_t handler, const char *name, void *priv);
- 
-+int vpu_ipi_send_sync_async(struct platform_device *pdev,
-+		 enum ipi_id id, void *buf,
-+		 unsigned int len, unsigned int wait);
-+
- /**
-  * vpu_ipi_send - send data from AP to vpu.
-  *
-@@ -191,4 +195,25 @@ int vpu_load_firmware(struct platform_device *pdev);
-  **/
- void *vpu_mapping_dm_addr(struct platform_device *pdev,
- 			  u32 dtcm_dmem_addr);
-+
-+#define VPU_RESERVED_MEM	(1)
-+#if VPU_RESERVED_MEM
-+/* vpu reserve memory ID definition*/
-+enum vpu_reserve_mem_id_t {
-+	ISP_MEM_ID,
-+	NUMS_MEM_ID,
-+};
-+
-+struct vpu_reserve_mblock {
-+	enum vpu_reserve_mem_id_t num;
-+	u64 start_phys;
-+	u64 start_virt;
-+	u64 size;
-+};
-+
-+extern phys_addr_t vpu_get_reserve_mem_phys(enum vpu_reserve_mem_id_t id);
-+extern phys_addr_t vpu_get_reserve_mem_virt(enum vpu_reserve_mem_id_t id);
-+extern phys_addr_t vpu_get_reserve_mem_size(enum vpu_reserve_mem_id_t id);
-+#endif
-+
- #endif /* _MTK_VPU_H */
 diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
 index 63389f075f1d..4a291dabf2cc 100644
 --- a/drivers/memory/Kconfig
@@ -10268,6 +11351,19 @@ index 000000000000..33659ba69be3
 +	hqa_write,
 +	burn
 +};
+diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
+index b91f2679945c..e728a5471bd7 100644
+--- a/drivers/net/wireless/ath/ath10k/core.c
++++ b/drivers/net/wireless/ath/ath10k/core.c
+@@ -184,7 +184,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+ 			.board_size = QCA6174_BOARD_DATA_SZ,
+ 			.board_ext_size = QCA6174_BOARD_EXT_DATA_SZ,
+ 		},
+-		.hw_ops = &qca6174_ops,
++		.hw_ops = &qca6174_sdio_ops,
+ 		.hw_clk = qca6174_clk,
+ 		.target_cpu_freq = 176000000,
+ 		.decap_align_bytes = 4,
 diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
 index 9eed1cb17fda..2a14606ac91f 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_rx.c
@@ -10326,8 +11422,21 @@ index 9eed1cb17fda..2a14606ac91f 100644
  	ieee80211_rx_ni(ar->hw, skb);
  
  	/* We have delivered the skb to the upper layers (mac80211) so we
+diff --git a/drivers/net/wireless/ath/ath10k/hw.c b/drivers/net/wireless/ath/ath10k/hw.c
+index 52845912a4b9..e8dd6a1e6e03 100644
+--- a/drivers/net/wireless/ath/ath10k/hw.c
++++ b/drivers/net/wireless/ath/ath10k/hw.c
+@@ -1130,4 +1130,8 @@ const struct ath10k_hw_ops qca6174_ops = {
+ 	.enable_pll_clk = ath10k_hw_qca6174_enable_pll_clock,
+ };
+ 
++const struct ath10k_hw_ops qca6174_sdio_ops = {
++	.enable_pll_clk = ath10k_hw_qca6174_enable_pll_clock,
++};
++
+ const struct ath10k_hw_ops wcn3990_ops = {};
 diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 5c256d41cc82..23fdbc3941b2 100644
+index 5c256d41cc82..3ff49d973ea4 100644
 --- a/drivers/net/wireless/ath/ath10k/hw.h
 +++ b/drivers/net/wireless/ath/ath10k/hw.h
 @@ -162,6 +162,8 @@ enum qca9377_chip_id_rev {
@@ -10339,7 +11448,15 @@ index 5c256d41cc82..23fdbc3941b2 100644
  /* includes also the null byte */
  #define ATH10K_FIRMWARE_MAGIC               "QCA-ATH10K"
  #define ATH10K_BOARD_MAGIC                  "QCA-ATH10K-BOARD"
-@@ -1076,6 +1078,7 @@ ath10k_rx_desc_get_l3_pad_bytes(struct ath10k_hw_params *hw,
+@@ -633,6 +635,7 @@ struct ath10k_hw_ops {
+ extern const struct ath10k_hw_ops qca988x_ops;
+ extern const struct ath10k_hw_ops qca99x0_ops;
+ extern const struct ath10k_hw_ops qca6174_ops;
++extern const struct ath10k_hw_ops qca6174_sdio_ops;
+ extern const struct ath10k_hw_ops wcn3990_ops;
+ 
+ extern const struct ath10k_hw_clk_params qca6174_clk[];
+@@ -1076,6 +1079,7 @@ ath10k_rx_desc_get_l3_pad_bytes(struct ath10k_hw_params *hw,
  #define MBOX_CPU_INT_STATUS_ENABLE_ADDRESS	0x00000819
  #define MBOX_CPU_INT_STATUS_ENABLE_BIT_LSB	0
  #define MBOX_CPU_INT_STATUS_ENABLE_BIT_MASK	0x000000ff
@@ -10348,7 +11465,7 @@ index 5c256d41cc82..23fdbc3941b2 100644
  #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_LSB  1
  #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_MASK 0x00000002
 diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 2ebe657be089..7beac869bf58 100644
+index 2ebe657be089..874d17dfcf0e 100644
 --- a/drivers/net/wireless/ath/ath10k/sdio.c
 +++ b/drivers/net/wireless/ath/ath10k/sdio.c
 @@ -618,6 +618,10 @@ static int ath10k_sdio_mbox_rx_alloc(struct ath10k *ar,
@@ -10373,18 +11490,7 @@ index 2ebe657be089..7beac869bf58 100644
  	return ret;
  }
  
-@@ -1448,10 +1456,6 @@ static void ath10k_sdio_hif_power_down(struct ath10k *ar)
- 		return;
- 	}
- 
--	ret = mmc_hw_reset(ar_sdio->func->card->host);
--	if (ret)
--		ath10k_warn(ar, "unable to reset sdio: %d\n", ret);
--
- 	sdio_release_host(ar_sdio->func);
- 
- 	ar_sdio->is_disabled = true;
-@@ -1510,8 +1514,10 @@ static int ath10k_sdio_hif_enable_intrs(struct ath10k *ar)
+@@ -1510,8 +1518,10 @@ static int ath10k_sdio_hif_enable_intrs(struct ath10k *ar)
  	regs->int_status_en |=
  		FIELD_PREP(MBOX_INT_STATUS_ENABLE_MBOX_DATA_MASK, 1);
  
@@ -10426,383 +11532,8 @@ index c24ee616833c..348d98be2c70 100644
  					       &ar->testmode.utf_mode_fw.fw_file);
  	if (ret == 0) {
  		ath10k_dbg(ar, ATH10K_DBG_TESTMODE, "testmode using fw utf api 2");
-diff --git a/drivers/pinctrl/mediatek/mtk-eint.c b/drivers/pinctrl/mediatek/mtk-eint.c
-index a613e546717a..564cfaee129d 100644
---- a/drivers/pinctrl/mediatek/mtk-eint.c
-+++ b/drivers/pinctrl/mediatek/mtk-eint.c
-@@ -113,6 +113,8 @@ static void mtk_eint_mask(struct irq_data *d)
- 	void __iomem *reg = mtk_eint_get_offset(eint, d->hwirq,
- 						eint->regs->mask_set);
- 
-+	eint->cur_mask[d->hwirq >> 5] &= ~mask;
-+
- 	writel(mask, reg);
- }
- 
-@@ -123,6 +125,8 @@ static void mtk_eint_unmask(struct irq_data *d)
- 	void __iomem *reg = mtk_eint_get_offset(eint, d->hwirq,
- 						eint->regs->mask_clr);
- 
-+	eint->cur_mask[d->hwirq >> 5] |= mask;
-+
- 	writel(mask, reg);
- 
- 	if (eint->dual_edge[d->hwirq])
-@@ -217,19 +221,6 @@ static void mtk_eint_chip_write_mask(const struct mtk_eint *eint,
- 	}
- }
- 
--static void mtk_eint_chip_read_mask(const struct mtk_eint *eint,
--				    void __iomem *base, u32 *buf)
--{
--	int port;
--	void __iomem *reg;
--
--	for (port = 0; port < eint->hw->ports; port++) {
--		reg = base + eint->regs->mask + (port << 2);
--		buf[port] = ~readl_relaxed(reg);
--		/* Mask is 0 when irq is enabled, and 1 when disabled. */
--	}
--}
--
- static int mtk_eint_irq_request_resources(struct irq_data *d)
- {
- 	struct mtk_eint *eint = irq_data_get_irq_chip_data(d);
-@@ -318,7 +309,7 @@ static void mtk_eint_irq_handler(struct irq_desc *desc)
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	struct mtk_eint *eint = irq_desc_get_handler_data(desc);
- 	unsigned int status, eint_num;
--	int offset, index, virq;
-+	int offset, mask_offset, index, virq;
- 	void __iomem *reg =  mtk_eint_get_offset(eint, 0, eint->regs->stat);
- 	int dual_edge, start_level, curr_level;
- 
-@@ -328,10 +319,24 @@ static void mtk_eint_irq_handler(struct irq_desc *desc)
- 		status = readl(reg);
- 		while (status) {
- 			offset = __ffs(status);
-+			mask_offset = eint_num >> 5;
- 			index = eint_num + offset;
- 			virq = irq_find_mapping(eint->domain, index);
- 			status &= ~BIT(offset);
- 
-+			/*
-+			 * If we get an interrupt on pin that was only required
-+			 * for wake (but no real interrupt requested), mask the
-+			 * interrupt (as would mtk_eint_resume do anyway later
-+			 * in the resume sequence).
-+			 */
-+			if (eint->wake_mask[mask_offset] & BIT(offset) &&
-+			    !(eint->cur_mask[mask_offset] & BIT(offset))) {
-+				writel_relaxed(BIT(offset), reg -
-+					eint->regs->stat +
-+					eint->regs->mask_set);
-+			}
-+
- 			dual_edge = eint->dual_edge[index];
- 			if (dual_edge) {
- 				/*
-@@ -370,7 +375,6 @@ static void mtk_eint_irq_handler(struct irq_desc *desc)
- 
- int mtk_eint_do_suspend(struct mtk_eint *eint)
- {
--	mtk_eint_chip_read_mask(eint, eint->base, eint->cur_mask);
- 	mtk_eint_chip_write_mask(eint, eint->base, eint->wake_mask);
- 
- 	return 0;
-diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index ff9fef5a032b..317ec441ad60 100644
---- a/drivers/soc/mediatek/mtk-cmdq-helper.c
-+++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
-@@ -9,17 +9,109 @@
- #include <linux/mailbox_controller.h>
- #include <linux/soc/mediatek/mtk-cmdq.h>
- 
--#define CMDQ_ARG_A_WRITE_MASK	0xffff
-+#define CMDQ_GET_ARG_B(arg)	(((arg) & GENMASK(31, 16)) >> 16)
-+#define CMDQ_GET_ARG_C(arg)	((arg) & GENMASK(15, 0))
- #define CMDQ_WRITE_ENABLE_MASK	BIT(0)
- #define CMDQ_EOC_IRQ_EN		BIT(0)
- #define CMDQ_EOC_CMD		((u64)((CMDQ_CODE_EOC << CMDQ_OP_CODE_SHIFT)) \
- 				<< 32 | CMDQ_EOC_IRQ_EN)
-+#define CMDQ_IMMEDIATE_VALUE	0
-+#define CMDQ_REG_TYPE		1
-+
-+struct cmdq_instruction {
-+	s16 arg_c:16;
-+	s16 arg_b:16;
-+	s16 arg_a:16;
-+	u8 s_op:5;
-+	u8 arg_c_type:1;
-+	u8 arg_b_type:1;
-+	u8 arg_a_type:1;
-+	u8 op:8;
-+};
-+
-+static void cmdq_pkt_instr_encoder(struct cmdq_pkt *pkt, s16 arg_c, s16 arg_b,
-+				   s16 arg_a, u8 s_op, u8 arg_c_type,
-+				   u8 arg_b_type, u8 arg_a_type, u8 op)
-+{
-+	struct cmdq_instruction *cmdq_inst;
-+
-+	cmdq_inst = pkt->va_base + pkt->cmd_buf_size;
-+	cmdq_inst->op = op;
-+	cmdq_inst->arg_a_type = arg_a_type;
-+	cmdq_inst->arg_b_type = arg_b_type;
-+	cmdq_inst->arg_c_type = arg_c_type;
-+	cmdq_inst->s_op = s_op;
-+	cmdq_inst->arg_a = arg_a;
-+	cmdq_inst->arg_b = arg_b;
-+	cmdq_inst->arg_c = arg_c;
-+	pkt->cmd_buf_size += CMDQ_INST_SIZE;
-+}
-+
-+struct cmdq_subsys *cmdq_dev_get_subsys(struct device *dev, int idx)
-+{
-+	struct cmdq_subsys *subsys;
-+	struct of_phandle_args spec;
-+
-+	subsys = devm_kzalloc(dev, sizeof(*subsys), GFP_KERNEL);
-+	if (!subsys)
-+		return NULL;
-+
-+	if (of_parse_phandle_with_args(dev->of_node, "mediatek,gce-client-reg",
-+				       "#subsys-cells", idx, &spec)) {
-+		dev_err(dev, "can't parse gce-client-reg property");
-+
-+		return(struct cmdq_subsys *)-ENODEV;
-+	}
-+
-+	subsys->id = spec.args[0];
-+	subsys->offset = spec.args[1];
-+	subsys->size = spec.args[2];
-+	of_node_put(spec.np);
-+
-+	return subsys;
-+}
-+EXPORT_SYMBOL(cmdq_dev_get_subsys);
-+
-+s32 cmdq_dev_get_event(struct device *dev, const char *name)
-+{
-+	s32 index = 0;
-+	struct of_phandle_args spec;
-+	s32 result;
-+
-+	if (!dev)
-+		return -EINVAL;
-+
-+	index = of_property_match_string(dev->of_node,
-+					 "mediatek,gce-event-names", name);
-+	if (index < 0) {
-+		dev_err(dev, "no gce-event-names property or no such event:%s",
-+			name);
-+
-+		return index;
-+	}
-+
-+	if (of_parse_phandle_with_args(dev->of_node, "mediatek,gce-events",
-+				       "#event-cells", index, &spec)) {
-+		dev_err(dev, "can't parse gce-events property");
-+
-+		return -ENODEV;
-+	}
-+
-+	result = spec.args[0];
-+	of_node_put(spec.np);
-+
-+	return result;
-+}
-+EXPORT_SYMBOL(cmdq_dev_get_event);
- 
- static void cmdq_client_timeout(struct timer_list *t)
- {
- 	struct cmdq_client *client = from_timer(client, t, timer);
- 
- 	dev_err(client->client.dev, "cmdq timeout!\n");
-+#ifdef CONFIG_MTK_CMDQ_DEBUG
-+	mbox_free_channel(client->chan);
-+#endif
- }
- 
- struct cmdq_client *cmdq_mbox_create(struct device *dev, int index, u32 timeout)
-@@ -110,10 +202,11 @@ void cmdq_pkt_destroy(struct cmdq_pkt *pkt)
- }
- EXPORT_SYMBOL(cmdq_pkt_destroy);
- 
--static int cmdq_pkt_append_command(struct cmdq_pkt *pkt, enum cmdq_code code,
--				   u32 arg_a, u32 arg_b)
-+static int cmdq_pkt_append_command(struct cmdq_pkt *pkt, s16 arg_c, s16 arg_b,
-+				   s16 arg_a, u8 s_op, u8 arg_c_type,
-+				   u8 arg_b_type, u8 arg_a_type,
-+				   enum cmdq_code code)
- {
--	u64 *cmd_ptr;
- 
- 	if (unlikely(pkt->cmd_buf_size + CMDQ_INST_SIZE > pkt->buf_size)) {
- 		/*
-@@ -129,77 +222,129 @@ static int cmdq_pkt_append_command(struct cmdq_pkt *pkt, enum cmdq_code code,
- 			__func__, (u32)pkt->buf_size);
- 		return -ENOMEM;
- 	}
--	cmd_ptr = pkt->va_base + pkt->cmd_buf_size;
--	(*cmd_ptr) = (u64)((code << CMDQ_OP_CODE_SHIFT) | arg_a) << 32 | arg_b;
--	pkt->cmd_buf_size += CMDQ_INST_SIZE;
-+	cmdq_pkt_instr_encoder(pkt, arg_c, arg_b, arg_a, s_op, arg_c_type,
-+			       arg_b_type, arg_a_type, code);
- 
- 	return 0;
- }
- 
--int cmdq_pkt_write(struct cmdq_pkt *pkt, u32 value, u32 subsys, u32 offset)
-+int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value)
- {
--	u32 arg_a = (offset & CMDQ_ARG_A_WRITE_MASK) |
--		    (subsys << CMDQ_SUBSYS_SHIFT);
--
--	return cmdq_pkt_append_command(pkt, CMDQ_CODE_WRITE, arg_a, value);
-+	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(value),
-+				       CMDQ_GET_ARG_B(value), offset, subsys,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE, CMDQ_CODE_WRITE);
- }
- EXPORT_SYMBOL(cmdq_pkt_write);
- 
--int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u32 value,
--			u32 subsys, u32 offset, u32 mask)
-+int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys, u16 offset,
-+			u32 value, u32 mask)
- {
- 	u32 offset_mask = offset;
- 	int err = 0;
- 
- 	if (mask != 0xffffffff) {
--		err = cmdq_pkt_append_command(pkt, CMDQ_CODE_MASK, 0, ~mask);
-+		err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(~mask),
-+					      CMDQ_GET_ARG_B(~mask),
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_CODE_MASK);
- 		offset_mask |= CMDQ_WRITE_ENABLE_MASK;
- 	}
--	err |= cmdq_pkt_write(pkt, value, subsys, offset_mask);
-+	err |= cmdq_pkt_write(pkt, subsys, offset_mask, value);
- 
- 	return err;
- }
- EXPORT_SYMBOL(cmdq_pkt_write_mask);
- 
--int cmdq_pkt_wfe(struct cmdq_pkt *pkt, u32 event)
-+int cmdq_pkt_wfe(struct cmdq_pkt *pkt, u16 event)
- {
--	u32 arg_b;
--
- 	if (event >= CMDQ_MAX_EVENT)
- 		return -EINVAL;
- 
--	/*
--	 * WFE arg_b
--	 * bit 0-11: wait value
--	 * bit 15: 1 - wait, 0 - no wait
--	 * bit 16-27: update value
--	 * bit 31: 1 - update, 0 - no update
--	 */
--	arg_b = CMDQ_WFE_UPDATE | CMDQ_WFE_WAIT | CMDQ_WFE_WAIT_VALUE;
--
--	return cmdq_pkt_append_command(pkt, CMDQ_CODE_WFE, event, arg_b);
-+	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_WFE_OPTION),
-+				       CMDQ_GET_ARG_B(CMDQ_WFE_OPTION), event,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_CODE_WFE);
- }
- EXPORT_SYMBOL(cmdq_pkt_wfe);
- 
--int cmdq_pkt_clear_event(struct cmdq_pkt *pkt, u32 event)
-+int cmdq_pkt_clear_event(struct cmdq_pkt *pkt, u16 event)
- {
- 	if (event >= CMDQ_MAX_EVENT)
- 		return -EINVAL;
- 
--	return cmdq_pkt_append_command(pkt, CMDQ_CODE_WFE, event,
--				       CMDQ_WFE_UPDATE);
-+	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_WFE_UPDATE),
-+				       CMDQ_GET_ARG_B(CMDQ_WFE_UPDATE), event,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_CODE_WFE);
- }
- EXPORT_SYMBOL(cmdq_pkt_clear_event);
- 
-+int cmdq_pkt_poll(struct cmdq_pkt *pkt, u8 subsys,
-+		  u16 offset, u32 value, u32 mask)
-+{
-+	int err;
-+
-+	if (mask != 0xffffffff) {
-+		err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(~mask),
-+					      CMDQ_GET_ARG_B(~mask),
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_IMMEDIATE_VALUE,
-+					      CMDQ_CODE_MASK);
-+
-+		if (err != 0)
-+			return err;
-+	}
-+	offset = offset | 0x1;
-+
-+	return cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(value),
-+				       CMDQ_GET_ARG_B(value),
-+				       offset, subsys,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_IMMEDIATE_VALUE,
-+				       CMDQ_CODE_POLL);
-+}
-+EXPORT_SYMBOL(cmdq_pkt_poll);
-+
- static int cmdq_pkt_finalize(struct cmdq_pkt *pkt)
- {
- 	int err;
- 
- 	/* insert EOC and generate IRQ for each command iteration */
--	err = cmdq_pkt_append_command(pkt, CMDQ_CODE_EOC, 0, CMDQ_EOC_IRQ_EN);
--
-+	err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_EOC_IRQ_EN),
-+				      CMDQ_GET_ARG_B(CMDQ_EOC_IRQ_EN),
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_CODE_EOC);
-+	if (err < 0)
-+		return err;
- 	/* JUMP to end */
--	err |= cmdq_pkt_append_command(pkt, CMDQ_CODE_JUMP, 0, CMDQ_JUMP_PASS);
-+	err = cmdq_pkt_append_command(pkt, CMDQ_GET_ARG_C(CMDQ_JUMP_PASS),
-+				      CMDQ_GET_ARG_B(CMDQ_JUMP_PASS),
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_IMMEDIATE_VALUE,
-+				      CMDQ_CODE_JUMP);
- 
- 	return err;
- }
 diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index ad0406bed698..3eaa37cefb90 100644
+index 3d0115316bae..a17563c2cf47 100644
 --- a/drivers/thermal/mtk_thermal.c
 +++ b/drivers/thermal/mtk_thermal.c
 @@ -46,6 +46,7 @@
@@ -11222,329 +11953,78 @@ index ac60e9c8564e..7660d107e5bc 100644
  		break;
  	case MTU3_DR_FORCE_NONE:
  		value &= ~(SSUSB_U2_PORT_FORCE_IDDIG | SSUSB_U2_PORT_RG_IDDIG);
-diff --git a/include/dt-bindings/gce/mt8183-gce.h b/include/dt-bindings/gce/mt8183-gce.h
-new file mode 100644
-index 000000000000..aeb95154fac2
---- /dev/null
-+++ b/include/dt-bindings/gce/mt8183-gce.h
-@@ -0,0 +1,177 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2019 MediaTek Inc.
-+ * Author: Bibby Hsieh <bibby.hsieh@mediatek.com>
-+ *
-+ */
-+
-+#ifndef _DT_BINDINGS_GCE_MT8183_H
-+#define _DT_BINDINGS_GCE_MT8183_H
-+
-+#define CMDQ_NO_TIMEOUT		0xffffffff
-+
-+#define CMDQ_THR_MAX_COUNT	24
-+
-+/* GCE HW thread priority */
-+#define CMDQ_THR_PRIO_LOWEST	0
-+#define CMDQ_THR_PRIO_HIGHEST	1
-+
-+/* GCE SUBSYS */
-+#define SUBSYS_1300XXXX		0
-+#define SUBSYS_1400XXXX		1
-+#define SUBSYS_1401XXXX		2
-+#define SUBSYS_1402XXXX		3
-+#define SUBSYS_1502XXXX		4
-+#define SUBSYS_1880XXXX		5
-+#define SUBSYS_1881XXXX		6
-+#define SUBSYS_1882XXXX		7
-+#define SUBSYS_1883XXXX		8
-+#define SUBSYS_1884XXXX		9
-+#define SUBSYS_1000XXXX		10
-+#define SUBSYS_1001XXXX		11
-+#define SUBSYS_1002XXXX		12
-+#define SUBSYS_1003XXXX		13
-+#define SUBSYS_1004XXXX		14
-+#define SUBSYS_1005XXXX		15
-+#define SUBSYS_1020XXXX		16
-+#define SUBSYS_1028XXXX		17
-+#define SUBSYS_1700XXXX		18
-+#define SUBSYS_1701XXXX		19
-+#define SUBSYS_1702XXXX		20
-+#define SUBSYS_1703XXXX		21
-+#define SUBSYS_1800XXXX		22
-+#define SUBSYS_1801XXXX		23
-+#define SUBSYS_1802XXXX		24
-+#define SUBSYS_1804XXXX		25
-+#define SUBSYS_1805XXXX		26
-+#define SUBSYS_1808XXXX		27
-+#define SUBSYS_180aXXXX		28
-+#define SUBSYS_180bXXXX		29
-+
-+#define CMDQ_EVENT_DISP_RDMA0_SOF					0
-+#define CMDQ_EVENT_DISP_RDMA1_SOF					1
-+#define CMDQ_EVENT_MDP_RDMA0_SOF					2
-+#define CMDQ_EVENT_MDP_RSZ0_SOF						4
-+#define CMDQ_EVENT_MDP_RSZ1_SOF						5
-+#define CMDQ_EVENT_MDP_TDSHP_SOF					6
-+#define CMDQ_EVENT_MDP_WROT0_SOF					7
-+#define CMDQ_EVENT_MDP_WDMA0_SOF					8
-+#define CMDQ_EVENT_DISP_OVL0_SOF					9
-+#define CMDQ_EVENT_DISP_OVL0_2L_SOF					10
-+#define CMDQ_EVENT_DISP_OVL1_2L_SOF					11
-+#define CMDQ_EVENT_DISP_WDMA0_SOF					12
-+#define CMDQ_EVENT_DISP_COLOR0_SOF					13
-+#define CMDQ_EVENT_DISP_CCORR0_SOF					14
-+#define CMDQ_EVENT_DISP_AAL0_SOF					15
-+#define CMDQ_EVENT_DISP_GAMMA0_SOF					16
-+#define CMDQ_EVENT_DISP_DITHER0_SOF					17
-+#define CMDQ_EVENT_DISP_PWM0_SOF					18
-+#define CMDQ_EVENT_DISP_DSI0_SOF					19
-+#define CMDQ_EVENT_DISP_DPI0_SOF					20
-+#define CMDQ_EVENT_DISP_RSZ_SOF						22
-+#define CMDQ_EVENT_MDP_AAL_SOF						23
-+#define CMDQ_EVENT_MDP_CCORR_SOF					24
-+#define CMDQ_EVENT_DISP_DBI_SOF						25
-+#define CMDQ_EVENT_DISP_RDMA0_EOF					26
-+#define CMDQ_EVENT_DISP_RDMA1_EOF					27
-+#define CMDQ_EVENT_MDP_RDMA0_EOF					28
-+#define CMDQ_EVENT_MDP_RSZ0_EOF						30
-+#define CMDQ_EVENT_MDP_RSZ1_EOF						31
-+#define CMDQ_EVENT_MDP_TDSHP_EOF					32
-+#define CMDQ_EVENT_MDP_WROT0_EOF					33
-+#define CMDQ_EVENT_MDP_WDMA0_EOF					34
-+#define CMDQ_EVENT_DISP_OVL0_EOF					35
-+#define CMDQ_EVENT_DISP_OVL0_2L_EOF					36
-+#define CMDQ_EVENT_DISP_OVL1_2L_EOF					37
-+#define CMDQ_EVENT_DISP_WDMA0_EOF					38
-+#define CMDQ_EVENT_DISP_COLOR0_EOF					39
-+#define CMDQ_EVENT_DISP_CCORR0_EOF					40
-+#define CMDQ_EVENT_DISP_AAL0_EOF					41
-+#define CMDQ_EVENT_DISP_GAMMA0_EOF					42
-+#define CMDQ_EVENT_DISP_DITHER0_EOF					43
-+#define CMDQ_EVENT_DSI0_EOF						44
-+#define CMDQ_EVENT_DPI0_EOF						45
-+#define CMDQ_EVENT_DISP_RSZ_EOF						47
-+#define CMDQ_EVENT_MDP_AAL_EOF						48
-+#define CMDQ_EVENT_MDP_CCORR_EOF					49
-+#define CMDQ_EVENT_DBI_EOF						50
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE0					130
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE1					131
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE2					132
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE3					133
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE4					134
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE5					135
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE6					136
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE7					137
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE8					138
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE9					139
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE10					140
-+#define CMDQ_EVENT_MUTEX_STREAM_DONE11					141
-+#define CMDQ_EVENT_DISP_RDMA0_BUF_UNDERRUN_EVEN				142
-+#define CMDQ_EVENT_DISP_RDMA1_BUF_UNDERRUN_EVEN				143
-+#define CMDQ_EVENT_DSI0_TE_EVENT					144
-+#define CMDQ_EVENT_DSI0_IRQ_EVENT					145
-+#define CMDQ_EVENT_DSI0_DONE_EVENT					146
-+#define CMDQ_EVENT_DISP_WDMA0_SW_RST_DONE				150
-+#define CMDQ_EVENT_MDP_WDMA_SW_RST_DONE					151
-+#define CMDQ_EVENT_MDP_WROT0_SW_RST_DONE				152
-+#define CMDQ_EVENT_MDP_RDMA0_SW_RST_DONE				154
-+#define CMDQ_EVENT_DISP_OVL0_FRAME_RST_DONE_PULE			155
-+#define CMDQ_EVENT_DISP_OVL0_2L_FRAME_RST_DONE_ULSE			156
-+#define CMDQ_EVENT_DISP_OVL1_2L_FRAME_RST_DONE_ULSE			157
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_0					257
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_1					258
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_2					259
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_3					260
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_4					261
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_5					262
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_6					263
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_7					264
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_8					265
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_9					266
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_10					267
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_11					268
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_12					269
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_13					270
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_14					271
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_15					272
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_16					273
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_17					274
-+#define CMDQ_EVENT_ISP_FRAME_DONE_P2_18					275
-+#define CMDQ_EVENT_AMD_FRAME_DONE					276
-+#define CMDQ_EVENT_DVE_DONE						277
-+#define CMDQ_EVENT_WMFE_DONE						278
-+#define CMDQ_EVENT_RSC_DONE						279
-+#define CMDQ_EVENT_MFB_DONE						280
-+#define CMDQ_EVENT_WPE_A_DONE						281
-+#define CMDQ_EVENT_SPE_B_DONE						282
-+#define CMDQ_EVENT_OCC_DONE						283
-+#define CMDQ_EVENT_VENC_CMDQ_FRAME_DONE					289
-+#define CMDQ_EVENT_JPG_ENC_CMDQ_DONE					290
-+#define CMDQ_EVENT_JPG_DEC_CMDQ_DONE					291
-+#define CMDQ_EVENT_VENC_CMDQ_MB_DONE					292
-+#define CMDQ_EVENT_VENC_CMDQ_128BYTE_DONE				293
-+#define CMDQ_EVENT_ISP_FRAME_DONE_A					321
-+#define CMDQ_EVENT_ISP_FRAME_DONE_B					322
-+#define CMDQ_EVENT_CAMSV0_PASS1_DONE					323
-+#define CMDQ_EVENT_CAMSV1_PASS1_DONE					324
-+#define CMDQ_EVENT_CAMSV2_PASS1_DONE					325
-+#define CMDQ_EVENT_TSF_DONE						326
-+#define CMDQ_EVENT_SENINF_CAM0_FIFO_FULL				327
-+#define CMDQ_EVENT_SENINF_CAM1_FIFO_FULL				328
-+#define CMDQ_EVENT_SENINF_CAM2_FIFO_FULL				329
-+#define CMDQ_EVENT_SENINF_CAM3_FIFO_FULL				330
-+#define CMDQ_EVENT_SENINF_CAM4_FIFO_FULL				331
-+#define CMDQ_EVENT_SENINF_CAM5_FIFO_FULL				332
-+#define CMDQ_EVENT_SENINF_CAM6_FIFO_FULL				333
-+#define CMDQ_EVENT_SENINF_CAM7_FIFO_FULL				334
-+#define CMDQ_EVENT_IPU_CORE0_DONE0					353
-+#define CMDQ_EVENT_IPU_CORE0_DONE1					354
-+#define CMDQ_EVENT_IPU_CORE0_DONE2					355
-+#define CMDQ_EVENT_IPU_CORE0_DONE3					356
-+#define CMDQ_EVENT_IPU_CORE1_DONE0					385
-+#define CMDQ_EVENT_IPU_CORE1_DONE1					386
-+#define CMDQ_EVENT_IPU_CORE1_DONE2					387
-+#define CMDQ_EVENT_IPU_CORE1_DONE3					388
-+
-+#endif
-diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
-index ccb73422c2fa..1dfd5ed5c8c5 100644
---- a/include/linux/mailbox/mtk-cmdq-mailbox.h
-+++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
-@@ -19,6 +19,10 @@
- #define CMDQ_WFE_UPDATE			BIT(31)
- #define CMDQ_WFE_WAIT			BIT(15)
- #define CMDQ_WFE_WAIT_VALUE		0x1
-+#define CMDQ_WFE_OPTION                 (CMDQ_WFE_UPDATE | CMDQ_WFE_WAIT | \
-+					CMDQ_WFE_WAIT_VALUE)
-+/** cmdq event maximum */
-+#define CMDQ_MAX_EVENT			0x3ff
+diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
+index c871b94f3e6f..6f9cf64fe7bb 100644
+--- a/drivers/usb/mtu3/mtu3_host.c
++++ b/drivers/usb/mtu3/mtu3_host.c
+@@ -29,6 +29,17 @@
+ #define SSC_IP_SLEEP_EN	BIT(4)
+ #define SSC_SPM_INT_EN		BIT(1)
  
- /*
-  * CMDQ_CODE_MASK:
-@@ -42,6 +46,7 @@
- enum cmdq_code {
- 	CMDQ_CODE_MASK = 0x02,
- 	CMDQ_CODE_WRITE = 0x04,
-+	CMDQ_CODE_POLL = 0x08,
- 	CMDQ_CODE_JUMP = 0x10,
- 	CMDQ_CODE_WFE = 0x20,
- 	CMDQ_CODE_EOC = 0x40,
-diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
-index 54ade13a9b15..15884354af20 100644
---- a/include/linux/soc/mediatek/mtk-cmdq.h
-+++ b/include/linux/soc/mediatek/mtk-cmdq.h
-@@ -13,11 +13,14 @@
- 
- #define CMDQ_NO_TIMEOUT		0xffffffffu
- 
--/** cmdq event maximum */
--#define CMDQ_MAX_EVENT				0x3ff
--
- struct cmdq_pkt;
- 
-+struct cmdq_subsys {
-+	u8 id;
-+	u16 offset;
-+	u16 size;
-+};
++/* mt8183 etc */
++#define PERI_USB_WK_CTRL0		0x400
++#define SSUSB_INST_DP_CDDEBOUNCE	(0xf << 26)
++#define SSUSB_INST_DM_CDDEBOUNCE	(0xf << 22)
++#define SSUSB_INST_DP_CDEN		BIT(21)
++#define SSUSB_INST_DM_CDEN		BIT(20)
++#define SSUSB_INST_DP_SPM_RISE_ENABLE	BIT(19)
++#define SSUSB_INST_DP_SPM_FALL_ENABLE	BIT(18)
++#define SSUSB_INST_DM_SPM_RISE_ENABLE	BIT(17)
++#define SSUSB_INST_DM_SPM_FALL_ENABLE	BIT(16)
 +
- struct cmdq_client {
- 	spinlock_t lock;
- 	u32 pkt_cnt;
-@@ -63,26 +66,26 @@ void cmdq_pkt_destroy(struct cmdq_pkt *pkt);
- /**
-  * cmdq_pkt_write() - append write command to the CMDQ packet
-  * @pkt:	the CMDQ packet
-- * @value:	the specified target register value
-  * @subsys:	the CMDQ sub system code
-  * @offset:	register offset from CMDQ sub system
-+ * @value:	the specified target register value
-  *
-  * Return: 0 for success; else the error code is returned
-  */
--int cmdq_pkt_write(struct cmdq_pkt *pkt, u32 value, u32 subsys, u32 offset);
-+int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value);
+ enum ssusb_uwk_vers {
+ 	SSUSB_UWK_V1 = 1,
+ 	SSUSB_UWK_V2,
+@@ -59,6 +70,22 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
+ 	regmap_update_bits(ssusb->uwk, reg, msk, val);
+ }
  
- /**
-  * cmdq_pkt_write_mask() - append write command with mask to the CMDQ packet
-  * @pkt:	the CMDQ packet
-- * @value:	the specified target register value
-  * @subsys:	the CMDQ sub system code
-  * @offset:	register offset from CMDQ sub system
-+ * @value:	the specified target register value
-  * @mask:	the specified target register mask
-  *
-  * Return: 0 for success; else the error code is returned
-  */
--int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u32 value,
--			u32 subsys, u32 offset, u32 mask);
-+int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys, u16 offset,
-+			u32 value, u32 mask);
- 
- /**
-  * cmdq_pkt_wfe() - append wait for event command to the CMDQ packet
-@@ -91,7 +94,7 @@ int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u32 value,
-  *
-  * Return: 0 for success; else the error code is returned
-  */
--int cmdq_pkt_wfe(struct cmdq_pkt *pkt, u32 event);
-+int cmdq_pkt_wfe(struct cmdq_pkt *pkt, u16 event);
- 
- /**
-  * cmdq_pkt_clear_event() - append clear event command to the CMDQ packet
-@@ -100,8 +103,23 @@ int cmdq_pkt_wfe(struct cmdq_pkt *pkt, u32 event);
-  *
-  * Return: 0 for success; else the error code is returned
-  */
--int cmdq_pkt_clear_event(struct cmdq_pkt *pkt, u32 event);
-+int cmdq_pkt_clear_event(struct cmdq_pkt *pkt, u16 event);
- 
-+/**
-+ * cmdq_pkt_poll() - Append polling command to the CMDQ packet, ask GCE to
-+ *		     execute an instruction that wait for a specified hardware
-+ *		     register to check for the value. All GCE hardware
-+ *		     threads will be blocked by this instruction.
-+ * @pkt:	the CMDQ packet
-+ * @subsys:	the CMDQ sub system code
-+ * @offset:	register offset from CMDQ sub system
-+ * @value:	the specified target register value
-+ * @mask:	the specified target register mask
-+ *
-+ * Return: 0 for success; else the error code is returned
-+ */
-+int cmdq_pkt_poll(struct cmdq_pkt *pkt, u8 subsys,
-+		  u16 offset, u32 value, u32 mask);
- /**
-  * cmdq_pkt_flush_async() - trigger CMDQ to asynchronously execute the CMDQ
-  *                          packet and call back at the end of done packet
-@@ -130,4 +148,28 @@ int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb,
-  */
- int cmdq_pkt_flush(struct cmdq_pkt *pkt);
- 
-+/**
-+ * cmdq_dev_get_subsys() - parse sub system from the device node of CMDQ client
-+ * @dev:	device of CMDQ mailbox client
-+ * @idx:	the index of desired subsys
-+ *
-+ * Return: CMDQ subsys pointer
-+ *
-+ * Help CMDQ client pasing the sub system number
-+ * from the device node of CMDQ client.
-+ */
-+struct cmdq_subsys *cmdq_dev_get_subsys(struct device *dev, int idx);
++static void ssusb_wakeup_dm_set(struct ssusb_mtk *ssusb, bool enable)
++{
++	u32 tmp;
 +
-+/**
-+ * cmdq_dev_get_event() - parse event from the device node of CMDQ client
-+ * @dev:	device of CMDQ mailbox client
-+ * @name:	the name of desired event
-+ *
-+ * Return: CMDQ event number
-+ *
-+ * Help CMDQ client pasing the event number
-+ * from the device node of CMDQ client.
-+ */
-+s32 cmdq_dev_get_event(struct device *dev, const char *name);
++	regmap_read(ssusb->uwk, PERI_USB_WK_CTRL0, &tmp);
++	if (enable) {
++		tmp |= SSUSB_INST_DM_SPM_RISE_ENABLE;
++		tmp |= SSUSB_INST_DM_CDDEBOUNCE;
++		tmp |= SSUSB_INST_DM_CDEN;
++	} else
++		tmp &= ~SSUSB_INST_DM_CDEN;
 +
- #endif	/* __MTK_CMDQ_H__ */
++	regmap_write(ssusb->uwk, PERI_USB_WK_CTRL0, tmp);
++	regmap_read(ssusb->uwk, PERI_USB_WK_CTRL0, &tmp);
++}
++
+ int ssusb_wakeup_of_property_parse(struct ssusb_mtk *ssusb,
+ 				struct device_node *dn)
+ {
+@@ -87,8 +114,10 @@ int ssusb_wakeup_of_property_parse(struct ssusb_mtk *ssusb,
+ 
+ void ssusb_wakeup_set(struct ssusb_mtk *ssusb, bool enable)
+ {
+-	if (ssusb->uwk_en)
++	if (ssusb->uwk_en) {
+ 		ssusb_wakeup_ip_sleep_set(ssusb, enable);
++		ssusb_wakeup_dm_set(ssusb, enable);
++	}
+ }
+ 
+ static void host_ports_num_get(struct ssusb_mtk *ssusb)
+diff --git a/include/dt-bindings/clock/mt8183-clk.h b/include/dt-bindings/clock/mt8183-clk.h
+index 0046506eb24c..bf133a5a8848 100644
+--- a/include/dt-bindings/clock/mt8183-clk.h
++++ b/include/dt-bindings/clock/mt8183-clk.h
+@@ -284,6 +284,10 @@
+ #define CLK_INFRA_FBIST2FPC		100
+ #define CLK_INFRA_NR_CLK		101
+ 
++/* PERICFG */
++#define CLK_PERIAXI                     0
++#define CLK_PERI_NR_CLK                 1
++
+ /* MFGCFG */
+ #define CLK_MFG_BG3D			0
+ #define CLK_MFG_NR_CLK			1
 diff --git a/include/soc/mediatek/emi.h b/include/soc/mediatek/emi.h
 new file mode 100644
 index 000000000000..83bdaeb6840b
@@ -11698,3 +12178,30 @@ index 7a8d87051ee8..609397d69602 100644
  #endif
  
  #endif
+diff --git a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
+index 34c9102d56af..928687771b49 100644
+--- a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
++++ b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
+@@ -299,8 +299,6 @@ static struct snd_soc_card mt8183_mt6358_ts3a227_max98357_card = {
+ 	.owner = THIS_MODULE,
+ 	.dai_link = mt8183_mt6358_ts3a227_max98357_dai_links,
+ 	.num_links = ARRAY_SIZE(mt8183_mt6358_ts3a227_max98357_dai_links),
+-	.aux_dev = &mt8183_mt6358_ts3a227_max98357_headset_dev,
+-	.num_aux_devs = 1,
+ };
+ 
+ static int
+@@ -360,10 +358,9 @@ mt8183_mt6358_ts3a227_max98357_dev_probe(struct platform_device *pdev)
+ 	mt8183_mt6358_ts3a227_max98357_headset_dev.codec_of_node =
+ 		of_parse_phandle(pdev->dev.of_node,
+ 				 "mediatek,headset-codec", 0);
+-	if (!mt8183_mt6358_ts3a227_max98357_headset_dev.codec_of_node) {
+-		dev_err(&pdev->dev,
+-			"Property 'mediatek,headset-codec' missing/invalid\n");
+-		return -EINVAL;
++	if (mt8183_mt6358_ts3a227_max98357_headset_dev.codec_of_node) {
++		card->aux_dev = &mt8183_mt6358_ts3a227_max98357_headset_dev;
++		card->num_aux_devs = 1;
+ 	}
+ 
+ 	default_pins =
