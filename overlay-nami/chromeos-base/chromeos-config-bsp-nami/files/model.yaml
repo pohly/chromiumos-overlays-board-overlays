@@ -91,6 +91,14 @@ device_specific_audio_device_config: &device_specific_audio_device_config
     $ucm: "{{$device-name}}"
     $ucm-source-suffix: ""
 
+convertible_device_config: &convertible_device_config
+  <<: *device_specific_audio_device_config
+  hardware-properties:
+    is-lid-convertible: True
+    has-lid-accelerometer: True
+    has-base-accelerometer: True
+    has-base-gyroscope: True
+
 chromeos:
   devices:
     - $device-name: "akali"
@@ -114,10 +122,10 @@ chromeos:
           $key-id: "AKALI"
       skus:
         - $sku-id: 0x2be7
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x2a67
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
     - $device-name: "nami"
       $has-ambient-light-sensor: "1"
       products:
@@ -137,30 +145,30 @@ chromeos:
       skus:
         - $sku-id: 0x3f62
           config:
-            <<: *device_specific_audio_device_config
+            <<: *convertible_device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
         - $sku-id: 0x3f63
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
         - $sku-id: 0x3f67
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3e63
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3e67
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
         - $sku-id: 0x100bf62
           config:
-            <<: *device_specific_audio_device_config
+            <<: *convertible_device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
             $dptf-file: "dptf-pyke.dv"
         - $sku-id: 0x100bf63
           config:
-            <<: *device_specific_audio_device_config
+            <<: *convertible_device_config
             $dptf-file: "dptf-pyke.dv"
     - $device-name: "sona"
       $bluetooth-device: "{{$device-name}}"
@@ -172,12 +180,12 @@ chromeos:
       skus:
         - $sku-id: 0x3ae2
           config:
-            <<: *device_specific_audio_device_config
+            <<: *convertible_device_config
             power:
               <<: *power_common
               $has-keyboard-backlight: "0"
         - $sku-id: 0x3ae3
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
     - $device-name: "syndra"
       $touchpad-wakeup: "1"
       $internal-backlight-no-als-battery-brightness: "63.0"
@@ -226,13 +234,13 @@ chromeos:
           $key-id: "VAYNE"
       skus:
         - $sku-id: 0x3a67
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3a63
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
 # TODO (EVT only, to be removed)
         - $sku-id: 0x3a7f
-          config: *device_specific_audio_device_config
+          config: *convertible_device_config
     - $device-name: "ekko"
       $touchpad-wakeup: "1"
       products:
