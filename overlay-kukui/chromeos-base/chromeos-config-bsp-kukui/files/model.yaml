@@ -40,6 +40,8 @@ common_config: &common_config
           destination: "{{$ucm-dest}}/HiFi.conf"
         - source: "{{$ucm-source}}/{{$card}}.conf"
           destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
+  power:
+    usb-min-ac-watts: 10
 
 kukui-config: &kukui_config
   <<: *common_config
