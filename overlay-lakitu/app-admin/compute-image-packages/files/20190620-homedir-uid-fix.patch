@@ -1,0 +1,141 @@
+From 00243896aa249f8db2a965f61b66d452effcaab5 Mon Sep 17 00:00:00 2001
+From: vaibhavrustagi <vaibhavrustagi@google.com>
+Date: Thu, 20 Jun 2019 12:26:56 -0800
+Subject: [PATCH] When creating users try to derive the UID/GID from the
+ homedir
+
+It's possible that when a new user is being created that the home
+directory for that user already exists. When this happens account
+manager will now try to find the UID and GID of the user from that
+directory and reuse it.
+
+This fixes potential problems if for some reason the new accounts that
+were previously added into passwd/group were not preserved after reboot,
+but the correspondinghome directory was.
+---
+ .../accounts/accounts_utils.py                | 70 +++++++++++++++++--
+ 1 file changed, 65 insertions(+), 5 deletions(-)
+
+diff --git a/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py b/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py
+index 56732c5..60ad005 100644
+--- a/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py
++++ b/packages/python-google-compute-engine/google_compute_engine/accounts/accounts_utils.py
+@@ -30,7 +30,8 @@ USER_REGEX = re.compile(r'\A[A-Za-z0-9._][A-Za-z0-9._-]{0,31}\Z')
+ DEFAULT_GPASSWD_ADD_CMD = 'gpasswd -a {user} {group}'
+ DEFAULT_GPASSWD_REMOVE_CMD = 'gpasswd -d {user} {group}'
+ DEFAULT_GROUPADD_CMD = 'groupadd {group}'
+-DEFAULT_USERADD_CMD = 'useradd -m -s /bin/bash -p * {user}'
++DEFAULT_GROUPADD_WITH_GID_CMD = 'groupadd -g {gid} {group}'
++DEFAULT_USERADD_CMD = 'useradd -s /bin/bash -p * {user}'
+ DEFAULT_USERDEL_CMD = 'userdel -r {user}'
+ DEFAULT_USERMOD_CMD = 'usermod -G {groups} {user}'
+ 
+@@ -60,6 +61,7 @@ class AccountsUtils(object):
+     self.gpasswd_add_cmd = gpasswd_add_cmd or DEFAULT_GPASSWD_ADD_CMD
+     self.gpasswd_remove_cmd = gpasswd_remove_cmd or DEFAULT_GPASSWD_REMOVE_CMD
+     self.groupadd_cmd = groupadd_cmd or DEFAULT_GROUPADD_CMD
++    self.groupadd_with_gid_cmd = DEFAULT_GROUPADD_WITH_GID_CMD
+     self.useradd_cmd = useradd_cmd or DEFAULT_USERADD_CMD
+     self.userdel_cmd = userdel_cmd or DEFAULT_USERDEL_CMD
+     self.usermod_cmd = usermod_cmd or DEFAULT_USERMOD_CMD
+@@ -113,6 +115,29 @@ class AccountsUtils(object):
+     file_utils.SetPermissions(
+         self.google_sudoers_file, mode=0o440, uid=0, gid=0)
+ 
++  def _CreateGroupWithGID(self, group, gid):
++    """Create a Linux group with specific gid.
++
++    Args:
++      group: string, the name of the Linux group to create.
++      gid: string, derived from user's home directory.
++
++    Returns:
++      bool, True if group created with gid succeeded.
++    """
++    self.logger.info('Creating a group for %s with gid %s.', group, gid)
++
++    command = self.groupadd_with_gid_cmd.format(gid=gid, group=group)
++    try:
++      subprocess.check_call(command.split(' '))
++    except subprocess.CalledProcessError as e:
++      self.logger.warning('Could not create group %s with gid %s . %s.',
++                          group, gid, str(e))
++      return False
++    else:
++      self.logger.info('Created group %s with gid %s.', group, gid)
++      return True
++
+   def _GetUser(self, user):
+     """Retrieve a Linux user account.
+ 
+@@ -127,18 +152,31 @@ class AccountsUtils(object):
+     except KeyError:
+       return None
+ 
+-  def _AddUser(self, user):
++  def _AddUser(self, user, uid=None, gid=None, homedir=None):
+     """Configure a Linux user account.
+ 
+     Args:
+       user: string, the name of the Linux user account to create.
++      uid: string, derived from 'new' user's home directory.
++      gid: string, derived from 'new' user's home directory.
++      homedir: string, home directory for 'new' user.
+ 
+     Returns:
+       bool, True if user creation succeeded.
+     """
+     self.logger.info('Creating a new user account for %s.', user)
+ 
+-    command = self.useradd_cmd.format(user=user)
++    extra_flags = ''
++    if homedir:
++      extra_flags += ' -d %s' % homedir
++    else:
++      extra_flags += ' -m'
++    if uid:
++      extra_flags += ' -u %s' % str(uid)
++    if gid:
++      extra_flags += ' -g %s' % str(gid)
++
++    command = self.useradd_cmd.format(user=user) + extra_flags
+     try:
+       subprocess.check_call(command.split(' '))
+     except subprocess.CalledProcessError as e:
+@@ -342,9 +380,31 @@ class AccountsUtils(object):
+     if not self._GetUser(user):
+       # User does not exist. Attempt to create the user and add them to the
+       # appropriate user groups.
+-      if not (self._AddUser(user)
+-              and self._UpdateUserGroups(user, self.groups)):
++      user_created = False
++
++      # Check if the homedir already exists and if yes try to derive UID
++      # and GID from that directory.
++      homedir = '/home/%s' % user
++      if os.path.isdir(homedir):
++        stats = os.stat(homedir)
++        if stats.st_uid > 1000:
++          self.logger.info('Using UID %d, GID %d and homedir %s for account %s',
++                       stats.st_uid, stats.st_gid, homedir, user)
++
++          if not self._CreateGroupWithGID(user, stats.st_gid):
++            return False
++
++          if not self._AddUser(user, uid=stats.st_uid,
++                               gid=stats.st_gid, homedir=homedir):
++            return False
++          user_created = True
++
++      if not user_created and not self._AddUser(user):
++        return False
++
++      if not self._UpdateUserGroups(user, self.groups):
+         return False
++
+     # Add the user to the google sudoers group.
+     if not self._UpdateSudoer(user, sudoer=True):
+       return False
+-- 
+2.22.0.410.gd8fdbe21b5-goog
+

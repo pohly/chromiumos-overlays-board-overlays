@@ -36,7 +36,7 @@ python_prepare_all() {
 	# at ${S}. As we have patches which are outside
 	# packages/python-google-compute-engine, we cd two level up.
 	pushd "${S}"/../../
-	epatch "${FILESDIR}/20190304-homedir-uid-fix.patch"
+	epatch "${FILESDIR}/20190620-homedir-uid-fix.patch"
 	epatch "${FILESDIR}/20190304-no-boto.patch"
 	epatch "${FILESDIR}/20190304-do-not-block-sshd-for-google.service.patch"
 	popd
