@@ -70,6 +70,13 @@ base_config: &base_config
       libpayload: "grunt"
       u-boot: "coreboot"
 
+convertible_base_config: &convertible_base_config
+  hardware-properties:
+    is-lid-convertible: True
+    has-lid-accelerometer: True
+    has-base-accelerometer: True
+    has-base-gyroscope: True
+
 grunt-config: &grunt-config
   <<: *base_config
   firmware:
@@ -153,7 +160,7 @@ kasumi-config: &kasumi-config
         symlink: "{{$fw_root}}/hid-06CB_CDB5"
 
 kasumi360-config: &kasumi360-config
-  <<: *kasumi-config
+  <<: [ *kasumi-config, *convertible_base_config ]
   $audio-config: "kasumi"
   touch:
     <<: *touch_common
