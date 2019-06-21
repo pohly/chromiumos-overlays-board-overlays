@@ -232,6 +232,7 @@ chromeos:
       products:
         - $whitelabel-tag: ""
         - $whitelabel-tag: "gik"
+          $sub_cras_config: ".gik"
       skus:
         - $sku-id-val: 1
           config: *clamshell_wl_config
@@ -246,6 +247,7 @@ chromeos:
       products:
         - $whitelabel-tag: ""
         - $whitelabel-tag: "gik360"
+          $sub_cras_config: ".gik360"
       skus:
         - $sku-id-val: 9
           $stylus-category: "internal"
