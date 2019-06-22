@@ -7,10 +7,10 @@ LINUX_FIRMWARE=""
 USE=""
 
 # Use Intel WiFi
-LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9000 iwlwifi-9260"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9000"
 
 # Use Intel BT driver
-LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt ibt-hw ibt_9560 ibt_9260"
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt ibt-hw ibt_9560"
 
 # Enable NVMe utility
 USE="${USE} nvme"
