@@ -4,15 +4,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-common_config: &common_config
+base_config: &base_config
   name: "{{$device-name}}"
-  identity:
+  identity: &identity_common
     platform-name: "Hatch"
     smbios-name-match: "{{$fw-name}}"
     sku-id: "{{$sku-id}}"
   firmware:
     no-firmware: True
-  firmware-signing:
+  firmware-signing: &firmware_signing_common
     key-id: "{{$key-id}}"
     signature-id: "{{$device-name}}"
   power: &power_common
@@ -32,6 +32,13 @@ common_config: &common_config
     $stylus-category: "none"
     stylus-category: "{{$stylus-category}}"
 
+unprovisioned-config: &unprovisioned_config
+  name: "{{$device-name}}"
+  identity: *identity_common
+  firmware:
+    no-firmware: True
+  firmware-signing: *firmware_signing_common
+
 chromeos:
   devices:
     - $device-name: "hatch"
@@ -41,10 +48,10 @@ chromeos:
       skus:
         - $sku-id: 255 # Unprovisioned
           $stylus-category: "internal"
-          config: *common_config
+          config: *base_config
         - $sku-id: 1
           $stylus-category: "internal"
-          config: *common_config
+          config: *base_config
     - $device-name: "hatch_whl"
       $fw-name: "Hatch_whl"
       $internal-backlight-als-steps: |-
@@ -55,25 +62,58 @@ chromeos:
       skus:
         - $sku-id: 255
           $stylus-category: "internal"
-          config: *common_config
+          config: *base_config
+    - $device-name: "unprovisioned_kohaku"
+      skus:
+        - $sku-id: 255
+          $fw-name: "Kohaku"
+          $key-id: "HATCH"
+          config: *unprovisioned_config
     - $device-name: "kohaku"
       $fw-name: "Kohaku"
       products:
         - $key-id: "HATCH"
       skus:
+        - $sku-id: 1
+          config: *base_config
+    - $device-name: "unprovisioned_kindred"
+      skus:
         - $sku-id: 255
-          config: *common_config
+          $fw-name: "Kindred"
+          $key-id: "HATCH"
+          config: *unprovisioned_config
+    - $device-name: "kled"
+      $fw-name: "Kindred"
+      products:
+        - $key-id: "HATCH"
+      skus:
+        - $sku-id: 1
+          config: *base_config
+        - $sku-id: 2
+          config: *base_config
+        - $sku-id: 3
+          config: *base_config
+        - $sku-id: 4
+          config: *base_config
     - $device-name: "kindred"
       $fw-name: "Kindred"
       products:
         - $key-id: "HATCH"
       skus:
+        - $sku-id: 21
+          config: *base_config
+        - $sku-id: 22
+          config: *base_config
+    - $device-name: "unprovisioned_helios"
+      skus:
         - $sku-id: 255
-          config: *common_config
+          $fw-name: "Helios"
+          $key-id: "HATCH"
+          config: *unprovisioned_config
     - $device-name: "helios"
       $fw-name: "Helios"
       products:
         - $key-id: "HATCH"
       skus:
-        - $sku-id: 255
-          config: *common_config
+        - $sku-id: 1
+          config: *base_config
