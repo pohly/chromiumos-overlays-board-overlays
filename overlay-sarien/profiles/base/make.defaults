@@ -44,3 +44,6 @@ INPUT_DEVICES="wacom"
 
 # Enable background blur.
 USE="${USE} background_blur"
+
+# Add EC logging for Arcada ISH
+USE="${USE} eclog"
