@@ -72,6 +72,7 @@ chromeos:
             power:
               << : *power_common
               $internal-backlight-no-als-battery-brightness: "62.5"
+              $internal-backlight-no-als-ac-brightness: "68.75"
     - $device-name: "leona"
       skus:
         - $sku-id: 0x2863  # leona
@@ -80,9 +81,11 @@ chromeos:
             power:
               << : *power_common
               $internal-backlight-no-als-battery-brightness: "62.5"
+              $internal-backlight-no-als-ac-brightness: "68.75"
         - $sku-id: 0x2861  # non-touch
           config:
             <<: *common_config
             power:
               << : *power_common
               $internal-backlight-no-als-battery-brightness: "62.5"
+              $internal-backlight-no-als-ac-brightness: "68.75"
