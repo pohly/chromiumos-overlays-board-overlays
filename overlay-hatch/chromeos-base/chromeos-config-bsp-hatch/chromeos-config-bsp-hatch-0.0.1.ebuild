@@ -12,12 +12,8 @@ KEYWORDS="-* amd64 x86"
 
 inherit cros-unibuild
 
-S=${WORKDIR}
+S="${WORKDIR}"
 
-# From an ideological purity perspective, this DEPEND should be there, but
-# it can't be, since otherwise we end up with circular dependencies.
-# DEPEND="virtual/chromeos-bsp"
-
-src_install(){
+src_install() {
 	install_model_files
 }
