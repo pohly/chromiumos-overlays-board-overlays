@@ -72,6 +72,7 @@ LAKITU_RDEPEND="
 	)
 	sys-fs/e2fsprogs
 	sys-fs/lvm2
+	sys-fs/xfsprogs
 	criu? ( sys-process/criu )
 	virtual/chromeos-bsp
 	virtual/chromeos-firewall
