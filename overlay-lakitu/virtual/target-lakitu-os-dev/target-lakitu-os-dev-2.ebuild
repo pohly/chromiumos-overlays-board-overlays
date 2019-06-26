@@ -49,7 +49,7 @@ RDEPEND="
 	app-shells/bash
 	app-shells/bash-completion
 	chromeos-base/chromeos-dev-root
-	chromeos-base/gmerge
+	chromeos-base/update-utils
 	chromeos-base/protofiles
 	dev-python/cherrypy
 	dev-python/dbus-python
