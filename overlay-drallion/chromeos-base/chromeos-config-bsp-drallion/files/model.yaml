@@ -1,0 +1,17 @@
+common_config: &common_config
+  name: "{{$device-name}}"
+  identity:
+    platform-name: "Drallion"
+    smbios-name-match: "{{$fw-name}}"
+    sku-id: "{{$sku-id}}"
+  firmware:
+    no-firmware: True
+
+chromeos:
+  devices:
+    - $device-name: "drallion"
+      $fw-name: "Drallion"
+      skus:
+        - $sku-id: 1
+          config: *common_config
+

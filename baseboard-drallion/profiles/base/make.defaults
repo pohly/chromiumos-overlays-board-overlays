@@ -1,0 +1,25 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+LINUX_FIRMWARE=""
+USE=""
+
+# Use Intel WiFi
+LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9000 iwlwifi-9260"
+
+# Use Intel BT driver
+LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt ibt-hw ibt_9560 ibt_9260"
+
+# Enable NVMe utility
+USE="${USE} nvme"
+
+# Enable legacy power button behavior
+USE="${USE} legacy_power_button"
+
+# Enable Virtual Machines
+USE="${USE} kvm_host crosvm-gpu"
+
+# Enable CR50 for TPM
+USE="${USE} -tpm tpm2 cr50_onboard"
