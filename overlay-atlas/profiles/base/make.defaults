@@ -22,6 +22,9 @@ USE="${USE} background_blur"
 # Enable keyboard backlight control
 USE="${USE} has_keyboard_backlight"
 
+# Enable sensor support and calibration (light sensor)
+USE="${USE} touchview"
+
 # Building EC
 USE="${USE} cros_ec"
 
