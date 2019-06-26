@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit eutils golang-vcs-snapshot toolchain-funcs
+inherit eutils golang-vcs-snapshot toolchain-funcs systemd
 
 EGO_PN="k8s.io/node-problem-detector"
 DESCRIPTION="node-problem-detector"
@@ -53,4 +53,7 @@ src_install() {
 	doins config/kernel-monitor.json
 
 	dosbin bin/node-problem-detector
+
+	systemd_dounit "${FILESDIR}"/node-problem-detector.service
+	systemd_enable_service multi-user.target node-problem-detector.service
 }

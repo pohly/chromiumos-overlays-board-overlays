@@ -1,0 +1,10 @@
+[Unit]
+Description=Node problem detector
+
+[Service]
+Restart=always
+RestartSec=10
+ExecStart=/usr/sbin/node-problem-detector --config.system-stats-monitor=/etc/node_problem_detector/system-stats-monitor.json --config.system-log-monitor=/etc/node_problem_detector/kernel-monitor.json --enable-k8s-exporter=false --alsologtostderr
+
+[Install]
+WantedBy=multi-user.target
