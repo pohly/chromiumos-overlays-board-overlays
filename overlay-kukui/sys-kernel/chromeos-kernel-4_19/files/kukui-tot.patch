@@ -162,6 +162,86 @@ index 5467470c7b8a..bc8e30c20c64 100644
  };
  
  color0: color@14013000 {
+diff --git a/Documentation/devicetree/bindings/display/panel/auo,kd101n80-45na.txt b/Documentation/devicetree/bindings/display/panel/auo,kd101n80-45na.txt
+new file mode 100644
+index 000000000000..994c2a13f942
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/auo,kd101n80-45na.txt
+@@ -0,0 +1,34 @@
++AUO Corporation 10.1" WUXGA TFT LCD panel
++
++Required properties:
++- compatible: should be "auo,kd101n80-45na"
++- reg: the virtual channel number of a DSI peripheral
++- enable-gpios: a GPIO spec for the enable pin
++- pp1800-supply: core voltage supply
++- avdd-supply: phandle of the regulator that provides positive voltage
++- avee-supply: phandle of the regulator that provides negative voltage
++- backlight: phandle of the backlight device attached to the panel
++
++The device node can contain one 'port' child node with one child
++'endpoint' node, according to the bindings defined in
++media/video-interfaces.txt. This node should describe panel's video bus.
++
++Example:
++&dsi {
++	...
++	panel@0 {
++		compatible = "auo,kd101n80-45na";
++		reg = <0>;
++		enable-gpios = <&pio 45 0>;
++		avdd-supply = <&ppvarn_lcd>;
++		avee-supply = <&ppvarp_lcd>;
++		pp1800-supply = <&pp1800_lcd>;
++		backlight = <&backlight_lcd0>;
++		status = "okay";
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++	};
++};
+diff --git a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.txt b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.txt
+new file mode 100644
+index 000000000000..bd44af636390
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.txt
+@@ -0,0 +1,34 @@
++Boe Corporation 10.1" WUXGA TFT LCD panel
++
++Required properties:
++- compatible: should be "boe,tv101wum-nl6"
++- reg: the virtual channel number of a DSI peripheral
++- enable-gpios: a GPIO spec for the enable pin
++- pp1800-supply: core voltage supply
++- avdd-supply: phandle of the regulator that provides positive voltage
++- avee-supply: phandle of the regulator that provides negative voltage
++- backlight: phandle of the backlight device attached to the panel
++
++The device node can contain one 'port' child node with one child
++'endpoint' node, according to the bindings defined in
++media/video-interfaces.txt. This node should describe panel's video bus.
++
++Example:
++&dsi {
++	...
++	panel@0 {
++		compatible = "boe,tv101wum-nl6";
++		reg = <0>;
++		enable-gpios = <&pio 45 0>;
++		avdd-supply = <&ppvarn_lcd>;
++		avee-supply = <&ppvarp_lcd>;
++		pp1800-supply = <&pp1800_lcd>;
++		backlight = <&backlight_lcd0>;
++		status = "okay";
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++	};
++};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
 index 3813947b4d4f..c9f89132830c 100644
 --- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
@@ -303,7 +383,7 @@ index 2c3fc512e746..c088646f3f1e 100644
  iwave  iWave Systems Technologies Pvt. Ltd.
  jdi	Japan Display Inc.
 diff --git a/Makefile b/Makefile
-index 045c0cf11e7d..04b5c73760bd 100644
+index 05db073654cb..e7b2f552aca3 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -321,14 +401,17 @@ index 2c927ccbd970..768caa3970ef 100644
  ============
  
 diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index 3a55c454b65d..d09409979c84 100644
+index 3a55c454b65d..ac7e79064ad1 100644
 --- a/arch/arm64/boot/dts/mediatek/Makefile
 +++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -8,5 +8,6 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+@@ -8,5 +8,9 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-evb.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-evb.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3-sku16.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3-sku176.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev4-sku16.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev4-sku176.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
 diff --git a/arch/arm64/boot/dts/mediatek/mt6358.dtsi b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
@@ -357,23 +440,199 @@ index a7e655c42a54..a049ac2e39f7 100644
  				regulator-enable-ramp-delay = <540>;
  			};
  		};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku16.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku16.dts
 new file mode 100644
-index 000000000000..4c71b09e26a3
+index 000000000000..cb4a1264d06b
 --- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3.dts
-@@ -0,0 +1,325 @@
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku16.dts
+@@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
-+ * Copyright (c) 2018 Google LLC
++ * Copyright 2019 Google LLC
++ */
++
++/dts-v1/;
++#include "mt8183-krane.dtsi"
++
++/ {
++	model = "MediaTek krane rev3 sku16 board";
++	compatible = "google,krane-rev3-sku16", "google,krane-rev3",
++		"google,krane-sku16", "google,krane",
++		"google,kukui", "mediatek,mt8183";
++};
++
++#include "mt8183-krane-sku16.dtsi"
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku176.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku176.dts
+new file mode 100644
+index 000000000000..e49769610d35
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku176.dts
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
++ */
++
++/dts-v1/;
++#include "mt8183-krane.dtsi"
++
++/ {
++	model = "MediaTek krane rev3 sku176 board";
++	/*
++	 * Strapping on rev3 display is wrong, and appears as 0 instead of 176,
++	 * so match both here.
++	 */
++	compatible = "google,krane-rev3-sku0", "google,krane-rev3-sku176",
++		"google,krane-rev3",
++		"google,krane-sku0", "google,krane-sku176",
++		"google,krane", "google,kukui", "mediatek,mt8183";
++};
++
++#include "mt8183-krane-sku176.dtsi"
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku16.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku16.dts
+new file mode 100644
+index 000000000000..341a9cf7cadb
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku16.dts
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
++ */
++
++/dts-v1/;
++#include "mt8183-krane.dtsi"
++
++/ {
++	model = "MediaTek krane rev4 sku16 board";
++	compatible = "google,krane-rev4-sku16", "google,krane-rev4",
++		"google,krane-sku16", "google,krane",
++		"google,kukui", "mediatek,mt8183";
++};
++
++#include "mt8183-krane-sku16.dtsi"
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku176.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku176.dts
+new file mode 100644
+index 000000000000..8a8b3a410ea4
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku176.dts
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
++ */
++
++/dts-v1/;
++#include "mt8183-krane.dtsi"
++
++/ {
++	model = "MediaTek krane rev4 sku176 board";
++	/*
++	 * Strapping on rev4 display is wrong, and appears as 0 instead of 176,
++	 * so match both here.
++	 */
++	compatible = "google,krane-rev4-sku0", "google,krane-rev4-sku176",
++		"google,krane-rev4",
++		"google,krane-sku0", "google,krane-sku176",
++		"google,krane", "google,kukui", "mediatek,mt8183";
++};
++
++#include "mt8183-krane-sku176.dtsi"
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-sku16.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku16.dtsi
+new file mode 100644
+index 000000000000..71b1b6af4cae
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku16.dtsi
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
++ *
++ * Device-tree fragment for krane sku16 (boe panel).
++ */
++
++&panel {
++	status = "okay";
++	compatible = "boe,tv101wum-nl6";
++	reg = <0>;
++	enable-gpios = <&pio 45 0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&panel_pins_default>;
++	avdd-supply = <&ppvarn_lcd>;
++	avee-supply = <&ppvarp_lcd>;
++	pp1800-supply = <&pp1800_lcd>;
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-sku176.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku176.dtsi
+new file mode 100644
+index 000000000000..7c20e7c2bab6
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku176.dtsi
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
++ *
++ * Device-tree fragment for krane sku176 (AUO panel).
++ */
++
++&panel {
++	status = "okay";
++	compatible = "auo,kd101n80-45na";
++	reg = <0>;
++	enable-gpios = <&pio 45 0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&panel_pins_default>;
++	avdd-supply = <&ppvarn_lcd>;
++	avee-supply = <&ppvarp_lcd>;
++	pp1800-supply = <&pp1800_lcd>;
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-krane.dtsi
+new file mode 100644
+index 000000000000..71a12420e781
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8183-krane.dtsi
+@@ -0,0 +1,305 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright 2019 Google LLC
 + */
 +
 +/dts-v1/;
 +#include "mt8183-kukui.dtsi"
 +
 +/ {
-+	model = "MediaTek krane rev3 board";
-+	compatible = "google,krane-rev3", "google,krane", "google,kukui", "mediatek,mt8183";
++	ppvarn_lcd: ppvarn-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "ppvarn_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&ppvarn_lcd_en>;
++
++		enable-active-high;
++
++		gpio = <&pio 66 GPIO_ACTIVE_HIGH>;
++	};
++
++	ppvarp_lcd: ppvarp-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "ppvarp_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&ppvarp_lcd_en>;
++
++		enable-active-high;
++
++		gpio = <&pio 166 GPIO_ACTIVE_HIGH>;
++	};
++
++	pp1800_lcd: pp1800-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "pp1800_lcd";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pp1800_lcm_en>;
++
++		enable-active-high;
++
++		gpio = <&pio 36 GPIO_ACTIVE_HIGH>;
++	};
 +};
 +
 +&i2c0 {
@@ -592,56 +851,7 @@ index 000000000000..4c71b09e26a3
 +		"",
 +		"",
 +		"";
-+};
 +
-+/ {
-+	ppvarn_lcd: ppvarn-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ppvarn_lcd";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ppvarn_lcd_en>;
-+
-+		enable-active-high;
-+
-+		gpio = <&pio 66 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	ppvarp_lcd: ppvarp-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ppvarp_lcd";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ppvarp_lcd_en>;
-+
-+		enable-active-high;
-+
-+		gpio = <&pio 166 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	pp1800_lcd: pp1800-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pp1800_lcd";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pp1800_lcm_en>;
-+
-+		enable-active-high;
-+
-+		gpio = <&pio 36 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&panel {
-+	status = "okay";
-+	compatible = "boe,tv101wum";
-+	reg = <0>;
-+	enable-gpios = <&pio 45 0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&panel_pins_default>;
-+	avdd-supply = <&ppvarn_lcd>;
-+	avee-supply = <&ppvarp_lcd>;
-+	pp1800-supply = <&pp1800_lcd>;
-+};
-+
-+&pio {
 +	ppvarp_lcd_en: ppvarp-lcd-en {
 +		pins1 {
 +			pinmux = <PINMUX_GPIO66__FUNC_GPIO66>;
@@ -687,7 +897,6 @@ index 000000000000..4c71b09e26a3
 +		};
 +	};
 +};
-+
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 index 0f78005f705c..96e101d6b346 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
@@ -905,7 +1114,7 @@ index f950c87b1672..ba0ffaf330d4 100644
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 6e8549859067..33cf69b5899f 100644
+index 6e8549859067..c031a21cf778 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 @@ -41,6 +41,15 @@
@@ -932,7 +1141,18 @@ index 6e8549859067..33cf69b5899f 100644
  		pinctrl-names = "default";
  		pinctrl-0 = <&aud_pins>;
  		status = "okay";
-@@ -171,6 +179,18 @@
+@@ -135,6 +143,10 @@
+ 	i2s0-share = "I2S5";
+ };
+ 
++&auxadc {
++	status = "okay";
++};
++
+ &cci {
+ 	proc-supply = <&mt6358_vproc12_reg>;
+ };
+@@ -171,6 +183,18 @@
  	proc-supply = <&mt6358_vproc11_reg>;
  };
  
@@ -951,7 +1171,7 @@ index 6e8549859067..33cf69b5899f 100644
  &dsi0 {
  	status = "okay";
  	#address-cells = <1>;
-@@ -246,6 +266,28 @@
+@@ -246,6 +270,28 @@
  	pinctrl-0 = <&i2c3_pins>;
  	status = "okay";
  	clock-frequency = <100000>;
@@ -980,7 +1200,7 @@ index 6e8549859067..33cf69b5899f 100644
  };
  
  &i2c4 {
-@@ -270,6 +312,7 @@
+@@ -270,6 +316,7 @@
  		reg = <0x3b>;
  		interrupt-parent = <&pio>;
  		interrupts = <157 IRQ_TYPE_LEVEL_LOW>;
@@ -988,7 +1208,7 @@ index 6e8549859067..33cf69b5899f 100644
  	};
  };
  
-@@ -380,6 +423,51 @@
+@@ -380,6 +427,51 @@
  		};
  	};
  
@@ -1040,7 +1260,7 @@ index 6e8549859067..33cf69b5899f 100644
  	ec_ap_int_odl: ec_ap_int_odl {
  		pins1 {
  			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
-@@ -465,6 +553,22 @@
+@@ -465,6 +557,22 @@
  		};
  	};
  
@@ -1063,7 +1283,7 @@ index 6e8549859067..33cf69b5899f 100644
  	mmc0_pins_default: mmc0default {
  		pins_cmd_dat {
  			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
-@@ -786,6 +890,12 @@
+@@ -786,6 +894,12 @@
  			#address-cells = <1>;
  			#size-cells = <0>;
  		};
@@ -1076,7 +1296,7 @@ index 6e8549859067..33cf69b5899f 100644
  	};
  };
  
-@@ -829,7 +939,8 @@
+@@ -829,7 +943,8 @@
  };
  
  &ssusb {
@@ -1087,7 +1307,7 @@ index 6e8549859067..33cf69b5899f 100644
  	status = "okay";
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 1e791d585ad0..537b5d15c180 100644
+index 1e791d585ad0..517d0b1a9de6 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 @@ -115,67 +115,67 @@
@@ -1204,7 +1424,56 @@ index 1e791d585ad0..537b5d15c180 100644
  	cpus {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -532,6 +555,13 @@
+@@ -467,6 +490,48 @@
+ 			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>;
+ 	};
+ 
++
++	tboard_thermistor: thermal-sensor {
++		compatible = "generic-adc-thermal";
++		#thermal-sensor-cells = <0>;
++		io-channels = <&auxadc 1>;
++		io-channel-names = "sensor-channel";
++		temperature-lookup-table = <    (-40000) 4833
++						(-35000) 4798
++						(-30000) 4754
++						(-25000) 4694
++						(-20000) 4615
++						(-15000) 4517
++						(-10000) 4391
++						(-5000) 4241
++						0 4063
++						5000 3856
++						10000 3621
++						15000 3364
++						20000 3091
++						25000 2810
++						30000 2526
++						35000 2247
++						40000 1982
++						45000 1734
++						50000 1507
++						55000 1305
++						60000 1122
++						65000 964
++						70000 827
++						75000 710
++						80000 606
++						85000 519
++						90000 445
++						95000 382
++						100000 330
++						105000 284
++						110000 846
++						115000 213
++						120000 183
++						125000 161>;
++	};
++
+ 	soc {
+ 		#address-cells = <2>;
+ 		#size-cells = <2>;
+@@ -532,6 +597,13 @@
  			#reset-cells = <1>;
  		};
  
@@ -1218,7 +1487,7 @@ index 1e791d585ad0..537b5d15c180 100644
  		pio: pinctrl@10005000 {
  			compatible = "mediatek,mt8183-pinctrl";
  			reg = <0 0x10005000 0 0x1000>,
-@@ -652,6 +682,17 @@
+@@ -652,6 +724,17 @@
  			#iommu-cells = <1>;
  		};
  
@@ -1236,7 +1505,30 @@ index 1e791d585ad0..537b5d15c180 100644
  		gce: gce@10238000 {
  			compatible = "mediatek,mt8183-gce";
  			reg = <0 0x10238000 0 0x4000>;
-@@ -1125,6 +1166,8 @@
+@@ -681,6 +764,8 @@
+ 			clocks = <&infracfg CLK_INFRA_AUXADC>;
+ 			clock-names = "main";
+ 			#io-channel-cells = <1>;
++			nvmem-cells = <&auxadc_calibration>;
++			nvmem-cell-names = "calibration-data";
+ 			status = "disabled";
+ 		};
+ 
+@@ -908,6 +993,13 @@
+ 				trips {};
+ 				cooling-maps {};
+ 			};
++
++	                Tboard {
++				polling-delay = <1000>; /* milliseconds */
++				polling-delay-passive = <0>; /* milliseconds */
++				thermal-sensors = <&tboard_thermistor>;
++	                };
++
+ 		};
+ 
+ 		pwm0: pwm@1100e000 {
+@@ -1125,6 +1217,8 @@
  			clocks = <&infracfg CLK_INFRA_UNIPRO_SCK>,
  				 <&infracfg CLK_INFRA_USB>;
  			clock-names = "sys_ck", "ref_ck";
@@ -1245,7 +1537,17 @@ index 1e791d585ad0..537b5d15c180 100644
  			#address-cells = <2>;
  			#size-cells = <2>;
  			ranges;
-@@ -1295,6 +1338,7 @@
+@@ -1281,6 +1375,9 @@
+ 			thermal_calibration: calib@180 {
+ 				reg = <0x180 0xc>;
+ 			};
++			auxadc_calibration: auxadccali@1b4 {
++				reg = <0x1b4 0x4>;
++			};
+ 		};
+ 
+ 		u3phy: usb-phy@11f40000 {
+@@ -1295,6 +1392,7 @@
  				clocks = <&clk26m>;
  				clock-names = "ref";
  				#phy-cells = <1>;
@@ -1253,7 +1555,7 @@ index 1e791d585ad0..537b5d15c180 100644
  				status = "okay";
  			};
  
-@@ -1496,7 +1540,6 @@
+@@ -1496,7 +1594,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL0>;
  			iommus = <&iommu M4U_PORT_DISP_OVL0>;
@@ -1261,7 +1563,7 @@ index 1e791d585ad0..537b5d15c180 100644
  		};
  
  		ovl_2l0: ovl@14009000 {
-@@ -1506,7 +1549,6 @@
+@@ -1506,7 +1603,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL0_2L>;
  			iommus = <&iommu M4U_PORT_DISP_2L_OVL0_LARB0>;
@@ -1269,7 +1571,7 @@ index 1e791d585ad0..537b5d15c180 100644
  		};
  
  		ovl_2l1: ovl@1400a000 {
-@@ -1516,7 +1558,6 @@
+@@ -1516,7 +1612,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL1_2L>;
  			iommus = <&iommu M4U_PORT_DISP_2L_OVL1_LARB0>;
@@ -1277,7 +1579,7 @@ index 1e791d585ad0..537b5d15c180 100644
  		};
  
  		rdma0: rdma@1400b000 {
-@@ -1526,7 +1567,6 @@
+@@ -1526,7 +1621,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
  			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
@@ -1285,7 +1587,7 @@ index 1e791d585ad0..537b5d15c180 100644
  		};
  
  		rdma1: rdma@1400c000 {
-@@ -1536,7 +1576,6 @@
+@@ -1536,7 +1630,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
  			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
@@ -1293,7 +1595,7 @@ index 1e791d585ad0..537b5d15c180 100644
  		};
  
  		color0: color@1400e000 {
-@@ -1596,6 +1635,17 @@
+@@ -1596,6 +1689,17 @@
  			phy-names = "dphy";
  		};
  
@@ -1312,18 +1614,26 @@ index 1e791d585ad0..537b5d15c180 100644
  			compatible = "mediatek,mt8183-disp-mutex";
  			reg = <0 0x14016000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 513a1569a10d..cfbf0d28d132 100644
+index 13f7bd27b0bf..14df7facbb99 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
 @@ -40,6 +40,7 @@ CONFIG_DRM_ANALOGIX_ANX78XX=y
  CONFIG_DRM_MEDIATEK=y
  CONFIG_DRM_MEDIATEK_HDMI=y
  # CONFIG_DRM_MSM_HDMI_HDCP is not set
-+CONFIG_DRM_PANEL_BOE_TV101WUM=y
++CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=y
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  CONFIG_DRM_TI_SN65DSI86=y
  CONFIG_DRM_VIRTIO_GPU=y
-@@ -75,6 +76,7 @@ CONFIG_MSM_GCC_8916=y
+@@ -63,6 +64,7 @@ CONFIG_I2C_RK3X=y
+ CONFIG_INTERCONNECT=y
+ CONFIG_INTERCONNECT_QCOM=y
+ CONFIG_INTERCONNECT_QCOM_SDM845=y
++CONFIG_MEDIATEK_MT6577_AUXADC=y
+ CONFIG_MEDIATEK_WATCHDOG=y
+ CONFIG_MFD_PALMAS=y
+ CONFIG_MFD_RK808=y
+@@ -75,6 +77,7 @@ CONFIG_MSM_GCC_8916=y
  CONFIG_MTD_MT81xx_NOR=y
  CONFIG_MTK_CMDQ=y
  CONFIG_MTK_EFUSE=y
@@ -1331,7 +1641,7 @@ index 513a1569a10d..cfbf0d28d132 100644
  CONFIG_MTK_IOMMU=y
  CONFIG_MTK_PMIC_WRAP=y
  CONFIG_MTK_SCP=m
-@@ -183,8 +185,10 @@ CONFIG_SPI_QCOM_QSPI=y
+@@ -184,8 +187,10 @@ CONFIG_SPI_QCOM_QSPI=y
  CONFIG_SPI_ROCKCHIP=y
  CONFIG_SPMI=y
  CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
@@ -1343,8 +1653,15 @@ index 513a1569a10d..cfbf0d28d132 100644
  CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIRTIO_BLK=y
+@@ -193,3 +198,6 @@ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_VIRTIO_NET=y
++
++CONFIG_GENERIC_ADC_THERMAL=y
++
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index e02669621c75..c9ec40995030 100644
+index e02669621c75..543e5e071074 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 @@ -25,10 +25,13 @@ CONFIG_COMMON_CLK_MT8183_MMSYS=y
@@ -1357,11 +1674,19 @@ index e02669621c75..c9ec40995030 100644
 +CONFIG_DRM_ITE_IT6505=y
  CONFIG_DRM_MEDIATEK=y
  CONFIG_DRM_MEDIATEK_HDMI=y
-+CONFIG_DRM_PANEL_BOE_TV101WUM=y
++CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=y
  CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
  # CONFIG_EFI is not set
  CONFIG_ENERGY_MODEL=y
-@@ -46,6 +49,7 @@ CONFIG_MMC_MTK=y
+@@ -39,6 +42,7 @@ CONFIG_MALI_DMA_FENCE=y
+ CONFIG_MALI_EXPERT=y
+ CONFIG_MALI_MIDGARD=y
+ CONFIG_MALI_PLATFORM_NAME="mediatek"
++CONFIG_MEDIATEK_MT6577_AUXADC=y
+ CONFIG_MEDIATEK_WATCHDOG=y
+ CONFIG_MEDIA_CONTROLLER=y
+ CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
+@@ -46,6 +50,7 @@ CONFIG_MMC_MTK=y
  CONFIG_MTD_MT81xx_NOR=y
  CONFIG_MTK_CMDQ=y
  CONFIG_MTK_EFUSE=y
@@ -1369,7 +1694,7 @@ index e02669621c75..c9ec40995030 100644
  CONFIG_MTK_IOMMU=y
  CONFIG_MTK_PMIC_WRAP=y
  CONFIG_MTK_SCP=m
-@@ -77,7 +81,9 @@ CONFIG_STAGING_MEDIA=y
+@@ -77,7 +82,12 @@ CONFIG_STAGING_MEDIA=y
  CONFIG_TCG_CR50_I2C=y
  CONFIG_TMPFS=y
  CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
@@ -1380,6 +1705,9 @@ index e02669621c75..c9ec40995030 100644
 -CONFIG_USB_MTU3_HOST=y
  CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
++
++CONFIG_GENERIC_ADC_THERMAL=y
++
 diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
 index 3dc1b9f15ea2..5df0e476e94d 100644
 --- a/drivers/clk/mediatek/Makefile
@@ -8892,38 +9220,43 @@ index 6bf46d1f39b4..9e7969bc755f 100644
  	const struct mtk_ddp_comp_funcs *funcs;
  };
 diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 4aae4a7d9f71..146b88647dfa 100644
+index 4aae4a7d9f71..3d4817d381e0 100644
 --- a/drivers/gpu/drm/panel/Kconfig
 +++ b/drivers/gpu/drm/panel/Kconfig
-@@ -197,4 +197,13 @@ config DRM_PANEL_SITRONIX_ST7789V
- 	  Say Y here if you want to enable support for the Sitronix
- 	  ST7789V controller for 240x320 LCD panels
+@@ -28,6 +28,15 @@ config DRM_PANEL_BOE_HIMAX8279D
+ 	  24 bit RGB per pixel. It provides a MIPI DSI interface to
+ 	  the host and has a built-in LED backlight.
  
-+config DRM_PANEL_BOE_TV101WUM
-+	tristate "boe TV101WUM WUXGA video mode panel"
++config DRM_PANEL_BOE_TV101WUM_NL6
++	tristate "BOE TV101WUM 1200x1920 panel"
 +	depends on OF
 +	depends on DRM_MIPI_DSI
 +	depends on BACKLIGHT_CLASS_DEVICE
 +	help
-+	  Say Y here if you want to enable support for boe TV101WUM WUXGA
-+	  (1920x1200) DSI panel
++	  Say Y here if you want to support for BOE TV101WUM WUXGA PANEL
++	  DSI Video Mode panel
 +
- endmenu
+ config DRM_PANEL_LVDS
+ 	tristate "Generic LVDS panel driver"
+ 	depends on OF
 diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index 7285539d8015..8515ba962381 100644
+index 7285539d8015..47e639a7f575 100644
 --- a/drivers/gpu/drm/panel/Makefile
 +++ b/drivers/gpu/drm/panel/Makefile
-@@ -20,3 +20,4 @@ obj-$(CONFIG_DRM_PANEL_SEIKO_43WVF1G) += panel-seiko-43wvf1g.o
- obj-$(CONFIG_DRM_PANEL_SHARP_LQ101R1SX01) += panel-sharp-lq101r1sx01.o
- obj-$(CONFIG_DRM_PANEL_SHARP_LS043T1LE01) += panel-sharp-ls043t1le01.o
- obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
-+obj-$(CONFIG_DRM_PANEL_BOE_TV101WUM) += panel-boe-tv101wum.o
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum.c b/drivers/gpu/drm/panel/panel-boe-tv101wum.c
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_DRM_PANEL_ARM_VERSATILE) += panel-arm-versatile.o
+ obj-$(CONFIG_DRM_PANEL_BOE_HIMAX8279D) += panel-boe-himax8279d.o
++obj-$(CONFIG_DRM_PANEL_BOE_TV101WUM_NL6) += panel-boe-tv101wum-nl6.o
+ obj-$(CONFIG_DRM_PANEL_LVDS) += panel-lvds.o
+ obj-$(CONFIG_DRM_PANEL_SIMPLE) += panel-simple.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_IL9322) += panel-ilitek-ili9322.o
+diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
 new file mode 100644
-index 000000000000..8089f6360e09
+index 000000000000..91898794df74
 --- /dev/null
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum.c
-@@ -0,0 +1,708 @@
++++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
+@@ -0,0 +1,755 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2018 MediaTek Inc.
@@ -8931,21 +9264,43 @@ index 000000000000..8089f6360e09
 + */
 +
 +#include <linux/backlight.h>
++#include <linux/delay.h>
 +#include <linux/gpio/consumer.h>
 +#include <linux/module.h>
 +#include <linux/of.h>
++#include <linux/of_device.h>
 +#include <linux/regulator/consumer.h>
 +
-+#include <drm/drmP.h>
 +#include <drm/drm_crtc.h>
 +#include <drm/drm_mipi_dsi.h>
 +#include <drm/drm_panel.h>
 +
 +#include <video/mipi_display.h>
 +
-+struct boe_hx_panel {
++struct panel_desc {
++	const struct drm_display_mode *modes;
++	unsigned int bpc;
++
++	/**
++	 * @width: width (in millimeters) of the panel's active display area
++	 * @height: height (in millimeters) of the panel's active display area
++	 */
++	struct {
++		unsigned int width;
++		unsigned int height;
++	} size;
++
++	unsigned long mode_flags;
++	enum mipi_dsi_pixel_format format;
++	const struct panel_init_cmd *init_cmds;
++	unsigned int lanes;
++};
++
++struct boe_panel {
 +	struct drm_panel base;
 +	struct mipi_dsi_device *dsi;
++
++	const struct panel_desc *desc;
 +
 +	struct backlight_device *backlight;
 +	struct regulator *pp1800;
@@ -8960,7 +9315,6 @@ index 000000000000..8089f6360e09
 +};
 +
 +enum dsi_cmd_type {
-+	INIT_GENENIC_CMD,
 +	INIT_DCS_CMD,
 +	DELAY_CMD,
 +};
@@ -8970,11 +9324,6 @@ index 000000000000..8089f6360e09
 +	size_t len;
 +	const char *data;
 +};
-+
-+#define _INIT_CMD(...) { \
-+	.type = INIT_GENENIC_CMD,\
-+	.len = sizeof((char[]){__VA_ARGS__}), \
-+	.data = (char[]){__VA_ARGS__} }
 +
 +#define _INIT_DCS_CMD(...) { \
 +	.type = INIT_DCS_CMD, \
@@ -8986,18 +9335,15 @@ index 000000000000..8089f6360e09
 +	.len = sizeof((char[]){__VA_ARGS__}), \
 +	.data = (char[]){__VA_ARGS__} }
 +
-+static const struct panel_init_cmd boe_hx_init_cmd[] = {
-+	_INIT_DCS_CMD(0x10),
-+	_INIT_DELAY_CMD(34),
++static const struct panel_init_cmd boe_init_cmd[] = {
++	_INIT_DELAY_CMD(24),
 +	_INIT_DCS_CMD(0xB0, 0x05),
 +	_INIT_DCS_CMD(0xB1, 0xE5),
 +	_INIT_DCS_CMD(0xB3, 0x52),
-+
 +	_INIT_DCS_CMD(0xB0, 0x00),
 +	_INIT_DCS_CMD(0xB3, 0x88),
 +	_INIT_DCS_CMD(0xB0, 0x04),
 +	_INIT_DCS_CMD(0xB8, 0x00),
-+
 +	_INIT_DCS_CMD(0xB0, 0x00),
 +	_INIT_DCS_CMD(0xB6, 0x03),
 +	_INIT_DCS_CMD(0xBA, 0x8B),
@@ -9007,7 +9353,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xC3, 0x02),
 +	_INIT_DCS_CMD(0xC4, 0x0C),
 +	_INIT_DCS_CMD(0xC5, 0x02),
-+
 +	_INIT_DCS_CMD(0xB0, 0x01),
 +	_INIT_DCS_CMD(0xE0, 0x26),
 +	_INIT_DCS_CMD(0xE1, 0x26),
@@ -9037,7 +9382,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xCB, 0x07),
 +	_INIT_DCS_CMD(0xDE, 0x08),
 +	_INIT_DCS_CMD(0xDF, 0x08),
-+
 +	_INIT_DCS_CMD(0xB0, 0x02),
 +	_INIT_DCS_CMD(0xC0, 0x00),
 +	_INIT_DCS_CMD(0xC1, 0x0D),
@@ -9073,7 +9417,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xE0, 0x2F),
 +	_INIT_DCS_CMD(0xE1, 0x2F),
 +	_INIT_DCS_CMD(0xE2, 0x07),
-+
 +	_INIT_DCS_CMD(0xB0, 0x03),
 +	_INIT_DCS_CMD(0xC8, 0x0B),
 +	_INIT_DCS_CMD(0xC9, 0x07),
@@ -9086,7 +9429,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xE4, 0xC0),
 +	_INIT_DCS_CMD(0xE5, 0x0D),
 +	_INIT_DCS_CMD(0xCB, 0x00),
-+
 +	_INIT_DCS_CMD(0xB0, 0x06),
 +	_INIT_DCS_CMD(0xB8, 0xA5),
 +	_INIT_DCS_CMD(0xC0, 0xA5),
@@ -9095,7 +9437,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xB8, 0x00),
 +	_INIT_DCS_CMD(0xC0, 0x00),
 +	_INIT_DCS_CMD(0xBC, 0x00),
-+
 +	_INIT_DCS_CMD(0xB0, 0x07),
 +	_INIT_DCS_CMD(0xB1, 0x00),
 +	_INIT_DCS_CMD(0xB2, 0x02),
@@ -9127,7 +9468,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xCC, 0xAF),
 +	_INIT_DCS_CMD(0xCD, 0xFF),
 +	_INIT_DCS_CMD(0xCE, 0xFF),
-+
 +	_INIT_DCS_CMD(0xB0, 0x08),
 +	_INIT_DCS_CMD(0xB1, 0x04),
 +	_INIT_DCS_CMD(0xB2, 0x05),
@@ -9159,7 +9499,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xCC, 0xAF),
 +	_INIT_DCS_CMD(0xCD, 0xFF),
 +	_INIT_DCS_CMD(0xCE, 0xFF),
-+
 +	_INIT_DCS_CMD(0xB0, 0x09),
 +	_INIT_DCS_CMD(0xB1, 0x04),
 +	_INIT_DCS_CMD(0xB2, 0x02),
@@ -9191,7 +9530,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xCC, 0xAF),
 +	_INIT_DCS_CMD(0xCD, 0xFF),
 +	_INIT_DCS_CMD(0xCE, 0xFF),
-+
 +	_INIT_DCS_CMD(0xB0, 0x0A),
 +	_INIT_DCS_CMD(0xB1, 0x00),
 +	_INIT_DCS_CMD(0xB2, 0x02),
@@ -9223,7 +9561,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xCC, 0xAF),
 +	_INIT_DCS_CMD(0xCD, 0xFF),
 +	_INIT_DCS_CMD(0xCE, 0xFF),
-+
 +	_INIT_DCS_CMD(0xB0, 0x0B),
 +	_INIT_DCS_CMD(0xB1, 0x04),
 +	_INIT_DCS_CMD(0xB2, 0x05),
@@ -9255,7 +9592,6 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xCC, 0xAF),
 +	_INIT_DCS_CMD(0xCD, 0xFF),
 +	_INIT_DCS_CMD(0xCE, 0xFF),
-+
 +	_INIT_DCS_CMD(0xB0, 0x0C),
 +	_INIT_DCS_CMD(0xB1, 0x04),
 +	_INIT_DCS_CMD(0xB2, 0x02),
@@ -9287,71 +9623,70 @@ index 000000000000..8089f6360e09
 +	_INIT_DCS_CMD(0xCC, 0xAF),
 +	_INIT_DCS_CMD(0xCD, 0xFF),
 +	_INIT_DCS_CMD(0xCE, 0xFF),
-+
 +	_INIT_DCS_CMD(0xB0, 0x00),
 +	_INIT_DCS_CMD(0xB3, 0x08),
 +	_INIT_DCS_CMD(0xB0, 0x04),
 +	_INIT_DCS_CMD(0xB8, 0x68),
-+	_INIT_DELAY_CMD(10),
-+	_INIT_DCS_CMD(0x11),
-+	_INIT_DELAY_CMD(120),
-+	_INIT_DCS_CMD(0x29),
-+	_INIT_DELAY_CMD(20),
++	_INIT_DELAY_CMD(150),
 +	{},
 +};
 +
-+static inline struct boe_hx_panel *to_boe_hx_panel(struct drm_panel *panel)
++static const struct panel_init_cmd auo_init_cmd[] = {
++	_INIT_DELAY_CMD(24),
++	_INIT_DCS_CMD(0x11),
++	_INIT_DELAY_CMD(120),
++	_INIT_DCS_CMD(0x29),
++	_INIT_DELAY_CMD(120),
++	{},
++};
++
++static inline struct boe_panel *to_boe_panel(struct drm_panel *panel)
 +{
-+	return container_of(panel, struct boe_hx_panel, base);
++	return container_of(panel, struct boe_panel, base);
 +}
 +
-+static int boe_hx_panel_init(struct boe_hx_panel *boe_hx)
++static int boe_panel_init(struct boe_panel *boe)
 +{
-+	struct mipi_dsi_device *dsi = boe_hx->dsi;
-+	struct drm_panel *panel = &boe_hx->base;
++	struct mipi_dsi_device *dsi = boe->dsi;
++	struct drm_panel *panel = &boe->base;
 +	int err, i;
 +
-+	for (i = 0; boe_hx_init_cmd[i].len != 0; i++) {
-+		const struct panel_init_cmd *cmd = &boe_hx_init_cmd[i];
++	if (boe->desc->init_cmds) {
++		const struct panel_init_cmd *init_cmds = boe->desc->init_cmds;
 +
-+		switch (cmd->type) {
-+		case INIT_DCS_CMD:
-+			err = mipi_dsi_dcs_write(dsi, cmd->data[0],
-+						 (cmd->len <= 1) ? NULL :
-+						 &cmd->data[1], cmd->len - 1);
-+			break;
++		for (i = 0; init_cmds[i].len != 0; i++) {
++			const struct panel_init_cmd *cmd = &init_cmds[i];
 +
-+		case DELAY_CMD:
-+			msleep(cmd->data[0]);
-+			err = 0;
-+			break;
++			switch (cmd->type) {
++			case DELAY_CMD:
++				msleep(cmd->data[0]);
++				err = 0;
++				break;
 +
-+		case INIT_GENENIC_CMD:
-+		default:
-+			err = mipi_dsi_generic_write(dsi, cmd->data, cmd->len);
-+			break;
-+		}
++			case INIT_DCS_CMD:
++				err = mipi_dsi_dcs_write(dsi, cmd->data[0],
++							 cmd->len <= 1 ? NULL :
++							 &cmd->data[1],
++							 cmd->len - 1);
++				break;
++			}
 +
-+		if (err < 0) {
-+			dev_err(panel->dev,
-+				"failed to write command %u\n", i);
-+			return err;
++			if (err < 0) {
++				dev_err(panel->dev,
++					"failed to write command %u\n", i);
++				return err;
++			}
 +		}
 +	}
-+
 +	return 0;
 +}
 +
-+static int boe_hx_panel_off(struct boe_hx_panel *boe_hx)
++static int boe_panel_off(struct boe_panel *boe)
 +{
-+	struct mipi_dsi_device *dsi = boe_hx->dsi;
++	struct mipi_dsi_device *dsi = boe->dsi;
 +	int ret;
 +
 +	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-+
-+	ret = mipi_dsi_dcs_set_display_off(dsi);
-+	if (ret < 0)
-+		return ret;
 +
 +	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
 +	if (ret < 0)
@@ -9360,123 +9695,124 @@ index 000000000000..8089f6360e09
 +	return 0;
 +}
 +
-+static int boe_hx_panel_disable(struct drm_panel *panel)
++static int boe_panel_disable(struct drm_panel *panel)
 +{
-+	struct boe_hx_panel *boe_hx = to_boe_hx_panel(panel);
++	struct boe_panel *boe = to_boe_panel(panel);
 +
-+	if (!boe_hx->enabled)
++	if (!boe->enabled)
 +		return 0;
 +
-+	backlight_disable(boe_hx->backlight);
++	backlight_disable(boe->backlight);
 +
-+	boe_hx->enabled = false;
++	boe->enabled = false;
 +
 +	return 0;
 +}
 +
-+static int boe_hx_panel_unprepare(struct drm_panel *panel)
++static int boe_panel_unprepare(struct drm_panel *panel)
 +{
-+	struct boe_hx_panel *boe_hx = to_boe_hx_panel(panel);
++	struct boe_panel *boe = to_boe_panel(panel);
 +	int ret;
 +
-+	if (!boe_hx->prepared)
++	if (!boe->prepared)
 +		return 0;
 +
-+	ret = boe_hx_panel_off(boe_hx);
++	ret = boe_panel_off(boe);
 +	if (ret < 0) {
 +		dev_err(panel->dev, "failed to set panel off: %d\n", ret);
 +		return ret;
 +	}
 +
 +	msleep(150);
-+	regulator_disable(boe_hx->avee);
-+	regulator_disable(boe_hx->avdd);
++	if (boe->enable_gpio)
++		gpiod_set_value(boe->enable_gpio, 0);
++	usleep_range(500, 1000);
++	regulator_disable(boe->avee);
++	regulator_disable(boe->avdd);
 +	usleep_range(5000, 7000);
-+	regulator_disable(boe_hx->pp1800);
-+	if (boe_hx->enable_gpio)
-+		gpiod_set_value(boe_hx->enable_gpio, 0);
++	regulator_disable(boe->pp1800);
 +
-+	boe_hx->prepared = false;
++	boe->prepared = false;
 +
 +	return 0;
 +}
 +
-+static int boe_hx_panel_prepare(struct drm_panel *panel)
++static int boe_panel_prepare(struct drm_panel *panel)
 +{
-+	struct boe_hx_panel *boe_hx = to_boe_hx_panel(panel);
++	struct boe_panel *boe = to_boe_panel(panel);
 +	int ret;
 +
-+	if (boe_hx->prepared)
++	if (boe->prepared)
 +		return 0;
 +
-+	if (boe_hx->enable_gpio) {
-+		gpiod_set_value(boe_hx->enable_gpio, 0);
++	if (boe->enable_gpio) {
++		gpiod_set_value(boe->enable_gpio, 0);
 +		usleep_range(1000, 1500);
 +	}
 +
-+	ret = regulator_enable(boe_hx->pp1800);
++	ret = regulator_enable(boe->pp1800);
 +	if (ret < 0)
 +		return ret;
 +
 +	usleep_range(3000, 5000);
 +
-+	ret = regulator_enable(boe_hx->avdd);
++	ret = regulator_enable(boe->avdd);
 +	if (ret < 0)
 +		goto poweroff1v8;
-+	ret = regulator_enable(boe_hx->avee);
++	ret = regulator_enable(boe->avee);
 +	if (ret < 0)
 +		goto poweroffavdd;
 +
 +	msleep(100);
 +
-+	if (boe_hx->enable_gpio) {
-+		gpiod_set_value(boe_hx->enable_gpio, 1);
++	if (boe->enable_gpio) {
++		gpiod_set_value(boe->enable_gpio, 1);
 +		usleep_range(10000, 12000);
 +	}
 +
-+	ret = boe_hx_panel_init(boe_hx);
++	ret = boe_panel_init(boe);
 +	if (ret < 0) {
 +		dev_err(panel->dev, "failed to init panel: %d\n", ret);
 +		goto poweroff;
 +	}
 +
-+	boe_hx->prepared = true;
++	boe->prepared = true;
 +
 +	return 0;
 +
 +poweroff:
-+	regulator_disable(boe_hx->avee);
++	regulator_disable(boe->avee);
 +poweroffavdd:
-+	regulator_disable(boe_hx->avdd);
++	regulator_disable(boe->avdd);
 +poweroff1v8:
 +	usleep_range(5000, 7000);
-+	regulator_disable(boe_hx->pp1800);
-+	if (boe_hx->enable_gpio)
-+		gpiod_set_value(boe_hx->enable_gpio, 0);
++	regulator_disable(boe->pp1800);
++	if (boe->enable_gpio)
++		gpiod_set_value(boe->enable_gpio, 0);
 +	return ret;
 +}
 +
-+static int boe_hx_panel_enable(struct drm_panel *panel)
++static int boe_panel_enable(struct drm_panel *panel)
 +{
-+	struct boe_hx_panel *boe_hx = to_boe_hx_panel(panel);
++	struct boe_panel *boe = to_boe_panel(panel);
 +	int ret;
 +
-+	if (boe_hx->enabled)
++	if (boe->enabled)
 +		return 0;
 +
-+	ret = backlight_enable(boe_hx->backlight);
++	ret = backlight_enable(boe->backlight);
 +	if (ret) {
-+		DRM_DEV_ERROR(panel->drm->dev,
-+			      "Failed to enable backlight %d\n", ret);
++		dev_err(panel->dev, "Failed to enable backlight %d\n",
++			ret);
 +		return ret;
 +	}
 +
-+	boe_hx->enabled = true;
++	boe->enabled = true;
 +
 +	return 0;
 +}
 +
-+static const struct drm_display_mode default_mode = {
++static const struct drm_display_mode boe_default_mode = {
 +	.clock = 159425,
 +	.hdisplay = 1200,
 +	.hsync_start = 1200 + 100,
@@ -9487,17 +9823,61 @@ index 000000000000..8089f6360e09
 +	.vsync_end = 1920 + 10 + 14,
 +	.vtotal = 1920 + 10 + 14 + 4,
 +	.vrefresh = 60,
++	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
 +};
 +
-+static int boe_hx_panel_get_modes(struct drm_panel *panel)
++static const struct panel_desc boe_tv101wum_nl6_desc = {
++	.modes = &boe_default_mode,
++	.bpc = 8,
++	.size = {
++		.width = 135,
++		.height = 216,
++	},
++	.lanes = 4,
++	.format = MIPI_DSI_FMT_RGB888,
++	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++		      MIPI_DSI_MODE_LPM,
++	.init_cmds = boe_init_cmd,
++};
++
++static const struct drm_display_mode auo_default_mode = {
++	.clock = 157000,
++	.hdisplay = 1200,
++	.hsync_start = 1200 + 80,
++	.hsync_end = 1200 + 80 + 24,
++	.htotal = 1200 + 80 + 24 + 36,
++	.vdisplay = 1920,
++	.vsync_start = 1920 + 16,
++	.vsync_end = 1920 + 16 + 4,
++	.vtotal = 1920 + 16 + 4 + 16,
++	.vrefresh = 60,
++	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
++};
++
++static const struct panel_desc auo_kd101n80_45na_desc = {
++	.modes = &auo_default_mode,
++	.bpc = 8,
++	.size = {
++		.width = 135,
++		.height = 216,
++	},
++	.lanes = 4,
++	.format = MIPI_DSI_FMT_RGB888,
++	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++		      MIPI_DSI_MODE_LPM,
++	.init_cmds = auo_init_cmd,
++};
++
++static int boe_panel_get_modes(struct drm_panel *panel)
 +{
++	struct boe_panel *boe = to_boe_panel(panel);
++	const struct drm_display_mode *m = boe->desc->modes;
 +	struct drm_display_mode *mode;
 +
-+	mode = drm_mode_duplicate(panel->drm, &default_mode);
++	mode = drm_mode_duplicate(panel->drm, m);
 +	if (!mode) {
-+		dev_err(panel->drm->dev, "failed to add mode %ux%ux@%u\n",
-+			default_mode.hdisplay, default_mode.vdisplay,
-+			default_mode.vrefresh);
++		dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
++			m->hdisplay, m->vdisplay, m->vrefresh);
 +		return -ENOMEM;
 +	}
 +
@@ -9505,94 +9885,88 @@ index 000000000000..8089f6360e09
 +
 +	drm_mode_probed_add(panel->connector, mode);
 +
-+	panel->connector->display_info.width_mm = 135;
-+	panel->connector->display_info.height_mm = 216;
-+	panel->connector->display_info.bpc = 8;
++	panel->connector->display_info.width_mm = boe->desc->size.width;
++	panel->connector->display_info.height_mm = boe->desc->size.height;
++	panel->connector->display_info.bpc = boe->desc->bpc;
 +
 +	return 1;
 +}
 +
-+static const struct drm_panel_funcs boe_hx_panel_funcs = {
-+	.disable = boe_hx_panel_disable,
-+	.unprepare = boe_hx_panel_unprepare,
-+	.prepare = boe_hx_panel_prepare,
-+	.enable = boe_hx_panel_enable,
-+	.get_modes = boe_hx_panel_get_modes,
++static const struct drm_panel_funcs boe_panel_funcs = {
++	.disable = boe_panel_disable,
++	.unprepare = boe_panel_unprepare,
++	.prepare = boe_panel_prepare,
++	.enable = boe_panel_enable,
++	.get_modes = boe_panel_get_modes,
 +};
 +
-+static int boe_hx_panel_add(struct boe_hx_panel *boe_hx)
++static int boe_panel_add(struct boe_panel *boe)
 +{
-+	struct device *dev = &boe_hx->dsi->dev;
++	struct device *dev = &boe->dsi->dev;
 +
-+	boe_hx->avdd = devm_regulator_get(dev, "avdd");
-+	if (IS_ERR(boe_hx->avdd))
-+		return PTR_ERR(boe_hx->avdd);
++	boe->avdd = devm_regulator_get(dev, "avdd");
++	if (IS_ERR(boe->avdd))
++		return PTR_ERR(boe->avdd);
 +
-+	boe_hx->avee = devm_regulator_get(dev, "avee");
-+	if (IS_ERR(boe_hx->avee))
-+		return PTR_ERR(boe_hx->avee);
++	boe->avee = devm_regulator_get(dev, "avee");
++	if (IS_ERR(boe->avee))
++		return PTR_ERR(boe->avee);
 +
-+	boe_hx->pp1800 = devm_regulator_get(dev, "pp1800");
-+	if (IS_ERR(boe_hx->pp1800))
-+		return PTR_ERR(boe_hx->pp1800);
++	boe->pp1800 = devm_regulator_get(dev, "pp1800");
++	if (IS_ERR(boe->pp1800))
++		return PTR_ERR(boe->pp1800);
 +
-+	boe_hx->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
-+	if (IS_ERR(boe_hx->enable_gpio)) {
++	boe->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
++	if (IS_ERR(boe->enable_gpio)) {
 +		dev_err(dev, "cannot get reset-gpios %ld\n",
-+			PTR_ERR(boe_hx->enable_gpio));
-+		boe_hx->enable_gpio = NULL;
-+	} else {
-+		gpiod_set_value(boe_hx->enable_gpio, 0);
++			PTR_ERR(boe->enable_gpio));
++		return PTR_ERR(boe->enable_gpio);
 +	}
 +
-+	boe_hx->backlight = devm_of_find_backlight(dev);
-+	if (IS_ERR(boe_hx->backlight))
-+		return PTR_ERR(boe_hx->backlight);
++	gpiod_set_value(boe->enable_gpio, 0);
 +
-+	drm_panel_init(&boe_hx->base);
-+	boe_hx->base.funcs = &boe_hx_panel_funcs;
-+	boe_hx->base.dev = &boe_hx->dsi->dev;
++	boe->backlight = devm_of_find_backlight(dev);
++	if (IS_ERR(boe->backlight))
++		return PTR_ERR(boe->backlight);
 +
-+	return drm_panel_add(&boe_hx->base);
++	drm_panel_init(&boe->base);
++	boe->base.funcs = &boe_panel_funcs;
++	boe->base.dev = &boe->dsi->dev;
++
++	return drm_panel_add(&boe->base);
 +}
 +
-+static void boe_hx_panel_del(struct boe_hx_panel *boe_hx)
++static int boe_panel_probe(struct mipi_dsi_device *dsi)
 +{
-+	if (boe_hx->base.dev)
-+		drm_panel_remove(&boe_hx->base);
-+}
-+
-+static int boe_hx_panel_probe(struct mipi_dsi_device *dsi)
-+{
-+	struct boe_hx_panel *boe_hx;
++	struct boe_panel *boe;
 +	int ret;
++	const struct panel_desc *desc;
 +
-+	dsi->lanes = 4;
-+	dsi->format = MIPI_DSI_FMT_RGB888;
-+	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
-+		 MIPI_DSI_MODE_LPM;
-+
-+	boe_hx = devm_kzalloc(&dsi->dev, sizeof(*boe_hx), GFP_KERNEL);
-+	if (!boe_hx)
++	boe = devm_kzalloc(&dsi->dev, sizeof(*boe), GFP_KERNEL);
++	if (!boe)
 +		return -ENOMEM;
 +
-+	mipi_dsi_set_drvdata(dsi, boe_hx);
-+
-+	boe_hx->dsi = dsi;
-+
-+	ret = boe_hx_panel_add(boe_hx);
++	desc = of_device_get_match_data(&dsi->dev);
++	dsi->lanes = desc->lanes;
++	dsi->format = desc->format;
++	dsi->mode_flags = desc->mode_flags;
++	boe->desc = desc;
++	boe->dsi = dsi;
++	ret = boe_panel_add(boe);
 +	if (ret < 0)
 +		return ret;
++
++	mipi_dsi_set_drvdata(dsi, boe);
 +
 +	return mipi_dsi_attach(dsi);
 +}
 +
-+static int boe_hx_panel_remove(struct mipi_dsi_device *dsi)
++static int boe_panel_remove(struct mipi_dsi_device *dsi)
 +{
-+	struct boe_hx_panel *boe_hx = mipi_dsi_get_drvdata(dsi);
++	struct boe_panel *boe = mipi_dsi_get_drvdata(dsi);
 +	int ret;
 +
-+	ret = boe_hx_panel_disable(&boe_hx->base);
++	ret = boe_panel_disable(&boe->base);
 +	if (ret < 0)
 +		dev_err(&dsi->dev, "failed to disable panel: %d\n", ret);
 +
@@ -9600,37 +9974,43 @@ index 000000000000..8089f6360e09
 +	if (ret < 0)
 +		dev_err(&dsi->dev, "failed to detach from DSI host: %d\n", ret);
 +
-+	boe_hx_panel_del(boe_hx);
++	if (boe->base.dev)
++		drm_panel_remove(&boe->base);
 +
 +	return 0;
 +}
 +
-+static void boe_hx_panel_shutdown(struct mipi_dsi_device *dsi)
++static void boe_panel_shutdown(struct mipi_dsi_device *dsi)
 +{
-+	struct boe_hx_panel *boe_hx = mipi_dsi_get_drvdata(dsi);
++	struct boe_panel *boe = mipi_dsi_get_drvdata(dsi);
 +
-+	boe_hx_panel_disable(&boe_hx->base);
++	boe_panel_disable(&boe->base);
 +}
 +
-+static const struct of_device_id boe_hx_of_match[] = {
-+	{ .compatible = "boe,tv101wum", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, boe_hx_of_match);
-+
-+static struct mipi_dsi_driver boe_hx_panel_driver = {
-+	.driver = {
-+		.name = "panel-boe-tv101wum",
-+		.of_match_table = boe_hx_of_match,
++static const struct of_device_id boe_of_match[] = {
++	{ .compatible = "boe,tv101wum-nl6",
++	  .data = &boe_tv101wum_nl6_desc
 +	},
-+	.probe = boe_hx_panel_probe,
-+	.remove = boe_hx_panel_remove,
-+	.shutdown = boe_hx_panel_shutdown,
++	{ .compatible = "auo,kd101n80-45na",
++	  .data = &auo_kd101n80_45na_desc
++	},
++	{ /* sentinel */ }
 +};
-+module_mipi_dsi_driver(boe_hx_panel_driver);
++MODULE_DEVICE_TABLE(of, boe_of_match);
++
++static struct mipi_dsi_driver boe_panel_driver = {
++	.driver = {
++		.name = "panel-boe-tv101wum-nl6",
++		.of_match_table = boe_of_match,
++	},
++	.probe = boe_panel_probe,
++	.remove = boe_panel_remove,
++	.shutdown = boe_panel_shutdown,
++};
++module_mipi_dsi_driver(boe_panel_driver);
 +
 +MODULE_AUTHOR("Jitao Shi <jitao.shi@mediatek.com>");
-+MODULE_DESCRIPTION("BOE tv101wum FT8201-based wuxga (1200x1920) video mode panel driver");
++MODULE_DESCRIPTION("BOE tv101wum-nl6 1200x1920 video mode panel driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/panel/panel-innolux-p079zca.c b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 index 88c7d035ace6..f52c892323c3 100644
@@ -9849,19 +10229,119 @@ index 88c7d035ace6..f52c892323c3 100644
  	}
  
  	innolux->backlight = devm_of_find_backlight(dev);
-diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-index 54890d74779d..7bdb5e3b036b 100644
---- a/drivers/input/keyboard/cros_ec_keyb.c
-+++ b/drivers/input/keyboard/cros_ec_keyb.c
-@@ -267,7 +267,7 @@ static int cros_ec_keyb_work(struct notifier_block *nb,
- 	if (queued_during_suspend && !device_may_wakeup(ckdev->dev))
- 		return NOTIFY_OK;
+diff --git a/drivers/iio/adc/mt6577_auxadc.c b/drivers/iio/adc/mt6577_auxadc.c
+index 95d76abb64ec..ac2b01c601d9 100644
+--- a/drivers/iio/adc/mt6577_auxadc.c
++++ b/drivers/iio/adc/mt6577_auxadc.c
+@@ -17,12 +17,14 @@
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/nvmem-consumer.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/iopoll.h>
+ #include <linux/io.h>
+ #include <linux/iio/iio.h>
++#include <linux/slab.h>
  
--	switch (ckdev->ec->event_data.event_type) {
-+	switch (ckdev->ec->event_data.event_type & EC_MKBP_EVENT_TYPE_MASK) {
- 	case EC_MKBP_EVENT_KEY_MATRIX:
- 		pm_wakeup_event(ckdev->dev, 0);
+ /* Register definitions */
+ #define MT6577_AUXADC_CON0                    0x00
+@@ -42,6 +44,13 @@
+ #define MT6577_AUXADC_POWER_READY_MS          1
+ #define MT6577_AUXADC_SAMPLE_READY_US         25
  
++#define ADC_GE_A_SHIFT      10
++#define ADC_GE_A_MASK       (0x3ff << ADC_GE_A_SHIFT)
++#define ADC_OE_A_SHIFT      0
++#define ADC_OE_A_MASK       (0x3ff << ADC_OE_A_SHIFT)
++#define ADC_CALI_EN_A_SHIFT 20
++#define ADC_CALI_EN_A_MASK  (0x1 << ADC_CALI_EN_A_SHIFT)
++
+ struct mt6577_auxadc_device {
+ 	void __iomem *reg_base;
+ 	struct clk *adc_clk;
+@@ -74,6 +83,59 @@ static const struct iio_chan_spec mt6577_auxadc_iio_channels[] = {
+ 	MT6577_AUXADC_CHANNEL(15),
+ };
+ 
++s32 cali_oe;
++s32 cali_ge;
++static u32 cali_ge_a;
++static u32 cali_oe_a;
++static u32 gain;
++
++static int mt_auxadc_update_cali(struct device *dev)
++{
++	struct nvmem_cell *cell;
++	u32 *buf;
++	size_t len;
++	int ret = 0;
++	cali_oe = 0;
++	cali_ge = 0;
++
++	cell = nvmem_cell_get(dev, "calibration-data");
++	if (IS_ERR(cell)) {
++		if (PTR_ERR(cell) == -EPROBE_DEFER)
++			return PTR_ERR(cell);
++		return 0;
++	}
++
++	buf = (u32 *)nvmem_cell_read(cell, &len);
++
++	nvmem_cell_put(cell);
++
++	if (IS_ERR(buf))
++		return PTR_ERR(buf);
++
++	if (len < sizeof(u32)) {
++		dev_warn(dev, "invalid calibration data\n");
++		ret = -EINVAL;
++		goto out;
++	}
++
++	if (((buf[0] & ADC_CALI_EN_A_MASK) >> ADC_CALI_EN_A_SHIFT) != 0) {
++		cali_oe_a = (buf[0] & ADC_OE_A_MASK) >> ADC_OE_A_SHIFT;
++		cali_ge_a = ((buf[0] & ADC_GE_A_MASK) >> ADC_GE_A_SHIFT);
++
++		cali_ge = cali_ge_a - 512;
++		cali_oe = cali_oe_a - 512;
++		gain = 1 + cali_ge;
++	}  else {
++		dev_info(dev, "Device not calibrated, using default calibration values\n");
++	}
++	pr_err("xupo cali_oe=%d,cali_ge=%d\n", cali_oe,cali_ge);
++
++out:
++	kfree(buf);
++
++	return ret;
++}
++
+ static inline void mt6577_auxadc_mod_reg(void __iomem *reg,
+ 					 u32 or_mask, u32 and_mask)
+ {
+@@ -221,7 +283,7 @@ static int mt6577_auxadc_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct iio_dev *indio_dev;
+ 	int ret;
+-
++	pr_err("xupo auxadc probe start\n");
+ 	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*adc_dev));
+ 	if (!indio_dev)
+ 		return -ENOMEM;
+@@ -274,6 +336,10 @@ static int mt6577_auxadc_probe(struct platform_device *pdev)
+ 		goto err_power_off;
+ 	}
+ 
++	ret = mt_auxadc_update_cali(&pdev->dev);
++	if (ret)
++		return ret;
++pr_err("xupo audadc probe end\n");
+ 	return 0;
+ 
+ err_power_off:
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
 index 803084c86124..43e420cdab6e 100644
 --- a/drivers/iommu/mtk_iommu.c
@@ -11365,7 +11845,7 @@ index b91f2679945c..e728a5471bd7 100644
  		.target_cpu_freq = 176000000,
  		.decap_align_bytes = 4,
 diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
-index 9eed1cb17fda..2a14606ac91f 100644
+index 4a3892735ab8..4893928502af 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_rx.c
 +++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
 @@ -1952,6 +1952,7 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
