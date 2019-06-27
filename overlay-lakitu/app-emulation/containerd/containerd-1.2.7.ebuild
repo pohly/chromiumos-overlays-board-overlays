@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 else
 	MY_PV="${PV/_rc/-rc.}"
 	EGIT_COMMIT="v${MY_PV}"
-	CONTAINERD_COMMIT="894b81a4b802e4eb2a91d1ce216b8817763c29fb"
+	CONTAINERD_COMMIT="85f6aa58b8a3170aec9824568f7a31832878b603"
 	SRC_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	inherit golang-vcs-snapshot
