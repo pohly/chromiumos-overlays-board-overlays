@@ -29,4 +29,13 @@ modify_kernel_command_line() {
 
   # Disable Container Security Monitor by default.
   echo "csm.disabled=1" >> "${config_file}"
+
+  # Exclude pinning kernel modules.
+  echo "loadpin.exclude=kernel-module" >> "${config_file}"
+
+  # Load loadpin-trigger kernel module automatically on boot.
+  echo "modules-load=loadpin_trigger" >> "${config_file}"
+
+  # Enforce kernel module signature verification.
+  echo "module.sig_enforce=1" >> "${config_file}"
 }
