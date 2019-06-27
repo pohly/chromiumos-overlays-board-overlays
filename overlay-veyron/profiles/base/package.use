@@ -3,3 +3,4 @@ media-libs/libv4lplugins rockchip
 chromeos-base/chromeos-chrome v4lplugin
 sys-apps/flashrom use_os_timer
 sys-kernel/chromeos-kernel-3_14 -kernel_afdo
+sys-kernel/chromeos-kernel-4_19 -clang -kernel_afdo
