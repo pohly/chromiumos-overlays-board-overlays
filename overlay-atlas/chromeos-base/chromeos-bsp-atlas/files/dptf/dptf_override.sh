@@ -23,10 +23,10 @@ dptf_get_override() {
 
   dptf_file=""
   case "${cpu_dram}" in
-    m3-K4) dptf_file="50_57_53_50.dv" ;;
-    m3-MT) dptf_file="50_57_53_50.dv" ;;
-    i5-K4) dptf_file="50_57_53_50.dv" ;;
-    i5-MT) dptf_file="50_57_53_50.dv" ;;
+    m3-K4) dptf_file="50_57_54_51.dv" ;;
+    m3-MT) dptf_file="50_57_54_51.dv" ;;
+    i5-K4) dptf_file="50_57_54_51.dv" ;;
+    i5-MT) dptf_file="50_57_54_51.dv" ;;
     i7-K4) dptf_file="50_57_54_53.dv" ;;
     i7-MT) dptf_file="50_57_55_52.dv" ;;
   esac
