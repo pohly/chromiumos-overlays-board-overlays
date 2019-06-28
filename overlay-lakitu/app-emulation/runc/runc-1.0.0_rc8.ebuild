@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit golang-build golang-vcs
 else
 	MY_PV="${PV/_/-}"
-	RUNC_COMMIT="2b18fe1d885ee5083ef9f0838fee39b62d653e30" # Change this when you update the ebuild
+	RUNC_COMMIT="425e105d5a03fabd737a126ad93d62a9eeede87f" # Change this when you update the ebuild
 	SRC_URI="https://${EGO_PN}/archive/${RUNC_COMMIT}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	inherit golang-build golang-vcs-snapshot
@@ -33,13 +33,13 @@ RDEPEND="
 src_prepare() {
 	pushd "src/${EGO_PN}" || die
 	eapply "${FILESDIR}/1.0.0_rc6-Use-GO-cross-compiler.patch"
-	popd
 	default
 	sed -i -e "/^GIT_BRANCH/d"\
 		-e "/^GIT_BRANCH_CLEAN/d"\
 		-e "/^COMMIT_NO/d"\
 		-e "s/COMMIT :=.*/COMMIT := ${RUNC_COMMIT}/"\
-		src/${EGO_PN}/Makefile || die
+		Makefile || die
+	popd || die
 }
 
 src_compile() {
