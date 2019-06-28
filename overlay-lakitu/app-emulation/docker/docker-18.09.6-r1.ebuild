@@ -1,1 +1,0 @@
-docker-18.09.6.ebuild

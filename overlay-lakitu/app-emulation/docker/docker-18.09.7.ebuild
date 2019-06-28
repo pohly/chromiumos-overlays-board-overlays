@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${P}/src/${EGO_PN}"
 	inherit git-r3
 else
-	DOCKER_GITCOMMIT="481bc77"
+	DOCKER_GITCOMMIT="2d0083d"
 	SRC_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
@@ -53,9 +53,9 @@ RDEPEND="
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
-	>=app-emulation/containerd-1.2.5
-	>=app-emulation/runc-1.0.0_rc6_p20190216[apparmor?,seccomp?]
-	~app-emulation/docker-proxy-0.8.0_p20190417
+	>=app-emulation/containerd-1.2.6
+	>=app-emulation/runc-1.0.0_rc8[apparmor?,seccomp?]
+	~app-emulation/docker-proxy-0.8.0_p20190513
 	container-init? ( >=sys-process/tini-0.18.0[static] )
 	pigz? ( app-arch/pigz )
 "
