@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${P}/src/${EGO_PN}"
 	inherit git-r3
 else
-	DOCKER_GITCOMMIT="774a1f4"
+	DOCKER_GITCOMMIT="2d0083d"
 	SRC_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
@@ -56,9 +56,9 @@ RDEPEND="
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
-	>=app-emulation/containerd-1.2.3
-	>=app-emulation/runc-1.0.0_rc6_p20181203[apparmor?,seccomp?]
-	~app-emulation/docker-proxy-0.8.0_p20181207
+	>=app-emulation/containerd-1.2.6
+	>=app-emulation/runc-1.0.0_rc8[apparmor?,seccomp?]
+	~app-emulation/docker-proxy-0.8.0_p20190513
 	container-init? ( >=sys-process/tini-0.18.0[static] )
 	pigz? ( app-arch/pigz )
 "
@@ -70,7 +70,6 @@ S="${WORKDIR}/${P}/src/${EGO_PN}"
 PATCHES=(
 	"${FILESDIR}"/docker-18.09.0-go-cross-compilation.patch
 	"${FILESDIR}"/docker-18.06.0-log-line-max-size.patch
-	"${FILESDIR}"/docker-18.09.3-preserve-init-uid.patch
 	"${FILESDIR}"/docker-18.09.5-customize-docker-service.patch
 )
 
