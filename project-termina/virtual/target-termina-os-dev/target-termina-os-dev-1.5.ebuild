@@ -28,7 +28,6 @@ IUSE="+profile"
 
 RDEPEND="
 	profile? (
-		app-benchmarks/punybench
 		app-benchmarks/libc-bench
 		net-analyzer/netperf
 		dev-util/perf
