@@ -1,7 +1,7 @@
 # Copyright 2016 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 inherit appid cros-audio-configs
 
@@ -21,7 +21,11 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_install() {
-	doappid "{2EDF7C6D-6586-D292-0B61-4A33B62E3BF6}" "CHROMEBOOK"
+	if use kefka-kernelnext; then
+		doappid "{33D387DA-99F8-11E9-A838-7B9E2880DE80}" "CHROMEBOOK"
+	else
+		doappid "{2EDF7C6D-6586-D292-0B61-4A33B62E3BF6}" "CHROMEBOOK"
+	fi
 
 	# Install platform specific config files for power_manager.
 	insinto "/usr/share/power_manager/board_specific"
