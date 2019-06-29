@@ -41,6 +41,3 @@ EC_FIRMWARE="atlas"
 
 # iwlwifi firmware and ibt_9260 firmware for ThunderPeak2/1216 chip.
 LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-9260 ibt_9260"
-
-# Legacy support for Intel 7265 (StP2) wifi and BT
-LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-7265D iwlwifi-7265 ibt-hw"
