@@ -32,13 +32,6 @@ base_config: &base_config
     $stylus-category: "none"
     stylus-category: "{{$stylus-category}}"
 
-unprovisioned-config: &unprovisioned_config
-  name: "{{$device-name}}"
-  identity: *identity_common
-  firmware:
-    no-firmware: True
-  firmware-signing: *firmware_signing_common
-
 chromeos:
   devices:
     - $device-name: "hatch"
@@ -68,7 +61,7 @@ chromeos:
         - $sku-id: 255
           $fw-name: "Kohaku"
           $key-id: "HATCH"
-          config: *unprovisioned_config
+          config: *base_config
     - $device-name: "kohaku"
       $fw-name: "Kohaku"
       products:
@@ -81,7 +74,7 @@ chromeos:
         - $sku-id: 255
           $fw-name: "Kindred"
           $key-id: "HATCH"
-          config: *unprovisioned_config
+          config: *base_config
     - $device-name: "kled"
       $fw-name: "Kindred"
       products:
@@ -109,7 +102,7 @@ chromeos:
         - $sku-id: 255
           $fw-name: "Helios"
           $key-id: "HATCH"
-          config: *unprovisioned_config
+          config: *base_config
     - $device-name: "helios"
       $fw-name: "Helios"
       products:
