@@ -293,18 +293,21 @@ chromeos:
           config: *convertible_config
     - $device-name: "droid"
       $fw-name: "Bobba"
+      products:
+        - $whitelabel-tag: ""
+        - $whitelabel-tag: "droid-pb"
       $num-mic-locations: 1
       skus:
         - $sku-id-val: 33
           $has-keyboard-backlight: 1
-          config: *clamshell_config
+          config: *clamshell_wl_config
         - $sku-id-val: 34
           $has-keyboard-backlight: 1
-          config: *clamshell_config
+          config: *clamshell_wl_config
         - $sku-id-val: 35
-          config: *clamshell_config
+          config: *clamshell_wl_config
         - $sku-id-val: 36
-          config: *clamshell_config
+          config: *clamshell_wl_config
     - $device-name: "blorb"
       $fw-name: "Bobba"
       $num-mic-locations: 1
