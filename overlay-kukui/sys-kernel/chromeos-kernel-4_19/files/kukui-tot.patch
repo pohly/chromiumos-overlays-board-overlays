@@ -1,62 +1,3 @@
-diff --git a/Documentation/devicetree/bindings/devfreq/devfreq-cpufreq-map.txt b/Documentation/devicetree/bindings/devfreq/devfreq-cpufreq-map.txt
-new file mode 100644
-index 000000000000..982a30bcfc86
---- /dev/null
-+++ b/Documentation/devicetree/bindings/devfreq/devfreq-cpufreq-map.txt
-@@ -0,0 +1,53 @@
-+Devfreq CPUfreq governor
-+
-+devfreq-cpufreq-map is a parent device that contains one or more child devices.
-+Each child device provides CPU frequency to device frequency mapping for a
-+specific device. Examples of devices that could use this are: DDR, cache and
-+CCI.
-+
-+Parent device name shall be "devfreq-cpufreq-map".
-+
-+Required child device properties:
-+- cpu-to-dev-map, or cpu-to-dev-map-<X>:
-+			A list of tuples where each tuple consists of a
-+			CPU frequency (KHz) and the corresponding device
-+			frequency. CPU frequencies not listed in the table
-+			will use the device frequency that corresponds to the
-+			next rounded up CPU frequency.
-+			Use "cpu-to-dev-map" if all CPUs in the system should
-+			share same mapping.
-+			Use cpu-to-dev-map-<cpuid> to describe different
-+			mappings for different CPUs. The property should be
-+			listed only for the first CPU if multiple CPUs are
-+			synchronous.
-+- target-dev:		Phandle to device that this mapping applies to.
-+
-+Example:
-+	devfreq-cpufreq-map {
-+		cpubw-cpufreq {
-+			target-dev = <&cpubw>;
-+			cpu-to-dev-map =
-+				<  300000  1144000 >,
-+				<  422400  2288000 >,
-+				<  652800  3051000 >,
-+				<  883200  5996000 >,
-+				< 1190400  8056000 >,
-+				< 1497600 10101000 >,
-+				< 1728000 12145000 >,
-+				< 2649600 16250000 >;
-+		};
-+
-+		cache-cpufreq {
-+			target-dev = <&cache>;
-+			cpu-to-dev-map =
-+				<  300000  300000 >,
-+				<  422400  422400 >,
-+				<  652800  499200 >,
-+				<  883200  576000 >,
-+				<  960000  960000 >,
-+				< 1497600 1036800 >,
-+				< 1574400 1574400 >,
-+				< 1728000 1651200 >,
-+				< 2649600 1728000 >;
-+		};
-+	};
 diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.txt b/Documentation/devicetree/bindings/display/bridge/ite,it6505.txt
 new file mode 100644
 index 000000000000..c3506ac4c980
@@ -162,86 +103,6 @@ index 5467470c7b8a..bc8e30c20c64 100644
  };
  
  color0: color@14013000 {
-diff --git a/Documentation/devicetree/bindings/display/panel/auo,kd101n80-45na.txt b/Documentation/devicetree/bindings/display/panel/auo,kd101n80-45na.txt
-new file mode 100644
-index 000000000000..994c2a13f942
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/auo,kd101n80-45na.txt
-@@ -0,0 +1,34 @@
-+AUO Corporation 10.1" WUXGA TFT LCD panel
-+
-+Required properties:
-+- compatible: should be "auo,kd101n80-45na"
-+- reg: the virtual channel number of a DSI peripheral
-+- enable-gpios: a GPIO spec for the enable pin
-+- pp1800-supply: core voltage supply
-+- avdd-supply: phandle of the regulator that provides positive voltage
-+- avee-supply: phandle of the regulator that provides negative voltage
-+- backlight: phandle of the backlight device attached to the panel
-+
-+The device node can contain one 'port' child node with one child
-+'endpoint' node, according to the bindings defined in
-+media/video-interfaces.txt. This node should describe panel's video bus.
-+
-+Example:
-+&dsi {
-+	...
-+	panel@0 {
-+		compatible = "auo,kd101n80-45na";
-+		reg = <0>;
-+		enable-gpios = <&pio 45 0>;
-+		avdd-supply = <&ppvarn_lcd>;
-+		avee-supply = <&ppvarp_lcd>;
-+		pp1800-supply = <&pp1800_lcd>;
-+		backlight = <&backlight_lcd0>;
-+		status = "okay";
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&dsi_out>;
-+			};
-+		};
-+	};
-+};
-diff --git a/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.txt b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.txt
-new file mode 100644
-index 000000000000..bd44af636390
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/boe,tv101wum-nl6.txt
-@@ -0,0 +1,34 @@
-+Boe Corporation 10.1" WUXGA TFT LCD panel
-+
-+Required properties:
-+- compatible: should be "boe,tv101wum-nl6"
-+- reg: the virtual channel number of a DSI peripheral
-+- enable-gpios: a GPIO spec for the enable pin
-+- pp1800-supply: core voltage supply
-+- avdd-supply: phandle of the regulator that provides positive voltage
-+- avee-supply: phandle of the regulator that provides negative voltage
-+- backlight: phandle of the backlight device attached to the panel
-+
-+The device node can contain one 'port' child node with one child
-+'endpoint' node, according to the bindings defined in
-+media/video-interfaces.txt. This node should describe panel's video bus.
-+
-+Example:
-+&dsi {
-+	...
-+	panel@0 {
-+		compatible = "boe,tv101wum-nl6";
-+		reg = <0>;
-+		enable-gpios = <&pio 45 0>;
-+		avdd-supply = <&ppvarn_lcd>;
-+		avee-supply = <&ppvarp_lcd>;
-+		pp1800-supply = <&pp1800_lcd>;
-+		backlight = <&backlight_lcd0>;
-+		status = "okay";
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&dsi_out>;
-+			};
-+		};
-+	};
-+};
 diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
 index 3813947b4d4f..c9f89132830c 100644
 --- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
@@ -383,7 +244,7 @@ index 2c3fc512e746..c088646f3f1e 100644
  iwave  iWave Systems Technologies Pvt. Ltd.
  jdi	Japan Display Inc.
 diff --git a/Makefile b/Makefile
-index 05db073654cb..e7b2f552aca3 100644
+index feb17f673c30..f78b632318b4 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,3 +1,4 @@
@@ -400,20 +261,6 @@ index 2c927ccbd970..768caa3970ef 100644
  Linux kernel
  ============
  
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index 3a55c454b65d..ac7e79064ad1 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -8,5 +8,9 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-evb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-evb.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3-sku16.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev3-sku176.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev4-sku16.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-krane-rev4-sku176.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev1.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-rev2.dtb
 diff --git a/arch/arm64/boot/dts/mediatek/mt6358.dtsi b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
 index a7e655c42a54..a049ac2e39f7 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6358.dtsi
@@ -440,463 +287,6 @@ index a7e655c42a54..a049ac2e39f7 100644
  				regulator-enable-ramp-delay = <540>;
  			};
  		};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku16.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku16.dts
-new file mode 100644
-index 000000000000..cb4a1264d06b
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku16.dts
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright 2019 Google LLC
-+ */
-+
-+/dts-v1/;
-+#include "mt8183-krane.dtsi"
-+
-+/ {
-+	model = "MediaTek krane rev3 sku16 board";
-+	compatible = "google,krane-rev3-sku16", "google,krane-rev3",
-+		"google,krane-sku16", "google,krane",
-+		"google,kukui", "mediatek,mt8183";
-+};
-+
-+#include "mt8183-krane-sku16.dtsi"
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku176.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku176.dts
-new file mode 100644
-index 000000000000..e49769610d35
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev3-sku176.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright 2019 Google LLC
-+ */
-+
-+/dts-v1/;
-+#include "mt8183-krane.dtsi"
-+
-+/ {
-+	model = "MediaTek krane rev3 sku176 board";
-+	/*
-+	 * Strapping on rev3 display is wrong, and appears as 0 instead of 176,
-+	 * so match both here.
-+	 */
-+	compatible = "google,krane-rev3-sku0", "google,krane-rev3-sku176",
-+		"google,krane-rev3",
-+		"google,krane-sku0", "google,krane-sku176",
-+		"google,krane", "google,kukui", "mediatek,mt8183";
-+};
-+
-+#include "mt8183-krane-sku176.dtsi"
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku16.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku16.dts
-new file mode 100644
-index 000000000000..341a9cf7cadb
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku16.dts
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright 2019 Google LLC
-+ */
-+
-+/dts-v1/;
-+#include "mt8183-krane.dtsi"
-+
-+/ {
-+	model = "MediaTek krane rev4 sku16 board";
-+	compatible = "google,krane-rev4-sku16", "google,krane-rev4",
-+		"google,krane-sku16", "google,krane",
-+		"google,kukui", "mediatek,mt8183";
-+};
-+
-+#include "mt8183-krane-sku16.dtsi"
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku176.dts b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku176.dts
-new file mode 100644
-index 000000000000..8a8b3a410ea4
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-rev4-sku176.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright 2019 Google LLC
-+ */
-+
-+/dts-v1/;
-+#include "mt8183-krane.dtsi"
-+
-+/ {
-+	model = "MediaTek krane rev4 sku176 board";
-+	/*
-+	 * Strapping on rev4 display is wrong, and appears as 0 instead of 176,
-+	 * so match both here.
-+	 */
-+	compatible = "google,krane-rev4-sku0", "google,krane-rev4-sku176",
-+		"google,krane-rev4",
-+		"google,krane-sku0", "google,krane-sku176",
-+		"google,krane", "google,kukui", "mediatek,mt8183";
-+};
-+
-+#include "mt8183-krane-sku176.dtsi"
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-sku16.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku16.dtsi
-new file mode 100644
-index 000000000000..71b1b6af4cae
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku16.dtsi
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright 2019 Google LLC
-+ *
-+ * Device-tree fragment for krane sku16 (boe panel).
-+ */
-+
-+&panel {
-+	status = "okay";
-+	compatible = "boe,tv101wum-nl6";
-+	reg = <0>;
-+	enable-gpios = <&pio 45 0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&panel_pins_default>;
-+	avdd-supply = <&ppvarn_lcd>;
-+	avee-supply = <&ppvarp_lcd>;
-+	pp1800-supply = <&pp1800_lcd>;
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane-sku176.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku176.dtsi
-new file mode 100644
-index 000000000000..7c20e7c2bab6
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane-sku176.dtsi
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright 2019 Google LLC
-+ *
-+ * Device-tree fragment for krane sku176 (AUO panel).
-+ */
-+
-+&panel {
-+	status = "okay";
-+	compatible = "auo,kd101n80-45na";
-+	reg = <0>;
-+	enable-gpios = <&pio 45 0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&panel_pins_default>;
-+	avdd-supply = <&ppvarn_lcd>;
-+	avee-supply = <&ppvarp_lcd>;
-+	pp1800-supply = <&pp1800_lcd>;
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-krane.dtsi
-new file mode 100644
-index 000000000000..71a12420e781
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-krane.dtsi
-@@ -0,0 +1,305 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright 2019 Google LLC
-+ */
-+
-+/dts-v1/;
-+#include "mt8183-kukui.dtsi"
-+
-+/ {
-+	ppvarn_lcd: ppvarn-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ppvarn_lcd";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ppvarn_lcd_en>;
-+
-+		enable-active-high;
-+
-+		gpio = <&pio 66 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	ppvarp_lcd: ppvarp-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ppvarp_lcd";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ppvarp_lcd_en>;
-+
-+		enable-active-high;
-+
-+		gpio = <&pio 166 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	pp1800_lcd: pp1800-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pp1800_lcd";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pp1800_lcm_en>;
-+
-+		enable-active-high;
-+
-+		gpio = <&pio 36 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	touchscreen4: touchscreen@5d {
-+		compatible = "hid-over-i2c";
-+		reg = <0x5d>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&open_touch>;
-+
-+		interrupt-parent = <&pio>;
-+		interrupts = <155 IRQ_TYPE_EDGE_FALLING>;
-+
-+		post-power-on-delay-ms = <10>;
-+		hid-descr-addr = <0x0001>;
-+	};
-+};
-+
-+&pio {
-+	/* 192 lines */
-+	gpio-line-names =
-+		"SPI_AP_EC_CS_L",
-+		"SPI_AP_EC_MOSI",
-+		"SPI_AP_EC_CLK",
-+		"I2S3_DO",
-+		"USB_PD_INT_ODL",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"IT6505_HPD_L",
-+		"I2S3_TDM_D3",
-+		"SOC_I2C6_1V8_SCL",
-+		"SOC_I2C6_1V8_SDA",
-+		"DPI_D0",
-+		"DPI_D1",
-+		"DPI_D2",
-+		"DPI_D3",
-+		"DPI_D4",
-+		"DPI_D5",
-+		"DPI_D6",
-+		"DPI_D7",
-+		"DPI_D8",
-+		"DPI_D9",
-+		"DPI_D10",
-+		"DPI_D11",
-+		"DPI_HSYNC",
-+		"DPI_VSYNC",
-+		"DPI_DE",
-+		"DPI_CK",
-+		"AP_MSDC1_CLK",
-+		"AP_MSDC1_DAT3",
-+		"AP_MSDC1_CMD",
-+		"AP_MSDC1_DAT0",
-+		"AP_MSDC1_DAT2",
-+		"AP_MSDC1_DAT1",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"OTG_EN",
-+		"DRVBUS",
-+		"DISP_PWM",
-+		"DSI_TE",
-+		"LCM_RST_1V8",
-+		"AP_CTS_WIFI_RTS",
-+		"AP_RTS_WIFI_CTS",
-+		"SOC_I2C5_1V8_SCL",
-+		"SOC_I2C5_1V8_SDA",
-+		"SOC_I2C3_1V8_SCL",
-+		"SOC_I2C3_1V8_SDA",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"SOC_I2C1_1V8_SDA",
-+		"SOC_I2C0_1V8_SDA",
-+		"SOC_I2C0_1V8_SCL",
-+		"SOC_I2C1_1V8_SCL",
-+		"AP_SPI_H1_MISO",
-+		"AP_SPI_H1_CS_L",
-+		"AP_SPI_H1_MOSI",
-+		"AP_SPI_H1_CLK",
-+		"I2S5_BCK",
-+		"I2S5_LRCK",
-+		"I2S5_DO",
-+		"BOOTBLOCK_EN_L",
-+		"MT8183_KPCOL0",
-+		"SPI_AP_EC_MISO",
-+		"UART_DBG_TX_AP_RX",
-+		"UART_AP_TX_DBG_RX",
-+		"I2S2_MCK",
-+		"I2S2_BCK",
-+		"CLK_5M_WCAM",
-+		"CLK_2M_UCAM",
-+		"I2S2_LRCK",
-+		"I2S2_DI",
-+		"SOC_I2C2_1V8_SCL",
-+		"SOC_I2C2_1V8_SDA",
-+		"SOC_I2C4_1V8_SCL",
-+		"SOC_I2C4_1V8_SDA",
-+		"",
-+		"SCL8",
-+		"SDA8",
-+		"FCAM_PWDN_L",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"I2S_PMIC",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		/*
-+		 * AP_FLASH_WP_L is crossystem ABI. Rev1 schematics
-+		 * call it BIOS_FLASH_WP_R_L.
-+		 */
-+		"AP_FLASH_WP_L",
-+		"EC_AP_INT_ODL",
-+		"IT6505_INT_ODL",
-+		"H1_INT_OD_L",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"AP_SPI_FLASH_MISO",
-+		"AP_SPI_FLASH_CS_L",
-+		"AP_SPI_FLASH_MOSI",
-+		"AP_SPI_FLASH_CLK",
-+		"DA7219_IRQ",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"",
-+		"";
-+
-+	ppvarp_lcd_en: ppvarp-lcd-en {
-+		pins1 {
-+			pinmux = <PINMUX_GPIO66__FUNC_GPIO66>;
-+			output-low;
-+		};
-+	};
-+
-+	ppvarn_lcd_en: ppvarn-lcd-en {
-+		pins1 {
-+			pinmux = <PINMUX_GPIO166__FUNC_GPIO166>;
-+			output-low;
-+		};
-+	};
-+
-+	pp1800_lcm_en: pp1800-lcd-en {
-+		pins1 {
-+			pinmux = <PINMUX_GPIO36__FUNC_GPIO36>;
-+			output-low;
-+		};
-+	};
-+
-+	open_touch: open_touch {
-+		irq_pin {
-+			pinmux = <PINMUX_GPIO155__FUNC_GPIO155>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		rst_pin {
-+			pinmux = <PINMUX_GPIO156__FUNC_GPIO156>;
-+
-+			/*
-+			 * The pen driver doesn't currently support  driving
-+			 * this reset line.  By specifying output-high here
-+			 * we're relying on the fact that this pin has a default
-+			 * pulldown at boot (which makes sure the pen was in
-+			 * reset if it was powered) and then we set it high here
-+			 * to take it out of reset.  Better would be if the pen
-+			 * driver could control this and we could remove
-+			 * "output-high" here.
-+			 */
-+			output-high;
-+		};
-+	};
-+};
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
 index 0f78005f705c..96e101d6b346 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-rev1.dts
@@ -1307,173 +697,279 @@ index 6e8549859067..c031a21cf778 100644
  	status = "okay";
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 1e791d585ad0..517d0b1a9de6 100644
+index 1e791d585ad0..4ec3b99d1ea5 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -115,67 +115,67 @@
+@@ -45,67 +45,67 @@
+ 	cluster0_opp: opp_table0 {
+ 		compatible = "operating-points-v2";
  		opp-shared;
- 		opp00 {
+-		opp00 {
++		opp0_00: opp-0 {
+ 			opp-hz = /bits/ 64 <793000000>;
+ 			opp-microvolt = <650000>;
+ 		};
+-		opp01 {
++		opp0_01: opp-1 {
+ 			opp-hz = /bits/ 64 <910000000>;
+ 			opp-microvolt = <687500>;
+ 		};
+-		opp02 {
++		opp0_02: opp-2 {
+ 			opp-hz = /bits/ 64 <1014000000>;
+ 			opp-microvolt = <718750>;
+ 		};
+-		opp03 {
++		opp0_03: opp-3 {
+ 			opp-hz = /bits/ 64 <1131000000>;
+ 			opp-microvolt = <756250>;
+ 		};
+-		opp04 {
++		opp0_04: opp-4 {
+ 			opp-hz = /bits/ 64 <1248000000>;
+ 			opp-microvolt = <800000>;
+ 		};
+-		opp05 {
++		opp0_05: opp-5 {
+ 			opp-hz = /bits/ 64 <1326000000>;
+ 			opp-microvolt = <818750>;
+ 		};
+-		opp06 {
++		opp0_06: opp-6 {
+ 			opp-hz = /bits/ 64 <1417000000>;
+ 			opp-microvolt = <850000>;
+ 		};
+-		opp07 {
++		opp0_07: opp-7 {
+ 			opp-hz = /bits/ 64 <1508000000>;
+ 			opp-microvolt = <868750>;
+ 		};
+-		opp08 {
++		opp0_08: opp-8 {
+ 			opp-hz = /bits/ 64 <1586000000>;
+ 			opp-microvolt = <893750>;
+ 		};
+-		opp09 {
++		opp0_09: opp-9 {
+ 			opp-hz = /bits/ 64 <1625000000>;
+ 			opp-microvolt = <906250>;
+ 		};
+-		opp10 {
++		opp0_10: opp-10 {
+ 			opp-hz = /bits/ 64 <1677000000>;
+ 			opp-microvolt = <931250>;
+ 		};
+-		opp11 {
++		opp0_11: opp-11 {
+ 			opp-hz = /bits/ 64 <1716000000>;
+ 			opp-microvolt = <943750>;
+ 		};
+-		opp12 {
++		opp0_12: opp-12 {
+ 			opp-hz = /bits/ 64 <1781000000>;
+ 			opp-microvolt = <975000>;
+ 		};
+-		opp13 {
++		opp0_13: opp-13 {
+ 			opp-hz = /bits/ 64 <1846000000>;
+ 			opp-microvolt = <1000000>;
+ 		};
+-		opp14 {
++		opp0_14: opp-14 {
+ 			opp-hz = /bits/ 64 <1924000000>;
+ 			opp-microvolt = <1025000>;
+ 		};
+-		opp15 {
++		opp0_15: opp-15 {
+ 			opp-hz = /bits/ 64 <1989000000>;
+ 			opp-microvolt = <1050000>;
+ 		};	};
+@@ -113,69 +113,69 @@
+ 	cluster1_opp: opp_table1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+-		opp00 {
++		opp1_00: opp-0 {
  			opp-hz = /bits/ 64 <793000000>;
 -			opp-microvolt = <650000>;
 +			opp-microvolt = <700000>;
  		};
- 		opp01 {
+-		opp01 {
++		opp1_01: opp-1 {
  			opp-hz = /bits/ 64 <910000000>;
 -			opp-microvolt = <675000>;
 +			opp-microvolt = <725000>;
  		};
- 		opp02 {
+-		opp02 {
++		opp1_02: opp-2 {
  			opp-hz = /bits/ 64 <1014000000>;
 -			opp-microvolt = <700000>;
 +			opp-microvolt = <750000>;
  		};
- 		opp03 {
+-		opp03 {
++		opp1_03: opp-3 {
  			opp-hz = /bits/ 64 <1131000000>;
 -			opp-microvolt = <725000>;
 +			opp-microvolt = <775000>;
  		};
- 		opp04 {
+-		opp04 {
++		opp1_04: opp-4 {
  			opp-hz = /bits/ 64 <1248000000>;
 -			opp-microvolt = <750000>;
 +			opp-microvolt = <800000>;
  		};
- 		opp05 {
+-		opp05 {
++		opp1_05: opp-5 {
  			opp-hz = /bits/ 64 <1326000000>;
 -			opp-microvolt = <775000>;
 +			opp-microvolt = <825000>;
  		};
- 		opp06 {
+-		opp06 {
++		opp1_06: opp-6 {
  			opp-hz = /bits/ 64 <1417000000>;
 -			opp-microvolt = <800000>;
 +			opp-microvolt = <850000>;
  		};
- 		opp07 {
+-		opp07 {
++		opp1_07: opp-7 {
  			opp-hz = /bits/ 64 <1508000000>;
 -			opp-microvolt = <825000>;
 +			opp-microvolt = <875000>;
  		};
- 		opp08 {
+-		opp08 {
++		opp1_08: opp-8 {
  			opp-hz = /bits/ 64 <1586000000>;
 -			opp-microvolt = <850000>;
 +			opp-microvolt = <900000>;
  		};
- 		opp09 {
+-		opp09 {
++		opp1_09: opp-9 {
  			opp-hz = /bits/ 64 <1625000000>;
 -			opp-microvolt = <862500>;
 +			opp-microvolt = <912500>;
  		};
- 		opp10 {
+-		opp10 {
++		opp1_10: opp-10 {
  			opp-hz = /bits/ 64 <1677000000>;
 -			opp-microvolt = <881250>;
 +			opp-microvolt = <931250>;
  		};
- 		opp11 {
+-		opp11 {
++		opp1_11: opp-11 {
  			opp-hz = /bits/ 64 <1716000000>;
 -			opp-microvolt = <900000>;
 +			opp-microvolt = <950000>;
  		};
- 		opp12 {
+-		opp12 {
++		opp1_12: opp-12 {
  			opp-hz = /bits/ 64 <1781000000>;
 -			opp-microvolt = <925000>;
 +			opp-microvolt = <975000>;
  		};
- 		opp13 {
+-		opp13 {
++		opp1_13: opp-13 {
  			opp-hz = /bits/ 64 <1846000000>;
 -			opp-microvolt = <950000>;
 +			opp-microvolt = <1000000>;
  		};
- 		opp14 {
+-		opp14 {
++		opp1_14: opp-14 {
  			opp-hz = /bits/ 64 <1924000000>;
 -			opp-microvolt = <975000>;
 +			opp-microvolt = <1025000>;
  		};
- 		opp15 {
+-		opp15 {
++		opp1_15: opp-15 {
  			opp-hz = /bits/ 64 <1989000000>;
 -			opp-microvolt = <1000000>;
 +			opp-microvolt = <1050000>;
  		};
  	};
  
-@@ -255,6 +255,29 @@
- 		operating-points-v2 = <&cci_opp>;
+@@ -185,66 +185,82 @@
+ 		opp00 {
+ 			opp-hz = /bits/ 64 <273000000>;
+ 			opp-microvolt = <650000>;
++			required-opps = <&opp0_00>, <&opp1_00>;
+ 		};
+ 		opp01 {
+ 			opp-hz = /bits/ 64 <338000000>;
+ 			opp-microvolt = <687500>;
++			required-opps = <&opp0_01>, <&opp1_01>;
+ 		};
+ 		opp02 {
+ 			opp-hz = /bits/ 64 <403000000>;
+ 			opp-microvolt = <718750>;
++			required-opps = <&opp0_02>, <&opp1_02>;
+ 		};
+ 		opp03 {
+ 			opp-hz = /bits/ 64 <463000000>;
+ 			opp-microvolt = <756250>;
++			required-opps = <&opp0_03>, <&opp1_03>;
+ 		};
+ 		opp04 {
+ 			opp-hz = /bits/ 64 <546000000>;
+ 			opp-microvolt = <800000>;
++			required-opps = <&opp0_04>, <&opp1_04>;
+ 		};
+ 		opp05 {
+ 			opp-hz = /bits/ 64 <624000000>;
+ 			opp-microvolt = <818750>;
++			required-opps = <&opp0_05>, <&opp1_05>;
+ 		};
+ 		opp06 {
+ 			opp-hz = /bits/ 64 <689000000>;
+ 			opp-microvolt = <850000>;
++			required-opps = <&opp0_06>, <&opp1_06>;
+ 		};
+ 		opp07 {
+ 			opp-hz = /bits/ 64 <767000000>;
+ 			opp-microvolt = <868750>;
++			required-opps = <&opp0_07>, <&opp1_07>;
+ 		};
+ 		opp08 {
+ 			opp-hz = /bits/ 64 <845000000>;
+ 			opp-microvolt = <893750>;
++			required-opps = <&opp0_08>, <&opp1_08>;
+ 		};
+ 		opp09 {
+ 			opp-hz = /bits/ 64 <871000000>;
+ 			opp-microvolt = <906250>;
++			required-opps = <&opp0_09>, <&opp1_09>;
+ 		};
+ 		opp10 {
+ 			opp-hz = /bits/ 64 <923000000>;
+ 			opp-microvolt = <931250>;
++			required-opps = <&opp0_10>, <&opp1_10>;
+ 		};
+ 		opp11 {
+ 			opp-hz = /bits/ 64 <962000000>;
+ 			opp-microvolt = <943750>;
++			required-opps = <&opp0_11>, <&opp1_11>;
+ 		};
+ 		opp12 {
+ 			opp-hz = /bits/ 64 <1027000000>;
+ 			opp-microvolt = <975000>;
++			required-opps = <&opp0_12>, <&opp1_12>;
+ 		};
+ 		opp13 {
+ 			opp-hz = /bits/ 64 <1092000000>;
+ 			opp-microvolt = <1000000>;
++			required-opps = <&opp0_13>, <&opp1_13>;
+ 		};
+ 		opp14 {
+ 			opp-hz = /bits/ 64 <1144000000>;
+ 			opp-microvolt = <1025000>;
++			required-opps = <&opp0_14>, <&opp1_14>;
+ 		};
+ 		opp15 {
+ 			opp-hz = /bits/ 64 <1196000000>;
+ 			opp-microvolt = <1050000>;
++			required-opps = <&opp0_15>, <&opp1_15>;
+ 		};
  	};
  
-+	devfreq-cpufreq-map {
-+		cci-cpufreq {
-+			target-dev = <&cci>;
-+			cpu-to-dev-map =
-+				< 793000  273000000 >,
-+				< 910000  403000000 >,
-+				< 1014000  463000000 >,
-+				< 1131000  546000000 >,
-+				< 1248000  624000000 >,
-+				< 1326000  689000000 >,
-+				< 1417000  767000000 >,
-+				< 1508000  871000000 >,
-+				< 1586000  923000000 >,
-+				< 1625000  962000000 >,
-+				< 1677000  1027000000 >,
-+				< 1716000  1092000000 >,
-+				< 1781000  1144000000 >,
-+				< 1846000  1196000000 >,
-+				< 1924000  1196000000 >,
-+				< 1989000  1196000000 >;
-+		};
-+	};
-+
- 	cpus {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-@@ -467,6 +490,48 @@
- 			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>;
- 	};
- 
-+
-+	tboard_thermistor: thermal-sensor {
-+		compatible = "generic-adc-thermal";
-+		#thermal-sensor-cells = <0>;
-+		io-channels = <&auxadc 1>;
-+		io-channel-names = "sensor-channel";
-+		temperature-lookup-table = <    (-40000) 4833
-+						(-35000) 4798
-+						(-30000) 4754
-+						(-25000) 4694
-+						(-20000) 4615
-+						(-15000) 4517
-+						(-10000) 4391
-+						(-5000) 4241
-+						0 4063
-+						5000 3856
-+						10000 3621
-+						15000 3364
-+						20000 3091
-+						25000 2810
-+						30000 2526
-+						35000 2247
-+						40000 1982
-+						45000 1734
-+						50000 1507
-+						55000 1305
-+						60000 1122
-+						65000 964
-+						70000 827
-+						75000 710
-+						80000 606
-+						85000 519
-+						90000 445
-+						95000 382
-+						100000 330
-+						105000 284
-+						110000 846
-+						115000 213
-+						120000 183
-+						125000 161>;
-+	};
-+
- 	soc {
- 		#address-cells = <2>;
- 		#size-cells = <2>;
-@@ -532,6 +597,13 @@
+@@ -532,6 +548,13 @@
  			#reset-cells = <1>;
  		};
  
@@ -1487,7 +983,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		pio: pinctrl@10005000 {
  			compatible = "mediatek,mt8183-pinctrl";
  			reg = <0 0x10005000 0 0x1000>,
-@@ -652,6 +724,17 @@
+@@ -652,6 +675,17 @@
  			#iommu-cells = <1>;
  		};
  
@@ -1505,7 +1001,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		gce: gce@10238000 {
  			compatible = "mediatek,mt8183-gce";
  			reg = <0 0x10238000 0 0x4000>;
-@@ -681,6 +764,8 @@
+@@ -681,6 +715,8 @@
  			clocks = <&infracfg CLK_INFRA_AUXADC>;
  			clock-names = "main";
  			#io-channel-cells = <1>;
@@ -1514,21 +1010,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  			status = "disabled";
  		};
  
-@@ -908,6 +993,13 @@
- 				trips {};
- 				cooling-maps {};
- 			};
-+
-+	                Tboard {
-+				polling-delay = <1000>; /* milliseconds */
-+				polling-delay-passive = <0>; /* milliseconds */
-+				thermal-sensors = <&tboard_thermistor>;
-+	                };
-+
- 		};
- 
- 		pwm0: pwm@1100e000 {
-@@ -1125,6 +1217,8 @@
+@@ -1125,6 +1161,8 @@
  			clocks = <&infracfg CLK_INFRA_UNIPRO_SCK>,
  				 <&infracfg CLK_INFRA_USB>;
  			clock-names = "sys_ck", "ref_ck";
@@ -1537,7 +1019,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  			#address-cells = <2>;
  			#size-cells = <2>;
  			ranges;
-@@ -1281,6 +1375,9 @@
+@@ -1281,6 +1319,9 @@
  			thermal_calibration: calib@180 {
  				reg = <0x180 0xc>;
  			};
@@ -1547,7 +1029,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		};
  
  		u3phy: usb-phy@11f40000 {
-@@ -1295,6 +1392,7 @@
+@@ -1295,6 +1336,7 @@
  				clocks = <&clk26m>;
  				clock-names = "ref";
  				#phy-cells = <1>;
@@ -1555,7 +1037,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  				status = "okay";
  			};
  
-@@ -1496,7 +1594,6 @@
+@@ -1496,7 +1538,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL0>;
  			iommus = <&iommu M4U_PORT_DISP_OVL0>;
@@ -1563,7 +1045,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		};
  
  		ovl_2l0: ovl@14009000 {
-@@ -1506,7 +1603,6 @@
+@@ -1506,7 +1547,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL0_2L>;
  			iommus = <&iommu M4U_PORT_DISP_2L_OVL0_LARB0>;
@@ -1571,7 +1053,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		};
  
  		ovl_2l1: ovl@1400a000 {
-@@ -1516,7 +1612,6 @@
+@@ -1516,7 +1556,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_OVL1_2L>;
  			iommus = <&iommu M4U_PORT_DISP_2L_OVL1_LARB0>;
@@ -1579,7 +1061,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		};
  
  		rdma0: rdma@1400b000 {
-@@ -1526,7 +1621,6 @@
+@@ -1526,7 +1565,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
  			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
@@ -1587,7 +1069,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		};
  
  		rdma1: rdma@1400c000 {
-@@ -1536,7 +1630,6 @@
+@@ -1536,7 +1574,6 @@
  			power-domains = <&scpsys MT8183_POWER_DOMAIN_DISP>;
  			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
  			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
@@ -1595,7 +1077,7 @@ index 1e791d585ad0..517d0b1a9de6 100644
  		};
  
  		color0: color@1400e000 {
-@@ -1596,6 +1689,17 @@
+@@ -1596,6 +1633,17 @@
  			phy-names = "dphy";
  		};
  
@@ -1614,18 +1096,10 @@ index 1e791d585ad0..517d0b1a9de6 100644
  			compatible = "mediatek,mt8183-disp-mutex";
  			reg = <0 0x14016000 0 0x1000>;
 diff --git a/chromeos/config/arm64/chromiumos-arm64.flavour.config b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-index 13f7bd27b0bf..14df7facbb99 100644
+index 05db6cbf4f38..dee44103ef12 100644
 --- a/chromeos/config/arm64/chromiumos-arm64.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-arm64.flavour.config
-@@ -40,6 +40,7 @@ CONFIG_DRM_ANALOGIX_ANX78XX=y
- CONFIG_DRM_MEDIATEK=y
- CONFIG_DRM_MEDIATEK_HDMI=y
- # CONFIG_DRM_MSM_HDMI_HDCP is not set
-+CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=y
- CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
- CONFIG_DRM_TI_SN65DSI86=y
- CONFIG_DRM_VIRTIO_GPU=y
-@@ -63,6 +64,7 @@ CONFIG_I2C_RK3X=y
+@@ -64,6 +64,7 @@ CONFIG_I2C_RK3X=y
  CONFIG_INTERCONNECT=y
  CONFIG_INTERCONNECT_QCOM=y
  CONFIG_INTERCONNECT_QCOM_SDM845=y
@@ -1633,7 +1107,7 @@ index 13f7bd27b0bf..14df7facbb99 100644
  CONFIG_MEDIATEK_WATCHDOG=y
  CONFIG_MFD_PALMAS=y
  CONFIG_MFD_RK808=y
-@@ -75,6 +77,7 @@ CONFIG_MSM_GCC_8916=y
+@@ -76,6 +77,7 @@ CONFIG_MSM_GCC_8916=y
  CONFIG_MTD_MT81xx_NOR=y
  CONFIG_MTK_CMDQ=y
  CONFIG_MTK_EFUSE=y
@@ -1641,7 +1115,7 @@ index 13f7bd27b0bf..14df7facbb99 100644
  CONFIG_MTK_IOMMU=y
  CONFIG_MTK_PMIC_WRAP=y
  CONFIG_MTK_SCP=m
-@@ -184,8 +187,10 @@ CONFIG_SPI_QCOM_QSPI=y
+@@ -185,8 +187,10 @@ CONFIG_SPI_QCOM_QSPI=y
  CONFIG_SPI_ROCKCHIP=y
  CONFIG_SPMI=y
  CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
@@ -1653,32 +1127,22 @@ index 13f7bd27b0bf..14df7facbb99 100644
  CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
  CONFIG_VIRTIO_BLK=y
-@@ -193,3 +198,6 @@ CONFIG_VIRTIO_CONSOLE=y
- CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_VIRTIO_NET=y
-+
-+CONFIG_GENERIC_ADC_THERMAL=y
-+
 diff --git a/chromeos/config/arm64/chromiumos-mediatek.flavour.config b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-index e02669621c75..543e5e071074 100644
+index c1c09b90f817..8f6b120d5caf 100644
 --- a/chromeos/config/arm64/chromiumos-mediatek.flavour.config
 +++ b/chromeos/config/arm64/chromiumos-mediatek.flavour.config
-@@ -25,10 +25,13 @@ CONFIG_COMMON_CLK_MT8183_MMSYS=y
+@@ -25,8 +25,10 @@ CONFIG_COMMON_CLK_MT8183_MMSYS=y
  CONFIG_COMMON_CLK_MT8183_VDECSYS=y
  CONFIG_COMMON_CLK_MT8183_VENCSYS=y
  CONFIG_CROS_EC_RPMSG=m
-+CONFIG_DEVFREQ_GOV_CPUFREQ_MAP=y
++CONFIG_DEVFREQ_GOV_PASSIVE=y
  CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
  CONFIG_DRM_ANALOGIX_ANX78XX=y
 +CONFIG_DRM_ITE_IT6505=y
  CONFIG_DRM_MEDIATEK=y
  CONFIG_DRM_MEDIATEK_HDMI=y
-+CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=y
- CONFIG_DRM_PANEL_INNOLUX_P079ZCA=y
- # CONFIG_EFI is not set
- CONFIG_ENERGY_MODEL=y
-@@ -39,6 +42,7 @@ CONFIG_MALI_DMA_FENCE=y
+ CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=y
+@@ -40,6 +42,7 @@ CONFIG_MALI_DMA_FENCE=y
  CONFIG_MALI_EXPERT=y
  CONFIG_MALI_MIDGARD=y
  CONFIG_MALI_PLATFORM_NAME="mediatek"
@@ -1686,7 +1150,7 @@ index e02669621c75..543e5e071074 100644
  CONFIG_MEDIATEK_WATCHDOG=y
  CONFIG_MEDIA_CONTROLLER=y
  CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
-@@ -46,6 +50,7 @@ CONFIG_MMC_MTK=y
+@@ -47,6 +50,7 @@ CONFIG_MMC_MTK=y
  CONFIG_MTD_MT81xx_NOR=y
  CONFIG_MTK_CMDQ=y
  CONFIG_MTK_EFUSE=y
@@ -1694,10 +1158,10 @@ index e02669621c75..543e5e071074 100644
  CONFIG_MTK_IOMMU=y
  CONFIG_MTK_PMIC_WRAP=y
  CONFIG_MTK_SCP=m
-@@ -77,7 +82,12 @@ CONFIG_STAGING_MEDIA=y
+@@ -77,7 +81,9 @@ CONFIG_SPI_MT65XX=y
+ CONFIG_STAGING_MEDIA=y
  CONFIG_TCG_CR50_I2C=y
  CONFIG_TMPFS=y
- CONFIG_TOUCHSCREEN_MELFAS_MIP4=y
 +CONFIG_USB_CONFIGFS_ACM=y
 +CONFIG_USB_CONFIGFS_MASS_STORAGE=y
 +CONFIG_USB_CONFIGFS_SERIAL=y
@@ -1705,9 +1169,6 @@ index e02669621c75..543e5e071074 100644
 -CONFIG_USB_MTU3_HOST=y
  CONFIG_VIDEO_MEDIATEK_MDP=y
  CONFIG_VIDEO_MEDIATEK_VCODEC=y
-+
-+CONFIG_GENERIC_ADC_THERMAL=y
-+
 diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
 index 3dc1b9f15ea2..5df0e476e94d 100644
 --- a/drivers/clk/mediatek/Makefile
@@ -5603,631 +5064,405 @@ index 000000000000..b9cddf3445ff
 +
 +void print_regs(void);
 +void print_fmeter_all(void);
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 6514187a43f4..7bff0c5f44ee 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -54,6 +54,7 @@ struct mtk_cpu_dvfs_info {
+ 	struct notifier_block opp_nb;
+ 	int opp_cpu;
+ 	unsigned long opp_freq;
++	int old_vproc;
+ };
+ 
+ static LIST_HEAD(dvfs_info_list);
+@@ -204,11 +205,15 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+ 
+ static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info *info, int vproc)
+ {
++	int ret;
++
+ 	if (info->need_voltage_tracking)
+-		return mtk_cpufreq_voltage_tracking(info, vproc);
++		ret = mtk_cpufreq_voltage_tracking(info, vproc);
+ 	else
+-		return regulator_set_voltage(info->proc_reg, vproc,
+-					     vproc + VOLT_TOL);
++		ret = regulator_set_voltage(info->proc_reg, vproc,
++					     MAX_VOLT_LIMIT);
++	info->old_vproc = vproc;
++	return ret;
+ }
+ 
+ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+@@ -226,7 +231,9 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+ 	inter_vproc = info->intermediate_voltage;
+ 
+ 	old_freq_hz = clk_get_rate(cpu_clk);
+-	old_vproc = regulator_get_voltage(info->proc_reg);
++	old_vproc = info->old_vproc;
++	if (old_vproc == 0)
++		old_vproc = regulator_get_voltage(info->proc_reg);
+ 	if (old_vproc < 0) {
+ 		pr_err("%s: invalid Vproc value: %d\n", __func__, old_vproc);
+ 		return old_vproc;
 diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index e178f1473136..6794e6093a47 100644
+index e178f1473136..910c4e22c6cb 100644
 --- a/drivers/devfreq/Kconfig
 +++ b/drivers/devfreq/Kconfig
-@@ -73,6 +73,14 @@ config DEVFREQ_GOV_PASSIVE
+@@ -72,6 +72,10 @@ config DEVFREQ_GOV_PASSIVE
+ 	  device. This governor does not change the frequency by itself
  	  through sysfs entries. The passive governor recommends that
  	  devfreq device uses the OPP table to get the frequency/voltage.
++	  Alternatively the governor can also be chosen to scale based on
++	  the online CPUs current frequency. A CPU frequency to device
++	  frequency mapping table(s) is auto-populated by the governor
++	  for this purpose.
  
-+config DEVFREQ_GOV_CPUFREQ_MAP
-+	tristate "CPUfreq Map"
-+	depends on CPU_FREQ
-+	help
-+	  Chooses frequency based on the online CPUs' current frequency and a
-+	  CPU frequency to device frequency mapping table(s). This governor
-+	  can be useful for controlling devices such as DDR, cache, CCI, etc.
-+
  comment "DEVFREQ Drivers"
  
- config ARM_EXYNOS_BUS_DEVFREQ
-diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-index 71e7ac084db6..85d48f5744a0 100644
---- a/drivers/devfreq/Makefile
-+++ b/drivers/devfreq/Makefile
-@@ -6,6 +6,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PERFORMANCE)	+= governor_performance.o
- obj-$(CONFIG_DEVFREQ_GOV_POWERSAVE)	+= governor_powersave.o
- obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+= governor_userspace.o
- obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
-+obj-$(CONFIG_DEVFREQ_GOV_CPUFREQ_MAP)	+= governor_cpufreq_map.o
+diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+index 3bc29acbd54e..2506682b233b 100644
+--- a/drivers/devfreq/governor_passive.c
++++ b/drivers/devfreq/governor_passive.c
+@@ -11,10 +11,63 @@
+  */
  
- # DEVFREQ Drivers
- obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
-diff --git a/drivers/devfreq/governor_cpufreq_map.c b/drivers/devfreq/governor_cpufreq_map.c
-new file mode 100644
-index 000000000000..084a3ffb8f54
---- /dev/null
-+++ b/drivers/devfreq/governor_cpufreq_map.c
-@@ -0,0 +1,583 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2014-2015, 2018, The Linux Foundation. All rights reserved.
-+ */
-+
-+#define pr_fmt(fmt) "dev-cpufreq-map: " fmt
-+
-+#include <linux/devfreq.h>
+ #include <linux/module.h>
 +#include <linux/cpu.h>
 +#include <linux/cpufreq.h>
 +#include <linux/cpumask.h>
-+#include <linux/slab.h>
-+#include <linux/platform_device.h>
+ #include <linux/device.h>
+ #include <linux/devfreq.h>
 +#include <linux/of.h>
-+#include <linux/module.h>
-+#include "governor.h"
-+
-+struct cpu_state {
-+	unsigned int freq;
-+	unsigned int min_freq;
-+	unsigned int max_freq;
-+	unsigned int first_cpu;
-+};
-+static struct cpu_state *state[NR_CPUS];
-+static int cpufreq_cnt;
-+
-+struct freq_map {
-+	unsigned int cpu_khz;
-+	unsigned int target_freq;
-+};
-+
-+struct devfreq_node {
-+	struct devfreq *df;
-+	void *orig_data;
-+	struct device *dev;
-+	struct device_node *of_node;
-+	struct list_head list;
-+	struct freq_map **map;
-+	struct freq_map *common_map;
-+};
-+static LIST_HEAD(devfreq_list);
-+static DEFINE_MUTEX(state_lock);
-+static DEFINE_MUTEX(cpufreq_reg_lock);
-+
-+static void update_all_devfreqs(void)
++#include <linux/slab.h>
+ #include "governor.h"
+ 
++static unsigned int xlate_cpufreq_to_devfreq(struct devfreq_passive_data *data,
++					     unsigned int cpu)
 +{
-+	struct devfreq_node *node;
++	unsigned int cpu_min, cpu_max;
++	struct devfreq *devfreq = (struct devfreq *)data->this;
++	unsigned int dev_min, dev_max, cpu_percent, cpu_freq = 0, freq = 0;
++	unsigned long *freq_table = devfreq->profile->freq_table;
++	struct device *dev = devfreq->dev.parent;
++	struct devfreq_map *map;
++	int opp_cnt, i;
 +
-+	list_for_each_entry(node, &devfreq_list, list) {
-+		struct devfreq *df = node->df;
-+
-+		if (!node->df)
-+			continue;
-+		mutex_lock(&df->lock);
-+		update_devfreq(df);
-+		mutex_unlock(&df->lock);
-+
-+	}
-+}
-+
-+static struct devfreq_node *find_devfreq_node(struct device *dev)
-+{
-+	struct devfreq_node *node;
-+
-+	list_for_each_entry(node, &devfreq_list, list)
-+		if (node->dev == dev || node->of_node == dev->of_node)
-+			return node;
-+
-+	return NULL;
-+}
-+
-+/* ==================== cpufreq part ==================== */
-+static struct cpu_state *add_policy(struct cpufreq_policy *policy)
-+{
-+	struct cpu_state *new_state;
-+	unsigned int cpu, first_cpu;
-+
-+	new_state = kzalloc(sizeof(struct cpu_state), GFP_KERNEL);
-+	if (!new_state)
-+		return NULL;
-+
-+	first_cpu = cpumask_first(policy->related_cpus);
-+	new_state->first_cpu = first_cpu;
-+	new_state->freq = policy->cur;
-+	new_state->min_freq = policy->cpuinfo.min_freq;
-+	new_state->max_freq = policy->cpuinfo.max_freq;
-+
-+	for_each_cpu(cpu, policy->related_cpus)
-+		state[cpu] = new_state;
-+
-+	return new_state;
-+}
-+
-+static int cpufreq_trans_notifier(struct notifier_block *nb,
-+		unsigned long event, void *data)
-+{
-+	struct cpufreq_freqs *freq = data;
-+	struct cpu_state *s;
-+	struct cpufreq_policy *policy = NULL;
-+
-+	if (event != CPUFREQ_POSTCHANGE)
-+		return 0;
-+
-+	mutex_lock(&state_lock);
-+
-+	s = state[freq->cpu];
-+	if (!s) {
-+		policy = cpufreq_cpu_get(freq->cpu);
-+		if (policy) {
-+			s = add_policy(policy);
-+			cpufreq_cpu_put(policy);
-+		}
-+	}
-+	if (!s)
-+		goto out;
-+
-+	if (s->freq != freq->new || policy) {
-+		s->freq = freq->new;
-+		update_all_devfreqs();
-+	}
-+
-+out:
-+	mutex_unlock(&state_lock);
-+	return 0;
-+}
-+
-+static struct notifier_block cpufreq_trans_nb = {
-+	.notifier_call = cpufreq_trans_notifier
-+};
-+
-+static int register_cpufreq(void)
-+{
-+	int ret = 0;
-+	unsigned int cpu;
-+	struct cpufreq_policy *policy;
-+
-+	mutex_lock(&cpufreq_reg_lock);
-+
-+	if (cpufreq_cnt)
-+		goto cnt_not_zero;
-+
-+	get_online_cpus();
-+	ret = cpufreq_register_notifier(&cpufreq_trans_nb,
-+				CPUFREQ_TRANSITION_NOTIFIER);
-+	if (ret)
-+		goto out;
-+
-+	for_each_online_cpu(cpu) {
-+		policy = cpufreq_cpu_get(cpu);
-+		if (policy) {
-+			add_policy(policy);
-+			cpufreq_cpu_put(policy);
-+		}
-+	}
-+out:
-+	put_online_cpus();
-+cnt_not_zero:
-+	if (!ret)
-+		cpufreq_cnt++;
-+	mutex_unlock(&cpufreq_reg_lock);
-+	return ret;
-+}
-+
-+static int unregister_cpufreq(void)
-+{
-+	int ret = 0;
-+	int cpu;
-+
-+	mutex_lock(&cpufreq_reg_lock);
-+
-+	if (cpufreq_cnt > 1)
-+		goto out;
-+
-+	cpufreq_unregister_notifier(&cpufreq_trans_nb,
-+				CPUFREQ_TRANSITION_NOTIFIER);
-+
-+	for (cpu = ARRAY_SIZE(state) - 1; cpu >= 0; cpu--) {
-+		if (!state[cpu])
-+			continue;
-+		if (state[cpu]->first_cpu == cpu)
-+			kfree(state[cpu]);
-+		state[cpu] = NULL;
-+	}
-+
-+out:
-+	cpufreq_cnt--;
-+	mutex_unlock(&cpufreq_reg_lock);
-+	return ret;
-+}
-+
-+/* ==================== devfreq part ==================== */
-+
-+static unsigned int interpolate_freq(struct devfreq *df, unsigned int cpu)
-+{
-+	unsigned long *freq_table = df->profile->freq_table;
-+	unsigned int cpu_min = state[cpu]->min_freq;
-+	unsigned int cpu_max = state[cpu]->max_freq;
-+	unsigned int cpu_freq = state[cpu]->freq;
-+	unsigned int dev_min, dev_max, cpu_percent;
-+
-+	if (freq_table) {
-+		dev_min = freq_table[0];
-+		dev_max = freq_table[df->profile->max_state - 1];
-+	} else {
-+		if (df->max_freq <= df->min_freq)
-+			return 0;
-+		dev_min = df->min_freq;
-+		dev_max = df->max_freq;
-+	}
-+
-+	cpu_percent = ((cpu_freq - cpu_min) * 100) / (cpu_max - cpu_min);
-+	return dev_min + mult_frac(dev_max - dev_min, cpu_percent, 100);
-+}
-+
-+static unsigned int cpu_to_dev_freq(struct devfreq *df, unsigned int cpu)
-+{
-+	struct freq_map *map = NULL;
-+	unsigned int cpu_khz = 0, freq;
-+	struct devfreq_node *n = df->data;
-+
-+	if (!state[cpu] || state[cpu]->first_cpu != cpu) {
++	if (!data->state[cpu] || data->state[cpu]->first_cpu != cpu) {
 +		freq = 0;
 +		goto out;
 +	}
 +
-+	if (n->common_map)
-+		map = n->common_map;
-+	else if (n->map)
-+		map = n->map[cpu];
++	/* Use Interpolation if map is not available */
++	cpu_freq = data->state[cpu]->freq;
++	if (!data->map) {
++		cpu_min = data->state[cpu]->min_freq;
++		cpu_max = data->state[cpu]->max_freq;
++		if (freq_table) {
++			dev_min = freq_table[0];
++			dev_max = freq_table[devfreq->profile->max_state - 1];
++		} else {
++			if (devfreq->max_freq <= devfreq->min_freq)
++				return 0;
++			dev_min = devfreq->min_freq;
++			dev_max = devfreq->max_freq;
++		}
 +
-+	cpu_khz = state[cpu]->freq;
-+
-+	if (!map) {
-+		freq = interpolate_freq(df, cpu);
++		cpu_percent = ((cpu_freq - cpu_min) * 100) / cpu_max - cpu_min;
++		freq = dev_min + mult_frac(dev_max - dev_min, cpu_percent, 100);
 +		goto out;
 +	}
 +
-+	while (map->cpu_khz && map->cpu_khz < cpu_khz)
-+		map++;
-+	if (!map->cpu_khz)
-+		map--;
-+	freq = map->target_freq;
-+
++	map = data->map[cpu];
++	opp_cnt = dev_pm_opp_get_opp_count(dev);
++	for (i = 0; i < opp_cnt; i++) {
++		freq = max(freq, map[i].dev_hz);
++		if (map[i].cpu_khz >= cpu_freq)
++			break;
++	}
 +out:
-+	dev_dbg(df->dev.parent, "CPU%u: %d -> dev: %u\n", cpu, cpu_khz, freq);
++	dev_dbg(dev, "CPU%u: %d -> dev: %u\n", cpu, cpu_freq, freq);
 +	return freq;
 +}
 +
-+static int devfreq_cpufreq_get_freq(struct devfreq *df,
-+					unsigned long *freq)
-+{
+ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+ 					unsigned long *freq)
+ {
+@@ -23,6 +76,7 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+ 	struct devfreq *parent_devfreq = (struct devfreq *)p_data->parent;
+ 	unsigned long child_freq = ULONG_MAX;
+ 	struct dev_pm_opp *opp;
 +	unsigned int cpu, tgt_freq = 0;
-+	struct devfreq_node *node;
-+
-+	node = df->data;
-+	if (!node) {
-+		pr_err("Unable to find devfreq node!\n");
-+		return -ENODEV;
+ 	int i, count, ret = 0;
+ 
+ 	/*
+@@ -35,6 +89,14 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+ 		goto out;
+ 	}
+ 
++	if (p_data->cpufreq_type) {
++		for_each_possible_cpu(cpu)
++			tgt_freq = max(tgt_freq,
++				       xlate_cpufreq_to_devfreq(p_data, cpu));
++		*freq = tgt_freq;
++		goto out;
 +	}
 +
-+	for_each_possible_cpu(cpu)
-+		tgt_freq = max(tgt_freq, cpu_to_dev_freq(df, cpu));
-+
-+	*freq = tgt_freq;
-+	return 0;
-+}
-+
-+static unsigned int show_table(char *buf, unsigned int len,
-+				struct freq_map *map)
+ 	/*
+ 	 * If the parent and passive devfreq device uses the OPP table,
+ 	 * get the next frequency by using the OPP table.
+@@ -149,6 +211,200 @@ static int devfreq_passive_notifier_call(struct notifier_block *nb,
+ 	return NOTIFY_DONE;
+ }
+ 
++static int cpufreq_passive_notifier_call(struct notifier_block *nb,
++					 unsigned long event, void *ptr)
 +{
-+	unsigned int cnt = 0;
-+
-+	cnt += snprintf(buf + cnt, len - cnt, "CPU freq\tDevice freq\n");
-+
-+	while (map->cpu_khz && cnt < len) {
-+		cnt += snprintf(buf + cnt, len - cnt, "%8u\t%11u\n",
-+				map->cpu_khz, map->target_freq);
-+		map++;
-+	}
-+	if (cnt < len)
-+		cnt += snprintf(buf + cnt, len - cnt, "\n");
-+
-+	return cnt;
-+}
-+
-+static ssize_t freq_map_show(struct device *dev, struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct devfreq *df = to_devfreq(dev);
-+	struct devfreq_node *n = df->data;
-+	struct freq_map *map;
-+	unsigned int cnt = 0, cpu;
-+
-+	mutex_lock(&state_lock);
-+	if (n->common_map) {
-+		map = n->common_map;
-+		cnt += snprintf(buf + cnt, PAGE_SIZE - cnt,
-+				"Common table for all CPUs:\n");
-+		cnt += show_table(buf + cnt, PAGE_SIZE - cnt, map);
-+	} else if (n->map) {
-+		for_each_possible_cpu(cpu) {
-+			map = n->map[cpu];
-+			if (!map)
-+				continue;
-+			cnt += snprintf(buf + cnt, PAGE_SIZE - cnt,
-+					"CPU %u:\n", cpu);
-+			if (cnt >= PAGE_SIZE)
-+				break;
-+			cnt += show_table(buf + cnt, PAGE_SIZE - cnt, map);
-+			if (cnt >= PAGE_SIZE)
-+				break;
-+		}
-+	} else {
-+		cnt += snprintf(buf + cnt, PAGE_SIZE - cnt,
-+				"Device freq interpolated based on CPU freq\n");
-+	}
-+	mutex_unlock(&state_lock);
-+
-+	return cnt;
-+}
-+
-+static DEVICE_ATTR_RO(freq_map);
-+static struct attribute *dev_attr[] = {
-+	&dev_attr_freq_map.attr,
-+	NULL,
-+};
-+
-+static struct attribute_group dev_attr_group = {
-+	.name = "cpufreq-map",
-+	.attrs = dev_attr,
-+};
-+
-+static int devfreq_cpufreq_gov_start(struct devfreq *devfreq)
-+{
++	struct devfreq_passive_data *data =
++			container_of(nb, struct devfreq_passive_data, nb);
++	struct devfreq *devfreq = (struct devfreq *)data->this;
++	struct cpufreq_freqs *freq = ptr;
++	struct devfreq_cpu_state *state;
 +	int ret = 0;
-+	struct devfreq_node *node;
-+	bool alloc = false;
 +
-+	ret = register_cpufreq();
++	if (event != CPUFREQ_POSTCHANGE)
++		goto out;
++
++	state = data->state[freq->cpu];
++	if (!state)
++		goto out;
++
++	if (state->freq != freq->new) {
++		state->freq = freq->new;
++		mutex_lock(&devfreq->lock);
++		ret = update_devfreq(devfreq);
++		mutex_unlock(&devfreq->lock);
++		if (ret)
++			dev_err(&devfreq->dev, "Frequency update failed.\n");
++	}
++out:
++	return ret;
++}
++
++static int cpufreq_passive_register(struct devfreq_passive_data **p_data)
++{
++	unsigned int cpu;
++	struct devfreq_map **cpu_map;
++	struct devfreq_map *map, *per_cpu_map;
++	struct devfreq_passive_data *data = *p_data;
++	struct devfreq *devfreq = (struct devfreq *)data->this;
++	int i, count = 0, opp_cnt = 0, ret = 0, iter_val = 0;
++	struct device_node *np, *opp_table_np, *cpu_np;
++	struct opp_table *opp_table, *cpu_opp_tbl;
++	struct device *dev = devfreq->dev.parent;
++	struct devfreq_cpu_state *state;
++	struct dev_pm_opp *opp, *cpu_opp;
++	struct cpufreq_policy *policy;
++	struct device *cpu_dev;
++	u64 cpu_khz, dev_hz;
++
++	get_online_cpus();
++	data->nb.notifier_call = cpufreq_passive_notifier_call;
++	ret = cpufreq_register_notifier(&data->nb,
++					CPUFREQ_TRANSITION_NOTIFIER);
 +	if (ret)
 +		return ret;
 +
-+	ret = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
-+	if (ret) {
-+		unregister_cpufreq();
-+		return ret;
-+	}
++	/* Populate devfreq_cpu_state */
++	for_each_online_cpu(cpu) {
++		if (data->state[cpu])
++			continue;
 +
-+	mutex_lock(&state_lock);
++		policy = cpufreq_cpu_get(cpu);
++		if (policy) {
++			state = kzalloc(sizeof(*state), GFP_KERNEL);
++			if (!state)
++				return -ENOMEM;
 +
-+	node = find_devfreq_node(devfreq->dev.parent);
-+	if (node == NULL) {
-+		node = kzalloc(sizeof(struct devfreq_node), GFP_KERNEL);
-+		if (!node) {
-+			ret = -ENOMEM;
-+			goto alloc_fail;
++			state->first_cpu = cpumask_first(policy->related_cpus);
++			state->freq = policy->cur;
++			state->min_freq = policy->cpuinfo.min_freq;
++			state->max_freq = policy->cpuinfo.max_freq;
++			data->state[cpu] = state;
++			cpufreq_cpu_put(policy);
++		} else {
++			return -EPROBE_DEFER;
 +		}
-+		alloc = true;
-+		node->dev = devfreq->dev.parent;
-+		list_add_tail(&node->list, &devfreq_list);
 +	}
-+	node->df = devfreq;
-+	node->orig_data = devfreq->data;
-+	devfreq->data = node;
 +
++	opp_table_np = dev_pm_opp_of_get_opp_desc_node(dev);
++	if (!opp_table_np)
++		goto out;
++
++	opp_cnt = dev_pm_opp_get_opp_count(dev);
++	if (opp_cnt <= 0)
++		goto put_opp_table;
++
++	/* Allocate memory for devfreq_map*/
++	cpu_map = kcalloc(num_possible_cpus(), sizeof(*cpu_map), GFP_KERNEL);
++	if (!cpu_map)
++		return -ENOMEM;
++
++	for_each_possible_cpu(cpu) {
++		per_cpu_map = kcalloc(opp_cnt, sizeof(*per_cpu_map),
++				      GFP_KERNEL);
++		if (!per_cpu_map)
++			return -ENOMEM;
++		cpu_map[cpu] = per_cpu_map;
++	}
++	data->map = cpu_map;
++
++	/* Populate devfreq_map */
++	opp_table = dev_pm_opp_get_opp_table(dev);
++	if (!opp_table)
++		return -ENOMEM;
++
++	for_each_available_child_of_node(opp_table_np, np) {
++		opp = dev_pm_opp_find_opp_of_np(opp_table, np);
++		if (IS_ERR(opp))
++			continue;
++
++		dev_hz = dev_pm_opp_get_freq(opp);
++		dev_pm_opp_put(opp);
++
++		count = of_count_phandle_with_args(np, "required-opps", NULL);
++		for (i = 0; i < count; i++) {
++			for_each_possible_cpu(cpu) {
++				cpu_dev = get_cpu_device(cpu);
++				if (!cpu_dev) {
++					dev_err(dev, "CPU get device failed.\n");
++					continue;
++				}
++
++				cpu_np = of_parse_required_opp(np, i);
++				if (!cpu_np) {
++					dev_err(dev, "Parsing required opp failed.\n");
++					continue;
++				}
++
++				/* Get cpu opp-table */
++				cpu_opp_tbl = dev_pm_opp_get_opp_table(cpu_dev);
++				if (!cpu_opp_tbl) {
++					dev_err(dev, "CPU opp table get failed.\n");
++					goto put_cpu_node;
++				}
++
++				/* Match the cpu opp node from required-opp with
++				 * the cpu-opp table */
++				cpu_opp = dev_pm_opp_find_opp_of_np(cpu_opp_tbl,
++								    cpu_np);
++				if (!cpu_opp) {
++					dev_dbg(dev, "CPU opp get failed.\n");
++					goto put_cpu_opp_table;
++				}
++
++				cpu_khz = dev_pm_opp_get_freq(cpu_opp);
++				if (cpu_opp && cpu_khz) {
++					/* Update freq-map if not already set */
++					map = cpu_map[cpu];
++					map[iter_val].cpu_khz = cpu_khz / 1000;
++					map[iter_val].dev_hz = dev_hz;
++				}
++				dev_pm_opp_put(cpu_opp);
++put_cpu_opp_table:
++				dev_pm_opp_put_opp_table(cpu_opp_tbl);
++put_cpu_node:
++				of_node_put(cpu_np);
++			}
++		}
++		iter_val++;
++	}
++	dev_pm_opp_put_opp_table(opp_table);
++put_opp_table:
++	of_node_put(opp_table_np);
++out:
++	put_online_cpus();
++
++	/* Update devfreq */
 +	mutex_lock(&devfreq->lock);
 +	ret = update_devfreq(devfreq);
 +	mutex_unlock(&devfreq->lock);
-+	if (ret) {
-+		pr_err("Freq update failed!\n");
-+		goto update_fail;
-+	}
-+
-+	mutex_unlock(&state_lock);
-+	return 0;
-+
-+update_fail:
-+	devfreq->data = node->orig_data;
-+	if (alloc) {
-+		list_del(&node->list);
-+		kfree(node);
-+	}
-+alloc_fail:
-+	mutex_unlock(&state_lock);
-+	sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
-+	unregister_cpufreq();
-+	return ret;
-+}
-+
-+static void devfreq_cpufreq_gov_stop(struct devfreq *devfreq)
-+{
-+	struct devfreq_node *node = devfreq->data;
-+
-+	mutex_lock(&state_lock);
-+	devfreq->data = node->orig_data;
-+	if (node->map || node->common_map) {
-+		node->df = NULL;
-+	} else {
-+		list_del(&node->list);
-+		kfree(node);
-+	}
-+	mutex_unlock(&state_lock);
-+
-+	sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
-+	unregister_cpufreq();
-+}
-+
-+static int devfreq_cpufreq_ev_handler(struct devfreq *devfreq,
-+					unsigned int event, void *data)
-+{
-+	int ret;
-+
-+	switch (event) {
-+	case DEVFREQ_GOV_START:
-+
-+		ret = devfreq_cpufreq_gov_start(devfreq);
-+		if (ret) {
-+			pr_err("Governor start failed!\n");
-+			return ret;
-+		}
-+		pr_debug("Enabled CPUfreq-map governor\n");
-+		break;
-+
-+	case DEVFREQ_GOV_STOP:
-+
-+		devfreq_cpufreq_gov_stop(devfreq);
-+		pr_debug("Disabled dev CPUfreq-map governor\n");
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct devfreq_governor devfreq_cpufreq = {
-+	.name = "cpufreq-map",
-+	.get_target_freq = devfreq_cpufreq_get_freq,
-+	.event_handler = devfreq_cpufreq_ev_handler,
-+};
-+
-+#define NUM_COLS	2
-+static struct freq_map *read_tbl(struct device_node *of_node, char *prop_name)
-+{
-+	int len, nf, i, j;
-+	u32 data;
-+	struct freq_map *tbl;
-+
-+	if (!of_find_property(of_node, prop_name, &len))
-+		return NULL;
-+	len /= sizeof(data);
-+
-+	if (len % NUM_COLS || len == 0)
-+		return NULL;
-+	nf = len / NUM_COLS;
-+
-+	tbl = kzalloc((nf + 1) * sizeof(*tbl), GFP_KERNEL);
-+	if (!tbl)
-+		return NULL;
-+
-+	for (i = 0, j = 0; i < nf; i++, j += 2) {
-+		of_property_read_u32_index(of_node, prop_name, j, &data);
-+		tbl[i].cpu_khz = data;
-+
-+		of_property_read_u32_index(of_node, prop_name, j + 1, &data);
-+		tbl[i].target_freq = data;
-+	}
-+	tbl[i].cpu_khz = 0;
-+
-+	return tbl;
-+}
-+
-+#define PROP_TARGET "target-dev"
-+#define PROP_TABLE "cpu-to-dev-map"
-+static int add_table_from_of(struct device_node *of_node)
-+{
-+	struct device_node *target_of_node;
-+	struct devfreq_node *node;
-+	struct freq_map *common_tbl;
-+	struct freq_map **tbl_list = NULL;
-+	static char prop_name[] = PROP_TABLE "-999999";
-+	int cpu, ret, cnt = 0, prop_sz = ARRAY_SIZE(prop_name);
-+
-+	target_of_node = of_parse_phandle(of_node, PROP_TARGET, 0);
-+	if (!target_of_node)
-+		return -EINVAL;
-+
-+	node = kzalloc(sizeof(struct devfreq_node), GFP_KERNEL);
-+	if (!node)
-+		return -ENOMEM;
-+
-+	common_tbl = read_tbl(of_node, PROP_TABLE);
-+	if (!common_tbl) {
-+		tbl_list = kzalloc(sizeof(*tbl_list) * NR_CPUS, GFP_KERNEL);
-+		if (!tbl_list) {
-+			ret = -ENOMEM;
-+			goto err_list;
-+		}
-+
-+		for_each_possible_cpu(cpu) {
-+			ret = snprintf(prop_name, prop_sz, "%s-%d",
-+					PROP_TABLE, cpu);
-+			if (ret >= prop_sz) {
-+				pr_warn("More CPUs than I can handle!\n");
-+				pr_warn("Skipping rest of the tables!\n");
-+				break;
-+			}
-+			tbl_list[cpu] = read_tbl(of_node, prop_name);
-+			if (tbl_list[cpu])
-+				cnt++;
-+		}
-+	}
-+	if (!common_tbl && !cnt) {
-+		ret = -EINVAL;
-+		goto err_tbl;
-+	}
-+
-+	mutex_lock(&state_lock);
-+	node->of_node = target_of_node;
-+	node->map = tbl_list;
-+	node->common_map = common_tbl;
-+	list_add_tail(&node->list, &devfreq_list);
-+	mutex_unlock(&state_lock);
-+
-+	return 0;
-+err_tbl:
-+	kfree(tbl_list);
-+err_list:
-+	kfree(node);
-+	return ret;
-+}
-+
-+static int __init devfreq_cpufreq_init(void)
-+{
-+	int ret;
-+	struct device_node *of_par, *of_child;
-+
-+	of_par = of_find_node_by_name(NULL, "devfreq-cpufreq-map");
-+	if (of_par) {
-+		for_each_child_of_node(of_par, of_child) {
-+			ret = add_table_from_of(of_child);
-+			if (ret)
-+				pr_err("Parsing %s failed!\n", of_child->name);
-+			else
-+				pr_debug("Parsed %s.\n", of_child->name);
-+		}
-+		of_node_put(of_par);
-+	} else {
-+		pr_info("No tables parsed from DT.\n");
-+	}
-+
-+	ret = devfreq_add_governor(&devfreq_cpufreq);
-+	if (ret) {
-+		pr_err("cpufreq-map governor add failed!\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+subsys_initcall(devfreq_cpufreq_init);
-+
-+static void __exit devfreq_cpufreq_exit(void)
-+{
-+	int ret, cpu;
-+	struct devfreq_node *node, *tmp;
-+
-+	ret = devfreq_remove_governor(&devfreq_cpufreq);
 +	if (ret)
-+		pr_err("cpufreq-map governor remove failed!\n");
++		dev_err(dev, "Frequency update failed.\n");
 +
-+	mutex_lock(&state_lock);
-+	list_for_each_entry_safe(node, tmp, &devfreq_list, list) {
-+		kfree(node->common_map);
-+		for_each_possible_cpu(cpu)
-+			kfree(node->map[cpu]);
-+		kfree(node->map);
-+		list_del(&node->list);
-+		kfree(node);
-+	}
-+	mutex_unlock(&state_lock);
++	return ret;
 +}
-+module_exit(devfreq_cpufreq_exit);
 +
-+MODULE_DESCRIPTION("devfreq gov that sets dev freq based on current CPU freq");
-+MODULE_LICENSE("GPL v2");
++static int cpufreq_passive_unregister(struct devfreq_passive_data **p_data)
++{
++	int cpu;
++	struct devfreq_passive_data *data = *p_data;
++
++	cpufreq_unregister_notifier(&data->nb,
++				    CPUFREQ_TRANSITION_NOTIFIER);
++
++	for_each_possible_cpu(cpu) {
++		kfree(data->state[cpu]);
++		kfree(data->map[cpu]);
++		data->state[cpu] = NULL;
++		data->map[cpu] = NULL;
++	}
++
++	kfree(data->map);
++	data->map = NULL;
++
++	return 0;
++}
++
+ static int devfreq_passive_event_handler(struct devfreq *devfreq,
+ 				unsigned int event, void *data)
+ {
+@@ -159,7 +415,7 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
+ 	struct notifier_block *nb = &p_data->nb;
+ 	int ret = 0;
+ 
+-	if (!parent)
++	if (!parent && !p_data->cpufreq_type)
+ 		return -EPROBE_DEFER;
+ 
+ 	switch (event) {
+@@ -167,13 +423,21 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
+ 		if (!p_data->this)
+ 			p_data->this = devfreq;
+ 
+-		nb->notifier_call = devfreq_passive_notifier_call;
+-		ret = devm_devfreq_register_notifier(dev, parent, nb,
+-					DEVFREQ_TRANSITION_NOTIFIER);
++		if (p_data->cpufreq_type) {
++			ret = cpufreq_passive_register(&p_data);
++		} else {
++			nb->notifier_call = devfreq_passive_notifier_call;
++			ret = devm_devfreq_register_notifier(dev, parent, nb,
++						DEVFREQ_TRANSITION_NOTIFIER);
++		}
+ 		break;
+ 	case DEVFREQ_GOV_STOP:
+-		devm_devfreq_unregister_notifier(dev, parent, nb,
+-					DEVFREQ_TRANSITION_NOTIFIER);
++		if (p_data->cpufreq_type) {
++			cpufreq_passive_unregister(&p_data);
++		} else {
++			devm_devfreq_unregister_notifier(dev, parent, nb,
++						DEVFREQ_TRANSITION_NOTIFIER);
++		}
+ 		break;
+ 	default:
+ 		break;
 diff --git a/drivers/devfreq/mt8183-cci-devfreq.c b/drivers/devfreq/mt8183-cci-devfreq.c
-index b5d8c1ff493f..a153adee033e 100644
+index b5d8c1ff493f..5ac98296595c 100644
 --- a/drivers/devfreq/mt8183-cci-devfreq.c
 +++ b/drivers/devfreq/mt8183-cci-devfreq.c
-@@ -17,164 +17,7 @@
+@@ -11,181 +11,49 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regulator/consumer.h>
++#include <linux/time.h>
+ 
+ #include "governor.h"
+ 
++#define MAX_VOLT_LIMIT		(1150000)
++
  struct cci_devfreq {
  	struct devfreq *devfreq;
  	struct regulator *proc_reg;
@@ -6237,8 +5472,10 @@ index b5d8c1ff493f..a153adee033e 100644
 -	struct notifier_block nb;
 -	struct notifier_block opp_nb;
 -	int cci_min_freq;
--};
--
++	int old_vproc;
++	unsigned long old_freq;
+ };
+ 
 -static int cci_devfreq_regulator_notifier(struct notifier_block *nb,
 -					  unsigned long val, void *data)
 -{
@@ -6284,8 +5521,10 @@ index b5d8c1ff493f..a153adee033e 100644
 -
 -static int ccidevfreq_opp_notifier(struct notifier_block *nb,
 -unsigned long event, void *data)
--{
--	int ret;
++static int mtk_cci_devfreq_target(struct device *dev, unsigned long *freq,
++				  u32 flags)
+ {
+ 	int ret;
 -	struct dev_pm_opp *opp = data;
 -	struct cci_devfreq *cci_df = container_of(nb, struct cci_devfreq,
 -						  opp_nb);
@@ -6324,7 +5563,8 @@ index b5d8c1ff493f..a153adee033e 100644
 -				       unsigned long *freq)
 -{
 -	struct cci_devfreq *cci_df;
--	struct dev_pm_opp *opp;
++	struct cci_devfreq *cci_df = dev_get_drvdata(dev);
+ 	struct dev_pm_opp *opp;
 -	int ret;
 -
 -	cci_df = dev_get_drvdata(devfreq->dev.parent);
@@ -6339,7 +5579,8 @@ index b5d8c1ff493f..a153adee033e 100644
 -		return ret;
 -	}
 -	*freq = dev_pm_opp_get_freq(opp);
--
++	unsigned long opp_rate, opp_voltage, old_voltage;
+ 
 -	return 0;
 -}
 -
@@ -6350,11 +5591,15 @@ index b5d8c1ff493f..a153adee033e 100644
 -	struct cci_devfreq *cci_df;
 -	struct notifier_block *nb;
 -	struct notifier_block *opp_nb;
--
++	if (!cci_df)
++		return -EINVAL;
+ 
 -	cci_df = dev_get_drvdata(devfreq->dev.parent);
 -	nb = &cci_df->nb;
 -	opp_nb = &cci_df->opp_nb;
--
++	if (cci_df->old_freq == *freq)
++		return 0;
+ 
 -	switch (event) {
 -	case DEVFREQ_GOV_START:
 -	case DEVFREQ_GOV_RESUME:
@@ -6367,7 +5612,11 @@ index b5d8c1ff493f..a153adee033e 100644
 -		opp_nb->notifier_call = ccidevfreq_opp_notifier;
 -		dev_pm_opp_register_notifier(devfreq->dev.parent, opp_nb);
 -		break;
--
++	opp_rate = *freq;
++	opp = dev_pm_opp_find_freq_floor(dev, &opp_rate);
++	opp_voltage = dev_pm_opp_get_voltage(opp);
++	dev_pm_opp_put(opp);
+ 
 -	case DEVFREQ_GOV_STOP:
 -	case DEVFREQ_GOV_SUSPEND:
 -		ret = regulator_unregister_notifier(cci_df->proc_reg,
@@ -6376,11 +5625,18 @@ index b5d8c1ff493f..a153adee033e 100644
 -			pr_err("%s: failed to add governor: %d\n", __func__,
 -			       ret);
 -		break;
--
++	old_voltage = cci_df->old_vproc;
++	if (old_voltage == 0)
++		old_voltage = regulator_get_voltage(cci_df->proc_reg);
+ 
 -	default:
 -		break;
--	}
--
++	// scale up: set voltage first then freq
++	if (opp_voltage > old_voltage) {
++		regulator_set_voltage(cci_df->proc_reg, opp_voltage,
++						MAX_VOLT_LIMIT);
+ 	}
+ 
 -	return 0;
 -}
 -
@@ -6389,28 +5645,47 @@ index b5d8c1ff493f..a153adee033e 100644
 -	.get_target_freq = mtk_cci_governor_get_target,
 -	.event_handler = mtk_cci_governor_event_handler,
 -	.immutable = true
- };
- 
- static int mtk_cci_devfreq_target(struct device *dev, unsigned long *freq,
-@@ -193,8 +36,6 @@ static int mtk_cci_devfreq_target(struct device *dev, unsigned long *freq,
+-};
+-
+-static int mtk_cci_devfreq_target(struct device *dev, unsigned long *freq,
+-				  u32 flags)
+-{
+-	int ret;
+-	struct cci_devfreq *cci_df = dev_get_drvdata(dev);
+-
+-	if (!cci_df)
+-		return -EINVAL;
+-
+ 	ret = clk_set_rate(cci_df->cci_clk, *freq);
+ 	if (ret) {
+ 		pr_err("%s: failed cci to set rate: %d\n", __func__,
+@@ -193,7 +61,14 @@ static int mtk_cci_devfreq_target(struct device *dev, unsigned long *freq,
  		return ret;
  	}
  
 -	cci_df->freq = *freq;
--
++	// scale down: set freq first then voltage
++	if (opp_voltage < old_voltage) {
++		regulator_set_voltage(cci_df->proc_reg, opp_voltage,
++						MAX_VOLT_LIMIT);
++	}
++
++	cci_df->old_vproc = opp_voltage;
++	cci_df->old_freq = *freq;
+ 
  	return 0;
  }
- 
-@@ -206,8 +47,6 @@ static int mtk_cci_devfreq_probe(struct platform_device *pdev)
+@@ -206,8 +81,7 @@ static int mtk_cci_devfreq_probe(struct platform_device *pdev)
  {
  	struct device *cci_dev = &pdev->dev;
  	struct cci_devfreq *cci_df;
 -	unsigned long freq, volt;
 -	struct dev_pm_opp *opp;
++	struct devfreq_passive_data *passive_data;
  	int ret;
  
  	cci_df = devm_kzalloc(cci_dev, sizeof(*cci_df), GFP_KERNEL);
-@@ -237,19 +76,12 @@ static int mtk_cci_devfreq_probe(struct platform_device *pdev)
+@@ -237,19 +111,18 @@ static int mtk_cci_devfreq_probe(struct platform_device *pdev)
  		return ret;
  	}
  
@@ -6423,17 +5698,22 @@ index b5d8c1ff493f..a153adee033e 100644
 -
  	platform_set_drvdata(pdev, cci_df);
  
++	passive_data = devm_kzalloc(cci_dev, sizeof(*passive_data), GFP_KERNEL);
++	if (!passive_data)
++		return -ENOMEM;
++
++	passive_data->cpufreq_type = true;
++
  	cci_df->devfreq = devm_devfreq_add_device(cci_dev,
--						  &cci_devfreq_profile,
+ 						  &cci_devfreq_profile,
 -						  "mtk_cci_vmon",
 -						  NULL);
-+						&cci_devfreq_profile,
-+						"cpufreq-map",
-+						NULL);
++						  DEVFREQ_GOV_PASSIVE,
++						  passive_data);
  	if (IS_ERR(cci_df->devfreq)) {
  		ret = PTR_ERR(cci_df->devfreq);
  		dev_err(cci_dev, "cannot create cci devfreq device:%d\n", ret);
-@@ -277,30 +109,12 @@ static struct platform_driver cci_devfreq_driver = {
+@@ -277,30 +150,12 @@ static struct platform_driver cci_devfreq_driver = {
  
  static int __init mtk_cci_devfreq_init(void)
  {
@@ -9219,799 +8499,6 @@ index 6bf46d1f39b4..9e7969bc755f 100644
  	enum mtk_ddp_comp_id id;
  	const struct mtk_ddp_comp_funcs *funcs;
  };
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 4aae4a7d9f71..3d4817d381e0 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -28,6 +28,15 @@ config DRM_PANEL_BOE_HIMAX8279D
- 	  24 bit RGB per pixel. It provides a MIPI DSI interface to
- 	  the host and has a built-in LED backlight.
- 
-+config DRM_PANEL_BOE_TV101WUM_NL6
-+	tristate "BOE TV101WUM 1200x1920 panel"
-+	depends on OF
-+	depends on DRM_MIPI_DSI
-+	depends on BACKLIGHT_CLASS_DEVICE
-+	help
-+	  Say Y here if you want to support for BOE TV101WUM WUXGA PANEL
-+	  DSI Video Mode panel
-+
- config DRM_PANEL_LVDS
- 	tristate "Generic LVDS panel driver"
- 	depends on OF
-diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index 7285539d8015..47e639a7f575 100644
---- a/drivers/gpu/drm/panel/Makefile
-+++ b/drivers/gpu/drm/panel/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_DRM_PANEL_ARM_VERSATILE) += panel-arm-versatile.o
- obj-$(CONFIG_DRM_PANEL_BOE_HIMAX8279D) += panel-boe-himax8279d.o
-+obj-$(CONFIG_DRM_PANEL_BOE_TV101WUM_NL6) += panel-boe-tv101wum-nl6.o
- obj-$(CONFIG_DRM_PANEL_LVDS) += panel-lvds.o
- obj-$(CONFIG_DRM_PANEL_SIMPLE) += panel-simple.o
- obj-$(CONFIG_DRM_PANEL_ILITEK_IL9322) += panel-ilitek-ili9322.o
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-new file mode 100644
-index 000000000000..91898794df74
---- /dev/null
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-@@ -0,0 +1,755 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2018 MediaTek Inc.
-+ * Author: Jitao Shi <jitao.shi@mediatek.com>
-+ */
-+
-+#include <linux/backlight.h>
-+#include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/regulator/consumer.h>
-+
-+#include <drm/drm_crtc.h>
-+#include <drm/drm_mipi_dsi.h>
-+#include <drm/drm_panel.h>
-+
-+#include <video/mipi_display.h>
-+
-+struct panel_desc {
-+	const struct drm_display_mode *modes;
-+	unsigned int bpc;
-+
-+	/**
-+	 * @width: width (in millimeters) of the panel's active display area
-+	 * @height: height (in millimeters) of the panel's active display area
-+	 */
-+	struct {
-+		unsigned int width;
-+		unsigned int height;
-+	} size;
-+
-+	unsigned long mode_flags;
-+	enum mipi_dsi_pixel_format format;
-+	const struct panel_init_cmd *init_cmds;
-+	unsigned int lanes;
-+};
-+
-+struct boe_panel {
-+	struct drm_panel base;
-+	struct mipi_dsi_device *dsi;
-+
-+	const struct panel_desc *desc;
-+
-+	struct backlight_device *backlight;
-+	struct regulator *pp1800;
-+	struct regulator *avee;
-+	struct regulator *avdd;
-+	struct gpio_desc *enable_gpio;
-+
-+	bool prepared;
-+	bool enabled;
-+
-+	const struct drm_display_mode *mode;
-+};
-+
-+enum dsi_cmd_type {
-+	INIT_DCS_CMD,
-+	DELAY_CMD,
-+};
-+
-+struct panel_init_cmd {
-+	enum dsi_cmd_type type;
-+	size_t len;
-+	const char *data;
-+};
-+
-+#define _INIT_DCS_CMD(...) { \
-+	.type = INIT_DCS_CMD, \
-+	.len = sizeof((char[]){__VA_ARGS__}), \
-+	.data = (char[]){__VA_ARGS__} }
-+
-+#define _INIT_DELAY_CMD(...) { \
-+	.type = DELAY_CMD,\
-+	.len = sizeof((char[]){__VA_ARGS__}), \
-+	.data = (char[]){__VA_ARGS__} }
-+
-+static const struct panel_init_cmd boe_init_cmd[] = {
-+	_INIT_DELAY_CMD(24),
-+	_INIT_DCS_CMD(0xB0, 0x05),
-+	_INIT_DCS_CMD(0xB1, 0xE5),
-+	_INIT_DCS_CMD(0xB3, 0x52),
-+	_INIT_DCS_CMD(0xB0, 0x00),
-+	_INIT_DCS_CMD(0xB3, 0x88),
-+	_INIT_DCS_CMD(0xB0, 0x04),
-+	_INIT_DCS_CMD(0xB8, 0x00),
-+	_INIT_DCS_CMD(0xB0, 0x00),
-+	_INIT_DCS_CMD(0xB6, 0x03),
-+	_INIT_DCS_CMD(0xBA, 0x8B),
-+	_INIT_DCS_CMD(0xBF, 0x1A),
-+	_INIT_DCS_CMD(0xC0, 0x0F),
-+	_INIT_DCS_CMD(0xC2, 0x0C),
-+	_INIT_DCS_CMD(0xC3, 0x02),
-+	_INIT_DCS_CMD(0xC4, 0x0C),
-+	_INIT_DCS_CMD(0xC5, 0x02),
-+	_INIT_DCS_CMD(0xB0, 0x01),
-+	_INIT_DCS_CMD(0xE0, 0x26),
-+	_INIT_DCS_CMD(0xE1, 0x26),
-+	_INIT_DCS_CMD(0xDC, 0x00),
-+	_INIT_DCS_CMD(0xDD, 0x00),
-+	_INIT_DCS_CMD(0xCC, 0x26),
-+	_INIT_DCS_CMD(0xCD, 0x26),
-+	_INIT_DCS_CMD(0xC8, 0x00),
-+	_INIT_DCS_CMD(0xC9, 0x00),
-+	_INIT_DCS_CMD(0xD2, 0x03),
-+	_INIT_DCS_CMD(0xD3, 0x03),
-+	_INIT_DCS_CMD(0xE6, 0x04),
-+	_INIT_DCS_CMD(0xE7, 0x04),
-+	_INIT_DCS_CMD(0xC4, 0x09),
-+	_INIT_DCS_CMD(0xC5, 0x09),
-+	_INIT_DCS_CMD(0xD8, 0x0A),
-+	_INIT_DCS_CMD(0xD9, 0x0A),
-+	_INIT_DCS_CMD(0xC2, 0x0B),
-+	_INIT_DCS_CMD(0xC3, 0x0B),
-+	_INIT_DCS_CMD(0xD6, 0x0C),
-+	_INIT_DCS_CMD(0xD7, 0x0C),
-+	_INIT_DCS_CMD(0xC0, 0x05),
-+	_INIT_DCS_CMD(0xC1, 0x05),
-+	_INIT_DCS_CMD(0xD4, 0x06),
-+	_INIT_DCS_CMD(0xD5, 0x06),
-+	_INIT_DCS_CMD(0xCA, 0x07),
-+	_INIT_DCS_CMD(0xCB, 0x07),
-+	_INIT_DCS_CMD(0xDE, 0x08),
-+	_INIT_DCS_CMD(0xDF, 0x08),
-+	_INIT_DCS_CMD(0xB0, 0x02),
-+	_INIT_DCS_CMD(0xC0, 0x00),
-+	_INIT_DCS_CMD(0xC1, 0x0D),
-+	_INIT_DCS_CMD(0xC2, 0x17),
-+	_INIT_DCS_CMD(0xC3, 0x26),
-+	_INIT_DCS_CMD(0xC4, 0x31),
-+	_INIT_DCS_CMD(0xC5, 0x1C),
-+	_INIT_DCS_CMD(0xC6, 0x2C),
-+	_INIT_DCS_CMD(0xC7, 0x33),
-+	_INIT_DCS_CMD(0xC8, 0x31),
-+	_INIT_DCS_CMD(0xC9, 0x37),
-+	_INIT_DCS_CMD(0xCA, 0x37),
-+	_INIT_DCS_CMD(0xCB, 0x37),
-+	_INIT_DCS_CMD(0xCC, 0x39),
-+	_INIT_DCS_CMD(0xCD, 0x2E),
-+	_INIT_DCS_CMD(0xCE, 0x2F),
-+	_INIT_DCS_CMD(0xCF, 0x2F),
-+	_INIT_DCS_CMD(0xD0, 0x07),
-+	_INIT_DCS_CMD(0xD2, 0x00),
-+	_INIT_DCS_CMD(0xD3, 0x0D),
-+	_INIT_DCS_CMD(0xD4, 0x17),
-+	_INIT_DCS_CMD(0xD5, 0x26),
-+	_INIT_DCS_CMD(0xD6, 0x31),
-+	_INIT_DCS_CMD(0xD7, 0x3F),
-+	_INIT_DCS_CMD(0xD8, 0x3F),
-+	_INIT_DCS_CMD(0xD9, 0x3F),
-+	_INIT_DCS_CMD(0xDA, 0x3F),
-+	_INIT_DCS_CMD(0xDB, 0x37),
-+	_INIT_DCS_CMD(0xDC, 0x37),
-+	_INIT_DCS_CMD(0xDD, 0x37),
-+	_INIT_DCS_CMD(0xDE, 0x39),
-+	_INIT_DCS_CMD(0xDF, 0x2E),
-+	_INIT_DCS_CMD(0xE0, 0x2F),
-+	_INIT_DCS_CMD(0xE1, 0x2F),
-+	_INIT_DCS_CMD(0xE2, 0x07),
-+	_INIT_DCS_CMD(0xB0, 0x03),
-+	_INIT_DCS_CMD(0xC8, 0x0B),
-+	_INIT_DCS_CMD(0xC9, 0x07),
-+	_INIT_DCS_CMD(0xC3, 0x00),
-+	_INIT_DCS_CMD(0xE7, 0x00),
-+	_INIT_DCS_CMD(0xC5, 0x2A),
-+	_INIT_DCS_CMD(0xDE, 0x2A),
-+	_INIT_DCS_CMD(0xCA, 0x43),
-+	_INIT_DCS_CMD(0xC9, 0x07),
-+	_INIT_DCS_CMD(0xE4, 0xC0),
-+	_INIT_DCS_CMD(0xE5, 0x0D),
-+	_INIT_DCS_CMD(0xCB, 0x00),
-+	_INIT_DCS_CMD(0xB0, 0x06),
-+	_INIT_DCS_CMD(0xB8, 0xA5),
-+	_INIT_DCS_CMD(0xC0, 0xA5),
-+	_INIT_DCS_CMD(0xC7, 0x0F),
-+	_INIT_DCS_CMD(0xD5, 0x32),
-+	_INIT_DCS_CMD(0xB8, 0x00),
-+	_INIT_DCS_CMD(0xC0, 0x00),
-+	_INIT_DCS_CMD(0xBC, 0x00),
-+	_INIT_DCS_CMD(0xB0, 0x07),
-+	_INIT_DCS_CMD(0xB1, 0x00),
-+	_INIT_DCS_CMD(0xB2, 0x02),
-+	_INIT_DCS_CMD(0xB3, 0x0F),
-+	_INIT_DCS_CMD(0xB4, 0x25),
-+	_INIT_DCS_CMD(0xB5, 0x39),
-+	_INIT_DCS_CMD(0xB6, 0x4E),
-+	_INIT_DCS_CMD(0xB7, 0x72),
-+	_INIT_DCS_CMD(0xB8, 0x97),
-+	_INIT_DCS_CMD(0xB9, 0xDC),
-+	_INIT_DCS_CMD(0xBA, 0x22),
-+	_INIT_DCS_CMD(0xBB, 0xA4),
-+	_INIT_DCS_CMD(0xBC, 0x2B),
-+	_INIT_DCS_CMD(0xBD, 0x2F),
-+	_INIT_DCS_CMD(0xBE, 0xA9),
-+	_INIT_DCS_CMD(0xBF, 0x25),
-+	_INIT_DCS_CMD(0xC0, 0x61),
-+	_INIT_DCS_CMD(0xC1, 0x97),
-+	_INIT_DCS_CMD(0xC2, 0xB2),
-+	_INIT_DCS_CMD(0xC3, 0xCD),
-+	_INIT_DCS_CMD(0xC4, 0xD9),
-+	_INIT_DCS_CMD(0xC5, 0xE7),
-+	_INIT_DCS_CMD(0xC6, 0xF4),
-+	_INIT_DCS_CMD(0xC7, 0xFA),
-+	_INIT_DCS_CMD(0xC8, 0xFC),
-+	_INIT_DCS_CMD(0xC9, 0x00),
-+	_INIT_DCS_CMD(0xCA, 0x00),
-+	_INIT_DCS_CMD(0xCB, 0x16),
-+	_INIT_DCS_CMD(0xCC, 0xAF),
-+	_INIT_DCS_CMD(0xCD, 0xFF),
-+	_INIT_DCS_CMD(0xCE, 0xFF),
-+	_INIT_DCS_CMD(0xB0, 0x08),
-+	_INIT_DCS_CMD(0xB1, 0x04),
-+	_INIT_DCS_CMD(0xB2, 0x05),
-+	_INIT_DCS_CMD(0xB3, 0x11),
-+	_INIT_DCS_CMD(0xB4, 0x24),
-+	_INIT_DCS_CMD(0xB5, 0x39),
-+	_INIT_DCS_CMD(0xB6, 0x4F),
-+	_INIT_DCS_CMD(0xB7, 0x72),
-+	_INIT_DCS_CMD(0xB8, 0x98),
-+	_INIT_DCS_CMD(0xB9, 0xDC),
-+	_INIT_DCS_CMD(0xBA, 0x23),
-+	_INIT_DCS_CMD(0xBB, 0xA6),
-+	_INIT_DCS_CMD(0xBC, 0x2C),
-+	_INIT_DCS_CMD(0xBD, 0x30),
-+	_INIT_DCS_CMD(0xBE, 0xAA),
-+	_INIT_DCS_CMD(0xBF, 0x26),
-+	_INIT_DCS_CMD(0xC0, 0x62),
-+	_INIT_DCS_CMD(0xC1, 0x9B),
-+	_INIT_DCS_CMD(0xC2, 0xB5),
-+	_INIT_DCS_CMD(0xC3, 0xCF),
-+	_INIT_DCS_CMD(0xC4, 0xDB),
-+	_INIT_DCS_CMD(0xC5, 0xE8),
-+	_INIT_DCS_CMD(0xC6, 0xF5),
-+	_INIT_DCS_CMD(0xC7, 0xFA),
-+	_INIT_DCS_CMD(0xC8, 0xFC),
-+	_INIT_DCS_CMD(0xC9, 0x00),
-+	_INIT_DCS_CMD(0xCA, 0x00),
-+	_INIT_DCS_CMD(0xCB, 0x16),
-+	_INIT_DCS_CMD(0xCC, 0xAF),
-+	_INIT_DCS_CMD(0xCD, 0xFF),
-+	_INIT_DCS_CMD(0xCE, 0xFF),
-+	_INIT_DCS_CMD(0xB0, 0x09),
-+	_INIT_DCS_CMD(0xB1, 0x04),
-+	_INIT_DCS_CMD(0xB2, 0x02),
-+	_INIT_DCS_CMD(0xB3, 0x16),
-+	_INIT_DCS_CMD(0xB4, 0x24),
-+	_INIT_DCS_CMD(0xB5, 0x3B),
-+	_INIT_DCS_CMD(0xB6, 0x4F),
-+	_INIT_DCS_CMD(0xB7, 0x73),
-+	_INIT_DCS_CMD(0xB8, 0x99),
-+	_INIT_DCS_CMD(0xB9, 0xE0),
-+	_INIT_DCS_CMD(0xBA, 0x26),
-+	_INIT_DCS_CMD(0xBB, 0xAD),
-+	_INIT_DCS_CMD(0xBC, 0x36),
-+	_INIT_DCS_CMD(0xBD, 0x3A),
-+	_INIT_DCS_CMD(0xBE, 0xAE),
-+	_INIT_DCS_CMD(0xBF, 0x2A),
-+	_INIT_DCS_CMD(0xC0, 0x66),
-+	_INIT_DCS_CMD(0xC1, 0x9E),
-+	_INIT_DCS_CMD(0xC2, 0xB8),
-+	_INIT_DCS_CMD(0xC3, 0xD1),
-+	_INIT_DCS_CMD(0xC4, 0xDD),
-+	_INIT_DCS_CMD(0xC5, 0xE9),
-+	_INIT_DCS_CMD(0xC6, 0xF6),
-+	_INIT_DCS_CMD(0xC7, 0xFA),
-+	_INIT_DCS_CMD(0xC8, 0xFC),
-+	_INIT_DCS_CMD(0xC9, 0x00),
-+	_INIT_DCS_CMD(0xCA, 0x00),
-+	_INIT_DCS_CMD(0xCB, 0x16),
-+	_INIT_DCS_CMD(0xCC, 0xAF),
-+	_INIT_DCS_CMD(0xCD, 0xFF),
-+	_INIT_DCS_CMD(0xCE, 0xFF),
-+	_INIT_DCS_CMD(0xB0, 0x0A),
-+	_INIT_DCS_CMD(0xB1, 0x00),
-+	_INIT_DCS_CMD(0xB2, 0x02),
-+	_INIT_DCS_CMD(0xB3, 0x0F),
-+	_INIT_DCS_CMD(0xB4, 0x25),
-+	_INIT_DCS_CMD(0xB5, 0x39),
-+	_INIT_DCS_CMD(0xB6, 0x4E),
-+	_INIT_DCS_CMD(0xB7, 0x72),
-+	_INIT_DCS_CMD(0xB8, 0x97),
-+	_INIT_DCS_CMD(0xB9, 0xDC),
-+	_INIT_DCS_CMD(0xBA, 0x22),
-+	_INIT_DCS_CMD(0xBB, 0xA4),
-+	_INIT_DCS_CMD(0xBC, 0x2B),
-+	_INIT_DCS_CMD(0xBD, 0x2F),
-+	_INIT_DCS_CMD(0xBE, 0xA9),
-+	_INIT_DCS_CMD(0xBF, 0x25),
-+	_INIT_DCS_CMD(0xC0, 0x61),
-+	_INIT_DCS_CMD(0xC1, 0x97),
-+	_INIT_DCS_CMD(0xC2, 0xB2),
-+	_INIT_DCS_CMD(0xC3, 0xCD),
-+	_INIT_DCS_CMD(0xC4, 0xD9),
-+	_INIT_DCS_CMD(0xC5, 0xE7),
-+	_INIT_DCS_CMD(0xC6, 0xF4),
-+	_INIT_DCS_CMD(0xC7, 0xFA),
-+	_INIT_DCS_CMD(0xC8, 0xFC),
-+	_INIT_DCS_CMD(0xC9, 0x00),
-+	_INIT_DCS_CMD(0xCA, 0x00),
-+	_INIT_DCS_CMD(0xCB, 0x16),
-+	_INIT_DCS_CMD(0xCC, 0xAF),
-+	_INIT_DCS_CMD(0xCD, 0xFF),
-+	_INIT_DCS_CMD(0xCE, 0xFF),
-+	_INIT_DCS_CMD(0xB0, 0x0B),
-+	_INIT_DCS_CMD(0xB1, 0x04),
-+	_INIT_DCS_CMD(0xB2, 0x05),
-+	_INIT_DCS_CMD(0xB3, 0x11),
-+	_INIT_DCS_CMD(0xB4, 0x24),
-+	_INIT_DCS_CMD(0xB5, 0x39),
-+	_INIT_DCS_CMD(0xB6, 0x4F),
-+	_INIT_DCS_CMD(0xB7, 0x72),
-+	_INIT_DCS_CMD(0xB8, 0x98),
-+	_INIT_DCS_CMD(0xB9, 0xDC),
-+	_INIT_DCS_CMD(0xBA, 0x23),
-+	_INIT_DCS_CMD(0xBB, 0xA6),
-+	_INIT_DCS_CMD(0xBC, 0x2C),
-+	_INIT_DCS_CMD(0xBD, 0x30),
-+	_INIT_DCS_CMD(0xBE, 0xAA),
-+	_INIT_DCS_CMD(0xBF, 0x26),
-+	_INIT_DCS_CMD(0xC0, 0x62),
-+	_INIT_DCS_CMD(0xC1, 0x9B),
-+	_INIT_DCS_CMD(0xC2, 0xB5),
-+	_INIT_DCS_CMD(0xC3, 0xCF),
-+	_INIT_DCS_CMD(0xC4, 0xDB),
-+	_INIT_DCS_CMD(0xC5, 0xE8),
-+	_INIT_DCS_CMD(0xC6, 0xF5),
-+	_INIT_DCS_CMD(0xC7, 0xFA),
-+	_INIT_DCS_CMD(0xC8, 0xFC),
-+	_INIT_DCS_CMD(0xC9, 0x00),
-+	_INIT_DCS_CMD(0xCA, 0x00),
-+	_INIT_DCS_CMD(0xCB, 0x16),
-+	_INIT_DCS_CMD(0xCC, 0xAF),
-+	_INIT_DCS_CMD(0xCD, 0xFF),
-+	_INIT_DCS_CMD(0xCE, 0xFF),
-+	_INIT_DCS_CMD(0xB0, 0x0C),
-+	_INIT_DCS_CMD(0xB1, 0x04),
-+	_INIT_DCS_CMD(0xB2, 0x02),
-+	_INIT_DCS_CMD(0xB3, 0x16),
-+	_INIT_DCS_CMD(0xB4, 0x24),
-+	_INIT_DCS_CMD(0xB5, 0x3B),
-+	_INIT_DCS_CMD(0xB6, 0x4F),
-+	_INIT_DCS_CMD(0xB7, 0x73),
-+	_INIT_DCS_CMD(0xB8, 0x99),
-+	_INIT_DCS_CMD(0xB9, 0xE0),
-+	_INIT_DCS_CMD(0xBA, 0x26),
-+	_INIT_DCS_CMD(0xBB, 0xAD),
-+	_INIT_DCS_CMD(0xBC, 0x36),
-+	_INIT_DCS_CMD(0xBD, 0x3A),
-+	_INIT_DCS_CMD(0xBE, 0xAE),
-+	_INIT_DCS_CMD(0xBF, 0x2A),
-+	_INIT_DCS_CMD(0xC0, 0x66),
-+	_INIT_DCS_CMD(0xC1, 0x9E),
-+	_INIT_DCS_CMD(0xC2, 0xB8),
-+	_INIT_DCS_CMD(0xC3, 0xD1),
-+	_INIT_DCS_CMD(0xC4, 0xDD),
-+	_INIT_DCS_CMD(0xC5, 0xE9),
-+	_INIT_DCS_CMD(0xC6, 0xF6),
-+	_INIT_DCS_CMD(0xC7, 0xFA),
-+	_INIT_DCS_CMD(0xC8, 0xFC),
-+	_INIT_DCS_CMD(0xC9, 0x00),
-+	_INIT_DCS_CMD(0xCA, 0x00),
-+	_INIT_DCS_CMD(0xCB, 0x16),
-+	_INIT_DCS_CMD(0xCC, 0xAF),
-+	_INIT_DCS_CMD(0xCD, 0xFF),
-+	_INIT_DCS_CMD(0xCE, 0xFF),
-+	_INIT_DCS_CMD(0xB0, 0x00),
-+	_INIT_DCS_CMD(0xB3, 0x08),
-+	_INIT_DCS_CMD(0xB0, 0x04),
-+	_INIT_DCS_CMD(0xB8, 0x68),
-+	_INIT_DELAY_CMD(150),
-+	{},
-+};
-+
-+static const struct panel_init_cmd auo_init_cmd[] = {
-+	_INIT_DELAY_CMD(24),
-+	_INIT_DCS_CMD(0x11),
-+	_INIT_DELAY_CMD(120),
-+	_INIT_DCS_CMD(0x29),
-+	_INIT_DELAY_CMD(120),
-+	{},
-+};
-+
-+static inline struct boe_panel *to_boe_panel(struct drm_panel *panel)
-+{
-+	return container_of(panel, struct boe_panel, base);
-+}
-+
-+static int boe_panel_init(struct boe_panel *boe)
-+{
-+	struct mipi_dsi_device *dsi = boe->dsi;
-+	struct drm_panel *panel = &boe->base;
-+	int err, i;
-+
-+	if (boe->desc->init_cmds) {
-+		const struct panel_init_cmd *init_cmds = boe->desc->init_cmds;
-+
-+		for (i = 0; init_cmds[i].len != 0; i++) {
-+			const struct panel_init_cmd *cmd = &init_cmds[i];
-+
-+			switch (cmd->type) {
-+			case DELAY_CMD:
-+				msleep(cmd->data[0]);
-+				err = 0;
-+				break;
-+
-+			case INIT_DCS_CMD:
-+				err = mipi_dsi_dcs_write(dsi, cmd->data[0],
-+							 cmd->len <= 1 ? NULL :
-+							 &cmd->data[1],
-+							 cmd->len - 1);
-+				break;
-+			}
-+
-+			if (err < 0) {
-+				dev_err(panel->dev,
-+					"failed to write command %u\n", i);
-+				return err;
-+			}
-+		}
-+	}
-+	return 0;
-+}
-+
-+static int boe_panel_off(struct boe_panel *boe)
-+{
-+	struct mipi_dsi_device *dsi = boe->dsi;
-+	int ret;
-+
-+	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-+
-+	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int boe_panel_disable(struct drm_panel *panel)
-+{
-+	struct boe_panel *boe = to_boe_panel(panel);
-+
-+	if (!boe->enabled)
-+		return 0;
-+
-+	backlight_disable(boe->backlight);
-+
-+	boe->enabled = false;
-+
-+	return 0;
-+}
-+
-+static int boe_panel_unprepare(struct drm_panel *panel)
-+{
-+	struct boe_panel *boe = to_boe_panel(panel);
-+	int ret;
-+
-+	if (!boe->prepared)
-+		return 0;
-+
-+	ret = boe_panel_off(boe);
-+	if (ret < 0) {
-+		dev_err(panel->dev, "failed to set panel off: %d\n", ret);
-+		return ret;
-+	}
-+
-+	msleep(150);
-+	if (boe->enable_gpio)
-+		gpiod_set_value(boe->enable_gpio, 0);
-+	usleep_range(500, 1000);
-+	regulator_disable(boe->avee);
-+	regulator_disable(boe->avdd);
-+	usleep_range(5000, 7000);
-+	regulator_disable(boe->pp1800);
-+
-+	boe->prepared = false;
-+
-+	return 0;
-+}
-+
-+static int boe_panel_prepare(struct drm_panel *panel)
-+{
-+	struct boe_panel *boe = to_boe_panel(panel);
-+	int ret;
-+
-+	if (boe->prepared)
-+		return 0;
-+
-+	if (boe->enable_gpio) {
-+		gpiod_set_value(boe->enable_gpio, 0);
-+		usleep_range(1000, 1500);
-+	}
-+
-+	ret = regulator_enable(boe->pp1800);
-+	if (ret < 0)
-+		return ret;
-+
-+	usleep_range(3000, 5000);
-+
-+	ret = regulator_enable(boe->avdd);
-+	if (ret < 0)
-+		goto poweroff1v8;
-+	ret = regulator_enable(boe->avee);
-+	if (ret < 0)
-+		goto poweroffavdd;
-+
-+	msleep(100);
-+
-+	if (boe->enable_gpio) {
-+		gpiod_set_value(boe->enable_gpio, 1);
-+		usleep_range(10000, 12000);
-+	}
-+
-+	ret = boe_panel_init(boe);
-+	if (ret < 0) {
-+		dev_err(panel->dev, "failed to init panel: %d\n", ret);
-+		goto poweroff;
-+	}
-+
-+	boe->prepared = true;
-+
-+	return 0;
-+
-+poweroff:
-+	regulator_disable(boe->avee);
-+poweroffavdd:
-+	regulator_disable(boe->avdd);
-+poweroff1v8:
-+	usleep_range(5000, 7000);
-+	regulator_disable(boe->pp1800);
-+	if (boe->enable_gpio)
-+		gpiod_set_value(boe->enable_gpio, 0);
-+	return ret;
-+}
-+
-+static int boe_panel_enable(struct drm_panel *panel)
-+{
-+	struct boe_panel *boe = to_boe_panel(panel);
-+	int ret;
-+
-+	if (boe->enabled)
-+		return 0;
-+
-+	ret = backlight_enable(boe->backlight);
-+	if (ret) {
-+		dev_err(panel->dev, "Failed to enable backlight %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	boe->enabled = true;
-+
-+	return 0;
-+}
-+
-+static const struct drm_display_mode boe_default_mode = {
-+	.clock = 159425,
-+	.hdisplay = 1200,
-+	.hsync_start = 1200 + 100,
-+	.hsync_end = 1200 + 100 + 40,
-+	.htotal = 1200 + 100 + 40 + 24,
-+	.vdisplay = 1920,
-+	.vsync_start = 1920 + 10,
-+	.vsync_end = 1920 + 10 + 14,
-+	.vtotal = 1920 + 10 + 14 + 4,
-+	.vrefresh = 60,
-+	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
-+};
-+
-+static const struct panel_desc boe_tv101wum_nl6_desc = {
-+	.modes = &boe_default_mode,
-+	.bpc = 8,
-+	.size = {
-+		.width = 135,
-+		.height = 216,
-+	},
-+	.lanes = 4,
-+	.format = MIPI_DSI_FMT_RGB888,
-+	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
-+		      MIPI_DSI_MODE_LPM,
-+	.init_cmds = boe_init_cmd,
-+};
-+
-+static const struct drm_display_mode auo_default_mode = {
-+	.clock = 157000,
-+	.hdisplay = 1200,
-+	.hsync_start = 1200 + 80,
-+	.hsync_end = 1200 + 80 + 24,
-+	.htotal = 1200 + 80 + 24 + 36,
-+	.vdisplay = 1920,
-+	.vsync_start = 1920 + 16,
-+	.vsync_end = 1920 + 16 + 4,
-+	.vtotal = 1920 + 16 + 4 + 16,
-+	.vrefresh = 60,
-+	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
-+};
-+
-+static const struct panel_desc auo_kd101n80_45na_desc = {
-+	.modes = &auo_default_mode,
-+	.bpc = 8,
-+	.size = {
-+		.width = 135,
-+		.height = 216,
-+	},
-+	.lanes = 4,
-+	.format = MIPI_DSI_FMT_RGB888,
-+	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
-+		      MIPI_DSI_MODE_LPM,
-+	.init_cmds = auo_init_cmd,
-+};
-+
-+static int boe_panel_get_modes(struct drm_panel *panel)
-+{
-+	struct boe_panel *boe = to_boe_panel(panel);
-+	const struct drm_display_mode *m = boe->desc->modes;
-+	struct drm_display_mode *mode;
-+
-+	mode = drm_mode_duplicate(panel->drm, m);
-+	if (!mode) {
-+		dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
-+			m->hdisplay, m->vdisplay, m->vrefresh);
-+		return -ENOMEM;
-+	}
-+
-+	drm_mode_set_name(mode);
-+
-+	drm_mode_probed_add(panel->connector, mode);
-+
-+	panel->connector->display_info.width_mm = boe->desc->size.width;
-+	panel->connector->display_info.height_mm = boe->desc->size.height;
-+	panel->connector->display_info.bpc = boe->desc->bpc;
-+
-+	return 1;
-+}
-+
-+static const struct drm_panel_funcs boe_panel_funcs = {
-+	.disable = boe_panel_disable,
-+	.unprepare = boe_panel_unprepare,
-+	.prepare = boe_panel_prepare,
-+	.enable = boe_panel_enable,
-+	.get_modes = boe_panel_get_modes,
-+};
-+
-+static int boe_panel_add(struct boe_panel *boe)
-+{
-+	struct device *dev = &boe->dsi->dev;
-+
-+	boe->avdd = devm_regulator_get(dev, "avdd");
-+	if (IS_ERR(boe->avdd))
-+		return PTR_ERR(boe->avdd);
-+
-+	boe->avee = devm_regulator_get(dev, "avee");
-+	if (IS_ERR(boe->avee))
-+		return PTR_ERR(boe->avee);
-+
-+	boe->pp1800 = devm_regulator_get(dev, "pp1800");
-+	if (IS_ERR(boe->pp1800))
-+		return PTR_ERR(boe->pp1800);
-+
-+	boe->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
-+	if (IS_ERR(boe->enable_gpio)) {
-+		dev_err(dev, "cannot get reset-gpios %ld\n",
-+			PTR_ERR(boe->enable_gpio));
-+		return PTR_ERR(boe->enable_gpio);
-+	}
-+
-+	gpiod_set_value(boe->enable_gpio, 0);
-+
-+	boe->backlight = devm_of_find_backlight(dev);
-+	if (IS_ERR(boe->backlight))
-+		return PTR_ERR(boe->backlight);
-+
-+	drm_panel_init(&boe->base);
-+	boe->base.funcs = &boe_panel_funcs;
-+	boe->base.dev = &boe->dsi->dev;
-+
-+	return drm_panel_add(&boe->base);
-+}
-+
-+static int boe_panel_probe(struct mipi_dsi_device *dsi)
-+{
-+	struct boe_panel *boe;
-+	int ret;
-+	const struct panel_desc *desc;
-+
-+	boe = devm_kzalloc(&dsi->dev, sizeof(*boe), GFP_KERNEL);
-+	if (!boe)
-+		return -ENOMEM;
-+
-+	desc = of_device_get_match_data(&dsi->dev);
-+	dsi->lanes = desc->lanes;
-+	dsi->format = desc->format;
-+	dsi->mode_flags = desc->mode_flags;
-+	boe->desc = desc;
-+	boe->dsi = dsi;
-+	ret = boe_panel_add(boe);
-+	if (ret < 0)
-+		return ret;
-+
-+	mipi_dsi_set_drvdata(dsi, boe);
-+
-+	return mipi_dsi_attach(dsi);
-+}
-+
-+static int boe_panel_remove(struct mipi_dsi_device *dsi)
-+{
-+	struct boe_panel *boe = mipi_dsi_get_drvdata(dsi);
-+	int ret;
-+
-+	ret = boe_panel_disable(&boe->base);
-+	if (ret < 0)
-+		dev_err(&dsi->dev, "failed to disable panel: %d\n", ret);
-+
-+	ret = mipi_dsi_detach(dsi);
-+	if (ret < 0)
-+		dev_err(&dsi->dev, "failed to detach from DSI host: %d\n", ret);
-+
-+	if (boe->base.dev)
-+		drm_panel_remove(&boe->base);
-+
-+	return 0;
-+}
-+
-+static void boe_panel_shutdown(struct mipi_dsi_device *dsi)
-+{
-+	struct boe_panel *boe = mipi_dsi_get_drvdata(dsi);
-+
-+	boe_panel_disable(&boe->base);
-+}
-+
-+static const struct of_device_id boe_of_match[] = {
-+	{ .compatible = "boe,tv101wum-nl6",
-+	  .data = &boe_tv101wum_nl6_desc
-+	},
-+	{ .compatible = "auo,kd101n80-45na",
-+	  .data = &auo_kd101n80_45na_desc
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, boe_of_match);
-+
-+static struct mipi_dsi_driver boe_panel_driver = {
-+	.driver = {
-+		.name = "panel-boe-tv101wum-nl6",
-+		.of_match_table = boe_of_match,
-+	},
-+	.probe = boe_panel_probe,
-+	.remove = boe_panel_remove,
-+	.shutdown = boe_panel_shutdown,
-+};
-+module_mipi_dsi_driver(boe_panel_driver);
-+
-+MODULE_AUTHOR("Jitao Shi <jitao.shi@mediatek.com>");
-+MODULE_DESCRIPTION("BOE tv101wum-nl6 1200x1920 video mode panel driver");
-+MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/panel/panel-innolux-p079zca.c b/drivers/gpu/drm/panel/panel-innolux-p079zca.c
 index 88c7d035ace6..f52c892323c3 100644
 --- a/drivers/gpu/drm/panel/panel-innolux-p079zca.c
@@ -10519,7 +9006,7 @@ index d70bdf64ab71..832ea99f7a16 100644
 -subsys_initcall(m4u_init);
 +builtin_platform_driver(mtk_iommu_driver);
 diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-index f761e4d8bf2a..2f375386e376 100644
+index 3b199662cb34..f5a3da4386bb 100644
 --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
 +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
 @@ -29,7 +29,6 @@
@@ -10775,7 +9262,7 @@ index 662a84b822af..cf56b07c4828 100644
  	struct mtk_vcodec_dev	*mtkdev;
  };
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index 50351adafc47..80d1c4ef8247 100644
+index 2c92ee4f0c8c..3087b1856bbd 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
 @@ -16,7 +16,6 @@
@@ -11831,414 +10318,134 @@ index 000000000000..33659ba69be3
 +	hqa_write,
 +	burn
 +};
-diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index b91f2679945c..e728a5471bd7 100644
---- a/drivers/net/wireless/ath/ath10k/core.c
-+++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -184,7 +184,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 			.board_size = QCA6174_BOARD_DATA_SZ,
- 			.board_ext_size = QCA6174_BOARD_EXT_DATA_SZ,
- 		},
--		.hw_ops = &qca6174_ops,
-+		.hw_ops = &qca6174_sdio_ops,
- 		.hw_clk = qca6174_clk,
- 		.target_cpu_freq = 176000000,
- 		.decap_align_bytes = 4,
 diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
-index 4a3892735ab8..4893928502af 100644
+index 511d83163109..6650a4a7e996 100644
 --- a/drivers/net/wireless/ath/ath10k/htt_rx.c
 +++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
-@@ -1952,6 +1952,7 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
- 	int num_mpdu_ranges;
- 	size_t tot_hdr_len;
- 	struct ieee80211_channel *ch;
-+	bool pn_invalid;
- 
- 	peer_id = __le16_to_cpu(rx->hdr.peer_id);
- 
-@@ -1959,7 +1960,7 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
- 	peer = ath10k_peer_find_by_id(ar, peer_id);
- 	spin_unlock_bh(&ar->data_lock);
- 	if (!peer)
--		ath10k_warn(ar, "Got RX ind from invalid peer: %u\n", peer_id);
-+		ath10k_dbg(ar, ATH10K_DBG_HTT, "Got RX ind from invalid peer: %u\n", peer_id);
- 
- 	num_mpdu_ranges = MS(__le32_to_cpu(rx->hdr.info1),
- 			     HTT_RX_INDICATION_INFO1_NUM_MPDU_RANGES);
-@@ -1977,15 +1978,21 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
- 			    num_mpdu_ranges);
- 
- 	if (mpdu_ranges->mpdu_range_status !=
--	    HTT_RX_IND_MPDU_STATUS_OK) {
+@@ -1981,7 +1981,7 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 	    HTT_RX_IND_MPDU_STATUS_OK &&
+ 	    mpdu_ranges->mpdu_range_status !=
+ 	    HTT_RX_IND_MPDU_STATUS_TKIP_MIC_ERR) {
 -		ath10k_warn(ar, "MPDU range status: %d\n",
-+	    HTT_RX_IND_MPDU_STATUS_OK &&
-+	    mpdu_ranges->mpdu_range_status !=
-+	    HTT_RX_IND_MPDU_STATUS_TKIP_MIC_ERR) {
 +		ath10k_dbg(ar, ATH10K_DBG_HTT, "MPDU range status: %d\n",
  			    mpdu_ranges->mpdu_range_status);
  		goto err;
  	}
+diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
+index 066b26c7db81..a9316a5a3847 100644
+--- a/drivers/net/wireless/ath/ath10k/htt_tx.c
++++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
+@@ -1201,6 +1201,7 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
+ 	struct ath10k *ar = htt->ar;
+ 	int res, data_len;
+ 	struct htt_cmd_hdr *cmd_hdr;
++	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)msdu->data;
+ 	struct htt_data_tx_desc *tx_desc;
+ 	struct ath10k_skb_cb *skb_cb = ATH10K_SKB_CB(msdu);
+ 	struct sk_buff *tmp_skb;
+@@ -1211,6 +1212,13 @@ static int ath10k_htt_tx_hl(struct ath10k_htt *htt, enum ath10k_hw_txrx_mode txm
+ 	u16 flags1 = 0;
+ 	u16 msdu_id = 0;
  
--	if (check_pn_type == HTT_RX_PN_CHECK &&
--	    ath10k_htt_rx_pn_check_replay_hl(ar, peer, rx))
--		goto err;
-+	if (check_pn_type == HTT_RX_PN_CHECK) {
-+		spin_lock_bh(&ar->data_lock);
-+		pn_invalid = ath10k_htt_rx_pn_check_replay_hl(ar, peer, rx);
-+		spin_unlock_bh(&ar->data_lock);
-+		if (pn_invalid)
-+			goto err;
++	if ((ieee80211_is_action(hdr->frame_control) ||
++	     ieee80211_is_deauth(hdr->frame_control) ||
++	     ieee80211_is_disassoc(hdr->frame_control)) &&
++	     ieee80211_has_protected(hdr->frame_control)) {
++		skb_put(msdu, IEEE80211_CCMP_MIC_LEN);
 +	}
- 
- 	/* Strip off all headers before the MAC header before delivery to
- 	 * mac80211
-@@ -2047,6 +2054,9 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
- 		rx_status->flag &= ~RX_FLAG_IV_STRIPPED &
- 				   ~RX_FLAG_MMIC_STRIPPED;
- 
-+	if (mpdu_ranges->mpdu_range_status == HTT_RX_IND_MPDU_STATUS_TKIP_MIC_ERR)
-+		rx_status->flag |= RX_FLAG_MMIC_ERROR;
 +
- 	ieee80211_rx_ni(ar->hw, skb);
+ 	data_len = msdu->len;
  
- 	/* We have delivered the skb to the upper layers (mac80211) so we
-diff --git a/drivers/net/wireless/ath/ath10k/hw.c b/drivers/net/wireless/ath/ath10k/hw.c
-index 52845912a4b9..e8dd6a1e6e03 100644
---- a/drivers/net/wireless/ath/ath10k/hw.c
-+++ b/drivers/net/wireless/ath/ath10k/hw.c
-@@ -1130,4 +1130,8 @@ const struct ath10k_hw_ops qca6174_ops = {
- 	.enable_pll_clk = ath10k_hw_qca6174_enable_pll_clock,
- };
+ 	switch (txmode) {
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index b71571c90c84..508f4b9bb288 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -739,7 +739,7 @@ static int _set_required_opps(struct device *dev,
+ 		return 0;
  
-+const struct ath10k_hw_ops qca6174_sdio_ops = {
-+	.enable_pll_clk = ath10k_hw_qca6174_enable_pll_clock,
-+};
-+
- const struct ath10k_hw_ops wcn3990_ops = {};
-diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 5c256d41cc82..3ff49d973ea4 100644
---- a/drivers/net/wireless/ath/ath10k/hw.h
-+++ b/drivers/net/wireless/ath/ath10k/hw.h
-@@ -162,6 +162,8 @@ enum qca9377_chip_id_rev {
- #define ATH10K_FW_UTF_FILE		"utf.bin"
- #define ATH10K_FW_UTF_API2_FILE		"utf-2.bin"
- 
-+#define ATH10K_FW_UTF_FILE_BASE		"utf"
-+
- /* includes also the null byte */
- #define ATH10K_FIRMWARE_MAGIC               "QCA-ATH10K"
- #define ATH10K_BOARD_MAGIC                  "QCA-ATH10K-BOARD"
-@@ -633,6 +635,7 @@ struct ath10k_hw_ops {
- extern const struct ath10k_hw_ops qca988x_ops;
- extern const struct ath10k_hw_ops qca99x0_ops;
- extern const struct ath10k_hw_ops qca6174_ops;
-+extern const struct ath10k_hw_ops qca6174_sdio_ops;
- extern const struct ath10k_hw_ops wcn3990_ops;
- 
- extern const struct ath10k_hw_clk_params qca6174_clk[];
-@@ -1076,6 +1079,7 @@ ath10k_rx_desc_get_l3_pad_bytes(struct ath10k_hw_params *hw,
- #define MBOX_CPU_INT_STATUS_ENABLE_ADDRESS	0x00000819
- #define MBOX_CPU_INT_STATUS_ENABLE_BIT_LSB	0
- #define MBOX_CPU_INT_STATUS_ENABLE_BIT_MASK	0x000000ff
-+#define MBOX_CPU_STATUS_ENABLE_ASSERT_MASK 0x00000001
- #define MBOX_ERROR_STATUS_ENABLE_ADDRESS	0x0000081a
- #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_LSB  1
- #define MBOX_ERROR_STATUS_ENABLE_RX_UNDERFLOW_MASK 0x00000002
-diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
-index 2ebe657be089..874d17dfcf0e 100644
---- a/drivers/net/wireless/ath/ath10k/sdio.c
-+++ b/drivers/net/wireless/ath/ath10k/sdio.c
-@@ -618,6 +618,10 @@ static int ath10k_sdio_mbox_rx_alloc(struct ath10k *ar,
- 						    full_len,
- 						    last_in_bundle,
- 						    last_in_bundle);
-+		if (ret) {
-+			ath10k_warn(ar, "alloc_rx_pkt error %d\n", ret);
-+			goto err;
-+		}
- 	}
- 
- 	ar_sdio->n_rx_pkts = i;
-@@ -866,6 +870,10 @@ static int ath10k_sdio_mbox_proc_cpu_intr(struct ath10k *ar)
- 
- out:
- 	mutex_unlock(&irq_data->mtx);
-+	if (cpu_int_status & MBOX_CPU_STATUS_ENABLE_ASSERT_MASK) {
-+		ath10k_err(ar, "firmware crashed!\n");
-+		queue_work(ar->workqueue, &ar->restart_work);
-+	}
- 	return ret;
+ 	/* Single genpd case */
+-	if (!genpd_virt_devs) {
++	if (!genpd_virt_devs && required_opp_tables[0]->is_genpd) {
+ 		pstate = opp->required_opps[0]->pstate;
+ 		ret = dev_pm_genpd_set_performance_state(dev, pstate);
+ 		if (ret) {
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 62504b18f198..64429ce07b12 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -97,8 +97,8 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
+ 	return NULL;
  }
  
-@@ -1510,8 +1518,10 @@ static int ath10k_sdio_hif_enable_intrs(struct ath10k *ar)
- 	regs->int_status_en |=
- 		FIELD_PREP(MBOX_INT_STATUS_ENABLE_MBOX_DATA_MASK, 1);
+-static struct device_node *of_parse_required_opp(struct device_node *np,
+-						 int index)
++struct device_node *of_parse_required_opp(struct device_node *np,
++					  int index)
+ {
+ 	struct device_node *required_np;
  
--	/* Set up the CPU Interrupt status Register */
--	regs->cpu_int_status_en = 0;
-+	/* Set up the CPU Interrupt Status Register, enable CPU sourced interrupt #0
-+	 * #0 is used for report assertion from target
+@@ -110,6 +110,15 @@ static struct device_node *of_parse_required_opp(struct device_node *np,
+ 
+ 	return required_np;
+ }
++EXPORT_SYMBOL_GPL(of_parse_required_opp);
++
++/* The caller must call dev_pm_opp_put() after the OPP is used */
++struct dev_pm_opp *dev_pm_opp_find_opp_of_np(struct opp_table *opp_table,
++					     struct device_node *opp_np)
++{
++	return _find_opp_of_np(opp_table, opp_np);
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_find_opp_of_np);
+ 
+ /* The caller must call dev_pm_opp_put_opp_table() after the table is used */
+ static struct opp_table *_find_table_of_opp_np(struct device_node *opp_np)
+@@ -173,7 +182,7 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 	struct opp_table **required_opp_tables;
+ 	struct device **genpd_virt_devs = NULL;
+ 	struct device_node *required_np, *np;
+-	int count, i;
++	int count, count_pd, i;
+ 
+ 	/* Traversing the first OPP node is all we need */
+ 	np = of_get_next_available_child(opp_np, NULL);
+@@ -186,7 +195,16 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 	if (!count)
+ 		goto put_np;
+ 
+-	if (count > 1) {
++	/*
++	 * Check the number of power-domains to know if we need to deal
++	 * with virtual devices. In some cases we have devices with multiple
++	 * power domains but with only one of them being scalable, hence
++	 * 'count' could be 1, but we still have to deal with multiple genpds
++	 * and virtual devices.
 +	 */
-+	regs->cpu_int_status_en = FIELD_PREP(MBOX_CPU_STATUS_ENABLE_ASSERT_MASK, 1);
++	count_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
++					      "#power-domain-cells");
++	if (count_pd > 1) {
+ 		genpd_virt_devs = kcalloc(count, sizeof(*genpd_virt_devs),
+ 					GFP_KERNEL);
+ 		if (!genpd_virt_devs)
+@@ -214,17 +232,6 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
  
- 	/* Set up the Error Interrupt status Register */
- 	regs->err_int_status_en =
-diff --git a/drivers/net/wireless/ath/ath10k/testmode.c b/drivers/net/wireless/ath/ath10k/testmode.c
-index c24ee616833c..348d98be2c70 100644
---- a/drivers/net/wireless/ath/ath10k/testmode.c
-+++ b/drivers/net/wireless/ath/ath10k/testmode.c
-@@ -185,8 +185,23 @@ static int ath10k_tm_fetch_firmware(struct ath10k *ar)
- {
- 	struct ath10k_fw_components *utf_mode_fw;
- 	int ret;
-+	char fw_name[100];
-+	int fw_api2 = 2;
-+
-+	switch (ar->hif.bus) {
-+	case ATH10K_BUS_SDIO:
-+	case ATH10K_BUS_USB:
-+		scnprintf(fw_name, sizeof(fw_name), "%s-%s-%d.bin",
-+			  ATH10K_FW_UTF_FILE_BASE, ath10k_bus_str(ar->hif.bus),
-+			  fw_api2);
-+		break;
-+	default:
-+		scnprintf(fw_name, sizeof(fw_name), "%s-%d.bin",
-+			  ATH10K_FW_UTF_FILE_BASE, fw_api2);
-+		break;
-+	}
- 
--	ret = ath10k_core_fetch_firmware_api_n(ar, ATH10K_FW_UTF_API2_FILE,
-+	ret = ath10k_core_fetch_firmware_api_n(ar, fw_name,
- 					       &ar->testmode.utf_mode_fw.fw_file);
- 	if (ret == 0) {
- 		ath10k_dbg(ar, ATH10K_DBG_TESTMODE, "testmode using fw utf api 2");
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 3d0115316bae..a17563c2cf47 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -46,6 +46,7 @@
- #define TEMP_MONIDET0		0x014
- #define TEMP_MONIDET1		0x018
- #define TEMP_MSRCTL0		0x038
-+#define TEMP_MSRCTL1		0x03c
- #define TEMP_AHBPOLL		0x040
- #define TEMP_AHBTO		0x044
- #define TEMP_ADCPNP0		0x048
-@@ -95,6 +96,9 @@
- #define TEMP_ADCVALIDMASK_VALID_HIGH		BIT(5)
- #define TEMP_ADCVALIDMASK_VALID_POS(bit)	(bit)
- 
-+#define TEMP_BUS_STA	(BIT(1) | BIT(8))
-+#define TEMP_SENSING_POINTS_PAUSE	0x10E
-+
- /* MT8173 thermal sensors */
- #define MT8173_TS1	0
- #define MT8173_TS2	1
-@@ -266,6 +270,10 @@ struct mtk_thermal_data {
- struct mtk_thermal {
- 	struct device *dev;
- 	void __iomem *thermal_base;
-+	void __iomem *apmixed_base;
-+	void __iomem *auxadc_base;
-+	u64 apmixed_phys_base;
-+	u64 auxadc_phys_base;
- 
- 	struct clk *clk_peri_therm;
- 	struct clk *clk_auxadc;
-@@ -795,6 +803,52 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 	mtk_thermal_put_bank(bank);
- }
- 
-+static int mtk_thermal_disable_sensing(struct mtk_thermal *mt, int num)
-+{
-+	struct mtk_thermal_bank *bank = &mt->banks[num];
-+	u32 val;
-+	unsigned long timeout;
-+	bool expired;
-+	int ret = 0;
-+
-+	bank->id = num;
-+	bank->mt = mt;
-+
-+	mtk_thermal_get_bank(bank);
-+
-+	/* wait until temperature measurement bus idle */
-+	timeout = jiffies + HZ;
-+	expired = false;
-+	while (1) {
-+		val = readl(mt->thermal_base + TEMP_MSRCTL1);
-+		if ((val & TEMP_BUS_STA) == 0x0 ||
-+		    (val & TEMP_BUS_STA) == TEMP_BUS_STA)
-+			break;
-+
-+		if (expired) {
-+			ret = -ETIMEDOUT;
-+			goto out;
-+		}
-+
-+		cpu_relax();
-+
-+		if (time_after(jiffies, timeout))
-+			expired = true;
-+	}
-+
-+	/* pause periodic temperature measurement for sensing points */
-+	writel(val | TEMP_SENSING_POINTS_PAUSE,
-+	       mt->thermal_base + TEMP_MSRCTL1);
-+
-+	/* disable periodic temperature meausrement on sensing points */
-+	writel(0x0, mt->thermal_base + TEMP_MONCTL0);
-+
-+out:
-+	mtk_thermal_put_bank(bank);
-+
-+	return ret;
-+}
-+
- static u64 of_get_phys_base(struct device_node *np)
- {
- 	u64 size64;
-@@ -917,7 +971,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	struct device_node *auxadc, *apmixedsys, *np = pdev->dev.of_node;
- 	struct mtk_thermal *mt;
- 	struct resource *res;
--	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	struct mtk_thermal_zone *tz;
- 
-@@ -954,11 +1007,12 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		return -ENODEV;
+ 		if (IS_ERR(required_opp_tables[i]))
+ 			goto free_required_tables;
+-
+-		/*
+-		 * We only support genpd's OPPs in the "required-opps" for now,
+-		 * as we don't know how much about other cases. Error out if the
+-		 * required OPP doesn't belong to a genpd.
+-		 */
+-		if (!required_opp_tables[i]->is_genpd) {
+-			dev_err(dev, "required-opp doesn't belong to genpd: %pOF\n",
+-				required_np);
+-			goto free_required_tables;
+-		}
  	}
  
--	auxadc_phys_base = of_get_phys_base(auxadc);
-+	mt->auxadc_phys_base = of_get_phys_base(auxadc);
-+	mt->auxadc_base = of_iomap(auxadc, 0);
- 
- 	of_node_put(auxadc);
- 
--	if (auxadc_phys_base == OF_BAD_ADDR) {
-+	if (mt->auxadc_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
- 		return -EINVAL;
- 	}
-@@ -969,11 +1023,12 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	apmixed_phys_base = of_get_phys_base(apmixedsys);
-+	mt->apmixed_phys_base = of_get_phys_base(apmixedsys);
-+	mt->apmixed_base = of_iomap(apmixedsys, 0);
- 
- 	of_node_put(apmixedsys);
- 
--	if (apmixed_phys_base == OF_BAD_ADDR) {
-+	if (mt->apmixed_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
- 		return -EINVAL;
- 	}
-@@ -985,19 +1040,19 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(mt->clk_auxadc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
-+		goto err_disable_clk_auxadc;
- 	}
- 
- 	ret = clk_prepare_enable(mt->clk_peri_therm);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
--		goto err_disable_clk_auxadc;
-+		goto err_disable_clk_peri_therm;
- 	}
- 
- 	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
- 		for (i = 0; i < mt->conf->num_banks; i++)
--			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
--					      auxadc_phys_base, ctrl_id);
-+			mtk_thermal_init_bank(mt, i, mt->apmixed_phys_base,
-+					      mt->auxadc_phys_base, ctrl_id);
- 
- 	platform_set_drvdata(pdev, mt);
- 
-@@ -1041,11 +1096,78 @@ static int mtk_thermal_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int __maybe_unused mtk_thermal_suspend(struct device *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct mtk_thermal *mt = platform_get_drvdata(pdev);
-+	int i, ret;
-+
-+	for (i = 0; i < mt->conf->num_banks; i++) {
-+		ret = mtk_thermal_disable_sensing(mt, i);
-+		if (ret)
-+			goto out;
-+	}
-+
-+	/* disable buffer */
-+	writel(readl(mt->apmixed_base + APMIXED_SYS_TS_CON1) | 0x30,
-+	       mt->apmixed_base + APMIXED_SYS_TS_CON1);
-+
-+	clk_disable_unprepare(mt->clk_peri_therm);
-+	clk_disable_unprepare(mt->clk_auxadc);
-+
-+	return 0;
-+
-+out:
-+	dev_err(&pdev->dev, "Failed to wait until bus idle\n");
-+
-+	return ret;
-+}
-+
-+static int __maybe_unused mtk_thermal_resume(struct device *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct mtk_thermal *mt = platform_get_drvdata(pdev);
-+	int i, ret, ctrl_id;
-+
-+	ret = device_reset(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(mt->clk_auxadc);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
-+		goto err_disable_clk_auxadc;
-+	}
-+
-+	ret = clk_prepare_enable(mt->clk_peri_therm);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
-+		goto err_disable_clk_peri_therm;
-+	}
-+
-+	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
-+		for (i = 0; i < mt->conf->num_banks; i++)
-+			mtk_thermal_init_bank(mt, i, mt->apmixed_phys_base,
-+					      mt->auxadc_phys_base, ctrl_id);
-+	return 0;
-+
-+err_disable_clk_peri_therm:
-+	clk_disable_unprepare(mt->clk_peri_therm);
-+err_disable_clk_auxadc:
-+	clk_disable_unprepare(mt->clk_auxadc);
-+
-+	return ret;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(mtk_thermal_pm_ops,
-+			 mtk_thermal_suspend, mtk_thermal_resume);
-+
- static struct platform_driver mtk_thermal_driver = {
- 	.probe = mtk_thermal_probe,
- 	.remove = mtk_thermal_remove,
- 	.driver = {
- 		.name = "mtk-thermal",
-+		.pm = &mtk_thermal_pm_ops,
- 		.of_match_table = mtk_thermal_of_match,
- 	},
- };
+ 	goto put_np;
 diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
 old mode 100644
 new mode 100755
@@ -12505,6 +10712,120 @@ index 0046506eb24c..bf133a5a8848 100644
  /* MFGCFG */
  #define CLK_MFG_BG3D			0
  #define CLK_MFG_NR_CLK			1
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index 3aae5b3af87c..b06ed1ee97f6 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -247,6 +247,38 @@ struct devfreq_simple_ondemand_data {
+ #endif
+ 
+ #if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
++/**
++ * struct devfreq_cpu_state - holds the per-cpu state
++ * @freq:	holds the current frequency of the cpu.
++ * @min_freq:	holds the min frequency of the cpu.
++ * @max_freq:	holds the max frequency of the cpu.
++ * @first_cpu:	holds the cpumask of the first cpu of a policy.
++ *
++ * This structure stores the required cpu_state of a cpu.
++ * This is auto-populated by the governor.
++ */
++struct devfreq_cpu_state {
++	unsigned int freq;
++	unsigned int min_freq;
++	unsigned int max_freq;
++	unsigned int first_cpu;
++};
++
++/**
++ * struct devfreq_map - holds mapping from cpu frequency
++ * to devfreq frequency
++ * @cpu_khz:	holds the cpu frequency in Khz
++ * @dev_hz:	holds the devfreq device frequency in Hz
++ *
++ * This structure stores the lookup table between cpu
++ * and the devfreq device. This is auto-populated by the
++ * governor.
++ */
++struct devfreq_map {
++	unsigned int cpu_khz;
++	unsigned int dev_hz;
++};
++
+ /**
+  * struct devfreq_passive_data - void *data fed to struct devfreq
+  *	and devfreq_add_device
+@@ -260,11 +292,13 @@ struct devfreq_simple_ondemand_data {
+  *			the next frequency, should use this callback.
+  * @this:	the devfreq instance of own device.
+  * @nb:		the notifier block for DEVFREQ_TRANSITION_NOTIFIER list
++ * @state:	holds the state min/max/current frequency of all online cpu's
++ * @map:	holds the maps between cpu frequency and device frequency
+  *
+  * The devfreq_passive_data have to set the devfreq instance of parent
+  * device with governors except for the passive governor. But, don't need to
+- * initialize the 'this' and 'nb' field because the devfreq core will handle
+- * them.
++ * initialize the 'this', 'nb', 'state' and 'map' field because the devfreq
++ * core will handle them.
+  */
+ struct devfreq_passive_data {
+ 	/* Should set the devfreq instance of parent device */
+@@ -273,9 +307,14 @@ struct devfreq_passive_data {
+ 	/* Optional callback to decide the next frequency of passvice device */
+ 	int (*get_target_freq)(struct devfreq *this, unsigned long *freq);
+ 
++	/* Should be set if the devfreq device wants to be scaled with cpu*/
++	u8 cpufreq_type;
++
+ 	/* For passive governor's internal use. Don't need to set them */
+ 	struct devfreq *this;
+ 	struct notifier_block nb;
++	struct devfreq_cpu_state *state[NR_CPUS];
++	struct devfreq_map **map;
+ };
+ #endif
+ 
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 85166b8f3c2b..51fc5e256a99 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -355,8 +355,11 @@ void dev_pm_opp_of_cpumask_remove_table(const struct cpumask *cpumask);
+ int dev_pm_opp_of_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask);
+ struct device_node *dev_pm_opp_of_get_opp_desc_node(struct device *dev);
+ struct device_node *dev_pm_opp_get_of_node(struct dev_pm_opp *opp);
++struct device_node *of_parse_required_opp(struct device_node *np, int index);
+ int of_get_required_opp_performance_state(struct device_node *np, int index);
+ void dev_pm_opp_of_register_em(struct cpumask *cpus);
++struct dev_pm_opp *dev_pm_opp_find_opp_of_np(struct opp_table *opp_table,
++					     struct device_node *opp_np);
+ #else
+ static inline int dev_pm_opp_of_add_table(struct device *dev)
+ {
+@@ -386,6 +389,11 @@ static inline int dev_pm_opp_of_get_sharing_cpus(struct device *cpu_dev, struct
+ 	return -ENOTSUPP;
+ }
+ 
++static inline struct dev_pm_opp *dev_pm_opp_find_opp_of_np(struct opp_table *opp_table, struct device_node *opp_np)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
+ static inline struct device_node *dev_pm_opp_of_get_opp_desc_node(struct device *dev)
+ {
+ 	return NULL;
+@@ -404,6 +412,11 @@ static inline int of_get_required_opp_performance_state(struct device_node *np,
+ {
+ 	return -ENOTSUPP;
+ }
++
++static inline struct device_node *of_parse_required_opp(struct device_node *np, int index)
++{
++	return NULL;
++}
+ #endif
+ 
+ #endif		/* __LINUX_OPP_H__ */
 diff --git a/include/soc/mediatek/emi.h b/include/soc/mediatek/emi.h
 new file mode 100644
 index 000000000000..83bdaeb6840b
