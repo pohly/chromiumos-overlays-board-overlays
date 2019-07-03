@@ -18,6 +18,7 @@ SERVICES="
 	google-clock-skew-daemon.service
 	google-network-daemon.service
 	metrics-daemon.service
+	node-problem-detector.service
 	update-engine.service
 "
 
