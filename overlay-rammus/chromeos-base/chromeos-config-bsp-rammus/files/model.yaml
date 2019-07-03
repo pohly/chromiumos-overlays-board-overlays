@@ -38,10 +38,10 @@ common_config: &common_config
     no-firmware: True
   test-label: "{{$device-name}}"
   audio:
-    <<: *audio_common
-    $cras: "common"
-    $ucm: "common" # Default
+    $cras: "{{$device-name}}"
+    $ucm: "{{$device-name}}"
     $ucm-source-suffix: ""
+    <<: *audio_common
   power: &power_common
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
@@ -67,6 +67,8 @@ chromeos:
         - $sku-id: 0x2a63
           config: *common_config
         - $sku-id: 0x2ae3  # shyvana-m
+          $cras: "shyvana-m"
+          $ucm: "shyvana-m"
           config:
             <<: *common_config
             power:
