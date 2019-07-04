@@ -10,10 +10,8 @@ common_config: &common_config
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
     has-charge-controller: "1"
-    $internal-backlight-no-als-battery-brightness: "55"
+    $internal-backlight-no-als-battery-brightness: "50"
     internal-backlight-no-als-battery-brightness: "{{$internal-backlight-no-als-battery-brightness}}"
-    # Max brightness is 120000, as reported by
-    # /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/max_brightness
     min-visible-backlight-level: "8400"
   hardware-properties:
     is-lid-convertible: "{{$is-lid-convertible-val}}"
