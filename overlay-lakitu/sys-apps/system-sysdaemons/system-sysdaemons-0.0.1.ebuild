@@ -12,13 +12,13 @@ SLOT="0"
 KEYWORDS="*"
 S="${WORKDIR}"
 
+# TODO(xueweiz): Add node-problem-detector.service when it is in Lakitu.
 SERVICES="
 	device_policy_manager.service
 	google-accounts-daemon.service
 	google-clock-skew-daemon.service
 	google-network-daemon.service
 	metrics-daemon.service
-	node-problem-detector.service
 	update-engine.service
 "
 
