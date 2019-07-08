@@ -58,7 +58,9 @@ device-config: &device_config
         - source: "{{$ucm_src_root}}/audio/ucm-config/{{$card}}.{{$num-mic-locations}}mic/HiFi.conf"
           destination: "{{$ucm_root}}/{{$card}}.{{ucm-suffix}}/HiFi.conf"
   camera:
+    $camera-clock: "monotonic"
     count: "{{$num-mic-locations}}"
+    clock: "{{$camera-clock}}"
   power:
     low-battery-shutdown-percent: "4.0"
     suspend-to-idle: "1"
@@ -287,6 +289,7 @@ chromeos:
           config: *convertible_config
         - $sku-id-val: 26
           $stylus-category: "internal"
+          $camera-clock: "boottime"
           config: *convertible_config
     - $device-name: "droid"
       $fw-name: "Bobba"
