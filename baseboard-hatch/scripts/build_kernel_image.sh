@@ -9,6 +9,7 @@ modify_kernel_command_line() {
   echo "ramoops.ecc=1" >> "$1"
 
   # Avoid a cosmetic TPM error (Work around for b/113527055)
+  sed -i -e '/tpm_tis.force/d' "$1"
   echo "tpm_tis.force=0" >> "$1"
 
   # Enable S0ix logging using GSMI

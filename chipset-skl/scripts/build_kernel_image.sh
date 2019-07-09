@@ -7,5 +7,6 @@
 modify_kernel_command_line() {
   echo "intel_idle.max_cstate=7" >> "$1"
 # Avoid a cosmetic TPM error (Work around for b/113527055)
+  sed -i -e '/tpm_tis.force/d' "$1"
   echo "tpm_tis.force=0" >> "$1"
 }
