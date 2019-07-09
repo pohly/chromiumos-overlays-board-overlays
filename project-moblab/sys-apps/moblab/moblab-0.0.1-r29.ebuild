@@ -29,6 +29,8 @@ RDEPEND="
 		dev-python/grpcio
 		dev-python/protobuf-python
 		net-libs/grpc
+		app-admin/logrotate
+		dev-python/parallel-ssh
 "
 
 DEPEND="${RDEPEND}
