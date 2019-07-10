@@ -31,6 +31,10 @@ main() {
     "2")
       echo "sku6"
       ;;
+    # sku3 shares the same panel as sku7.
+    "3")
+      echo "sku7"
+      ;;
     *)
       ## Unknown SKU.
       echo 0000_0000
