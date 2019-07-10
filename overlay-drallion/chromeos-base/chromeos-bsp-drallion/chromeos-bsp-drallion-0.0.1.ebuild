@@ -3,15 +3,7 @@
 
 EAPI=6
 
-CROS_WORKON_COMMIT="48fa47b3b3d29359e51ed4766d6987d579dfa34b"
-CROS_WORKON_TREE="db836bc5072e0400e842c4f5bdc56e392b76081c"
-inherit appid
-
-CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
-CROS_WORKON_LOCALNAME="../overlays/"
-CROS_WORKON_SUBTREE="overlay-drallion/chromeos-base/chromeos-bsp-drallion/files"
-
-inherit cros-unibuild cros-workon
+inherit appid cros-unibuild
 
 DESCRIPTION="Drallion board-specific ebuild that pulls in necessary ebuilds as
 dependencies or portage actions."
@@ -19,6 +11,7 @@ dependencies or portage actions."
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="* amd64 x86"
+S="${WORKDIR}"
 
 src_install() {
 	doappid "{ED3A4869-C380-4F79-A190-027C3E879357}" "CHROMEBOOK"

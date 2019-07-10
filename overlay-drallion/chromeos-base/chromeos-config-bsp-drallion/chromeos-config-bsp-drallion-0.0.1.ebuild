@@ -3,19 +3,14 @@
 
 EAPI=6
 
-inherit cros-constants
-
-CROS_WORKON_PROJECT="chromiumos/overlays/board-overlays"
-CROS_WORKON_LOCALNAME="../overlays/"
-CROS_WORKON_SUBTREE="overlay-drallion/chromeos-base/chromeos-config-bsp-drallion/files"
-
-inherit cros-unibuild cros-workon
+inherit cros-constants cros-unibuild
 
 DESCRIPTION="Chrome OS Model configuration package for drallion."
 
 LICENSE="BSD-Google"
 SLOT="0/${PF}"
-KEYWORDS="~* ~amd64 ~x86"
+KEYWORDS="* amd64 x86"
+S="${WORKDIR}"
 
 src_install() {
 	install_model_files
