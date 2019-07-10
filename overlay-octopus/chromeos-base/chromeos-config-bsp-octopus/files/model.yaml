@@ -77,6 +77,10 @@ device-config: &device_config
     # src/platform2/power_manager/default_prefs/internal_backlight_no_als_battery_brightness
     $internal-backlight-no-als-battery-brightness: "63"
     internal-backlight-no-als-battery-brightness: "{{$internal-backlight-no-als-battery-brightness}}"
+    # 40 is the default value in
+    # src/platform2/power_manager/default_prefs/keyboard_backlight_no_als_brightness
+    $keyboard-backlight-no-als-brightness: "40"
+    keyboard-backlight-no-als-brightness: "{{$keyboard-backlight-no-als-brightness}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
@@ -454,10 +458,12 @@ chromeos:
           config: *convertible_config
         - $sku-id-val: 34
           $has-keyboard-backlight: 1
+          $keyboard-backlight-no-als-brightness: 20
           config: *convertible_config
         - $sku-id-val: 35
           $stylus-category: "external"
           $has-keyboard-backlight: 1
+          $keyboard-backlight-no-als-brightness: 20
           config: *convertible_config
         - $sku-id-val: 36
           config: *convertible_config
@@ -474,10 +480,12 @@ chromeos:
       skus:
         - $sku-id-val: 49
           $has-keyboard-backlight: 1
+          $keyboard-backlight-no-als-brightness: 20
           config: *convertible_config
         - $sku-id-val: 50
           $stylus-category: "external"
           $has-keyboard-backlight: 1
+          $keyboard-backlight-no-als-brightness: 20
           config: *convertible_config
         - $sku-id-val: 51
           config: *convertible_config
