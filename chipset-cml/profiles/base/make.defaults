@@ -27,3 +27,6 @@ USE="${USE} dptf"
 # Load GuC/HuC Binaries
 USE="${USE} builtin_fw_guc_g9"
 USE="${USE} builtin_fw_huc_g9"
+
+# Enable Android aep
+USE="${USE} android_aep"
