@@ -37,6 +37,9 @@ base_config: &base_config
     has-fingerprint-sensor: True
     has-touchscreen: True
     stylus-category: "internal"
+  camera:
+    $camera-count: 1
+    count: "{{$camera-count}}"
 
 clamshell-config: &clamshell_config
   <<: *base_config
@@ -108,6 +111,7 @@ chromeos:
         - $sku-id: 255
           config: *base_config
     - $device-name: "unprovisioned_kohaku"
+      $camera-count: 2
       skus:
         - $sku-id: 255
           $fw-name: "Kohaku"
@@ -117,6 +121,7 @@ chromeos:
       $fw-name: "Kohaku"
       products:
         - $key-id: "HATCH"
+      $camera-count: 2
       skus:
         - $sku-id: 1
           config: *convertible_with_internal_stylus_config
