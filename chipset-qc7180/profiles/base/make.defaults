@@ -1,0 +1,19 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+CHROMEOS_KERNEL_SPLITCONFIG="chromiumos-qualcomm"
+CHROMEOS_KERNEL_ARCH="arm64"
+
+BOARD_COMPILER_FLAGS="-march=armv8-a+crc -mtune=cortex-a57.cortex-a53 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard"
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} big_little"
+USE="${USE} device_tree"
+USE="${USE} drm_atomic"
+USE="${USE} hardfp"
+USE="${USE} kernel-4_19"
+USE="${USE} neon"
+USE="${USE} qc7180"
