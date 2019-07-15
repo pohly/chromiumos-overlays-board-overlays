@@ -41,6 +41,7 @@ common_config: &common_config
         - source: "{{$ucm-source}}/{{$card}}.conf"
           destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
   power:
+    low-battery-shutdown-percent: "4.0"
     usb-min-ac-watts: 10
 
 kukui-config: &kukui_config
