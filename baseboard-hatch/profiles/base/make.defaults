@@ -26,7 +26,7 @@ USE="${USE} eclog"
 USE="${USE} -acpi_ac"
 
 # Enable VMs
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
 
 # Enable serial console
 TTY_CONSOLE="ttyS0"
