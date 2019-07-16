@@ -102,6 +102,9 @@ chromeos:
           config: *base_config
     - $device-name: "unprovisioned_kohaku"
       $camera-count: 2
+      $internal-backlight-als-steps: |-
+        80.0 47.62 -1 400
+        100.0 80.0 100 -1
       skus:
         - $sku-id: 255
           $fw-name: "Kohaku"
@@ -112,6 +115,9 @@ chromeos:
       products:
         - $key-id: "HATCH"
       $camera-count: 2
+      $internal-backlight-als-steps: |-
+        80.0 47.62 -1 400
+        100.0 80.0 100 -1
       skus:
         - $sku-id: 1
           config: *convertible_with_internal_stylus_config
