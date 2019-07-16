@@ -41,4 +41,4 @@ USE="${USE} cr50_onboard"
 USE="${USE} eclog"
 
 # VMs are supported by all APL models
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
