@@ -42,4 +42,4 @@ USE="${USE} iwlwifi_rescan"
 USE="${USE} -tpm tpm2"
 
 # VMs are supported by all APL models
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
