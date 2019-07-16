@@ -21,4 +21,4 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 USE="${USE} eclog"
 
 # Enable Virtual Machines
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
