@@ -73,6 +73,10 @@ device-config: &device_config
     min-visible-backlight-level: "960"
     $has-keyboard-backlight: "0"
     has-keyboard-backlight: "{{$has-keyboard-backlight}}"
+    # 63 is the default value in
+    # src/platform2/power_manager/default_prefs/internal_backlight_no_als_battery_brightness
+    $internal-backlight-no-als-battery-brightness: "63"
+    internal-backlight-no-als-battery-brightness: "{{$internal-backlight-no-als-battery-brightness}}"
   thermal:
     dptf-dv: "{{$device-name}}/dptf.dv"
     files:
@@ -441,6 +445,9 @@ chromeos:
       $num-mic-locations: 1
       $ucm_src_root: "{{$device-name}}"
       $ucm_extra_suffix: "{{$device-name}}"
+      $internal-backlight-no-als-battery-brightness: |-
+        60 221
+        57 233
       skus:
         - $sku-id-val: 33
           $stylus-category: "external"
@@ -459,6 +466,11 @@ chromeos:
       $num-mic-locations: 1
       $ucm_src_root: "{{$device-name}}"
       $ucm_extra_suffix: "{{$device-name}}"
+      $internal-backlight-no-als-battery-brightness: |-
+        60.5 211
+        59.5 221
+        58.5 231
+        58   237
       skus:
         - $sku-id-val: 49
           $has-keyboard-backlight: 1
