@@ -14,7 +14,7 @@ BOARD_COMPILER_FLAGS="-march=corei7"
 # Initial value just for style purposes.
 USE=""
 
-USE="${USE} containers kvm_host"
+USE="${USE} containers kvm_host crosvm-gpu"
 
 USE="${USE} legacy_keyboard legacy_power_button sse kernel-4_14"
 
