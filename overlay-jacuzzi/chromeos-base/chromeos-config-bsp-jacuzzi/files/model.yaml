@@ -4,5 +4,36 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+common_config: &common_config
+  name: "{{$device-name}}"
+  identity: &identity
+    platform-name: "Jacuzzi"
+    device-tree-compatible-match: "{{$fw-name}}"
+  firmware:
+    build-targets:
+      coreboot: "{{$fw-build-name}}"
+      ec: "{{$fw-build-name}}"
+      ec_extras: [ "kukui_scp" ]
+      depthcharge: "{{$fw-build-name}}"
+      libpayload: "jacuzzi"
+    no-firmware: true
+  firmware-signing:
+    key-id: "{{$key-id}}"
+    signature-id: "{{$device-name}}"
+  test-label: "{{$device-name}}"
+  power:
+    usb-min-ac-watts: 10
+
+jacuzzi-config: &jacuzzi_config
+  <<: *common_config
+  $fw-name: "google,jacuzzi"
+  $fw-build-name: "jacuzzi"
+  $key-id: "JACUZZI"
+  identity:
+    <<: *identity
+
 chromeos:
-  devices: []
+  devices:
+    - $device-name: "jacuzzi"
+      skus:
+        - config: *jacuzzi_config
