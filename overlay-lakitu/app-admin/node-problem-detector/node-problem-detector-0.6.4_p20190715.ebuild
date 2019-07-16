@@ -15,7 +15,7 @@ HOMEPAGE="https://github.com/kubernetes/node-problem-detector"
 # we will choose NPD code based on the commit hash.
 # TODO(xueweiz): remove EGIT_COMMIT and use officially released version before
 # enabling NPD in overlay-lakitu.
-EGIT_COMMIT="e10e6cc106d6d5faf5fe24cfef40a3550c0b1ffb"
+EGIT_COMMIT="b8ce6360d93d61eacf9f7442d344f8fb263a38af"
 SRC_URI="https://github.com/kubernetes/node-problem-detector/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0"
