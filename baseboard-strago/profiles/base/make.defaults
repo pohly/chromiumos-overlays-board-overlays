@@ -15,7 +15,7 @@ USE="${USE} iwlwifi_rescan"
 USE="${USE} tpm_slb9655"
 
 # VMs are supported by all Braswell models
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
 
 # WiFi and BT driver firmware
 LINUX_FIRMWARE="iwlwifi-7260 iwlwifi-7265D ibt-hw fw_sst"
