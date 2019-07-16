@@ -6,7 +6,7 @@
 USE=""
 LINUX_FIRMWARE=""
 
-USE="${USE} ac_only -internal_mic tidus"
+USE="${USE} ac_only -internal_mic -internal_speaker tidus"
 
 # Allow consumer kiosk.
 # NOTE: Deprecating feature. New board should NOT have it.

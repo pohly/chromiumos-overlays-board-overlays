@@ -15,7 +15,7 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw"
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 
-USE="${USE} ac_only -display_backlight -internal_mic"
+USE="${USE} ac_only -display_backlight -internal_mic -internal_speaker"
 USE="${USE} -subpixel_rendering -tpm tpm2"
 
 # Use ext4 crypto
