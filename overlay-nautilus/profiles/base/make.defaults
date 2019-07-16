@@ -46,7 +46,7 @@ USE="${USE} touchview"
 USE="${USE} internal_stylus"
 
 # Enable VMs.
-USE="${USE} kvm_host"
+USE="${USE} kvm_host crosvm-gpu"
 
 # Add modemfwd for updating modem firmware.
 USE="${USE} modemfwd"
