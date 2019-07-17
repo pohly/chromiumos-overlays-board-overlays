@@ -40,6 +40,9 @@ main() {
     "af06-632d") # af06(AUO)
       echo "2d1f_4944"  # wacom hardware_id = VID_PID
     ;;
+    "e430-05dc") # e430(LGD)
+      echo "2d1f_4945"  # wacom hardware_id = VID_PID
+    ;;
     "ae0d-1382") # ae0d(INO)
       echo "2d1f_4946"  # wacom hardware_id = VID_PID
     ;;
