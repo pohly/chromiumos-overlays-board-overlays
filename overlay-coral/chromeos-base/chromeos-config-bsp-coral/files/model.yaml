@@ -184,7 +184,7 @@ chromeos:
           $key-id: "CORALK"
         - $whitelabel-tag: "xma"
           $brand-code: "HKGT"
-          $key-id: "CORALC"
+          $key-id: "CORALP"
         - $whitelabel-tag: "positivo"
           $brand-code: "HTPV"
           $key-id: "CORALO"
