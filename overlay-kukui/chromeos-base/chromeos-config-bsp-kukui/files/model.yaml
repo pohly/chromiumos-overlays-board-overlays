@@ -40,7 +40,7 @@ common_config: &common_config
           destination: "{{$ucm-dest}}/HiFi.conf"
         - source: "{{$ucm-source}}/{{$card}}.conf"
           destination: "{{$ucm-dest}}/{{$card}}.{{ucm-suffix}}.conf"
-  power:
+  power: &power_common
     low-battery-shutdown-percent: "4.0"
     usb-min-ac-watts: 10
 
@@ -52,12 +52,20 @@ kukui-config: &kukui_config
   identity:
     <<: *identity
     sku-id: 0
+  power:
+    <<: *power_common
+    charging-ports: |
+      CROS_USBPD_CHARGER0 LEFT
 
 krane-config: &krane_config
   <<: *common_config
   $fw-name: "google,krane"
   $fw-build-name: "krane"
   $key-id: "KRANE"
+  power:
+    <<: *power_common
+    charging-ports: |
+      CROS_USBPD_CHARGER0 RIGHT
 
 chromeos:
   devices:
