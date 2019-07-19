@@ -245,3 +245,7 @@ chromeos:
           config: *device_specific_audio_device_config
         - $sku-id: 0x1009ce1
           config: *device_specific_audio_device_config
+        - $sku-id: 0x1009ce0
+          config: *device_specific_audio_device_config
+        - $sku-id: 0x1009ce2
+          config: *device_specific_audio_device_config
