@@ -9,6 +9,9 @@ USE=""
 # Add EC logging
 USE="${USE} eclog"
 
+# Always have bootblock inside EC.
+USE="${USE} bootblock_in_ec"
+
 # Tell powerd to use the "mosys eventlog" command to log system events.
 USE="${USE} mosys_eventlog"
 

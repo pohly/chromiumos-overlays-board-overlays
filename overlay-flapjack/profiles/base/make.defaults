@@ -11,7 +11,7 @@ USE="${USE} detachable_ui"
 
 
 # Building EC
-USE="${USE} cros_ec bootblock_in_ec"
+USE="${USE} cros_ec"
 
 USE="${USE} touch_centric_device"
 
