@@ -28,66 +28,6 @@ base_config: &base_config
       80.0 55.0 -1 400
       100.0 80.0 100 -1
     internal-backlight-als-steps: "{{$internal-backlight-als-steps}}"
-  hardware-properties:
-    is-lid-convertible: True
-    has-lid-accelerometer: True
-    has-base-accelerometer: True
-    has-base-gyroscope: True
-    has-base-magnetometer: True
-    has-fingerprint-sensor: True
-    has-touchscreen: True
-    stylus-category: "internal"
-  camera:
-    $camera-count: 1
-    count: "{{$camera-count}}"
-
-clamshell-config: &clamshell_config
-  <<: *base_config
-  hardware-properties:
-    is-lid-convertible: False
-    has-lid-accelerometer: False
-    has-base-accelerometer: False
-    has-base-gyroscope: False
-    has-base-magnetometer: False
-    has-fingerprint-sensor: False
-    has-touchscreen: False
-    stylus-category: "none"
-
-clamshell-with-touchscreen-config: &clamshell_with_touchscreen_config
-  <<: *base_config
-  hardware-properties:
-    is-lid-convertible: False
-    has-lid-accelerometer: False
-    has-base-accelerometer: False
-    has-base-gyroscope: False
-    has-base-magnetometer: False
-    has-fingerprint-sensor: False
-    has-touchscreen: True
-    stylus-category: "none"
-
-convertible-config: &convertible_config
-  <<: *base_config
-  hardware-properties:
-    is-lid-convertible: True
-    has-lid-accelerometer: True
-    has-base-accelerometer: True
-    has-base-gyroscope: True
-    has-base-magnetometer: False
-    has-fingerprint-sensor: False
-    has-touchscreen: True
-    stylus-category: "none"
-
-convertible-with-internal-stylus-config: &convertible_with_internal_stylus_config
-  <<: *base_config
-  hardware-properties:
-    is-lid-convertible: True
-    has-lid-accelerometer: True
-    has-base-accelerometer: True
-    has-base-gyroscope: True
-    has-base-magnetometer: False
-    has-fingerprint-sensor: False
-    has-touchscreen: True
-    stylus-category: "internal"
 
 chromeos:
   devices:
@@ -101,7 +41,6 @@ chromeos:
         - $sku-id: 1
           config: *base_config
     - $device-name: "unprovisioned_kohaku"
-      $camera-count: 2
       $internal-backlight-als-steps: |-
         80.0 47.62 -1 400
         100.0 80.0 100 -1
@@ -114,13 +53,12 @@ chromeos:
       $fw-name: "Kohaku"
       products:
         - $key-id: "HATCH"
-      $camera-count: 2
       $internal-backlight-als-steps: |-
         80.0 47.62 -1 400
         100.0 80.0 100 -1
       skus:
         - $sku-id: 1
-          config: *convertible_with_internal_stylus_config
+          config: *base_config
     - $device-name: "unprovisioned_kindred"
       skus:
         - $sku-id: 255
@@ -133,22 +71,22 @@ chromeos:
         - $key-id: "HATCH"
       skus:
         - $sku-id: 1
-          config: *convertible_config
+          config: *base_config
         - $sku-id: 2
-          config: *convertible_config
+          config: *base_config
         - $sku-id: 3
-          config: *convertible_config
+          config: *base_config
         - $sku-id: 4
-          config: *convertible_config
+          config: *base_config
     - $device-name: "kindred"
       $fw-name: "Kindred"
       products:
         - $key-id: "HATCH"
       skus:
         - $sku-id: 21
-          config: *clamshell_config
+          config: *base_config
         - $sku-id: 22
-          config: *clamshell_with_touchscreen_config
+          config: *base_config
     - $device-name: "unprovisioned_helios"
       skus:
         - $sku-id: 255
@@ -161,5 +99,4 @@ chromeos:
         - $key-id: "HATCH"
       skus:
         - $sku-id: 1
-          # TODO(jschettler) Confirm stylus-category.
-          config: *convertible_config
+          config: *base_config
