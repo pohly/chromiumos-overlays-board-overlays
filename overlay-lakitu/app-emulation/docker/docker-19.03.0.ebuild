@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${P}/src/${EGO_PN}"
 	inherit git-r3
 else
-	DOCKER_GITCOMMIT="0dd43dd"
+	DOCKER_GITCOMMIT="aeac949"
 	SRC_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="*"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
@@ -65,7 +65,7 @@ RESTRICT="installsources strip"
 S="${WORKDIR}/${P}/src/${EGO_PN}"
 
 PATCHES=(
-	"${FILESDIR}"/docker-18.09.0-go-cross-compilation.patch
+	"${FILESDIR}"/docker-19.03.0-go-cross-compilation.patch
 	"${FILESDIR}"/docker-18.06.0-log-line-max-size.patch
 	"${FILESDIR}"/docker-18.09.5-customize-docker-service.patch
 )

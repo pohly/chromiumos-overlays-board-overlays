@@ -1,21 +1,21 @@
-From 3502e16cd5a1b6b3dcdd6c656432dffbe44d1140 Mon Sep 17 00:00:00 2001
-From: Edward Hyunkoo Jee <edjee@google.com>
-Date: Thu, 13 Dec 2018 16:23:53 -0800
+From d08702b1d4f50a209e354592d42833e9a4f4f905 Mon Sep 17 00:00:00 2001
+From: Robert Kolchmeyer <rkolchmeyer@google.com>
+Date: Wed, 24 Jul 2019 13:59:25 -0700
 Subject: [PATCH] Use specified Go compiler for cross compilation
 
 ---
- components/cli/scripts/build/.variables |  4 ++--
+ components/cli/scripts/build/.variables |  6 +++---
  components/cli/scripts/build/dynbinary  |  2 +-
  components/engine/hack/make.sh          |  4 ++--
  components/engine/hack/make/.binary     | 10 +++++-----
  components/engine/hack/make/.go-autogen |  4 ++--
- 5 files changed, 12 insertions(+), 12 deletions(-)
+ 5 files changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/components/cli/scripts/build/.variables b/components/cli/scripts/build/.variables
-index 208f44c316..991364ae46 100755
+index b8ebe667cd..3289115240 100755
 --- a/components/cli/scripts/build/.variables
 +++ b/components/cli/scripts/build/.variables
-@@ -20,7 +20,7 @@ export LDFLAGS="\
+@@ -20,10 +20,10 @@ export LDFLAGS="\
      ${LDFLAGS:-} \
  "
  
@@ -23,8 +23,12 @@ index 208f44c316..991364ae46 100755
 -GOARCH="${GOARCH:-$(go env GOHOSTARCH)}"
 +GOOS="${GOOS:-$(${GO} env GOHOSTOS)}"
 +GOARCH="${GOARCH:-$(${GO} env GOHOSTARCH)}"
- export TARGET="build/docker-$GOOS-$GOARCH"
- export SOURCE="github.com/docker/cli/cmd/docker"
+ if [ "${GOARCH}" = "arm" ]; then
+-	GOARM="${GOARM:-$(go env GOHOSTARM)}"
++	GOARM="${GOARM:-$(${GO} env GOHOSTARM)}"
+ fi
+ 
+ TARGET="build/docker-$GOOS-$GOARCH"
 diff --git a/components/cli/scripts/build/dynbinary b/components/cli/scripts/build/dynbinary
 index 4feb7e71d8..d35cadc547 100755
 --- a/components/cli/scripts/build/dynbinary
@@ -38,7 +42,7 @@ index 4feb7e71d8..d35cadc547 100755
  
  ln -sf "$(basename "${TARGET}")" build/docker
 diff --git a/components/engine/hack/make.sh b/components/engine/hack/make.sh
-index 2f4ece3cdb..d1e7cf2ed3 100755
+index e1e3dc46fa..d20c7acb6c 100755
 --- a/components/engine/hack/make.sh
 +++ b/components/engine/hack/make.sh
 @@ -31,7 +31,7 @@ export PKG_CONFIG=${PKG_CONFIG:-pkg-config}
@@ -50,7 +54,7 @@ index 2f4ece3cdb..d1e7cf2ed3 100755
  	if [ -z "$FROM_DOCKERFILE" ]; then
  		unset inContainer
  	fi
-@@ -197,7 +197,7 @@ main() {
+@@ -189,7 +189,7 @@ main() {
  	mkdir -p bundles
  
  	# Windows and symlinks don't get along well
@@ -60,7 +64,7 @@ index 2f4ece3cdb..d1e7cf2ed3 100755
  		# preserve latest symlink for backward compatibility
  		ln -sf . bundles/latest
 diff --git a/components/engine/hack/make/.binary b/components/engine/hack/make/.binary
-index 010c2c11da..6c51cfbffa 100644
+index 53de6749e5..dede04dd37 100644
 --- a/components/engine/hack/make/.binary
 +++ b/components/engine/hack/make/.binary
 @@ -3,7 +3,7 @@ set -e
@@ -84,7 +88,7 @@ index 010c2c11da..6c51cfbffa 100644
  		windows/amd64)
  			export CC=x86_64-w64-mingw32-gcc
  			export CGO_ENABLED=1
-@@ -51,7 +51,7 @@ if [ "$(go env GOOS)/$(go env GOARCH)" != "$(go env GOHOSTOS)/$(go env GOHOSTARC
+@@ -71,7 +71,7 @@ if [ "$(go env GOOS)/$(go env GOARCH)" != "$(go env GOHOSTOS)/$(go env GOHOSTARC
  fi
  
  # -buildmode=pie is not supported on Windows and Linux on mips.
@@ -93,17 +97,17 @@ index 010c2c11da..6c51cfbffa 100644
  	windows/*|linux/mips*)
  		;;
  	*)
-@@ -60,7 +60,7 @@ case "$(go env GOOS)/$(go env GOARCH)" in
- esac
+@@ -81,7 +81,7 @@ esac
  
  echo "Building: $DEST/$BINARY_FULLNAME"
+ echo "GOOS=\"${GOOS}\" GOARCH=\"${GOARCH}\" GOARM=\"${GOARM}\""
 -go build \
 +${GO} build \
  	-o "$DEST/$BINARY_FULLNAME" \
  	"${BUILDFLAGS[@]}" \
  	-ldflags "
 diff --git a/components/engine/hack/make/.go-autogen b/components/engine/hack/make/.go-autogen
-index ea8a32ff5d..75212d3bd5 100644
+index ef5c6a40f2..9ba3b3ae02 100644
 --- a/components/engine/hack/make/.go-autogen
 +++ b/components/engine/hack/make/.go-autogen
 @@ -43,12 +43,12 @@ const (
@@ -122,5 +126,5 @@ index ea8a32ff5d..75212d3bd5 100644
  		WINDMC=windmc
  	else
 -- 
-2.20.0.405.gbc1bbc6f85-goog
+2.22.0.657.g960e92d24f-goog
 
