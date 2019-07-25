@@ -18,65 +18,6 @@
     <Settings>
         <Setting name="max-video-encoder-input-buffers" value="4" />
     </Settings>
-    <Decoders>
-        <MediaCodec name="ARC.h264.decode" type="video/avc" >
-            <Limit name="size" min="16x16" max="4096x4096" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="3993300" />
-            <Limit name="bitrate" range="1-62500000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-        </MediaCodec>
-        <MediaCodec name="ARC.vp8.decode" type="video/x-vnd.on2.vp8" >
-            <Limit name="size" min="16x16" max="4096x4096" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="4098600" />
-            <Limit name="bitrate" range="1-62500000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-         </MediaCodec>
-         <MediaCodec name="ARC.vp9.decode" type="video/x-vnd.on2.vp9" >
-            <Limit name="size" min="16x16" max="4096x4096" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="3726000" />
-            <Limit name="bitrate" range="1-62500000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-        </MediaCodec>
-        <MediaCodec name="ARC.h264.decode.secure" type="video/avc" >
-            <Limit name="size" min="16x16" max="4096x4096" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="3993300" />
-            <Limit name="bitrate" range="1-62500000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-            <Feature name="secure-playback" required="true" />
-        </MediaCodec>
-        <MediaCodec name="ARC.vp8.decode.secure" type="video/x-vnd.on2.vp8" >
-            <Limit name="size" min="16x16" max="4096x4096" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="4098600" />
-            <Limit name="bitrate" range="1-62500000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-            <Feature name="secure-playback" required="true" />
-         </MediaCodec>
-         <MediaCodec name="ARC.vp9.decode.secure" type="video/x-vnd.on2.vp9" >
-            <Limit name="size" min="16x16" max="4096x4096" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="3726000" />
-            <Limit name="bitrate" range="1-62500000" />
-            <Limit name="concurrent-instances" max="8" />
-            <Feature name="adaptive-playback" />
-            <Feature name="secure-playback" required="true" />
-        </MediaCodec>
-    </Decoders>
     <Encoders>
         <MediaCodec name="OMX.arc.h264.encode" type="video/avc">
             <Limit name="size" min="32x32" max="1920x1088" />
