@@ -1,0 +1,29 @@
+# Copyright 2019 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# Initial value just for style purposes.
+USE=""
+
+USE="${USE} bubs"
+
+# Enable firmware detachable ui
+USE="${USE} detachable_ui"
+
+# Use ext4 crypto
+USE="${USE} direncryption"
+
+# Enable QMI support in ModemManager
+USE="${USE} qmi"
+
+# Magic sauce for mocktpm (override baseboard-trogdor)
+USE="${USE} tpm -tpm2 mocktpm"
+
+# No Cr50 (override baseboard-trogdor)
+USE="${USE} -cr50_onboard"
+
+# No EC (override baseboard-trogdor)
+USE="${USE} -cros_ec -eclog"
+
+# We're not unibuild (even though baseboard-trogdor is)
+USE="${USE} -unibuild"
