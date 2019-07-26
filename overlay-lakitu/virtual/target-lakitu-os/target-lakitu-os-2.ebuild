@@ -21,6 +21,7 @@ LAKITU_RDEPEND="
 	)
 	watchdog? ( sys-apps/daisydog )
 	app-admin/compute-image-packages
+	app-admin/node-problem-detector
 	stackdriver_alpha? ( app-admin/stackdriver )
 	app-admin/sosreport
 	app-admin/sudo
