@@ -60,11 +60,7 @@ net-misc/openssh -hpn
 chromeos-base/chromeos-installer -oobe_config
 
 # Use gcc to compile kernel-4_14 rather than clang. (b/119272876).
-# Use gcc to compile kernel-4_19 rather than clang. (b/131425916).
-# TODO(vaibhavrustagi): Change it back after qualifying clang-built
-# kernel-4_19 image for kdump.
 sys-kernel/lakitu-kernel-4_14 -clang
-sys-kernel/lakitu-kernel-4_19 -clang
 sys-kernel/dump-capture-kernel -clang
 
 # Disable kernel module signing for dump capture kernel.
