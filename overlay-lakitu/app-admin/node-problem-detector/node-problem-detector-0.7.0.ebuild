@@ -10,13 +10,7 @@ EGO_PN="k8s.io/node-problem-detector"
 DESCRIPTION="node-problem-detector"
 HOMEPAGE="https://github.com/kubernetes/node-problem-detector"
 
-# NPD is being activelly developed to suit lakitu's use cases. To allow us
-# picking up latest version of NPD without cutting NPD releases too frequently,
-# we will choose NPD code based on the commit hash.
-# TODO(xueweiz): remove EGIT_COMMIT and use officially released version before
-# enabling NPD in overlay-lakitu.
-EGIT_COMMIT="b8ce6360d93d61eacf9f7442d344f8fb263a38af"
-SRC_URI="https://github.com/kubernetes/node-problem-detector/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/kubernetes/node-problem-detector/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -43,14 +37,14 @@ src_compile() {
 	export GO
 	echo "GO compiler: '${GO}'"
 
-	emake VERSION="${PV}-${EGIT_COMMIT}" bin/node-problem-detector
+	emake VERSION="${PV}" bin/node-problem-detector
 }
 
 src_install() {
 	insinto /etc/node_problem_detector
-	doins config/system-stats-monitor.json
-	doins config/docker-monitor.json
-	doins config/kernel-monitor.json
+	doins "${FILESDIR}"/system-stats-monitor.json
+	doins "${FILESDIR}"/docker-monitor.json
+	doins "${FILESDIR}"/kernel-monitor.json
 
 	dosbin bin/node-problem-detector
 
