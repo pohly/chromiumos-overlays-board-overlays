@@ -61,7 +61,6 @@ chromeos-base/chromeos-installer -oobe_config
 
 # Use gcc to compile kernel-4_14 rather than clang. (b/119272876).
 sys-kernel/lakitu-kernel-4_14 -clang
-sys-kernel/dump-capture-kernel -clang
 
 # Disable kernel module signing for dump capture kernel.
 sys-kernel/dump-capture-kernel -module_sign
