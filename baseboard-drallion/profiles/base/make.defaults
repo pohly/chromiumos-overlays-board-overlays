@@ -12,6 +12,13 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} iwlwifi-QuZ"
 # Use Intel BT driver
 LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt-hw ibt_ax201"
 
+# Build kernel with serial driver
+USE="${USE} pcserial"
+USE="${USE} tty_console_ttyS0"
+
+# Enable serial console
+TTY_CONSOLE="ttyS0"
+
 # Enable NVMe utility
 USE="${USE} nvme"
 
