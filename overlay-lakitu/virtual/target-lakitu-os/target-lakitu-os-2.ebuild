@@ -61,7 +61,6 @@ LAKITU_RDEPEND="
 	sys-apps/dbus
 	sys-apps/ethtool
 	>=sys-apps/iproute2-3.19.0
-	sys-apps/loadpin-trigger
 	module_sign? ( sys-apps/keyutils )
 	sys-apps/less
 	sys-apps/mosys

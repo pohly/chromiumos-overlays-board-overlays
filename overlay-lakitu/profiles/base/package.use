@@ -75,6 +75,3 @@ sys-fs/lvm2 -device-mapper-only
 
 # Enable virtio balloon driver.
 sys-kernel/lakitu-kernel-4_19 virtio_balloon
-
-# Out-of-tree kernel module should use the same compiler as kernel.
-sys-apps/loadpin-trigger -clang
