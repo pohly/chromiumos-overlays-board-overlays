@@ -17,6 +17,9 @@ LINUX_FIRMWARE="${LINUX_FIRMWARE} ibt_9560 ibt_9260"
 # Google USBPD peripheral firmwares
 LINUX_FIRMWARE="${LINUX_FIRMWARE} cros-pd"
 
+# RTL8822C WiFi firmware
+LINUX_FIRMWARE="${LINUX_FIRMWARE} rtw8822c"
+
 # Enable EC logging
 USE="${USE} eclog"
 
