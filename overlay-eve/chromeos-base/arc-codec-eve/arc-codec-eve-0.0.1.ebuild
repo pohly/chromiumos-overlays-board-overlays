@@ -1,7 +1,7 @@
 # Copyright 2017 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 inherit cros-constants
 
@@ -10,7 +10,7 @@ DESCRIPTION="Install codec configuration for ARC++"
 LICENSE="BSD-Google"
 SLOT="0"
 KEYWORDS="*"
-IUSE="android-container-pi"
+IUSE="android-container-nyc"
 
 RDEPEND="!chromeos-base/arc-codec-chipset-kbl"
 
@@ -19,14 +19,12 @@ S="${WORKDIR}"
 src_install() {
 	insinto "${ARC_VENDOR_DIR}/etc/"
 
-	if use android-container-pi; then
-		ARC_CODEC_DIR="${FILESDIR}/pic"
-		doins "${ARC_CODEC_DIR}/media_codecs_c2.xml"
-		doins "${ARC_CODEC_DIR}/media_codecs_performance_c2.xml"
-	else
+	if use android-container-nyc; then
 		ARC_CODEC_DIR="${FILESDIR}/nyc"
+	else
+		# Adopt for pic and future desserts
+		ARC_CODEC_DIR="${FILESDIR}/pic"
 	fi
 
-	doins "${ARC_CODEC_DIR}/media_codecs.xml"
-	doins "${ARC_CODEC_DIR}/media_codecs_performance.xml"
+	doins "${ARC_CODEC_DIR}"/*
 }
