@@ -29,4 +29,4 @@ USE="${USE} eclog"
 USE="${USE} hammerd"
 
 # Enable VMs
-USE="${USE} kvm_host crosvm-gpu"
+USE="${USE} kvm_host crosvm-gpu virtio_gpu"
