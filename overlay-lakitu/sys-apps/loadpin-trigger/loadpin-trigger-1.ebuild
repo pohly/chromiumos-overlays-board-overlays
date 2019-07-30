@@ -49,7 +49,7 @@ pkg_setup() {
 src_prepare() {
 	cp "${FILESDIR}"/* .
 
-	# use gcc as long as clang USE flag is not set.
+	# Allowing gcc to be used when clang is not set.
 	# This is copied from cros-kernel2.eclass to make sure the third
 	# party kernel module uses the same compiler as kernel.
 	use clang || cros_use_gcc
