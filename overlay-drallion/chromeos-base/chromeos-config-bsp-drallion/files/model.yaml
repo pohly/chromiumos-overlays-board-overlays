@@ -14,4 +14,9 @@ chromeos:
       skus:
         - $sku-id: 1
           config: *common_config
+    - $device-name: "drallion360"
+      $fw-name: "Drallion"
+      skus:
+        - $sku-id: 2
+          config: *common_config
 
