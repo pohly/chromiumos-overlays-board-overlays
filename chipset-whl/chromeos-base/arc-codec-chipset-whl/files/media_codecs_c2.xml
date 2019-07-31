@@ -20,7 +20,7 @@
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="2586720" />
+            <Limit name="blocks-per-second" min="1" max="3631200" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -29,7 +29,7 @@
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="2586720" />
+            <Limit name="blocks-per-second" min="1" max="3631200" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -39,7 +39,7 @@
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="2341920" />
+            <Limit name="blocks-per-second" min="1" max="3827040" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -48,7 +48,7 @@
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="2341920" />
+            <Limit name="blocks-per-second" min="1" max="3827040" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -58,7 +58,7 @@
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="2721600" />
+            <Limit name="blocks-per-second" min="1" max="4179600" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
@@ -67,7 +67,7 @@
             <Limit name="size" min="16x16" max="4096x4096" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" min="1" max="2721600" />
+            <Limit name="blocks-per-second" min="1" max="4179600" />
             <Limit name="bitrate" range="1-62500000" />
             <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback" />
