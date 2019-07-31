@@ -49,5 +49,4 @@ src_install() {
 	dosbin bin/node-problem-detector
 
 	systemd_dounit "${FILESDIR}"/node-problem-detector.service
-	systemd_enable_service multi-user.target node-problem-detector.service
 }
